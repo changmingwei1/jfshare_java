@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.fileNameMapped.model.mapper.TbFileNameMappedMapper" >
+  <resultMap id="BaseResultMap" type="com.jfshare.fileNameMapped.model.TbFileNameMapped" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="filename_md5" property="filenameMd5" jdbcType="VARCHAR" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="fileid" property="fileid" jdbcType="VARCHAR" />
+    <result column="backup_state" property="backupState" jdbcType="INTEGER" />
+    <result column="backup_time" property="backupTime" jdbcType="TIMESTAMP" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, filename_md5, filename, fileid, backup_state, backup_time, source
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jfshare.fileNameMapped.model.TbFileNameMappedExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_file_name_mapped
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.jfshare.fileNameMapped.model.TbFileNameMappedExample" >
+    delete from tb_file_name_mapped
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.jfshare.fileNameMapped.model.TbFileNameMapped" >
+    insert into tb_file_name_mapped
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="filenameMd5 != null" >
+        filename_md5,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="fileid != null" >
+        fileid,
+      </if>
+      <if test="backupState != null" >
+        backup_state,
+      </if>
+      <if test="backupTime != null" >
+        backup_time,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="filenameMd5 != null" >
+        #{filenameMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileid != null" >
+        #{fileid,jdbcType=VARCHAR},
+      </if>
+      <if test="backupState != null" >
+        #{backupState,jdbcType=INTEGER},
+      </if>
+      <if test="backupTime != null" >
+        #{backupTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jfshare.fileNameMapped.model.TbFileNameMappedExample" resultType="java.lang.Integer" >
+    select count(*) from tb_file_name_mapped
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_file_name_mapped
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.filenameMd5 != null" >
+        filename_md5 = #{record.filenameMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filename != null" >
+        filename = #{record.filename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileid != null" >
+        fileid = #{record.fileid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.backupState != null" >
+        backup_state = #{record.backupState,jdbcType=INTEGER},
+      </if>
+      <if test="record.backupTime != null" >
+        backup_time = #{record.backupTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.source != null" >
+        source = #{record.source,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_file_name_mapped
+    set id = #{record.id,jdbcType=INTEGER},
+      filename_md5 = #{record.filenameMd5,jdbcType=VARCHAR},
+      filename = #{record.filename,jdbcType=VARCHAR},
+      fileid = #{record.fileid,jdbcType=VARCHAR},
+      backup_state = #{record.backupState,jdbcType=INTEGER},
+      backup_time = #{record.backupTime,jdbcType=TIMESTAMP},
+      source = #{record.source,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jfshare.fileNameMapped.model.TbFileNameMapped" >
+    update tb_file_name_mapped
+    <set >
+      <if test="filenameMd5 != null" >
+        filename_md5 = #{filenameMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileid != null" >
+        fileid = #{fileid,jdbcType=VARCHAR},
+      </if>
+      <if test="backupState != null" >
+        backup_state = #{backupState,jdbcType=INTEGER},
+      </if>
+      <if test="backupTime != null" >
+        backup_time = #{backupTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

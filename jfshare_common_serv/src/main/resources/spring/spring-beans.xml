@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                           http://www.springframework.org/schema/aop
+                      	   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+       default-autowire="byName">
+	
+	<!-- zk use -->
+	<bean id="configManager" class="com.jfshare.ridge.ConfigManager">
+       <!--<constructor-arg name="serverList" value="127.0.0.1:2181"/>-->
+    </bean>
+
+    <!--brain服务端启动-->
+    <bean id="brainServCfg" class="com.jfshare.brain.finagle.server.FinagleServerCfg">
+        <property name="sid" value="commonServ"/>
+        <property name="ref" value="handler"/>
+        <property name="api" value="com.jfshare.finagle.thrift.common.CommonServ"/>
+        <property name="port" value="#{configManager.getConfigValue('jfx_public_client','common_port')}"/>
+        <property name="threads" value="300"/>
+        <property name="stimeout" value="80000"/>
+        <property name="version" value="1.0-SNAPSHOT"/>
+    </bean>
+    <bean id="brainServ" class="com.jfshare.brain.finagle.server.FinagleServer">
+        <constructor-arg name="cfg" ref="brainServCfg"/>
+    </bean>
+
+    <bean id="imageCaptchaService" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService">
+        <constructor-arg type="com.octo.captcha.service.captchastore.CaptchaStore" index="0">
+            <ref bean="redisCaptchaStore"/>
+        </constructor-arg>
+        <!--which captcha Engine you use-->
+        <constructor-arg type="com.octo.captcha.engine.CaptchaEngine" index="1">
+            <ref bean="jfShareCaptchaEngine"/>
+        </constructor-arg>
+
+        <constructor-arg index="2">
+            <value>180</value>
+        </constructor-arg>
+
+        <constructor-arg index="3">
+            <value>100000</value>
+        </constructor-arg>
+
+        <constructor-arg index="4">
+            <value>75000</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="redisCaptchaStore" class="com.jfshare.common.captcha.RedisCaptchaStore"/>
+    <bean id="jfShareCaptchaEngine" class="com.jfshare.common.captcha.JFShareCaptchaEngine"/>
+
+    <bean class="com.jfshare.common.util.SpringContextHolder"></bean>
+
+    <!-- 登录/注册 短信验证Sender -->
+    <bean id="signinSenderConf" class="com.jfshare.common.shortmsg.sender.MsgServConfig">
+        <property name="cpid" value="15096"/>
+        <property name="password" value="587321"/>
+        <property name="channelid" value="1462"/>
+    </bean>
+    <bean id="signinMsgSender" class="com.jfshare.common.shortmsg.sender.Sender">
+        <constructor-arg type="com.jfshare.common.shortmsg.sender.MsgServConfig" index="0">
+            <ref bean="signinSenderConf"/>
+        </constructor-arg>
+    </bean>
+
+</beans>

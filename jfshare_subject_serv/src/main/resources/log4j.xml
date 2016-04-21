@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- 在log4j的dtd中，明确定义了每个元素的顺序 <!ELEMENT log4j:configuration (renderer*,
+		throwableRenderer?,appender*,plugin*, (category|logger)*,root?,(categoryFactory|loggerFactory)?)> 
+		如果不按照顺序，启动服务的时候会有警告 -->
+
+	<!-- 日志级别 日记记录的优先级priority，优先级由高到低分为 OFF ,FATAL ,ERROR ,WARN ,INFO ,DEBUG
+		,ALL。 Log4j建议只使用FATAL ,ERROR ,WARN ,INFO ,DEBUG这五个级别。 -->
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] [%p] [%F][%M(%L)] %m %n" />
+		</layout>
+	</appender>
+
+	<!-- 自定义配置 -->
+	<appender name="subject" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/var/log/java/jfshare/subject/subject.log" />
+		<param name="Append" value="true" />
+		<param name="Encoding" value="UTF-8" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] [%p] [%F][%M(%L)] %m %n" />
+		</layout>
+	</appender>
+
+	<!-- 自定义配置 -->
+	<appender name="subjectException" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/var/log/java/jfshare/subject/exception/subjectException.log" />
+		<param name="Append" value="true" />
+		<param name="Encoding" value="UTF-8" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] [%p] [%F][%M(%L)] %m  %n" />
+		</layout>
+	</appender>
+
+
+	<logger name="com.jfshare.subject">
+		<level value="INFO" />
+		<appender-ref ref="subject" />
+	</logger>
+
+	<!-- sql配置 -->
+	<logger name="java.sql.Connection">
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="java.sql.Statement">
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="java.sql.PreparedStatement">
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="java.sql.ResultSet">
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<logger name="com.jfshare.exception">
+		<level value="WARN" />
+	</logger>-->
+
+	<root>
+		<priority value="INFO" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+</log4j:configuration>

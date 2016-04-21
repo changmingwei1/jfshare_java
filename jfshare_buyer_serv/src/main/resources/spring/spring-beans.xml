@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                           http://www.springframework.org/schema/aop
+                      	   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+       default-autowire="byName">
+	
+	<!-- zk use -->
+	<bean id="configManager" class="com.jfshare.ridge.ConfigManager">
+        <!--<constructor-arg name="serverList" value="127.0.0.1:2181"/>-->
+    </bean>
+
+    <!--brain服务端启动-->
+    <bean id="brainServCfg" class="com.jfshare.brain.finagle.server.FinagleServerCfg">
+        <property name="sid" value="buyerServ"/>
+        <property name="ref" value="handler"/>
+        <property name="api" value="com.jfshare.finagle.thrift.buyer.BuyerServ"/>
+        <property name="port" value="#{configManager.getConfigValue('jfx_public_client','buyer_port')}"/>
+        <property name="threads" value="300"/>
+        <property name="stimeout" value="20000"/>
+        <property name="version" value="1.0-SNAPSHOT"/>
+    </bean>
+    <bean id="brainServ" class="com.jfshare.brain.finagle.server.FinagleServer">
+        <constructor-arg name="cfg" ref="brainServCfg"/>
+    </bean>
+
+</beans>

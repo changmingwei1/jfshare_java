@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.product.model.mapper.manual.ManualTbProductMapper">
+
+	<resultMap id="BaseResultMap" type="com.jfshare.finagle.thrift.product.ProductSurvey" >
+	    <id column="id" property="productId" jdbcType="VARCHAR" />
+	    <result column="name" property="productName" jdbcType="VARCHAR" />
+	    <result column="subject_id" property="subjectId" jdbcType="INTEGER" />
+	    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
+	    <result column="img_key" property="imgUrl" jdbcType="VARCHAR" />
+	    <result column="active_state" property="activeState" jdbcType="INTEGER" />
+	    <result column="org_price" property="orgPrice" jdbcType="VARCHAR" />
+	    <result column="cur_price" property="curPrice" jdbcType="VARCHAR" />
+	    <result column="vice_name" property="viceName" jdbcType="VARCHAR" />
+    	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    	<result column="seller_id" property="sellerId" jdbcType="INTEGER" />
+	    <!--
+	    <result column="active_stock" property="activeStock" jdbcType="INTEGER" />
+	    <result column="total_sales" property="totalSales" jdbcType="INTEGER" />
+	     -->
+  	</resultMap>
+
+	<!-- 查询条件 sellerId state -->
+	<select id="productSurveyQueryPage"
+		parameterType="com.jfshare.finagle.thrift.product.ProductSurveyQueryParam"
+		resultMap="BaseResultMap">
+		select
+			a.id,
+			a.NAME,
+			a.subject_id,
+			a.brand_id,
+			a.img_key,
+			a.active_state,
+			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
+			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
+			a.vice_name,create_time,seller_id
+		from tb_product a
+		<where>
+				<!-- AND b.sku_num = '' -->
+			<if test=" sellerId > 0">
+				AND a.seller_id = #{sellerId,jdbcType=INTEGER}
+			</if>
+			<if test=" productId != null and productId != ''">
+				AND a.id = #{productId,jdbcType=VARCHAR}
+			</if>
+			<if test=" productName != null and productName != ''">
+				AND a.name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test=" activeState != 0">
+				AND a.active_state = #{activeState,jdbcType=INTEGER}
+			</if>
+			<!-- 
+			<if test=" subjectId != 0">
+				AND a.subject_id = #{subjectId,jdbcType=INTEGER}
+			</if>
+			 -->
+            <if test="productIdList != null">
+                AND a.id IN
+                <foreach collection="productIdList" index="index" item="item" open="(" separator="," close=")">
+                    #{productIdList[${index}]}
+                </foreach>
+            </if>
+			<if test="subjectIdList != null">
+				AND a.subject_id IN   
+			     <foreach collection="subjectIdList" index="index" item="item" open="(" separator="," close=")">  
+			        #{subjectIdList[${index}]}  
+			     </foreach> 
+			</if>
+			<if test=" brandId != 0">
+				AND a.brand_id = #{brandId,jdbcType=INTEGER}
+			</if>
+		</where>
+			<if test=" sort == null or sort == ''">
+				ORDER BY a.last_update_time DESC
+			</if>
+			<if test=" sort == 'create_time DESC'">
+				ORDER BY a.create_time DESC
+			</if>
+			<if test=" sort == 'cur_price DESC'">
+				ORDER BY cur_price DESC
+			</if>
+			<if test=" sort == 'cur_price ASC'">
+				ORDER BY cur_price ASC
+			</if>
+	</select>
+
+	<select id="productSurveyQuery"
+		parameterType="com.jfshare.finagle.thrift.product.ProductSurveyQueryParam"
+		resultMap="BaseResultMap">
+		select
+			a.id,
+			a.NAME,
+			a.subject_id,
+			a.brand_id,
+			a.img_key,
+			a.active_state,
+			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
+			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
+			a.vice_name,create_time
+		from tb_product a
+		<where>
+				<!-- AND b.sku_num = '' -->
+			<if test=" sellerId > 0">
+				AND a.seller_id = #{sellerId,jdbcType=INTEGER}
+			</if>
+			<if test=" productId != null and productId != ''">
+				AND a.id = #{productId,jdbcType=VARCHAR}
+			</if>
+			<if test=" productName != null and productName != ''">
+				AND a.name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test=" activeState != 0">
+				AND a.active_state = #{activeState,jdbcType=INTEGER}
+			</if>
+			<!-- 
+			<if test=" subjectId != 0">
+				AND a.subject_id = #{subjectId,jdbcType=INTEGER}
+			</if>
+			 -->
+            <if test="productIdList != null">
+                AND a.id IN
+                <foreach collection="productIdList" index="index" item="item" open="(" separator="," close=")">
+                    #{productIdList[${index}]}
+                </foreach>
+            </if>
+			<if test="subjectIdList != null">
+				AND a.subject_id IN   
+			     <foreach collection="subjectIdList" index="index" item="item" open="(" separator="," close=")">  
+			        #{subjectIdList[${index}]}  
+			     </foreach> 
+			</if>
+			<if test=" brandId != 0">
+				AND a.brand_id = #{brandId,jdbcType=INTEGER}
+			</if>
+		</where>
+			<if test=" sort == null or sort == ''">
+				ORDER BY a.last_update_time DESC
+			</if>
+			<if test=" sort == 'create_time DESC'">
+				ORDER BY a.create_time DESC
+			</if>
+			<if test=" sort == 'cur_price DESC'">
+				ORDER BY cur_price DESC
+			</if>
+			<if test=" sort == 'cur_price ASC'">
+				ORDER BY cur_price ASC
+			</if>
+	</select>
+
+
+	<!-- 查询楼层商品列表 -->
+	<select id="queryFloorProduct"
+		parameterType="int"
+		resultMap="BaseResultMap">
+		
+		SELECT
+			a.id,
+			a. NAME,
+			a.subject_id,
+			a.brand_id,
+			a.img_key,
+			a.active_state,
+			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
+			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
+			a.vice_name,create_time		
+		FROM
+			tb_product a
+		WHERE
+			a.subject_id IN (
+				SELECT
+					id
+				FROM
+					tb_subject
+				WHERE
+					pid IN (
+						SELECT
+							id
+						FROM
+							tb_subject
+						WHERE
+							pid = #{floorId,jdbcType=INTEGER}
+					)
+				AND is_leaf = 1
+				AND deleted = 0
+			)
+			AND a.active_state = 300
+			
+		ORDER BY a.last_update_time DESC
+		
+		limit 0,4
+	</select>
+	
+	<select id="productSurveyQueryById"
+		parameterType="com.jfshare.finagle.thrift.product.ProductSurveyQueryParam"
+		resultMap="BaseResultMap">
+		select
+			a.id,
+			a.NAME,
+			a.subject_id,
+			a.brand_id,
+			a.img_key,
+			a.active_state,
+			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
+			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
+			a.vice_name,create_time				
+		from tb_product a
+		where a.id = #{productId,jdbcType=VARCHAR}
+	</select>
+	
+</mapper>

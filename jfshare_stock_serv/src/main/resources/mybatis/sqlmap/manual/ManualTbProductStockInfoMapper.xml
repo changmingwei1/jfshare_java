@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.stock.dao.mybatis.mappers.manual.ManualTbProductStockInfoMapper">
+
+    <update id="update_stock_count_by_change" parameterType="com.jfshare.stock.model.StockLockModel">
+        UPDATE tb_product_stock t SET
+            t.active_count = t.active_count - #{countChange, jdbcType=INTEGER} ,
+            t.lock_count = t.lock_count - #{lockCountChange, jdbcType=INTEGER}
+        WHERE product_id= #{productId, jdbcType=VARCHAR}
+            AND sku_num = #{skuNum, jdbcType=VARCHAR}
+            AND t.active_count >= #{countChange, jdbcType=INTEGER}
+    </update>
+</mapper>

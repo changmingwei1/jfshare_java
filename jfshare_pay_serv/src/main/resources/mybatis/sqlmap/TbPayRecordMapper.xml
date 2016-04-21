@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.pay.model.mapper.TbPayRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.jfshare.pay.model.TbPayRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="pay_id" property="payId" jdbcType="VARCHAR" />
+    <result column="token_id" property="tokenId" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="extra_param" property="extraParam" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="INTEGER" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="pay_channel" property="payChannel" jdbcType="INTEGER" />
+    <result column="pay_ip" property="payIp" jdbcType="VARCHAR" />
+    <result column="return_url" property="returnUrl" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="pay_state" property="payState" jdbcType="INTEGER" />
+    <result column="biz_code" property="bizCode" jdbcType="INTEGER" />
+    <result column="third_id" property="thirdId" jdbcType="VARCHAR" />
+    <result column="third_price" property="thirdPrice" jdbcType="INTEGER" />
+    <result column="third_score" property="thirdScore" jdbcType="INTEGER" />
+    <result column="third_account" property="thirdAccount" jdbcType="VARCHAR" />
+    <result column="third_time" property="thirdTime" jdbcType="TIMESTAMP" typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+    <result column="process_time" property="processTime" jdbcType="TIMESTAMP" typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jfshare.pay.model.TbPayRecordWithBLOBs" extends="BaseResultMap" >
+    <result column="third_req" property="thirdReq" jdbcType="LONGVARCHAR" />
+    <result column="third_ret" property="thirdRet" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.thirdTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler} and #{criterion.secondValue,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.processTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler} and #{criterion.secondValue,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.createTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler} and #{criterion.secondValue,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.lastUpdateTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler} and #{criterion.secondValue,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.thirdTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler} and #{criterion.secondValue,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.processTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler} and #{criterion.secondValue,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.createTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler} and #{criterion.secondValue,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.lastUpdateTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler} and #{criterion.secondValue,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, pay_id, token_id, order_no, extra_param, title, price, score, pay_channel, pay_ip, 
+    return_url, remark, pay_state, biz_code, third_id, third_price, third_score, third_account, 
+    third_time, process_time, create_time, last_update_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    third_req, third_ret
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.jfshare.pay.model.TbPayRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_pay_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jfshare.pay.model.TbPayRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pay_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.jfshare.pay.model.TbPayRecordExample" >
+    delete from tb_pay_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.jfshare.pay.model.TbPayRecordWithBLOBs" >
+    insert into tb_pay_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="payId != null" >
+        pay_id,
+      </if>
+      <if test="tokenId != null" >
+        token_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="extraParam != null" >
+        extra_param,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="payChannel != null" >
+        pay_channel,
+      </if>
+      <if test="payIp != null" >
+        pay_ip,
+      </if>
+      <if test="returnUrl != null" >
+        return_url,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="payState != null" >
+        pay_state,
+      </if>
+      <if test="bizCode != null" >
+        biz_code,
+      </if>
+      <if test="thirdId != null" >
+        third_id,
+      </if>
+      <if test="thirdPrice != null" >
+        third_price,
+      </if>
+      <if test="thirdScore != null" >
+        third_score,
+      </if>
+      <if test="thirdAccount != null" >
+        third_account,
+      </if>
+      <if test="thirdTime != null" >
+        third_time,
+      </if>
+      <if test="processTime != null" >
+        process_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time,
+      </if>
+      <if test="thirdReq != null" >
+        third_req,
+      </if>
+      <if test="thirdRet != null" >
+        third_ret,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="payId != null" >
+        #{payId,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenId != null" >
+        #{tokenId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="extraParam != null" >
+        #{extraParam,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="payChannel != null" >
+        #{payChannel,jdbcType=INTEGER},
+      </if>
+      <if test="payIp != null" >
+        #{payIp,jdbcType=VARCHAR},
+      </if>
+      <if test="returnUrl != null" >
+        #{returnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="payState != null" >
+        #{payState,jdbcType=INTEGER},
+      </if>
+      <if test="bizCode != null" >
+        #{bizCode,jdbcType=INTEGER},
+      </if>
+      <if test="thirdId != null" >
+        #{thirdId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdPrice != null" >
+        #{thirdPrice,jdbcType=INTEGER},
+      </if>
+      <if test="thirdScore != null" >
+        #{thirdScore,jdbcType=INTEGER},
+      </if>
+      <if test="thirdAccount != null" >
+        #{thirdAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdTime != null" >
+        #{thirdTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="processTime != null" >
+        #{processTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="thirdReq != null" >
+        #{thirdReq,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="thirdRet != null" >
+        #{thirdRet,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jfshare.pay.model.TbPayRecordExample" resultType="java.lang.Integer" >
+    select count(*) from tb_pay_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_pay_record
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.payId != null" >
+        pay_id = #{record.payId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tokenId != null" >
+        token_id = #{record.tokenId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extraParam != null" >
+        extra_param = #{record.extraParam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=INTEGER},
+      </if>
+      <if test="record.score != null" >
+        score = #{record.score,jdbcType=INTEGER},
+      </if>
+      <if test="record.payChannel != null" >
+        pay_channel = #{record.payChannel,jdbcType=INTEGER},
+      </if>
+      <if test="record.payIp != null" >
+        pay_ip = #{record.payIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.returnUrl != null" >
+        return_url = #{record.returnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payState != null" >
+        pay_state = #{record.payState,jdbcType=INTEGER},
+      </if>
+      <if test="record.bizCode != null" >
+        biz_code = #{record.bizCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.thirdId != null" >
+        third_id = #{record.thirdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thirdPrice != null" >
+        third_price = #{record.thirdPrice,jdbcType=INTEGER},
+      </if>
+      <if test="record.thirdScore != null" >
+        third_score = #{record.thirdScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.thirdAccount != null" >
+        third_account = #{record.thirdAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thirdTime != null" >
+        third_time = #{record.thirdTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="record.processTime != null" >
+        process_time = #{record.processTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="record.lastUpdateTime != null" >
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="record.thirdReq != null" >
+        third_req = #{record.thirdReq,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.thirdRet != null" >
+        third_ret = #{record.thirdRet,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update tb_pay_record
+    set id = #{record.id,jdbcType=INTEGER},
+      pay_id = #{record.payId,jdbcType=VARCHAR},
+      token_id = #{record.tokenId,jdbcType=VARCHAR},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      extra_param = #{record.extraParam,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=INTEGER},
+      score = #{record.score,jdbcType=INTEGER},
+      pay_channel = #{record.payChannel,jdbcType=INTEGER},
+      pay_ip = #{record.payIp,jdbcType=VARCHAR},
+      return_url = #{record.returnUrl,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      pay_state = #{record.payState,jdbcType=INTEGER},
+      biz_code = #{record.bizCode,jdbcType=INTEGER},
+      third_id = #{record.thirdId,jdbcType=VARCHAR},
+      third_price = #{record.thirdPrice,jdbcType=INTEGER},
+      third_score = #{record.thirdScore,jdbcType=INTEGER},
+      third_account = #{record.thirdAccount,jdbcType=VARCHAR},
+      third_time = #{record.thirdTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      process_time = #{record.processTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      third_req = #{record.thirdReq,jdbcType=LONGVARCHAR},
+      third_ret = #{record.thirdRet,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_pay_record
+    set id = #{record.id,jdbcType=INTEGER},
+      pay_id = #{record.payId,jdbcType=VARCHAR},
+      token_id = #{record.tokenId,jdbcType=VARCHAR},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      extra_param = #{record.extraParam,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=INTEGER},
+      score = #{record.score,jdbcType=INTEGER},
+      pay_channel = #{record.payChannel,jdbcType=INTEGER},
+      pay_ip = #{record.payIp,jdbcType=VARCHAR},
+      return_url = #{record.returnUrl,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      pay_state = #{record.payState,jdbcType=INTEGER},
+      biz_code = #{record.bizCode,jdbcType=INTEGER},
+      third_id = #{record.thirdId,jdbcType=VARCHAR},
+      third_price = #{record.thirdPrice,jdbcType=INTEGER},
+      third_score = #{record.thirdScore,jdbcType=INTEGER},
+      third_account = #{record.thirdAccount,jdbcType=VARCHAR},
+      third_time = #{record.thirdTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      process_time = #{record.processTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jfshare.pay.model.TbPayRecordWithBLOBs" >
+    update tb_pay_record
+    <set >
+      <if test="payId != null" >
+        pay_id = #{payId,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenId != null" >
+        token_id = #{tokenId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="extraParam != null" >
+        extra_param = #{extraParam,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="payChannel != null" >
+        pay_channel = #{payChannel,jdbcType=INTEGER},
+      </if>
+      <if test="payIp != null" >
+        pay_ip = #{payIp,jdbcType=VARCHAR},
+      </if>
+      <if test="returnUrl != null" >
+        return_url = #{returnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="payState != null" >
+        pay_state = #{payState,jdbcType=INTEGER},
+      </if>
+      <if test="bizCode != null" >
+        biz_code = #{bizCode,jdbcType=INTEGER},
+      </if>
+      <if test="thirdId != null" >
+        third_id = #{thirdId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdPrice != null" >
+        third_price = #{thirdPrice,jdbcType=INTEGER},
+      </if>
+      <if test="thirdScore != null" >
+        third_score = #{thirdScore,jdbcType=INTEGER},
+      </if>
+      <if test="thirdAccount != null" >
+        third_account = #{thirdAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdTime != null" >
+        third_time = #{thirdTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="processTime != null" >
+        process_time = #{processTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="thirdReq != null" >
+        third_req = #{thirdReq,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="thirdRet != null" >
+        third_ret = #{thirdRet,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

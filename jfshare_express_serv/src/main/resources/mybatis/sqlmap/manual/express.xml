@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.express.impl.ExpressImpl">
+
+    <!--<update id="delExpress"-->
+            <!--parameterType="int">-->
+         <!--UPDATE `tb_express` SET STATUS = 2 WHERE id = #{id}-->
+    <!--</update>-->
+    
+    <select id="checkExpressInfo"
+            parameterType="com.jfshare.finagle.thrift.express.ExpressInfo" resultType="com.jfshare.finagle.thrift.express.ExpressInfo">
+         select name,kuaidi_key as kuaidiKey,name_rule as nameRule
+         from `tb_express`
+         where 1 = 1 and
+         <if test="id != null">
+	        id!=#{id} and
+	     </if>
+	     <trim prefix="(" prefixOverrides="or" suffix=")">
+		     <if test="name != null">
+		        or name=#{name}
+		     </if>
+ 		     <if test="nameRule != null">
+ 		       or name_rule=#{nameRule}
+ 		     </if>
+	     </trim>  
+    </select>
+    
+    <select id="selectExpressByConditions"
+            resultType="com.jfshare.finagle.thrift.express.ExpressInfo" parameterType="map" >
+            SELECT 
+    id, name, query_url as queryUrl, status, comment, last_update_time as lastUpdateTime, last_update_user_id as lastUpdateUserId, create_time as createTime, 
+    create_user_id as createUserId, kuaidi_key as kuaidiKey, name_rule as nameRule, express_no_rule as expressNoRule, grab_state as grabState, type_state as typeState,
+    dnf_tel as dnfTel, user_type as userType, serial_num as serialNum
+            FROM `tb_express` a
+            <where>
+                <if test="conditions.status != null and conditions.status != -1" >
+			      AND a.status=#{conditions.status}
+			    </if>
+	            <if test="conditions.name != null" >
+			      AND a.name like CONCAT('%',#{conditions.name},'%') 
+			    </if>
+			    <if test="conditions.nameRule != null" >
+			      AND a.name_rule like CONCAT('%',#{conditions.nameRule},'%') 
+			    </if>
+			    <if test="conditions.id != null and conditions.id != 0" >
+			      AND a.id=#{conditions.id}
+			    </if>
+			    <if test="conditions.grabState != null and conditions.grabState != -1" >
+			      AND a.grab_state=#{conditions.grabState} 
+			    </if>
+			    <if test="conditions.typeState != null and conditions.typeState != -1" >
+			      AND a.type_state=#{conditions.typeState} 
+			    </if>
+			    <if test="conditions.userType != null and conditions.userType != -1" >
+			      AND a.user_type=#{conditions.userType} 
+			    </if>
+		    </where>
+		    <if test="conditions.orderByClause != null">
+		      order by ${conditions.orderByClause}
+		    </if>
+		    <if test="start != null and end != null">
+		      	limit  #{start} ,#{end} 
+		    </if>
+    </select>
+    
+    <select id="countExpressByConditions"
+            resultType="int" parameterType="map" >
+            SELECT count(0)
+            FROM `tb_express` a
+            <where>
+                <if test="conditions.status != null and conditions.status != -1" >
+			      AND a.status=#{conditions.status}
+			    </if>
+	            <if test="conditions.name != null" >
+			      AND a.name like CONCAT('%',#{conditions.name},'%') 
+			    </if>
+			    <if test="conditions.nameRule != null" >
+			      AND a.name_rule like CONCAT('%',#{conditions.nameRule},'%') 
+			    </if>
+			    <if test="conditions.id != null and conditions.id != 0" >
+			      AND a.id=#{conditions.id}
+			    </if>
+			    <if test="conditions.grabState != null and conditions.grabState != -1" >
+			      AND a.grab_state=#{conditions.grabState} 
+			    </if>
+			    <if test="conditions.typeState != null and conditions.typeState != -1" >
+			      AND a.type_state=#{conditions.typeState} 
+			    </if>
+			    <if test="conditions.userType != null and conditions.userType != -1" >
+			      AND a.user_type=#{conditions.userType} 
+			    </if>
+		    </where>
+    </select>
+    
+     <select id="queryByIds" resultType="com.jfshare.finagle.thrift.express.ExpressInfo" parameterType="map">
+       SELECT 
+    id, name, query_url as queryUrl, status, comment, last_update_time as lastUpdateTime, last_update_user_id as lastUpdateUserId, create_time as createTime, 
+    create_user_id as createUserId, kuaidi_key as kuaidiKey, name_rule as nameRule, express_no_rule as expressNoRule, grab_state as grabState, type_state as typeState,
+    dnf_tel as dnfTel, user_type as userType, serial_num as serialNum
+            FROM `tb_express` a
+            <where>
+                1=1
+                <if test="ids != null" >
+			      AND a.id in (${ids}) 
+			    </if>
+		    </where>
+   </select>
+   
+   <select id="queryFreight" resultType="com.jfshare.finagle.thrift.express.ExpressInfo" parameterType="map">
+       SELECT 
+           id, name
+            FROM `tb_express` a
+            <where>
+                STATUS = 1 AND type_state = 1
+		    </where>
+   </select>
+
+</mapper>

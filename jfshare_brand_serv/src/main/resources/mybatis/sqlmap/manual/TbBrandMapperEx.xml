@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.brand.dao.mysql.impl.BrandDaoImpl" >
+  <resultMap id="BaseResultMap" type="com.jfshare.brand.model.TbBrand" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="img_key" property="imgKey" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="serial" property="serial" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createId" jdbcType="INTEGER" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_id" property="lastUpdateId" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, name, img_key, url, serial, remark, create_time, create_id, last_update_time, 
+    last_update_id, state
+  </sql>
+  <select id="queryByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT distinct
+    <include refid="Base_Column_List" />
+    FROM tb_brand a, tb_subject_brand b
+    <where>
+      a.state != 1
+      <if test="conditions.id != null and conditions.id > 0" >
+        AND a.id = #{conditions.id}
+      </if>
+      <if test="conditions.name != null" >
+        AND a.name like CONCAT('%',#{conditions.name},'%')
+      </if>
+      <!-- 
+      <if test="conditions.subjectId != null and conditions.subjectId > 0" >
+        AND b.subjectId = #{conditions.subjectId}
+      </if>
+       -->
+      <if test=" conditions.hsubjectIdList != null">
+      		AND a.id = b.brand_id
+			AND b.subject_id IN   
+		     <foreach collection="conditions.hsubjectIdList" index="index" item="item" open="(" separator="," close=")">  
+		        #{conditions.hsubjectIdList[${index}]}  
+		     </foreach> 
+		</if>
+    </where>
+    order by a.serial
+    <if test="start != null and end != null">
+      limit  #{start} ,#{end}
+    </if>
+  </select>
+
+  <select id="queryByIds" resultMap="BaseResultMap" parameterType="map" >
+    SELECT
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    FROM tb_brand a
+    <where>
+      a.state != 1
+      <if test="idList != null" >
+        AND a.id IN
+        <foreach collection="idList" item="id" open="(" close=")" separator=",">
+          #{id}
+        </foreach>
+      </if>
+    </where>
+  </select>
+</mapper>

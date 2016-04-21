@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.manager.dao.mybatis.mappers.manual.manualTbProductOperator">
+	<select id="select_product_opt_records" parameterType="com.jfshare.finagle.thrift.manager.QueryConditions"
+          resultMap="com.jfshare.manager.model.mappers.TbProductOperatorMapper.BaseResultMap">
+        select
+        <include refid="com.jfshare.manager.model.mappers.TbProductOperatorMapper.Base_Column_List" />
+        from tb_product_operator a where
+        a.product_id = #{productId}
+	</select>
+	
+</mapper>

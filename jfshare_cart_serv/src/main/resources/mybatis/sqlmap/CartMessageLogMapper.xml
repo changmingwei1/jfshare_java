@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.cart.model.mapper.manual.CartMessageLogMapper">
+	<resultMap id="ResultMap" type="com.jfshare.cart.model.entity.TbCartMessageLog">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="product_id" property="productId" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="queryById" parameterType="java.lang.Integer" resultMap="ResultMap">
+		select id, user_id, product_id, status, add_time, update_time from tb_cart_message_log where id = #{id}
+	</select>
+	
+	<select id="findByUserIdAndProductIdAndStatus" parameterType="java.util.HashMap" resultMap="ResultMap">
+		select id, user_id, product_id, status, add_time, update_time from tb_cart_message_log where user_id = #{userId} and product_id = #{productId} and status = #{status} LIMIT 0,1
+	</select>
+	
+	<insert id="insert" parameterType="com.jfshare.cart.model.entity.TbCartMessageLog" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_cart_message_log (user_id, product_id, status, add_time, update_time) 
+		values (#{userId}, #{productId}, #{status}, #{addTime}, #{updateTime})
+	</insert>
+	
+	<update id="update" parameterType="com.jfshare.cart.model.entity.TbCartMessageLog">
+		update tb_cart_message_log set user_id = #{userId}, product_id = #{productId}, status = #{status}, add_time = #{addTime}, update_time = #{updateTime} where id = #{id}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_cart_message_log where id = #{id}
+	</delete>
+	
+	<delete id="deleteByUserIdAndProductIdAndStatus" parameterType="java.util.HashMap">
+		delete from tb_cart_message_log where user_id = #{userId} and product_id = #{productId} and status = #{status}
+	</delete>
+	
+	<update id="updateStatus" parameterType="java.util.HashMap">
+		update tb_cart_message_log set status = #{status}, update_time = #{updateTime} where user_id = #{userId} and product_id = #{productId}
+	</update>
+	
+	<select id="count" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	    select count(1) from tb_cart_message_log where status = #{status}
+    </select>
+    
+    <select id="queryForPage" parameterType="java.util.HashMap" resultMap="ResultMap">
+	  select id, user_id, product_id, status, add_time, update_time from tb_cart_message_log where status = #{status} order by add_time LIMIT #{begin},#{pageSize}
+    </select>
+</mapper>

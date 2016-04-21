@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.subject.bean.TbSubject">
+    <resultMap id="BaseResultMap" type="com.jfshare.subject.bean.TbSubject">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="pid" property="pid" jdbcType="INTEGER"/>
+        <result column="sorted" property="sorted" jdbcType="INTEGER"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="is_leaf" property="isLeaf" jdbcType="INTEGER"/>
+        <result column="demo" property="demo" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="updater" property="updater" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="path" property="path" jdbcType="VARCHAR"/>
+        <result column="attributes" property="attributes" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, pid, sorted, level, is_leaf, demo, create_time, creator, update_time, updater,
+        status,path,attributes
+    </sql>
+
+    <select id="getId" resultType="java.lang.Integer">
+        select auto_increment from information_schema.tables where table_name='tb_subject'
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_subject
+        where id = #{id,jdbcType=INTEGER}
+        and status != 4
+    </select>
+
+    <!--类目管理查询专用-->
+    <select id="selectByIdManage" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_subject
+        where id = #{id,jdbcType=INTEGER}
+        and status != 4
+    </select>
+
+
+    <select id="selectByPid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_subject
+        where pid = #{pid,jdbcType=INTEGER}
+        and (status = 2 or status = 3)
+    </select>
+
+    <!--前台分类获取后台分类对象-->
+    <select id="selectSubjectByDisplayId" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_subject_ref_display rd, tb_subject s
+        where rd.subject_id = s.id
+        and s.status != 4
+        and display_id = #{displayId,jdbcType=INTEGER}
+        <if test="start != null ">
+            <if test="count != null">
+                limit #{start} ,#{count}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectSubjectNumByDisplayId" resultType="java.lang.Integer" parameterType="map">
+        select
+        count(*)
+        from tb_subject_ref_display rd, tb_subject s
+        where rd.subject_id = s.id
+        and s.status != 4
+        and display_id = #{displayId,jdbcType=INTEGER}
+        <if test="start != null ">
+            <if test="count != null">
+                limit #{start} ,#{count}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_subject
+        where status != 4
+        order by level asc, sorted asc
+    </select>
+
+    <!--查询所有的子节点-->
+    <select id="selectAllSub" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_subject
+        where path like CONCAT('${_parameter}','%' )
+    </select>
+
+    <select id="selectByParam" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_subject
+        <where>
+            <if test="status != null and status != 0">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="name != null">
+                and name like CONCAT('%','${name}','%' )
+            </if>
+            <if test="pId != null and pId != 0">
+                and pid = #{pId,jdbcType=INTEGER}
+            </if>
+            <if test="path != null">
+                and path like CONCAT('${path}','%' )
+            </if>
+            <!--and status != 4-->
+
+        </where>
+        order by path
+        <if test="start != null ">
+            <if test="count != null">
+                limit #{start} ,#{count}
+            </if>
+        </if>
+    </select>
+
+    <!--查询已经存在关系的子节点-->
+    <select id="selectRelationByPath" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_subject s, tb_subject_ref_display d
+        <where>
+            s.id = d.subject_id
+            and d.`display_id` = #{displayId,jdbcType=INTEGER}
+            and path like CONCAT('${path}','%' )
+            and status != 4
+        </where>
+    </select>
+
+    <select id="selectTotalByParam" resultType="int" parameterType="map">
+        select
+        count(*)
+        from tb_subject
+        <where>
+            <if test="status != null and status != 0">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="name != null">
+                and name like CONCAT('%','${name}','%' )
+            </if>
+            <if test="pId != null and pId != 0">
+                and pid = #{pId,jdbcType=INTEGER}
+            </if>
+            <if test="path != null">
+                and path like CONCAT('${path}','%' )
+            </if>
+            <!--and status != 4-->
+        </where>
+    </select>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        update
+        tb_subject
+        set status = 2
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!--删除类目，逻辑删除
+        如果类目当前状态为新增 1，则直接变为已删除 4
+        如果类目当前状态为已发布 3，则变为删除 2 -->
+    <delete id="deleteSub" parameterType="java.lang.String">
+        <!--update
+        tb_subject
+        set status = 4
+        where path like CONCAT('${path}','%' )-->
+
+        update tb_subject
+        set status = case status
+        when 1 then 4
+        when 3 then 2
+        end
+        <where>
+            path like CONCAT('${_parameter}','%' )
+            <!--删除状态和已删除状态的不操作-->
+            and status != 2 and status != 4
+        </where>
+    </delete>
+
+    <!--删除状态类目发布，逻辑删除
+        将本身和子类目直接变为已删除 4 -->
+    <delete id="deleteRelease" parameterType="java.lang.String">
+        update
+        tb_subject
+        set status = 4
+        <where>
+            path like CONCAT('${_parameter}','%' )
+        </where>
+    </delete>
+
+    <insert id="insert" parameterType="com.jfshare.subject.bean.TbSubject" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_subject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="sorted != null">
+                sorted,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="isLeaf != null">
+                is_leaf,
+            </if>
+            <if test="demo != null">
+                demo,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updater != null">
+                updater,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="path != null">
+                path,
+            </if>
+            <if test="attributes != null">
+                attributes,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="sorted != null">
+                #{sorted,jdbcType=INTEGER},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="isLeaf != null">
+                #{isLeaf,jdbcType=INTEGER},
+            </if>
+            <if test="demo != null">
+                #{demo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="updater != null">
+                #{updater,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="path != null">
+                #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="attributes != null">
+                #{attributes,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.jfshare.subject.bean.TbSubject">
+        <!--
+          WARNING - @mbggenerated
+          This element is automatically generated by MyBatis Generator, do not modify.
+          This element was generated on Mon Mar 23 11:36:53 CST 2015.
+        -->
+        update tb_subject
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="sorted != null">
+                sorted = #{sorted,jdbcType=INTEGER},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="isLeaf != null">
+                is_leaf = #{isLeaf,jdbcType=INTEGER},
+            </if>
+            <if test="demo != null">
+                demo = #{demo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time =
+                #{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time =
+                #{updateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="updater != null">
+                updater = #{updater,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="path != null">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="attributes != null">
+                attributes = #{attributes,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

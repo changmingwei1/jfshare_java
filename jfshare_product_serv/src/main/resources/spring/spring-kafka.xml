@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+       default-autowire="byName">
+
+    <util:properties id="propertiesProducer" >
+        <prop key="metadata.broker.list">120.24.153.102:9092,120.24.153.155:9092</prop>
+        <!--<prop key="metadata.broker.list">#{configManager.getKafkaConfig('jfx_public_kafka','1.1').broker}</prop>-->
+        <prop key="producer.type">sync</prop>
+        <prop key="compression.codec">none</prop>
+        <prop key="serializer.class">kafka.serializer.StringEncoder</prop>
+        <prop key="request.required.acks">1</prop>
+        <prop key="message.send.max.retries">3</prop>
+        <prop key="retry.backoff.ms">100</prop>
+    </util:properties>
+
+    <bean id="productProducer" class="com.jfshare.kafkautil.kafka.KafkaProducer">
+        <constructor-arg index="0" ref="propertiesProducer" />
+        <constructor-arg index="1" value="jfshare_product_push" />
+    </bean>
+
+    <!-- 使用异步方式推送kafka消息需要配置 start -->
+    <bean id="assemble" class="com.jfshare.kafkautil.common.Assemble">
+        <constructor-arg index="0">
+            <set>
+                <ref bean="productProducer" />
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <bean id="asyncTransferThread" class="com.jfshare.kafkautil.kafka.AsyncTransfer" init-method="start">
+        <property name="assemble" ref="assemble"/>
+    </bean>
+    <!-- 使用异步方式推送kafka消息需要配置 end -->
+</beans>

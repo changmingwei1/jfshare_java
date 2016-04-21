@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-autowire="byName">
+
+    <!-- ridge -->
+    <bean id="configManager" class="com.jfshare.ridge.ConfigManager">
+    </bean>
+
+    <!--brain服务端启动-->
+    <bean id="brainServCfg" class="com.jfshare.brain.finagle.server.FinagleServerCfg">
+        <property name="sid" value="orderServ"/>
+        <property name="ref" value="orderHandler"/>
+        <property name="api" value="com.jfshare.finagle.thrift.order.OrderServ"/>
+        <property name="port" value="#{configManager.getConfigValue('jfx_public_client','order_port')}"/>
+        <property name="threads" value="128"/>
+        <property name="stimeout" value="5000"/>
+        <property name="version" value="1.0"/>
+    </bean>
+
+    <bean id="brainServ" class="com.jfshare.brain.finagle.server.FinagleServer">
+        <constructor-arg name="cfg" ref="brainServCfg"/>
+    </bean>
+</beans>

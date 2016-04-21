@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.common.util.impl.IpAttributionImpl" >
+  <resultMap id="IpStartIntResultMap" type="com.jfshare.common.model.TbIp2addressDic" >
+    <result column="ip_start_int" property="ipStartInt" jdbcType="BIGINT" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectIpStartIntList" resultMap="IpStartIntResultMap">
+    select ip_start_int, city_id, city_name, province_id,  province_name
+    from tb_ip2address_dic order by ip_start_int
+  </select>
+</mapper>

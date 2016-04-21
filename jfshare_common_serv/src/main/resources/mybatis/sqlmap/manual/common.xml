@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.common.impl.CommonImpl">
+
+
+    <resultMap id="areaInfo" type="com.jfshare.finagle.thrift.common.AreaInfo">
+        <result column="short_name" javaType="String" property="shortName"></result>
+        <result column="area_property" javaType="String" property="property"></result>
+        <result column="province_id" javaType="INTEGER" property="provinceId"></result>
+        <result column="city_id" javaType="INTEGER" property="cityId"></result>
+        <result column="county_id" javaType="INTEGER" property="countyId"></result>
+    </resultMap>
+
+    <select id="getProvince"
+            resultMap="areaInfo">
+    SELECT id,name,short_name,area_property,postcode,pinyin,initial,province_id,city_id,county_id 
+    FROM `tb_area_dic` WHERE id = province_id and delete_state=0 order by area_property desc,id
+    </select>
+
+    <select id="getCity"
+            parameterType="int"
+            resultMap="areaInfo">
+    SELECT id,NAME,short_name,area_property,postcode,pinyin,initial,province_id,city_id,county_id  
+    FROM `tb_area_dic`
+    WHERE id = city_id AND province_id = #{provinceId} and delete_state=0 order by area_property desc,id
+    </select>
+
+    <select id="getCounty"
+            resultMap="areaInfo">
+    SELECT id,NAME,short_name,area_property,postcode,pinyin,initial,province_id,city_id,county_id  
+    FROM `tb_area_dic`
+    WHERE id = county_id AND city_id = #{cityId} and delete_state=0 order by area_property desc,id
+    </select>
+    
+    <select id="getAreaInfoById"
+            resultMap="areaInfo">
+    SELECT id,NAME,short_name,area_property,postcode,pinyin,initial,province_id,city_id,county_id  
+    FROM `tb_area_dic`
+    WHERE id = #{id} and delete_state=0
+    </select>
+    
+    <resultMap id="attribution" type="com.jfshare.finagle.thrift.common.Attribution">
+        <result column="city_id" javaType="Integer" property="cityId"></result>
+        <result column="city_Name" javaType="String" property="cityName"></result>
+        <result column="province_id" javaType="Integer" property="provinceId"></result>
+        <result column="province_Name" javaType="String" property="provinceName"></result>
+    </resultMap>
+    <select id="numberAttribution"
+            parameterType="string"
+            resultMap="attribution">
+    SELECT `province_id`,`province_name`,`city_id`,`city_name`
+    FROM `tb_mobile2address_dic`
+    WHERE h_code = #{number}
+    </select>
+
+    <resultMap id="attributionOperator" type="com.jfshare.finagle.thrift.common.AttributionOperator">
+        <result column="city_id" javaType="Integer" property="cityId"></result>
+        <result column="city_Name" javaType="String" property="cityName"></result>
+        <result column="province_id" javaType="Integer" property="provinceId"></result>
+        <result column="province_Name" javaType="String" property="provinceName"></result>
+        <result column="operator" javaType="String" property="operator"></result>
+    </resultMap>
+    <select id="numberAttributionOperator"
+            parameterType="string"
+            resultMap="attributionOperator">
+    SELECT `province_id`,`province_name`,`city_id`,`city_name`,`operator`
+    FROM `tb_mobile2address_dic`
+    WHERE h_code = #{number}
+    </select>
+
+    <select id="ipAttribution"
+            parameterType="long"
+            resultMap="attribution">
+    SELECT `city_id`,`city_name`,`province_id`,`province_name`
+    FROM `tb_ip2address_dic`
+    where #{ip} >= `ip_start_int` and `ip_end_int` >= #{ip}
+    </select>
+
+    <select id="cityAttribution"
+            parameterType="int"
+            resultMap="attribution">
+    SELECT b.city_id,b.name as city_name,b.province_id,a.name as province_name FROM `tb_area_dic` a,
+    (SELECT `city_id`,`name`,`province_id` FROM `tb_area_dic` WHERE id = #{cityId} and delete_state=0) b
+    WHERE a.id = b.province_id;
+    </select>
+
+    <select id="getProvinceId"
+            parameterType="string"
+            resultType="int">
+    SELECT a.id FROM `tb_area_dic` a
+    WHERE a.id = a.province_id and a.name like CONCAT('%',#{provinceName},'%')
+    </select>
+    <select id="getCityId"
+            parameterType="java.util.HashMap"
+            resultType="int">
+    SELECT a.id FROM `tb_area_dic` a
+    WHERE a.id = a.city_id and a.province_id = #{provinceId} and a.name like CONCAT('%',#{cityName},'%')
+    </select>
+    <select id="getCountyId"
+            parameterType="java.util.HashMap"
+            resultType="int">
+    SELECT a.id FROM `tb_area_dic` a
+    WHERE  a.county_id = a.id and a.city_id = #{cityId} and a.name like CONCAT('%',#{countyName},'%')
+    </select>
+
+</mapper>

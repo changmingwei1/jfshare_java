@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfshare.order.model.mappers.TbOrderInfoMapper">
+  <resultMap id="OrderInfoResultMap" type="com.jfshare.order.model.TbOrderInfoRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="vice_name" jdbcType="VARCHAR" property="viceName" />
+    <result column="product_snapshoot_id" jdbcType="VARCHAR" property="productSnapshootId" />
+    <result column="sku_num" jdbcType="VARCHAR" property="skuNum" />
+    <result column="sku_desc" jdbcType="VARCHAR" property="skuDesc" />
+    <result column="seller_class_num" jdbcType="VARCHAR" property="sellerClassNum" />
+    <result column="cur_price" jdbcType="INTEGER" property="curPrice" />
+    <result column="org_price" jdbcType="INTEGER" property="orgPrice" />
+    <result column="images_url" jdbcType="VARCHAR" property="imagesUrl" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="shelf" jdbcType="VARCHAR" property="shelf" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+    <result column="subject_id" jdbcType="INTEGER" property="subjectId" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="wi" jdbcType="VARCHAR" property="wi" />
+    <result column="exchange_score" jdbcType="INTEGER" property="exchangeScore" />
+    <result column="exchange_cash" jdbcType="INTEGER" property="exchangeCash" />
+    <result column="exchange_rule" jdbcType="VARCHAR" property="exchangeRule" />
+    <result column="third_score" jdbcType="INTEGER" property="thirdScore" />
+  </resultMap>
+
+  <insert id="insertSelectiveEx_OrderInfo" parameterType="map">
+    insert into ${table}
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="record.id != null">
+        id,
+      </if>
+      <if test="record.orderId != null">
+        order_id,
+      </if>
+      <if test="record.productId != null">
+        product_id,
+      </if>
+      <if test="record.productName != null">
+        product_name,
+      </if>
+      <if test="record.viceName != null">
+        vice_name,
+      </if>
+      <if test="record.productSnapshootId != null">
+        product_snapshoot_id,
+      </if>
+      <if test="record.skuNum != null">
+        sku_num,
+      </if>
+      <if test="record.skuDesc != null">
+        sku_desc,
+      </if>
+      <if test="record.sellerClassNum != null">
+        seller_class_num,
+      </if>
+      <if test="record.curPrice != null">
+        cur_price,
+      </if>
+      <if test="record.orgPrice != null">
+        org_price,
+      </if>
+      <if test="record.imagesUrl != null">
+        images_url,
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="record.createTime != null">
+        create_time,
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id,
+      </if>
+      <if test="record.type != null">
+        type,
+      </if>
+      <if test="record.shelf != null">
+        shelf,
+      </if>
+      <if test="record.count != null">
+        count,
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="record.subjectId != null">
+        subject_id,
+      </if>
+      <if test="record.brandId != null">
+        brand_id,
+      </if>
+      <if test="record.wi != null">
+        wi,
+      </if>
+      <if test="record.exchangeScore != null">
+        exchange_score,
+      </if>
+      <if test="record.exchangeCash != null">
+        exchange_cash,
+      </if>
+      <if test="record.exchangeRule != null">
+        exchange_rule,
+      </if>
+      <if test="record.thirdScore != null">
+        third_score,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="record.id != null">
+        #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null">
+        #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productId != null">
+        #{record.productId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viceName != null">
+        #{record.viceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productSnapshootId != null">
+        #{record.productSnapshootId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuNum != null">
+        #{record.skuNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuDesc != null">
+        #{record.skuDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sellerClassNum != null">
+        #{record.sellerClassNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curPrice != null">
+        #{record.curPrice,jdbcType=INTEGER},
+      </if>
+      <if test="record.orgPrice != null">
+        #{record.orgPrice,jdbcType=INTEGER},
+      </if>
+      <if test="record.imagesUrl != null">
+        #{record.imagesUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        #{record.createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="record.createUserId != null">
+        #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.shelf != null">
+        #{record.shelf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.count != null">
+        #{record.count,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        #{record.lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+      </if>
+      <if test="record.subjectId != null">
+        #{record.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.brandId != null">
+        #{record.brandId,jdbcType=INTEGER},
+      </if>
+      <if test="record.wi != null">
+        #{record.wi,jdbcType=VARCHAR},
+      </if>
+      <if test="record.exchangeScore != null">
+        #{record.exchangeScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.exchangeCash != null">
+        #{record.exchangeCash,jdbcType=INTEGER},
+      </if>
+      <if test="record.exchangeRule != null">
+        #{record.exchangeRule,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thirdScore != null">
+        #{record.thirdScore,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

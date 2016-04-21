@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfshare.task.dao.mysql.impl.OrderDaoImpl">
+
+    <resultMap id="OrderResultMap" type="com.jfshare.task.model.manual.OrderModel">
+        <id column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="trade_code" property="tradeCode" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="pay_account" property="payAccount" jdbcType="VARCHAR"/>
+        <result column="seller_id" property="sellerId" jdbcType="INTEGER"/>
+        <result column="seller_name" property="sellerName" jdbcType="VARCHAR"/>
+        <result column="pay_channel" property="payChannel" jdbcType="INTEGER"/>
+        <result column="pay_id" property="payId" jdbcType="VARCHAR"/>
+        <result column="closing_price" property="closingPrice" jdbcType="INTEGER"/>
+        <result column="third_id" property="thirdId" jdbcType="VARCHAR"/>
+        <result column="express_id" property="expressId" jdbcType="INTEGER"/>
+        <result column="express_no" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="province_id" property="provinceId" jdbcType="INTEGER"/>
+        <result column="city_id" property="cityId" jdbcType="INTEGER"/>
+        <result column="county_id" property="countyId" jdbcType="INTEGER"/>
+        <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR"/>
+        <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
+        <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR"/>
+        <result column="receiver_tele" property="receiverTele" jdbcType="VARCHAR"/>
+        <result column="order_state" property="orderState" jdbcType="INTEGER"/>
+        <result column="seller_comment" property="sellerComment" jdbcType="VARCHAR"/>
+        <result column="buyer_comment" property="buyerComment" jdbcType="VARCHAR"/>
+        <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="last_update_user_id" property="lastUpdateUserId" jdbcType="INTEGER"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="pay_state" property="payState" jdbcType="INTEGER"/>
+        <result column="address_id" property="addressId" jdbcType="INTEGER"/>
+        <result column="province_name" property="provinceName" jdbcType="VARCHAR"/>
+        <result column="city_name" property="cityName" jdbcType="VARCHAR"/>
+        <result column="county_name" property="countyName" jdbcType="VARCHAR"/>
+        <result column="post_code" property="postCode" jdbcType="VARCHAR"/>
+        <result column="deliver_time" property="deliverTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="success_time" property="successTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="settlement_state" property="settlementState" jdbcType="TINYINT"/>
+        <result column="postage" property="postage" jdbcType="INTEGER"/>
+        <result column="order_state_type" property="orderStateType" jdbcType="INTEGER"/>
+        <result column="order_state_type_desc" property="orderStateTypeDesc" jdbcType="INTEGER"/>
+        <result column="settlement_time" property="settlementTime" jdbcType="TIMESTAMP"
+                typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+        <result column="order_tag" property="orderTag" jdbcType="INTEGER"/>
+        <result column="express_name" property="expressName" jdbcType="VARCHAR"/>
+        <result column="wi" property="wi" jdbcType="VARCHAR"/>
+        <result column="from_source" property="fromSource" jdbcType="INTEGER"/>
+        <result column="trade_pay_id" property="tradePayId" jdbcType="VARCHAR"/>
+        <result column="order_delete_state" property="orderDeleteState" jdbcType="INTEGER"/>
+        <result column="exchange_score" property="exchangeScore" jdbcType="INTEGER"/>
+        <result column="exchange_cash" property="exchangeCash" jdbcType="INTEGER"/>
+        <result column="order_batch" property="orderBatch" jdbcType="VARCHAR"/>
+        <result column="active_state" property="activeState" jdbcType="INTEGER"/>
+        <result column="third_score" property="thirdScore" jdbcType="INTEGER"/>
+
+        <collection property="tbOrderInfoList" column="order_id" javaType="ArrayList"
+                    ofType="com.jfshare.task.model.manual.TbOrderInfoRecord">
+            <result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+            <result column="product_id" property="productId" jdbcType="VARCHAR"/>
+            <result column="product_name" property="productName" jdbcType="VARCHAR"/>
+            <result column="vice_name" property="viceName" jdbcType="VARCHAR"/>
+            <result column="product_snapshoot_id" property="productSnapshootId" jdbcType="VARCHAR"/>
+            <result column="sku_num" property="skuNum" jdbcType="VARCHAR"/>
+            <result column="sku_desc" property="skuDesc" jdbcType="VARCHAR"/>
+            <result column="seller_class_num" property="sellerClassNum" jdbcType="VARCHAR"/>
+            <result column="cur_price" property="curPrice" jdbcType="INTEGER"/>
+            <result column="org_price" property="orgPrice" jdbcType="INTEGER"/>
+            <result column="images_url" property="imagesUrl" jdbcType="VARCHAR"/>
+            <result column="last_update_user_id" property="lastUpdateUserId" jdbcType="INTEGER"/>
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP"
+                    typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+            <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+            <result column="type" property="type" jdbcType="INTEGER"/>
+            <result column="shelf" property="shelf" jdbcType="VARCHAR"/>
+            <result column="count" property="count" jdbcType="INTEGER"/>
+            <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP"
+                    typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler"/>
+            <result column="subject_id" property="subjectId" jdbcType="INTEGER"/>
+            <result column="brand_id" property="brandId" jdbcType="INTEGER"/>
+            <result column="wi" property="wi" jdbcType="VARCHAR"/>
+            <result column="exchange_score" property="exchangeScore" jdbcType="INTEGER"/>
+            <result column="exchange_cash" property="exchangeCash" jdbcType="INTEGER"/>
+            <result column="exchange_rule" property="exchangeRule" jdbcType="VARCHAR"/>
+            <result column="third_score" property="thirdScore"  jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Set_Order_Fields">
+        <set>
+            <if test="record.tradeCode != null">
+                trade_code = #{record.tradeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userName != null">
+                user_name = #{record.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="record.cancelTime != null">
+                cancel_time = #{record.cancelTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="record.payTime != null">
+                pay_time = #{record.payTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="record.payAccount != null">
+                pay_account = #{record.payAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sellerName != null">
+                seller_name = #{record.sellerName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.payChannel != null">
+                pay_channel = #{record.payChannel,jdbcType=INTEGER},
+            </if>
+            <if test="record.payId != null">
+                pay_id = #{record.payId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.closingPrice != null">
+                closing_price = #{record.closingPrice,jdbcType=INTEGER},
+            </if>
+            <if test="record.thirdId != null">
+                third_id = #{record.thirdId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.expressId != null">
+                express_id = #{record.expressId,jdbcType=INTEGER},
+            </if>
+            <if test="record.expressNo != null">
+                express_no = #{record.expressNo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.provinceId != null">
+                province_id = #{record.provinceId,jdbcType=INTEGER},
+            </if>
+            <if test="record.cityId != null">
+                city_id = #{record.cityId,jdbcType=INTEGER},
+            </if>
+            <if test="record.countyId != null">
+                county_id = #{record.countyId,jdbcType=INTEGER},
+            </if>
+            <if test="record.receiverAddress != null">
+                receiver_address = #{record.receiverAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="record.receiverName != null">
+                receiver_name = #{record.receiverName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.receiverMobile != null">
+                receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="record.receiverTele != null">
+                receiver_tele = #{record.receiverTele,jdbcType=VARCHAR},
+            </if>
+            <if test="record.orderState != null">
+                order_state = #{record.orderState,jdbcType=INTEGER},
+            </if>
+            <if test="record.sellerComment != null">
+                seller_comment = #{record.sellerComment,jdbcType=VARCHAR},
+            </if>
+            <if test="record.buyerComment != null">
+                buyer_comment = #{record.buyerComment,jdbcType=VARCHAR},
+            </if>
+            <if test="record.lastUpdateTime != null">
+                last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="record.lastUpdateUserId != null">
+                last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+            </if>
+            <if test="record.createUserId != null">
+                create_user_id = #{record.createUserId,jdbcType=INTEGER},
+            </if>
+            <if test="record.payState != null">
+                pay_state = #{record.payState,jdbcType=INTEGER},
+            </if>
+            <if test="record.addressId != null">
+                address_id = #{record.addressId,jdbcType=INTEGER},
+            </if>
+            <if test="record.provinceName != null">
+                province_name = #{record.provinceName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cityName != null">
+                city_name = #{record.cityName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.countyName != null">
+                county_name = #{record.countyName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.postCode != null">
+                post_code = #{record.postCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deliverTime != null">
+                deliver_time = #{record.deliverTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="record.successTime != null">
+                success_time = #{record.successTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="record.settlementState != null">
+                settlement_state = #{record.settlementState,jdbcType=TINYINT},
+            </if>
+            <if test="record.postage != null">
+                postage = #{record.postage,jdbcType=INTEGER},
+            </if>
+            <if test="record.orderStateType != null">
+                order_state_type = #{record.orderStateType,jdbcType=INTEGER},
+            </if>
+            <if test="record.orderStateTypeDesc != null">
+                order_state_type_desc = #{record.orderStateTypeDesc,jdbcType=INTEGER},
+            </if>
+            <if test="record.settlementTime != null">
+                settlement_time = #{record.settlementTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
+            </if>
+            <if test="record.orderTag != null">
+                order_tag = #{record.orderTag,jdbcType=INTEGER},
+            </if>
+            <if test="record.expressName != null">
+                express_name = #{record.expressName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.wi != null">
+                wi = #{record.wi,jdbcType=VARCHAR},
+            </if>
+            <if test="record.fromSource != null">
+                from_source = #{record.fromSource,jdbcType=INTEGER},
+            </if>
+            <if test="record.tradePayId != null">
+                trade_pay_id = #{record.tradePayId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.orderDeleteState != null">
+                order_delete_state = #{record.orderDeleteState,jdbcType=INTEGER},
+            </if>
+            <if test="record.exchangeScore != null">
+                exchange_score = #{record.exchangeScore,jdbcType=INTEGER},
+            </if>
+            <if test="record.exchangeCash != null">
+                exchange_cash = #{record.exchangeCash,jdbcType=INTEGER},
+            </if>
+            <if test="record.orderBatch != null">
+                order_batch = #{record.orderBatch,jdbcType=VARCHAR},
+            </if>
+            <if test="record.activeState != null">
+                active_state = #{record.activeState,jdbcType=INTEGER},
+            </if>
+            <if test="record.thirdScore != null">
+                third_score = #{record.thirdScore,jdbcType=INTEGER},
+            </if>
+        </set>
+    </sql>
+
+
+    <sql id="Select_Order_Sql">
+        a.order_id, a.trade_code, a.user_id, a.user_name, a.create_time, a.cancel_time, a.pay_time, a.pay_account,
+        a.seller_id, a.seller_name, a.pay_channel, a.pay_id, a.closing_price, a.third_id, a.express_id,
+        a.express_no, a.province_id, a.city_id, a.county_id, a.receiver_address, a.receiver_name, a.receiver_mobile,
+        a.receiver_tele, a.order_state, a.seller_comment, a.buyer_comment, a.last_update_time, a.last_update_user_id,
+        a.create_user_id, a.pay_state, a.address_id, a.province_name, a.city_name, a.county_name, a.post_code,
+        a.deliver_time, a.success_time, a.settlement_state, a.postage, a.order_state_type, a.order_state_type_desc,
+        a.settlement_time, a.order_tag, a.express_name, a.wi, a.from_source, a.trade_pay_id, a.order_delete_state,
+        a.exchange_score, a.exchange_cash, a.order_batch, a.active_state, a.third_score,
+        b.order_id, b.product_id, b.product_name, b.vice_name, b.product_snapshoot_id, b.sku_num,
+        b.sku_desc, b.seller_class_num, b.cur_price, b.org_price, b.images_url, b.last_update_user_id,
+        b.create_time, b.create_user_id, b.type, b.shelf, b.count, b.last_update_time, b.subject_id, b.brand_id,
+        b.wi, b.exchange_score, b.exchange_cash, b.exchange_rule, b.third_score
+    </sql>
+
+    <sql id="Select_Order_Profile_Sql">
+        order_id, trade_code, user_id, user_name, create_time, cancel_time, pay_time, pay_account,
+        seller_id, seller_name, pay_channel, pay_id, closing_price, third_id, express_id,
+        express_no, province_id, city_id, county_id, receiver_address, receiver_name, receiver_mobile,
+        receiver_tele, order_state, seller_comment, buyer_comment, last_update_time, last_update_user_id,
+        create_user_id, pay_state, address_id, province_name, city_name, county_name, post_code,
+        deliver_time, success_time, settlement_state, postage, order_state_type, order_state_type_desc,
+        settlement_time, order_tag, express_name, wi, from_source, trade_pay_id, order_delete_state,
+        exchange_score, exchange_cash, order_batch, active_state, third_score
+    </sql>
+
+
+
+    <select id="selectByExampleEx_Order" parameterType="java.util.HashMap" resultMap="OrderResultMap">
+        select
+        <include refid="Select_Order_Profile_Sql"/>
+        from
+        ${orderTable} a
+
+        <where>
+
+            <if test="orderState != null and orderState > 0">
+                <choose>
+                    <!--买家待发货特殊包含审核中订单-->
+                    <when test="orderState == 3">
+                        AND a.order_state >= (#{orderState} - 1) * 10 AND a.order_state <![CDATA[<]]> (#{orderState} + 1) * 10
+                    </when>
+                    <!--区间订单状态-->
+                    <when test="10 > orderState">
+                        AND a.order_state >= #{orderState} * 10 AND  a.order_state <![CDATA[<]]> (#{orderState} + 1) * 10
+                    </when>
+                    <!--精准订单状态-->
+                    <when test="orderState >= 10">
+                        AND a.order_state =#{orderState}
+                    </when>
+                </choose>
+             </if>
+        </where>
+        order by a.create_time desc, a.order_id
+        <if test="start != null and end != null">
+            limit #{start} ,#{end}
+        </if>
+    </select>
+</mapper>
