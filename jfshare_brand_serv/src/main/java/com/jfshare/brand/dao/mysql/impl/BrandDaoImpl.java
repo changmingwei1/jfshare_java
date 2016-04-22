@@ -65,4 +65,28 @@ public class BrandDaoImpl extends SqlSessionDaoSupport implements IBrandDao {
 
         return this.getSqlSession().selectList("queryByIds", paraMap);
     }
+
+	@Override
+	public int addBrand(TbBrand brand) {
+		return tbBrandMapper.insert(brand);
+	}
+
+	@Override
+	public int deleteBrand(int id) {
+//		TbBrandExample example = new TbBrandExample();
+//	    TbBrandExample.Criteria criteria = example.createCriteria();
+//	    criteria.andIdEqualTo(id);
+	    TbBrand brand = new TbBrand();
+	    brand.setId(id);
+	    brand.setState(1);
+	    return tbBrandMapper.updateByPrimaryKeySelective(brand);
+	    
+	}
+
+	@Override
+	public int updateBrand(TbBrand brand) {
+		return tbBrandMapper.updateByPrimaryKeySelective(brand);
+	}
+    
+    
 }

@@ -16,4 +16,10 @@ public interface IBrandDao {
     List<TbBrand> query();
 
     List<TbBrand> queryByIds(List<Integer> validIdList);
+    
+    int addBrand(TbBrand brand);
+    
+    int deleteBrand(int id);
+    
+    int updateBrand(TbBrand brand);
 }

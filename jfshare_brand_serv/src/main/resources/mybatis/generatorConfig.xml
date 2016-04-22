@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <!-- db driver -->
-    <classPathEntry location="D:\Program Files\maven\res\mysql\mysql-connector-java\5.1.33\mysql-connector-java-5.1.33.jar" />
+    <classPathEntry location="C:\Program Files\Java\mysql-connector-java-5.1.6.jar" />
     
     <!-- introspectedColumnImpl prop define special column reflect -->
     <context id="mysqlJfx" targetRuntime="MyBatis3">
@@ -45,6 +45,9 @@
 
       <!--Run As  Maven build... goals mybatis-generator:generate -->
       <table tableName="tb_brand" schema="jfshare">
+       <!--<columnRenamingRule searchString="^tb_" replaceString="" />-->
+      </table>
+      <table tableName="tb_subject_brand" schema="jfshare">
        <!--<columnRenamingRule searchString="^tb_" replaceString="" />-->
       </table>
     </context>

@@ -1,6 +1,6 @@
-import com.jfshare.finagle.thrift.brand.BrandResult;
-import com.jfshare.finagle.thrift.brand.BrandServ;
-import com.jfshare.finagle.thrift.brand.QueryParam;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -10,15 +10,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.jfshare.finagle.thrift.brand.BrandInfo;
+import com.jfshare.finagle.thrift.brand.BrandResult;
+import com.jfshare.finagle.thrift.brand.BrandServ;
+import com.jfshare.finagle.thrift.result.Result;
 
-/**
- * Created by lenovo on 2015/9/28.
- */
+
 public class Test_brand {
     // 执行次数，0的时候不执行测试用例
-    private static final Integer DO_IT = 0;
+    private static final Integer DO_IT = 1;
 
     private TTransport transport;
 
@@ -53,6 +53,29 @@ public class Test_brand {
     public void testM1() throws Exception {
         if (DO_IT == 0)
             return;
+        
+ /*       BrandInfo info = new BrandInfo();
+        info.setCreateId(33);
+        info.setName("hewei");
+        info.setImgKey("heweikey");
+        Result result = client.addBrand(info);
+        System.out.print("返回码=" + result);*/
+        
+/*        BrandInfo info = new BrandInfo();
+        info.setId(834);
+        info.setCreateId(33);
+        info.setName("hewei");
+        info.setImgKey("heweikey2");
+        info.setLastUpdateId(22222);
+        Result result = client.updateBrand(info);
+        System.out.print("返回码=" + result);*/
+        
+        
+        /*Result result = client.deleteBrand(833);
+        System.out.print("返回码=" + result);*/
+        
+        BrandResult result = client.queryBySubject(3001);
+        System.out.print("返回码=" + result);
 
 //        QueryParam param = new QueryParam();
 ////        param.setId(1);
@@ -61,9 +84,9 @@ public class Test_brand {
 //        BrandResult ret = client.query();
 //        System.out.println("返回码="+ret);
 
-        List<Integer> ids = new ArrayList<Integer>();
+/*        List<Integer> ids = new ArrayList<Integer>();
         ids.add(1);ids.add(2);
         BrandResult brandResult = client.queryBatch(ids);
-        System.out.println("返回码="+brandResult);
+        System.out.println("返回码="+brandResult);*/
     }
 }

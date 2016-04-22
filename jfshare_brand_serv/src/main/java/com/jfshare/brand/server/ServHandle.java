@@ -101,4 +101,73 @@ public class ServHandle implements BrandServ.Iface {
 
 		return brandResult;
 	}
+
+	@Override
+	public Result addBrand(BrandInfo brand) throws TException {
+		Result result = new Result();
+		result.setCode(0);
+		try {
+			int ret = brandSvcImpl.addBrand(brand);
+			if(ret!=0){
+				result.setCode(1);
+				logger.info("参数问题，添加品牌出错！");
+			}
+		} catch (Exception e) {
+			logger.error("添加品牌出错！", e);
+			result.setCode(1);
+		}
+		return result;
+	}
+
+	
+
+	@Override
+	public Result deleteBrand(int id) throws TException {
+		Result result = new Result();
+		result.setCode(0);
+		
+		try{
+			brandSvcImpl.deleteBrand(id);
+		}catch(Exception e){
+			logger.error("删除品牌出错！", e);
+			result.setCode(1);
+		}
+		return result;
+	}
+
+	@Override
+	public Result updateBrand(BrandInfo brand) throws TException {
+		Result result = new Result();
+		result.setCode(0);
+		try {
+			int ret = brandSvcImpl.updateBrand(brand);
+			if(ret!=0){
+				result.setCode(1);
+				logger.info("参数问题，修改品牌出错！");
+			}
+		} catch (Exception e) {
+			logger.error("修改品牌出错！", e);
+			result.setCode(1);
+		}
+		return result;
+	}
+
+	@Override
+	public BrandResult queryBySubject(int id) throws TException {
+		BrandResult brandResult = new BrandResult();
+		Result result = new Result();
+		result.setCode(0);
+		brandResult.setResult(result);
+		try {
+			List<BrandInfo> brands = brandSvcImpl.queryBySubject(id);
+			brandResult.setBrandInfo(brands);
+		} catch (Exception e) {
+			logger.error("查询品牌出错！", e);
+			result.setCode(1);
+		}
+
+		return brandResult;
+	}
+	
+	
 }
