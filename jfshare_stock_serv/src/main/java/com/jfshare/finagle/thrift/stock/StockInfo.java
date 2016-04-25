@@ -11,12 +11,20 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
 import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.thrift.*;
+import org.apache.thrift.async.*;
 import org.apache.thrift.meta_data.*;
+import org.apache.thrift.transport.*;
 import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
@@ -27,14 +35,12 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
   private static final TField TOTAL_FIELD_DESC = new TField("total", TType.I32, (short)1);
   private static final TField LOCK_TOTAL_FIELD_DESC = new TField("lockTotal", TType.I32, (short)2);
   private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)3);
-  private static final TField STOCK_ITEM_MAP_FIELD_DESC = new TField("stockItemMap", TType.MAP, (short)4);
-  private static final TField STOCK_ITEMS_FIELD_DESC = new TField("stockItems", TType.LIST, (short)5);
+  private static final TField STOCK_ITEMS_FIELD_DESC = new TField("stockItems", TType.LIST, (short)4);
 
 
   public int total;
   public int lockTotal;
   public String productId;
-  public Map<String,StockItem> stockItemMap;
   public List<StockItem> stockItems;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -42,8 +48,7 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
     TOTAL((short)1, "total"),
     LOCK_TOTAL((short)2, "lockTotal"),
     PRODUCT_ID((short)3, "productId"),
-    STOCK_ITEM_MAP((short)4, "stockItemMap"),
-    STOCK_ITEMS((short)5, "stockItems");
+    STOCK_ITEMS((short)4, "stockItems");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -64,9 +69,7 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
   	return LOCK_TOTAL;
         case 3: // PRODUCT_ID
   	return PRODUCT_ID;
-        case 4: // STOCK_ITEM_MAP
-  	return STOCK_ITEM_MAP;
-        case 5: // STOCK_ITEMS
+        case 4: // STOCK_ITEMS
   	return STOCK_ITEMS;
         default:
   	return null;
@@ -122,10 +125,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.PRODUCT_ID, new FieldMetaData("productId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.STOCK_ITEM_MAP, new FieldMetaData("stockItemMap", TFieldRequirementType.DEFAULT,
-      new MapMetaData(TType.MAP,
-            new FieldValueMetaData(TType.STRING),
-            new StructMetaData(TType.STRUCT, StockItem.class))));
     tmpMap.put(_Fields.STOCK_ITEMS, new FieldMetaData("stockItems", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
                 new StructMetaData(TType.STRUCT, StockItem.class))));
@@ -141,7 +140,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
     int total,
     int lockTotal,
     String productId,
-    Map<String,StockItem> stockItemMap,
     List<StockItem> stockItems)
   {
     this();
@@ -150,7 +148,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
     this.lockTotal = lockTotal;
     setLockTotalIsSet(true);
     this.productId = productId;
-    this.stockItemMap = stockItemMap;
     this.stockItems = stockItems;
   }
 
@@ -164,17 +161,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
     this.lockTotal = other.lockTotal;
     if (other.isSetProductId()) {
       this.productId = other.productId;
-    }
-    if (other.isSetStockItemMap()) {
-      Map<String,StockItem> __this__stockItemMap = new HashMap<String,StockItem>();
-      for (Map.Entry<String, StockItem> other_element : other.stockItemMap.entrySet()) {
-        String other_element_key = other_element.getKey();
-        StockItem other_element_value = other_element.getValue();
-        String __this__stockItemMap_copy_key = other_element_key;
-        StockItem __this__stockItemMap_copy_value = new StockItem(other_element_value);
-        __this__stockItemMap.put(__this__stockItemMap_copy_key, __this__stockItemMap_copy_value);
-      }
-      this.stockItemMap = __this__stockItemMap;
     }
     if (other.isSetStockItems()) {
       List<StockItem> __this__stockItems = new ArrayList<StockItem>();
@@ -196,7 +182,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
     setLockTotalIsSet(false);
     this.lockTotal = 0;
     this.productId = null;
-    this.stockItemMap = null;
     this.stockItems = null;
   }
 
@@ -273,42 +258,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
     }
   }
 
-  public int getStockItemMapSize() {
-    return (this.stockItemMap == null) ? 0 : this.stockItemMap.size();
-  }
-
-  public void putToStockItemMap(String key, StockItem val) {
-    if (this.stockItemMap == null) {
-      this.stockItemMap = new HashMap<String,StockItem>();
-    }
-    this.stockItemMap.put(key, val);
-  }
-
-  public Map<String,StockItem> getStockItemMap() {
-    return this.stockItemMap;
-  }
-
-  public StockInfo setStockItemMap(Map<String,StockItem> stockItemMap) {
-    this.stockItemMap = stockItemMap;
-    
-    return this;
-  }
-
-  public void unsetStockItemMap() {
-    this.stockItemMap = null;
-  }
-
-  /** Returns true if field stockItemMap is set (has been asigned a value) and false otherwise */
-  public boolean isSetStockItemMap() {
-    return this.stockItemMap != null;
-  }
-
-  public void setStockItemMapIsSet(boolean value) {
-    if (!value) {
-      this.stockItemMap = null;
-    }
-  }
-
   public int getStockItemsSize() {
     return (this.stockItems == null) ? 0 : this.stockItems.size();
   }
@@ -372,13 +321,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
         setProductId((String)value);
       }
       break;
-    case STOCK_ITEM_MAP:
-      if (value == null) {
-        unsetStockItemMap();
-      } else {
-        setStockItemMap((Map<String,StockItem>)value);
-      }
-      break;
     case STOCK_ITEMS:
       if (value == null) {
         unsetStockItems();
@@ -397,8 +339,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
       return new Integer(getLockTotal());
     case PRODUCT_ID:
       return getProductId();
-    case STOCK_ITEM_MAP:
-      return getStockItemMap();
     case STOCK_ITEMS:
       return getStockItems();
     }
@@ -418,8 +358,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
       return isSetLockTotal();
     case PRODUCT_ID:
       return isSetProductId();
-    case STOCK_ITEM_MAP:
-      return isSetStockItemMap();
     case STOCK_ITEMS:
       return isSetStockItems();
     }
@@ -462,14 +400,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
       if (!this.productId.equals(that.productId))
         return false;
     }
-    boolean this_present_stockItemMap = true && this.isSetStockItemMap();
-    boolean that_present_stockItemMap = true && that.isSetStockItemMap();
-    if (this_present_stockItemMap || that_present_stockItemMap) {
-      if (!(this_present_stockItemMap && that_present_stockItemMap))
-        return false;
-      if (!this.stockItemMap.equals(that.stockItemMap))
-        return false;
-    }
     boolean this_present_stockItems = true && this.isSetStockItems();
     boolean that_present_stockItems = true && that.isSetStockItems();
     if (this_present_stockItems || that_present_stockItems) {
@@ -497,10 +427,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
     builder.append(present_productId);
     if (present_productId)
       builder.append(productId);
-    boolean present_stockItemMap = true && (isSetStockItemMap());
-    builder.append(present_stockItemMap);
-    if (present_stockItemMap)
-      builder.append(stockItemMap);
     boolean present_stockItems = true && (isSetStockItems());
     builder.append(present_stockItems);
     if (present_stockItems)
@@ -542,16 +468,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
     }
     if (isSetProductId()) {
       lastComparison = TBaseHelper.compareTo(this.productId, typedOther.productId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetStockItemMap()).compareTo(typedOther.isSetStockItemMap());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetStockItemMap()) {
-      lastComparison = TBaseHelper.compareTo(this.stockItemMap, typedOther.stockItemMap);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -607,37 +523,17 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 4: // STOCK_ITEM_MAP
-          if (field.type == TType.MAP) {
-            {
-            TMap _map0 = iprot.readMapBegin();
-            this.stockItemMap = new HashMap<String,StockItem>(2*_map0.size);
-            for (int _i1 = 0; _i1 < _map0.size; ++_i1)
-            {
-              String _key2;
-              StockItem _val3;
-              _key2 = iprot.readString();
-              _val3 = new StockItem();
-              _val3.read(iprot);
-              this.stockItemMap.put(_key2, _val3);
-            }
-            iprot.readMapEnd();
-            }
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 5: // STOCK_ITEMS
+        case 4: // STOCK_ITEMS
           if (field.type == TType.LIST) {
             {
-            TList _list4 = iprot.readListBegin();
-            this.stockItems = new ArrayList<StockItem>(_list4.size);
-            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
+            TList _list0 = iprot.readListBegin();
+            this.stockItems = new ArrayList<StockItem>(_list0.size);
+            for (int _i1 = 0; _i1 < _list0.size; ++_i1)
             {
-              StockItem _elem6;
-              _elem6 = new StockItem();
-              _elem6.read(iprot);
-              this.stockItems.add(_elem6);
+              StockItem _elem2;
+              _elem2 = new StockItem();
+              _elem2.read(iprot);
+              this.stockItems.add(_elem2);
             }
             iprot.readListEnd();
             }
@@ -671,26 +567,13 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
       oprot.writeString(this.productId);
       oprot.writeFieldEnd();
     }
-    if (this.stockItemMap != null) {
-      oprot.writeFieldBegin(STOCK_ITEM_MAP_FIELD_DESC);
-      {
-        oprot.writeMapBegin(new TMap(TType.STRING, TType.STRUCT, this.stockItemMap.size()));
-        for (Map.Entry<String, StockItem> _iter7 : this.stockItemMap.entrySet())
-        {
-          oprot.writeString(_iter7.getKey());
-          _iter7.getValue().write(oprot);
-        }
-        oprot.writeMapEnd();
-      }
-      oprot.writeFieldEnd();
-    }
     if (this.stockItems != null) {
       oprot.writeFieldBegin(STOCK_ITEMS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.stockItems.size()));
-        for (StockItem _iter8 : this.stockItems)
+        for (StockItem _iter3 : this.stockItems)
         {
-          _iter8.write(oprot);
+          _iter3.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -717,14 +600,6 @@ public class StockInfo implements TBase<StockInfo, StockInfo._Fields>, java.io.S
       sb.append("null");
     } else {
       sb.append(this.productId);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("stockItemMap:");
-    if (this.stockItemMap == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.stockItemMap);
     }
     first = false;
     if (!first) sb.append(", ");
