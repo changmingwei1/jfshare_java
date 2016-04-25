@@ -221,11 +221,11 @@ public class PayUtil {
         payUrlMap.put("_input_charset", AlipayConfig.input_charset);
         payUrlMap.put("body", ConvertUtil.getString(payReq.getRemark(), "无"));
 //        payUrlMap.put("exter_invoke_ip", payReq.getPayIp());
-        payUrlMap.put("notify_url", AlipayConfig.notify_url);
+        payUrlMap.put("notify_url", PropertiesUtil.getProperty("jfx_pay_serv", "alipay_notify_url"));
         payUrlMap.put("out_trade_no", payId);
         payUrlMap.put("partner", AlipayConfig.partner);
         payUrlMap.put("payment_type", "1");
-        payUrlMap.put("return_url", AlipayConfig.return_url);
+        payUrlMap.put("return_url", PropertiesUtil.getProperty("jfx_pay_serv", "alipay_return_url"));
         payUrlMap.put("seller_email", AlipayConfig.seller_email);
 //        payUrlMap.put("seller_id", AlipayConfig.partner);
         payUrlMap.put("service", "create_direct_pay_by_user");
@@ -234,6 +234,30 @@ public class PayUtil {
 
 //        payUrlMap.put("show_url", null);
 //        payUrlMap.put("anti_phishing_key", null);
+
+        Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap);
+        retMap.put("action", AlipayConfig.ALIPAY_GATEWAY_NEW);
+
+        String payUrl = JSON.toJSONString(retMap);
+        logger.info("AliPay支付申请url ==> " + payUrl);
+        return payUrl;
+    }
+
+    public static String getReqAliH5(PayReq payReq, String payId) {
+        Map<String, String> payUrlMap = new HashMap<String, String>();
+        payUrlMap.put("_input_charset", AlipayConfig.input_charset);
+        payUrlMap.put("body", ConvertUtil.getString(payReq.getRemark(), "无"));
+//        payUrlMap.put("exter_invoke_ip", payReq.getPayIp());
+        payUrlMap.put("notify_url", PropertiesUtil.getProperty("jfx_pay_serv", "alipay_notify_url"));
+        payUrlMap.put("out_trade_no", payId);
+        payUrlMap.put("partner", AlipayConfig.partner);
+        payUrlMap.put("payment_type", "1");
+        payUrlMap.put("return_url", PropertiesUtil.getProperty("jfx_pay_serv", "aliwap_return_url"));
+        payUrlMap.put("seller_id", AlipayConfig.partner);
+        payUrlMap.put("service", "alipay.wap.create.direct.pay.by.user");
+        payUrlMap.put("subject", payReq.getTitle());
+        payUrlMap.put("total_fee", PriceUtils.intToStr(payReq.getPrice()));
+        payUrlMap.put("show_url", PropertiesUtil.getProperty("jfx_pay_serv", "aliwap_show_url"));
 
         Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap);
         retMap.put("action", AlipayConfig.ALIPAY_GATEWAY_NEW);

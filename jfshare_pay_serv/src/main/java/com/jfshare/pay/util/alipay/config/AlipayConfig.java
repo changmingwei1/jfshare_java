@@ -51,6 +51,6 @@ public class AlipayConfig {
 	/**
 	 * 以下为商户配置参数
 	 */
-	public static String notify_url = "http://120.24.153.102:13005/pay/notify/alipay"; //后端支付通知地址
-	public static String return_url = "http://120.24.153.102:13003/pay/jump/alipay"; //前端支付通知地址
+//	public static String notify_url = "http://120.24.153.102:13005/pay/notify/alipay"; //后端支付通知地址
+//	public static String return_url = "http://120.24.153.102:13003/pay/jump/alipay"; //前端支付通知地址
 }
