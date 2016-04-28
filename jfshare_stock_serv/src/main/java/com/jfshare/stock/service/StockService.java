@@ -8,6 +8,7 @@ import com.jfshare.stock.model.StockLockModel;
 import com.jfshare.stock.model.TbProductStock;
 import com.jfshare.stock.util.ConvertUtil;
 import com.jfshare.stock.util.FailCode;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -117,16 +118,51 @@ public class StockService{
     public StockInfo getStockInfo(String productId) {
         //query from cache
         StockInfo stockInfo = this.stockRedis.getStockAll(productId);
-        if(stockInfo != null) {
+        if(stockInfo != null)
             return stockInfo;
-        }
 
         //query from db
         List<TbProductStock> stockList = stockDao.getStockByProductId(productId);
+        if(CollectionUtils.isEmpty(stockList))
+            return null;
 
         //reload to cache
         this.stockRedis.reloadStockCache(productId, stockList);
         stockInfo = ConvertUtil.convertStockInfo(productId, stockList);
+        return stockInfo;
+    }
+
+    public StockInfo getStockInfo(String productId, String storehouseId) {
+        //query from cache
+        StockInfo stockInfo = this.stockRedis.getStockStorehouse(productId, storehouseId);
+        if(stockInfo != null)
+            return stockInfo;
+
+        //query from db
+        List<TbProductStock> stockList = stockDao.getStockByProductId(productId);
+        if(CollectionUtils.isEmpty(stockList))
+            return null;
+
+        //reload to cache
+        this.stockRedis.reloadStockCache(productId, stockList);
+        stockInfo = ConvertUtil.convertStockInfo(productId, storehouseId, stockList);
+        return stockInfo;
+    }
+
+    public StockInfo getStockInfo(String productId, String storehouseId, String skuNum) {
+        //query from cache
+        StockInfo stockInfo = this.stockRedis.getStockSku(productId, storehouseId, skuNum);
+        if(stockInfo != null)
+            return stockInfo;
+
+        //query from db
+        List<TbProductStock> stockList = stockDao.getStockByProductId(productId);
+        if(CollectionUtils.isEmpty(stockList))
+            return null;
+
+        //reload to cache
+        this.stockRedis.reloadStockCache(productId, stockList);
+        stockInfo = ConvertUtil.convertStockInfo(productId, storehouseId, stockList);
         return stockInfo;
     }
 
@@ -143,7 +179,6 @@ public class StockService{
         this.stockRedis.removeStockCache(productId);
     }
 
-   
     public void createStock(List<TbProductStock> stockList) {
         //插入新的库存数据
         stockDao.insertStockInfoBatch(stockList);

@@ -85,9 +85,9 @@ public class Client extends TestCase {
 
 //            System.err.println(client.removeStock(productId));
 //            System.err.println(client.createStock(productId, si));
-            StockResult sr = client.getStockForSku(productId, list);
+//            StockResult sr = client.getStockForSku(productId, list);
 
-            System.err.println(sr);
+//            System.err.println(sr);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

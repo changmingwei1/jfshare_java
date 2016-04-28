@@ -8,7 +8,7 @@ public class FailCode {
 	public static final FailDesc SYS_ERROR = 			new FailDesc("SYS_ERROR", "5000", "系统异常");
 	
 	public static final FailDesc EntryIsNull = 		new FailDesc("DATA_ERROR", "5201", "带转换实体为null");
-	public static final FailDesc parametersEmpty = 		new FailDesc("DATA_ERROR", "5001", "库存接口参数不能为空");
+	public static final FailDesc parametersEmpty = 		new FailDesc("DATA_ERROR", "5001", "库存接口参数不合法");
 	public static final FailDesc skuNumIsNull = 		new FailDesc("DATA_ERROR", "5002", "skum编码为null");
 	public static final FailDesc stockCountError = 		new FailDesc("DATA_ERROR", "5003", "设置的库存数不能为负数");
 	

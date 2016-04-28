@@ -9,8 +9,6 @@ public enum QueryType {
     //商品-仓库维度查询
     storehouse,
     //商品-仓库-sku维度查询
-    sku,
-    //未知类型
-    undefined
+    sku
     ;
 }
