@@ -18,8 +18,8 @@ public class Client extends TestCase {
     @Override
     public void setUp() throws Exception {
 
-        transport = new TFramedTransport(new TSocket("120.24.153.155", 1983));
-//        transport = new TFramedTransport(new TSocket("localhost", 1983));
+//        transport = new TFramedTransport(new TSocket("120.24.153.155", 1983));
+        transport = new TFramedTransport(new TSocket("localhost", 1983));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new StockServ.Client(protocol);
@@ -32,11 +32,11 @@ public class Client extends TestCase {
     }
 
     /**
-     * 添加后台类目
+     * 新增库存信息
      * @throws Exception
      */
     @Test
-    public void testAddSubject() throws Exception {
+    public void testCreateStock() throws Exception {
         //商品id
         String productId = "ze0000test";
         try {
@@ -46,10 +46,12 @@ public class Client extends TestCase {
             StockItem item3 = new StockItem();
             item3.setSkuNum("200-200:200-200");
             item3.setCount(100);
+            item3.setStorehouseId("1");
             list.add(item3);
             StockItem item5 = new StockItem();
             item5.setSkuNum("100-100:100-100");
             item5.setCount(100);
+            item5.setStorehouseId("2");
             list.add(item5);
 
             si.setProductId(productId);
@@ -58,7 +60,7 @@ public class Client extends TestCase {
             ////////////////////////////////////////////////////
 
 //            System.err.println(client.removeStock(productId));
-//            System.err.println(client.setStock(productId, si));
+            System.err.println(client.createStock("testCreate", si));
 //            StockResult sr = client.getStock(productId);
 
 //            System.err.println(sr);

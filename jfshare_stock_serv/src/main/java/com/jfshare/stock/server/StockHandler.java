@@ -70,6 +70,7 @@ public class StockHandler extends BaseHandler implements StockServ.Iface {
                     break;
                 }
                 case sku:{
+                    stockInfo = this.stockService.getStockInfo(productId, param.getStorehouseId(), param.getSkuNum());
                     break;
                 }
             }
