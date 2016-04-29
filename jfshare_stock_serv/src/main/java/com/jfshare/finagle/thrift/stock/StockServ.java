@@ -39,7 +39,7 @@ public class StockServ {
   public interface Iface {
     public com.jfshare.finagle.thrift.result.Result setStock(String tranId, StockInfo stockInfo) throws TException;
     public StockResult queryStock(QueryParam param) throws TException;
-    public StockResult batchQueryStock(BatchQueryParam param) throws TException;
+    public BatchStockResult batchQueryStock(BatchQueryParam param) throws TException;
     public LockStockResult lockStock(String tranId, List<LockInfo> lockInfoList) throws TException;
     public com.jfshare.finagle.thrift.result.Result releaseStock(String tranId, List<LockInfo> lockInfoList) throws TException;
     public com.jfshare.finagle.thrift.result.Result releaseLockCount(String tranId, List<LockInfo> lockInfoList) throws TException;
@@ -65,7 +65,7 @@ public class StockServ {
   public interface ServiceIface {
     public Future<com.jfshare.finagle.thrift.result.Result> setStock(String tranId, StockInfo stockInfo);
     public Future<StockResult> queryStock(QueryParam param);
-    public Future<StockResult> batchQueryStock(BatchQueryParam param);
+    public Future<BatchStockResult> batchQueryStock(BatchQueryParam param);
     public Future<LockStockResult> lockStock(String tranId, List<LockInfo> lockInfoList);
     public Future<com.jfshare.finagle.thrift.result.Result> releaseStock(String tranId, List<LockInfo> lockInfoList);
     public Future<com.jfshare.finagle.thrift.result.Result> releaseLockCount(String tranId, List<LockInfo> lockInfoList);
@@ -183,7 +183,7 @@ public class StockServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryStock failed: unknown result");
     }
-    public StockResult batchQueryStock(BatchQueryParam param) throws TException
+    public BatchStockResult batchQueryStock(BatchQueryParam param) throws TException
     {
       send_batchQueryStock(param);
       return recv_batchQueryStock();
@@ -199,7 +199,7 @@ public class StockServ {
       oprot_.getTransport().flush();
     }
 
-    public StockResult recv_batchQueryStock() throws TException
+    public BatchStockResult recv_batchQueryStock() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -575,7 +575,7 @@ public class StockServ {
         prot.writeMessageEnd();
       }
 
-      public StockResult getResult() throws TException {
+      public BatchStockResult getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -892,7 +892,7 @@ public class StockServ {
         return Future.exception(e);
       }
     }
-    public Future<StockResult> batchQueryStock(BatchQueryParam param) {
+    public Future<BatchStockResult> batchQueryStock(BatchQueryParam param) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
@@ -907,8 +907,8 @@ public class StockServ {
         byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
         ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
         Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<StockResult>>() {
-          public Future<StockResult> apply(byte[] __buffer__) {
+        return __done__.flatMap(new Function<byte[], Future<BatchStockResult>>() {
+          public Future<BatchStockResult> apply(byte[] __buffer__) {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
@@ -1605,7 +1605,7 @@ public class StockServ {
           } catch (Exception e) {
             return Future.exception(e);
           }
-          Future<StockResult> future;
+          Future<BatchStockResult> future;
           try {
             future = iface.batchQueryStock(args.param);
           } catch (Exception e) {
@@ -1613,8 +1613,8 @@ public class StockServ {
           }
 
           try {
-            return future.flatMap(new Function<StockResult, Future<byte[]>>() {
-              public Future<byte[]> apply(StockResult value) {
+            return future.flatMap(new Function<BatchStockResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BatchStockResult value) {
                 batchQueryStock_result result = new batchQueryStock_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
@@ -3676,7 +3676,7 @@ public class StockServ {
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
 
-  public StockResult success;
+  public BatchStockResult success;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -3743,7 +3743,7 @@ public class StockServ {
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, StockResult.class)));
+      new StructMetaData(TType.STRUCT, BatchStockResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(batchQueryStock_result.class, metaDataMap);
   }
@@ -3753,7 +3753,7 @@ public class StockServ {
   }
 
   public batchQueryStock_result(
-    StockResult success)
+    BatchStockResult success)
   {
     this();
     this.success = success;
@@ -3764,7 +3764,7 @@ public class StockServ {
    */
   public batchQueryStock_result(batchQueryStock_result other) {
     if (other.isSetSuccess()) {
-      this.success = new StockResult(other.success);
+      this.success = new BatchStockResult(other.success);
     }
   }
 
@@ -3777,11 +3777,11 @@ public class StockServ {
     this.success = null;
   }
 
-  public StockResult getSuccess() {
+  public BatchStockResult getSuccess() {
     return this.success;
   }
 
-  public batchQueryStock_result setSuccess(StockResult success) {
+  public batchQueryStock_result setSuccess(BatchStockResult success) {
     this.success = success;
     
     return this;
@@ -3808,7 +3808,7 @@ public class StockServ {
       if (value == null) {
         unsetSuccess();
       } else {
-        setSuccess((StockResult)value);
+        setSuccess((BatchStockResult)value);
       }
       break;
     }
@@ -3907,7 +3907,7 @@ public class StockServ {
       switch (field.id) {
         case 0: // SUCCESS
           if (field.type == TType.STRUCT) {
-            this.success = new StockResult();
+            this.success = new BatchStockResult();
             this.success.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
@@ -4292,14 +4292,14 @@ public class StockServ {
         case 2: // LOCK_INFO_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list12 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list12.size);
-            for (int _i13 = 0; _i13 < _list12.size; ++_i13)
+            TList _list16 = iprot.readListBegin();
+            this.lockInfoList = new ArrayList<LockInfo>(_list16.size);
+            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
             {
-              LockInfo _elem14;
-              _elem14 = new LockInfo();
-              _elem14.read(iprot);
-              this.lockInfoList.add(_elem14);
+              LockInfo _elem18;
+              _elem18 = new LockInfo();
+              _elem18.read(iprot);
+              this.lockInfoList.add(_elem18);
             }
             iprot.readListEnd();
             }
@@ -4331,9 +4331,9 @@ public class StockServ {
       oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter15 : this.lockInfoList)
+        for (LockInfo _iter19 : this.lockInfoList)
         {
-          _iter15.write(oprot);
+          _iter19.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -4993,14 +4993,14 @@ public class StockServ {
         case 2: // LOCK_INFO_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list20 = iprot.readListBegin();
+            this.lockInfoList = new ArrayList<LockInfo>(_list20.size);
+            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
             {
-              LockInfo _elem18;
-              _elem18 = new LockInfo();
-              _elem18.read(iprot);
-              this.lockInfoList.add(_elem18);
+              LockInfo _elem22;
+              _elem22 = new LockInfo();
+              _elem22.read(iprot);
+              this.lockInfoList.add(_elem22);
             }
             iprot.readListEnd();
             }
@@ -5032,9 +5032,9 @@ public class StockServ {
       oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter19 : this.lockInfoList)
+        for (LockInfo _iter23 : this.lockInfoList)
         {
-          _iter19.write(oprot);
+          _iter23.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -5694,14 +5694,14 @@ public class StockServ {
         case 2: // LOCK_INFO_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list20 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list20.size);
-            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
+            TList _list24 = iprot.readListBegin();
+            this.lockInfoList = new ArrayList<LockInfo>(_list24.size);
+            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
             {
-              LockInfo _elem22;
-              _elem22 = new LockInfo();
-              _elem22.read(iprot);
-              this.lockInfoList.add(_elem22);
+              LockInfo _elem26;
+              _elem26 = new LockInfo();
+              _elem26.read(iprot);
+              this.lockInfoList.add(_elem26);
             }
             iprot.readListEnd();
             }
@@ -5733,9 +5733,9 @@ public class StockServ {
       oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter23 : this.lockInfoList)
+        for (LockInfo _iter27 : this.lockInfoList)
         {
-          _iter23.write(oprot);
+          _iter27.write(oprot);
         }
         oprot.writeListEnd();
       }

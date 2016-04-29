@@ -3,12 +3,15 @@ package com.jfshare.stock.server;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.stock.*;
 import com.jfshare.stock.common.StockCommons;
+import com.jfshare.stock.exceptions.StockException;
 import com.jfshare.stock.exceptions.StockLockException;
+import com.jfshare.stock.model.enums.BatchQueryType;
 import com.jfshare.stock.model.enums.QueryType;
 import com.jfshare.stock.service.StockService;
 import com.jfshare.stock.util.ConvertUtil;
 import com.jfshare.stock.util.FailCode;
 import com.jfshare.stock.util.StockResultUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -16,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service(value = "stockHandler") 
@@ -83,8 +87,43 @@ public class StockHandler extends BaseHandler implements StockServ.Iface {
     }
 
     @Override
-    public StockResult batchQueryStock(BatchQueryParam param) throws TException {
-        return null;
+    public BatchStockResult batchQueryStock(BatchQueryParam param) throws TException {
+
+        if(StringUtils.isBlank(param.getQueryType()) || CollectionUtils.isEmpty(param.getQueryContents())) {
+            return StockResultUtil.createBatchGetStockFailResult(FailCode.parametersEmpty);
+        }
+
+        BatchQueryType queryType = null;
+
+        try {
+            queryType = BatchQueryType.valueOf(param.getQueryType());
+        } catch (IllegalArgumentException e) {
+            logger.error("batchQueryStock==> 错误的queryType, {}", param.getQueryType());
+            return StockResultUtil.createBatchGetStockFailResult(FailCode.parametersEmpty);
+        }
+
+        List<StockInfo> stockInfos = null;
+        List<String> querys = param.getQueryContents();
+        try {
+            switch (queryType) {
+                case all:{
+                    stockInfos = stockService.getStockInfoWithConcurrent(querys);
+                    break;
+                }
+                case total:{
+                    stockInfos = stockService.getStockInfoWithConcurrent(querys);
+                    break;
+                }
+                case sku: {
+                    stockInfos = stockService.getStockInfoWithConcurrent(querys);
+                }
+            }
+        } catch (StockException e) {
+            return StockResultUtil.createBatchGetStockFailResult(e.getFailDesc());
+        } catch (Exception e) {
+            return StockResultUtil.createBatchGetStockFailResult(FailCode.SYS_ERROR);
+        }
+        return StockResultUtil.createBatchGetStockResult(stockInfos);
     }
 
     public LockStockResult lockStock(String tranId,  List<LockInfo> lockInfoList){

@@ -33,13 +33,13 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
   private static final TStruct STRUCT_DESC = new TStruct("QueryParam");
 
   private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)1);
-  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.STRING, (short)2);
+  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.I32, (short)2);
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)3);
   private static final TField QUERY_TYPE_FIELD_DESC = new TField("queryType", TType.STRING, (short)4);
 
 
   public String productId;
-  public String storehouseId;
+  public int storehouseId;
   public String skuNum;
   public String queryType;
 
@@ -112,6 +112,8 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
 
 
   // isset id assignments
+  private static final int __STOREHOUSEID_ISSET_ID = 0;
+  private BitSet __isset_bit_vector = new BitSet(1);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -119,7 +121,7 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     tmpMap.put(_Fields.PRODUCT_ID, new FieldMetaData("productId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.STOREHOUSE_ID, new FieldMetaData("storehouseId", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
+      new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.QUERY_TYPE, new FieldMetaData("queryType", TFieldRequirementType.DEFAULT,
@@ -134,13 +136,14 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
 
   public QueryParam(
     String productId,
-    String storehouseId,
+    int storehouseId,
     String skuNum,
     String queryType)
   {
     this();
     this.productId = productId;
     this.storehouseId = storehouseId;
+    setStorehouseIdIsSet(true);
     this.skuNum = skuNum;
     this.queryType = queryType;
   }
@@ -149,12 +152,12 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
    * Performs a deep copy on <i>other</i>.
    */
   public QueryParam(QueryParam other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetProductId()) {
       this.productId = other.productId;
     }
-    if (other.isSetStorehouseId()) {
-      this.storehouseId = other.storehouseId;
-    }
+    this.storehouseId = other.storehouseId;
     if (other.isSetSkuNum()) {
       this.skuNum = other.skuNum;
     }
@@ -170,7 +173,8 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
   @Override
   public void clear() {
     this.productId = null;
-    this.storehouseId = null;
+    setStorehouseIdIsSet(false);
+    this.storehouseId = 0;
     this.skuNum = null;
     this.queryType = null;
   }
@@ -200,29 +204,28 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     }
   }
 
-  public String getStorehouseId() {
+  public int getStorehouseId() {
     return this.storehouseId;
   }
 
-  public QueryParam setStorehouseId(String storehouseId) {
+  public QueryParam setStorehouseId(int storehouseId) {
     this.storehouseId = storehouseId;
-    
+    setStorehouseIdIsSet(true);
+
     return this;
   }
 
   public void unsetStorehouseId() {
-    this.storehouseId = null;
+  __isset_bit_vector.clear(__STOREHOUSEID_ISSET_ID);
   }
 
   /** Returns true if field storehouseId is set (has been asigned a value) and false otherwise */
   public boolean isSetStorehouseId() {
-    return this.storehouseId != null;
+    return __isset_bit_vector.get(__STOREHOUSEID_ISSET_ID);
   }
 
   public void setStorehouseIdIsSet(boolean value) {
-    if (!value) {
-      this.storehouseId = null;
-    }
+    __isset_bit_vector.set(__STOREHOUSEID_ISSET_ID, value);
   }
 
   public String getSkuNum() {
@@ -288,7 +291,7 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
       if (value == null) {
         unsetStorehouseId();
       } else {
-        setStorehouseId((String)value);
+        setStorehouseId((Integer)value);
       }
       break;
     case SKU_NUM:
@@ -313,7 +316,7 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     case PRODUCT_ID:
       return getProductId();
     case STOREHOUSE_ID:
-      return getStorehouseId();
+      return new Integer(getStorehouseId());
     case SKU_NUM:
       return getSkuNum();
     case QUERY_TYPE:
@@ -361,12 +364,12 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
       if (!this.productId.equals(that.productId))
         return false;
     }
-    boolean this_present_storehouseId = true && this.isSetStorehouseId();
-    boolean that_present_storehouseId = true && that.isSetStorehouseId();
+    boolean this_present_storehouseId = true;
+    boolean that_present_storehouseId = true;
     if (this_present_storehouseId || that_present_storehouseId) {
       if (!(this_present_storehouseId && that_present_storehouseId))
         return false;
-      if (!this.storehouseId.equals(that.storehouseId))
+      if (this.storehouseId != that.storehouseId)
         return false;
     }
     boolean this_present_skuNum = true && this.isSetSkuNum();
@@ -396,7 +399,7 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     builder.append(present_productId);
     if (present_productId)
       builder.append(productId);
-    boolean present_storehouseId = true && (isSetStorehouseId());
+    boolean present_storehouseId = true;
     builder.append(present_storehouseId);
     if (present_storehouseId)
       builder.append(storehouseId);
@@ -485,8 +488,9 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
           }
           break;
         case 2: // STOREHOUSE_ID
-          if (field.type == TType.STRING) {
-            this.storehouseId = iprot.readString();
+          if (field.type == TType.I32) {
+            this.storehouseId = iprot.readI32();
+            setStorehouseIdIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -525,11 +529,9 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
       oprot.writeString(this.productId);
       oprot.writeFieldEnd();
     }
-    if (this.storehouseId != null) {
-      oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
-      oprot.writeString(this.storehouseId);
-      oprot.writeFieldEnd();
-    }
+    oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
+    oprot.writeI32(this.storehouseId);
+    oprot.writeFieldEnd();
     if (this.skuNum != null) {
       oprot.writeFieldBegin(SKU_NUM_FIELD_DESC);
       oprot.writeString(this.skuNum);
@@ -557,11 +559,7 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     first = false;
     if (!first) sb.append(", ");
     sb.append("storehouseId:");
-    if (this.storehouseId == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.storehouseId);
-    }
+    sb.append(this.storehouseId);
     first = false;
     if (!first) sb.append(", ");
     sb.append("skuNum:");

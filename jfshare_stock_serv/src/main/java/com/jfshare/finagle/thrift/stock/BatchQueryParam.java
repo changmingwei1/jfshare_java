@@ -358,13 +358,13 @@ public class BatchQueryParam implements TBase<BatchQueryParam, BatchQueryParam._
         case 1: // QUERY_CONTENTS
           if (field.type == TType.LIST) {
             {
-            TList _list8 = iprot.readListBegin();
-            this.queryContents = new ArrayList<String>(_list8.size);
-            for (int _i9 = 0; _i9 < _list8.size; ++_i9)
+            TList _list12 = iprot.readListBegin();
+            this.queryContents = new ArrayList<String>(_list12.size);
+            for (int _i13 = 0; _i13 < _list12.size; ++_i13)
             {
-              String _elem10;
-              _elem10 = iprot.readString();
-              this.queryContents.add(_elem10);
+              String _elem14;
+              _elem14 = iprot.readString();
+              this.queryContents.add(_elem14);
             }
             iprot.readListEnd();
             }
@@ -398,9 +398,9 @@ public class BatchQueryParam implements TBase<BatchQueryParam, BatchQueryParam._
       oprot.writeFieldBegin(QUERY_CONTENTS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.queryContents.size()));
-        for (String _iter11 : this.queryContents)
+        for (String _iter15 : this.queryContents)
         {
-          oprot.writeString(_iter11);
+          oprot.writeString(_iter15);
         }
         oprot.writeListEnd();
       }

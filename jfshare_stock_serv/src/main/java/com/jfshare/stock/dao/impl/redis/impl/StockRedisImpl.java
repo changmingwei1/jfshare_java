@@ -72,18 +72,18 @@ public class StockRedisImpl implements StockRedis{
     }
 
     @Override
-    public StockInfo getStockStorehouse(String productId, String storehouseId) {
+    public StockInfo getStockStorehouse(String productId, int storehouseId) {
         Map<String, String> stockMapCache = this.baseRedis.getMapAll(ConstRedis.STOCK_KEY + productId);
         if(MapUtils.isEmpty(stockMapCache)) {
             return null;
         }
 
-        List<String> skuNums = this.getSkuNums(stockMapCache, storehouseId);
+        List<String> skuNums = this.getSkuNums(stockMapCache, String.valueOf(storehouseId));
         return this.fillStockInfo(productId, stockMapCache, skuNums);
     }
 
     @Override
-    public StockInfo getStockSku(String productId, String storehouseId, String skuNum) {
+    public StockInfo getStockSku(String productId, int storehouseId, String skuNum) {
         StockInfo stockInfo = new StockInfo();
 
         Jedis jedis = null;
@@ -97,7 +97,11 @@ public class StockRedisImpl implements StockRedis{
             StockItem stockItem = new StockItem();
             stockItem.setStorehouseId(storehouseId);
             stockItem.setSkuNum(skuNum);
-            stockItem.setCount(NumberUtils.toInt(countRes.get()));
+            String countStr = countRes.get();
+            if(StringUtils.isBlank(countStr)) {
+                return null;
+            }
+            stockItem.setCount(NumberUtils.toInt(countStr));
             stockItem.setLockCount(NumberUtils.toInt(lockCountRes.get()));
             stockInfo.addToStockItems(stockItem);
 
@@ -232,7 +236,6 @@ public class StockRedisImpl implements StockRedis{
 
         for(String skuNumStr : skuNums) {
             String count = stockMapCache.get(ConstRedis.STOCK_FIELD_COUNT + skuNumStr);
-
             if(StringUtils.isBlank(count)) {
                 //sku不存在，跳过
                 continue;
@@ -242,7 +245,7 @@ public class StockRedisImpl implements StockRedis{
             stockItem.setSkuNum(StockUtil.getSkuNumBySplit(skuNumStr));
             stockItem.setStorehouseId(StockUtil.getStoreHouseIdBySplit(skuNumStr));
             stockItem.setCount(NumberUtils.toInt(count));
-            stockItem.setLockCount(NumberUtils.toInt(stockMapCache.get(ConstRedis.STOCK_FIELD_LOCKCOUNT) + skuNumStr, 0));
+            stockItem.setLockCount(NumberUtils.toInt(stockMapCache.get(ConstRedis.STOCK_FIELD_LOCKCOUNT + skuNumStr), 0));
             stockItems.add(stockItem);
 
             total += stockItem.getCount();
@@ -289,7 +292,7 @@ public class StockRedisImpl implements StockRedis{
             return;
         }
 
-        if(StringUtils.isBlank(baseRedis.getMap(ConstRedis.STOCK_KEY + productId, ConstRedis.STOCK_FIELD_COUNT + skuNum))) {
+        if(StringUtils.isBlank(baseRedis.getMap(ConstRedis.STOCK_KEY + productId, ConstRedis.STOCK_FIELD_COUNT + storehouseId + ConstRedis.SPLIT + skuNum))) {
             logger.warn("===》 刷新stock缓存失败，ProductId:{}, storehouseId:{}, SkuNum:{} 不存在！", productId, storehouseId, skuNum);
             return;
         }
@@ -300,8 +303,6 @@ public class StockRedisImpl implements StockRedis{
             Transaction tx = jedis.multi();
             tx.hincrBy(ConstRedis.STOCK_KEY + productId, ConstRedis.STOCK_FIELD_COUNT + storehouseId + ConstRedis.SPLIT + skuNum, -countChange);
             tx.hincrBy(ConstRedis.STOCK_KEY + productId, ConstRedis.STOCK_FIELD_LOCKCOUNT + storehouseId + ConstRedis.SPLIT + skuNum, -lockCountChange);
-            tx.hincrBy(ConstRedis.STOCK_KEY + productId, ConstRedis.STOCK_FIELD_TOTAL, -countChange);
-            tx.hincrBy(ConstRedis.STOCK_KEY + productId, ConstRedis.STOCK_FIELD_TOTALLOCK, -lockCountChange);
             tx.exec();
         } catch (Exception e) {
             logger.error("===》 刷新stock缓存发生异常, 参数："+ JsonMapper.toJsonNotNull(stockLockModel), e);

@@ -26,7 +26,7 @@ public class ConvertUtil {
         tbProductStock.setSkuNum(stockItem.getSkuNum());
         tbProductStock.setActiveCount(stockItem.getCount());
         tbProductStock.setLockCount(stockItem.getLockCount());
-        tbProductStock.setStorehouseId(Integer.parseInt(stockItem.getStorehouseId()));
+        tbProductStock.setStorehouseId(stockItem.getStorehouseId());
         return tbProductStock;
     }
 
@@ -38,7 +38,7 @@ public class ConvertUtil {
         stockItem.setSkuNum(tbProductStock.getSkuNum());
         stockItem.setCount(tbProductStock.getActiveCount());
         stockItem.setLockCount(tbProductStock.getLockCount());
-        stockItem.setStorehouseId(String.valueOf(tbProductStock.getStorehouseId()));
+        stockItem.setStorehouseId(tbProductStock.getStorehouseId());
         return stockItem;
     }
 
@@ -70,7 +70,7 @@ public class ConvertUtil {
         stockLLockModel.setProductId(lockInfo.getProductId());
         stockLLockModel.setSkuNum(lockInfo.getSkuNum());
         stockLLockModel.setCountChange(lockInfo.getApplyCount());
-        stockLLockModel.setStorehouseId(Integer.parseInt(lockInfo.getStorehouseId()));
+        stockLLockModel.setStorehouseId(lockInfo.getStorehouseId());
         return stockLLockModel;
     }
 
@@ -102,7 +102,7 @@ public class ConvertUtil {
         }
         LockInfo lockInfo = new LockInfo();
         lockInfo.setProductId(stockLockModel.getProductId());
-        lockInfo.setStorehouseId(String.valueOf(stockLockModel.getStorehouseId()));
+        lockInfo.setStorehouseId(stockLockModel.getStorehouseId());
         lockInfo.setSkuNum(stockLockModel.getSkuNum());
         lockInfo.setApplyCount(stockLockModel.getCountChange());
         lockInfo.setLockCount(-stockLockModel.getLockCountChange());
@@ -127,13 +127,13 @@ public class ConvertUtil {
         return stockInfo;
     }
 
-    public static StockInfo convertStockInfo(String productId, String storehouseId, List<TbProductStock> tbProductStocks) {
+    public static StockInfo convertStockInfo(String productId, int storehouseId, List<TbProductStock> tbProductStocks) {
         StockInfo stockInfo = new StockInfo();
         List<StockItem> stockItems = new ArrayList<>();
         int totalCount = 0;
         int totalLockCount = 0;
         for(TbProductStock tbProductStock  : tbProductStocks) {
-            if(String.valueOf(tbProductStock.getStorehouseId()).equals(storehouseId) == false)
+            if(tbProductStock.getStorehouseId() != storehouseId)
                 continue;
 
             StockItem item = ConvertUtil.rConvertProductStock(tbProductStock);

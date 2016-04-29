@@ -32,7 +32,7 @@ public interface StockRedis {
      * @param storehouseId
      * @return
      */
-    public StockInfo getStockStorehouse(String productId, String storehouseId);
+    public StockInfo getStockStorehouse(String productId, int storehouseId);
 
     /**
      * SKU维度库存查询
@@ -41,7 +41,7 @@ public interface StockRedis {
      * @param skuNum
      * @return
      */
-    public StockInfo getStockSku(String productId, String storehouseId, String skuNum);
+    public StockInfo getStockSku(String productId, int storehouseId, String skuNum);
 
     public StockInfo getStockSkus(String productId, List<String> skuNums);
 

@@ -35,13 +35,13 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)1);
   private static final TField COUNT_FIELD_DESC = new TField("count", TType.I32, (short)2);
   private static final TField LOCK_COUNT_FIELD_DESC = new TField("lockCount", TType.I32, (short)3);
-  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.STRING, (short)4);
+  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.I32, (short)4);
 
 
   public String skuNum;
   public int count;
   public int lockCount;
-  public String storehouseId;
+  public int storehouseId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -114,7 +114,8 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
   // isset id assignments
   private static final int __COUNT_ISSET_ID = 0;
   private static final int __LOCKCOUNT_ISSET_ID = 1;
-  private BitSet __isset_bit_vector = new BitSet(2);
+  private static final int __STOREHOUSEID_ISSET_ID = 2;
+  private BitSet __isset_bit_vector = new BitSet(3);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -126,7 +127,7 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     tmpMap.put(_Fields.LOCK_COUNT, new FieldMetaData("lockCount", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.STOREHOUSE_ID, new FieldMetaData("storehouseId", TFieldRequirementType.OPTIONAL,
-      new FieldValueMetaData(TType.STRING)));
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(StockItem.class, metaDataMap);
   }
@@ -159,9 +160,7 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     }
     this.count = other.count;
     this.lockCount = other.lockCount;
-    if (other.isSetStorehouseId()) {
-      this.storehouseId = other.storehouseId;
-    }
+    this.storehouseId = other.storehouseId;
   }
 
   public StockItem deepCopy() {
@@ -175,7 +174,8 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     this.count = 0;
     setLockCountIsSet(false);
     this.lockCount = 0;
-    this.storehouseId = null;
+    setStorehouseIdIsSet(false);
+    this.storehouseId = 0;
   }
 
   public String getSkuNum() {
@@ -251,29 +251,28 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     __isset_bit_vector.set(__LOCKCOUNT_ISSET_ID, value);
   }
 
-  public String getStorehouseId() {
+  public int getStorehouseId() {
     return this.storehouseId;
   }
 
-  public StockItem setStorehouseId(String storehouseId) {
+  public StockItem setStorehouseId(int storehouseId) {
     this.storehouseId = storehouseId;
-    
+    setStorehouseIdIsSet(true);
+
     return this;
   }
 
   public void unsetStorehouseId() {
-    this.storehouseId = null;
+  __isset_bit_vector.clear(__STOREHOUSEID_ISSET_ID);
   }
 
   /** Returns true if field storehouseId is set (has been asigned a value) and false otherwise */
   public boolean isSetStorehouseId() {
-    return this.storehouseId != null;
+    return __isset_bit_vector.get(__STOREHOUSEID_ISSET_ID);
   }
 
   public void setStorehouseIdIsSet(boolean value) {
-    if (!value) {
-      this.storehouseId = null;
-    }
+    __isset_bit_vector.set(__STOREHOUSEID_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -303,7 +302,7 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
       if (value == null) {
         unsetStorehouseId();
       } else {
-        setStorehouseId((String)value);
+        setStorehouseId((Integer)value);
       }
       break;
     }
@@ -318,7 +317,7 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     case LOCK_COUNT:
       return new Integer(getLockCount());
     case STOREHOUSE_ID:
-      return getStorehouseId();
+      return new Integer(getStorehouseId());
     }
     throw new IllegalStateException();
   }
@@ -383,7 +382,7 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     if (this_present_storehouseId || that_present_storehouseId) {
       if (!(this_present_storehouseId && that_present_storehouseId))
         return false;
-      if (!this.storehouseId.equals(that.storehouseId))
+      if (this.storehouseId != that.storehouseId)
         return false;
     }
 
@@ -502,8 +501,9 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
           }
           break;
         case 4: // STOREHOUSE_ID
-          if (field.type == TType.STRING) {
-            this.storehouseId = iprot.readString();
+          if (field.type == TType.I32) {
+            this.storehouseId = iprot.readI32();
+            setStorehouseIdIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -534,12 +534,10 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     oprot.writeFieldBegin(LOCK_COUNT_FIELD_DESC);
     oprot.writeI32(this.lockCount);
     oprot.writeFieldEnd();
-    if (this.storehouseId != null) {
-      if (isSetStorehouseId()) {
-        oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
-        oprot.writeString(this.storehouseId);
-        oprot.writeFieldEnd();
-      }
+    if (isSetStorehouseId()) {
+      oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
+      oprot.writeI32(this.storehouseId);
+      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -567,11 +565,7 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     if (isSetStorehouseId()) {
       if (!first) sb.append(", ");
       sb.append("storehouseId:");
-      if (this.storehouseId == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.storehouseId);
-      }
+      sb.append(this.storehouseId);
       first = false;
       }
     sb.append(")");

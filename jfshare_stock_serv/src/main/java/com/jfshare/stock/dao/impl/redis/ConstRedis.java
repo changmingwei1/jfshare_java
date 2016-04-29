@@ -12,12 +12,6 @@ public class ConstRedis {
 	//Redis库存的key前缀
     public final static String STOCK_KEY = "cache_stock" + ConstRedis.SPLIT;
     
-    //Redis库存field（总库存量）
-    public final static String STOCK_FIELD_TOTAL = "total";
-    
-    //Redis库存field（总锁定量）
-    public final static String STOCK_FIELD_TOTALLOCK = "locktotal";
-    
     //Redis库存field前缀（sku库存量）
     public final static String STOCK_FIELD_COUNT = "count" + ConstRedis.SPLIT;
     //修改存储 的版本前缀
