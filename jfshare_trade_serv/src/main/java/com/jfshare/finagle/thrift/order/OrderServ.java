@@ -44,8 +44,10 @@ public class OrderServ {
     public com.jfshare.finagle.thrift.result.Result cancelOrder(int userType, int userId, String orderId, int reason) throws TException;
     public OrderProfileResult orderProfileQuery(int userType, int userId, OrderQueryConditions conditions) throws TException;
     public OrderDetailResult queryOrderDetail(int userType, int userId, String orderId) throws TException;
+    public OrderStateResult orderStateQuery(int userType, int userId, OrderQueryConditions conditions) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult payApply(PayParam param) throws TException;
-    public com.jfshare.finagle.thrift.result.StringResult payFinish(PayParam param) throws TException;
+    public com.jfshare.finagle.thrift.result.StringResult payFinish(String payRes) throws TException;
+    public PayStateResult payState(PayState payState) throws TException;
   }
 
   public interface AsyncIface {
@@ -56,8 +58,10 @@ public class OrderServ {
     public void cancelOrder(int userType, int userId, String orderId, int reason, AsyncMethodCallback<AsyncClient.cancelOrder_call> resultHandler) throws TException;
     public void orderProfileQuery(int userType, int userId, OrderQueryConditions conditions, AsyncMethodCallback<AsyncClient.orderProfileQuery_call> resultHandler) throws TException;
     public void queryOrderDetail(int userType, int userId, String orderId, AsyncMethodCallback<AsyncClient.queryOrderDetail_call> resultHandler) throws TException;
+    public void orderStateQuery(int userType, int userId, OrderQueryConditions conditions, AsyncMethodCallback<AsyncClient.orderStateQuery_call> resultHandler) throws TException;
     public void payApply(PayParam param, AsyncMethodCallback<AsyncClient.payApply_call> resultHandler) throws TException;
-    public void payFinish(PayParam param, AsyncMethodCallback<AsyncClient.payFinish_call> resultHandler) throws TException;
+    public void payFinish(String payRes, AsyncMethodCallback<AsyncClient.payFinish_call> resultHandler) throws TException;
+    public void payState(PayState payState, AsyncMethodCallback<AsyncClient.payState_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
@@ -68,8 +72,10 @@ public class OrderServ {
     public Future<com.jfshare.finagle.thrift.result.Result> cancelOrder(int userType, int userId, String orderId, int reason);
     public Future<OrderProfileResult> orderProfileQuery(int userType, int userId, OrderQueryConditions conditions);
     public Future<OrderDetailResult> queryOrderDetail(int userType, int userId, String orderId);
+    public Future<OrderStateResult> orderStateQuery(int userType, int userId, OrderQueryConditions conditions);
     public Future<com.jfshare.finagle.thrift.result.StringResult> payApply(PayParam param);
-    public Future<com.jfshare.finagle.thrift.result.StringResult> payFinish(PayParam param);
+    public Future<com.jfshare.finagle.thrift.result.StringResult> payFinish(String payRes);
+    public Future<PayStateResult> payState(PayState payState);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -366,6 +372,43 @@ public class OrderServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryOrderDetail failed: unknown result");
     }
+    public OrderStateResult orderStateQuery(int userType, int userId, OrderQueryConditions conditions) throws TException
+    {
+      send_orderStateQuery(userType, userId, conditions);
+      return recv_orderStateQuery();
+    }
+
+    public void send_orderStateQuery(int userType, int userId, OrderQueryConditions conditions) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("orderStateQuery", TMessageType.CALL, ++seqid_));
+      orderStateQuery_args args = new orderStateQuery_args();
+      args.setUserType(userType);
+      args.setUserId(userId);
+      args.setConditions(conditions);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public OrderStateResult recv_orderStateQuery() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "orderStateQuery failed: out of sequence response");
+      }
+      orderStateQuery_result result = new orderStateQuery_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "orderStateQuery failed: unknown result");
+    }
     public com.jfshare.finagle.thrift.result.StringResult payApply(PayParam param) throws TException
     {
       send_payApply(param);
@@ -401,17 +444,17 @@ public class OrderServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "payApply failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.StringResult payFinish(PayParam param) throws TException
+    public com.jfshare.finagle.thrift.result.StringResult payFinish(String payRes) throws TException
     {
-      send_payFinish(param);
+      send_payFinish(payRes);
       return recv_payFinish();
     }
 
-    public void send_payFinish(PayParam param) throws TException
+    public void send_payFinish(String payRes) throws TException
     {
       oprot_.writeMessageBegin(new TMessage("payFinish", TMessageType.CALL, ++seqid_));
       payFinish_args args = new payFinish_args();
-      args.setParam(param);
+      args.setPayRes(payRes);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
@@ -435,6 +478,41 @@ public class OrderServ {
         return result.success;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "payFinish failed: unknown result");
+    }
+    public PayStateResult payState(PayState payState) throws TException
+    {
+      send_payState(payState);
+      return recv_payState();
+    }
+
+    public void send_payState(PayState payState) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("payState", TMessageType.CALL, ++seqid_));
+      payState_args args = new payState_args();
+      args.setPayState(payState);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public PayStateResult recv_payState() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "payState failed: out of sequence response");
+      }
+      payState_result result = new payState_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "payState failed: unknown result");
     }
   }
 
@@ -708,6 +786,43 @@ public class OrderServ {
         return (new Client(prot)).recv_queryOrderDetail();
       }
      }
+    public void orderStateQuery(int userType, int userId, OrderQueryConditions conditions, AsyncMethodCallback<orderStateQuery_call> resultHandler) throws TException {
+      checkReady();
+      orderStateQuery_call method_call = new orderStateQuery_call(userType, userId, conditions, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class orderStateQuery_call extends TAsyncMethodCall {
+      private int userType;
+      private int userId;
+      private OrderQueryConditions conditions;
+
+      public orderStateQuery_call(int userType, int userId, OrderQueryConditions conditions, AsyncMethodCallback<orderStateQuery_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.userType = userType;
+        this.userId = userId;
+        this.conditions = conditions;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("orderStateQuery", TMessageType.CALL, 0));
+        orderStateQuery_args args = new orderStateQuery_args();
+        args.setUserType(userType);
+        args.setUserId(userId);
+        args.setConditions(conditions);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public OrderStateResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_orderStateQuery();
+      }
+     }
     public void payApply(PayParam param, AsyncMethodCallback<payApply_call> resultHandler) throws TException {
       checkReady();
       payApply_call method_call = new payApply_call(param, resultHandler, this, protocolFactory, transport);
@@ -739,24 +854,24 @@ public class OrderServ {
         return (new Client(prot)).recv_payApply();
       }
      }
-    public void payFinish(PayParam param, AsyncMethodCallback<payFinish_call> resultHandler) throws TException {
+    public void payFinish(String payRes, AsyncMethodCallback<payFinish_call> resultHandler) throws TException {
       checkReady();
-      payFinish_call method_call = new payFinish_call(param, resultHandler, this, protocolFactory, transport);
+      payFinish_call method_call = new payFinish_call(payRes, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
     public static class payFinish_call extends TAsyncMethodCall {
-      private PayParam param;
+      private String payRes;
 
-      public payFinish_call(PayParam param, AsyncMethodCallback<payFinish_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public payFinish_call(String payRes, AsyncMethodCallback<payFinish_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.param = param;
+        this.payRes = payRes;
       }
 
       public void write_args(TProtocol prot) throws TException {
         prot.writeMessageBegin(new TMessage("payFinish", TMessageType.CALL, 0));
         payFinish_args args = new payFinish_args();
-        args.setParam(param);
+        args.setPayRes(payRes);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -768,6 +883,37 @@ public class OrderServ {
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         return (new Client(prot)).recv_payFinish();
+      }
+     }
+    public void payState(PayState payState, AsyncMethodCallback<payState_call> resultHandler) throws TException {
+      checkReady();
+      payState_call method_call = new payState_call(payState, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class payState_call extends TAsyncMethodCall {
+      private PayState payState;
+
+      public payState_call(PayState payState, AsyncMethodCallback<payState_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.payState = payState;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("payState", TMessageType.CALL, 0));
+        payState_args args = new payState_args();
+        args.setPayState(payState);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public PayStateResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_payState();
       }
      }
    }
@@ -1004,6 +1150,38 @@ public class OrderServ {
         return Future.exception(e);
       }
     }
+    public Future<OrderStateResult> orderStateQuery(int userType, int userId, OrderQueryConditions conditions) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("orderStateQuery", TMessageType.CALL, 0));
+        orderStateQuery_args __args__ = new orderStateQuery_args();
+        __args__.setUserType(userType);
+        __args__.setUserId(userId);
+        __args__.setConditions(conditions);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<OrderStateResult>>() {
+          public Future<OrderStateResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_orderStateQuery());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<com.jfshare.finagle.thrift.result.StringResult> payApply(PayParam param) {
       try {
         // TODO: size
@@ -1034,14 +1212,14 @@ public class OrderServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.StringResult> payFinish(PayParam param) {
+    public Future<com.jfshare.finagle.thrift.result.StringResult> payFinish(String payRes) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
         __prot__.writeMessageBegin(new TMessage("payFinish", TMessageType.CALL, 0));
         payFinish_args __args__ = new payFinish_args();
-        __args__.setParam(param);
+        __args__.setPayRes(payRes);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -1055,6 +1233,36 @@ public class OrderServ {
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
               return Future.value((new Client(__prot__)).recv_payFinish());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<PayStateResult> payState(PayState payState) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("payState", TMessageType.CALL, 0));
+        payState_args __args__ = new payState_args();
+        __args__.setPayState(payState);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<PayStateResult>>() {
+          public Future<PayStateResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_payState());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1078,8 +1286,10 @@ public class OrderServ {
       processMap_.put("cancelOrder", new cancelOrder());
       processMap_.put("orderProfileQuery", new orderProfileQuery());
       processMap_.put("queryOrderDetail", new queryOrderDetail());
+      processMap_.put("orderStateQuery", new orderStateQuery());
       processMap_.put("payApply", new payApply());
       processMap_.put("payFinish", new payFinish());
+      processMap_.put("payState", new payState());
     }
 
     protected static interface ProcessFunction {
@@ -1282,6 +1492,31 @@ public class OrderServ {
         oprot.getTransport().flush();
       }
     }
+    private class orderStateQuery implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        orderStateQuery_args args = new orderStateQuery_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("orderStateQuery", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        orderStateQuery_result result = new orderStateQuery_result();
+        result.success = iface_.orderStateQuery(args.userType, args.userId, args.conditions);
+        
+        oprot.writeMessageBegin(new TMessage("orderStateQuery", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
     private class payApply implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
@@ -1324,9 +1559,34 @@ public class OrderServ {
         }
         iprot.readMessageEnd();
         payFinish_result result = new payFinish_result();
-        result.success = iface_.payFinish(args.param);
+        result.success = iface_.payFinish(args.payRes);
         
         oprot.writeMessageBegin(new TMessage("payFinish", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class payState implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        payState_args args = new payState_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("payState", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        payState_result result = new payState_result();
+        result.success = iface_.payState(args.payState);
+        
+        oprot.writeMessageBegin(new TMessage("payState", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -1810,6 +2070,73 @@ public class OrderServ {
           }
         }
       });
+      functionMap.put("orderStateQuery", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          orderStateQuery_args args = new orderStateQuery_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("orderStateQuery", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<OrderStateResult> future;
+          try {
+            future = iface.orderStateQuery(args.userType, args.userId, args.conditions);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<OrderStateResult, Future<byte[]>>() {
+              public Future<byte[]> apply(OrderStateResult value) {
+                orderStateQuery_result result = new orderStateQuery_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("orderStateQuery", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
       functionMap.put("payApply", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
           payApply_args args = new payApply_args();
@@ -1909,7 +2236,7 @@ public class OrderServ {
           }
           Future<com.jfshare.finagle.thrift.result.StringResult> future;
           try {
-            future = iface.payFinish(args.param);
+            future = iface.payFinish(args.payRes);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -1926,6 +2253,73 @@ public class OrderServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("payFinish", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("payState", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          payState_args args = new payState_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("payState", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<PayStateResult> future;
+          try {
+            future = iface.payState(args.payState);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<PayStateResult, Future<byte[]>>() {
+              public Future<byte[]> apply(PayStateResult value) {
+                payState_result result = new payState_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("payState", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -2237,14 +2631,14 @@ public class OrderServ {
         case 1: // ORDER_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.orderList = new ArrayList<Order>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list20 = iprot.readListBegin();
+            this.orderList = new ArrayList<Order>(_list20.size);
+            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
             {
-              Order _elem18;
-              _elem18 = new Order();
-              _elem18.read(iprot);
-              this.orderList.add(_elem18);
+              Order _elem22;
+              _elem22 = new Order();
+              _elem22.read(iprot);
+              this.orderList.add(_elem22);
             }
             iprot.readListEnd();
             }
@@ -2271,9 +2665,9 @@ public class OrderServ {
       oprot.writeFieldBegin(ORDER_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.orderList.size()));
-        for (Order _iter19 : this.orderList)
+        for (Order _iter23 : this.orderList)
         {
-          _iter19.write(oprot);
+          _iter23.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -7074,6 +7468,754 @@ public class OrderServ {
 }
 
 
+  public static class orderStateQuery_args implements TBase<orderStateQuery_args, orderStateQuery_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("orderStateQuery_args");
+
+  private static final TField USER_TYPE_FIELD_DESC = new TField("userType", TType.I32, (short)1);
+  private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.I32, (short)2);
+  private static final TField CONDITIONS_FIELD_DESC = new TField("conditions", TType.STRUCT, (short)3);
+
+
+  public int userType;
+  public int userId;
+  public OrderQueryConditions conditions;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    USER_TYPE((short)1, "userType"),
+    USER_ID((short)2, "userId"),
+    CONDITIONS((short)3, "conditions");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // USER_TYPE
+  	return USER_TYPE;
+        case 2: // USER_ID
+  	return USER_ID;
+        case 3: // CONDITIONS
+  	return CONDITIONS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+  private static final int __USERTYPE_ISSET_ID = 0;
+  private static final int __USERID_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.USER_TYPE, new FieldMetaData("userType", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.USER_ID, new FieldMetaData("userId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.CONDITIONS, new FieldMetaData("conditions", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, OrderQueryConditions.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(orderStateQuery_args.class, metaDataMap);
+  }
+
+
+  public orderStateQuery_args() {
+  }
+
+  public orderStateQuery_args(
+    int userType,
+    int userId,
+    OrderQueryConditions conditions)
+  {
+    this();
+    this.userType = userType;
+    setUserTypeIsSet(true);
+    this.userId = userId;
+    setUserIdIsSet(true);
+    this.conditions = conditions;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public orderStateQuery_args(orderStateQuery_args other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
+    this.userType = other.userType;
+    this.userId = other.userId;
+    if (other.isSetConditions()) {
+      this.conditions = new OrderQueryConditions(other.conditions);
+    }
+  }
+
+  public orderStateQuery_args deepCopy() {
+    return new orderStateQuery_args(this);
+  }
+
+  @Override
+  public void clear() {
+    setUserTypeIsSet(false);
+    this.userType = 0;
+    setUserIdIsSet(false);
+    this.userId = 0;
+    this.conditions = null;
+  }
+
+  public int getUserType() {
+    return this.userType;
+  }
+
+  public orderStateQuery_args setUserType(int userType) {
+    this.userType = userType;
+    setUserTypeIsSet(true);
+
+    return this;
+  }
+
+  public void unsetUserType() {
+  __isset_bit_vector.clear(__USERTYPE_ISSET_ID);
+  }
+
+  /** Returns true if field userType is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserType() {
+    return __isset_bit_vector.get(__USERTYPE_ISSET_ID);
+  }
+
+  public void setUserTypeIsSet(boolean value) {
+    __isset_bit_vector.set(__USERTYPE_ISSET_ID, value);
+  }
+
+  public int getUserId() {
+    return this.userId;
+  }
+
+  public orderStateQuery_args setUserId(int userId) {
+    this.userId = userId;
+    setUserIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetUserId() {
+  __isset_bit_vector.clear(__USERID_ISSET_ID);
+  }
+
+  /** Returns true if field userId is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserId() {
+    return __isset_bit_vector.get(__USERID_ISSET_ID);
+  }
+
+  public void setUserIdIsSet(boolean value) {
+    __isset_bit_vector.set(__USERID_ISSET_ID, value);
+  }
+
+  public OrderQueryConditions getConditions() {
+    return this.conditions;
+  }
+
+  public orderStateQuery_args setConditions(OrderQueryConditions conditions) {
+    this.conditions = conditions;
+    
+    return this;
+  }
+
+  public void unsetConditions() {
+    this.conditions = null;
+  }
+
+  /** Returns true if field conditions is set (has been asigned a value) and false otherwise */
+  public boolean isSetConditions() {
+    return this.conditions != null;
+  }
+
+  public void setConditionsIsSet(boolean value) {
+    if (!value) {
+      this.conditions = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case USER_TYPE:
+      if (value == null) {
+        unsetUserType();
+      } else {
+        setUserType((Integer)value);
+      }
+      break;
+    case USER_ID:
+      if (value == null) {
+        unsetUserId();
+      } else {
+        setUserId((Integer)value);
+      }
+      break;
+    case CONDITIONS:
+      if (value == null) {
+        unsetConditions();
+      } else {
+        setConditions((OrderQueryConditions)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case USER_TYPE:
+      return new Integer(getUserType());
+    case USER_ID:
+      return new Integer(getUserId());
+    case CONDITIONS:
+      return getConditions();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case USER_TYPE:
+      return isSetUserType();
+    case USER_ID:
+      return isSetUserId();
+    case CONDITIONS:
+      return isSetConditions();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof orderStateQuery_args)
+      return this.equals((orderStateQuery_args)that);
+    return false;
+  }
+
+  public boolean equals(orderStateQuery_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_userType = true;
+    boolean that_present_userType = true;
+    if (this_present_userType || that_present_userType) {
+      if (!(this_present_userType && that_present_userType))
+        return false;
+      if (this.userType != that.userType)
+        return false;
+    }
+    boolean this_present_userId = true;
+    boolean that_present_userId = true;
+    if (this_present_userId || that_present_userId) {
+      if (!(this_present_userId && that_present_userId))
+        return false;
+      if (this.userId != that.userId)
+        return false;
+    }
+    boolean this_present_conditions = true && this.isSetConditions();
+    boolean that_present_conditions = true && that.isSetConditions();
+    if (this_present_conditions || that_present_conditions) {
+      if (!(this_present_conditions && that_present_conditions))
+        return false;
+      if (!this.conditions.equals(that.conditions))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_userType = true;
+    builder.append(present_userType);
+    if (present_userType)
+      builder.append(userType);
+    boolean present_userId = true;
+    builder.append(present_userId);
+    if (present_userId)
+      builder.append(userId);
+    boolean present_conditions = true && (isSetConditions());
+    builder.append(present_conditions);
+    if (present_conditions)
+      builder.append(conditions);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(orderStateQuery_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    orderStateQuery_args typedOther = (orderStateQuery_args)other;
+
+    lastComparison = Boolean.valueOf(isSetUserType()).compareTo(typedOther.isSetUserType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUserType()) {
+      lastComparison = TBaseHelper.compareTo(this.userType, typedOther.userType);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetUserId()).compareTo(typedOther.isSetUserId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUserId()) {
+      lastComparison = TBaseHelper.compareTo(this.userId, typedOther.userId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetConditions()).compareTo(typedOther.isSetConditions());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetConditions()) {
+      lastComparison = TBaseHelper.compareTo(this.conditions, typedOther.conditions);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // USER_TYPE
+          if (field.type == TType.I32) {
+            this.userType = iprot.readI32();
+            setUserTypeIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // USER_ID
+          if (field.type == TType.I32) {
+            this.userId = iprot.readI32();
+            setUserIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // CONDITIONS
+          if (field.type == TType.STRUCT) {
+            this.conditions = new OrderQueryConditions();
+            this.conditions.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    oprot.writeFieldBegin(USER_TYPE_FIELD_DESC);
+    oprot.writeI32(this.userType);
+    oprot.writeFieldEnd();
+    oprot.writeFieldBegin(USER_ID_FIELD_DESC);
+    oprot.writeI32(this.userId);
+    oprot.writeFieldEnd();
+    if (this.conditions != null) {
+      oprot.writeFieldBegin(CONDITIONS_FIELD_DESC);
+      this.conditions.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("orderStateQuery_args(");
+    boolean first = true;
+    sb.append("userType:");
+    sb.append(this.userType);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("userId:");
+    sb.append(this.userId);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("conditions:");
+    if (this.conditions == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.conditions);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class orderStateQuery_result implements TBase<orderStateQuery_result, orderStateQuery_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("orderStateQuery_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public OrderStateResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, OrderStateResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(orderStateQuery_result.class, metaDataMap);
+  }
+
+
+  public orderStateQuery_result() {
+  }
+
+  public orderStateQuery_result(
+    OrderStateResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public orderStateQuery_result(orderStateQuery_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new OrderStateResult(other.success);
+    }
+  }
+
+  public orderStateQuery_result deepCopy() {
+    return new orderStateQuery_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public OrderStateResult getSuccess() {
+    return this.success;
+  }
+
+  public orderStateQuery_result setSuccess(OrderStateResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((OrderStateResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof orderStateQuery_result)
+      return this.equals((orderStateQuery_result)that);
+    return false;
+  }
+
+  public boolean equals(orderStateQuery_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(orderStateQuery_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    orderStateQuery_result typedOther = (orderStateQuery_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new OrderStateResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("orderStateQuery_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
   public static class payApply_args implements TBase<payApply_args, payApply_args._Fields>, java.io.Serializable, Cloneable {
   private static final TStruct STRUCT_DESC = new TStruct("payApply_args");
 
@@ -7650,14 +8792,14 @@ public class OrderServ {
   public static class payFinish_args implements TBase<payFinish_args, payFinish_args._Fields>, java.io.Serializable, Cloneable {
   private static final TStruct STRUCT_DESC = new TStruct("payFinish_args");
 
-  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+  private static final TField PAY_RES_FIELD_DESC = new TField("payRes", TType.STRING, (short)1);
 
 
-  public PayParam param;
+  public String payRes;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    PARAM((short)1, "param");
+    PAY_RES((short)1, "payRes");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -7672,8 +8814,8 @@ public class OrderServ {
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // PARAM
-  	return PARAM;
+        case 1: // PAY_RES
+  	return PAY_RES;
         default:
   	return null;
       }
@@ -7719,8 +8861,8 @@ public class OrderServ {
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, PayParam.class)));
+    tmpMap.put(_Fields.PAY_RES, new FieldMetaData("payRes", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(payFinish_args.class, metaDataMap);
   }
@@ -7730,18 +8872,18 @@ public class OrderServ {
   }
 
   public payFinish_args(
-    PayParam param)
+    String payRes)
   {
     this();
-    this.param = param;
+    this.payRes = payRes;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
   public payFinish_args(payFinish_args other) {
-    if (other.isSetParam()) {
-      this.param = new PayParam(other.param);
+    if (other.isSetPayRes()) {
+      this.payRes = other.payRes;
     }
   }
 
@@ -7751,41 +8893,41 @@ public class OrderServ {
 
   @Override
   public void clear() {
-    this.param = null;
+    this.payRes = null;
   }
 
-  public PayParam getParam() {
-    return this.param;
+  public String getPayRes() {
+    return this.payRes;
   }
 
-  public payFinish_args setParam(PayParam param) {
-    this.param = param;
+  public payFinish_args setPayRes(String payRes) {
+    this.payRes = payRes;
     
     return this;
   }
 
-  public void unsetParam() {
-    this.param = null;
+  public void unsetPayRes() {
+    this.payRes = null;
   }
 
-  /** Returns true if field param is set (has been asigned a value) and false otherwise */
-  public boolean isSetParam() {
-    return this.param != null;
+  /** Returns true if field payRes is set (has been asigned a value) and false otherwise */
+  public boolean isSetPayRes() {
+    return this.payRes != null;
   }
 
-  public void setParamIsSet(boolean value) {
+  public void setPayResIsSet(boolean value) {
     if (!value) {
-      this.param = null;
+      this.payRes = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case PARAM:
+    case PAY_RES:
       if (value == null) {
-        unsetParam();
+        unsetPayRes();
       } else {
-        setParam((PayParam)value);
+        setPayRes((String)value);
       }
       break;
     }
@@ -7793,8 +8935,8 @@ public class OrderServ {
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case PARAM:
-      return getParam();
+    case PAY_RES:
+      return getPayRes();
     }
     throw new IllegalStateException();
   }
@@ -7806,8 +8948,8 @@ public class OrderServ {
     }
 
     switch (field) {
-    case PARAM:
-      return isSetParam();
+    case PAY_RES:
+      return isSetPayRes();
     }
     throw new IllegalStateException();
   }
@@ -7824,12 +8966,12 @@ public class OrderServ {
   public boolean equals(payFinish_args that) {
     if (that == null)
       return false;
-    boolean this_present_param = true && this.isSetParam();
-    boolean that_present_param = true && that.isSetParam();
-    if (this_present_param || that_present_param) {
-      if (!(this_present_param && that_present_param))
+    boolean this_present_payRes = true && this.isSetPayRes();
+    boolean that_present_payRes = true && that.isSetPayRes();
+    if (this_present_payRes || that_present_payRes) {
+      if (!(this_present_payRes && that_present_payRes))
         return false;
-      if (!this.param.equals(that.param))
+      if (!this.payRes.equals(that.payRes))
         return false;
     }
 
@@ -7839,10 +8981,10 @@ public class OrderServ {
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_param = true && (isSetParam());
-    builder.append(present_param);
-    if (present_param)
-      builder.append(param);
+    boolean present_payRes = true && (isSetPayRes());
+    builder.append(present_payRes);
+    if (present_payRes)
+      builder.append(payRes);
     return builder.toHashCode();
   }
 
@@ -7854,12 +8996,12 @@ public class OrderServ {
     int lastComparison = 0;
     payFinish_args typedOther = (payFinish_args)other;
 
-    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    lastComparison = Boolean.valueOf(isSetPayRes()).compareTo(typedOther.isSetPayRes());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetParam()) {
-      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+    if (isSetPayRes()) {
+      lastComparison = TBaseHelper.compareTo(this.payRes, typedOther.payRes);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -7882,10 +9024,9 @@ public class OrderServ {
         break;
       }
       switch (field.id) {
-        case 1: // PARAM
-          if (field.type == TType.STRUCT) {
-            this.param = new PayParam();
-            this.param.read(iprot);
+        case 1: // PAY_RES
+          if (field.type == TType.STRING) {
+            this.payRes = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -7905,9 +9046,9 @@ public class OrderServ {
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.param != null) {
-      oprot.writeFieldBegin(PARAM_FIELD_DESC);
-      this.param.write(oprot);
+    if (this.payRes != null) {
+      oprot.writeFieldBegin(PAY_RES_FIELD_DESC);
+      oprot.writeString(this.payRes);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -7918,11 +9059,11 @@ public class OrderServ {
   public String toString() {
     StringBuilder sb = new StringBuilder("payFinish_args(");
     boolean first = true;
-    sb.append("param:");
-    if (this.param == null) {
+    sb.append("payRes:");
+    if (this.payRes == null) {
       sb.append("null");
     } else {
-      sb.append(this.param);
+      sb.append(this.payRes);
     }
     first = false;
     sb.append(")");
@@ -8202,6 +9343,579 @@ public class OrderServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("payFinish_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class payState_args implements TBase<payState_args, payState_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("payState_args");
+
+  private static final TField PAY_STATE_FIELD_DESC = new TField("payState", TType.STRUCT, (short)1);
+
+
+  public PayState payState;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PAY_STATE((short)1, "payState");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PAY_STATE
+  	return PAY_STATE;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PAY_STATE, new FieldMetaData("payState", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, PayState.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(payState_args.class, metaDataMap);
+  }
+
+
+  public payState_args() {
+  }
+
+  public payState_args(
+    PayState payState)
+  {
+    this();
+    this.payState = payState;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public payState_args(payState_args other) {
+    if (other.isSetPayState()) {
+      this.payState = new PayState(other.payState);
+    }
+  }
+
+  public payState_args deepCopy() {
+    return new payState_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.payState = null;
+  }
+
+  public PayState getPayState() {
+    return this.payState;
+  }
+
+  public payState_args setPayState(PayState payState) {
+    this.payState = payState;
+    
+    return this;
+  }
+
+  public void unsetPayState() {
+    this.payState = null;
+  }
+
+  /** Returns true if field payState is set (has been asigned a value) and false otherwise */
+  public boolean isSetPayState() {
+    return this.payState != null;
+  }
+
+  public void setPayStateIsSet(boolean value) {
+    if (!value) {
+      this.payState = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PAY_STATE:
+      if (value == null) {
+        unsetPayState();
+      } else {
+        setPayState((PayState)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PAY_STATE:
+      return getPayState();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PAY_STATE:
+      return isSetPayState();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof payState_args)
+      return this.equals((payState_args)that);
+    return false;
+  }
+
+  public boolean equals(payState_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_payState = true && this.isSetPayState();
+    boolean that_present_payState = true && that.isSetPayState();
+    if (this_present_payState || that_present_payState) {
+      if (!(this_present_payState && that_present_payState))
+        return false;
+      if (!this.payState.equals(that.payState))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_payState = true && (isSetPayState());
+    builder.append(present_payState);
+    if (present_payState)
+      builder.append(payState);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(payState_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    payState_args typedOther = (payState_args)other;
+
+    lastComparison = Boolean.valueOf(isSetPayState()).compareTo(typedOther.isSetPayState());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPayState()) {
+      lastComparison = TBaseHelper.compareTo(this.payState, typedOther.payState);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PAY_STATE
+          if (field.type == TType.STRUCT) {
+            this.payState = new PayState();
+            this.payState.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.payState != null) {
+      oprot.writeFieldBegin(PAY_STATE_FIELD_DESC);
+      this.payState.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("payState_args(");
+    boolean first = true;
+    sb.append("payState:");
+    if (this.payState == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.payState);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class payState_result implements TBase<payState_result, payState_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("payState_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public PayStateResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, PayStateResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(payState_result.class, metaDataMap);
+  }
+
+
+  public payState_result() {
+  }
+
+  public payState_result(
+    PayStateResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public payState_result(payState_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new PayStateResult(other.success);
+    }
+  }
+
+  public payState_result deepCopy() {
+    return new payState_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public PayStateResult getSuccess() {
+    return this.success;
+  }
+
+  public payState_result setSuccess(PayStateResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((PayStateResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof payState_result)
+      return this.equals((payState_result)that);
+    return false;
+  }
+
+  public boolean equals(payState_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(payState_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    payState_result typedOther = (payState_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new PayStateResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("payState_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

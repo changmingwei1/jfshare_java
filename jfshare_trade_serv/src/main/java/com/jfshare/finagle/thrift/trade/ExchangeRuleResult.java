@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.stock;
+package com.jfshare.finagle.thrift.trade;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,20 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class LockStockResult implements TBase<LockStockResult, LockStockResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("LockStockResult");
+public class ExchangeRuleResult implements TBase<ExchangeRuleResult, ExchangeRuleResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ExchangeRuleResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField LOCK_INFO_LIST_FIELD_DESC = new TField("lockInfoList", TType.LIST, (short)2);
+  private static final TField EXCHANGE_RULE_FIELD_DESC = new TField("exchangeRule", TType.STRUCT, (short)2);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public List<LockInfo> lockInfoList;
+  public ExchangeRule exchangeRule;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    LOCK_INFO_LIST((short)2, "lockInfoList");
+    EXCHANGE_RULE((short)2, "exchangeRule");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -59,8 +59,8 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // LOCK_INFO_LIST
-  	return LOCK_INFO_LIST;
+        case 2: // EXCHANGE_RULE
+  	return EXCHANGE_RULE;
         default:
   	return null;
       }
@@ -108,57 +108,52 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.LOCK_INFO_LIST, new FieldMetaData("lockInfoList", TFieldRequirementType.DEFAULT,
-      new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, LockInfo.class))));
+    tmpMap.put(_Fields.EXCHANGE_RULE, new FieldMetaData("exchangeRule", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ExchangeRule.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(LockStockResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ExchangeRuleResult.class, metaDataMap);
   }
 
 
-  public LockStockResult() {
+  public ExchangeRuleResult() {
   }
 
-  public LockStockResult(
+  public ExchangeRuleResult(
     com.jfshare.finagle.thrift.result.Result result,
-    List<LockInfo> lockInfoList)
+    ExchangeRule exchangeRule)
   {
     this();
     this.result = result;
-    this.lockInfoList = lockInfoList;
+    this.exchangeRule = exchangeRule;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public LockStockResult(LockStockResult other) {
+  public ExchangeRuleResult(ExchangeRuleResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetLockInfoList()) {
-      List<LockInfo> __this__lockInfoList = new ArrayList<LockInfo>();
-      for (LockInfo other_element : other.lockInfoList) {
-        __this__lockInfoList.add(new LockInfo(other_element));
-      }
-      this.lockInfoList = __this__lockInfoList;
+    if (other.isSetExchangeRule()) {
+      this.exchangeRule = new ExchangeRule(other.exchangeRule);
     }
   }
 
-  public LockStockResult deepCopy() {
-    return new LockStockResult(this);
+  public ExchangeRuleResult deepCopy() {
+    return new ExchangeRuleResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.lockInfoList = null;
+    this.exchangeRule = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public LockStockResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public ExchangeRuleResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -179,43 +174,28 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     }
   }
 
-  public int getLockInfoListSize() {
-    return (this.lockInfoList == null) ? 0 : this.lockInfoList.size();
+  public ExchangeRule getExchangeRule() {
+    return this.exchangeRule;
   }
 
-  public java.util.Iterator<LockInfo> getLockInfoListIterator() {
-    return (this.lockInfoList == null) ? null : this.lockInfoList.iterator();
-  }
-
-  public void addToLockInfoList(LockInfo elem) {
-    if (this.lockInfoList == null) {
-      this.lockInfoList = new ArrayList<LockInfo>();
-    }
-    this.lockInfoList.add(elem);
-  }
-
-  public List<LockInfo> getLockInfoList() {
-    return this.lockInfoList;
-  }
-
-  public LockStockResult setLockInfoList(List<LockInfo> lockInfoList) {
-    this.lockInfoList = lockInfoList;
+  public ExchangeRuleResult setExchangeRule(ExchangeRule exchangeRule) {
+    this.exchangeRule = exchangeRule;
     
     return this;
   }
 
-  public void unsetLockInfoList() {
-    this.lockInfoList = null;
+  public void unsetExchangeRule() {
+    this.exchangeRule = null;
   }
 
-  /** Returns true if field lockInfoList is set (has been asigned a value) and false otherwise */
-  public boolean isSetLockInfoList() {
-    return this.lockInfoList != null;
+  /** Returns true if field exchangeRule is set (has been asigned a value) and false otherwise */
+  public boolean isSetExchangeRule() {
+    return this.exchangeRule != null;
   }
 
-  public void setLockInfoListIsSet(boolean value) {
+  public void setExchangeRuleIsSet(boolean value) {
     if (!value) {
-      this.lockInfoList = null;
+      this.exchangeRule = null;
     }
   }
 
@@ -228,11 +208,11 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case LOCK_INFO_LIST:
+    case EXCHANGE_RULE:
       if (value == null) {
-        unsetLockInfoList();
+        unsetExchangeRule();
       } else {
-        setLockInfoList((List<LockInfo>)value);
+        setExchangeRule((ExchangeRule)value);
       }
       break;
     }
@@ -242,8 +222,8 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     switch (field) {
     case RESULT:
       return getResult();
-    case LOCK_INFO_LIST:
-      return getLockInfoList();
+    case EXCHANGE_RULE:
+      return getExchangeRule();
     }
     throw new IllegalStateException();
   }
@@ -257,8 +237,8 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     switch (field) {
     case RESULT:
       return isSetResult();
-    case LOCK_INFO_LIST:
-      return isSetLockInfoList();
+    case EXCHANGE_RULE:
+      return isSetExchangeRule();
     }
     throw new IllegalStateException();
   }
@@ -267,12 +247,12 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof LockStockResult)
-      return this.equals((LockStockResult)that);
+    if (that instanceof ExchangeRuleResult)
+      return this.equals((ExchangeRuleResult)that);
     return false;
   }
 
-  public boolean equals(LockStockResult that) {
+  public boolean equals(ExchangeRuleResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -283,12 +263,12 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_lockInfoList = true && this.isSetLockInfoList();
-    boolean that_present_lockInfoList = true && that.isSetLockInfoList();
-    if (this_present_lockInfoList || that_present_lockInfoList) {
-      if (!(this_present_lockInfoList && that_present_lockInfoList))
+    boolean this_present_exchangeRule = true && this.isSetExchangeRule();
+    boolean that_present_exchangeRule = true && that.isSetExchangeRule();
+    if (this_present_exchangeRule || that_present_exchangeRule) {
+      if (!(this_present_exchangeRule && that_present_exchangeRule))
         return false;
-      if (!this.lockInfoList.equals(that.lockInfoList))
+      if (!this.exchangeRule.equals(that.exchangeRule))
         return false;
     }
 
@@ -302,20 +282,20 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_lockInfoList = true && (isSetLockInfoList());
-    builder.append(present_lockInfoList);
-    if (present_lockInfoList)
-      builder.append(lockInfoList);
+    boolean present_exchangeRule = true && (isSetExchangeRule());
+    builder.append(present_exchangeRule);
+    if (present_exchangeRule)
+      builder.append(exchangeRule);
     return builder.toHashCode();
   }
 
-  public int compareTo(LockStockResult other) {
+  public int compareTo(ExchangeRuleResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    LockStockResult typedOther = (LockStockResult)other;
+    ExchangeRuleResult typedOther = (ExchangeRuleResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -327,12 +307,12 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetLockInfoList()).compareTo(typedOther.isSetLockInfoList());
+    lastComparison = Boolean.valueOf(isSetExchangeRule()).compareTo(typedOther.isSetExchangeRule());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetLockInfoList()) {
-      lastComparison = TBaseHelper.compareTo(this.lockInfoList, typedOther.lockInfoList);
+    if (isSetExchangeRule()) {
+      lastComparison = TBaseHelper.compareTo(this.exchangeRule, typedOther.exchangeRule);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -363,20 +343,10 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // LOCK_INFO_LIST
-          if (field.type == TType.LIST) {
-            {
-            TList _list8 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list8.size);
-            for (int _i9 = 0; _i9 < _list8.size; ++_i9)
-            {
-              LockInfo _elem10;
-              _elem10 = new LockInfo();
-              _elem10.read(iprot);
-              this.lockInfoList.add(_elem10);
-            }
-            iprot.readListEnd();
-            }
+        case 2: // EXCHANGE_RULE
+          if (field.type == TType.STRUCT) {
+            this.exchangeRule = new ExchangeRule();
+            this.exchangeRule.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -401,16 +371,9 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.lockInfoList != null) {
-      oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter11 : this.lockInfoList)
-        {
-          _iter11.write(oprot);
-        }
-        oprot.writeListEnd();
-      }
+    if (this.exchangeRule != null) {
+      oprot.writeFieldBegin(EXCHANGE_RULE_FIELD_DESC);
+      this.exchangeRule.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -419,7 +382,7 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("LockStockResult(");
+    StringBuilder sb = new StringBuilder("ExchangeRuleResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -429,11 +392,11 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("lockInfoList:");
-    if (this.lockInfoList == null) {
+    sb.append("exchangeRule:");
+    if (this.exchangeRule == null) {
       sb.append("null");
     } else {
-      sb.append(this.lockInfoList);
+      sb.append(this.exchangeRule);
     }
     first = false;
     sb.append(")");

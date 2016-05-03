@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.stock;
+package com.jfshare.finagle.thrift.trade;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,29 +29,23 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("LockInfo");
+public class ExchangeProduct implements TBase<ExchangeProduct, ExchangeProduct._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ExchangeProduct");
 
   private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)1);
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)2);
-  private static final TField APPLY_COUNT_FIELD_DESC = new TField("applyCount", TType.I32, (short)3);
-  private static final TField LOCK_COUNT_FIELD_DESC = new TField("lockCount", TType.I32, (short)4);
-  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.I32, (short)5);
+  private static final TField PRICE_FIELD_DESC = new TField("price", TType.STRING, (short)3);
 
 
   public String productId;
   public String skuNum;
-  public int applyCount;
-  public int lockCount;
-  public int storehouseId;
+  public String price;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     PRODUCT_ID((short)1, "productId"),
     SKU_NUM((short)2, "skuNum"),
-    APPLY_COUNT((short)3, "applyCount"),
-    LOCK_COUNT((short)4, "lockCount"),
-    STOREHOUSE_ID((short)5, "storehouseId");
+    PRICE((short)3, "price");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -70,12 +64,8 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
   	return PRODUCT_ID;
         case 2: // SKU_NUM
   	return SKU_NUM;
-        case 3: // APPLY_COUNT
-  	return APPLY_COUNT;
-        case 4: // LOCK_COUNT
-  	return LOCK_COUNT;
-        case 5: // STOREHOUSE_ID
-  	return STOREHOUSE_ID;
+        case 3: // PRICE
+  	return PRICE;
         default:
   	return null;
       }
@@ -117,10 +107,6 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
 
 
   // isset id assignments
-  private static final int __APPLYCOUNT_ISSET_ID = 0;
-  private static final int __LOCKCOUNT_ISSET_ID = 1;
-  private static final int __STOREHOUSEID_ISSET_ID = 2;
-  private BitSet __isset_bit_vector = new BitSet(3);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -129,73 +115,58 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.APPLY_COUNT, new FieldMetaData("applyCount", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.LOCK_COUNT, new FieldMetaData("lockCount", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.STOREHOUSE_ID, new FieldMetaData("storehouseId", TFieldRequirementType.OPTIONAL,
-      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.PRICE, new FieldMetaData("price", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(LockInfo.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ExchangeProduct.class, metaDataMap);
   }
 
 
-  public LockInfo() {
+  public ExchangeProduct() {
   }
 
-  public LockInfo(
+  public ExchangeProduct(
     String productId,
     String skuNum,
-    int applyCount,
-    int lockCount)
+    String price)
   {
     this();
     this.productId = productId;
     this.skuNum = skuNum;
-    this.applyCount = applyCount;
-    setApplyCountIsSet(true);
-    this.lockCount = lockCount;
-    setLockCountIsSet(true);
+    this.price = price;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public LockInfo(LockInfo other) {
-    __isset_bit_vector.clear();
-    __isset_bit_vector.or(other.__isset_bit_vector);
+  public ExchangeProduct(ExchangeProduct other) {
     if (other.isSetProductId()) {
       this.productId = other.productId;
     }
     if (other.isSetSkuNum()) {
       this.skuNum = other.skuNum;
     }
-    this.applyCount = other.applyCount;
-    this.lockCount = other.lockCount;
-    this.storehouseId = other.storehouseId;
+    if (other.isSetPrice()) {
+      this.price = other.price;
+    }
   }
 
-  public LockInfo deepCopy() {
-    return new LockInfo(this);
+  public ExchangeProduct deepCopy() {
+    return new ExchangeProduct(this);
   }
 
   @Override
   public void clear() {
     this.productId = null;
     this.skuNum = null;
-    setApplyCountIsSet(false);
-    this.applyCount = 0;
-    setLockCountIsSet(false);
-    this.lockCount = 0;
-    setStorehouseIdIsSet(false);
-    this.storehouseId = 0;
+    this.price = null;
   }
 
   public String getProductId() {
     return this.productId;
   }
 
-  public LockInfo setProductId(String productId) {
+  public ExchangeProduct setProductId(String productId) {
     this.productId = productId;
     
     return this;
@@ -220,7 +191,7 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     return this.skuNum;
   }
 
-  public LockInfo setSkuNum(String skuNum) {
+  public ExchangeProduct setSkuNum(String skuNum) {
     this.skuNum = skuNum;
     
     return this;
@@ -241,76 +212,29 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     }
   }
 
-  public int getApplyCount() {
-    return this.applyCount;
+  public String getPrice() {
+    return this.price;
   }
 
-  public LockInfo setApplyCount(int applyCount) {
-    this.applyCount = applyCount;
-    setApplyCountIsSet(true);
-
+  public ExchangeProduct setPrice(String price) {
+    this.price = price;
+    
     return this;
   }
 
-  public void unsetApplyCount() {
-  __isset_bit_vector.clear(__APPLYCOUNT_ISSET_ID);
+  public void unsetPrice() {
+    this.price = null;
   }
 
-  /** Returns true if field applyCount is set (has been asigned a value) and false otherwise */
-  public boolean isSetApplyCount() {
-    return __isset_bit_vector.get(__APPLYCOUNT_ISSET_ID);
+  /** Returns true if field price is set (has been asigned a value) and false otherwise */
+  public boolean isSetPrice() {
+    return this.price != null;
   }
 
-  public void setApplyCountIsSet(boolean value) {
-    __isset_bit_vector.set(__APPLYCOUNT_ISSET_ID, value);
-  }
-
-  public int getLockCount() {
-    return this.lockCount;
-  }
-
-  public LockInfo setLockCount(int lockCount) {
-    this.lockCount = lockCount;
-    setLockCountIsSet(true);
-
-    return this;
-  }
-
-  public void unsetLockCount() {
-  __isset_bit_vector.clear(__LOCKCOUNT_ISSET_ID);
-  }
-
-  /** Returns true if field lockCount is set (has been asigned a value) and false otherwise */
-  public boolean isSetLockCount() {
-    return __isset_bit_vector.get(__LOCKCOUNT_ISSET_ID);
-  }
-
-  public void setLockCountIsSet(boolean value) {
-    __isset_bit_vector.set(__LOCKCOUNT_ISSET_ID, value);
-  }
-
-  public int getStorehouseId() {
-    return this.storehouseId;
-  }
-
-  public LockInfo setStorehouseId(int storehouseId) {
-    this.storehouseId = storehouseId;
-    setStorehouseIdIsSet(true);
-
-    return this;
-  }
-
-  public void unsetStorehouseId() {
-  __isset_bit_vector.clear(__STOREHOUSEID_ISSET_ID);
-  }
-
-  /** Returns true if field storehouseId is set (has been asigned a value) and false otherwise */
-  public boolean isSetStorehouseId() {
-    return __isset_bit_vector.get(__STOREHOUSEID_ISSET_ID);
-  }
-
-  public void setStorehouseIdIsSet(boolean value) {
-    __isset_bit_vector.set(__STOREHOUSEID_ISSET_ID, value);
+  public void setPriceIsSet(boolean value) {
+    if (!value) {
+      this.price = null;
+    }
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -329,25 +253,11 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
         setSkuNum((String)value);
       }
       break;
-    case APPLY_COUNT:
+    case PRICE:
       if (value == null) {
-        unsetApplyCount();
+        unsetPrice();
       } else {
-        setApplyCount((Integer)value);
-      }
-      break;
-    case LOCK_COUNT:
-      if (value == null) {
-        unsetLockCount();
-      } else {
-        setLockCount((Integer)value);
-      }
-      break;
-    case STOREHOUSE_ID:
-      if (value == null) {
-        unsetStorehouseId();
-      } else {
-        setStorehouseId((Integer)value);
+        setPrice((String)value);
       }
       break;
     }
@@ -359,12 +269,8 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       return getProductId();
     case SKU_NUM:
       return getSkuNum();
-    case APPLY_COUNT:
-      return new Integer(getApplyCount());
-    case LOCK_COUNT:
-      return new Integer(getLockCount());
-    case STOREHOUSE_ID:
-      return new Integer(getStorehouseId());
+    case PRICE:
+      return getPrice();
     }
     throw new IllegalStateException();
   }
@@ -380,12 +286,8 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       return isSetProductId();
     case SKU_NUM:
       return isSetSkuNum();
-    case APPLY_COUNT:
-      return isSetApplyCount();
-    case LOCK_COUNT:
-      return isSetLockCount();
-    case STOREHOUSE_ID:
-      return isSetStorehouseId();
+    case PRICE:
+      return isSetPrice();
     }
     throw new IllegalStateException();
   }
@@ -394,12 +296,12 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof LockInfo)
-      return this.equals((LockInfo)that);
+    if (that instanceof ExchangeProduct)
+      return this.equals((ExchangeProduct)that);
     return false;
   }
 
-  public boolean equals(LockInfo that) {
+  public boolean equals(ExchangeProduct that) {
     if (that == null)
       return false;
     boolean this_present_productId = true && this.isSetProductId();
@@ -418,28 +320,12 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       if (!this.skuNum.equals(that.skuNum))
         return false;
     }
-    boolean this_present_applyCount = true;
-    boolean that_present_applyCount = true;
-    if (this_present_applyCount || that_present_applyCount) {
-      if (!(this_present_applyCount && that_present_applyCount))
+    boolean this_present_price = true && this.isSetPrice();
+    boolean that_present_price = true && that.isSetPrice();
+    if (this_present_price || that_present_price) {
+      if (!(this_present_price && that_present_price))
         return false;
-      if (this.applyCount != that.applyCount)
-        return false;
-    }
-    boolean this_present_lockCount = true;
-    boolean that_present_lockCount = true;
-    if (this_present_lockCount || that_present_lockCount) {
-      if (!(this_present_lockCount && that_present_lockCount))
-        return false;
-      if (this.lockCount != that.lockCount)
-        return false;
-    }
-    boolean this_present_storehouseId = true && this.isSetStorehouseId();
-    boolean that_present_storehouseId = true && that.isSetStorehouseId();
-    if (this_present_storehouseId || that_present_storehouseId) {
-      if (!(this_present_storehouseId && that_present_storehouseId))
-        return false;
-      if (this.storehouseId != that.storehouseId)
+      if (!this.price.equals(that.price))
         return false;
     }
 
@@ -457,28 +343,20 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     builder.append(present_skuNum);
     if (present_skuNum)
       builder.append(skuNum);
-    boolean present_applyCount = true;
-    builder.append(present_applyCount);
-    if (present_applyCount)
-      builder.append(applyCount);
-    boolean present_lockCount = true;
-    builder.append(present_lockCount);
-    if (present_lockCount)
-      builder.append(lockCount);
-    boolean present_storehouseId = true && (isSetStorehouseId());
-    builder.append(present_storehouseId);
-    if (present_storehouseId)
-      builder.append(storehouseId);
+    boolean present_price = true && (isSetPrice());
+    builder.append(present_price);
+    if (present_price)
+      builder.append(price);
     return builder.toHashCode();
   }
 
-  public int compareTo(LockInfo other) {
+  public int compareTo(ExchangeProduct other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    LockInfo typedOther = (LockInfo)other;
+    ExchangeProduct typedOther = (ExchangeProduct)other;
 
     lastComparison = Boolean.valueOf(isSetProductId()).compareTo(typedOther.isSetProductId());
     if (lastComparison != 0) {
@@ -500,32 +378,12 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetApplyCount()).compareTo(typedOther.isSetApplyCount());
+    lastComparison = Boolean.valueOf(isSetPrice()).compareTo(typedOther.isSetPrice());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetApplyCount()) {
-      lastComparison = TBaseHelper.compareTo(this.applyCount, typedOther.applyCount);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetLockCount()).compareTo(typedOther.isSetLockCount());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetLockCount()) {
-      lastComparison = TBaseHelper.compareTo(this.lockCount, typedOther.lockCount);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetStorehouseId()).compareTo(typedOther.isSetStorehouseId());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetStorehouseId()) {
-      lastComparison = TBaseHelper.compareTo(this.storehouseId, typedOther.storehouseId);
+    if (isSetPrice()) {
+      lastComparison = TBaseHelper.compareTo(this.price, typedOther.price);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -562,26 +420,9 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // APPLY_COUNT
-          if (field.type == TType.I32) {
-            this.applyCount = iprot.readI32();
-            setApplyCountIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 4: // LOCK_COUNT
-          if (field.type == TType.I32) {
-            this.lockCount = iprot.readI32();
-            setLockCountIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 5: // STOREHOUSE_ID
-          if (field.type == TType.I32) {
-            this.storehouseId = iprot.readI32();
-            setStorehouseIdIsSet(true);
+        case 3: // PRICE
+          if (field.type == TType.STRING) {
+            this.price = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -611,15 +452,9 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       oprot.writeString(this.skuNum);
       oprot.writeFieldEnd();
     }
-    oprot.writeFieldBegin(APPLY_COUNT_FIELD_DESC);
-    oprot.writeI32(this.applyCount);
-    oprot.writeFieldEnd();
-    oprot.writeFieldBegin(LOCK_COUNT_FIELD_DESC);
-    oprot.writeI32(this.lockCount);
-    oprot.writeFieldEnd();
-    if (isSetStorehouseId()) {
-      oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
-      oprot.writeI32(this.storehouseId);
+    if (this.price != null) {
+      oprot.writeFieldBegin(PRICE_FIELD_DESC);
+      oprot.writeString(this.price);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -628,7 +463,7 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("LockInfo(");
+    StringBuilder sb = new StringBuilder("ExchangeProduct(");
     boolean first = true;
     sb.append("productId:");
     if (this.productId == null) {
@@ -646,19 +481,13 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("applyCount:");
-    sb.append(this.applyCount);
+    sb.append("price:");
+    if (this.price == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.price);
+    }
     first = false;
-    if (!first) sb.append(", ");
-    sb.append("lockCount:");
-    sb.append(this.lockCount);
-    first = false;
-    if (isSetStorehouseId()) {
-      if (!first) sb.append(", ");
-      sb.append("storehouseId:");
-      sb.append(this.storehouseId);
-      first = false;
-      }
     sb.append(")");
     return sb.toString();
   }

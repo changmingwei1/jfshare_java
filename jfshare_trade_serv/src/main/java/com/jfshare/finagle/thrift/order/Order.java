@@ -67,6 +67,7 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
   private static final TField ORDER_BATCH_FIELD_DESC = new TField("orderBatch", TType.STRING, (short)33);
   private static final TField ACTIVE_STATE_FIELD_DESC = new TField("activeState", TType.I32, (short)34);
   private static final TField PRODUCT_LIST_FIELD_DESC = new TField("productList", TType.LIST, (short)35);
+  private static final TField THIRD_SCORE_FIELD_DESC = new TField("thirdScore", TType.I32, (short)36);
 
 
   public String orderId;
@@ -104,6 +105,7 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
   public String orderBatch;
   public int activeState;
   public List<OrderInfo> productList;
+  public int thirdScore;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -141,7 +143,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     EXCHANGE_CASH((short)32, "exchangeCash"),
     ORDER_BATCH((short)33, "orderBatch"),
     ACTIVE_STATE((short)34, "activeState"),
-    PRODUCT_LIST((short)35, "productList");
+    PRODUCT_LIST((short)35, "productList"),
+    THIRD_SCORE((short)36, "thirdScore");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -226,6 +229,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
   	return ACTIVE_STATE;
         case 35: // PRODUCT_LIST
   	return PRODUCT_LIST;
+        case 36: // THIRD_SCORE
+  	return THIRD_SCORE;
         default:
   	return null;
       }
@@ -278,7 +283,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
   private static final int __ORDERDELETESTATE_ISSET_ID = 8;
   private static final int __EXCHANGESCORE_ISSET_ID = 9;
   private static final int __ACTIVESTATE_ISSET_ID = 10;
-  private BitSet __isset_bit_vector = new BitSet(11);
+  private static final int __THIRDSCORE_ISSET_ID = 11;
+  private BitSet __isset_bit_vector = new BitSet(12);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -354,6 +360,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     tmpMap.put(_Fields.PRODUCT_LIST, new FieldMetaData("productList", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
                 new StructMetaData(TType.STRUCT, OrderInfo.class))));
+    tmpMap.put(_Fields.THIRD_SCORE, new FieldMetaData("thirdScore", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(Order.class, metaDataMap);
   }
@@ -500,6 +508,7 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       }
       this.productList = __this__productList;
     }
+    this.thirdScore = other.thirdScore;
   }
 
   public Order deepCopy() {
@@ -554,6 +563,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     setActiveStateIsSet(false);
     this.activeState = 0;
     this.productList = null;
+    setThirdScoreIsSet(false);
+    this.thirdScore = 0;
   }
 
   public String getOrderId() {
@@ -1435,6 +1446,30 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     }
   }
 
+  public int getThirdScore() {
+    return this.thirdScore;
+  }
+
+  public Order setThirdScore(int thirdScore) {
+    this.thirdScore = thirdScore;
+    setThirdScoreIsSet(true);
+
+    return this;
+  }
+
+  public void unsetThirdScore() {
+  __isset_bit_vector.clear(__THIRDSCORE_ISSET_ID);
+  }
+
+  /** Returns true if field thirdScore is set (has been asigned a value) and false otherwise */
+  public boolean isSetThirdScore() {
+    return __isset_bit_vector.get(__THIRDSCORE_ISSET_ID);
+  }
+
+  public void setThirdScoreIsSet(boolean value) {
+    __isset_bit_vector.set(__THIRDSCORE_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ORDER_ID:
@@ -1682,6 +1717,13 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
         setProductList((List<OrderInfo>)value);
       }
       break;
+    case THIRD_SCORE:
+      if (value == null) {
+        unsetThirdScore();
+      } else {
+        setThirdScore((Integer)value);
+      }
+      break;
     }
   }
 
@@ -1757,6 +1799,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       return new Integer(getActiveState());
     case PRODUCT_LIST:
       return getProductList();
+    case THIRD_SCORE:
+      return new Integer(getThirdScore());
     }
     throw new IllegalStateException();
   }
@@ -1838,6 +1882,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       return isSetActiveState();
     case PRODUCT_LIST:
       return isSetProductList();
+    case THIRD_SCORE:
+      return isSetThirdScore();
     }
     throw new IllegalStateException();
   }
@@ -2134,6 +2180,14 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       if (!this.productList.equals(that.productList))
         return false;
     }
+    boolean this_present_thirdScore = true && this.isSetThirdScore();
+    boolean that_present_thirdScore = true && that.isSetThirdScore();
+    if (this_present_thirdScore || that_present_thirdScore) {
+      if (!(this_present_thirdScore && that_present_thirdScore))
+        return false;
+      if (this.thirdScore != that.thirdScore)
+        return false;
+    }
 
     return true;
   }
@@ -2281,6 +2335,10 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     builder.append(present_productList);
     if (present_productList)
       builder.append(productList);
+    boolean present_thirdScore = true && (isSetThirdScore());
+    builder.append(present_thirdScore);
+    if (present_thirdScore)
+      builder.append(thirdScore);
     return builder.toHashCode();
   }
 
@@ -2642,6 +2700,16 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetThirdScore()).compareTo(typedOther.isSetThirdScore());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetThirdScore()) {
+      lastComparison = TBaseHelper.compareTo(this.thirdScore, typedOther.thirdScore);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -2929,6 +2997,14 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 36: // THIRD_SCORE
+          if (field.type == TType.I32) {
+            this.thirdScore = iprot.readI32();
+            setThirdScoreIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -3136,6 +3212,11 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
         }
         oprot.writeListEnd();
       }
+      oprot.writeFieldEnd();
+    }
+    if (isSetThirdScore()) {
+      oprot.writeFieldBegin(THIRD_SCORE_FIELD_DESC);
+      oprot.writeI32(this.thirdScore);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -3415,6 +3496,12 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       sb.append(this.productList);
     }
     first = false;
+    if (isSetThirdScore()) {
+      if (!first) sb.append(", ");
+      sb.append("thirdScore:");
+      sb.append(this.thirdScore);
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }
