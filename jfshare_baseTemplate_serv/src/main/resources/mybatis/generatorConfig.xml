@@ -5,11 +5,10 @@
 
 <generatorConfiguration>
     <!-- db driver -->
-    <!--<classPathEntry location="E:\workSpace\myMaven\mysql\mysql-connector-java\5.1.26\mysql-connector-java-5.1.26.jar" />-->
-    <classPathEntry location="D:\devTools\apache-maven-3.2.1\m2\repository\mysql\mysql-connector-java\5.1.17\mysql-connector-java-5.1.17.jar" />
+    <classPathEntry location="E:\generator\mysql-connector-java-5.1.32-bin.jar" />
     
     <!-- introspectedColumnImpl prop define special column reflect -->
-    <context id="mysqlStepyee" targetRuntime="MyBatis3"> 
+    <context id="mysqlStepyee" targetRuntime="MyBatis3" introspectedColumnImpl="com.jfshare.mybatis.generator.api.IntrospectedColumn">
         <!-- generator or not comments (extend DefaultCommentGenerator to special)-->
 	    <commentGenerator>
 	      <property name="suppressAllComments" value="true" />
@@ -24,31 +23,33 @@
         </jdbcConnection>
 
         <!-- type reflect setting (type prop implements JavaTypeResolver to special type reflect)-->
-        <javaTypeResolver>
+        <javaTypeResolver type="com.jfshare.mybatis.generator.types.JavaTypeResolverImpl">
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
         <!-- generator javeBean、example Criteria -->
-        <javaModelGenerator targetPackage="com.jfshare.product.model" targetProject="src\main\java">
+        <javaModelGenerator targetPackage="com.jfshare.baseTemplate.mybatis.model.automatic" targetProject="src\main\java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!-- generator xml mapper -->
-        <sqlMapGenerator targetPackage="mybatis.sqlmap" targetProject="src\main\resources">
+        <sqlMapGenerator targetPackage="mybatis.sqlmap.automatic" targetProject="src\main\resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!-- generator java client annotation mapper -->
-        <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.jfshare.product.model.mapper" targetProject="src\main\java">
+        <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.jfshare.baseTemplate.mybatis.mapper.automatic" targetProject="src\main\java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
       <!--Run As  Maven build... goals mybatis-generator:generate -->
-      <!--<table tableName="tb_product" schema="jfshare"/>
-      <table tableName="tb_product_sku" schema="jfshare"/>
-      <table tableName="tb_product_history" schema="jfshare"/>-->
-      <table tableName="tb_product_card" schema="jfshare"/>
+        <table tableName="tb_storehouse" schema="jfshare">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_postage_template" schema="jfshare">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
     </context>
 </generatorConfiguration>
 
