@@ -13,20 +13,20 @@ import java.util.Map;
 public class OrderConstant {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderConstant.class);
-	
-	 /*
-     * 0初始,
-		1待支付
-		2待发货
-		3已发货
-		4 退货申请
-		5 交易成功
-		6交易取消
-		7交易关闭
-		8 审核中
-		99 用户付款中
-		98 商家退款中
-     */
+
+	/*
+    * 0初始,
+       1待支付
+       2待发货
+       3已发货
+       4 退货申请
+       5 交易成功
+       6交易取消
+       7交易关闭
+       8 审核中
+       99 用户付款中
+       98 商家退款中
+    */
 	public static int INIT_STATE = 0;
 	public static int WAIT_PAY_STATE = 10;
     public static int WAIT_AUDIT_STATE = 20;
@@ -383,4 +383,14 @@ tenpayapp 财付通手机控件支付
 
 		public final static int PT_MAN_JIAN = 101;
 	}
+
+	/**
+	 * 批量导出最大条数限制
+	 */
+	public final static int  MAX_BATCH_EXPORT_RECORD = 10000;
+
+	/**
+	 * 默认物流号匹配规则
+	 */
+	public static final String DEF_EXPRESS_NO_RULE = "[a-zA-Z0-9]{5,28}";
 }
