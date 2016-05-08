@@ -366,14 +366,14 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
         case 2: // LOCK_INFO_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list9 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list9.size);
-            for (int _i10 = 0; _i10 < _list9.size; ++_i10)
+            TList _list4 = iprot.readListBegin();
+            this.lockInfoList = new ArrayList<LockInfo>(_list4.size);
+            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
             {
-              LockInfo _elem11;
-              _elem11 = new LockInfo();
-              _elem11.read(iprot);
-              this.lockInfoList.add(_elem11);
+              LockInfo _elem6;
+              _elem6 = new LockInfo();
+              _elem6.read(iprot);
+              this.lockInfoList.add(_elem6);
             }
             iprot.readListEnd();
             }
@@ -405,9 +405,9 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
       oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter12 : this.lockInfoList)
+        for (LockInfo _iter7 : this.lockInfoList)
         {
-          _iter12.write(oprot);
+          _iter7.write(oprot);
         }
         oprot.writeListEnd();
       }

@@ -32,7 +32,7 @@ import org.apache.thrift.protocol.*;
 public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.io.Serializable, Cloneable {
   private static final TStruct STRUCT_DESC = new TStruct("ProductSku");
 
-  private static final TField PRODUCT_SKU_MAP_FIELD_DESC = new TField("productSkuMap", TType.MAP, (short)1);
+  private static final TField SKU_ITEMS_FIELD_DESC = new TField("skuItems", TType.LIST, (short)1);
   private static final TField SELLER_CLASS_NUM_FIELD_DESC = new TField("sellerClassNum", TType.STRING, (short)2);
   private static final TField SHELF_FIELD_DESC = new TField("shelf", TType.STRING, (short)3);
   private static final TField CUR_PRICE_FIELD_DESC = new TField("curPrice", TType.STRING, (short)4);
@@ -44,9 +44,10 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
   private static final TField V_PICTURE_FIELD_DESC = new TField("vPicture", TType.STRING, (short)10);
   private static final TField SKU_NAME_FIELD_DESC = new TField("skuName", TType.STRING, (short)11);
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)12);
+  private static final TField REF_PRICE_FIELD_DESC = new TField("refPrice", TType.STRING, (short)13);
 
 
-  public Map<String,ProductSkuItem> productSkuMap;
+  public List<ProductSkuItem> skuItems;
   public String sellerClassNum;
   public String shelf;
   public String curPrice;
@@ -58,10 +59,11 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
   public String vPicture;
   public String skuName;
   public String skuNum;
+  public String refPrice;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    PRODUCT_SKU_MAP((short)1, "productSkuMap"),
+    SKU_ITEMS((short)1, "skuItems"),
     SELLER_CLASS_NUM((short)2, "sellerClassNum"),
     SHELF((short)3, "shelf"),
     CUR_PRICE((short)4, "curPrice"),
@@ -72,7 +74,8 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
     MAX_ORG_PRICE((short)9, "maxOrgPrice"),
     V_PICTURE((short)10, "vPicture"),
     SKU_NAME((short)11, "skuName"),
-    SKU_NUM((short)12, "skuNum");
+    SKU_NUM((short)12, "skuNum"),
+    REF_PRICE((short)13, "refPrice");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -87,8 +90,8 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // PRODUCT_SKU_MAP
-  	return PRODUCT_SKU_MAP;
+        case 1: // SKU_ITEMS
+  	return SKU_ITEMS;
         case 2: // SELLER_CLASS_NUM
   	return SELLER_CLASS_NUM;
         case 3: // SHELF
@@ -111,6 +114,8 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
   	return SKU_NAME;
         case 12: // SKU_NUM
   	return SKU_NUM;
+        case 13: // REF_PRICE
+  	return REF_PRICE;
         default:
   	return null;
       }
@@ -156,10 +161,9 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.PRODUCT_SKU_MAP, new FieldMetaData("productSkuMap", TFieldRequirementType.OPTIONAL,
-      new MapMetaData(TType.MAP,
-            new FieldValueMetaData(TType.STRING),
-            new StructMetaData(TType.STRUCT, ProductSkuItem.class))));
+    tmpMap.put(_Fields.SKU_ITEMS, new FieldMetaData("skuItems", TFieldRequirementType.OPTIONAL,
+      new ListMetaData(TType.LIST,
+                new StructMetaData(TType.STRUCT, ProductSkuItem.class))));
     tmpMap.put(_Fields.SELLER_CLASS_NUM, new FieldMetaData("sellerClassNum", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.SHELF, new FieldMetaData("shelf", TFieldRequirementType.OPTIONAL,
@@ -182,6 +186,8 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.REF_PRICE, new FieldMetaData("refPrice", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductSku.class, metaDataMap);
   }
@@ -195,16 +201,12 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
    * Performs a deep copy on <i>other</i>.
    */
   public ProductSku(ProductSku other) {
-    if (other.isSetProductSkuMap()) {
-      Map<String,ProductSkuItem> __this__productSkuMap = new HashMap<String,ProductSkuItem>();
-      for (Map.Entry<String, ProductSkuItem> other_element : other.productSkuMap.entrySet()) {
-        String other_element_key = other_element.getKey();
-        ProductSkuItem other_element_value = other_element.getValue();
-        String __this__productSkuMap_copy_key = other_element_key;
-        ProductSkuItem __this__productSkuMap_copy_value = new ProductSkuItem(other_element_value);
-        __this__productSkuMap.put(__this__productSkuMap_copy_key, __this__productSkuMap_copy_value);
+    if (other.isSetSkuItems()) {
+      List<ProductSkuItem> __this__skuItems = new ArrayList<ProductSkuItem>();
+      for (ProductSkuItem other_element : other.skuItems) {
+        __this__skuItems.add(new ProductSkuItem(other_element));
       }
-      this.productSkuMap = __this__productSkuMap;
+      this.skuItems = __this__skuItems;
     }
     if (other.isSetSellerClassNum()) {
       this.sellerClassNum = other.sellerClassNum;
@@ -239,6 +241,9 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
     if (other.isSetSkuNum()) {
       this.skuNum = other.skuNum;
     }
+    if (other.isSetRefPrice()) {
+      this.refPrice = other.refPrice;
+    }
   }
 
   public ProductSku deepCopy() {
@@ -247,7 +252,7 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
 
   @Override
   public void clear() {
-    this.productSkuMap = null;
+    this.skuItems = null;
     this.sellerClassNum = null;
     this.shelf = null;
     this.curPrice = null;
@@ -259,41 +264,46 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
     this.vPicture = null;
     this.skuName = null;
     this.skuNum = null;
+    this.refPrice = null;
   }
 
-  public int getProductSkuMapSize() {
-    return (this.productSkuMap == null) ? 0 : this.productSkuMap.size();
+  public int getSkuItemsSize() {
+    return (this.skuItems == null) ? 0 : this.skuItems.size();
   }
 
-  public void putToProductSkuMap(String key, ProductSkuItem val) {
-    if (this.productSkuMap == null) {
-      this.productSkuMap = new HashMap<String,ProductSkuItem>();
+  public java.util.Iterator<ProductSkuItem> getSkuItemsIterator() {
+    return (this.skuItems == null) ? null : this.skuItems.iterator();
+  }
+
+  public void addToSkuItems(ProductSkuItem elem) {
+    if (this.skuItems == null) {
+      this.skuItems = new ArrayList<ProductSkuItem>();
     }
-    this.productSkuMap.put(key, val);
+    this.skuItems.add(elem);
   }
 
-  public Map<String,ProductSkuItem> getProductSkuMap() {
-    return this.productSkuMap;
+  public List<ProductSkuItem> getSkuItems() {
+    return this.skuItems;
   }
 
-  public ProductSku setProductSkuMap(Map<String,ProductSkuItem> productSkuMap) {
-    this.productSkuMap = productSkuMap;
+  public ProductSku setSkuItems(List<ProductSkuItem> skuItems) {
+    this.skuItems = skuItems;
     
     return this;
   }
 
-  public void unsetProductSkuMap() {
-    this.productSkuMap = null;
+  public void unsetSkuItems() {
+    this.skuItems = null;
   }
 
-  /** Returns true if field productSkuMap is set (has been asigned a value) and false otherwise */
-  public boolean isSetProductSkuMap() {
-    return this.productSkuMap != null;
+  /** Returns true if field skuItems is set (has been asigned a value) and false otherwise */
+  public boolean isSetSkuItems() {
+    return this.skuItems != null;
   }
 
-  public void setProductSkuMapIsSet(boolean value) {
+  public void setSkuItemsIsSet(boolean value) {
     if (!value) {
-      this.productSkuMap = null;
+      this.skuItems = null;
     }
   }
 
@@ -572,13 +582,38 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
     }
   }
 
+  public String getRefPrice() {
+    return this.refPrice;
+  }
+
+  public ProductSku setRefPrice(String refPrice) {
+    this.refPrice = refPrice;
+    
+    return this;
+  }
+
+  public void unsetRefPrice() {
+    this.refPrice = null;
+  }
+
+  /** Returns true if field refPrice is set (has been asigned a value) and false otherwise */
+  public boolean isSetRefPrice() {
+    return this.refPrice != null;
+  }
+
+  public void setRefPriceIsSet(boolean value) {
+    if (!value) {
+      this.refPrice = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case PRODUCT_SKU_MAP:
+    case SKU_ITEMS:
       if (value == null) {
-        unsetProductSkuMap();
+        unsetSkuItems();
       } else {
-        setProductSkuMap((Map<String,ProductSkuItem>)value);
+        setSkuItems((List<ProductSkuItem>)value);
       }
       break;
     case SELLER_CLASS_NUM:
@@ -658,13 +693,20 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
         setSkuNum((String)value);
       }
       break;
+    case REF_PRICE:
+      if (value == null) {
+        unsetRefPrice();
+      } else {
+        setRefPrice((String)value);
+      }
+      break;
     }
   }
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case PRODUCT_SKU_MAP:
-      return getProductSkuMap();
+    case SKU_ITEMS:
+      return getSkuItems();
     case SELLER_CLASS_NUM:
       return getSellerClassNum();
     case SHELF:
@@ -687,6 +729,8 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
       return getSkuName();
     case SKU_NUM:
       return getSkuNum();
+    case REF_PRICE:
+      return getRefPrice();
     }
     throw new IllegalStateException();
   }
@@ -698,8 +742,8 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
     }
 
     switch (field) {
-    case PRODUCT_SKU_MAP:
-      return isSetProductSkuMap();
+    case SKU_ITEMS:
+      return isSetSkuItems();
     case SELLER_CLASS_NUM:
       return isSetSellerClassNum();
     case SHELF:
@@ -722,6 +766,8 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
       return isSetSkuName();
     case SKU_NUM:
       return isSetSkuNum();
+    case REF_PRICE:
+      return isSetRefPrice();
     }
     throw new IllegalStateException();
   }
@@ -738,12 +784,12 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
   public boolean equals(ProductSku that) {
     if (that == null)
       return false;
-    boolean this_present_productSkuMap = true && this.isSetProductSkuMap();
-    boolean that_present_productSkuMap = true && that.isSetProductSkuMap();
-    if (this_present_productSkuMap || that_present_productSkuMap) {
-      if (!(this_present_productSkuMap && that_present_productSkuMap))
+    boolean this_present_skuItems = true && this.isSetSkuItems();
+    boolean that_present_skuItems = true && that.isSetSkuItems();
+    if (this_present_skuItems || that_present_skuItems) {
+      if (!(this_present_skuItems && that_present_skuItems))
         return false;
-      if (!this.productSkuMap.equals(that.productSkuMap))
+      if (!this.skuItems.equals(that.skuItems))
         return false;
     }
     boolean this_present_sellerClassNum = true && this.isSetSellerClassNum();
@@ -834,6 +880,14 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
       if (!this.skuNum.equals(that.skuNum))
         return false;
     }
+    boolean this_present_refPrice = true && this.isSetRefPrice();
+    boolean that_present_refPrice = true && that.isSetRefPrice();
+    if (this_present_refPrice || that_present_refPrice) {
+      if (!(this_present_refPrice && that_present_refPrice))
+        return false;
+      if (!this.refPrice.equals(that.refPrice))
+        return false;
+    }
 
     return true;
   }
@@ -841,10 +895,10 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_productSkuMap = true && (isSetProductSkuMap());
-    builder.append(present_productSkuMap);
-    if (present_productSkuMap)
-      builder.append(productSkuMap);
+    boolean present_skuItems = true && (isSetSkuItems());
+    builder.append(present_skuItems);
+    if (present_skuItems)
+      builder.append(skuItems);
     boolean present_sellerClassNum = true && (isSetSellerClassNum());
     builder.append(present_sellerClassNum);
     if (present_sellerClassNum)
@@ -889,6 +943,10 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
     builder.append(present_skuNum);
     if (present_skuNum)
       builder.append(skuNum);
+    boolean present_refPrice = true && (isSetRefPrice());
+    builder.append(present_refPrice);
+    if (present_refPrice)
+      builder.append(refPrice);
     return builder.toHashCode();
   }
 
@@ -900,12 +958,12 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
     int lastComparison = 0;
     ProductSku typedOther = (ProductSku)other;
 
-    lastComparison = Boolean.valueOf(isSetProductSkuMap()).compareTo(typedOther.isSetProductSkuMap());
+    lastComparison = Boolean.valueOf(isSetSkuItems()).compareTo(typedOther.isSetSkuItems());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetProductSkuMap()) {
-      lastComparison = TBaseHelper.compareTo(this.productSkuMap, typedOther.productSkuMap);
+    if (isSetSkuItems()) {
+      lastComparison = TBaseHelper.compareTo(this.skuItems, typedOther.skuItems);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1020,6 +1078,16 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetRefPrice()).compareTo(typedOther.isSetRefPrice());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetRefPrice()) {
+      lastComparison = TBaseHelper.compareTo(this.refPrice, typedOther.refPrice);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1038,21 +1106,19 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
         break;
       }
       switch (field.id) {
-        case 1: // PRODUCT_SKU_MAP
-          if (field.type == TType.MAP) {
+        case 1: // SKU_ITEMS
+          if (field.type == TType.LIST) {
             {
-            TMap _map0 = iprot.readMapBegin();
-            this.productSkuMap = new HashMap<String,ProductSkuItem>(2*_map0.size);
-            for (int _i1 = 0; _i1 < _map0.size; ++_i1)
+            TList _list0 = iprot.readListBegin();
+            this.skuItems = new ArrayList<ProductSkuItem>(_list0.size);
+            for (int _i1 = 0; _i1 < _list0.size; ++_i1)
             {
-              String _key2;
-              ProductSkuItem _val3;
-              _key2 = iprot.readString();
-              _val3 = new ProductSkuItem();
-              _val3.read(iprot);
-              this.productSkuMap.put(_key2, _val3);
+              ProductSkuItem _elem2;
+              _elem2 = new ProductSkuItem();
+              _elem2.read(iprot);
+              this.skuItems.add(_elem2);
             }
-            iprot.readMapEnd();
+            iprot.readListEnd();
             }
           } else {
             TProtocolUtil.skip(iprot, field.type);
@@ -1135,6 +1201,13 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 13: // REF_PRICE
+          if (field.type == TType.STRING) {
+            this.refPrice = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -1150,17 +1223,16 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.productSkuMap != null) {
-      if (isSetProductSkuMap()) {
-        oprot.writeFieldBegin(PRODUCT_SKU_MAP_FIELD_DESC);
+    if (this.skuItems != null) {
+      if (isSetSkuItems()) {
+        oprot.writeFieldBegin(SKU_ITEMS_FIELD_DESC);
         {
-          oprot.writeMapBegin(new TMap(TType.STRING, TType.STRUCT, this.productSkuMap.size()));
-          for (Map.Entry<String, ProductSkuItem> _iter4 : this.productSkuMap.entrySet())
+          oprot.writeListBegin(new TList(TType.STRUCT, this.skuItems.size()));
+          for (ProductSkuItem _iter3 : this.skuItems)
           {
-            oprot.writeString(_iter4.getKey());
-            _iter4.getValue().write(oprot);
+            _iter3.write(oprot);
           }
-          oprot.writeMapEnd();
+          oprot.writeListEnd();
         }
         oprot.writeFieldEnd();
       }
@@ -1242,6 +1314,13 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
         oprot.writeFieldEnd();
       }
     }
+    if (this.refPrice != null) {
+      if (isSetRefPrice()) {
+        oprot.writeFieldBegin(REF_PRICE_FIELD_DESC);
+        oprot.writeString(this.refPrice);
+        oprot.writeFieldEnd();
+      }
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -1250,12 +1329,12 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
   public String toString() {
     StringBuilder sb = new StringBuilder("ProductSku(");
     boolean first = true;
-    if (isSetProductSkuMap()) {
-      sb.append("productSkuMap:");
-      if (this.productSkuMap == null) {
+    if (isSetSkuItems()) {
+      sb.append("skuItems:");
+      if (this.skuItems == null) {
         sb.append("null");
       } else {
-        sb.append(this.productSkuMap);
+        sb.append(this.skuItems);
       }
       first = false;
       }
@@ -1366,6 +1445,16 @@ public class ProductSku implements TBase<ProductSku, ProductSku._Fields>, java.i
         sb.append("null");
       } else {
         sb.append(this.skuNum);
+      }
+      first = false;
+      }
+    if (isSetRefPrice()) {
+      if (!first) sb.append(", ");
+      sb.append("refPrice:");
+      if (this.refPrice == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.refPrice);
       }
       first = false;
       }

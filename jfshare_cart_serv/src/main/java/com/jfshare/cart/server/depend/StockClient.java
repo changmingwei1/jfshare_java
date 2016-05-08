@@ -6,6 +6,7 @@ import java.util.List;
 import com.jfshare.cart.util.Constant;
 import com.jfshare.cart.util.ResultGenerator;
 import com.jfshare.cart.util.StringUtil;
+import com.jfshare.finagle.thrift.stock.QueryParam;
 import com.jfshare.finagle.thrift.stock.StockInfo;
 import com.jfshare.finagle.thrift.stock.StockResult;
 import com.jfshare.finagle.thrift.stock.StockServ;
@@ -62,7 +63,10 @@ public class StockClient {
 		try {
 			List<String> items = new ArrayList<String>();
 			items.add(skuNum);
-			StockResult s = Await.result(service.getStockForSku(productId, items));
+			QueryParam stockQueryParam = new QueryParam();
+			stockQueryParam.setProductId(productId);
+			stockQueryParam.setSkuNum(skuNum);
+			StockResult s = Await.result(service.queryStock(stockQueryParam));
 			if (s != null && s.getResult().getCode() != ResultGenerator.SUCCESS_CODE) {
 				String errorCode = s.getResult().getFailDescList().get(0).getFailCode();
 				logger.error(param + ",getStockForSku接口错误编号" + errorCode);

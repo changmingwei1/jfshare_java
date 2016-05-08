@@ -11,8 +11,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
+import java.util.BitSet;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,13 +30,16 @@ import org.apache.thrift.protocol.*;
 import com.twitter.util.Future;
 import com.twitter.util.Function;
 import com.twitter.util.Function2;
+import com.twitter.util.Try;
+import com.twitter.util.Return;
+import com.twitter.util.Throw;
 import com.twitter.finagle.thrift.ThriftClientRequest;
 
 public class StockServ {
   public interface Iface {
     public com.jfshare.finagle.thrift.result.Result setStock(String tranId, StockInfo stockInfo) throws TException;
-    public StockResult getStock(String productId) throws TException;
-    public StockResult getStockForSku(String productId, List<String> skuNums) throws TException;
+    public StockResult queryStock(QueryParam param) throws TException;
+    public BatchStockResult batchQueryStock(BatchQueryParam param) throws TException;
     public LockStockResult lockStock(String tranId, List<LockInfo> lockInfoList) throws TException;
     public com.jfshare.finagle.thrift.result.Result releaseStock(String tranId, List<LockInfo> lockInfoList) throws TException;
     public com.jfshare.finagle.thrift.result.Result releaseLockCount(String tranId, List<LockInfo> lockInfoList) throws TException;
@@ -44,8 +51,8 @@ public class StockServ {
 
   public interface AsyncIface {
     public void setStock(String tranId, StockInfo stockInfo, AsyncMethodCallback<AsyncClient.setStock_call> resultHandler) throws TException;
-    public void getStock(String productId, AsyncMethodCallback<AsyncClient.getStock_call> resultHandler) throws TException;
-    public void getStockForSku(String productId, List<String> skuNums, AsyncMethodCallback<AsyncClient.getStockForSku_call> resultHandler) throws TException;
+    public void queryStock(QueryParam param, AsyncMethodCallback<AsyncClient.queryStock_call> resultHandler) throws TException;
+    public void batchQueryStock(BatchQueryParam param, AsyncMethodCallback<AsyncClient.batchQueryStock_call> resultHandler) throws TException;
     public void lockStock(String tranId, List<LockInfo> lockInfoList, AsyncMethodCallback<AsyncClient.lockStock_call> resultHandler) throws TException;
     public void releaseStock(String tranId, List<LockInfo> lockInfoList, AsyncMethodCallback<AsyncClient.releaseStock_call> resultHandler) throws TException;
     public void releaseLockCount(String tranId, List<LockInfo> lockInfoList, AsyncMethodCallback<AsyncClient.releaseLockCount_call> resultHandler) throws TException;
@@ -57,8 +64,8 @@ public class StockServ {
 
   public interface ServiceIface {
     public Future<com.jfshare.finagle.thrift.result.Result> setStock(String tranId, StockInfo stockInfo);
-    public Future<StockResult> getStock(String productId);
-    public Future<StockResult> getStockForSku(String productId, List<String> skuNums);
+    public Future<StockResult> queryStock(QueryParam param);
+    public Future<BatchStockResult> batchQueryStock(BatchQueryParam param);
     public Future<LockStockResult> lockStock(String tranId, List<LockInfo> lockInfoList);
     public Future<com.jfshare.finagle.thrift.result.Result> releaseStock(String tranId, List<LockInfo> lockInfoList);
     public Future<com.jfshare.finagle.thrift.result.Result> releaseLockCount(String tranId, List<LockInfo> lockInfoList);
@@ -141,23 +148,23 @@ public class StockServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "setStock failed: unknown result");
     }
-    public StockResult getStock(String productId) throws TException
+    public StockResult queryStock(QueryParam param) throws TException
     {
-      send_getStock(productId);
-      return recv_getStock();
+      send_queryStock(param);
+      return recv_queryStock();
     }
 
-    public void send_getStock(String productId) throws TException
+    public void send_queryStock(QueryParam param) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("getStock", TMessageType.CALL, ++seqid_));
-      getStock_args args = new getStock_args();
-      args.setProductId(productId);
+      oprot_.writeMessageBegin(new TMessage("queryStock", TMessageType.CALL, ++seqid_));
+      queryStock_args args = new queryStock_args();
+      args.setParam(param);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public StockResult recv_getStock() throws TException
+    public StockResult recv_queryStock() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -166,34 +173,33 @@ public class StockServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "getStock failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "queryStock failed: out of sequence response");
       }
-      getStock_result result = new getStock_result();
+      queryStock_result result = new queryStock_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "getStock failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryStock failed: unknown result");
     }
-    public StockResult getStockForSku(String productId, List<String> skuNums) throws TException
+    public BatchStockResult batchQueryStock(BatchQueryParam param) throws TException
     {
-      send_getStockForSku(productId, skuNums);
-      return recv_getStockForSku();
+      send_batchQueryStock(param);
+      return recv_batchQueryStock();
     }
 
-    public void send_getStockForSku(String productId, List<String> skuNums) throws TException
+    public void send_batchQueryStock(BatchQueryParam param) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("getStockForSku", TMessageType.CALL, ++seqid_));
-      getStockForSku_args args = new getStockForSku_args();
-      args.setProductId(productId);
-      args.setSkuNums(skuNums);
+      oprot_.writeMessageBegin(new TMessage("batchQueryStock", TMessageType.CALL, ++seqid_));
+      batchQueryStock_args args = new batchQueryStock_args();
+      args.setParam(param);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public StockResult recv_getStockForSku() throws TException
+    public BatchStockResult recv_batchQueryStock() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -202,15 +208,15 @@ public class StockServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "getStockForSku failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "batchQueryStock failed: out of sequence response");
       }
-      getStockForSku_result result = new getStockForSku_result();
+      batchQueryStock_result result = new batchQueryStock_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "getStockForSku failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "batchQueryStock failed: unknown result");
     }
     public LockStockResult lockStock(String tranId, List<LockInfo> lockInfoList) throws TException
     {
@@ -516,24 +522,24 @@ public class StockServ {
         return (new Client(prot)).recv_setStock();
       }
      }
-    public void getStock(String productId, AsyncMethodCallback<getStock_call> resultHandler) throws TException {
+    public void queryStock(QueryParam param, AsyncMethodCallback<queryStock_call> resultHandler) throws TException {
       checkReady();
-      getStock_call method_call = new getStock_call(productId, resultHandler, this, protocolFactory, transport);
+      queryStock_call method_call = new queryStock_call(param, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
-    public static class getStock_call extends TAsyncMethodCall {
-      private String productId;
+    public static class queryStock_call extends TAsyncMethodCall {
+      private QueryParam param;
 
-      public getStock_call(String productId, AsyncMethodCallback<getStock_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public queryStock_call(QueryParam param, AsyncMethodCallback<queryStock_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.productId = productId;
+        this.param = param;
       }
 
       public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("getStock", TMessageType.CALL, 0));
-        getStock_args args = new getStock_args();
-        args.setProductId(productId);
+        prot.writeMessageBegin(new TMessage("queryStock", TMessageType.CALL, 0));
+        queryStock_args args = new queryStock_args();
+        args.setParam(param);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -544,41 +550,38 @@ public class StockServ {
         }
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_getStock();
+        return (new Client(prot)).recv_queryStock();
       }
      }
-    public void getStockForSku(String productId, List<String> skuNums, AsyncMethodCallback<getStockForSku_call> resultHandler) throws TException {
+    public void batchQueryStock(BatchQueryParam param, AsyncMethodCallback<batchQueryStock_call> resultHandler) throws TException {
       checkReady();
-      getStockForSku_call method_call = new getStockForSku_call(productId, skuNums, resultHandler, this, protocolFactory, transport);
+      batchQueryStock_call method_call = new batchQueryStock_call(param, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
-    public static class getStockForSku_call extends TAsyncMethodCall {
-      private String productId;
-      private List<String> skuNums;
+    public static class batchQueryStock_call extends TAsyncMethodCall {
+      private BatchQueryParam param;
 
-      public getStockForSku_call(String productId, List<String> skuNums, AsyncMethodCallback<getStockForSku_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public batchQueryStock_call(BatchQueryParam param, AsyncMethodCallback<batchQueryStock_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.productId = productId;
-        this.skuNums = skuNums;
+        this.param = param;
       }
 
       public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("getStockForSku", TMessageType.CALL, 0));
-        getStockForSku_args args = new getStockForSku_args();
-        args.setProductId(productId);
-        args.setSkuNums(skuNums);
+        prot.writeMessageBegin(new TMessage("batchQueryStock", TMessageType.CALL, 0));
+        batchQueryStock_args args = new batchQueryStock_args();
+        args.setParam(param);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
-      public StockResult getResult() throws TException {
+      public BatchStockResult getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_getStockForSku();
+        return (new Client(prot)).recv_batchQueryStock();
       }
      }
     public void lockStock(String tranId, List<LockInfo> lockInfoList, AsyncMethodCallback<lockStock_call> resultHandler) throws TException {
@@ -859,14 +862,14 @@ public class StockServ {
         return Future.exception(e);
       }
     }
-    public Future<StockResult> getStock(String productId) {
+    public Future<StockResult> queryStock(QueryParam param) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("getStock", TMessageType.CALL, 0));
-        getStock_args __args__ = new getStock_args();
-        __args__.setProductId(productId);
+        __prot__.writeMessageBegin(new TMessage("queryStock", TMessageType.CALL, 0));
+        queryStock_args __args__ = new queryStock_args();
+        __args__.setParam(param);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -879,7 +882,7 @@ public class StockServ {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
-              return Future.value((new Client(__prot__)).recv_getStock());
+              return Future.value((new Client(__prot__)).recv_queryStock());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -889,15 +892,14 @@ public class StockServ {
         return Future.exception(e);
       }
     }
-    public Future<StockResult> getStockForSku(String productId, List<String> skuNums) {
+    public Future<BatchStockResult> batchQueryStock(BatchQueryParam param) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("getStockForSku", TMessageType.CALL, 0));
-        getStockForSku_args __args__ = new getStockForSku_args();
-        __args__.setProductId(productId);
-        __args__.setSkuNums(skuNums);
+        __prot__.writeMessageBegin(new TMessage("batchQueryStock", TMessageType.CALL, 0));
+        batchQueryStock_args __args__ = new batchQueryStock_args();
+        __args__.setParam(param);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -905,12 +907,12 @@ public class StockServ {
         byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
         ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
         Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<StockResult>>() {
-          public Future<StockResult> apply(byte[] __buffer__) {
+        return __done__.flatMap(new Function<byte[], Future<BatchStockResult>>() {
+          public Future<BatchStockResult> apply(byte[] __buffer__) {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
-              return Future.value((new Client(__prot__)).recv_getStockForSku());
+              return Future.value((new Client(__prot__)).recv_batchQueryStock());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1144,8 +1146,8 @@ public class StockServ {
     {
       iface_ = iface;
       processMap_.put("setStock", new setStock());
-      processMap_.put("getStock", new getStock());
-      processMap_.put("getStockForSku", new getStockForSku());
+      processMap_.put("queryStock", new queryStock());
+      processMap_.put("batchQueryStock", new batchQueryStock());
       processMap_.put("lockStock", new lockStock());
       processMap_.put("releaseStock", new releaseStock());
       processMap_.put("releaseLockCount", new releaseLockCount());
@@ -1205,51 +1207,51 @@ public class StockServ {
         oprot.getTransport().flush();
       }
     }
-    private class getStock implements ProcessFunction {
+    private class queryStock implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        getStock_args args = new getStock_args();
+        queryStock_args args = new queryStock_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("getStock", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("queryStock", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        getStock_result result = new getStock_result();
-        result.success = iface_.getStock(args.productId);
+        queryStock_result result = new queryStock_result();
+        result.success = iface_.queryStock(args.param);
         
-        oprot.writeMessageBegin(new TMessage("getStock", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("queryStock", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
       }
     }
-    private class getStockForSku implements ProcessFunction {
+    private class batchQueryStock implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        getStockForSku_args args = new getStockForSku_args();
+        batchQueryStock_args args = new batchQueryStock_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("getStockForSku", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("batchQueryStock", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        getStockForSku_result result = new getStockForSku_result();
-        result.success = iface_.getStockForSku(args.productId, args.skuNums);
+        batchQueryStock_result result = new batchQueryStock_result();
+        result.success = iface_.batchQueryStock(args.param);
         
-        oprot.writeMessageBegin(new TMessage("getStockForSku", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("batchQueryStock", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -1506,9 +1508,9 @@ public class StockServ {
           }
         }
       });
-      functionMap.put("getStock", new Function2<TProtocol, Integer, Future<byte[]>>() {
+      functionMap.put("queryStock", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          getStock_args args = new getStock_args();
+          queryStock_args args = new queryStock_args();
           try {
             args.read(iprot);
           } catch (TProtocolException e) {
@@ -1518,7 +1520,7 @@ public class StockServ {
               TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
               TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-              oprot.writeMessageBegin(new TMessage("getStock", TMessageType.EXCEPTION, seqid));
+              oprot.writeMessageBegin(new TMessage("queryStock", TMessageType.EXCEPTION, seqid));
               x.write(oprot);
               oprot.writeMessageEnd();
               oprot.getTransport().flush();
@@ -1538,7 +1540,7 @@ public class StockServ {
           }
           Future<StockResult> future;
           try {
-            future = iface.getStock(args.productId);
+            future = iface.queryStock(args.param);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -1546,7 +1548,7 @@ public class StockServ {
           try {
             return future.flatMap(new Function<StockResult, Future<byte[]>>() {
               public Future<byte[]> apply(StockResult value) {
-                getStock_result result = new getStock_result();
+                queryStock_result result = new queryStock_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
 
@@ -1554,7 +1556,7 @@ public class StockServ {
                   TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-                  oprot.writeMessageBegin(new TMessage("getStock", TMessageType.REPLY, seqid));
+                  oprot.writeMessageBegin(new TMessage("queryStock", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -1573,9 +1575,9 @@ public class StockServ {
           }
         }
       });
-      functionMap.put("getStockForSku", new Function2<TProtocol, Integer, Future<byte[]>>() {
+      functionMap.put("batchQueryStock", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          getStockForSku_args args = new getStockForSku_args();
+          batchQueryStock_args args = new batchQueryStock_args();
           try {
             args.read(iprot);
           } catch (TProtocolException e) {
@@ -1585,7 +1587,7 @@ public class StockServ {
               TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
               TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-              oprot.writeMessageBegin(new TMessage("getStockForSku", TMessageType.EXCEPTION, seqid));
+              oprot.writeMessageBegin(new TMessage("batchQueryStock", TMessageType.EXCEPTION, seqid));
               x.write(oprot);
               oprot.writeMessageEnd();
               oprot.getTransport().flush();
@@ -1603,17 +1605,17 @@ public class StockServ {
           } catch (Exception e) {
             return Future.exception(e);
           }
-          Future<StockResult> future;
+          Future<BatchStockResult> future;
           try {
-            future = iface.getStockForSku(args.productId, args.skuNums);
+            future = iface.batchQueryStock(args.param);
           } catch (Exception e) {
             future = Future.exception(e);
           }
 
           try {
-            return future.flatMap(new Function<StockResult, Future<byte[]>>() {
-              public Future<byte[]> apply(StockResult value) {
-                getStockForSku_result result = new getStockForSku_result();
+            return future.flatMap(new Function<BatchStockResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BatchStockResult value) {
+                batchQueryStock_result result = new batchQueryStock_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
 
@@ -1621,7 +1623,7 @@ public class StockServ {
                   TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-                  oprot.writeMessageBegin(new TMessage("getStockForSku", TMessageType.REPLY, seqid));
+                  oprot.writeMessageBegin(new TMessage("batchQueryStock", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -2808,17 +2810,17 @@ public class StockServ {
 }
 
 
-  public static class getStock_args implements TBase<getStock_args, getStock_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("getStock_args");
+  public static class queryStock_args implements TBase<queryStock_args, queryStock_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryStock_args");
 
-  private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)1);
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
 
 
-  public String productId;
+  public QueryParam param;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    PRODUCT_ID((short)1, "productId");
+    PARAM((short)1, "param");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -2833,8 +2835,8 @@ public class StockServ {
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // PRODUCT_ID
-  	return PRODUCT_ID;
+        case 1: // PARAM
+  	return PARAM;
         default:
   	return null;
       }
@@ -2880,73 +2882,73 @@ public class StockServ {
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.PRODUCT_ID, new FieldMetaData("productId", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, QueryParam.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(getStock_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(queryStock_args.class, metaDataMap);
   }
 
 
-  public getStock_args() {
+  public queryStock_args() {
   }
 
-  public getStock_args(
-    String productId)
+  public queryStock_args(
+    QueryParam param)
   {
     this();
-    this.productId = productId;
+    this.param = param;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public getStock_args(getStock_args other) {
-    if (other.isSetProductId()) {
-      this.productId = other.productId;
+  public queryStock_args(queryStock_args other) {
+    if (other.isSetParam()) {
+      this.param = new QueryParam(other.param);
     }
   }
 
-  public getStock_args deepCopy() {
-    return new getStock_args(this);
+  public queryStock_args deepCopy() {
+    return new queryStock_args(this);
   }
 
   @Override
   public void clear() {
-    this.productId = null;
+    this.param = null;
   }
 
-  public String getProductId() {
-    return this.productId;
+  public QueryParam getParam() {
+    return this.param;
   }
 
-  public getStock_args setProductId(String productId) {
-    this.productId = productId;
+  public queryStock_args setParam(QueryParam param) {
+    this.param = param;
     
     return this;
   }
 
-  public void unsetProductId() {
-    this.productId = null;
+  public void unsetParam() {
+    this.param = null;
   }
 
-  /** Returns true if field productId is set (has been asigned a value) and false otherwise */
-  public boolean isSetProductId() {
-    return this.productId != null;
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
   }
 
-  public void setProductIdIsSet(boolean value) {
+  public void setParamIsSet(boolean value) {
     if (!value) {
-      this.productId = null;
+      this.param = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case PRODUCT_ID:
+    case PARAM:
       if (value == null) {
-        unsetProductId();
+        unsetParam();
       } else {
-        setProductId((String)value);
+        setParam((QueryParam)value);
       }
       break;
     }
@@ -2954,8 +2956,8 @@ public class StockServ {
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case PRODUCT_ID:
-      return getProductId();
+    case PARAM:
+      return getParam();
     }
     throw new IllegalStateException();
   }
@@ -2967,8 +2969,8 @@ public class StockServ {
     }
 
     switch (field) {
-    case PRODUCT_ID:
-      return isSetProductId();
+    case PARAM:
+      return isSetParam();
     }
     throw new IllegalStateException();
   }
@@ -2977,20 +2979,20 @@ public class StockServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof getStock_args)
-      return this.equals((getStock_args)that);
+    if (that instanceof queryStock_args)
+      return this.equals((queryStock_args)that);
     return false;
   }
 
-  public boolean equals(getStock_args that) {
+  public boolean equals(queryStock_args that) {
     if (that == null)
       return false;
-    boolean this_present_productId = true && this.isSetProductId();
-    boolean that_present_productId = true && that.isSetProductId();
-    if (this_present_productId || that_present_productId) {
-      if (!(this_present_productId && that_present_productId))
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
         return false;
-      if (!this.productId.equals(that.productId))
+      if (!this.param.equals(that.param))
         return false;
     }
 
@@ -3000,27 +3002,27 @@ public class StockServ {
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_productId = true && (isSetProductId());
-    builder.append(present_productId);
-    if (present_productId)
-      builder.append(productId);
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
     return builder.toHashCode();
   }
 
-  public int compareTo(getStock_args other) {
+  public int compareTo(queryStock_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    getStock_args typedOther = (getStock_args)other;
+    queryStock_args typedOther = (queryStock_args)other;
 
-    lastComparison = Boolean.valueOf(isSetProductId()).compareTo(typedOther.isSetProductId());
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetProductId()) {
-      lastComparison = TBaseHelper.compareTo(this.productId, typedOther.productId);
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -3043,9 +3045,10 @@ public class StockServ {
         break;
       }
       switch (field.id) {
-        case 1: // PRODUCT_ID
-          if (field.type == TType.STRING) {
-            this.productId = iprot.readString();
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new QueryParam();
+            this.param.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -3065,9 +3068,9 @@ public class StockServ {
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.productId != null) {
-      oprot.writeFieldBegin(PRODUCT_ID_FIELD_DESC);
-      oprot.writeString(this.productId);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -3076,13 +3079,13 @@ public class StockServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("getStock_args(");
+    StringBuilder sb = new StringBuilder("queryStock_args(");
     boolean first = true;
-    sb.append("productId:");
-    if (this.productId == null) {
+    sb.append("param:");
+    if (this.param == null) {
       sb.append("null");
     } else {
-      sb.append(this.productId);
+      sb.append(this.param);
     }
     first = false;
     sb.append(")");
@@ -3094,8 +3097,8 @@ public class StockServ {
   }
 }
 
-  public static class getStock_result implements TBase<getStock_result, getStock_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("getStock_result");
+  public static class queryStock_result implements TBase<queryStock_result, queryStock_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryStock_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
@@ -3169,14 +3172,14 @@ public class StockServ {
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, StockResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(getStock_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(queryStock_result.class, metaDataMap);
   }
 
 
-  public getStock_result() {
+  public queryStock_result() {
   }
 
-  public getStock_result(
+  public queryStock_result(
     StockResult success)
   {
     this();
@@ -3186,14 +3189,14 @@ public class StockServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public getStock_result(getStock_result other) {
+  public queryStock_result(queryStock_result other) {
     if (other.isSetSuccess()) {
       this.success = new StockResult(other.success);
     }
   }
 
-  public getStock_result deepCopy() {
-    return new getStock_result(this);
+  public queryStock_result deepCopy() {
+    return new queryStock_result(this);
   }
 
   @Override
@@ -3205,7 +3208,7 @@ public class StockServ {
     return this.success;
   }
 
-  public getStock_result setSuccess(StockResult success) {
+  public queryStock_result setSuccess(StockResult success) {
     this.success = success;
     
     return this;
@@ -3263,12 +3266,12 @@ public class StockServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof getStock_result)
-      return this.equals((getStock_result)that);
+    if (that instanceof queryStock_result)
+      return this.equals((queryStock_result)that);
     return false;
   }
 
-  public boolean equals(getStock_result that) {
+  public boolean equals(queryStock_result that) {
     if (that == null)
       return false;
     boolean this_present_success = true && this.isSetSuccess();
@@ -3293,13 +3296,13 @@ public class StockServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(getStock_result other) {
+  public int compareTo(queryStock_result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    getStock_result typedOther = (getStock_result)other;
+    queryStock_result typedOther = (queryStock_result)other;
 
     lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
     if (lastComparison != 0) {
@@ -3361,7 +3364,7 @@ public class StockServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("getStock_result(");
+    StringBuilder sb = new StringBuilder("queryStock_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -3380,20 +3383,17 @@ public class StockServ {
 }
 
 
-  public static class getStockForSku_args implements TBase<getStockForSku_args, getStockForSku_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("getStockForSku_args");
+  public static class batchQueryStock_args implements TBase<batchQueryStock_args, batchQueryStock_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("batchQueryStock_args");
 
-  private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)1);
-  private static final TField SKU_NUMS_FIELD_DESC = new TField("skuNums", TType.LIST, (short)2);
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
 
 
-  public String productId;
-  public List<String> skuNums;
+  public BatchQueryParam param;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    PRODUCT_ID((short)1, "productId"),
-    SKU_NUMS((short)2, "skuNums");
+    PARAM((short)1, "param");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -3408,10 +3408,8 @@ public class StockServ {
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // PRODUCT_ID
-  	return PRODUCT_ID;
-        case 2: // SKU_NUMS
-  	return SKU_NUMS;
+        case 1: // PARAM
+  	return PARAM;
         default:
   	return null;
       }
@@ -3457,133 +3455,73 @@ public class StockServ {
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.PRODUCT_ID, new FieldMetaData("productId", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.SKU_NUMS, new FieldMetaData("skuNums", TFieldRequirementType.DEFAULT,
-      new ListMetaData(TType.LIST,
-                new FieldValueMetaData(TType.STRING))));
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BatchQueryParam.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(getStockForSku_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(batchQueryStock_args.class, metaDataMap);
   }
 
 
-  public getStockForSku_args() {
+  public batchQueryStock_args() {
   }
 
-  public getStockForSku_args(
-    String productId,
-    List<String> skuNums)
+  public batchQueryStock_args(
+    BatchQueryParam param)
   {
     this();
-    this.productId = productId;
-    this.skuNums = skuNums;
+    this.param = param;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public getStockForSku_args(getStockForSku_args other) {
-    if (other.isSetProductId()) {
-      this.productId = other.productId;
-    }
-    if (other.isSetSkuNums()) {
-      List<String> __this__skuNums = new ArrayList<String>();
-      for (String other_element : other.skuNums) {
-        __this__skuNums.add(other_element);
-      }
-      this.skuNums = __this__skuNums;
+  public batchQueryStock_args(batchQueryStock_args other) {
+    if (other.isSetParam()) {
+      this.param = new BatchQueryParam(other.param);
     }
   }
 
-  public getStockForSku_args deepCopy() {
-    return new getStockForSku_args(this);
+  public batchQueryStock_args deepCopy() {
+    return new batchQueryStock_args(this);
   }
 
   @Override
   public void clear() {
-    this.productId = null;
-    this.skuNums = null;
+    this.param = null;
   }
 
-  public String getProductId() {
-    return this.productId;
+  public BatchQueryParam getParam() {
+    return this.param;
   }
 
-  public getStockForSku_args setProductId(String productId) {
-    this.productId = productId;
+  public batchQueryStock_args setParam(BatchQueryParam param) {
+    this.param = param;
     
     return this;
   }
 
-  public void unsetProductId() {
-    this.productId = null;
+  public void unsetParam() {
+    this.param = null;
   }
 
-  /** Returns true if field productId is set (has been asigned a value) and false otherwise */
-  public boolean isSetProductId() {
-    return this.productId != null;
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
   }
 
-  public void setProductIdIsSet(boolean value) {
+  public void setParamIsSet(boolean value) {
     if (!value) {
-      this.productId = null;
-    }
-  }
-
-  public int getSkuNumsSize() {
-    return (this.skuNums == null) ? 0 : this.skuNums.size();
-  }
-
-  public java.util.Iterator<String> getSkuNumsIterator() {
-    return (this.skuNums == null) ? null : this.skuNums.iterator();
-  }
-
-  public void addToSkuNums(String elem) {
-    if (this.skuNums == null) {
-      this.skuNums = new ArrayList<String>();
-    }
-    this.skuNums.add(elem);
-  }
-
-  public List<String> getSkuNums() {
-    return this.skuNums;
-  }
-
-  public getStockForSku_args setSkuNums(List<String> skuNums) {
-    this.skuNums = skuNums;
-    
-    return this;
-  }
-
-  public void unsetSkuNums() {
-    this.skuNums = null;
-  }
-
-  /** Returns true if field skuNums is set (has been asigned a value) and false otherwise */
-  public boolean isSetSkuNums() {
-    return this.skuNums != null;
-  }
-
-  public void setSkuNumsIsSet(boolean value) {
-    if (!value) {
-      this.skuNums = null;
+      this.param = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case PRODUCT_ID:
+    case PARAM:
       if (value == null) {
-        unsetProductId();
+        unsetParam();
       } else {
-        setProductId((String)value);
-      }
-      break;
-    case SKU_NUMS:
-      if (value == null) {
-        unsetSkuNums();
-      } else {
-        setSkuNums((List<String>)value);
+        setParam((BatchQueryParam)value);
       }
       break;
     }
@@ -3591,10 +3529,8 @@ public class StockServ {
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case PRODUCT_ID:
-      return getProductId();
-    case SKU_NUMS:
-      return getSkuNums();
+    case PARAM:
+      return getParam();
     }
     throw new IllegalStateException();
   }
@@ -3606,10 +3542,8 @@ public class StockServ {
     }
 
     switch (field) {
-    case PRODUCT_ID:
-      return isSetProductId();
-    case SKU_NUMS:
-      return isSetSkuNums();
+    case PARAM:
+      return isSetParam();
     }
     throw new IllegalStateException();
   }
@@ -3618,28 +3552,20 @@ public class StockServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof getStockForSku_args)
-      return this.equals((getStockForSku_args)that);
+    if (that instanceof batchQueryStock_args)
+      return this.equals((batchQueryStock_args)that);
     return false;
   }
 
-  public boolean equals(getStockForSku_args that) {
+  public boolean equals(batchQueryStock_args that) {
     if (that == null)
       return false;
-    boolean this_present_productId = true && this.isSetProductId();
-    boolean that_present_productId = true && that.isSetProductId();
-    if (this_present_productId || that_present_productId) {
-      if (!(this_present_productId && that_present_productId))
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
         return false;
-      if (!this.productId.equals(that.productId))
-        return false;
-    }
-    boolean this_present_skuNums = true && this.isSetSkuNums();
-    boolean that_present_skuNums = true && that.isSetSkuNums();
-    if (this_present_skuNums || that_present_skuNums) {
-      if (!(this_present_skuNums && that_present_skuNums))
-        return false;
-      if (!this.skuNums.equals(that.skuNums))
+      if (!this.param.equals(that.param))
         return false;
     }
 
@@ -3649,41 +3575,27 @@ public class StockServ {
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_productId = true && (isSetProductId());
-    builder.append(present_productId);
-    if (present_productId)
-      builder.append(productId);
-    boolean present_skuNums = true && (isSetSkuNums());
-    builder.append(present_skuNums);
-    if (present_skuNums)
-      builder.append(skuNums);
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
     return builder.toHashCode();
   }
 
-  public int compareTo(getStockForSku_args other) {
+  public int compareTo(batchQueryStock_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    getStockForSku_args typedOther = (getStockForSku_args)other;
+    batchQueryStock_args typedOther = (batchQueryStock_args)other;
 
-    lastComparison = Boolean.valueOf(isSetProductId()).compareTo(typedOther.isSetProductId());
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetProductId()) {
-      lastComparison = TBaseHelper.compareTo(this.productId, typedOther.productId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetSkuNums()).compareTo(typedOther.isSetSkuNums());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSkuNums()) {
-      lastComparison = TBaseHelper.compareTo(this.skuNums, typedOther.skuNums);
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -3706,26 +3618,10 @@ public class StockServ {
         break;
       }
       switch (field.id) {
-        case 1: // PRODUCT_ID
-          if (field.type == TType.STRING) {
-            this.productId = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 2: // SKU_NUMS
-          if (field.type == TType.LIST) {
-            {
-            TList _list13 = iprot.readListBegin();
-            this.skuNums = new ArrayList<String>(_list13.size);
-            for (int _i14 = 0; _i14 < _list13.size; ++_i14)
-            {
-              String _elem15;
-              _elem15 = iprot.readString();
-              this.skuNums.add(_elem15);
-            }
-            iprot.readListEnd();
-            }
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new BatchQueryParam();
+            this.param.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -3745,21 +3641,9 @@ public class StockServ {
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.productId != null) {
-      oprot.writeFieldBegin(PRODUCT_ID_FIELD_DESC);
-      oprot.writeString(this.productId);
-      oprot.writeFieldEnd();
-    }
-    if (this.skuNums != null) {
-      oprot.writeFieldBegin(SKU_NUMS_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.STRING, this.skuNums.size()));
-        for (String _iter16 : this.skuNums)
-        {
-          oprot.writeString(_iter16);
-        }
-        oprot.writeListEnd();
-      }
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -3768,21 +3652,13 @@ public class StockServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("getStockForSku_args(");
+    StringBuilder sb = new StringBuilder("batchQueryStock_args(");
     boolean first = true;
-    sb.append("productId:");
-    if (this.productId == null) {
+    sb.append("param:");
+    if (this.param == null) {
       sb.append("null");
     } else {
-      sb.append(this.productId);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("skuNums:");
-    if (this.skuNums == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.skuNums);
+      sb.append(this.param);
     }
     first = false;
     sb.append(")");
@@ -3794,13 +3670,13 @@ public class StockServ {
   }
 }
 
-  public static class getStockForSku_result implements TBase<getStockForSku_result, getStockForSku_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("getStockForSku_result");
+  public static class batchQueryStock_result implements TBase<batchQueryStock_result, batchQueryStock_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("batchQueryStock_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
 
-  public StockResult success;
+  public BatchStockResult success;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -3867,17 +3743,17 @@ public class StockServ {
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, StockResult.class)));
+      new StructMetaData(TType.STRUCT, BatchStockResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(getStockForSku_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(batchQueryStock_result.class, metaDataMap);
   }
 
 
-  public getStockForSku_result() {
+  public batchQueryStock_result() {
   }
 
-  public getStockForSku_result(
-    StockResult success)
+  public batchQueryStock_result(
+    BatchStockResult success)
   {
     this();
     this.success = success;
@@ -3886,14 +3762,14 @@ public class StockServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public getStockForSku_result(getStockForSku_result other) {
+  public batchQueryStock_result(batchQueryStock_result other) {
     if (other.isSetSuccess()) {
-      this.success = new StockResult(other.success);
+      this.success = new BatchStockResult(other.success);
     }
   }
 
-  public getStockForSku_result deepCopy() {
-    return new getStockForSku_result(this);
+  public batchQueryStock_result deepCopy() {
+    return new batchQueryStock_result(this);
   }
 
   @Override
@@ -3901,11 +3777,11 @@ public class StockServ {
     this.success = null;
   }
 
-  public StockResult getSuccess() {
+  public BatchStockResult getSuccess() {
     return this.success;
   }
 
-  public getStockForSku_result setSuccess(StockResult success) {
+  public batchQueryStock_result setSuccess(BatchStockResult success) {
     this.success = success;
     
     return this;
@@ -3932,7 +3808,7 @@ public class StockServ {
       if (value == null) {
         unsetSuccess();
       } else {
-        setSuccess((StockResult)value);
+        setSuccess((BatchStockResult)value);
       }
       break;
     }
@@ -3963,12 +3839,12 @@ public class StockServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof getStockForSku_result)
-      return this.equals((getStockForSku_result)that);
+    if (that instanceof batchQueryStock_result)
+      return this.equals((batchQueryStock_result)that);
     return false;
   }
 
-  public boolean equals(getStockForSku_result that) {
+  public boolean equals(batchQueryStock_result that) {
     if (that == null)
       return false;
     boolean this_present_success = true && this.isSetSuccess();
@@ -3993,13 +3869,13 @@ public class StockServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(getStockForSku_result other) {
+  public int compareTo(batchQueryStock_result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    getStockForSku_result typedOther = (getStockForSku_result)other;
+    batchQueryStock_result typedOther = (batchQueryStock_result)other;
 
     lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
     if (lastComparison != 0) {
@@ -4031,7 +3907,7 @@ public class StockServ {
       switch (field.id) {
         case 0: // SUCCESS
           if (field.type == TType.STRUCT) {
-            this.success = new StockResult();
+            this.success = new BatchStockResult();
             this.success.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
@@ -4061,7 +3937,7 @@ public class StockServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("getStockForSku_result(");
+    StringBuilder sb = new StringBuilder("batchQueryStock_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -4416,14 +4292,14 @@ public class StockServ {
         case 2: // LOCK_INFO_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list17 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list17.size);
-            for (int _i18 = 0; _i18 < _list17.size; ++_i18)
+            TList _list16 = iprot.readListBegin();
+            this.lockInfoList = new ArrayList<LockInfo>(_list16.size);
+            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
             {
-              LockInfo _elem19;
-              _elem19 = new LockInfo();
-              _elem19.read(iprot);
-              this.lockInfoList.add(_elem19);
+              LockInfo _elem18;
+              _elem18 = new LockInfo();
+              _elem18.read(iprot);
+              this.lockInfoList.add(_elem18);
             }
             iprot.readListEnd();
             }
@@ -4455,9 +4331,9 @@ public class StockServ {
       oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter20 : this.lockInfoList)
+        for (LockInfo _iter19 : this.lockInfoList)
         {
-          _iter20.write(oprot);
+          _iter19.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -5117,14 +4993,14 @@ public class StockServ {
         case 2: // LOCK_INFO_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list21 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list21.size);
-            for (int _i22 = 0; _i22 < _list21.size; ++_i22)
+            TList _list20 = iprot.readListBegin();
+            this.lockInfoList = new ArrayList<LockInfo>(_list20.size);
+            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
             {
-              LockInfo _elem23;
-              _elem23 = new LockInfo();
-              _elem23.read(iprot);
-              this.lockInfoList.add(_elem23);
+              LockInfo _elem22;
+              _elem22 = new LockInfo();
+              _elem22.read(iprot);
+              this.lockInfoList.add(_elem22);
             }
             iprot.readListEnd();
             }
@@ -5156,9 +5032,9 @@ public class StockServ {
       oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter24 : this.lockInfoList)
+        for (LockInfo _iter23 : this.lockInfoList)
         {
-          _iter24.write(oprot);
+          _iter23.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -5818,14 +5694,14 @@ public class StockServ {
         case 2: // LOCK_INFO_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list25 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list25.size);
-            for (int _i26 = 0; _i26 < _list25.size; ++_i26)
+            TList _list24 = iprot.readListBegin();
+            this.lockInfoList = new ArrayList<LockInfo>(_list24.size);
+            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
             {
-              LockInfo _elem27;
-              _elem27 = new LockInfo();
-              _elem27.read(iprot);
-              this.lockInfoList.add(_elem27);
+              LockInfo _elem26;
+              _elem26 = new LockInfo();
+              _elem26.read(iprot);
+              this.lockInfoList.add(_elem26);
             }
             iprot.readListEnd();
             }
@@ -5857,9 +5733,9 @@ public class StockServ {
       oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter28 : this.lockInfoList)
+        for (LockInfo _iter27 : this.lockInfoList)
         {
-          _iter28.write(oprot);
+          _iter27.write(oprot);
         }
         oprot.writeListEnd();
       }

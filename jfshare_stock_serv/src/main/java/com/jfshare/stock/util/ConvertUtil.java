@@ -26,6 +26,7 @@ public class ConvertUtil {
         tbProductStock.setSkuNum(stockItem.getSkuNum());
         tbProductStock.setActiveCount(stockItem.getCount());
         tbProductStock.setLockCount(stockItem.getLockCount());
+        tbProductStock.setStorehouseId(stockItem.getStorehouseId());
         return tbProductStock;
     }
 
@@ -37,6 +38,7 @@ public class ConvertUtil {
         stockItem.setSkuNum(tbProductStock.getSkuNum());
         stockItem.setCount(tbProductStock.getActiveCount());
         stockItem.setLockCount(tbProductStock.getLockCount());
+        stockItem.setStorehouseId(tbProductStock.getStorehouseId());
         return stockItem;
     }
 
@@ -68,6 +70,7 @@ public class ConvertUtil {
         stockLLockModel.setProductId(lockInfo.getProductId());
         stockLLockModel.setSkuNum(lockInfo.getSkuNum());
         stockLLockModel.setCountChange(lockInfo.getApplyCount());
+        stockLLockModel.setStorehouseId(lockInfo.getStorehouseId());
         return stockLLockModel;
     }
 
@@ -99,6 +102,7 @@ public class ConvertUtil {
         }
         LockInfo lockInfo = new LockInfo();
         lockInfo.setProductId(stockLockModel.getProductId());
+        lockInfo.setStorehouseId(stockLockModel.getStorehouseId());
         lockInfo.setSkuNum(stockLockModel.getSkuNum());
         lockInfo.setApplyCount(stockLockModel.getCountChange());
         lockInfo.setLockCount(-stockLockModel.getLockCountChange());
@@ -107,23 +111,61 @@ public class ConvertUtil {
 
     public static StockInfo convertStockInfo(String productId, List<TbProductStock> tbProductStocks) {
         StockInfo stockInfo = new StockInfo();
-        Map<String, StockItem> mapResult = new HashMap<>();
         List<StockItem> stockItems = new ArrayList<>();
         int totalCount = 0;
         int totalLockCount = 0;
         for(TbProductStock tbProductStock  : tbProductStocks) {
-            StockItem item = new StockItem();
-            item.setSkuNum(tbProductStock.getSkuNum());
-            item.setCount(tbProductStock.getActiveCount());
-            item.setLockCount(tbProductStock.getLockCount());
+            StockItem item = ConvertUtil.rConvertProductStock(tbProductStock);
             totalCount += tbProductStock.getActiveCount();
             totalLockCount += tbProductStock.getLockCount();
-            mapResult.put(tbProductStock.getSkuNum(), item);
+            stockItems.add(item);
         }
         stockInfo.setProductId(productId);
         stockInfo.setTotal(totalCount);
         stockInfo.setLockTotal(totalLockCount);
-        stockInfo.setStockItemMap(mapResult);
+        stockInfo.setStockItems(stockItems);
+        return stockInfo;
+    }
+
+    public static StockInfo convertStockInfo(String productId, int storehouseId, List<TbProductStock> tbProductStocks) {
+        StockInfo stockInfo = new StockInfo();
+        List<StockItem> stockItems = new ArrayList<>();
+        int totalCount = 0;
+        int totalLockCount = 0;
+        for(TbProductStock tbProductStock  : tbProductStocks) {
+            if(tbProductStock.getStorehouseId() != storehouseId)
+                continue;
+
+            StockItem item = ConvertUtil.rConvertProductStock(tbProductStock);
+            totalCount += tbProductStock.getActiveCount();
+            totalLockCount += tbProductStock.getLockCount();
+            stockItems.add(item);
+        }
+        stockInfo.setProductId(productId);
+        stockInfo.setTotal(totalCount);
+        stockInfo.setLockTotal(totalLockCount);
+        stockInfo.setStockItems(stockItems);
+        return stockInfo;
+    }
+
+    public static StockInfo convertStockInfo(String productId, String storehouseId, String skuNum, List<TbProductStock> tbProductStocks) {
+        StockInfo stockInfo = new StockInfo();
+        List<StockItem> stockItems = new ArrayList<>();
+        int totalCount = 0;
+        int totalLockCount = 0;
+        for(TbProductStock tbProductStock  : tbProductStocks) {
+            if(String.valueOf(tbProductStock.getStorehouseId()).equals(storehouseId) == false || tbProductStock.getSkuNum().equals(skuNum) == false)
+                continue;
+
+            StockItem item = ConvertUtil.rConvertProductStock(tbProductStock);
+            totalCount += tbProductStock.getActiveCount();
+            totalLockCount += tbProductStock.getLockCount();
+            stockItems.add(item);
+        }
+        stockInfo.setProductId(productId);
+        stockInfo.setTotal(totalCount);
+        stockInfo.setLockTotal(totalLockCount);
+        stockInfo.setStockItems(stockItems);
         return stockInfo;
     }
 }

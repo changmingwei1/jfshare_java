@@ -12,6 +12,7 @@ import com.jfshare.stock.model.StockLockModel;
 import com.jfshare.stock.model.TbProductStock;
 
 import java.util.List;
+import java.util.Map;
 
 /** 
  * ClassName:StockDao <br/> 

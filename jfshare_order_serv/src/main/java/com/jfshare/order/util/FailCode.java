@@ -34,6 +34,8 @@ public class FailCode {
 	public static final FailDesc THIRD_SCORE＿FAIL =  new FailDesc("thirdScore", "3023", "支付通知积分不符");
 	public static final FailDesc PAY_STATE_GET_FAIL = new FailDesc("paystate", "3024", "支付状态获取失败");
 
+	public static final FailDesc DELIVER_INVALIDATE_TRADECODE = new FailDesc("DELIVER", "4000", "发货接口不支持该订单类型");
+
 	/**
 	 * 结果集中添加错误码
 	 * @param result

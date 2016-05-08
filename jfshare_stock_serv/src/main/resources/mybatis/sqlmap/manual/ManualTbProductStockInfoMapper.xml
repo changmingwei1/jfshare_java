@@ -8,6 +8,7 @@
             t.active_count = t.active_count - #{countChange, jdbcType=INTEGER} ,
             t.lock_count = t.lock_count - #{lockCountChange, jdbcType=INTEGER}
         WHERE product_id= #{productId, jdbcType=VARCHAR}
+            AND storehouse_id = #{storehouseId, jdbcType=INTEGER}
             AND sku_num = #{skuNum, jdbcType=VARCHAR}
             AND t.active_count >= #{countChange, jdbcType=INTEGER}
     </update>

@@ -10,10 +10,7 @@ package com.jfshare.stock.util;
 
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
-import com.jfshare.finagle.thrift.stock.LockInfo;
-import com.jfshare.finagle.thrift.stock.LockStockResult;
-import com.jfshare.finagle.thrift.stock.StockInfo;
-import com.jfshare.finagle.thrift.stock.StockResult;
+import com.jfshare.finagle.thrift.stock.*;
 import com.jfshare.stock.common.StockCommons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +92,25 @@ public class StockResultUtil {
 		stockResult.result.setFailDescList(failList);
 		return stockResult;
 	}
+
+	/**
+	 *
+	 *  Function:
+	 *  功能说明：批量库存查询BatchStockResult 失败结果填充
+	 *	 使用说明：
+	 *  @author  sushi  DateTime 2015年1月9日 下午3:13:09
+	 *	 返回类型: BatchStockResult
+	 *  @param failDesc
+	 *  @return
+	 */
+	public static BatchStockResult createBatchGetStockFailResult(FailDesc failDesc) {
+		BatchStockResult batchStockResult = new BatchStockResult();
+		List<FailDesc> failList = new ArrayList<FailDesc>();
+		failList.add(failDesc);
+		batchStockResult.result = new Result(StockCommons.STOCK_RESULT_FAIL);
+		batchStockResult.result.setFailDescList(failList);
+		return batchStockResult;
+	}
 	
 	/**
 	 * 
@@ -141,6 +157,18 @@ public class StockResultUtil {
 		Result r = new Result();
 		r.setCode(StockCommons.STOCK_RESULT_SUCC);
 		return r;
+	}
+
+	/**
+	 * 构造成功的BatchStockResult
+	 * @param stockInfos
+	 * @return
+     */
+	public static BatchStockResult createBatchGetStockResult(List<StockInfo> stockInfos) {
+		BatchStockResult batchStockResult = new BatchStockResult();
+		batchStockResult.result = new Result(StockCommons.STOCK_RESULT_SUCC);
+		batchStockResult.setStockInfos(stockInfos);
+		return batchStockResult;
 	}
 }
   
