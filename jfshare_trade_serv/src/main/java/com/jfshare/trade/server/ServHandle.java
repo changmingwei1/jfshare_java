@@ -172,7 +172,7 @@ public class ServHandle implements TradeServ.Iface {
 							break;
 						}
 						case score2cash:{
-							checkUtil.releaseScore2Cash(buyInfo);	//返回积分
+							checkUtil.releaseScore2Cash(buyInfo, null);	//返回积分
 							break;
 						}
 					}

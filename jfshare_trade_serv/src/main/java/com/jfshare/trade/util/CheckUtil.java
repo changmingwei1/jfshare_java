@@ -47,6 +47,8 @@ public class CheckUtil {
     @Autowired
     private CartClient cartClient;
     @Autowired
+    private ScoreClient scoreClient;
+    @Autowired
     private ScoreToCashService scoreToCashService;
 
     /**
@@ -432,6 +434,7 @@ public class CheckUtil {
         }
 
         //扣减用户积分
+        scoreClient.reduceScore(buyInfo.getUserId(), buyInfo.getExchangeScore());
 
         return failDescs;
     }
@@ -440,7 +443,7 @@ public class CheckUtil {
         return null;
     }
 
-    public void releaseScore2Cash(BuyInfo buyInfo) {
-
+    public void releaseScore2Cash(BuyInfo buyInfo, String transId) {
+        scoreClient.incomeScore(buyInfo.getUserId(), transId, buyInfo.getExchangeScore());
     }
 }

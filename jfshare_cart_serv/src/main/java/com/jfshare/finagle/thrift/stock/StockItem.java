@@ -35,17 +35,20 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)1);
   private static final TField COUNT_FIELD_DESC = new TField("count", TType.I32, (short)2);
   private static final TField LOCK_COUNT_FIELD_DESC = new TField("lockCount", TType.I32, (short)3);
+  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.STRING, (short)4);
 
 
   public String skuNum;
   public int count;
   public int lockCount;
+  public String storehouseId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SKU_NUM((short)1, "skuNum"),
     COUNT((short)2, "count"),
-    LOCK_COUNT((short)3, "lockCount");
+    LOCK_COUNT((short)3, "lockCount"),
+    STOREHOUSE_ID((short)4, "storehouseId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -66,6 +69,8 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
   	return COUNT;
         case 3: // LOCK_COUNT
   	return LOCK_COUNT;
+        case 4: // STOREHOUSE_ID
+  	return STOREHOUSE_ID;
         default:
   	return null;
       }
@@ -120,6 +125,8 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.LOCK_COUNT, new FieldMetaData("lockCount", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.STOREHOUSE_ID, new FieldMetaData("storehouseId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(StockItem.class, metaDataMap);
   }
@@ -152,6 +159,9 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     }
     this.count = other.count;
     this.lockCount = other.lockCount;
+    if (other.isSetStorehouseId()) {
+      this.storehouseId = other.storehouseId;
+    }
   }
 
   public StockItem deepCopy() {
@@ -165,6 +175,7 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     this.count = 0;
     setLockCountIsSet(false);
     this.lockCount = 0;
+    this.storehouseId = null;
   }
 
   public String getSkuNum() {
@@ -240,6 +251,31 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     __isset_bit_vector.set(__LOCKCOUNT_ISSET_ID, value);
   }
 
+  public String getStorehouseId() {
+    return this.storehouseId;
+  }
+
+  public StockItem setStorehouseId(String storehouseId) {
+    this.storehouseId = storehouseId;
+    
+    return this;
+  }
+
+  public void unsetStorehouseId() {
+    this.storehouseId = null;
+  }
+
+  /** Returns true if field storehouseId is set (has been asigned a value) and false otherwise */
+  public boolean isSetStorehouseId() {
+    return this.storehouseId != null;
+  }
+
+  public void setStorehouseIdIsSet(boolean value) {
+    if (!value) {
+      this.storehouseId = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SKU_NUM:
@@ -263,6 +299,13 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
         setLockCount((Integer)value);
       }
       break;
+    case STOREHOUSE_ID:
+      if (value == null) {
+        unsetStorehouseId();
+      } else {
+        setStorehouseId((String)value);
+      }
+      break;
     }
   }
 
@@ -274,6 +317,8 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
       return new Integer(getCount());
     case LOCK_COUNT:
       return new Integer(getLockCount());
+    case STOREHOUSE_ID:
+      return getStorehouseId();
     }
     throw new IllegalStateException();
   }
@@ -291,6 +336,8 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
       return isSetCount();
     case LOCK_COUNT:
       return isSetLockCount();
+    case STOREHOUSE_ID:
+      return isSetStorehouseId();
     }
     throw new IllegalStateException();
   }
@@ -331,6 +378,14 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
       if (this.lockCount != that.lockCount)
         return false;
     }
+    boolean this_present_storehouseId = true && this.isSetStorehouseId();
+    boolean that_present_storehouseId = true && that.isSetStorehouseId();
+    if (this_present_storehouseId || that_present_storehouseId) {
+      if (!(this_present_storehouseId && that_present_storehouseId))
+        return false;
+      if (!this.storehouseId.equals(that.storehouseId))
+        return false;
+    }
 
     return true;
   }
@@ -350,6 +405,10 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     builder.append(present_lockCount);
     if (present_lockCount)
       builder.append(lockCount);
+    boolean present_storehouseId = true && (isSetStorehouseId());
+    builder.append(present_storehouseId);
+    if (present_storehouseId)
+      builder.append(storehouseId);
     return builder.toHashCode();
   }
 
@@ -387,6 +446,16 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     }
     if (isSetLockCount()) {
       lastComparison = TBaseHelper.compareTo(this.lockCount, typedOther.lockCount);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetStorehouseId()).compareTo(typedOther.isSetStorehouseId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetStorehouseId()) {
+      lastComparison = TBaseHelper.compareTo(this.storehouseId, typedOther.storehouseId);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -432,6 +501,13 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 4: // STOREHOUSE_ID
+          if (field.type == TType.STRING) {
+            this.storehouseId = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -458,6 +534,13 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     oprot.writeFieldBegin(LOCK_COUNT_FIELD_DESC);
     oprot.writeI32(this.lockCount);
     oprot.writeFieldEnd();
+    if (this.storehouseId != null) {
+      if (isSetStorehouseId()) {
+        oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
+        oprot.writeString(this.storehouseId);
+        oprot.writeFieldEnd();
+      }
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -481,6 +564,16 @@ public class StockItem implements TBase<StockItem, StockItem._Fields>, java.io.S
     sb.append("lockCount:");
     sb.append(this.lockCount);
     first = false;
+    if (isSetStorehouseId()) {
+      if (!first) sb.append(", ");
+      sb.append("storehouseId:");
+      if (this.storehouseId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.storehouseId);
+      }
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

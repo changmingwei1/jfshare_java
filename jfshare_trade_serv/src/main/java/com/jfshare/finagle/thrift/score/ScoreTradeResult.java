@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.product;
+package com.jfshare.finagle.thrift.score;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,23 +29,23 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSurveyResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("ProductSurveyResult");
+public class ScoreTradeResult implements TBase<ScoreTradeResult, ScoreTradeResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ScoreTradeResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)2);
-  private static final TField PRODUCT_SURVEY_LIST_FIELD_DESC = new TField("productSurveyList", TType.LIST, (short)3);
+  private static final TField SCORE_TRADES_FIELD_DESC = new TField("scoreTrades", TType.LIST, (short)2);
+  private static final TField PAGEINATION_FIELD_DESC = new TField("pageination", TType.STRUCT, (short)3);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public com.jfshare.finagle.thrift.pagination.Pagination pagination;
-  public List<ProductSurvey> productSurveyList;
+  public List<ScoreTrade> scoreTrades;
+  public com.jfshare.finagle.thrift.pagination.Pagination pageination;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    PAGINATION((short)2, "pagination"),
-    PRODUCT_SURVEY_LIST((short)3, "productSurveyList");
+    SCORE_TRADES((short)2, "scoreTrades"),
+    PAGEINATION((short)3, "pageination");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -62,10 +62,10 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // PAGINATION
-  	return PAGINATION;
-        case 3: // PRODUCT_SURVEY_LIST
-  	return PRODUCT_SURVEY_LIST;
+        case 2: // SCORE_TRADES
+  	return SCORE_TRADES;
+        case 3: // PAGEINATION
+  	return PAGEINATION;
         default:
   	return null;
       }
@@ -113,61 +113,65 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.OPTIONAL,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
-    tmpMap.put(_Fields.PRODUCT_SURVEY_LIST, new FieldMetaData("productSurveyList", TFieldRequirementType.OPTIONAL,
+    tmpMap.put(_Fields.SCORE_TRADES, new FieldMetaData("scoreTrades", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, ProductSurvey.class))));
+                new StructMetaData(TType.STRUCT, ScoreTrade.class))));
+    tmpMap.put(_Fields.PAGEINATION, new FieldMetaData("pageination", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(ProductSurveyResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ScoreTradeResult.class, metaDataMap);
   }
 
 
-  public ProductSurveyResult() {
+  public ScoreTradeResult() {
   }
 
-  public ProductSurveyResult(
-    com.jfshare.finagle.thrift.result.Result result)
+  public ScoreTradeResult(
+    com.jfshare.finagle.thrift.result.Result result,
+    List<ScoreTrade> scoreTrades,
+    com.jfshare.finagle.thrift.pagination.Pagination pageination)
   {
     this();
     this.result = result;
+    this.scoreTrades = scoreTrades;
+    this.pageination = pageination;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public ProductSurveyResult(ProductSurveyResult other) {
+  public ScoreTradeResult(ScoreTradeResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetPagination()) {
-      this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
-    }
-    if (other.isSetProductSurveyList()) {
-      List<ProductSurvey> __this__productSurveyList = new ArrayList<ProductSurvey>();
-      for (ProductSurvey other_element : other.productSurveyList) {
-        __this__productSurveyList.add(new ProductSurvey(other_element));
+    if (other.isSetScoreTrades()) {
+      List<ScoreTrade> __this__scoreTrades = new ArrayList<ScoreTrade>();
+      for (ScoreTrade other_element : other.scoreTrades) {
+        __this__scoreTrades.add(new ScoreTrade(other_element));
       }
-      this.productSurveyList = __this__productSurveyList;
+      this.scoreTrades = __this__scoreTrades;
+    }
+    if (other.isSetPageination()) {
+      this.pageination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pageination);
     }
   }
 
-  public ProductSurveyResult deepCopy() {
-    return new ProductSurveyResult(this);
+  public ScoreTradeResult deepCopy() {
+    return new ScoreTradeResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.pagination = null;
-    this.productSurveyList = null;
+    this.scoreTrades = null;
+    this.pageination = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public ProductSurveyResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public ScoreTradeResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -188,68 +192,68 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
     }
   }
 
-  public com.jfshare.finagle.thrift.pagination.Pagination getPagination() {
-    return this.pagination;
+  public int getScoreTradesSize() {
+    return (this.scoreTrades == null) ? 0 : this.scoreTrades.size();
   }
 
-  public ProductSurveyResult setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
-    this.pagination = pagination;
+  public java.util.Iterator<ScoreTrade> getScoreTradesIterator() {
+    return (this.scoreTrades == null) ? null : this.scoreTrades.iterator();
+  }
+
+  public void addToScoreTrades(ScoreTrade elem) {
+    if (this.scoreTrades == null) {
+      this.scoreTrades = new ArrayList<ScoreTrade>();
+    }
+    this.scoreTrades.add(elem);
+  }
+
+  public List<ScoreTrade> getScoreTrades() {
+    return this.scoreTrades;
+  }
+
+  public ScoreTradeResult setScoreTrades(List<ScoreTrade> scoreTrades) {
+    this.scoreTrades = scoreTrades;
     
     return this;
   }
 
-  public void unsetPagination() {
-    this.pagination = null;
+  public void unsetScoreTrades() {
+    this.scoreTrades = null;
   }
 
-  /** Returns true if field pagination is set (has been asigned a value) and false otherwise */
-  public boolean isSetPagination() {
-    return this.pagination != null;
+  /** Returns true if field scoreTrades is set (has been asigned a value) and false otherwise */
+  public boolean isSetScoreTrades() {
+    return this.scoreTrades != null;
   }
 
-  public void setPaginationIsSet(boolean value) {
+  public void setScoreTradesIsSet(boolean value) {
     if (!value) {
-      this.pagination = null;
+      this.scoreTrades = null;
     }
   }
 
-  public int getProductSurveyListSize() {
-    return (this.productSurveyList == null) ? 0 : this.productSurveyList.size();
+  public com.jfshare.finagle.thrift.pagination.Pagination getPageination() {
+    return this.pageination;
   }
 
-  public java.util.Iterator<ProductSurvey> getProductSurveyListIterator() {
-    return (this.productSurveyList == null) ? null : this.productSurveyList.iterator();
-  }
-
-  public void addToProductSurveyList(ProductSurvey elem) {
-    if (this.productSurveyList == null) {
-      this.productSurveyList = new ArrayList<ProductSurvey>();
-    }
-    this.productSurveyList.add(elem);
-  }
-
-  public List<ProductSurvey> getProductSurveyList() {
-    return this.productSurveyList;
-  }
-
-  public ProductSurveyResult setProductSurveyList(List<ProductSurvey> productSurveyList) {
-    this.productSurveyList = productSurveyList;
+  public ScoreTradeResult setPageination(com.jfshare.finagle.thrift.pagination.Pagination pageination) {
+    this.pageination = pageination;
     
     return this;
   }
 
-  public void unsetProductSurveyList() {
-    this.productSurveyList = null;
+  public void unsetPageination() {
+    this.pageination = null;
   }
 
-  /** Returns true if field productSurveyList is set (has been asigned a value) and false otherwise */
-  public boolean isSetProductSurveyList() {
-    return this.productSurveyList != null;
+  /** Returns true if field pageination is set (has been asigned a value) and false otherwise */
+  public boolean isSetPageination() {
+    return this.pageination != null;
   }
 
-  public void setProductSurveyListIsSet(boolean value) {
+  public void setPageinationIsSet(boolean value) {
     if (!value) {
-      this.productSurveyList = null;
+      this.pageination = null;
     }
   }
 
@@ -262,18 +266,18 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case PAGINATION:
+    case SCORE_TRADES:
       if (value == null) {
-        unsetPagination();
+        unsetScoreTrades();
       } else {
-        setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
+        setScoreTrades((List<ScoreTrade>)value);
       }
       break;
-    case PRODUCT_SURVEY_LIST:
+    case PAGEINATION:
       if (value == null) {
-        unsetProductSurveyList();
+        unsetPageination();
       } else {
-        setProductSurveyList((List<ProductSurvey>)value);
+        setPageination((com.jfshare.finagle.thrift.pagination.Pagination)value);
       }
       break;
     }
@@ -283,10 +287,10 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
     switch (field) {
     case RESULT:
       return getResult();
-    case PAGINATION:
-      return getPagination();
-    case PRODUCT_SURVEY_LIST:
-      return getProductSurveyList();
+    case SCORE_TRADES:
+      return getScoreTrades();
+    case PAGEINATION:
+      return getPageination();
     }
     throw new IllegalStateException();
   }
@@ -300,10 +304,10 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
     switch (field) {
     case RESULT:
       return isSetResult();
-    case PAGINATION:
-      return isSetPagination();
-    case PRODUCT_SURVEY_LIST:
-      return isSetProductSurveyList();
+    case SCORE_TRADES:
+      return isSetScoreTrades();
+    case PAGEINATION:
+      return isSetPageination();
     }
     throw new IllegalStateException();
   }
@@ -312,12 +316,12 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof ProductSurveyResult)
-      return this.equals((ProductSurveyResult)that);
+    if (that instanceof ScoreTradeResult)
+      return this.equals((ScoreTradeResult)that);
     return false;
   }
 
-  public boolean equals(ProductSurveyResult that) {
+  public boolean equals(ScoreTradeResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -328,20 +332,20 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_pagination = true && this.isSetPagination();
-    boolean that_present_pagination = true && that.isSetPagination();
-    if (this_present_pagination || that_present_pagination) {
-      if (!(this_present_pagination && that_present_pagination))
+    boolean this_present_scoreTrades = true && this.isSetScoreTrades();
+    boolean that_present_scoreTrades = true && that.isSetScoreTrades();
+    if (this_present_scoreTrades || that_present_scoreTrades) {
+      if (!(this_present_scoreTrades && that_present_scoreTrades))
         return false;
-      if (!this.pagination.equals(that.pagination))
+      if (!this.scoreTrades.equals(that.scoreTrades))
         return false;
     }
-    boolean this_present_productSurveyList = true && this.isSetProductSurveyList();
-    boolean that_present_productSurveyList = true && that.isSetProductSurveyList();
-    if (this_present_productSurveyList || that_present_productSurveyList) {
-      if (!(this_present_productSurveyList && that_present_productSurveyList))
+    boolean this_present_pageination = true && this.isSetPageination();
+    boolean that_present_pageination = true && that.isSetPageination();
+    if (this_present_pageination || that_present_pageination) {
+      if (!(this_present_pageination && that_present_pageination))
         return false;
-      if (!this.productSurveyList.equals(that.productSurveyList))
+      if (!this.pageination.equals(that.pageination))
         return false;
     }
 
@@ -355,24 +359,24 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_pagination = true && (isSetPagination());
-    builder.append(present_pagination);
-    if (present_pagination)
-      builder.append(pagination);
-    boolean present_productSurveyList = true && (isSetProductSurveyList());
-    builder.append(present_productSurveyList);
-    if (present_productSurveyList)
-      builder.append(productSurveyList);
+    boolean present_scoreTrades = true && (isSetScoreTrades());
+    builder.append(present_scoreTrades);
+    if (present_scoreTrades)
+      builder.append(scoreTrades);
+    boolean present_pageination = true && (isSetPageination());
+    builder.append(present_pageination);
+    if (present_pageination)
+      builder.append(pageination);
     return builder.toHashCode();
   }
 
-  public int compareTo(ProductSurveyResult other) {
+  public int compareTo(ScoreTradeResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    ProductSurveyResult typedOther = (ProductSurveyResult)other;
+    ScoreTradeResult typedOther = (ScoreTradeResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -384,22 +388,22 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetPagination()).compareTo(typedOther.isSetPagination());
+    lastComparison = Boolean.valueOf(isSetScoreTrades()).compareTo(typedOther.isSetScoreTrades());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetPagination()) {
-      lastComparison = TBaseHelper.compareTo(this.pagination, typedOther.pagination);
+    if (isSetScoreTrades()) {
+      lastComparison = TBaseHelper.compareTo(this.scoreTrades, typedOther.scoreTrades);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetProductSurveyList()).compareTo(typedOther.isSetProductSurveyList());
+    lastComparison = Boolean.valueOf(isSetPageination()).compareTo(typedOther.isSetPageination());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetProductSurveyList()) {
-      lastComparison = TBaseHelper.compareTo(this.productSurveyList, typedOther.productSurveyList);
+    if (isSetPageination()) {
+      lastComparison = TBaseHelper.compareTo(this.pageination, typedOther.pageination);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -430,28 +434,28 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // PAGINATION
-          if (field.type == TType.STRUCT) {
-            this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination();
-            this.pagination.read(iprot);
+        case 2: // SCORE_TRADES
+          if (field.type == TType.LIST) {
+            {
+            TList _list0 = iprot.readListBegin();
+            this.scoreTrades = new ArrayList<ScoreTrade>(_list0.size);
+            for (int _i1 = 0; _i1 < _list0.size; ++_i1)
+            {
+              ScoreTrade _elem2;
+              _elem2 = new ScoreTrade();
+              _elem2.read(iprot);
+              this.scoreTrades.add(_elem2);
+            }
+            iprot.readListEnd();
+            }
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // PRODUCT_SURVEY_LIST
-          if (field.type == TType.LIST) {
-            {
-            TList _list16 = iprot.readListBegin();
-            this.productSurveyList = new ArrayList<ProductSurvey>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
-            {
-              ProductSurvey _elem18;
-              _elem18 = new ProductSurvey();
-              _elem18.read(iprot);
-              this.productSurveyList.add(_elem18);
-            }
-            iprot.readListEnd();
-            }
+        case 3: // PAGEINATION
+          if (field.type == TType.STRUCT) {
+            this.pageination = new com.jfshare.finagle.thrift.pagination.Pagination();
+            this.pageination.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -476,26 +480,22 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.pagination != null) {
-      if (isSetPagination()) {
-        oprot.writeFieldBegin(PAGINATION_FIELD_DESC);
-        this.pagination.write(oprot);
-        oprot.writeFieldEnd();
-      }
-    }
-    if (this.productSurveyList != null) {
-      if (isSetProductSurveyList()) {
-        oprot.writeFieldBegin(PRODUCT_SURVEY_LIST_FIELD_DESC);
+    if (this.scoreTrades != null) {
+      oprot.writeFieldBegin(SCORE_TRADES_FIELD_DESC);
+      {
+        oprot.writeListBegin(new TList(TType.STRUCT, this.scoreTrades.size()));
+        for (ScoreTrade _iter3 : this.scoreTrades)
         {
-          oprot.writeListBegin(new TList(TType.STRUCT, this.productSurveyList.size()));
-          for (ProductSurvey _iter19 : this.productSurveyList)
-          {
-            _iter19.write(oprot);
-          }
-          oprot.writeListEnd();
+          _iter3.write(oprot);
         }
-        oprot.writeFieldEnd();
+        oprot.writeListEnd();
       }
+      oprot.writeFieldEnd();
+    }
+    if (this.pageination != null) {
+      oprot.writeFieldBegin(PAGEINATION_FIELD_DESC);
+      this.pageination.write(oprot);
+      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -503,7 +503,7 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("ProductSurveyResult(");
+    StringBuilder sb = new StringBuilder("ScoreTradeResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -512,26 +512,22 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
       sb.append(this.result);
     }
     first = false;
-    if (isSetPagination()) {
-      if (!first) sb.append(", ");
-      sb.append("pagination:");
-      if (this.pagination == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.pagination);
-      }
-      first = false;
-      }
-    if (isSetProductSurveyList()) {
-      if (!first) sb.append(", ");
-      sb.append("productSurveyList:");
-      if (this.productSurveyList == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.productSurveyList);
-      }
-      first = false;
-      }
+    if (!first) sb.append(", ");
+    sb.append("scoreTrades:");
+    if (this.scoreTrades == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.scoreTrades);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("pageination:");
+    if (this.pageination == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.pageination);
+    }
+    first = false;
     sb.append(")");
     return sb.toString();
   }
