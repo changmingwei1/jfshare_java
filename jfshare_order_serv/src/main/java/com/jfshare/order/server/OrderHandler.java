@@ -100,12 +100,76 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     @Override
     public Result deliverVir(DeliverVirParam param) throws TException {
-        return null;
+        Result result = new Result(0);
+        try {
+            if (param == null || param.getSellerId() <= 0 || StringUtils.isBlank(param.getOrderId())) {
+                logger.warn(MessageFormat.format("deliverVir参数验证失败！sellerId[{0}],orderId[{1}]", param.getSellerId(), param.getOrderId()));
+                FailCode.addFails(result, FailCode.PARAM_ERROR);
+                return result;
+            }
+
+            OrderModel orderModel = orderService.sellerQueryDetail(param.getSellerId(), param.getOrderId());
+            if (orderModel == null) {
+                logger.warn(MessageFormat.format("deliverVir查询订单不存在！sellerId[{0}],orderId[{1}]", param.getSellerId(), param.getOrderId()));
+                FailCode.addFails(result, FailCode.ORDER_NO_EXIST);
+                return result;
+            }
+
+            if(orderModel.getTradeCode().equalsIgnoreCase(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAMI.getEnumVal()) == false) {
+                logger.warn(MessageFormat.format("deliverVir非卡密虚拟商品！sellerId[{0}],orderId[{1}],tradeCode[{2}]", param.getSellerId(), param.getOrderId()), orderModel.getTradeCode());
+                FailCode.addFails(result, FailCode.DELIVER_INVALIDATE_TRADECODE);
+                return result;
+            }
+
+            deliverService.updateDeliverInfo(orderModel);
+
+            //TODO 调用商品服务获取卡密
+            //TODO 发送短信
+        } catch (BaseException be) {
+            List<FailDesc> failDescs = be.getFailDescs();
+            logger.error("发货失败!");
+            return ResultBuilder.createFailNormalResult(failDescs);
+        } catch(Exception e) {
+            logger.error("发货失败，系统异常");
+            e.printStackTrace();
+            return ResultBuilder.createFailNormalResult(FailCode.SYS_ERROR);
+        }
+        return ResultBuilder.createNormalResult();
     }
 
     @Override
     public Result updateExpressInfo(int sellerId, String orderId, String expressId, String expressNo, String expressName) throws TException {
-        return null;
+        Result result = new Result(0);
+        try {
+            if (sellerId<=0 || StringUtils.isBlank(expressId) || StringUtils.isBlank(expressNo) || StringUtils.isBlank(orderId)) {
+                logger.warn(MessageFormat.format("updateExpressInfo参数验证失败！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", sellerId, orderId, expressId, expressNo));
+                FailCode.addFails(result, FailCode.PARAM_ERROR);
+                return result;
+            }
+            OrderModel orderModel = orderService.sellerQueryDetail(sellerId, orderId);
+            if (orderModel == null) {
+                logger.warn(MessageFormat.format("updateExpressInfo订单不存在！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", sellerId, orderId, expressId, expressNo));
+                FailCode.addFails(result, FailCode.ORDER_NO_EXIST);
+                return result;
+            }
+
+            orderModel.setExpressId(Integer.parseInt(expressId));
+            orderModel.setExpressNo(expressNo);
+            orderModel.setExpressName(expressName);
+
+            deliverService.updateDeliverInfo(orderModel);
+
+        }catch (BaseException be) {
+            List<FailDesc> failDescs = be.getFailDescs();
+            logger.error(MessageFormat.format("$$$$修改订单快递信息----更新数据库失败！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", sellerId, orderId, expressId, expressNo));
+            return ResultBuilder.createFailNormalResult(failDescs);
+        } catch (Exception e) {
+            logger.error(MessageFormat.format("$$$$修改订单快递信息----程序异常错误！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", sellerId, orderId, expressId, expressNo));
+            FailCode.addFails(result, FailCode.SYS_ERROR);
+            throw new RuntimeException("$$$$$$$$修改订单快递信息发生异常");
+        }
+
+        return result;
     }
 
     @Override
