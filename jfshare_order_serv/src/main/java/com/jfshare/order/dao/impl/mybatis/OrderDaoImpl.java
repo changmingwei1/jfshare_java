@@ -8,7 +8,11 @@
   
 package com.jfshare.order.dao.impl.mybatis;
 
+import com.jfshare.finagle.thrift.express.ExpressInfo;
+import com.jfshare.finagle.thrift.order.DeliverInfo;
+import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
+import com.jfshare.order.common.OrderConstant;
 import com.jfshare.order.dao.IOrderDao;
 import com.jfshare.order.exceptions.DaoManualException;
 import com.jfshare.order.model.OrderModel;
@@ -20,6 +24,7 @@ import com.jfshare.utils.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -247,6 +252,58 @@ public class OrderDaoImpl implements IOrderDao {
     }
 
     @Override
+    public List<OrderModel> queryBatchBySeller(int sellerId, OrderQueryConditions conditions) {
+        SqlSession sqlSession = null;
+        List<OrderModel> orderModels = null;
+        Map<String, Object> map = new HashMap<>();
+
+        int start = (conditions.curPage - 1)*conditions.count;
+        int end = conditions.count;
+        map.put("start", 0);
+        map.put("end", OrderConstant.MAX_BATCH_EXPORT_RECORD);
+        map.put("sellerId", sellerId);
+        map.put("orderTable", TableNameUtil.getOrderNameBySeller(sellerId));
+        map.put("orderInfoTable", TableNameUtil.getOrderInfoNameBySeller(sellerId));
+        map.put("conditions", conditions);
+
+        try {
+            sqlSession = sqlSessionFactoryRead.openSession();
+            orderModels = sqlSession.selectList("select_order_list_by_seller", map);
+        } finally {
+            try {
+                if (sqlSession != null)
+                    sqlSession.close();
+            } catch (Exception ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        return orderModels;
+    }
+
+    @Override
+    public List<OrderModel> getSellerOrderBatch(int sellerId, List<String> orderIds) {
+        SqlSession sqlSession = null;
+        List<OrderModel> orderModels = null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderTable", TableNameUtil.getOrderNameBySeller(sellerId));
+        map.put("orderInfoTable", TableNameUtil.getOrderInfoNameBySeller(sellerId));
+        map.put("orderIds", orderIds);
+        map.put("sellerId", sellerId);
+        try {
+            sqlSession = sqlSessionFactoryRead.openSession();
+            orderModels = sqlSession.selectList("select_order_list", map);
+        } finally {
+            try {
+                if (sqlSession != null)
+                    sqlSession.close();
+            } catch (Exception ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        return orderModels;
+    }
+
+    @Override
     public List<OrderModel> getOrderListBySeller(int sellerId, OrderQueryConditions conditions) {
         SqlSession sqlSession = null;
         List<OrderModel> orderModels = null;
@@ -396,6 +453,71 @@ public class OrderDaoImpl implements IOrderDao {
         logger.info("订单[" + orderModel.getOrderId() +"]入库" + userTypeName + "[" + orderModel.getUserId() + "]表[" + tableName + "," + infoTableName + "]成功");
 
         return count;
+    }
+
+    @Override
+    public int batchDeliverOp(int sellerId, List<Order> orderList) {
+        for(int i = 0; i < orderList.size(); i++)
+        {
+            DeliverInfo info = orderList.get(i).getDeliverInfo();
+
+            info.setOrderId(orderList.get(i).getOrderId());
+
+            //updateDeliverInfo(seller, info, orderState);
+
+
+            OrderModel tbOrder = new OrderModel();
+            tbOrder.setOrderId(info.getOrderId());
+            if(info.getExpressId() != null && !info.getExpressId().isEmpty()) {
+                tbOrder.setExpressNo(info.getExpressNo());
+                tbOrder.setExpressId(Integer.parseInt(info.getExpressId()));
+                tbOrder.setExpressName(info.getExpressName());
+            }
+            else  {
+                tbOrder.setExpressId(0);
+                tbOrder.setExpressNo("");
+            }
+
+            tbOrder.setBuyerComment(info.getBuyerComment());
+            tbOrder.setSellerComment(info.getSellerComment());
+            tbOrder.setReceiverName(info.getReceiverName());
+            tbOrder.setReceiverMobile(info.getReceiverMobile());
+            tbOrder.setReceiverTele(info.getReceiverTele());
+            tbOrder.setProvinceId(info.getProvinceId());
+            tbOrder.setCityId(info.getCityId());
+            tbOrder.setCountyId(info.getCountyId());
+            tbOrder.setReceiverAddress(info.getReceiverAddress());
+            tbOrder.setOrderState(OrderConstant.FINISH_DELIVER_STATE);
+            tbOrder.setPostCode(info.getPostCode());
+            tbOrder.setLastUpdateTime(new DateTime());
+            tbOrder.setLastUpdateUserId(sellerId);
+            //重新发货时保留上次发货时间
+            if(orderList.get(i).getOrderState() != OrderConstant.ORDER_STATE_FINISH_DELIVER)
+                tbOrder.setDeliverTime(new DateTime());
+
+            OrderModel orderProfile = this.getOrderProfileBySeller(sellerId, info.getOrderId());
+
+            if(orderProfile == null)
+                return -1;
+
+            TbOrderRecordExample example = new TbOrderRecordExample();
+            TbOrderRecordExample.Criteria criteria = example.createCriteria();
+            criteria.andOrderIdEqualTo(tbOrder.getOrderId());
+            criteria.andSellerIdEqualTo(tbOrder.getSellerId());
+            criteria.andUserIdEqualTo(tbOrder.getUserId());
+            int ret = this.updateOrderWithCriteria(tbOrder, BizUtil.USER_TYPE.BUYER.getEnumVal(),example);
+            if (ret <= 0) {
+                throw new RuntimeException("batchDeliverOp，更新买家表失败, 更新返回："+ ret);
+            }
+
+            ret = this.updateOrderWithCriteria(tbOrder, BizUtil.USER_TYPE.SELLER.getEnumVal(),example);
+            if (ret <= 0) {
+                throw new RuntimeException("batchDeliverOp，更新卖家表失败, 更新返回："+ ret);
+            }
+        }
+
+
+        return  orderList.size();
     }
 }
   

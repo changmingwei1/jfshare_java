@@ -1,5 +1,6 @@
 package com.jfshare.order.service;
 
+import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
 import com.jfshare.finagle.thrift.pay.PayRet;
@@ -277,6 +278,19 @@ public class OrderService {
     public List<OrderModel> sellerQueryStateList(OrderQueryConditions conditions) {
         List<OrderModel> orderModels = this.orderDao.getOrderStateListBySeller(conditions.getSellerId());
         return orderModels;
+    }
+
+    public List<OrderModel> queryBatch(OrderQueryConditions conditions) {
+        return orderDao.queryBatchBySeller(conditions.getSellerId(), conditions);
+    }
+
+    public List<OrderModel> getSellerOrderBatch(int sellerId, List<String> resultOrderIdList) {
+        return orderDao.getSellerOrderBatch(sellerId, resultOrderIdList);
+    }
+
+    public int batchDeliverOp(int sellerId, List<Order> deliverOrderList, List<ExpressInfo> expressList, int deliverType) {
+        return orderDao.batchDeliverOp(sellerId, deliverOrderList);
+        //TODO 通知物流抓取
     }
 }
  
