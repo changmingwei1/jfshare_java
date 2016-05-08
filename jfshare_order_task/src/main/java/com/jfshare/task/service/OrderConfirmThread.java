@@ -94,7 +94,7 @@ public class OrderConfirmThread extends Thread {
     		
     		if(waitConformList == null || waitConformList.size() <= 0)
     		{
-				return count;
+				continue;
     		}
     		
 //    		count += waitConformList.size();
