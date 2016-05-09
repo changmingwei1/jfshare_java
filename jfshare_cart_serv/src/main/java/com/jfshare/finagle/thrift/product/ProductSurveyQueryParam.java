@@ -41,6 +41,7 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
   private static final TField SUBJECT_ID_FIELD_DESC = new TField("subjectId", TType.I32, (short)7);
   private static final TField BRAND_ID_FIELD_DESC = new TField("brandId", TType.I32, (short)8);
   private static final TField SUBJECT_ID_LIST_FIELD_DESC = new TField("subjectIdList", TType.LIST, (short)9);
+  private static final TField PRODUCT_ID_LIST_FIELD_DESC = new TField("productIdList", TType.LIST, (short)10);
 
 
   public int sellerId;
@@ -52,6 +53,7 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
   public int subjectId;
   public int brandId;
   public List<Integer> subjectIdList;
+  public List<String> productIdList;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -63,7 +65,8 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
     SORT((short)6, "sort"),
     SUBJECT_ID((short)7, "subjectId"),
     BRAND_ID((short)8, "brandId"),
-    SUBJECT_ID_LIST((short)9, "subjectIdList");
+    SUBJECT_ID_LIST((short)9, "subjectIdList"),
+    PRODUCT_ID_LIST((short)10, "productIdList");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -96,6 +99,8 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
   	return BRAND_ID;
         case 9: // SUBJECT_ID_LIST
   	return SUBJECT_ID_LIST;
+        case 10: // PRODUCT_ID_LIST
+  	return PRODUCT_ID_LIST;
         default:
   	return null;
       }
@@ -165,6 +170,9 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
     tmpMap.put(_Fields.SUBJECT_ID_LIST, new FieldMetaData("subjectIdList", TFieldRequirementType.OPTIONAL,
       new ListMetaData(TType.LIST,
                 new FieldValueMetaData(TType.I32))));
+    tmpMap.put(_Fields.PRODUCT_ID_LIST, new FieldMetaData("productIdList", TFieldRequirementType.OPTIONAL,
+      new ListMetaData(TType.LIST,
+                new FieldValueMetaData(TType.STRING))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductSurveyQueryParam.class, metaDataMap);
   }
@@ -210,6 +218,13 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
       }
       this.subjectIdList = __this__subjectIdList;
     }
+    if (other.isSetProductIdList()) {
+      List<String> __this__productIdList = new ArrayList<String>();
+      for (String other_element : other.productIdList) {
+        __this__productIdList.add(other_element);
+      }
+      this.productIdList = __this__productIdList;
+    }
   }
 
   public ProductSurveyQueryParam deepCopy() {
@@ -231,6 +246,7 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
     setBrandIdIsSet(false);
     this.brandId = 0;
     this.subjectIdList = null;
+    this.productIdList = null;
   }
 
   public int getSellerId() {
@@ -469,6 +485,46 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
     }
   }
 
+  public int getProductIdListSize() {
+    return (this.productIdList == null) ? 0 : this.productIdList.size();
+  }
+
+  public java.util.Iterator<String> getProductIdListIterator() {
+    return (this.productIdList == null) ? null : this.productIdList.iterator();
+  }
+
+  public void addToProductIdList(String elem) {
+    if (this.productIdList == null) {
+      this.productIdList = new ArrayList<String>();
+    }
+    this.productIdList.add(elem);
+  }
+
+  public List<String> getProductIdList() {
+    return this.productIdList;
+  }
+
+  public ProductSurveyQueryParam setProductIdList(List<String> productIdList) {
+    this.productIdList = productIdList;
+    
+    return this;
+  }
+
+  public void unsetProductIdList() {
+    this.productIdList = null;
+  }
+
+  /** Returns true if field productIdList is set (has been asigned a value) and false otherwise */
+  public boolean isSetProductIdList() {
+    return this.productIdList != null;
+  }
+
+  public void setProductIdListIsSet(boolean value) {
+    if (!value) {
+      this.productIdList = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_ID:
@@ -534,6 +590,13 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         setSubjectIdList((List<Integer>)value);
       }
       break;
+    case PRODUCT_ID_LIST:
+      if (value == null) {
+        unsetProductIdList();
+      } else {
+        setProductIdList((List<String>)value);
+      }
+      break;
     }
   }
 
@@ -557,6 +620,8 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
       return new Integer(getBrandId());
     case SUBJECT_ID_LIST:
       return getSubjectIdList();
+    case PRODUCT_ID_LIST:
+      return getProductIdList();
     }
     throw new IllegalStateException();
   }
@@ -586,6 +651,8 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
       return isSetBrandId();
     case SUBJECT_ID_LIST:
       return isSetSubjectIdList();
+    case PRODUCT_ID_LIST:
+      return isSetProductIdList();
     }
     throw new IllegalStateException();
   }
@@ -674,6 +741,14 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
       if (!this.subjectIdList.equals(that.subjectIdList))
         return false;
     }
+    boolean this_present_productIdList = true && this.isSetProductIdList();
+    boolean that_present_productIdList = true && that.isSetProductIdList();
+    if (this_present_productIdList || that_present_productIdList) {
+      if (!(this_present_productIdList && that_present_productIdList))
+        return false;
+      if (!this.productIdList.equals(that.productIdList))
+        return false;
+    }
 
     return true;
   }
@@ -717,6 +792,10 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
     builder.append(present_subjectIdList);
     if (present_subjectIdList)
       builder.append(subjectIdList);
+    boolean present_productIdList = true && (isSetProductIdList());
+    builder.append(present_productIdList);
+    if (present_productIdList)
+      builder.append(productIdList);
     return builder.toHashCode();
   }
 
@@ -818,6 +897,16 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetProductIdList()).compareTo(typedOther.isSetProductIdList());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetProductIdList()) {
+      lastComparison = TBaseHelper.compareTo(this.productIdList, typedOther.productIdList);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -900,13 +989,30 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         case 9: // SUBJECT_ID_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list5 = iprot.readListBegin();
-            this.subjectIdList = new ArrayList<Integer>(_list5.size);
-            for (int _i6 = 0; _i6 < _list5.size; ++_i6)
+            TList _list4 = iprot.readListBegin();
+            this.subjectIdList = new ArrayList<Integer>(_list4.size);
+            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
             {
-              int _elem7;
-              _elem7 = iprot.readI32();
-              this.subjectIdList.add(_elem7);
+              int _elem6;
+              _elem6 = iprot.readI32();
+              this.subjectIdList.add(_elem6);
+            }
+            iprot.readListEnd();
+            }
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 10: // PRODUCT_ID_LIST
+          if (field.type == TType.LIST) {
+            {
+            TList _list7 = iprot.readListBegin();
+            this.productIdList = new ArrayList<String>(_list7.size);
+            for (int _i8 = 0; _i8 < _list7.size; ++_i8)
+            {
+              String _elem9;
+              _elem9 = iprot.readString();
+              this.productIdList.add(_elem9);
             }
             iprot.readListEnd();
             }
@@ -980,9 +1086,23 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         oprot.writeFieldBegin(SUBJECT_ID_LIST_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.I32, this.subjectIdList.size()));
-          for (int _iter8 : this.subjectIdList)
+          for (int _iter10 : this.subjectIdList)
           {
-            oprot.writeI32(_iter8);
+            oprot.writeI32(_iter10);
+          }
+          oprot.writeListEnd();
+        }
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.productIdList != null) {
+      if (isSetProductIdList()) {
+        oprot.writeFieldBegin(PRODUCT_ID_LIST_FIELD_DESC);
+        {
+          oprot.writeListBegin(new TList(TType.STRING, this.productIdList.size()));
+          for (String _iter11 : this.productIdList)
+          {
+            oprot.writeString(_iter11);
           }
           oprot.writeListEnd();
         }
@@ -1065,6 +1185,16 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         sb.append("null");
       } else {
         sb.append(this.subjectIdList);
+      }
+      first = false;
+      }
+    if (isSetProductIdList()) {
+      if (!first) sb.append(", ");
+      sb.append("productIdList:");
+      if (this.productIdList == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.productIdList);
       }
       first = false;
       }

@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.stock;
+package com.jfshare.finagle.thrift.score;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,20 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class LockStockResult implements TBase<LockStockResult, LockStockResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("LockStockResult");
+public class ScoreResult implements TBase<ScoreResult, ScoreResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ScoreResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField LOCK_INFO_LIST_FIELD_DESC = new TField("lockInfoList", TType.LIST, (short)2);
+  private static final TField SROCE_FIELD_DESC = new TField("sroce", TType.STRUCT, (short)2);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public List<LockInfo> lockInfoList;
+  public Score sroce;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    LOCK_INFO_LIST((short)2, "lockInfoList");
+    SROCE((short)2, "sroce");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -59,8 +59,8 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // LOCK_INFO_LIST
-  	return LOCK_INFO_LIST;
+        case 2: // SROCE
+  	return SROCE;
         default:
   	return null;
       }
@@ -108,57 +108,52 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.LOCK_INFO_LIST, new FieldMetaData("lockInfoList", TFieldRequirementType.DEFAULT,
-      new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, LockInfo.class))));
+    tmpMap.put(_Fields.SROCE, new FieldMetaData("sroce", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Score.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(LockStockResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ScoreResult.class, metaDataMap);
   }
 
 
-  public LockStockResult() {
+  public ScoreResult() {
   }
 
-  public LockStockResult(
+  public ScoreResult(
     com.jfshare.finagle.thrift.result.Result result,
-    List<LockInfo> lockInfoList)
+    Score sroce)
   {
     this();
     this.result = result;
-    this.lockInfoList = lockInfoList;
+    this.sroce = sroce;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public LockStockResult(LockStockResult other) {
+  public ScoreResult(ScoreResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetLockInfoList()) {
-      List<LockInfo> __this__lockInfoList = new ArrayList<LockInfo>();
-      for (LockInfo other_element : other.lockInfoList) {
-        __this__lockInfoList.add(new LockInfo(other_element));
-      }
-      this.lockInfoList = __this__lockInfoList;
+    if (other.isSetSroce()) {
+      this.sroce = new Score(other.sroce);
     }
   }
 
-  public LockStockResult deepCopy() {
-    return new LockStockResult(this);
+  public ScoreResult deepCopy() {
+    return new ScoreResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.lockInfoList = null;
+    this.sroce = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public LockStockResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public ScoreResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -179,43 +174,28 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     }
   }
 
-  public int getLockInfoListSize() {
-    return (this.lockInfoList == null) ? 0 : this.lockInfoList.size();
+  public Score getSroce() {
+    return this.sroce;
   }
 
-  public java.util.Iterator<LockInfo> getLockInfoListIterator() {
-    return (this.lockInfoList == null) ? null : this.lockInfoList.iterator();
-  }
-
-  public void addToLockInfoList(LockInfo elem) {
-    if (this.lockInfoList == null) {
-      this.lockInfoList = new ArrayList<LockInfo>();
-    }
-    this.lockInfoList.add(elem);
-  }
-
-  public List<LockInfo> getLockInfoList() {
-    return this.lockInfoList;
-  }
-
-  public LockStockResult setLockInfoList(List<LockInfo> lockInfoList) {
-    this.lockInfoList = lockInfoList;
+  public ScoreResult setSroce(Score sroce) {
+    this.sroce = sroce;
     
     return this;
   }
 
-  public void unsetLockInfoList() {
-    this.lockInfoList = null;
+  public void unsetSroce() {
+    this.sroce = null;
   }
 
-  /** Returns true if field lockInfoList is set (has been asigned a value) and false otherwise */
-  public boolean isSetLockInfoList() {
-    return this.lockInfoList != null;
+  /** Returns true if field sroce is set (has been asigned a value) and false otherwise */
+  public boolean isSetSroce() {
+    return this.sroce != null;
   }
 
-  public void setLockInfoListIsSet(boolean value) {
+  public void setSroceIsSet(boolean value) {
     if (!value) {
-      this.lockInfoList = null;
+      this.sroce = null;
     }
   }
 
@@ -228,11 +208,11 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case LOCK_INFO_LIST:
+    case SROCE:
       if (value == null) {
-        unsetLockInfoList();
+        unsetSroce();
       } else {
-        setLockInfoList((List<LockInfo>)value);
+        setSroce((Score)value);
       }
       break;
     }
@@ -242,8 +222,8 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     switch (field) {
     case RESULT:
       return getResult();
-    case LOCK_INFO_LIST:
-      return getLockInfoList();
+    case SROCE:
+      return getSroce();
     }
     throw new IllegalStateException();
   }
@@ -257,8 +237,8 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     switch (field) {
     case RESULT:
       return isSetResult();
-    case LOCK_INFO_LIST:
-      return isSetLockInfoList();
+    case SROCE:
+      return isSetSroce();
     }
     throw new IllegalStateException();
   }
@@ -267,12 +247,12 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof LockStockResult)
-      return this.equals((LockStockResult)that);
+    if (that instanceof ScoreResult)
+      return this.equals((ScoreResult)that);
     return false;
   }
 
-  public boolean equals(LockStockResult that) {
+  public boolean equals(ScoreResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -283,12 +263,12 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_lockInfoList = true && this.isSetLockInfoList();
-    boolean that_present_lockInfoList = true && that.isSetLockInfoList();
-    if (this_present_lockInfoList || that_present_lockInfoList) {
-      if (!(this_present_lockInfoList && that_present_lockInfoList))
+    boolean this_present_sroce = true && this.isSetSroce();
+    boolean that_present_sroce = true && that.isSetSroce();
+    if (this_present_sroce || that_present_sroce) {
+      if (!(this_present_sroce && that_present_sroce))
         return false;
-      if (!this.lockInfoList.equals(that.lockInfoList))
+      if (!this.sroce.equals(that.sroce))
         return false;
     }
 
@@ -302,20 +282,20 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_lockInfoList = true && (isSetLockInfoList());
-    builder.append(present_lockInfoList);
-    if (present_lockInfoList)
-      builder.append(lockInfoList);
+    boolean present_sroce = true && (isSetSroce());
+    builder.append(present_sroce);
+    if (present_sroce)
+      builder.append(sroce);
     return builder.toHashCode();
   }
 
-  public int compareTo(LockStockResult other) {
+  public int compareTo(ScoreResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    LockStockResult typedOther = (LockStockResult)other;
+    ScoreResult typedOther = (ScoreResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -327,12 +307,12 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetLockInfoList()).compareTo(typedOther.isSetLockInfoList());
+    lastComparison = Boolean.valueOf(isSetSroce()).compareTo(typedOther.isSetSroce());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetLockInfoList()) {
-      lastComparison = TBaseHelper.compareTo(this.lockInfoList, typedOther.lockInfoList);
+    if (isSetSroce()) {
+      lastComparison = TBaseHelper.compareTo(this.sroce, typedOther.sroce);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -363,20 +343,10 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // LOCK_INFO_LIST
-          if (field.type == TType.LIST) {
-            {
-            TList _list4 = iprot.readListBegin();
-            this.lockInfoList = new ArrayList<LockInfo>(_list4.size);
-            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
-            {
-              LockInfo _elem6;
-              _elem6 = new LockInfo();
-              _elem6.read(iprot);
-              this.lockInfoList.add(_elem6);
-            }
-            iprot.readListEnd();
-            }
+        case 2: // SROCE
+          if (field.type == TType.STRUCT) {
+            this.sroce = new Score();
+            this.sroce.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -401,16 +371,9 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.lockInfoList != null) {
-      oprot.writeFieldBegin(LOCK_INFO_LIST_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.lockInfoList.size()));
-        for (LockInfo _iter7 : this.lockInfoList)
-        {
-          _iter7.write(oprot);
-        }
-        oprot.writeListEnd();
-      }
+    if (this.sroce != null) {
+      oprot.writeFieldBegin(SROCE_FIELD_DESC);
+      this.sroce.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -419,7 +382,7 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("LockStockResult(");
+    StringBuilder sb = new StringBuilder("ScoreResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -429,11 +392,11 @@ public class LockStockResult implements TBase<LockStockResult, LockStockResult._
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("lockInfoList:");
-    if (this.lockInfoList == null) {
+    sb.append("sroce:");
+    if (this.sroce == null) {
       sb.append("null");
     } else {
-      sb.append(this.lockInfoList);
+      sb.append(this.sroce);
     }
     first = false;
     sb.append(")");

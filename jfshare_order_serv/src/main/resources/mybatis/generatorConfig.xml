@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="D:\Program Files\maven\res\mysql\mysql-connector-java\5.1.31\mysql-connector-java-5.1.31.jar" />
+    <classPathEntry location="/Users/bq/work/maven-res/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar" />
     
     <context id="jfshare_ad" targetRuntime="MyBatis3" introspectedColumnImpl="com.jfshare.mybatis.generator.api.IntrospectedColumn">
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"

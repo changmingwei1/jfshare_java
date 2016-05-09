@@ -118,6 +118,8 @@ public class OrderUtil {
             productInfo.setWi(tbOrderInfoRecord.getWi());
             productInfo.setExchangeScore(tbOrderInfoRecord.getExchangeScore());
             productInfo.setExchangeCash(PriceUtils.intToStr(tbOrderInfoRecord.getExchangeCash()));
+            productInfo.setStorehouseId(tbOrderInfoRecord.getStorehouseId());
+            productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
             productInfos.add(productInfo);
         }
         orderDetail.setProductList(productInfos);
