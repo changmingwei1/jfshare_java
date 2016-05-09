@@ -168,6 +168,7 @@ public class OrderUtil {
         orderDetail.setActiveState(orderModel.getActiveState());
         orderDetail.setOrderBatch(orderModel.getOrderBatch());
         orderDetail.setThirdScore(orderModel.getThirdScore());
+        orderDetail.setPostage(PriceUtils.strToInt(orderModel.getPostage()));
 
         DeliverInfo deliverInfo = orderModel.getDeliverInfo();
         if (deliverInfo != null) {
@@ -225,7 +226,7 @@ public class OrderUtil {
             productInfo.setWi(tbOrderInfoRecord.getWi());
             productInfo.setExchangeScore(tbOrderInfoRecord.getExchangeScore());
             productInfo.setExchangeCash(PriceUtils.strToInt(tbOrderInfoRecord.getExchangeCash()));
-            productInfos.add(productInfo);
+            productInfos. add(productInfo);
         }
         orderDetail.setTbOrderInfoList(productInfos);
         return orderDetail;

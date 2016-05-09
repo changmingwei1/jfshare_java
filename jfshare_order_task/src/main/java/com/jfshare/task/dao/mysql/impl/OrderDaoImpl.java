@@ -26,7 +26,7 @@ public class OrderDaoImpl implements com.jfshare.task.dao.mysql.IOrderDao {
         SqlSession sqlSession = null;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("orderTable", "tb_order_user_" + index);
-        map.put("orderState", "4");
+        map.put("orderState", 4);
         List<OrderModel> orderModels = null;
         try {
             sqlSession = sqlSessionFactoryRead.openSession();
@@ -48,7 +48,7 @@ public class OrderDaoImpl implements com.jfshare.task.dao.mysql.IOrderDao {
         SqlSession sqlSession = null;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("orderTable", "tb_order_user_" + index);
-        map.put("orderState", "1");
+        map.put("orderState", 1);
         List<OrderModel> orderModels = null;
         try {
             sqlSession = sqlSessionFactoryRead.openSession();

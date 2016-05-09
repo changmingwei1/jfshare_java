@@ -68,7 +68,7 @@ public class OrderTimeoutThread extends Thread {
 
 			if(waitCancelList == null || waitCancelList.size() <= 0)
 			{
-				return count;
+				continue;
 			}
 
 //    		count += waitCancelList.size();
