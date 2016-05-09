@@ -1324,6 +1324,136 @@ public class TbProductExample {
             addCriterion("tags not between", value1, value2, "tags");
             return (Criteria) this;
         }
+
+        public Criteria andStorehouseIdsIsNull() {
+            addCriterion("storehouse_ids is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsIsNotNull() {
+            addCriterion("storehouse_ids is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsEqualTo(String value) {
+            addCriterion("storehouse_ids =", value, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsNotEqualTo(String value) {
+            addCriterion("storehouse_ids <>", value, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsGreaterThan(String value) {
+            addCriterion("storehouse_ids >", value, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsGreaterThanOrEqualTo(String value) {
+            addCriterion("storehouse_ids >=", value, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsLessThan(String value) {
+            addCriterion("storehouse_ids <", value, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsLessThanOrEqualTo(String value) {
+            addCriterion("storehouse_ids <=", value, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsLike(String value) {
+            addCriterion("storehouse_ids like", value, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsNotLike(String value) {
+            addCriterion("storehouse_ids not like", value, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsIn(List<String> values) {
+            addCriterion("storehouse_ids in", values, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsNotIn(List<String> values) {
+            addCriterion("storehouse_ids not in", values, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsBetween(String value1, String value2) {
+            addCriterion("storehouse_ids between", value1, value2, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorehouseIdsNotBetween(String value1, String value2) {
+            addCriterion("storehouse_ids not between", value1, value2, "storehouseIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdIsNull() {
+            addCriterion("postage_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdIsNotNull() {
+            addCriterion("postage_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdEqualTo(Integer value) {
+            addCriterion("postage_id =", value, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdNotEqualTo(Integer value) {
+            addCriterion("postage_id <>", value, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdGreaterThan(Integer value) {
+            addCriterion("postage_id >", value, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("postage_id >=", value, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdLessThan(Integer value) {
+            addCriterion("postage_id <", value, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdLessThanOrEqualTo(Integer value) {
+            addCriterion("postage_id <=", value, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdIn(List<Integer> values) {
+            addCriterion("postage_id in", values, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdNotIn(List<Integer> values) {
+            addCriterion("postage_id not in", values, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdBetween(Integer value1, Integer value2) {
+            addCriterion("postage_id between", value1, value2, "postageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostageIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("postage_id not between", value1, value2, "postageId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

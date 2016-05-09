@@ -1,20 +1,25 @@
 package com.jfshare.product.util;
 
+import com.jfshare.finagle.thrift.pagination.Pagination;
 import com.jfshare.finagle.thrift.product.Product;
+import com.jfshare.finagle.thrift.product.ProductCard;
+import com.jfshare.finagle.thrift.product.ProductCardStatistics;
+import com.jfshare.finagle.thrift.product.ProductCardView;
 import com.jfshare.finagle.thrift.product.ProductOpt;
 import com.jfshare.finagle.thrift.product.ProductSku;
 import com.jfshare.finagle.thrift.product.ProductSkuItem;
+import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.TbProductHistoryWithBLOBs;
 import com.jfshare.product.model.TbProductSku;
 import com.jfshare.product.model.TbProductWithBLOBs;
 import com.jfshare.product.model.enums.ProductOptEnum;
+import com.jfshare.product.model.manual.ProductCardStatisticsModel;
+import com.jfshare.product.model.vo.Page;
 import com.jfshare.utils.PriceUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Lenovo on 2015/10/20.
@@ -34,6 +39,8 @@ public class ConvertUtil {
         tbProductWithBLOBs.setMaxBuyLimit(product.getMaxBuyLimit());
         tbProductWithBLOBs.setActiveState(product.getActiveState());
         tbProductWithBLOBs.setTags(product.getTags());
+        tbProductWithBLOBs.setStorehouseIds(product.getStorehouseIds());
+        tbProductWithBLOBs.setPostageId(product.getPostageId());
 
         //set blobs
         tbProductWithBLOBs.setSkuTemplate(product.getSkuTemplate());
@@ -65,20 +72,20 @@ public class ConvertUtil {
     }
 
     public static List<TbProductSku> convertTbProductSkus(ProductSku productSku, String productId) {
-        Map<String, ProductSkuItem> skuMap = productSku.productSkuMap;
-        Set<String> keys = skuMap.keySet();
         List<TbProductSku> tbProductSkus = new ArrayList<TbProductSku>();
-        for(String key : keys) {
+        for(ProductSkuItem productSkuItem : productSku.getSkuItems()) {
             TbProductSku tbProductSku = new TbProductSku();
-            ProductSkuItem productSkuItem = skuMap.get(key);
             tbProductSku.setProductId(productId);
-            tbProductSku.setSkuNum(key);
+            tbProductSku.setSkuNum(productSkuItem.getSkuNum());
             tbProductSku.setShelf(productSkuItem.getShelf());
             tbProductSku.setCurPrice(PriceUtils.strToInt(productSkuItem.getCurPrice()));
             tbProductSku.setOrgPrice(PriceUtils.strToInt(productSkuItem.getOrgPrice()));
             tbProductSku.setSellerClassNum(productSkuItem.getSellerClassNum());
             tbProductSku.setvPicture(productSkuItem.getVPicture());
             tbProductSku.setSkuName(productSkuItem.getSkuName());
+            tbProductSku.setWeight(productSkuItem.getWeight());
+            tbProductSku.setRefPrice(PriceUtils.strToInt(productSkuItem.getRefPrice()));
+            tbProductSku.setStorehouseId(productSkuItem.getStorehouseId());
             tbProductSkus.add(tbProductSku);
         }
         return tbProductSkus;
@@ -98,6 +105,58 @@ public class ConvertUtil {
         logProductOpt.setActiveState(productOpt.getActiveState());
 
         return logProductOpt;
+    }
+
+    public static ProductCard tbProductCard2Thrift(TbProductCard tbProductCard) {
+        if(tbProductCard == null) {
+            return null;
+        }
+        ProductCard productCard = new ProductCard();
+        productCard.setProductId(tbProductCard.getProductId());
+        productCard.setCardNumber(tbProductCard.getCardNumber());
+        productCard.setPassword(tbProductCard.getPassword());
+        return productCard;
+    }
+
+    public static ProductCardView tbProductCard2ViewThrift(TbProductCard tbProductCard) {
+        if(tbProductCard == null) {
+            return null;
+        }
+        ProductCardView productCardView = new ProductCardView();
+        productCardView.setProductId(tbProductCard.getProductId());
+        productCardView.setCardNumber(tbProductCard.getCardNumber());
+        productCardView.setPassword(tbProductCard.getPassword());
+        productCardView.setState(tbProductCard.getState());
+        return productCardView;
+    }
+
+    public static TbProductCard thrift2TbProductCard(ProductCard productCard) {
+        TbProductCard tbProductCard = new TbProductCard();
+        tbProductCard.setSellerId(productCard.getSellerId());
+        tbProductCard.setProductId(productCard.getProductId());
+        tbProductCard.setCardNumber(productCard.getCardNumber());
+        tbProductCard.setPassword(productCard.getPassword());
+        return tbProductCard;
+    }
+
+
+    public static Pagination page2Pagination(Page page) {
+        Pagination pagination = new Pagination();
+        pagination.setPageNumCount(page.getPageCount());
+        pagination.setTotalCount(page.getTotal());
+        return pagination;
+    }
+
+    public static ProductCardStatistics productCardStatisticsModel2Thrift(ProductCardStatisticsModel model) {
+
+        ProductCardStatistics statistics = new ProductCardStatistics();
+        statistics.setProductId(model.getProductId());
+        statistics.setProductName(model.getProductName());
+        statistics.setTotal(model.getTotal());
+        statistics.setUsedNum(model.getTotal() - model.getUnusedNum());
+        statistics.setUnusedNum(model.getUnusedNum());
+        statistics.setCreateTime(DateTimeUtil.DateTimeToStr(model.getCreateTime()));
+        return statistics;
     }
     
 }

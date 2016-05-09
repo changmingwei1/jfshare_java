@@ -145,6 +145,9 @@
 			<if test=" sort == 'cur_price ASC'">
 				ORDER BY cur_price ASC
 			</if>
+			<if test="sort == 'click_rate DESC'">
+				ORDER BY click_rate DESC
+			</if>
 	</select>
 
 

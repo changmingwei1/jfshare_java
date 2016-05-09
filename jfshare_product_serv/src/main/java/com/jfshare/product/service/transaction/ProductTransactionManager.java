@@ -1,6 +1,5 @@
 package com.jfshare.product.service.transaction;
 
-import com.alibaba.fastjson.JSON;
 import com.jfshare.finagle.thrift.product.ProductOpt;
 import com.jfshare.finagle.thrift.product.ProductSku;
 import com.jfshare.finagle.thrift.product.ProductSkuItem;
@@ -52,9 +51,10 @@ public class ProductTransactionManager {
         productSkuItem.setOrgPrice(productSku.getOrgPrice());
         productSkuItem.setSellerClassNum(productSku.getSellerClassNum());
         productSkuItem.setShelf(productSku.getShelf());
+        productSkuItem.setSkuNum(productSku.getSkuNum() == null ? "" : productSku.getSkuNum());
         productSkuItem.setVPicture(productSku.getVPicture());
-        productSku.productSkuMap.put("", productSkuItem);
-        tbProductHistoryWithBLOBs.setProductSku(JsonMapper.toJsonNotNull(productSku.getProductSkuMap()));
+        productSku.addToSkuItems(productSkuItem);
+        tbProductHistoryWithBLOBs.setProductSku(JsonMapper.toJsonNotNull(productSku.getSkuItems()));
         tbProductHistoryWithBLOBs.setProductSnapshootId(tbProductWithBLOBs.getId());
         productHistoryDao.add(tbProductHistoryWithBLOBs);
 
@@ -78,9 +78,10 @@ public class ProductTransactionManager {
         productSkuItem.setOrgPrice(productSku.getOrgPrice());
         productSkuItem.setSellerClassNum(productSku.getSellerClassNum());
         productSkuItem.setShelf(productSku.getShelf());
+        productSkuItem.setSkuNum(productSku.getSkuNum() == null ? "" : productSku.getSkuNum());
         productSkuItem.setVPicture(productSku.getVPicture());
-        productSku.productSkuMap.put("", productSkuItem);
-        tbProductHistoryWithBLOBs.setProductSku(JsonMapper.toJsonNotNull(productSku.getProductSkuMap()));
+        productSku.addToSkuItems(productSkuItem);
+        tbProductHistoryWithBLOBs.setProductSku(JsonMapper.toJsonNotNull(productSku.getSkuItems()));
         tbProductHistoryWithBLOBs.setProductSnapshootId(IdCreator.getSnapshotId());
         productHistoryDao.add(tbProductHistoryWithBLOBs);
 

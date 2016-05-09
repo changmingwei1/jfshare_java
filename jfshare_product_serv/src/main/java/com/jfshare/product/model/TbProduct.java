@@ -41,6 +41,10 @@ public class TbProduct {
 
     private String tags;
 
+    private String storehouseIds;
+
+    private Integer postageId;
+
     public String getId() {
         return id;
     }
@@ -191,5 +195,21 @@ public class TbProduct {
 
     public void setTags(String tags) {
         this.tags = tags == null ? null : tags.trim();
+    }
+
+    public String getStorehouseIds() {
+        return storehouseIds;
+    }
+
+    public void setStorehouseIds(String storehouseIds) {
+        this.storehouseIds = storehouseIds == null ? null : storehouseIds.trim();
+    }
+
+    public Integer getPostageId() {
+        return postageId;
+    }
+
+    public void setPostageId(Integer postageId) {
+        this.postageId = postageId;
     }
 }

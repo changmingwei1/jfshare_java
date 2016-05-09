@@ -55,6 +55,8 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
   private static final TField TAGS_FIELD_DESC = new TField("tags", TType.STRING, (short)21);
   private static final TField DETAIL_CONTENT_FIELD_DESC = new TField("detailContent", TType.STRING, (short)22);
   private static final TField PRODUCT_SNAPSHOOT_ID_FIELD_DESC = new TField("productSnapshootId", TType.STRING, (short)23);
+  private static final TField STOREHOUSE_IDS_FIELD_DESC = new TField("storehouseIds", TType.STRING, (short)24);
+  private static final TField POSTAGE_ID_FIELD_DESC = new TField("postageId", TType.I32, (short)25);
 
 
   public String productId;
@@ -80,6 +82,8 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
   public String tags;
   public String detailContent;
   public String productSnapshootId;
+  public String storehouseIds;
+  public int postageId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -105,7 +109,9 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     PRODUCT_URL((short)20, "productUrl"),
     TAGS((short)21, "tags"),
     DETAIL_CONTENT((short)22, "detailContent"),
-    PRODUCT_SNAPSHOOT_ID((short)23, "productSnapshootId");
+    PRODUCT_SNAPSHOOT_ID((short)23, "productSnapshootId"),
+    STOREHOUSE_IDS((short)24, "storehouseIds"),
+    POSTAGE_ID((short)25, "postageId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -166,6 +172,10 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
   	return DETAIL_CONTENT;
         case 23: // PRODUCT_SNAPSHOOT_ID
   	return PRODUCT_SNAPSHOOT_ID;
+        case 24: // STOREHOUSE_IDS
+  	return STOREHOUSE_IDS;
+        case 25: // POSTAGE_ID
+  	return POSTAGE_ID;
         default:
   	return null;
       }
@@ -215,7 +225,8 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
   private static final int __TYPE_ISSET_ID = 5;
   private static final int __CREATEUSERID_ISSET_ID = 6;
   private static final int __LASTUPDATEID_ISSET_ID = 7;
-  private BitSet __isset_bit_vector = new BitSet(8);
+  private static final int __POSTAGEID_ISSET_ID = 8;
+  private BitSet __isset_bit_vector = new BitSet(9);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -266,6 +277,10 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.PRODUCT_SNAPSHOOT_ID, new FieldMetaData("productSnapshootId", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.STOREHOUSE_IDS, new FieldMetaData("storehouseIds", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.POSTAGE_ID, new FieldMetaData("postageId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(Product.class, metaDataMap);
   }
@@ -341,6 +356,10 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     if (other.isSetProductSnapshootId()) {
       this.productSnapshootId = other.productSnapshootId;
     }
+    if (other.isSetStorehouseIds()) {
+      this.storehouseIds = other.storehouseIds;
+    }
+    this.postageId = other.postageId;
   }
 
   public Product deepCopy() {
@@ -380,6 +399,9 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     this.tags = null;
     this.detailContent = null;
     this.productSnapshootId = null;
+    this.storehouseIds = null;
+    setPostageIdIsSet(false);
+    this.postageId = 0;
   }
 
   public String getProductId() {
@@ -949,6 +971,55 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     }
   }
 
+  public String getStorehouseIds() {
+    return this.storehouseIds;
+  }
+
+  public Product setStorehouseIds(String storehouseIds) {
+    this.storehouseIds = storehouseIds;
+    
+    return this;
+  }
+
+  public void unsetStorehouseIds() {
+    this.storehouseIds = null;
+  }
+
+  /** Returns true if field storehouseIds is set (has been asigned a value) and false otherwise */
+  public boolean isSetStorehouseIds() {
+    return this.storehouseIds != null;
+  }
+
+  public void setStorehouseIdsIsSet(boolean value) {
+    if (!value) {
+      this.storehouseIds = null;
+    }
+  }
+
+  public int getPostageId() {
+    return this.postageId;
+  }
+
+  public Product setPostageId(int postageId) {
+    this.postageId = postageId;
+    setPostageIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetPostageId() {
+  __isset_bit_vector.clear(__POSTAGEID_ISSET_ID);
+  }
+
+  /** Returns true if field postageId is set (has been asigned a value) and false otherwise */
+  public boolean isSetPostageId() {
+    return __isset_bit_vector.get(__POSTAGEID_ISSET_ID);
+  }
+
+  public void setPostageIdIsSet(boolean value) {
+    __isset_bit_vector.set(__POSTAGEID_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -1112,6 +1183,20 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
         setProductSnapshootId((String)value);
       }
       break;
+    case STOREHOUSE_IDS:
+      if (value == null) {
+        unsetStorehouseIds();
+      } else {
+        setStorehouseIds((String)value);
+      }
+      break;
+    case POSTAGE_ID:
+      if (value == null) {
+        unsetPostageId();
+      } else {
+        setPostageId((Integer)value);
+      }
+      break;
     }
   }
 
@@ -1163,6 +1248,10 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       return getDetailContent();
     case PRODUCT_SNAPSHOOT_ID:
       return getProductSnapshootId();
+    case STOREHOUSE_IDS:
+      return getStorehouseIds();
+    case POSTAGE_ID:
+      return new Integer(getPostageId());
     }
     throw new IllegalStateException();
   }
@@ -1220,6 +1309,10 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       return isSetDetailContent();
     case PRODUCT_SNAPSHOOT_ID:
       return isSetProductSnapshootId();
+    case STOREHOUSE_IDS:
+      return isSetStorehouseIds();
+    case POSTAGE_ID:
+      return isSetPostageId();
     }
     throw new IllegalStateException();
   }
@@ -1420,6 +1513,22 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       if (!this.productSnapshootId.equals(that.productSnapshootId))
         return false;
     }
+    boolean this_present_storehouseIds = true && this.isSetStorehouseIds();
+    boolean that_present_storehouseIds = true && that.isSetStorehouseIds();
+    if (this_present_storehouseIds || that_present_storehouseIds) {
+      if (!(this_present_storehouseIds && that_present_storehouseIds))
+        return false;
+      if (!this.storehouseIds.equals(that.storehouseIds))
+        return false;
+    }
+    boolean this_present_postageId = true && this.isSetPostageId();
+    boolean that_present_postageId = true && that.isSetPostageId();
+    if (this_present_postageId || that_present_postageId) {
+      if (!(this_present_postageId && that_present_postageId))
+        return false;
+      if (this.postageId != that.postageId)
+        return false;
+    }
 
     return true;
   }
@@ -1519,6 +1628,14 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     builder.append(present_productSnapshootId);
     if (present_productSnapshootId)
       builder.append(productSnapshootId);
+    boolean present_storehouseIds = true && (isSetStorehouseIds());
+    builder.append(present_storehouseIds);
+    if (present_storehouseIds)
+      builder.append(storehouseIds);
+    boolean present_postageId = true && (isSetPostageId());
+    builder.append(present_postageId);
+    if (present_postageId)
+      builder.append(postageId);
     return builder.toHashCode();
   }
 
@@ -1760,6 +1877,26 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetStorehouseIds()).compareTo(typedOther.isSetStorehouseIds());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetStorehouseIds()) {
+      lastComparison = TBaseHelper.compareTo(this.storehouseIds, typedOther.storehouseIds);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPostageId()).compareTo(typedOther.isSetPostageId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPostageId()) {
+      lastComparison = TBaseHelper.compareTo(this.postageId, typedOther.postageId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1948,6 +2085,21 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 24: // STOREHOUSE_IDS
+          if (field.type == TType.STRING) {
+            this.storehouseIds = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 25: // POSTAGE_ID
+          if (field.type == TType.I32) {
+            this.postageId = iprot.readI32();
+            setPostageIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -2105,6 +2257,18 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
         oprot.writeString(this.productSnapshootId);
         oprot.writeFieldEnd();
       }
+    }
+    if (this.storehouseIds != null) {
+      if (isSetStorehouseIds()) {
+        oprot.writeFieldBegin(STOREHOUSE_IDS_FIELD_DESC);
+        oprot.writeString(this.storehouseIds);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (isSetPostageId()) {
+      oprot.writeFieldBegin(POSTAGE_ID_FIELD_DESC);
+      oprot.writeI32(this.postageId);
+      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -2307,6 +2471,22 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       } else {
         sb.append(this.productSnapshootId);
       }
+      first = false;
+      }
+    if (isSetStorehouseIds()) {
+      if (!first) sb.append(", ");
+      sb.append("storehouseIds:");
+      if (this.storehouseIds == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.storehouseIds);
+      }
+      first = false;
+      }
+    if (isSetPostageId()) {
+      if (!first) sb.append(", ");
+      sb.append("postageId:");
+      sb.append(this.postageId);
       first = false;
       }
     sb.append(")");

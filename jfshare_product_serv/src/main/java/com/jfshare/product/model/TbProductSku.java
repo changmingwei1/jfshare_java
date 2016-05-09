@@ -31,6 +31,12 @@ public class TbProductSku {
 
     private String vPicture;
 
+    private Integer refPrice;
+
+    private String weight;
+
+    private Integer storehouseId;
+
     public Integer getId() {
         return id;
     }
@@ -141,5 +147,29 @@ public class TbProductSku {
 
     public void setvPicture(String vPicture) {
         this.vPicture = vPicture == null ? null : vPicture.trim();
+    }
+
+    public Integer getRefPrice() {
+        return refPrice;
+    }
+
+    public void setRefPrice(Integer refPrice) {
+        this.refPrice = refPrice;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight == null ? null : weight.trim();
+    }
+
+    public Integer getStorehouseId() {
+        return storehouseId;
+    }
+
+    public void setStorehouseId(Integer storehouseId) {
+        this.storehouseId = storehouseId;
     }
 }

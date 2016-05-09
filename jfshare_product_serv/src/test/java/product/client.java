@@ -12,7 +12,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -91,6 +93,18 @@ public class client {
         System.err.println(s);
     }
 
+
+    @Test
+    public void testQueryProduct() throws Exception {
+        ProductRetParam param = new ProductRetParam();
+        param.setBaseTag(1);
+        param.setSkuTag(1);
+        param.setAttributeTag(1);
+        param.setSkuTemplateTag(1);
+        System.out.println(client.queryProduct("ze160505170956000167", param).toString());
+    }
+
+
     private Product initProduct(String productId) {
         Product product = new Product();
         product.setProductId(productId);
@@ -110,13 +124,19 @@ public class client {
         productSku.setCurPrice("100");
         productSku.setOrgPrice("200");
         productSku.setShelf("shelf");
-        Map<String, ProductSkuItem> productSkuItemMap = new HashMap<String, ProductSkuItem>();
+        productSku.setSkuNum("");
+//        Map<String, ProductSkuItem> productSkuItemMap = new HashMap<String, ProductSkuItem>();
+        List<ProductSkuItem> skuItems = new ArrayList<ProductSkuItem>();
         ProductSkuItem productSkuItem = new ProductSkuItem();
         productSkuItem.setShelf("sub-shelf");
         productSkuItem.setCurPrice("100");
         productSkuItem.setOrgPrice("200");
-        productSkuItemMap.put("1-2:100-101",productSkuItem);
-        productSku.setProductSkuMap(productSkuItemMap);
+        productSkuItem.setSkuNum("1-2:100-101");
+//        productSkuItemMap.put("1-2:100-101",productSkuItem);
+        skuItems.add(productSkuItem);
+        productSku.setSkuItems(skuItems);
+        product.setStorehouseIds("121312,131313");
+        product.setPostageId(124);
 
         product.setProductSku(productSku);
 

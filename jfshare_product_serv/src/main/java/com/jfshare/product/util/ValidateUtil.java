@@ -5,6 +5,7 @@ import com.jfshare.finagle.thrift.product.ProductSku;
 import com.jfshare.finagle.thrift.product.ProductSkuItem;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.utils.PriceUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,15 +29,14 @@ public class ValidateUtil {
         }
 
         ProductSku productSku = product.getProductSku();
-        if(MapUtils.isEmpty(productSku.getProductSkuMap())) {
+        if(CollectionUtils.isEmpty(productSku.getSkuItems())) {
             if(PriceUtils.strToInt(productSku.getOrgPrice()) <= 0
                     || PriceUtils.strToInt(productSku.getCurPrice()) <= 0
                     || PriceUtils.strToInt(productSku.getOrgPrice()) < PriceUtils.strToInt(productSku.getCurPrice())){
                 failDescs.add(FailCode.PRODUCT_VALIDATE_PRICE);
             }
         } else {
-            for(String key : productSku.getProductSkuMap().keySet()) {
-                ProductSkuItem skuItem = productSku.getProductSkuMap().get(key);
+            for(ProductSkuItem skuItem : productSku.getSkuItems()) {
                 if(PriceUtils.strToInt(skuItem.getOrgPrice()) <= 0
                         || PriceUtils.strToInt(skuItem.getCurPrice()) <= 0
                         || PriceUtils.strToInt(skuItem.getOrgPrice()) < PriceUtils.strToInt(skuItem.getCurPrice())){

@@ -5,7 +5,9 @@ import com.jfshare.finagle.thrift.product.ProductSkuItem;
 import com.jfshare.utils.BeanUtil;
 import com.jfshare.utils.JsonMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,15 +22,16 @@ public class Test {
 //            Map<String, ProductSkuItem> map = (HashMap<String,ProductSkuItem>) JSON.parse(jsonStr);
             Map<String, ProductSkuItem> map = null;
 
-            map = (Map<String, ProductSkuItem>) JsonMapper.toGenericMapEx(jsonStr, String.class, ProductSkuItem.class);
-
+//            map = (Map<String, ProductSkuItem>) JsonMapper.toGenericMapEx(jsonStr, String.class, ProductSkuItem.class);
+            List<ProductSkuItem> skuItems = new ArrayList<ProductSkuItem>();
+            skuItems = JsonMapper.toList(jsonStr, ProductSkuItem.class);
 
 //            for(HashMap<String,String> m : map.entrySet()) {
 //                ProductSkuItem psi = new ProductSkuItem();
 //                BeanUtil.fillBeanDataStringMap(psi, m);
 //            }
 //            Map<String,ProductSkuItem> rMap = convert(map);
-            productSku.setProductSkuMap(map);
+            productSku.setSkuItems(skuItems);
 
             System.err.println(productSku);
         } catch (Exception e) {

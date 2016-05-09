@@ -218,7 +218,8 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
             return null;
         }
 
-        Map<String,ProductSkuItem> productSkuMap = new HashMap<String,ProductSkuItem>();
+//        Map<String,ProductSkuItem> productSkuMap = new HashMap<String,ProductSkuItem>();
+        List<ProductSkuItem> productSkuItems = new ArrayList<ProductSkuItem>();
         int minCurPrice=Integer.MAX_VALUE, maxCurPrice=0, minOrgPrice=Integer.MAX_VALUE,maxOrgPrice=0;
         for(TbProductSku item : tbProductSkus) {
             Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
@@ -233,7 +234,8 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
                 skuItem.setCurPrice(PriceUtils.intToStr(item.getCurPrice()));
                 skuItem.setOrgPrice(PriceUtils.intToStr(item.getOrgPrice()));
 
-                productSkuMap.put(item.getSkuNum(), skuItem);
+//                productSkuMap.put(item.getSkuNum(), skuItem);
+                productSkuItems.add(skuItem);
 
                 if (minCurPrice > item.getCurPrice()) {
                     minCurPrice = item.getCurPrice();
@@ -249,12 +251,12 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
                 }
             }
         }
-        if (productSkuMap.size() > 0) {
+        if (productSkuItems.size() > 0) {
             productSku.setMinCurPrice(PriceUtils.intToStr(minCurPrice));
             productSku.setMaxCurPrice(PriceUtils.intToStr(maxCurPrice));
             productSku.setMinOrgPrice(PriceUtils.intToStr(minOrgPrice));
             productSku.setMaxOrgPrice(PriceUtils.intToStr(maxOrgPrice));
-            productSku.setProductSkuMap(productSkuMap);
+            productSku.setSkuItems(productSkuItems);
         }
 
         //reload cache
@@ -556,5 +558,32 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         	}
         }
         return productSurveyList;
+    }
+
+    @Override
+    public ProductSku getProductHotSku(String productId, int storehouseId, String skuNum) {
+        //query from cache
+        ProductSku productSku = productRedis.getProductSkuSingle(productId, storehouseId, skuNum);
+        if(productSku != null) {
+            return productSku;
+        }
+
+        //query from db
+        TbProductSku tbProductSku = productDaoImpl.getProductHotSku(productId, storehouseId, skuNum);
+        if (tbProductSku == null) {
+            return null;
+        }
+        Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(tbProductSku);
+        productSku = new ProductSku();
+        BeanUtil.fillBeanData(productSku, stringObjectMap);
+        productSku.setCurPrice(PriceUtils.intToStr(tbProductSku.getCurPrice()));
+        productSku.setOrgPrice(PriceUtils.intToStr(tbProductSku.getOrgPrice()));
+
+        //load cache
+        this.productRedis.removeProductSkuCache(productId);
+        ProductSku cacheProductSku = this.getProductSku(productId);
+        this.productRedis.setProductSkuCache(productId, cacheProductSku);
+
+        return productSku;
     }
 }
