@@ -1,6 +1,4 @@
-package com.jfshare.test;
 
-import com.jfshare.finagle.thrift.address.AddressInfoResult;
 import com.jfshare.finagle.thrift.order.DeliverInfo;
 import com.jfshare.finagle.thrift.order.OrderInfo;
 import com.jfshare.finagle.thrift.trade.*;

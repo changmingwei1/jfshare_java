@@ -31,30 +31,14 @@ public class ScoreToCashService {
 		for(ExchangeProduct exchangeProduct : param.getProductList())
 			sumPrice += NumberUtil.parseDouble(exchangeProduct.getPrice());
 
-			ExchangeRule exchangeRule = getExchangeRule();
 		if (param == null || param.getUserId() <= 0 || StringUtil.empty(param.getAmount())
 				|| NumberUtil.parseDouble(param.getAmount()) <= 0
-				|| sumPrice != NumberUtil.parseDouble(param.getAmount())) {
+				|| sumPrice != 0) {
 			logger.info(param.getUserId() + "积分兑换失败：" + ResultGenerator.PARAM_ERROR);
 			return ResultGenerator.createErrorExchangeResult(ResultGenerator.PARAM_ERROR);
 		}
 
-		int maxExchangeCash = NumberUtils.toInt(exchangeRule.getMaxExchangeCash());
-		logger.debug("测试代码->充值卡最大可兑换现金额度：" + maxExchangeCash);
-		logger.debug("测试代码->是否在充值卡积分兑换期间：" + (maxExchangeCash > 0));
-		if(maxExchangeCash == 0) {
-			logger.info(param.getUserId() + "积分兑换失败：" + ResultGenerator.NOT_TELCHARGE_EXCHANGE_PERIOD);
-			return ResultGenerator.createErrorExchangeResult(ResultGenerator.NOT_TELCHARGE_EXCHANGE_PERIOD);
-		}
-
-		int maxUseScoreLimit = maxExchangeCash * Globals.SCORE_PER_YUAN;
-		logger.debug("测试代码->充值卡最大可使用积分额度：" + maxUseScoreLimit);
-		logger.debug("测试代码->用户购买充值卡使用积分：" + param.getScore());
-
-		if(NumberUtil.parseInteger(param.getScore()) > maxUseScoreLimit) {
-			logger.info(param.getUserId() + "积分兑换失败：" + ResultGenerator.EXCEED_EXCHANGE_CASH_LIMIT);
-			return ResultGenerator.createErrorExchangeResult(ResultGenerator.EXCEED_EXCHANGE_CASH_LIMIT);
-		}
+		ExchangeRule exchangeRule = getExchangeRule();
 
 		/** 用户积分 */
 		int totalScore = this.scoreClient.getBuyerScore(param.getUserId());

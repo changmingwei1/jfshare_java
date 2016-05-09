@@ -31,7 +31,7 @@ public class ScoreClient {
 	@PostConstruct
 	public void init() {
 		String ips = configManager.getConfigValue("jfx_public_client", "score_serv_ips");
-		String port = configManager.getConfigValue("jfx_public_client", "score_port");
+		String port = configManager.getConfigValue("jfx_public_client", "score_serv_port");
 		StringBuilder hosts = new StringBuilder();
 		String[] ipArray = ips.split(";");
 		for(String ip : ipArray) {
