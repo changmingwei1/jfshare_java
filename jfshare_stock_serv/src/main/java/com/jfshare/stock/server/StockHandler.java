@@ -49,14 +49,22 @@ public class StockHandler extends BaseHandler implements StockServ.Iface {
         String productId = param.getProductId();
         String queryTypeStr = param.getQueryType();
 
-        if(StringUtils.isBlank(productId) || StringUtils.isBlank(queryTypeStr)) {
+        if(StringUtils.isBlank(productId)) {
             return StockResultUtil.createGetStockFailResult(FailCode.parametersEmpty);
         }
 
         QueryType queryType = null;
 
         try {
-            queryType = QueryType.valueOf(queryTypeStr);
+            if(param.getStorehouseId() <= 0) {
+                queryType = QueryType.product;
+            } else {
+                if(StringUtils.isBlank(param.getSkuNum())){
+                    queryType = QueryType.storehouse;
+                } else {
+                    queryType = QueryType.sku;
+                }
+            }
         } catch (IllegalArgumentException e) {
             logger.error("queryStock==> 错误的queryType, {}", queryTypeStr);
             return StockResultUtil.createGetStockFailResult(FailCode.parametersEmpty);
