@@ -1,6 +1,7 @@
 package com.jfshare.baseTemplate.service;
 
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbPostageTemplate;
+import com.jfshare.baseTemplate.mybatis.model.manual.CalculatePostageModel;
 
 import java.util.List;
 import java.util.Map;
@@ -44,5 +45,7 @@ public interface IPostageTemplateSvc {
      * @param id
      */
     TbPostageTemplate addCache(int id);
+
+    String calculatePostage(CalculatePostageModel model);
 
 }

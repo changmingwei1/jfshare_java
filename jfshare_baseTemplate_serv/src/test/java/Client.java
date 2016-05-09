@@ -1,10 +1,13 @@
 import com.jfshare.finagle.thrift.baseTemplate.BaseTemplateServ;
+import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageParam;
 import com.jfshare.finagle.thrift.baseTemplate.Postage;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplate;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateQueryParam;
 import com.jfshare.finagle.thrift.baseTemplate.Storehouse;
 import com.jfshare.finagle.thrift.baseTemplate.StorehouseQueryParam;
+import com.jfshare.utils.JsonMapper;
 import junit.framework.TestCase;
+import org.apache.poi.ss.usermodel.charts.ManuallyPositionable;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -12,7 +15,9 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Lenovo on 2016/4/26.
@@ -101,9 +106,20 @@ public class Client extends TestCase{
         PostageTemplate template = new PostageTemplate();
         template.setId(11);
         template.setName("邮费模板1231232");
-        Postage postage = new Postage("12313,12314,12315,11111", "123123123");
+        template.setType(11);
+        Map map = new HashMap();
+        map.put("number", 2);
+        map.put("postage", 5);
+        map.put("addNumber", 1);
+        map.put("addPostage", 2);
+        Postage postage = new Postage("12313,12314,12315,42321", JsonMapper.toJson(map));
         template.addToPostageList(postage);
-        postage = new Postage("11111,22222,33333,44444", "12365443");
+        map = new HashMap();
+        map.put("number", 2);
+        map.put("postage", 5);
+        map.put("addNumber", 2);
+        map.put("addPostage", 2);
+        postage = new Postage("11111,22222,33333,44444", JsonMapper.toJson(map));
         template.addToPostageList(postage);
         System.out.println(client.updatePostageTemplate(template).toString());
     }
@@ -128,6 +144,14 @@ public class Client extends TestCase{
         List<Integer> templateIds = new ArrayList<>();
         templateIds.add(11);
         System.out.println(client.getPostageTemplate(templateIds));
+    }
+
+    public void testCalculatePostage() throws Exception {
+        CalculatePostageParam postageParam = new CalculatePostageParam();
+        postageParam.setSendToProvince("11111");
+        postageParam.setNumber(5);
+        postageParam.setTemplateId(11);
+        System.out.println(client.calculatePostage(postageParam).toString());
     }
 
 }

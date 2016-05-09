@@ -36,19 +36,22 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
   private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)2);
   private static final TField TYPE_FIELD_DESC = new TField("type", TType.I32, (short)3);
   private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)4);
+  private static final TField GROUP_FIELD_DESC = new TField("group", TType.I32, (short)5);
 
 
   public int id;
   public int sellerId;
   public int type;
   public String name;
+  public int group;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     ID((short)1, "id"),
     SELLER_ID((short)2, "sellerId"),
     TYPE((short)3, "type"),
-    NAME((short)4, "name");
+    NAME((short)4, "name"),
+    GROUP((short)5, "group");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -71,6 +74,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
   	return TYPE;
         case 4: // NAME
   	return NAME;
+        case 5: // GROUP
+  	return GROUP;
         default:
   	return null;
       }
@@ -115,7 +120,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
   private static final int __ID_ISSET_ID = 0;
   private static final int __SELLERID_ISSET_ID = 1;
   private static final int __TYPE_ISSET_ID = 2;
-  private BitSet __isset_bit_vector = new BitSet(3);
+  private static final int __GROUP_ISSET_ID = 3;
+  private BitSet __isset_bit_vector = new BitSet(4);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -128,6 +134,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.GROUP, new FieldMetaData("group", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(PostageTemplateQueryParam.class, metaDataMap);
   }
@@ -139,7 +147,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
   public PostageTemplateQueryParam(
     int id,
     int sellerId,
-    int type)
+    int type,
+    int group)
   {
     this();
     this.id = id;
@@ -148,6 +157,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     setSellerIdIsSet(true);
     this.type = type;
     setTypeIsSet(true);
+    this.group = group;
+    setGroupIsSet(true);
   }
 
   /**
@@ -162,6 +173,7 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     if (other.isSetName()) {
       this.name = other.name;
     }
+    this.group = other.group;
   }
 
   public PostageTemplateQueryParam deepCopy() {
@@ -177,6 +189,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     setTypeIsSet(false);
     this.type = 0;
     this.name = null;
+    setGroupIsSet(false);
+    this.group = 0;
   }
 
   public int getId() {
@@ -276,6 +290,30 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     }
   }
 
+  public int getGroup() {
+    return this.group;
+  }
+
+  public PostageTemplateQueryParam setGroup(int group) {
+    this.group = group;
+    setGroupIsSet(true);
+
+    return this;
+  }
+
+  public void unsetGroup() {
+  __isset_bit_vector.clear(__GROUP_ISSET_ID);
+  }
+
+  /** Returns true if field group is set (has been asigned a value) and false otherwise */
+  public boolean isSetGroup() {
+    return __isset_bit_vector.get(__GROUP_ISSET_ID);
+  }
+
+  public void setGroupIsSet(boolean value) {
+    __isset_bit_vector.set(__GROUP_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ID:
@@ -306,6 +344,13 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
         setName((String)value);
       }
       break;
+    case GROUP:
+      if (value == null) {
+        unsetGroup();
+      } else {
+        setGroup((Integer)value);
+      }
+      break;
     }
   }
 
@@ -319,6 +364,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       return new Integer(getType());
     case NAME:
       return getName();
+    case GROUP:
+      return new Integer(getGroup());
     }
     throw new IllegalStateException();
   }
@@ -338,6 +385,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       return isSetType();
     case NAME:
       return isSetName();
+    case GROUP:
+      return isSetGroup();
     }
     throw new IllegalStateException();
   }
@@ -386,6 +435,14 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       if (!this.name.equals(that.name))
         return false;
     }
+    boolean this_present_group = true;
+    boolean that_present_group = true;
+    if (this_present_group || that_present_group) {
+      if (!(this_present_group && that_present_group))
+        return false;
+      if (this.group != that.group)
+        return false;
+    }
 
     return true;
   }
@@ -409,6 +466,10 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     builder.append(present_name);
     if (present_name)
       builder.append(name);
+    boolean present_group = true;
+    builder.append(present_group);
+    if (present_group)
+      builder.append(group);
     return builder.toHashCode();
   }
 
@@ -456,6 +517,16 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     }
     if (isSetName()) {
       lastComparison = TBaseHelper.compareTo(this.name, typedOther.name);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetGroup()).compareTo(typedOther.isSetGroup());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetGroup()) {
+      lastComparison = TBaseHelper.compareTo(this.group, typedOther.group);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -509,6 +580,14 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 5: // GROUP
+          if (field.type == TType.I32) {
+            this.group = iprot.readI32();
+            setGroupIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -540,6 +619,9 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
         oprot.writeFieldEnd();
       }
     }
+    oprot.writeFieldBegin(GROUP_FIELD_DESC);
+    oprot.writeI32(this.group);
+    oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -569,6 +651,10 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       }
       first = false;
       }
+    if (!first) sb.append(", ");
+    sb.append("group:");
+    sb.append(this.group);
+    first = false;
     sb.append(")");
     return sb.toString();
   }

@@ -2,11 +2,13 @@ package com.jfshare.baseTemplate.server;
 
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbPostageTemplate;
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbStorehouse;
+import com.jfshare.baseTemplate.mybatis.model.manual.CalculatePostageModel;
 import com.jfshare.baseTemplate.service.IPostageTemplateSvc;
 import com.jfshare.baseTemplate.service.IStorehouseSvc;
 import com.jfshare.baseTemplate.util.ConvertUtil;
 import com.jfshare.baseTemplate.util.FailCode;
 import com.jfshare.finagle.thrift.baseTemplate.BaseTemplateServ;
+import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageParam;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplate;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateQueryParam;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateResult;
@@ -319,4 +321,37 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		return postageTemplateResult;
 	}
 
+	@Override
+	public StringResult calculatePostage(CalculatePostageParam param) throws TException {
+
+		StringResult stringResult = new StringResult();
+		Result result = new Result();
+		stringResult.setResult(result);
+
+		CalculatePostageModel calculatePostageModel = new CalculatePostageModel();
+		calculatePostageModel.setTemplateId(param.getTemplateId());
+		calculatePostageModel.setNumber(param.getNumber());
+		calculatePostageModel.setWeight(param.getWeight());
+		calculatePostageModel.setOrderAmount(param.orderAmount);
+		calculatePostageModel.setSendToProvince(param.getSendToProvince());
+
+		String total = null;
+		try {
+			total = this.postageTemplateSvc.calculatePostage(calculatePostageModel);
+		} catch (Exception e) {
+			logger.error("<<<<<<<< calculatePostage error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.POSTAGE_CALCULATE_PARAM_ERROR);
+			return stringResult;
+		}
+		if (total == null) {
+			logger.error("<<<<<<<< calculatePostage error !! param : " + param.toString());
+			result.setCode(1);
+			result.addToFailDescList(FailCode.POSTAGE_CALCULATE_FAIL);
+		} else {
+			stringResult.setValue(total);
+		}
+
+		return stringResult;
+	}
 }
