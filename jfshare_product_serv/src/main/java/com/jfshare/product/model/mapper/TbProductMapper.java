@@ -33,7 +33,8 @@ public interface TbProductMapper {
         "create_user_id, last_update_time, ",
         "last_update_id, state, ",
         "tags, storehouse_ids, ",
-        "postage_id, sku_template, ",
+        "postage_id, click_rate, ",
+        "thirdExchangeRate, sku_template, ",
         "attribute)",
         "values (#{id,jdbcType=VARCHAR}, #{sellerId,jdbcType=INTEGER}, ",
         "#{name,jdbcType=VARCHAR}, #{viceName,jdbcType=VARCHAR}, ",
@@ -45,7 +46,8 @@ public interface TbProductMapper {
         "#{createUserId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP}, ",
         "#{lastUpdateId,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, ",
         "#{tags,jdbcType=VARCHAR}, #{storehouseIds,jdbcType=VARCHAR}, ",
-        "#{postageId,jdbcType=INTEGER}, #{skuTemplate,jdbcType=LONGVARCHAR}, ",
+        "#{postageId,jdbcType=INTEGER}, #{clickRate,jdbcType=INTEGER}, ",
+        "#{thirdexchangerate,jdbcType=VARCHAR}, #{skuTemplate,jdbcType=LONGVARCHAR}, ",
         "#{attribute,jdbcType=LONGVARCHAR})"
     })
     int insert(TbProductWithBLOBs record);
@@ -60,8 +62,8 @@ public interface TbProductMapper {
         "select",
         "id, seller_id, name, vice_name, subject_id, brand_id, img_key, detail_key, max_buy_limit, ",
         "active_state, product_snapshoot_id, type, remark, create_time, create_user_id, ",
-        "last_update_time, last_update_id, state, tags, storehouse_ids, postage_id, sku_template, ",
-        "attribute",
+        "last_update_time, last_update_id, state, tags, storehouse_ids, postage_id, click_rate, ",
+        "thirdExchangeRate, sku_template, attribute",
         "from tb_product",
         "where id = #{id,jdbcType=VARCHAR}"
     })
@@ -98,6 +100,8 @@ public interface TbProductMapper {
           "tags = #{tags,jdbcType=VARCHAR},",
           "storehouse_ids = #{storehouseIds,jdbcType=VARCHAR},",
           "postage_id = #{postageId,jdbcType=INTEGER},",
+          "click_rate = #{clickRate,jdbcType=INTEGER},",
+          "thirdExchangeRate = #{thirdexchangerate,jdbcType=VARCHAR},",
           "sku_template = #{skuTemplate,jdbcType=LONGVARCHAR},",
           "attribute = #{attribute,jdbcType=LONGVARCHAR}",
         "where id = #{id,jdbcType=VARCHAR}"
@@ -125,7 +129,9 @@ public interface TbProductMapper {
           "state = #{state,jdbcType=INTEGER},",
           "tags = #{tags,jdbcType=VARCHAR},",
           "storehouse_ids = #{storehouseIds,jdbcType=VARCHAR},",
-          "postage_id = #{postageId,jdbcType=INTEGER}",
+          "postage_id = #{postageId,jdbcType=INTEGER},",
+          "click_rate = #{clickRate,jdbcType=INTEGER},",
+          "thirdExchangeRate = #{thirdexchangerate,jdbcType=VARCHAR}",
         "where id = #{id,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(TbProduct record);

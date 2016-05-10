@@ -59,6 +59,7 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   private static final TField POSTAGE_TEMPLATE_ID_FIELD_DESC = new TField("postageTemplateId", TType.I32, (short)25);
   private static final TField POSTAGE_FIELD_DESC = new TField("postage", TType.STRING, (short)26);
   private static final TField REF_PRICE_FIELD_DESC = new TField("refPrice", TType.STRING, (short)27);
+  private static final TField THIRD_EXCHANGE_RATE_FIELD_DESC = new TField("thirdExchangeRate", TType.STRING, (short)28);
 
 
   public String orderId;
@@ -88,6 +89,7 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   public int postageTemplateId;
   public String postage;
   public String refPrice;
+  public String thirdExchangeRate;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -117,7 +119,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     STOREHOUSE_ID((short)24, "storehouseId"),
     POSTAGE_TEMPLATE_ID((short)25, "postageTemplateId"),
     POSTAGE((short)26, "postage"),
-    REF_PRICE((short)27, "refPrice");
+    REF_PRICE((short)27, "refPrice"),
+    THIRD_EXCHANGE_RATE((short)28, "thirdExchangeRate");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -186,6 +189,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   	return POSTAGE;
         case 27: // REF_PRICE
   	return REF_PRICE;
+        case 28: // THIRD_EXCHANGE_RATE
+  	return THIRD_EXCHANGE_RATE;
         default:
   	return null;
       }
@@ -291,6 +296,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     tmpMap.put(_Fields.POSTAGE, new FieldMetaData("postage", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.REF_PRICE, new FieldMetaData("refPrice", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.THIRD_EXCHANGE_RATE, new FieldMetaData("thirdExchangeRate", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(OrderInfo.class, metaDataMap);
@@ -425,6 +432,9 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     if (other.isSetRefPrice()) {
       this.refPrice = other.refPrice;
     }
+    if (other.isSetThirdExchangeRate()) {
+      this.thirdExchangeRate = other.thirdExchangeRate;
+    }
   }
 
   public OrderInfo deepCopy() {
@@ -466,6 +476,7 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     this.postageTemplateId = 0;
     this.postage = null;
     this.refPrice = null;
+    this.thirdExchangeRate = null;
   }
 
   public String getOrderId() {
@@ -1137,6 +1148,31 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     }
   }
 
+  public String getThirdExchangeRate() {
+    return this.thirdExchangeRate;
+  }
+
+  public OrderInfo setThirdExchangeRate(String thirdExchangeRate) {
+    this.thirdExchangeRate = thirdExchangeRate;
+    
+    return this;
+  }
+
+  public void unsetThirdExchangeRate() {
+    this.thirdExchangeRate = null;
+  }
+
+  /** Returns true if field thirdExchangeRate is set (has been asigned a value) and false otherwise */
+  public boolean isSetThirdExchangeRate() {
+    return this.thirdExchangeRate != null;
+  }
+
+  public void setThirdExchangeRateIsSet(boolean value) {
+    if (!value) {
+      this.thirdExchangeRate = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ORDER_ID:
@@ -1328,6 +1364,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         setRefPrice((String)value);
       }
       break;
+    case THIRD_EXCHANGE_RATE:
+      if (value == null) {
+        unsetThirdExchangeRate();
+      } else {
+        setThirdExchangeRate((String)value);
+      }
+      break;
     }
   }
 
@@ -1387,6 +1430,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       return getPostage();
     case REF_PRICE:
       return getRefPrice();
+    case THIRD_EXCHANGE_RATE:
+      return getThirdExchangeRate();
     }
     throw new IllegalStateException();
   }
@@ -1452,6 +1497,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       return isSetPostage();
     case REF_PRICE:
       return isSetRefPrice();
+    case THIRD_EXCHANGE_RATE:
+      return isSetThirdExchangeRate();
     }
     throw new IllegalStateException();
   }
@@ -1684,6 +1731,14 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       if (!this.refPrice.equals(that.refPrice))
         return false;
     }
+    boolean this_present_thirdExchangeRate = true && this.isSetThirdExchangeRate();
+    boolean that_present_thirdExchangeRate = true && that.isSetThirdExchangeRate();
+    if (this_present_thirdExchangeRate || that_present_thirdExchangeRate) {
+      if (!(this_present_thirdExchangeRate && that_present_thirdExchangeRate))
+        return false;
+      if (!this.thirdExchangeRate.equals(that.thirdExchangeRate))
+        return false;
+    }
 
     return true;
   }
@@ -1799,6 +1854,10 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     builder.append(present_refPrice);
     if (present_refPrice)
       builder.append(refPrice);
+    boolean present_thirdExchangeRate = true && (isSetThirdExchangeRate());
+    builder.append(present_thirdExchangeRate);
+    if (present_thirdExchangeRate)
+      builder.append(thirdExchangeRate);
     return builder.toHashCode();
   }
 
@@ -2080,6 +2139,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetThirdExchangeRate()).compareTo(typedOther.isSetThirdExchangeRate());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetThirdExchangeRate()) {
+      lastComparison = TBaseHelper.compareTo(this.thirdExchangeRate, typedOther.thirdExchangeRate);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -2293,6 +2362,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 28: // THIRD_EXCHANGE_RATE
+          if (field.type == TType.STRING) {
+            this.thirdExchangeRate = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -2440,6 +2516,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       if (isSetRefPrice()) {
         oprot.writeFieldBegin(REF_PRICE_FIELD_DESC);
         oprot.writeString(this.refPrice);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.thirdExchangeRate != null) {
+      if (isSetThirdExchangeRate()) {
+        oprot.writeFieldBegin(THIRD_EXCHANGE_RATE_FIELD_DESC);
+        oprot.writeString(this.thirdExchangeRate);
         oprot.writeFieldEnd();
       }
     }
@@ -2651,6 +2734,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         sb.append("null");
       } else {
         sb.append(this.refPrice);
+      }
+      first = false;
+      }
+    if (isSetThirdExchangeRate()) {
+      if (!first) sb.append(", ");
+      sb.append("thirdExchangeRate:");
+      if (this.thirdExchangeRate == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.thirdExchangeRate);
       }
       first = false;
       }

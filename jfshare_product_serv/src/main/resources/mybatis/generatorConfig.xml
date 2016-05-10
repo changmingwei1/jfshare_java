@@ -6,8 +6,8 @@
 <generatorConfiguration>
     <!-- db driver -->
     <!--<classPathEntry location="E:\workSpace\myMaven\mysql\mysql-connector-java\5.1.26\mysql-connector-java-5.1.26.jar" />-->
-    <classPathEntry location="D:\devTools\apache-maven-3.2.1\m2\repository\mysql\mysql-connector-java\5.1.17\mysql-connector-java-5.1.17.jar" />
-    
+    <!--<classPathEntry location="D:\devTools\apache-maven-3.2.1\m2\repository\mysql\mysql-connector-java\5.1.17\mysql-connector-java-5.1.17.jar" />-->
+    <classPathEntry location="/Users/bq/work/maven-res/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar" />
     <!-- introspectedColumnImpl prop define special column reflect -->
     <context id="mysqlStepyee" targetRuntime="MyBatis3"> 
         <!-- generator or not comments (extend DefaultCommentGenerator to special)-->
@@ -29,26 +29,26 @@
         </javaTypeResolver>
 
         <!-- generator javeBean、example Criteria -->
-        <javaModelGenerator targetPackage="com.jfshare.product.model" targetProject="src\main\java">
+        <javaModelGenerator targetPackage="com.jfshare.product.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!-- generator xml mapper -->
-        <sqlMapGenerator targetPackage="mybatis.sqlmap" targetProject="src\main\resources">
+        <sqlMapGenerator targetPackage="mybatis.sqlmap" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!-- generator java client annotation mapper -->
-        <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.jfshare.product.model.mapper" targetProject="src\main\java">
+        <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.jfshare.product.model.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
       <!--Run As  Maven build... goals mybatis-generator:generate -->
-      <!--<table tableName="tb_product" schema="jfshare"/>
-      <table tableName="tb_product_sku" schema="jfshare"/>-->
+      <table tableName="tb_product" schema="jfshare"/>
+      <!--<table tableName="tb_product_sku" schema="jfshare"/>-->
       <!--<table tableName="tb_product_history" schema="jfshare"/>-->
-      <table tableName="tb_product_card" schema="jfshare"/>
+      <!--<table tableName="tb_product_card" schema="jfshare"/>-->
     </context>
 </generatorConfiguration>
 

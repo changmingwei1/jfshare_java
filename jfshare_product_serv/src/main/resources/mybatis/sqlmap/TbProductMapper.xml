@@ -1,52 +1,54 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jfshare.product.model.mapper.TbProductMapper" >
-  <resultMap id="BaseResultMap" type="com.jfshare.product.model.TbProduct" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="seller_id" property="sellerId" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="vice_name" property="viceName" jdbcType="VARCHAR" />
-    <result column="subject_id" property="subjectId" jdbcType="INTEGER" />
-    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
-    <result column="img_key" property="imgKey" jdbcType="VARCHAR" />
-    <result column="detail_key" property="detailKey" jdbcType="VARCHAR" />
-    <result column="max_buy_limit" property="maxBuyLimit" jdbcType="INTEGER" />
-    <result column="active_state" property="activeState" jdbcType="INTEGER" />
-    <result column="product_snapshoot_id" property="productSnapshootId" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
-    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
-    <result column="last_update_id" property="lastUpdateId" jdbcType="INTEGER" />
-    <result column="state" property="state" jdbcType="INTEGER" />
-    <result column="tags" property="tags" jdbcType="VARCHAR" />
-    <result column="storehouse_ids" property="storehouseIds" jdbcType="VARCHAR" />
-    <result column="postage_id" property="postageId" jdbcType="INTEGER" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfshare.product.model.mapper.TbProductMapper">
+  <resultMap id="BaseResultMap" type="com.jfshare.product.model.TbProduct">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="seller_id" jdbcType="INTEGER" property="sellerId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="vice_name" jdbcType="VARCHAR" property="viceName" />
+    <result column="subject_id" jdbcType="INTEGER" property="subjectId" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="img_key" jdbcType="VARCHAR" property="imgKey" />
+    <result column="detail_key" jdbcType="VARCHAR" property="detailKey" />
+    <result column="max_buy_limit" jdbcType="INTEGER" property="maxBuyLimit" />
+    <result column="active_state" jdbcType="INTEGER" property="activeState" />
+    <result column="product_snapshoot_id" jdbcType="VARCHAR" property="productSnapshootId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_id" jdbcType="INTEGER" property="lastUpdateId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="storehouse_ids" jdbcType="VARCHAR" property="storehouseIds" />
+    <result column="postage_id" jdbcType="INTEGER" property="postageId" />
+    <result column="click_rate" jdbcType="INTEGER" property="clickRate" />
+    <result column="thirdExchangeRate" jdbcType="VARCHAR" property="thirdexchangerate" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.jfshare.product.model.TbProductWithBLOBs" extends="BaseResultMap" >
-    <result column="sku_template" property="skuTemplate" jdbcType="LONGVARCHAR" />
-    <result column="attribute" property="attribute" jdbcType="LONGVARCHAR" />
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jfshare.product.model.TbProductWithBLOBs">
+    <result column="sku_template" jdbcType="LONGVARCHAR" property="skuTemplate" />
+    <result column="attribute" jdbcType="LONGVARCHAR" property="attribute" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -57,25 +59,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -86,279 +88,792 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     id, seller_id, name, vice_name, subject_id, brand_id, img_key, detail_key, max_buy_limit, 
     active_state, product_snapshoot_id, type, remark, create_time, create_user_id, last_update_time, 
-    last_update_id, state, tags, storehouse_ids, postage_id
+    last_update_id, state, tags, storehouse_ids, postage_id, click_rate, thirdExchangeRate
   </sql>
-  <sql id="Blob_Column_List" >
+  <sql id="Blob_Column_List">
     sku_template, attribute
   </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.jfshare.product.model.TbProductExample" >
+  <select id="selectByExampleWithBLOBs" parameterType="com.jfshare.product.model.TbProductExample" resultMap="ResultMapWithBLOBs">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from tb_product
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jfshare.product.model.TbProductExample" >
+  <select id="selectByExample" parameterType="com.jfshare.product.model.TbProductExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from tb_product
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.jfshare.product.model.TbProductExample" >
+  <delete id="deleteByExample" parameterType="com.jfshare.product.model.TbProductExample">
     delete from tb_product
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="com.jfshare.product.model.TbProductWithBLOBs" >
+  <insert id="insertSelective" parameterType="com.jfshare.product.model.TbProductWithBLOBs">
     insert into tb_product
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="sellerId != null" >
+      <if test="sellerId != null">
         seller_id,
       </if>
-      <if test="name != null" >
+      <if test="name != null">
         name,
       </if>
-      <if test="viceName != null" >
+      <if test="viceName != null">
         vice_name,
       </if>
-      <if test="subjectId != null" >
+      <if test="subjectId != null">
         subject_id,
       </if>
-      <if test="brandId != null" >
+      <if test="brandId != null">
         brand_id,
       </if>
-      <if test="imgKey != null" >
+      <if test="imgKey != null">
         img_key,
       </if>
-      <if test="detailKey != null" >
+      <if test="detailKey != null">
         detail_key,
       </if>
-      <if test="maxBuyLimit != null" >
+      <if test="maxBuyLimit != null">
         max_buy_limit,
       </if>
-      <if test="activeState != null" >
+      <if test="activeState != null">
         active_state,
       </if>
-      <if test="productSnapshootId != null" >
+      <if test="productSnapshootId != null">
         product_snapshoot_id,
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type,
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
-      <if test="createUserId != null" >
+      <if test="createUserId != null">
         create_user_id,
       </if>
-      <if test="lastUpdateTime != null" >
+      <if test="lastUpdateTime != null">
         last_update_time,
       </if>
-      <if test="lastUpdateId != null" >
+      <if test="lastUpdateId != null">
         last_update_id,
       </if>
-      <if test="state != null" >
+      <if test="state != null">
         state,
       </if>
-      <if test="tags != null" >
+      <if test="tags != null">
         tags,
       </if>
-      <if test="storehouseIds != null" >
+      <if test="storehouseIds != null">
         storehouse_ids,
       </if>
-      <if test="postageId != null" >
+      <if test="postageId != null">
         postage_id,
       </if>
-      <if test="skuTemplate != null" >
+      <if test="clickRate != null">
+        click_rate,
+      </if>
+      <if test="thirdexchangerate != null">
+        thirdExchangeRate,
+      </if>
+      <if test="skuTemplate != null">
         sku_template,
       </if>
-      <if test="attribute != null" >
+      <if test="attribute != null">
         attribute,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="sellerId != null" >
+      <if test="sellerId != null">
         #{sellerId,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
+      <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="viceName != null" >
+      <if test="viceName != null">
         #{viceName,jdbcType=VARCHAR},
       </if>
-      <if test="subjectId != null" >
+      <if test="subjectId != null">
         #{subjectId,jdbcType=INTEGER},
       </if>
-      <if test="brandId != null" >
+      <if test="brandId != null">
         #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="imgKey != null" >
+      <if test="imgKey != null">
         #{imgKey,jdbcType=VARCHAR},
       </if>
-      <if test="detailKey != null" >
+      <if test="detailKey != null">
         #{detailKey,jdbcType=VARCHAR},
       </if>
-      <if test="maxBuyLimit != null" >
+      <if test="maxBuyLimit != null">
         #{maxBuyLimit,jdbcType=INTEGER},
       </if>
-      <if test="activeState != null" >
+      <if test="activeState != null">
         #{activeState,jdbcType=INTEGER},
       </if>
-      <if test="productSnapshootId != null" >
+      <if test="productSnapshootId != null">
         #{productSnapshootId,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUserId != null" >
+      <if test="createUserId != null">
         #{createUserId,jdbcType=INTEGER},
       </if>
-      <if test="lastUpdateTime != null" >
+      <if test="lastUpdateTime != null">
         #{lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastUpdateId != null" >
+      <if test="lastUpdateId != null">
         #{lastUpdateId,jdbcType=INTEGER},
       </if>
-      <if test="state != null" >
+      <if test="state != null">
         #{state,jdbcType=INTEGER},
       </if>
-      <if test="tags != null" >
+      <if test="tags != null">
         #{tags,jdbcType=VARCHAR},
       </if>
-      <if test="storehouseIds != null" >
+      <if test="storehouseIds != null">
         #{storehouseIds,jdbcType=VARCHAR},
       </if>
-      <if test="postageId != null" >
+      <if test="postageId != null">
         #{postageId,jdbcType=INTEGER},
       </if>
-      <if test="skuTemplate != null" >
+      <if test="clickRate != null">
+        #{clickRate,jdbcType=INTEGER},
+      </if>
+      <if test="thirdexchangerate != null">
+        #{thirdexchangerate,jdbcType=VARCHAR},
+      </if>
+      <if test="skuTemplate != null">
         #{skuTemplate,jdbcType=LONGVARCHAR},
       </if>
-      <if test="attribute != null" >
+      <if test="attribute != null">
         #{attribute,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jfshare.product.model.TbProductExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jfshare.product.model.TbProductExample" resultType="java.lang.Integer">
     select count(*) from tb_product
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update tb_product
-    <set >
-      <if test="record.id != null" >
+    <set>
+      <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.sellerId != null" >
+      <if test="record.sellerId != null">
         seller_id = #{record.sellerId,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null" >
+      <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.viceName != null" >
+      <if test="record.viceName != null">
         vice_name = #{record.viceName,jdbcType=VARCHAR},
       </if>
-      <if test="record.subjectId != null" >
+      <if test="record.subjectId != null">
         subject_id = #{record.subjectId,jdbcType=INTEGER},
       </if>
-      <if test="record.brandId != null" >
+      <if test="record.brandId != null">
         brand_id = #{record.brandId,jdbcType=INTEGER},
       </if>
-      <if test="record.imgKey != null" >
+      <if test="record.imgKey != null">
         img_key = #{record.imgKey,jdbcType=VARCHAR},
       </if>
-      <if test="record.detailKey != null" >
+      <if test="record.detailKey != null">
         detail_key = #{record.detailKey,jdbcType=VARCHAR},
       </if>
-      <if test="record.maxBuyLimit != null" >
+      <if test="record.maxBuyLimit != null">
         max_buy_limit = #{record.maxBuyLimit,jdbcType=INTEGER},
       </if>
-      <if test="record.activeState != null" >
+      <if test="record.activeState != null">
         active_state = #{record.activeState,jdbcType=INTEGER},
       </if>
-      <if test="record.productSnapshootId != null" >
+      <if test="record.productSnapshootId != null">
         product_snapshoot_id = #{record.productSnapshootId,jdbcType=VARCHAR},
       </if>
-      <if test="record.type != null" >
+      <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.remark != null" >
+      <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createUserId != null" >
+      <if test="record.createUserId != null">
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
-      <if test="record.lastUpdateTime != null" >
+      <if test="record.lastUpdateTime != null">
         last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.lastUpdateId != null" >
+      <if test="record.lastUpdateId != null">
         last_update_id = #{record.lastUpdateId,jdbcType=INTEGER},
       </if>
-      <if test="record.state != null" >
+      <if test="record.state != null">
         state = #{record.state,jdbcType=INTEGER},
       </if>
-      <if test="record.tags != null" >
+      <if test="record.tags != null">
         tags = #{record.tags,jdbcType=VARCHAR},
       </if>
-      <if test="record.storehouseIds != null" >
+      <if test="record.storehouseIds != null">
         storehouse_ids = #{record.storehouseIds,jdbcType=VARCHAR},
       </if>
-      <if test="record.postageId != null" >
+      <if test="record.postageId != null">
         postage_id = #{record.postageId,jdbcType=INTEGER},
       </if>
-      <if test="record.skuTemplate != null" >
+      <if test="record.clickRate != null">
+        click_rate = #{record.clickRate,jdbcType=INTEGER},
+      </if>
+      <if test="record.thirdexchangerate != null">
+        thirdExchangeRate = #{record.thirdexchangerate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuTemplate != null">
         sku_template = #{record.skuTemplate,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.attribute != null" >
+      <if test="record.attribute != null">
         attribute = #{record.attribute,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_product
+    set id = #{record.id,jdbcType=VARCHAR},
+      seller_id = #{record.sellerId,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      vice_name = #{record.viceName,jdbcType=VARCHAR},
+      subject_id = #{record.subjectId,jdbcType=INTEGER},
+      brand_id = #{record.brandId,jdbcType=INTEGER},
+      img_key = #{record.imgKey,jdbcType=VARCHAR},
+      detail_key = #{record.detailKey,jdbcType=VARCHAR},
+      max_buy_limit = #{record.maxBuyLimit,jdbcType=INTEGER},
+      active_state = #{record.activeState,jdbcType=INTEGER},
+      product_snapshoot_id = #{record.productSnapshootId,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_id = #{record.lastUpdateId,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=INTEGER},
+      tags = #{record.tags,jdbcType=VARCHAR},
+      storehouse_ids = #{record.storehouseIds,jdbcType=VARCHAR},
+      postage_id = #{record.postageId,jdbcType=INTEGER},
+      click_rate = #{record.clickRate,jdbcType=INTEGER},
+      thirdExchangeRate = #{record.thirdexchangerate,jdbcType=VARCHAR},
+      sku_template = #{record.skuTemplate,jdbcType=LONGVARCHAR},
+      attribute = #{record.attribute,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_product
+    set id = #{record.id,jdbcType=VARCHAR},
+      seller_id = #{record.sellerId,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      vice_name = #{record.viceName,jdbcType=VARCHAR},
+      subject_id = #{record.subjectId,jdbcType=INTEGER},
+      brand_id = #{record.brandId,jdbcType=INTEGER},
+      img_key = #{record.imgKey,jdbcType=VARCHAR},
+      detail_key = #{record.detailKey,jdbcType=VARCHAR},
+      max_buy_limit = #{record.maxBuyLimit,jdbcType=INTEGER},
+      active_state = #{record.activeState,jdbcType=INTEGER},
+      product_snapshoot_id = #{record.productSnapshootId,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_id = #{record.lastUpdateId,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=INTEGER},
+      tags = #{record.tags,jdbcType=VARCHAR},
+      storehouse_ids = #{record.storehouseIds,jdbcType=VARCHAR},
+      postage_id = #{record.postageId,jdbcType=INTEGER},
+      click_rate = #{record.clickRate,jdbcType=INTEGER},
+      thirdExchangeRate = #{record.thirdexchangerate,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jfshare.product.model.TbProductWithBLOBs">
+    update tb_product
+    <set>
+      <if test="sellerId != null">
+        seller_id = #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="viceName != null">
+        vice_name = #{viceName,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null">
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="imgKey != null">
+        img_key = #{imgKey,jdbcType=VARCHAR},
+      </if>
+      <if test="detailKey != null">
+        detail_key = #{detailKey,jdbcType=VARCHAR},
+      </if>
+      <if test="maxBuyLimit != null">
+        max_buy_limit = #{maxBuyLimit,jdbcType=INTEGER},
+      </if>
+      <if test="activeState != null">
+        active_state = #{activeState,jdbcType=INTEGER},
+      </if>
+      <if test="productSnapshootId != null">
+        product_snapshoot_id = #{productSnapshootId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateId != null">
+        last_update_id = #{lastUpdateId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="tags != null">
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="storehouseIds != null">
+        storehouse_ids = #{storehouseIds,jdbcType=VARCHAR},
+      </if>
+      <if test="postageId != null">
+        postage_id = #{postageId,jdbcType=INTEGER},
+      </if>
+      <if test="clickRate != null">
+        click_rate = #{clickRate,jdbcType=INTEGER},
+      </if>
+      <if test="thirdexchangerate != null">
+        thirdExchangeRate = #{thirdexchangerate,jdbcType=VARCHAR},
+      </if>
+      <if test="skuTemplate != null">
+        sku_template = #{skuTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="attribute != null">
+        attribute = #{attribute,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <resultMap id="BaseResultMap" type="com.jfshare.product.model.TbProduct">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="seller_id" jdbcType="INTEGER" property="sellerId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="vice_name" jdbcType="VARCHAR" property="viceName" />
+    <result column="subject_id" jdbcType="INTEGER" property="subjectId" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="img_key" jdbcType="VARCHAR" property="imgKey" />
+    <result column="detail_key" jdbcType="VARCHAR" property="detailKey" />
+    <result column="max_buy_limit" jdbcType="INTEGER" property="maxBuyLimit" />
+    <result column="active_state" jdbcType="INTEGER" property="activeState" />
+    <result column="product_snapshoot_id" jdbcType="VARCHAR" property="productSnapshootId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_id" jdbcType="INTEGER" property="lastUpdateId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="storehouse_ids" jdbcType="VARCHAR" property="storehouseIds" />
+    <result column="postage_id" jdbcType="INTEGER" property="postageId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jfshare.product.model.TbProductWithBLOBs">
+    <result column="sku_template" jdbcType="LONGVARCHAR" property="skuTemplate" />
+    <result column="attribute" jdbcType="LONGVARCHAR" property="attribute" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, seller_id, name, vice_name, subject_id, brand_id, img_key, detail_key, max_buy_limit, 
+    active_state, product_snapshoot_id, type, remark, create_time, create_user_id, last_update_time, 
+    last_update_id, state, tags, storehouse_ids, postage_id
+  </sql>
+  <sql id="Blob_Column_List">
+    sku_template, attribute
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jfshare.product.model.TbProductExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.jfshare.product.model.TbProductExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.jfshare.product.model.TbProductExample">
+    delete from tb_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.jfshare.product.model.TbProductWithBLOBs">
+    insert into tb_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sellerId != null">
+        seller_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="viceName != null">
+        vice_name,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="brandId != null">
+        brand_id,
+      </if>
+      <if test="imgKey != null">
+        img_key,
+      </if>
+      <if test="detailKey != null">
+        detail_key,
+      </if>
+      <if test="maxBuyLimit != null">
+        max_buy_limit,
+      </if>
+      <if test="activeState != null">
+        active_state,
+      </if>
+      <if test="productSnapshootId != null">
+        product_snapshoot_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateId != null">
+        last_update_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="tags != null">
+        tags,
+      </if>
+      <if test="storehouseIds != null">
+        storehouse_ids,
+      </if>
+      <if test="postageId != null">
+        postage_id,
+      </if>
+      <if test="skuTemplate != null">
+        sku_template,
+      </if>
+      <if test="attribute != null">
+        attribute,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null">
+        #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="viceName != null">
+        #{viceName,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null">
+        #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="imgKey != null">
+        #{imgKey,jdbcType=VARCHAR},
+      </if>
+      <if test="detailKey != null">
+        #{detailKey,jdbcType=VARCHAR},
+      </if>
+      <if test="maxBuyLimit != null">
+        #{maxBuyLimit,jdbcType=INTEGER},
+      </if>
+      <if test="activeState != null">
+        #{activeState,jdbcType=INTEGER},
+      </if>
+      <if test="productSnapshootId != null">
+        #{productSnapshootId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateId != null">
+        #{lastUpdateId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="tags != null">
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="storehouseIds != null">
+        #{storehouseIds,jdbcType=VARCHAR},
+      </if>
+      <if test="postageId != null">
+        #{postageId,jdbcType=INTEGER},
+      </if>
+      <if test="skuTemplate != null">
+        #{skuTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="attribute != null">
+        #{attribute,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jfshare.product.model.TbProductExample" resultType="java.lang.Integer">
+    select count(*) from tb_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_product
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sellerId != null">
+        seller_id = #{record.sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viceName != null">
+        vice_name = #{record.viceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subjectId != null">
+        subject_id = #{record.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.brandId != null">
+        brand_id = #{record.brandId,jdbcType=INTEGER},
+      </if>
+      <if test="record.imgKey != null">
+        img_key = #{record.imgKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailKey != null">
+        detail_key = #{record.detailKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxBuyLimit != null">
+        max_buy_limit = #{record.maxBuyLimit,jdbcType=INTEGER},
+      </if>
+      <if test="record.activeState != null">
+        active_state = #{record.activeState,jdbcType=INTEGER},
+      </if>
+      <if test="record.productSnapshootId != null">
+        product_snapshoot_id = #{record.productSnapshootId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateId != null">
+        last_update_id = #{record.lastUpdateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.tags != null">
+        tags = #{record.tags,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storehouseIds != null">
+        storehouse_ids = #{record.storehouseIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postageId != null">
+        postage_id = #{record.postageId,jdbcType=INTEGER},
+      </if>
+      <if test="record.skuTemplate != null">
+        sku_template = #{record.skuTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.attribute != null">
+        attribute = #{record.attribute,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
     update tb_product
     set id = #{record.id,jdbcType=VARCHAR},
       seller_id = #{record.sellerId,jdbcType=INTEGER},
@@ -383,11 +898,11 @@
       postage_id = #{record.postageId,jdbcType=INTEGER},
       sku_template = #{record.skuTemplate,jdbcType=LONGVARCHAR},
       attribute = #{record.attribute,jdbcType=LONGVARCHAR}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update tb_product
     set id = #{record.id,jdbcType=VARCHAR},
       seller_id = #{record.sellerId,jdbcType=INTEGER},
@@ -410,77 +925,77 @@
       tags = #{record.tags,jdbcType=VARCHAR},
       storehouse_ids = #{record.storehouseIds,jdbcType=VARCHAR},
       postage_id = #{record.postageId,jdbcType=INTEGER}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jfshare.product.model.TbProductWithBLOBs" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jfshare.product.model.TbProductWithBLOBs">
     update tb_product
-    <set >
-      <if test="sellerId != null" >
+    <set>
+      <if test="sellerId != null">
         seller_id = #{sellerId,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
+      <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="viceName != null" >
+      <if test="viceName != null">
         vice_name = #{viceName,jdbcType=VARCHAR},
       </if>
-      <if test="subjectId != null" >
+      <if test="subjectId != null">
         subject_id = #{subjectId,jdbcType=INTEGER},
       </if>
-      <if test="brandId != null" >
+      <if test="brandId != null">
         brand_id = #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="imgKey != null" >
+      <if test="imgKey != null">
         img_key = #{imgKey,jdbcType=VARCHAR},
       </if>
-      <if test="detailKey != null" >
+      <if test="detailKey != null">
         detail_key = #{detailKey,jdbcType=VARCHAR},
       </if>
-      <if test="maxBuyLimit != null" >
+      <if test="maxBuyLimit != null">
         max_buy_limit = #{maxBuyLimit,jdbcType=INTEGER},
       </if>
-      <if test="activeState != null" >
+      <if test="activeState != null">
         active_state = #{activeState,jdbcType=INTEGER},
       </if>
-      <if test="productSnapshootId != null" >
+      <if test="productSnapshootId != null">
         product_snapshoot_id = #{productSnapshootId,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type = #{type,jdbcType=INTEGER},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUserId != null" >
+      <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
-      <if test="lastUpdateTime != null" >
+      <if test="lastUpdateTime != null">
         last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastUpdateId != null" >
+      <if test="lastUpdateId != null">
         last_update_id = #{lastUpdateId,jdbcType=INTEGER},
       </if>
-      <if test="state != null" >
+      <if test="state != null">
         state = #{state,jdbcType=INTEGER},
       </if>
-      <if test="tags != null" >
+      <if test="tags != null">
         tags = #{tags,jdbcType=VARCHAR},
       </if>
-      <if test="storehouseIds != null" >
+      <if test="storehouseIds != null">
         storehouse_ids = #{storehouseIds,jdbcType=VARCHAR},
       </if>
-      <if test="postageId != null" >
+      <if test="postageId != null">
         postage_id = #{postageId,jdbcType=INTEGER},
       </if>
-      <if test="skuTemplate != null" >
+      <if test="skuTemplate != null">
         sku_template = #{skuTemplate,jdbcType=LONGVARCHAR},
       </if>
-      <if test="attribute != null" >
+      <if test="attribute != null">
         attribute = #{attribute,jdbcType=LONGVARCHAR},
       </if>
     </set>

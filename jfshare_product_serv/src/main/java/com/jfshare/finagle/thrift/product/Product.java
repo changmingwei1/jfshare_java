@@ -57,6 +57,7 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
   private static final TField PRODUCT_SNAPSHOOT_ID_FIELD_DESC = new TField("productSnapshootId", TType.STRING, (short)23);
   private static final TField STOREHOUSE_IDS_FIELD_DESC = new TField("storehouseIds", TType.STRING, (short)24);
   private static final TField POSTAGE_ID_FIELD_DESC = new TField("postageId", TType.I32, (short)25);
+  private static final TField THIRD_EXCHANGE_RATE_FIELD_DESC = new TField("thirdExchangeRate", TType.STRING, (short)26);
 
 
   public String productId;
@@ -84,6 +85,7 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
   public String productSnapshootId;
   public String storehouseIds;
   public int postageId;
+  public String thirdExchangeRate;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -111,7 +113,8 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     DETAIL_CONTENT((short)22, "detailContent"),
     PRODUCT_SNAPSHOOT_ID((short)23, "productSnapshootId"),
     STOREHOUSE_IDS((short)24, "storehouseIds"),
-    POSTAGE_ID((short)25, "postageId");
+    POSTAGE_ID((short)25, "postageId"),
+    THIRD_EXCHANGE_RATE((short)26, "thirdExchangeRate");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -176,6 +179,8 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
   	return STOREHOUSE_IDS;
         case 25: // POSTAGE_ID
   	return POSTAGE_ID;
+        case 26: // THIRD_EXCHANGE_RATE
+  	return THIRD_EXCHANGE_RATE;
         default:
   	return null;
       }
@@ -281,6 +286,8 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.POSTAGE_ID, new FieldMetaData("postageId", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.THIRD_EXCHANGE_RATE, new FieldMetaData("thirdExchangeRate", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(Product.class, metaDataMap);
   }
@@ -360,6 +367,9 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       this.storehouseIds = other.storehouseIds;
     }
     this.postageId = other.postageId;
+    if (other.isSetThirdExchangeRate()) {
+      this.thirdExchangeRate = other.thirdExchangeRate;
+    }
   }
 
   public Product deepCopy() {
@@ -402,6 +412,7 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     this.storehouseIds = null;
     setPostageIdIsSet(false);
     this.postageId = 0;
+    this.thirdExchangeRate = null;
   }
 
   public String getProductId() {
@@ -1020,6 +1031,31 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     __isset_bit_vector.set(__POSTAGEID_ISSET_ID, value);
   }
 
+  public String getThirdExchangeRate() {
+    return this.thirdExchangeRate;
+  }
+
+  public Product setThirdExchangeRate(String thirdExchangeRate) {
+    this.thirdExchangeRate = thirdExchangeRate;
+    
+    return this;
+  }
+
+  public void unsetThirdExchangeRate() {
+    this.thirdExchangeRate = null;
+  }
+
+  /** Returns true if field thirdExchangeRate is set (has been asigned a value) and false otherwise */
+  public boolean isSetThirdExchangeRate() {
+    return this.thirdExchangeRate != null;
+  }
+
+  public void setThirdExchangeRateIsSet(boolean value) {
+    if (!value) {
+      this.thirdExchangeRate = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -1197,6 +1233,13 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
         setPostageId((Integer)value);
       }
       break;
+    case THIRD_EXCHANGE_RATE:
+      if (value == null) {
+        unsetThirdExchangeRate();
+      } else {
+        setThirdExchangeRate((String)value);
+      }
+      break;
     }
   }
 
@@ -1252,6 +1295,8 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       return getStorehouseIds();
     case POSTAGE_ID:
       return new Integer(getPostageId());
+    case THIRD_EXCHANGE_RATE:
+      return getThirdExchangeRate();
     }
     throw new IllegalStateException();
   }
@@ -1313,6 +1358,8 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       return isSetStorehouseIds();
     case POSTAGE_ID:
       return isSetPostageId();
+    case THIRD_EXCHANGE_RATE:
+      return isSetThirdExchangeRate();
     }
     throw new IllegalStateException();
   }
@@ -1529,6 +1576,14 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       if (this.postageId != that.postageId)
         return false;
     }
+    boolean this_present_thirdExchangeRate = true && this.isSetThirdExchangeRate();
+    boolean that_present_thirdExchangeRate = true && that.isSetThirdExchangeRate();
+    if (this_present_thirdExchangeRate || that_present_thirdExchangeRate) {
+      if (!(this_present_thirdExchangeRate && that_present_thirdExchangeRate))
+        return false;
+      if (!this.thirdExchangeRate.equals(that.thirdExchangeRate))
+        return false;
+    }
 
     return true;
   }
@@ -1636,6 +1691,10 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
     builder.append(present_postageId);
     if (present_postageId)
       builder.append(postageId);
+    boolean present_thirdExchangeRate = true && (isSetThirdExchangeRate());
+    builder.append(present_thirdExchangeRate);
+    if (present_thirdExchangeRate)
+      builder.append(thirdExchangeRate);
     return builder.toHashCode();
   }
 
@@ -1897,6 +1956,16 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetThirdExchangeRate()).compareTo(typedOther.isSetThirdExchangeRate());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetThirdExchangeRate()) {
+      lastComparison = TBaseHelper.compareTo(this.thirdExchangeRate, typedOther.thirdExchangeRate);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -2100,6 +2169,13 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 26: // THIRD_EXCHANGE_RATE
+          if (field.type == TType.STRING) {
+            this.thirdExchangeRate = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -2269,6 +2345,13 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       oprot.writeFieldBegin(POSTAGE_ID_FIELD_DESC);
       oprot.writeI32(this.postageId);
       oprot.writeFieldEnd();
+    }
+    if (this.thirdExchangeRate != null) {
+      if (isSetThirdExchangeRate()) {
+        oprot.writeFieldBegin(THIRD_EXCHANGE_RATE_FIELD_DESC);
+        oprot.writeString(this.thirdExchangeRate);
+        oprot.writeFieldEnd();
+      }
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -2487,6 +2570,16 @@ public class Product implements TBase<Product, Product._Fields>, java.io.Seriali
       if (!first) sb.append(", ");
       sb.append("postageId:");
       sb.append(this.postageId);
+      first = false;
+      }
+    if (isSetThirdExchangeRate()) {
+      if (!first) sb.append(", ");
+      sb.append("thirdExchangeRate:");
+      if (this.thirdExchangeRate == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.thirdExchangeRate);
+      }
       first = false;
       }
     sb.append(")");

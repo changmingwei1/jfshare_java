@@ -124,6 +124,8 @@ public class OrderUtil {
                 productInfo.setStorehouseId(tbOrderInfoRecord.getStorehouseId());
             if(tbOrderInfoRecord.getPostageTemplateId() != null)
                 productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
+            if(tbOrderInfoRecord.getThirdexchangerate() != null)
+                productInfo.setThirdExchangeRate(tbOrderInfoRecord.getThirdexchangerate());
             productInfos.add(productInfo);
         }
         orderDetail.setProductList(productInfos);
@@ -230,6 +232,7 @@ public class OrderUtil {
             productInfo.setWi(tbOrderInfoRecord.getWi());
             productInfo.setExchangeScore(tbOrderInfoRecord.getExchangeScore());
             productInfo.setExchangeCash(PriceUtils.strToInt(tbOrderInfoRecord.getExchangeCash()));
+            productInfo.setThirdexchangerate(tbOrderInfoRecord.getThirdExchangeRate());
             productInfos. add(productInfo);
         }
         orderDetail.setTbOrderInfoList(productInfos);
