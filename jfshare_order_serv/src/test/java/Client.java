@@ -59,8 +59,9 @@ public class Client extends TestCase{
         try {
             ////////////////////////////////////////////////////
             OrderQueryConditions conditions = new OrderQueryConditions();
-            conditions.setSellerId(1);
-            System.err.println(client.orderProfileQuery(2, 1, conditions));
+            conditions.setSellerId(2);
+            conditions.setOrderState(61);
+            System.err.println(client.orderProfileQuery(2, 2, conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -165,6 +166,8 @@ public class Client extends TestCase{
             }
         }
     }
+
+
 
 
 
