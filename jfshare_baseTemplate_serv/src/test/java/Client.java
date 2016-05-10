@@ -30,7 +30,7 @@ public class Client extends TestCase{
 
     @Override
     public void setUp() throws Exception {
-        transport = new TFramedTransport(new TSocket("localhost", 12345));
+        transport = new TFramedTransport(new TSocket("localhost", 2004));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new BaseTemplateServ.Client(protocol);
