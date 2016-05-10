@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client extends TestCase {
+public class Client extends TestCase{
 
     private TTransport transport;
     private OrderServ.Client client;
@@ -34,7 +34,7 @@ public class Client extends TestCase {
     /**
      * @throws Exception
      */
-    @Test
+
     public void testQueryOrderDetail() throws Exception {
         //商品id
         String orderId = "1571111";
@@ -52,7 +52,7 @@ public class Client extends TestCase {
         }
     }
 
-    @Test
+
     public void testOrderProfileQuery() throws Exception {
         //商品id
         String orderId = "1";
@@ -71,18 +71,18 @@ public class Client extends TestCase {
         }
     }
 
-    @Test
+
     public void testOrderProfileQueryBuyer() throws Exception {
         //商品id
         String orderId = "1";
         try {
             ////////////////////////////////////////////////////
             OrderQueryConditions conditions = new OrderQueryConditions();
-//            conditions.setUserId(1111);
-//            conditions.setCurPage(1);
-//            conditions.setCount(3);
-//            conditions.setOrderState(1);
-//            System.err.println(client.orderProfileQuery(2, 1, conditions));
+            conditions.setUserId(1111);
+            conditions.setCurPage(1);
+            conditions.setCount(3);
+            conditions.setOrderState(1);
+            System.err.println(client.orderProfileQuery(2, 1, conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -93,7 +93,7 @@ public class Client extends TestCase {
         }
     }
 
-    @Test
+
     public void testDeliver() throws Exception {
         //商品id
         String orderId = "1";
@@ -114,7 +114,7 @@ public class Client extends TestCase {
     }
 
 
-    @Test
+
     public void testConfirmReceipt() throws Exception {
         //商品id
         String orderId = "3450002";
@@ -129,7 +129,7 @@ public class Client extends TestCase {
         }
     }
 
-    @Test
+
     public void testCancelOrder() throws Exception {
         //商品id
         String orderId = "3450002";
@@ -144,7 +144,7 @@ public class Client extends TestCase {
         }
     }
 
-    @Test
+
     public void testOrderStateQueryBuyer() throws Exception {
         //商品id
         String orderId = "1";
@@ -167,7 +167,7 @@ public class Client extends TestCase {
     }
 
 
-    @Test
+
     public void testPayApply() throws Exception {
         try {
             PayParam payParam = new PayParam();
@@ -188,7 +188,6 @@ public class Client extends TestCase {
         }
     }
 
-    @Test
     public void testPayState() throws Exception {
         try {
             PayState payState = new PayState();

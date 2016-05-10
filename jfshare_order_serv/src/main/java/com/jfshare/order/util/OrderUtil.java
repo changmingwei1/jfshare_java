@@ -1,6 +1,7 @@
 package com.jfshare.order.util;
 
 import com.jfshare.finagle.thrift.order.*;
+import com.jfshare.order.common.Commons;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderInfoRecord;
 import com.jfshare.ridge.PropertiesUtil;
@@ -8,6 +9,7 @@ import com.jfshare.utils.BizUtil;
 import com.jfshare.utils.ConvertUtil;
 import com.jfshare.utils.PriceUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -118,8 +120,10 @@ public class OrderUtil {
             productInfo.setWi(tbOrderInfoRecord.getWi());
             productInfo.setExchangeScore(tbOrderInfoRecord.getExchangeScore());
             productInfo.setExchangeCash(PriceUtils.intToStr(tbOrderInfoRecord.getExchangeCash()));
-            productInfo.setStorehouseId(tbOrderInfoRecord.getStorehouseId());
-            productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
+            if(tbOrderInfoRecord.getStorehouseId() != null)
+                productInfo.setStorehouseId(tbOrderInfoRecord.getStorehouseId());
+            if(tbOrderInfoRecord.getPostageTemplateId() != null)
+                productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
             productInfos.add(productInfo);
         }
         orderDetail.setProductList(productInfos);
