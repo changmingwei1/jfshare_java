@@ -23,7 +23,7 @@
         <property name="sid" value="baseTemplateServ"/>
         <property name="ref" value="handler"/>
         <property name="api" value="com.jfshare.finagle.thrift.baseTemplate.BaseTemplateServ"/>
-        <property name="port" value="12345"/>
+        <property name="port" value="2004"/>
         <property name="threads" value="300"/>
         <property name="stimeout" value="20000"/>
         <property name="version" value="1.0"/>
