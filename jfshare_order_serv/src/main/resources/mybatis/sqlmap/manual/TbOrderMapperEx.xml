@@ -320,7 +320,7 @@
                 </if>
                 <!--精准订单状态-->
                 <if test="conditions.orderState >= 10">
-                    AND (a.order_state =#{conditions.orderState}
+                    AND a.order_state =#{conditions.orderState}
                 </if>
             </if>
             <if test="conditions.sellerId != null and conditions.sellerId > 0">
