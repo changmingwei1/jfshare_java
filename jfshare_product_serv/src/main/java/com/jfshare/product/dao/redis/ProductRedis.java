@@ -21,7 +21,10 @@ public interface ProductRedis {
 
     public ProductSku getProductSku(String productId);
 
+    @Deprecated
     public ProductSku getProductSkuSingle(String productId, String skuNum);
+
+    public ProductSku getProductSkuSingle(String productId, int storehouseId, String skuNum);
 
     public boolean setProductCache(Product product);
 

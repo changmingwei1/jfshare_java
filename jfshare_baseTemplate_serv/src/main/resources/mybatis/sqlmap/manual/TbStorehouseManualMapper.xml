@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.baseTemplate.mybatis.mapper.manual.TbStorehouseManualMapper" >
+    <select id="queryStorehouse" resultMap="com.jfshare.baseTemplate.mybatis.mapper.automatic.TbStorehouseMapper.BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="com.jfshare.baseTemplate.mybatis.mapper.automatic.TbStorehouseMapper.Base_Column_List" />
+        FROM tb_storehouse
+        <where>
+            <if test="id != 0">
+                and id = #{id}
+            </if>
+            <if test="sellerId != 0">
+                and seller_id = #{sellerId}
+            </if>
+        </where>
+        limit 60
+
+    </select>
+</mapper>

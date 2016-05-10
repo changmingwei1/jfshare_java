@@ -21,6 +21,8 @@
     <result column="last_update_id" property="lastUpdateId" jdbcType="INTEGER" />
     <result column="state" property="state" jdbcType="INTEGER" />
     <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="storehouse_ids" property="storehouseIds" jdbcType="VARCHAR" />
+    <result column="postage_id" property="postageId" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.jfshare.product.model.TbProductWithBLOBs" extends="BaseResultMap" >
     <result column="sku_template" property="skuTemplate" jdbcType="LONGVARCHAR" />
@@ -87,7 +89,7 @@
   <sql id="Base_Column_List" >
     id, seller_id, name, vice_name, subject_id, brand_id, img_key, detail_key, max_buy_limit, 
     active_state, product_snapshoot_id, type, remark, create_time, create_user_id, last_update_time, 
-    last_update_id, state, tags
+    last_update_id, state, tags, storehouse_ids, postage_id
   </sql>
   <sql id="Blob_Column_List" >
     sku_template, attribute
@@ -188,6 +190,12 @@
       <if test="tags != null" >
         tags,
       </if>
+      <if test="storehouseIds != null" >
+        storehouse_ids,
+      </if>
+      <if test="postageId != null" >
+        postage_id,
+      </if>
       <if test="skuTemplate != null" >
         sku_template,
       </if>
@@ -252,6 +260,12 @@
       </if>
       <if test="tags != null" >
         #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="storehouseIds != null" >
+        #{storehouseIds,jdbcType=VARCHAR},
+      </if>
+      <if test="postageId != null" >
+        #{postageId,jdbcType=INTEGER},
       </if>
       <if test="skuTemplate != null" >
         #{skuTemplate,jdbcType=LONGVARCHAR},
@@ -327,6 +341,12 @@
       <if test="record.tags != null" >
         tags = #{record.tags,jdbcType=VARCHAR},
       </if>
+      <if test="record.storehouseIds != null" >
+        storehouse_ids = #{record.storehouseIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postageId != null" >
+        postage_id = #{record.postageId,jdbcType=INTEGER},
+      </if>
       <if test="record.skuTemplate != null" >
         sku_template = #{record.skuTemplate,jdbcType=LONGVARCHAR},
       </if>
@@ -359,6 +379,8 @@
       last_update_id = #{record.lastUpdateId,jdbcType=INTEGER},
       state = #{record.state,jdbcType=INTEGER},
       tags = #{record.tags,jdbcType=VARCHAR},
+      storehouse_ids = #{record.storehouseIds,jdbcType=VARCHAR},
+      postage_id = #{record.postageId,jdbcType=INTEGER},
       sku_template = #{record.skuTemplate,jdbcType=LONGVARCHAR},
       attribute = #{record.attribute,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
@@ -385,7 +407,9 @@
       last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
       last_update_id = #{record.lastUpdateId,jdbcType=INTEGER},
       state = #{record.state,jdbcType=INTEGER},
-      tags = #{record.tags,jdbcType=VARCHAR}
+      tags = #{record.tags,jdbcType=VARCHAR},
+      storehouse_ids = #{record.storehouseIds,jdbcType=VARCHAR},
+      postage_id = #{record.postageId,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -446,6 +470,12 @@
       </if>
       <if test="tags != null" >
         tags = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="storehouseIds != null" >
+        storehouse_ids = #{storehouseIds,jdbcType=VARCHAR},
+      </if>
+      <if test="postageId != null" >
+        postage_id = #{postageId,jdbcType=INTEGER},
       </if>
       <if test="skuTemplate != null" >
         sku_template = #{skuTemplate,jdbcType=LONGVARCHAR},

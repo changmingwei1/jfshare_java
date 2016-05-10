@@ -28,14 +28,18 @@ public interface TbProductSkuMapper {
         "cur_price, org_price, ",
         "comment, last_update_time, ",
         "last_update_user_id, create_time, ",
-        "create_user_id, v_picture)",
+        "create_user_id, v_picture, ",
+        "ref_price, weight, ",
+        "storehouse_id)",
         "values (#{id,jdbcType=INTEGER}, #{productId,jdbcType=VARCHAR}, ",
         "#{skuNum,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, ",
         "#{sellerClassNum,jdbcType=VARCHAR}, #{shelf,jdbcType=VARCHAR}, ",
         "#{curPrice,jdbcType=INTEGER}, #{orgPrice,jdbcType=INTEGER}, ",
         "#{comment,jdbcType=VARCHAR}, #{lastUpdateTime,jdbcType=TIMESTAMP}, ",
         "#{lastUpdateUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, ",
-        "#{createUserId,jdbcType=INTEGER}, #{vPicture,jdbcType=VARCHAR})"
+        "#{createUserId,jdbcType=INTEGER}, #{vPicture,jdbcType=VARCHAR}, ",
+        "#{refPrice,jdbcType=INTEGER}, #{weight,jdbcType=VARCHAR}, ",
+        "#{storehouseId,jdbcType=INTEGER})"
     })
     int insert(TbProductSku record);
 
@@ -47,7 +51,7 @@ public interface TbProductSkuMapper {
         "select",
         "id, product_id, sku_num, sku_name, seller_class_num, shelf, cur_price, org_price, ",
         "comment, last_update_time, last_update_user_id, create_time, create_user_id, ",
-        "v_picture",
+        "v_picture, ref_price, weight, storehouse_id",
         "from tb_product_sku",
         "where id = #{id,jdbcType=INTEGER}"
     })
@@ -74,7 +78,10 @@ public interface TbProductSkuMapper {
           "last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "create_user_id = #{createUserId,jdbcType=INTEGER},",
-          "v_picture = #{vPicture,jdbcType=VARCHAR}",
+          "v_picture = #{vPicture,jdbcType=VARCHAR},",
+          "ref_price = #{refPrice,jdbcType=INTEGER},",
+          "weight = #{weight,jdbcType=VARCHAR},",
+          "storehouse_id = #{storehouseId,jdbcType=INTEGER}",
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(TbProductSku record);

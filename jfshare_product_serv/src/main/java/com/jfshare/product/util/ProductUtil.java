@@ -87,7 +87,8 @@ public class ProductUtil {
 	public static ProductSku getSkuByJson(String skuJson) {
 		JSONObject jsonObject = JSONObject.parseObject(skuJson);
 		ProductSku productSku = new ProductSku();
-		Map<String,ProductSkuItem> productSkuMap = new HashMap<String,ProductSkuItem>();
+//		Map<String,ProductSkuItem> productSkuMap = new HashMap<String,ProductSkuItem>();
+		List<ProductSkuItem> productSkuItems = new ArrayList<ProductSkuItem>();
 		int minCurPrice=Integer.MAX_VALUE, maxCurPrice=0, minOrgPrice=Integer.MAX_VALUE,maxOrgPrice=0;
 		for(Map.Entry<String , Object> entry : jsonObject.entrySet()){
 //			System.out.println(entry.getKey() + "," + entry.getValue());
@@ -103,7 +104,8 @@ public class ProductUtil {
 				skuItem.setCurPrice(skuInfo.getString("curPrice"));
 				skuItem.setOrgPrice(skuInfo.getString("orgPrice"));
 
-				productSkuMap.put(entry.getKey(), skuItem);
+//				productSkuMap.put(entry.getKey(), skuItem);
+				productSkuItems.add(skuItem);
 
 				int curPrice = PriceUtils.strToInt(skuInfo.getString("curPrice"));
 				int orgPrice = PriceUtils.strToInt(skuInfo.getString("orgPrice"));
@@ -122,12 +124,12 @@ public class ProductUtil {
 			}
 		}
 
-		if (productSkuMap.size() > 0) {
+		if (productSkuItems.size() > 0) {
 			productSku.setMinCurPrice(PriceUtils.intToStr(minCurPrice));
 			productSku.setMaxCurPrice(PriceUtils.intToStr(maxCurPrice));
 			productSku.setMinOrgPrice(PriceUtils.intToStr(minOrgPrice));
 			productSku.setMaxOrgPrice(PriceUtils.intToStr(maxOrgPrice));
-			productSku.setProductSkuMap(productSkuMap);
+			productSku.setSkuItems(productSkuItems);
 		}
 
 		return productSku;

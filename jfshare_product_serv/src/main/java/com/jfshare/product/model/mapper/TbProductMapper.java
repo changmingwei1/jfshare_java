@@ -32,7 +32,8 @@ public interface TbProductMapper {
         "remark, create_time, ",
         "create_user_id, last_update_time, ",
         "last_update_id, state, ",
-        "tags, sku_template, ",
+        "tags, storehouse_ids, ",
+        "postage_id, sku_template, ",
         "attribute)",
         "values (#{id,jdbcType=VARCHAR}, #{sellerId,jdbcType=INTEGER}, ",
         "#{name,jdbcType=VARCHAR}, #{viceName,jdbcType=VARCHAR}, ",
@@ -43,7 +44,8 @@ public interface TbProductMapper {
         "#{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, ",
         "#{createUserId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP}, ",
         "#{lastUpdateId,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, ",
-        "#{tags,jdbcType=VARCHAR}, #{skuTemplate,jdbcType=LONGVARCHAR}, ",
+        "#{tags,jdbcType=VARCHAR}, #{storehouseIds,jdbcType=VARCHAR}, ",
+        "#{postageId,jdbcType=INTEGER}, #{skuTemplate,jdbcType=LONGVARCHAR}, ",
         "#{attribute,jdbcType=LONGVARCHAR})"
     })
     int insert(TbProductWithBLOBs record);
@@ -58,7 +60,8 @@ public interface TbProductMapper {
         "select",
         "id, seller_id, name, vice_name, subject_id, brand_id, img_key, detail_key, max_buy_limit, ",
         "active_state, product_snapshoot_id, type, remark, create_time, create_user_id, ",
-        "last_update_time, last_update_id, state, tags, sku_template, attribute",
+        "last_update_time, last_update_id, state, tags, storehouse_ids, postage_id, sku_template, ",
+        "attribute",
         "from tb_product",
         "where id = #{id,jdbcType=VARCHAR}"
     })
@@ -93,6 +96,8 @@ public interface TbProductMapper {
           "last_update_id = #{lastUpdateId,jdbcType=INTEGER},",
           "state = #{state,jdbcType=INTEGER},",
           "tags = #{tags,jdbcType=VARCHAR},",
+          "storehouse_ids = #{storehouseIds,jdbcType=VARCHAR},",
+          "postage_id = #{postageId,jdbcType=INTEGER},",
           "sku_template = #{skuTemplate,jdbcType=LONGVARCHAR},",
           "attribute = #{attribute,jdbcType=LONGVARCHAR}",
         "where id = #{id,jdbcType=VARCHAR}"
@@ -118,7 +123,9 @@ public interface TbProductMapper {
           "last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},",
           "last_update_id = #{lastUpdateId,jdbcType=INTEGER},",
           "state = #{state,jdbcType=INTEGER},",
-          "tags = #{tags,jdbcType=VARCHAR}",
+          "tags = #{tags,jdbcType=VARCHAR},",
+          "storehouse_ids = #{storehouseIds,jdbcType=VARCHAR},",
+          "postage_id = #{postageId,jdbcType=INTEGER}",
         "where id = #{id,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(TbProduct record);

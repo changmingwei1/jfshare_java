@@ -25,7 +25,10 @@ public interface IProductSvc {
 
     String updateProduct(Product product);
 
+    @Deprecated
     ProductSku getProductHotSku(String productId, String skuNum);
+
+    ProductSku getProductHotSku(String productId, int storehouseId, String skuNum);
 
     FailDesc updateProductState(ProductOpt productOpt) throws InterruptedException;
     

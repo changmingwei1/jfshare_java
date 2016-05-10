@@ -66,6 +66,17 @@ public class ProductDaoImpl implements IProductDao {
     }
 
     @Override
+    public TbProductSku getProductHotSku(String productId, int storehouseId, String skuNum) {
+        TbProductSkuExample example = new TbProductSkuExample();
+        TbProductSkuExample.Criteria criteria = example.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        criteria.andStorehouseIdEqualTo(storehouseId);
+        criteria.andSkuNumEqualTo(ConvertUtil.getString(skuNum));
+        List<TbProductSku> tbProductSkus = tbProductSkuMapper.selectByExample(example);
+        return tbProductSkus.size() > 0 ? tbProductSkus.get(0) : null;
+    }
+
+    @Override
     public void addProduct(TbProductWithBLOBs tbProduct) {
         tbProductMapper.insertSelective(tbProduct);
     }

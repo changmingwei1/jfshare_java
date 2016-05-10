@@ -6,13 +6,26 @@
 package com.jfshare.finagle.thrift.product;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.thrift.*;
-import org.apache.thrift.meta_data.FieldMetaData;
-import org.apache.thrift.meta_data.ListMetaData;
-import org.apache.thrift.meta_data.StructMetaData;
-import org.apache.thrift.protocol.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.EnumSet;
+import java.util.Collections;
+import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import org.apache.thrift.*;
+import org.apache.thrift.async.*;
+import org.apache.thrift.meta_data.*;
+import org.apache.thrift.transport.*;
+import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
@@ -428,14 +441,14 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
         case 3: // PRODUCT_SURVEY_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list17 = iprot.readListBegin();
-            this.productSurveyList = new ArrayList<ProductSurvey>(_list17.size);
-            for (int _i18 = 0; _i18 < _list17.size; ++_i18)
+            TList _list16 = iprot.readListBegin();
+            this.productSurveyList = new ArrayList<ProductSurvey>(_list16.size);
+            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
             {
-              ProductSurvey _elem19;
-              _elem19 = new ProductSurvey();
-              _elem19.read(iprot);
-              this.productSurveyList.add(_elem19);
+              ProductSurvey _elem18;
+              _elem18 = new ProductSurvey();
+              _elem18.read(iprot);
+              this.productSurveyList.add(_elem18);
             }
             iprot.readListEnd();
             }
@@ -475,9 +488,9 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
         oprot.writeFieldBegin(PRODUCT_SURVEY_LIST_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.productSurveyList.size()));
-          for (ProductSurvey _iter20 : this.productSurveyList)
+          for (ProductSurvey _iter19 : this.productSurveyList)
           {
-            _iter20.write(oprot);
+            _iter19.write(oprot);
           }
           oprot.writeListEnd();
         }

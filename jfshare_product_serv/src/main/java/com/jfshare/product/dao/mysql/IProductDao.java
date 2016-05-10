@@ -18,7 +18,10 @@ public interface IProductDao {
 
     List<TbProductSku> getProductSku(String productId);
 
+    @Deprecated
     TbProductSku getProductHotSku(String productId, String skuNum);
+
+    TbProductSku getProductHotSku(String productId, int storehouseId, String skuNum);
 
     void addProduct(TbProductWithBLOBs tbProduct);
 

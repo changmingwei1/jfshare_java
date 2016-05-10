@@ -4,85 +4,79 @@ import java.io.Serializable;
 
 /**
  * *************************************************************************
+ *
  * @文件名称: Page.java
- *
- * @包路径  : com.jfshare.product.model.vo 
- *				 
+ * @包路径 : com.jfshare.product.model.vo
  * @版权所有: (C) 2015
- *
- * @类描述:  分页模版
- * 
- * @创建人:   ljx 
- *
- * @创建时间: 2015年10月19日 - 下午9:38:41 
- *	
- **************************************************************************
+ * @类描述: 分页模版
+ * @创建人: ljx
+ * @创建时间: 2015年10月19日 - 下午9:38:41
+ * <p>
+ * *************************************************************************
  */
-public class Page implements Serializable{
+public class Page implements Serializable {
 
-	private static final long serialVersionUID = -6579435031214235862L;
+    private static final long serialVersionUID = -6579435031214235862L;
 
-	private int totalCount;				// 总记录数
-	private int pageNumCount;			// 总页数
-	private int numPerPage = 10;		// 每页记录数
-	private int currentPage = 1;		// 当前页数
-	
-	public Page(String currentPage, String numPerPage) {
-		if (currentPage == null) {
-			this.currentPage = 1;
-		} else {
-			this.currentPage = Integer.parseInt(currentPage);
-		}
-		if (numPerPage == null) {
-			this.numPerPage = 10;
-		} else {
-			this.numPerPage = Integer.parseInt(numPerPage);
-		}
-		// 计算总页数
-		this.pageNumCount = (int) Math.ceil(this.totalCount / (double) this.numPerPage);
-	}
-	
-	public Page pagination() {
-		if (currentPage == 0) {
-			this.currentPage = 1;
-		}
-		// 计算总页数
-		this.pageNumCount = (int) Math.ceil(this.totalCount / (double) this.numPerPage);
-		return this;
-	} 
+    /* 总数 */
+    private int total;
+    /* 总页数 */
+    private int pageCount;
+    /* 每页数量，默认为10 */
+    private int count;
+    /* 当前页数，默认从第一页开始 */
+    private int curPage;
+    /* 开始值 */
+    private int start;
 
-	public int getNumPerPage() {
-		return numPerPage;
-	}
+    public Page(int curPage, int count) {
+        this.count = count == 0 ? 10 : count;
+        this.curPage = curPage == 0 ? 1 : curPage;
+    }
 
-	public int getCurrentPage() {
-		return currentPage;
-	}
+    public int getTotal() {
+        return total;
+    }
 
-	public int getTotalCount() {
-		return totalCount;
-	}
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
+    public int getPageCount() {
+        return (int) Math.ceil(total / count) + 1;
+    }
 
-	public int getPageNumCount() {
-		return pageNumCount;
-	}
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
 
-	public void setPageNumCount(int pageNumCount) {
-		this.pageNumCount = pageNumCount;
-	}
+    public int getCount() {
+        return count;
+    }
 
-	public int getCurrentMinRow() {
-		return (currentPage-1) * pageNumCount;
-	}
+    public void setCount(int count) {
+        this.count = count;
+    }
 
-	public int getCurrentMaxRow() {
-		return currentPage * pageNumCount - 1;
-	}
+    public int getCurPage() {
+        return curPage;
+    }
+
+    public void setCurPage(int curPage) {
+        this.curPage = curPage;
+    }
+
+    public int getStart() {
+        return (this.curPage - 1) * count;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
 
 }
+//</editor-fold>
+//</editor-fold>
 
 

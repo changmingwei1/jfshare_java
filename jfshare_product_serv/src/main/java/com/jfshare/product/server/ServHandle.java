@@ -1,11 +1,18 @@
 package com.jfshare.product.server;
 
+import com.jfshare.finagle.thrift.pagination.Pagination;
 import com.jfshare.finagle.thrift.product.*;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.product.exceptions.BaseException;
+import com.jfshare.product.model.TbProduct;
+import com.jfshare.product.model.TbProductCard;
+import com.jfshare.product.model.manual.ProductCardStatisticsModel;
+import com.jfshare.product.model.vo.Page;
+import com.jfshare.product.service.IProductCartSvc;
 import com.jfshare.product.service.IProductSvc;
+import com.jfshare.product.util.ConvertUtil;
 import com.jfshare.product.util.FailCode;
 import com.jfshare.product.util.ResultUtil;
 import com.jfshare.product.util.ValidateUtil;
@@ -17,14 +24,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import scala.collection.parallel.ParMap;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service(value="handler")
 public class ServHandle implements ProductServ.Iface {
 	private static final transient Logger logger = LoggerFactory.getLogger(ServHandle.class);
-	@Autowired
+
+	@Resource
     private IProductSvc productSvcImpl;
+
+	@Resource
+	private IProductCartSvc productCartSvc;
 
 	@Override
 	public ProductResult queryProduct(String productId, ProductRetParam param) throws TException {
@@ -316,4 +332,194 @@ public class ServHandle implements ProductServ.Iface {
         productSurveyResult.setProductSurveyList(this.productSvcImpl.queryProductBatch(param.getFromType(), productIds));
         return productSurveyResult;
     }
+
+	@Override
+	public ProductSurveyResult productSurveyQueryByClick(ProductSurveyQueryParam param) throws TException {
+		return null;
+	}
+
+	@Override
+	public ProductResult queryHotSKUV1(ProductSkuParam skuParam, ProductRetParam param) throws TException {
+		ProductResult productResult = new ProductResult();
+		Result result = new Result();
+		result.setCode(0);
+		productResult.setResult(result);
+		if (param == null || StringUtil.isNullOrEmpty(skuParam.getProductId())) {
+			FailCode.addFails(result, FailCode.PARAM_ERROR);
+			return productResult;
+		}
+		try {
+			param.setSkuTag(0);
+			Product product = productSvcImpl.queryProduct(skuParam.getProductId(), param);
+			if (product != null) {
+				ProductSku productHotSku = productSvcImpl.getProductHotSku(skuParam.getProductId(), skuParam.getStorehouseId(), skuParam.getSkuNum());
+				if (productHotSku != null) {
+					product.setProductSku(productHotSku);
+					productResult.setProduct(product);
+				} else {
+					FailCode.addFails(result, FailCode.PRODUCT_SKU_NULL_ERROR);
+				}
+			} else {
+				FailCode.addFails(result, FailCode.PRODUCT_NULL_ERROR);
+			}
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryHotSKUV1 error !! ---- skuParam : " + skuParam.toString() + ",param=" + param.toString(), e);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+		}
+
+		return productResult;
+	}
+
+	@Override
+	public ProductCardResult getProductCard(ProductCardParam param) throws TException {
+		logger.info(">>>> getProductCard --- param : " + param.toString());
+		ProductCardResult productCardResult = new ProductCardResult();
+		Result result = new Result();
+		productCardResult.setResult(result);
+		Map queryMap = new HashMap();
+		queryMap.put("productId", param.getProductId());
+		queryMap.put("transactionId", param.getTransactionId());
+		queryMap.put("num", param.getNum());
+
+		StringBuffer cards = null;
+		List<ProductCard> productCards = new ArrayList<ProductCard>();
+		try {
+			List<TbProductCard> tbProductCards = this.productCartSvc.getProductCard(queryMap);
+			if (CollectionUtils.isEmpty(tbProductCards)) {
+                result.setCode(1);
+                result.addToFailDescList(FailCode.PRODUCT_CARD_GET_FAIL);
+                logger.error("<<<<<<<< getProductCard error !! --- param : " + param.toString());
+                return productCardResult;
+            }
+			cards = new StringBuffer();
+			for (TbProductCard tbProductCard : tbProductCards) {
+                productCards.add(ConvertUtil.tbProductCard2Thrift(tbProductCard));
+                cards.append(" ").append(tbProductCard.getCardNumber());
+            }
+		} catch (Exception e) {
+			logger.error("<<<<<<<< getProductCard error !! --- param : " + param.toString(), e);
+		}
+		logger.info("<<<< getProductCard ---- success !! param : {} , cards :{}", param.toString(), cards.toString());
+		productCardResult.setCardList(productCards);
+		return productCardResult;
+	}
+
+	@Override
+	public ProductCardResult queryProductCard(ProductCardParam param) throws TException {
+		ProductCardResult productCardResult = new ProductCardResult();
+		Result result = new Result();
+		productCardResult.setResult(result);
+
+		if (param.getTransactionId() == null) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.PARAM_ERROR);
+			return productCardResult;
+		}
+
+		Map queryMap = new HashMap();
+		queryMap.put("productId", param.getProductId());
+		queryMap.put("transactionId", param.getTransactionId());
+		try {
+			List<TbProductCard> tbProductCards = this.productCartSvc.queryProductCard(queryMap);
+			List<ProductCard> productCards = new ArrayList<ProductCard>();
+			if (CollectionUtils.isEmpty(tbProductCards)) {
+                productCardResult.setCardList(productCards);
+                return productCardResult;
+            }
+			for (TbProductCard tbProductCard : tbProductCards) {
+                productCardResult.addToCardList(ConvertUtil.tbProductCard2Thrift(tbProductCard));
+            }
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryProductCard error !! --- param : " + param.toString(), e);
+		}
+		return productCardResult;
+	}
+
+	@Override
+	public ProductCardStatisticsResult statisticsProductCard(ProductCardStatisticsParam param, Pagination pagination) throws TException {
+
+		ProductCardStatisticsResult productCardStatisticsResult = new ProductCardStatisticsResult();
+		Result result = new Result();
+		productCardStatisticsResult.setResult(result);
+		List<ProductCardStatistics> productCardStatisticsList = new ArrayList<ProductCardStatistics>();
+
+		if (param.getSellerId() == 0) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.PARAM_ERROR);
+			return productCardStatisticsResult;
+		}
+
+		Page page = new Page(pagination.getCurrentPage(), pagination.getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("sellerId", param.getSellerId());
+		queryMap.put("productName", param.getProductName());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		// 查询总数
+		int total = this.productCartSvc.statisticsProductCardCount(queryMap);
+		page.setTotal(total);
+
+		// 获取数据
+		List<ProductCardStatisticsModel> statisticsModels = this.productCartSvc.statisticsProductCard(queryMap);
+		for (ProductCardStatisticsModel statisticsModel : statisticsModels) {
+			productCardStatisticsList.add(ConvertUtil.productCardStatisticsModel2Thrift(statisticsModel));
+		}
+
+		productCardStatisticsResult.setCardtatisticsList(productCardStatisticsList);
+		productCardStatisticsResult.setPagination(ConvertUtil.page2Pagination(page));
+		return productCardStatisticsResult;
+	}
+
+	@Override
+	public ProductCardViewListResult queryProductCardViewList(ProductCardViewParam param, Pagination pagination) throws TException {
+		ProductCardViewListResult productCardViewListResult = new ProductCardViewListResult();
+		Result result = new Result();
+		productCardViewListResult.setResult(result);
+
+		if(param.getSellerId() == 0) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.PARAM_ERROR);
+			return  productCardViewListResult;
+		}
+
+		List<ProductCardView> productCardViews = new ArrayList<ProductCardView>();
+
+		Page page = new Page(pagination.getCurrentPage(), pagination.getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("sellerId", param.getSellerId());
+		queryMap.put("productId", param.getProductId());
+		queryMap.put("cardNumber", param.getCardNumber());
+		queryMap.put("state", param.getState() == 0 ? null : param.getState());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		// 查询总数
+		int total = this.productCartSvc.queryProductCardViewListCount(queryMap);
+		page.setTotal(total);
+
+		List<TbProductCard> tbProductCards = this.productCartSvc.queryProductCardViewList(queryMap);
+		for (TbProductCard tbProductCard : tbProductCards) {
+			productCardViews.add(ConvertUtil.tbProductCard2ViewThrift(tbProductCard));
+		}
+		productCardViewListResult.setCardViewList(productCardViews);
+		return productCardViewListResult;
+	}
+
+	@Override
+	public Result useProductCard(ProductCard productCard) throws TException {
+
+		logger.info(">>>> useProductCard --- productCard : {}", productCard.toString());
+		Result result = new Result();
+		TbProductCard tbProductCard = ConvertUtil.thrift2TbProductCard(productCard);
+		int num = this.productCartSvc.useProductCard(tbProductCard);
+		if (num == 0) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.PRODUCT_CARD_USE_FAIL);
+			logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString());
+		}
+		return result;
+	}
 }

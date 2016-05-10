@@ -10,6 +10,7 @@ import com.jfshare.utils.BeanUtil;
 import com.jfshare.utils.JsonMapper;
 import com.jfshare.utils.PriceUtils;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,7 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -66,13 +69,15 @@ public class ProductRedisImpl implements ProductRedis{
         }
         ProductSku productSku = new ProductSku();
         int minCurPrice=Integer.MAX_VALUE, maxCurPrice=0, minOrgPrice=Integer.MAX_VALUE,maxOrgPrice=0;
-        Map<String, ProductSkuItem> productSkuMap = new HashMap<String, ProductSkuItem>();
+//        Map<String, ProductSkuItem> productSkuMap = new HashMap<String, ProductSkuItem>();
+        List<ProductSkuItem> skuItems = new ArrayList<ProductSkuItem>();
         for(String key : cacheSkuMap.keySet()) {
             if ("".endsWith(key)) {
                 productSku = JsonMapper.toObject(cacheSkuMap.get(key), ProductSku.class);
             } else {
-                ProductSkuItem productSkuItem = (ProductSkuItem)JsonMapper.toObject(cacheSkuMap.get(key), ProductSkuItem.class);
-                productSkuMap.put(key, productSkuItem);
+                ProductSkuItem productSkuItem = JsonMapper.toObject(cacheSkuMap.get(key), ProductSkuItem.class);
+//                productSkuMap.put(key, productSkuItem);
+                skuItems.add(productSkuItem);
                 int curPrice = PriceUtils.strToInt(productSkuItem.getCurPrice());
                 int orgPrice = PriceUtils.strToInt(productSkuItem.getOrgPrice());
 
@@ -91,12 +96,12 @@ public class ProductRedisImpl implements ProductRedis{
             }
         }
 
-        if (productSkuMap.size() > 0) {
+        if (skuItems.size() > 0) {
             productSku.setMinCurPrice(PriceUtils.intToStr(minCurPrice));
             productSku.setMaxCurPrice(PriceUtils.intToStr(maxCurPrice));
             productSku.setMinOrgPrice(PriceUtils.intToStr(minOrgPrice));
             productSku.setMaxOrgPrice(PriceUtils.intToStr(maxOrgPrice));
-            productSku.setProductSkuMap(productSkuMap);
+            productSku.setSkuItems(skuItems);
         }
         return productSku;
     }
@@ -116,6 +121,22 @@ public class ProductRedisImpl implements ProductRedis{
     }
 
     @Override
+    public ProductSku getProductSkuSingle(String productId, int storehouseId, String skuNum) {
+        String productSkuItemJson = baseRedis.getMap(ConstRedis.CACHE_PRODUCT_SKU_PREFIX + productId, storehouseId + ":" + skuNum);
+        if(StringUtils.isBlank(productSkuItemJson)) {
+            return null;
+        }
+        ProductSkuItem productSkuItem = JsonMapper.toObject(productSkuItemJson, ProductSkuItem.class);
+       /* Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(productSkuItem);
+        ProductSku productSku = new ProductSku();
+        BeanUtil.fillBeanData(productSku, stringObjectMap);*/
+        ProductSku productSku = new ProductSku();
+        productSku.addToSkuItems(productSkuItem);
+        productSku.setSkuNum(skuNum);
+        return productSku;
+    }
+
+    @Override
     public boolean setProductCache(Product product) {
         String productId = product.getProductId();
         Map<String, String> productMap = BeanUtil.transThrift2StringMap(product);
@@ -124,14 +145,16 @@ public class ProductRedisImpl implements ProductRedis{
 
     @Override
     public boolean setProductSkuCache(String productId, ProductSku productSku) {
-        Map<String, ProductSkuItem> skuItemMap = productSku.getProductSkuMap();
+//        Map<String, ProductSkuItem> skuItemMap = productSku.getProductSkuMap();
+        List<ProductSkuItem> productSkuItems = productSku.getSkuItems();
         Map<String, String> cacheSkuMap = new HashMap<String, String>();
-        if(MapUtils.isEmpty(skuItemMap)) {
+        if(CollectionUtils.isEmpty(productSkuItems)) {
             //无sku商品
             cacheSkuMap.put("", JsonMapper.toJsonNotNull(productSku));
         } else {
-            for(String key : skuItemMap.keySet()) {
-                cacheSkuMap.put(key, JsonMapper.toJsonNotNull(skuItemMap.get(key)));
+            for(ProductSkuItem skuItem : productSkuItems) {
+                // 缓存中的key换成  仓库ID:skuNum
+                cacheSkuMap.put(skuItem.getStorehouseId() + ":" + skuItem.getSkuNum(), JsonMapper.toJsonNotNull(skuItem));
             }
         }
         return baseRedis.putMap(ConstRedis.CACHE_PRODUCT_SKU_PREFIX + productId, cacheSkuMap);
