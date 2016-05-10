@@ -8,6 +8,7 @@ import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.model.mapper.TbProductCardMapper;
 import com.jfshare.product.model.mapper.manual.ManualTbProductCardMapper;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Map;
 /**
  * Created by Lenovo on 2016/4/28.
  */
+@Repository
 public class ProductCardDaoImpl implements IProductCardDao {
 
     @Resource
