@@ -7,7 +7,7 @@
         <result column="name" property="productName" jdbcType="VARCHAR"/>
         <result column="total" property="total" jdbcType="INTEGER"/>
         <result column="unused" property="unusedNum" jdbcType="INTEGER"/>
-        <result column="create_time" property="createTime" jdbcType="DATETIME"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <select id="selectAvailableCard" parameterType="map" resultType="com.jfshare.product.model.TbProductCard">
