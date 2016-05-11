@@ -35,17 +35,20 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
   private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)1);
   private static final TField TRANSACTION_ID_FIELD_DESC = new TField("transactionId", TType.STRING, (short)2);
   private static final TField NUM_FIELD_DESC = new TField("num", TType.I32, (short)3);
+  private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)4);
 
 
   public String productId;
   public String transactionId;
   public int num;
+  public String skuNum;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     PRODUCT_ID((short)1, "productId"),
     TRANSACTION_ID((short)2, "transactionId"),
-    NUM((short)3, "num");
+    NUM((short)3, "num"),
+    SKU_NUM((short)4, "skuNum");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -66,6 +69,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
   	return TRANSACTION_ID;
         case 3: // NUM
   	return NUM;
+        case 4: // SKU_NUM
+  	return SKU_NUM;
         default:
   	return null;
       }
@@ -119,6 +124,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.NUM, new FieldMetaData("num", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductCardParam.class, metaDataMap);
   }
@@ -130,13 +137,15 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
   public ProductCardParam(
     String productId,
     String transactionId,
-    int num)
+    int num,
+    String skuNum)
   {
     this();
     this.productId = productId;
     this.transactionId = transactionId;
     this.num = num;
     setNumIsSet(true);
+    this.skuNum = skuNum;
   }
 
   /**
@@ -152,6 +161,9 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       this.transactionId = other.transactionId;
     }
     this.num = other.num;
+    if (other.isSetSkuNum()) {
+      this.skuNum = other.skuNum;
+    }
   }
 
   public ProductCardParam deepCopy() {
@@ -164,6 +176,7 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     this.transactionId = null;
     setNumIsSet(false);
     this.num = 0;
+    this.skuNum = null;
   }
 
   public String getProductId() {
@@ -240,6 +253,31 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     __isset_bit_vector.set(__NUM_ISSET_ID, value);
   }
 
+  public String getSkuNum() {
+    return this.skuNum;
+  }
+
+  public ProductCardParam setSkuNum(String skuNum) {
+    this.skuNum = skuNum;
+    
+    return this;
+  }
+
+  public void unsetSkuNum() {
+    this.skuNum = null;
+  }
+
+  /** Returns true if field skuNum is set (has been asigned a value) and false otherwise */
+  public boolean isSetSkuNum() {
+    return this.skuNum != null;
+  }
+
+  public void setSkuNumIsSet(boolean value) {
+    if (!value) {
+      this.skuNum = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -263,6 +301,13 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
         setNum((Integer)value);
       }
       break;
+    case SKU_NUM:
+      if (value == null) {
+        unsetSkuNum();
+      } else {
+        setSkuNum((String)value);
+      }
+      break;
     }
   }
 
@@ -274,6 +319,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       return getTransactionId();
     case NUM:
       return new Integer(getNum());
+    case SKU_NUM:
+      return getSkuNum();
     }
     throw new IllegalStateException();
   }
@@ -291,6 +338,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       return isSetTransactionId();
     case NUM:
       return isSetNum();
+    case SKU_NUM:
+      return isSetSkuNum();
     }
     throw new IllegalStateException();
   }
@@ -331,6 +380,14 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       if (this.num != that.num)
         return false;
     }
+    boolean this_present_skuNum = true && this.isSetSkuNum();
+    boolean that_present_skuNum = true && that.isSetSkuNum();
+    if (this_present_skuNum || that_present_skuNum) {
+      if (!(this_present_skuNum && that_present_skuNum))
+        return false;
+      if (!this.skuNum.equals(that.skuNum))
+        return false;
+    }
 
     return true;
   }
@@ -350,6 +407,10 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     builder.append(present_num);
     if (present_num)
       builder.append(num);
+    boolean present_skuNum = true && (isSetSkuNum());
+    builder.append(present_skuNum);
+    if (present_skuNum)
+      builder.append(skuNum);
     return builder.toHashCode();
   }
 
@@ -387,6 +448,16 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     }
     if (isSetNum()) {
       lastComparison = TBaseHelper.compareTo(this.num, typedOther.num);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetSkuNum()).compareTo(typedOther.isSetSkuNum());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSkuNum()) {
+      lastComparison = TBaseHelper.compareTo(this.skuNum, typedOther.skuNum);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -431,6 +502,13 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 4: // SKU_NUM
+          if (field.type == TType.STRING) {
+            this.skuNum = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -459,6 +537,11 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     oprot.writeFieldBegin(NUM_FIELD_DESC);
     oprot.writeI32(this.num);
     oprot.writeFieldEnd();
+    if (this.skuNum != null) {
+      oprot.writeFieldBegin(SKU_NUM_FIELD_DESC);
+      oprot.writeString(this.skuNum);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -485,6 +568,14 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     if (!first) sb.append(", ");
     sb.append("num:");
     sb.append(this.num);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("skuNum:");
+    if (this.skuNum == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.skuNum);
+    }
     first = false;
     sb.append(")");
     return sb.toString();

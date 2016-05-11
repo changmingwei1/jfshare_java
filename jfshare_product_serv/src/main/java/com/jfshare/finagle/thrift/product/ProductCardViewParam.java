@@ -36,19 +36,22 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
   private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)2);
   private static final TField CARD_NUMBER_FIELD_DESC = new TField("cardNumber", TType.STRING, (short)3);
   private static final TField STATE_FIELD_DESC = new TField("state", TType.I32, (short)4);
+  private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)5);
 
 
   public int sellerId;
   public String productId;
   public String cardNumber;
   public int state;
+  public String skuNum;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SELLER_ID((short)1, "sellerId"),
     PRODUCT_ID((short)2, "productId"),
     CARD_NUMBER((short)3, "cardNumber"),
-    STATE((short)4, "state");
+    STATE((short)4, "state"),
+    SKU_NUM((short)5, "skuNum");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -71,6 +74,8 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
   	return CARD_NUMBER;
         case 4: // STATE
   	return STATE;
+        case 5: // SKU_NUM
+  	return SKU_NUM;
         default:
   	return null;
       }
@@ -127,6 +132,8 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.STATE, new FieldMetaData("state", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductCardViewParam.class, metaDataMap);
   }
@@ -139,7 +146,8 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
     int sellerId,
     String productId,
     String cardNumber,
-    int state)
+    int state,
+    String skuNum)
   {
     this();
     this.sellerId = sellerId;
@@ -148,6 +156,7 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
     this.cardNumber = cardNumber;
     this.state = state;
     setStateIsSet(true);
+    this.skuNum = skuNum;
   }
 
   /**
@@ -164,6 +173,9 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
       this.cardNumber = other.cardNumber;
     }
     this.state = other.state;
+    if (other.isSetSkuNum()) {
+      this.skuNum = other.skuNum;
+    }
   }
 
   public ProductCardViewParam deepCopy() {
@@ -178,6 +190,7 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
     this.cardNumber = null;
     setStateIsSet(false);
     this.state = 0;
+    this.skuNum = null;
   }
 
   public int getSellerId() {
@@ -278,6 +291,31 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
     __isset_bit_vector.set(__STATE_ISSET_ID, value);
   }
 
+  public String getSkuNum() {
+    return this.skuNum;
+  }
+
+  public ProductCardViewParam setSkuNum(String skuNum) {
+    this.skuNum = skuNum;
+    
+    return this;
+  }
+
+  public void unsetSkuNum() {
+    this.skuNum = null;
+  }
+
+  /** Returns true if field skuNum is set (has been asigned a value) and false otherwise */
+  public boolean isSetSkuNum() {
+    return this.skuNum != null;
+  }
+
+  public void setSkuNumIsSet(boolean value) {
+    if (!value) {
+      this.skuNum = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_ID:
@@ -308,6 +346,13 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
         setState((Integer)value);
       }
       break;
+    case SKU_NUM:
+      if (value == null) {
+        unsetSkuNum();
+      } else {
+        setSkuNum((String)value);
+      }
+      break;
     }
   }
 
@@ -321,6 +366,8 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
       return getCardNumber();
     case STATE:
       return new Integer(getState());
+    case SKU_NUM:
+      return getSkuNum();
     }
     throw new IllegalStateException();
   }
@@ -340,6 +387,8 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
       return isSetCardNumber();
     case STATE:
       return isSetState();
+    case SKU_NUM:
+      return isSetSkuNum();
     }
     throw new IllegalStateException();
   }
@@ -388,6 +437,14 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
       if (this.state != that.state)
         return false;
     }
+    boolean this_present_skuNum = true && this.isSetSkuNum();
+    boolean that_present_skuNum = true && that.isSetSkuNum();
+    if (this_present_skuNum || that_present_skuNum) {
+      if (!(this_present_skuNum && that_present_skuNum))
+        return false;
+      if (!this.skuNum.equals(that.skuNum))
+        return false;
+    }
 
     return true;
   }
@@ -411,6 +468,10 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
     builder.append(present_state);
     if (present_state)
       builder.append(state);
+    boolean present_skuNum = true && (isSetSkuNum());
+    builder.append(present_skuNum);
+    if (present_skuNum)
+      builder.append(skuNum);
     return builder.toHashCode();
   }
 
@@ -458,6 +519,16 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
     }
     if (isSetState()) {
       lastComparison = TBaseHelper.compareTo(this.state, typedOther.state);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetSkuNum()).compareTo(typedOther.isSetSkuNum());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSkuNum()) {
+      lastComparison = TBaseHelper.compareTo(this.skuNum, typedOther.skuNum);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -510,6 +581,13 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 5: // SKU_NUM
+          if (field.type == TType.STRING) {
+            this.skuNum = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -541,6 +619,11 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
     oprot.writeFieldBegin(STATE_FIELD_DESC);
     oprot.writeI32(this.state);
     oprot.writeFieldEnd();
+    if (this.skuNum != null) {
+      oprot.writeFieldBegin(SKU_NUM_FIELD_DESC);
+      oprot.writeString(this.skuNum);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -571,6 +654,14 @@ public class ProductCardViewParam implements TBase<ProductCardViewParam, Product
     if (!first) sb.append(", ");
     sb.append("state:");
     sb.append(this.state);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("skuNum:");
+    if (this.skuNum == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.skuNum);
+    }
     first = false;
     sb.append(")");
     return sb.toString();

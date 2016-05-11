@@ -38,6 +38,7 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
   private static final TField USED_NUM_FIELD_DESC = new TField("usedNum", TType.I32, (short)4);
   private static final TField UNUSED_NUM_FIELD_DESC = new TField("unusedNum", TType.I32, (short)5);
   private static final TField CREATE_TIME_FIELD_DESC = new TField("createTime", TType.STRING, (short)6);
+  private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)7);
 
 
   public String productId;
@@ -46,6 +47,7 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
   public int usedNum;
   public int unusedNum;
   public String createTime;
+  public String skuNum;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -54,7 +56,8 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
     TOTAL((short)3, "total"),
     USED_NUM((short)4, "usedNum"),
     UNUSED_NUM((short)5, "unusedNum"),
-    CREATE_TIME((short)6, "createTime");
+    CREATE_TIME((short)6, "createTime"),
+    SKU_NUM((short)7, "skuNum");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -81,6 +84,8 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
   	return UNUSED_NUM;
         case 6: // CREATE_TIME
   	return CREATE_TIME;
+        case 7: // SKU_NUM
+  	return SKU_NUM;
         default:
   	return null;
       }
@@ -142,6 +147,8 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.CREATE_TIME, new FieldMetaData("createTime", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductCardStatistics.class, metaDataMap);
   }
@@ -156,7 +163,8 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
     int total,
     int usedNum,
     int unusedNum,
-    String createTime)
+    String createTime,
+    String skuNum)
   {
     this();
     this.productId = productId;
@@ -168,6 +176,7 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
     this.unusedNum = unusedNum;
     setUnusedNumIsSet(true);
     this.createTime = createTime;
+    this.skuNum = skuNum;
   }
 
   /**
@@ -188,6 +197,9 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
     if (other.isSetCreateTime()) {
       this.createTime = other.createTime;
     }
+    if (other.isSetSkuNum()) {
+      this.skuNum = other.skuNum;
+    }
   }
 
   public ProductCardStatistics deepCopy() {
@@ -205,6 +217,7 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
     setUnusedNumIsSet(false);
     this.unusedNum = 0;
     this.createTime = null;
+    this.skuNum = null;
   }
 
   public String getProductId() {
@@ -354,6 +367,31 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
     }
   }
 
+  public String getSkuNum() {
+    return this.skuNum;
+  }
+
+  public ProductCardStatistics setSkuNum(String skuNum) {
+    this.skuNum = skuNum;
+    
+    return this;
+  }
+
+  public void unsetSkuNum() {
+    this.skuNum = null;
+  }
+
+  /** Returns true if field skuNum is set (has been asigned a value) and false otherwise */
+  public boolean isSetSkuNum() {
+    return this.skuNum != null;
+  }
+
+  public void setSkuNumIsSet(boolean value) {
+    if (!value) {
+      this.skuNum = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -398,6 +436,13 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
         setCreateTime((String)value);
       }
       break;
+    case SKU_NUM:
+      if (value == null) {
+        unsetSkuNum();
+      } else {
+        setSkuNum((String)value);
+      }
+      break;
     }
   }
 
@@ -415,6 +460,8 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
       return new Integer(getUnusedNum());
     case CREATE_TIME:
       return getCreateTime();
+    case SKU_NUM:
+      return getSkuNum();
     }
     throw new IllegalStateException();
   }
@@ -438,6 +485,8 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
       return isSetUnusedNum();
     case CREATE_TIME:
       return isSetCreateTime();
+    case SKU_NUM:
+      return isSetSkuNum();
     }
     throw new IllegalStateException();
   }
@@ -502,6 +551,14 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
       if (!this.createTime.equals(that.createTime))
         return false;
     }
+    boolean this_present_skuNum = true && this.isSetSkuNum();
+    boolean that_present_skuNum = true && that.isSetSkuNum();
+    if (this_present_skuNum || that_present_skuNum) {
+      if (!(this_present_skuNum && that_present_skuNum))
+        return false;
+      if (!this.skuNum.equals(that.skuNum))
+        return false;
+    }
 
     return true;
   }
@@ -533,6 +590,10 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
     builder.append(present_createTime);
     if (present_createTime)
       builder.append(createTime);
+    boolean present_skuNum = true && (isSetSkuNum());
+    builder.append(present_skuNum);
+    if (present_skuNum)
+      builder.append(skuNum);
     return builder.toHashCode();
   }
 
@@ -604,6 +665,16 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetSkuNum()).compareTo(typedOther.isSetSkuNum());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSkuNum()) {
+      lastComparison = TBaseHelper.compareTo(this.skuNum, typedOther.skuNum);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -667,6 +738,13 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 7: // SKU_NUM
+          if (field.type == TType.STRING) {
+            this.skuNum = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -704,6 +782,11 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
     if (this.createTime != null) {
       oprot.writeFieldBegin(CREATE_TIME_FIELD_DESC);
       oprot.writeString(this.createTime);
+      oprot.writeFieldEnd();
+    }
+    if (this.skuNum != null) {
+      oprot.writeFieldBegin(SKU_NUM_FIELD_DESC);
+      oprot.writeString(this.skuNum);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -747,6 +830,14 @@ public class ProductCardStatistics implements TBase<ProductCardStatistics, Produ
       sb.append("null");
     } else {
       sb.append(this.createTime);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("skuNum:");
+    if (this.skuNum == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.skuNum);
     }
     first = false;
     sb.append(")");
