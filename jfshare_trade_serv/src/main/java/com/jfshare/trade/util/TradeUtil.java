@@ -41,6 +41,7 @@ public class TradeUtil {
             lockInfo.setSkuNum(productInfo.getSkuNum());
             lockInfo.setApplyCount(productInfo.getCount());
             lockInfo.setLockCount(0);
+            lockInfo.setStorehouseId(productInfo.getStorehouseId());
 
             lockInfos.add(lockInfo);
         }
@@ -168,7 +169,22 @@ public class TradeUtil {
     public static int getRealPayPrice(Order item) {
         int totalAmount = PriceUtils.strToInt(item.getClosingPrice());
         totalAmount -= PriceUtils.strToInt(item.getExchangeCash());
+        totalAmount += PriceUtils.strToInt(item.getPostage());
 
         return totalAmount;
+    }
+
+    /**
+     * 获取买家支付非邮费部分金额
+     * @param buyInfo
+     * @param orderList
+     * @return
+     */
+    public static int getPostageAmount(BuyInfo buyInfo, List<Order> orderList) {
+        int totalPostage = 0;
+        for(Order order : orderList)
+            totalPostage += PriceUtils.strToInt(order.getPostage());
+
+        return totalPostage;
     }
 }

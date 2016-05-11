@@ -21,6 +21,7 @@ import com.jfshare.finagle.thrift.seller.Seller;
 import com.jfshare.finagle.thrift.stock.StockInfo;
 import com.jfshare.utils.BeanUtil;
 import com.jfshare.utils.ConvertUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class ProductService {
 		}
 
 		StockInfo stockForSku = stockClient.getStockForSku(productId, skuNum);
-		if(stockForSku == null || stockForSku.getStockItemMap() == null){
+		if(stockForSku == null || CollectionUtils.isEmpty(stockForSku.getStockItems())){
 			LOGGER.info(param + ",getStockForSku库存信息返回错误");
 			return null;
 		}
@@ -83,7 +84,7 @@ public class ProductService {
 		ProductSkuInfo p = new ProductSkuInfo();
 		p.setCurrBuy(currBuy);
 		p.setMaxBuyLimit(pBase.getMaxBuyLimit());
-		p.setSkuStock(NumberUtil.parseInteger(stockForSku.getStockItemMap().get(skuNum).getCount()));
+		p.setSkuStock(stockForSku.getTotal());
 		p.setTotalStock(stockForSku.getTotal());
 		
 		LOGGER.info(param + ",getProductSkuInfo接口调用时间：" + (System.currentTimeMillis() - doneTime) + " ms!!");
@@ -142,7 +143,7 @@ public class ProductService {
 		//填充productSku
 		productSku.setSkuNum(cart.getSkuNum());
 		//SKU
-		if(pHotSku.getProductSku() == null || stockForSku.getStockItemMap() == null || !stockForSku.getStockItemMap().containsKey(cart.getSkuNum())){	//SKU不存在，此商品失效
+		if(pHotSku.getProductSku() == null){	//SKU不存在，此商品失效
 			goods.setInvalidProductInfo(itemPlus);
 		}else{
 			productSku.setCurPrice(pHotSku.getProductSku().getCurPrice());
@@ -151,8 +152,8 @@ public class ProductService {
 				productSku.setVPicture(pHotSku.getProductSku().getVPicture());
 			}
 			productSku.setSkuName(pHotSku.getProductSku().getSkuName());
-			itemPlus.setSkuCount(stockForSku.getStockItemMap().get(cart.getSkuNum()).getCount()); //当前sku库存数
-			itemPlus.setLockCount(stockForSku.getStockItemMap().get(cart.getSkuNum()).getLockCount()); //当前sku锁定库存数
+			itemPlus.setSkuCount(stockForSku.getTotal()); //当前sku库存数
+			itemPlus.setLockCount(stockForSku.getLockTotal()); //当前sku锁定库存数
 			
 			goods.setProductInfo(itemPlus);
 		}

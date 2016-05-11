@@ -1,5 +1,7 @@
 package com.jfshare.order.server.depend;
 
+import com.jfshare.finagle.thrift.express.ExpressInfo;
+import com.jfshare.finagle.thrift.express.ExpressInfoResult;
 import com.jfshare.finagle.thrift.express.ExpressServ;
 import com.jfshare.finagle.thrift.express.SubscribeReq;
 import com.jfshare.finagle.thrift.order.DeliverInfo;
@@ -20,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * Created by lenovo on 2015/10/31.
@@ -66,5 +69,25 @@ public class ExpressClient {
             logger.error("调用ExpressServ--失败", e);
             return false;
         }
+    }
+
+    public List<ExpressInfo> query()
+    {
+
+        List<ExpressInfo> listExpress = null;
+        try {
+
+            ExpressInfoResult addressInfoResult = Await.result(service.query());
+
+            if(addressInfoResult.getResult().getCode() == 0)
+                listExpress =  addressInfoResult.getExpressInfoList();
+
+        } catch (Exception e) {
+            logger.info("query异常", e);
+            e.printStackTrace();
+        }
+
+
+        return listExpress;
     }
 }

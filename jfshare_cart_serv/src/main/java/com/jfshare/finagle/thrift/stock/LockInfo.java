@@ -36,19 +36,22 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)2);
   private static final TField APPLY_COUNT_FIELD_DESC = new TField("applyCount", TType.I32, (short)3);
   private static final TField LOCK_COUNT_FIELD_DESC = new TField("lockCount", TType.I32, (short)4);
+  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.STRING, (short)5);
 
 
   public String productId;
   public String skuNum;
   public int applyCount;
   public int lockCount;
+  public String storehouseId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     PRODUCT_ID((short)1, "productId"),
     SKU_NUM((short)2, "skuNum"),
     APPLY_COUNT((short)3, "applyCount"),
-    LOCK_COUNT((short)4, "lockCount");
+    LOCK_COUNT((short)4, "lockCount"),
+    STOREHOUSE_ID((short)5, "storehouseId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -71,6 +74,8 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
   	return APPLY_COUNT;
         case 4: // LOCK_COUNT
   	return LOCK_COUNT;
+        case 5: // STOREHOUSE_ID
+  	return STOREHOUSE_ID;
         default:
   	return null;
       }
@@ -127,6 +132,8 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.LOCK_COUNT, new FieldMetaData("lockCount", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.STOREHOUSE_ID, new FieldMetaData("storehouseId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(LockInfo.class, metaDataMap);
   }
@@ -164,6 +171,9 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     }
     this.applyCount = other.applyCount;
     this.lockCount = other.lockCount;
+    if (other.isSetStorehouseId()) {
+      this.storehouseId = other.storehouseId;
+    }
   }
 
   public LockInfo deepCopy() {
@@ -178,6 +188,7 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     this.applyCount = 0;
     setLockCountIsSet(false);
     this.lockCount = 0;
+    this.storehouseId = null;
   }
 
   public String getProductId() {
@@ -278,6 +289,31 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     __isset_bit_vector.set(__LOCKCOUNT_ISSET_ID, value);
   }
 
+  public String getStorehouseId() {
+    return this.storehouseId;
+  }
+
+  public LockInfo setStorehouseId(String storehouseId) {
+    this.storehouseId = storehouseId;
+    
+    return this;
+  }
+
+  public void unsetStorehouseId() {
+    this.storehouseId = null;
+  }
+
+  /** Returns true if field storehouseId is set (has been asigned a value) and false otherwise */
+  public boolean isSetStorehouseId() {
+    return this.storehouseId != null;
+  }
+
+  public void setStorehouseIdIsSet(boolean value) {
+    if (!value) {
+      this.storehouseId = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -308,6 +344,13 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
         setLockCount((Integer)value);
       }
       break;
+    case STOREHOUSE_ID:
+      if (value == null) {
+        unsetStorehouseId();
+      } else {
+        setStorehouseId((String)value);
+      }
+      break;
     }
   }
 
@@ -321,6 +364,8 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       return new Integer(getApplyCount());
     case LOCK_COUNT:
       return new Integer(getLockCount());
+    case STOREHOUSE_ID:
+      return getStorehouseId();
     }
     throw new IllegalStateException();
   }
@@ -340,6 +385,8 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       return isSetApplyCount();
     case LOCK_COUNT:
       return isSetLockCount();
+    case STOREHOUSE_ID:
+      return isSetStorehouseId();
     }
     throw new IllegalStateException();
   }
@@ -388,6 +435,14 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
       if (this.lockCount != that.lockCount)
         return false;
     }
+    boolean this_present_storehouseId = true && this.isSetStorehouseId();
+    boolean that_present_storehouseId = true && that.isSetStorehouseId();
+    if (this_present_storehouseId || that_present_storehouseId) {
+      if (!(this_present_storehouseId && that_present_storehouseId))
+        return false;
+      if (!this.storehouseId.equals(that.storehouseId))
+        return false;
+    }
 
     return true;
   }
@@ -411,6 +466,10 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     builder.append(present_lockCount);
     if (present_lockCount)
       builder.append(lockCount);
+    boolean present_storehouseId = true && (isSetStorehouseId());
+    builder.append(present_storehouseId);
+    if (present_storehouseId)
+      builder.append(storehouseId);
     return builder.toHashCode();
   }
 
@@ -458,6 +517,16 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     }
     if (isSetLockCount()) {
       lastComparison = TBaseHelper.compareTo(this.lockCount, typedOther.lockCount);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetStorehouseId()).compareTo(typedOther.isSetStorehouseId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetStorehouseId()) {
+      lastComparison = TBaseHelper.compareTo(this.storehouseId, typedOther.storehouseId);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -510,6 +579,13 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 5: // STOREHOUSE_ID
+          if (field.type == TType.STRING) {
+            this.storehouseId = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -541,6 +617,13 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     oprot.writeFieldBegin(LOCK_COUNT_FIELD_DESC);
     oprot.writeI32(this.lockCount);
     oprot.writeFieldEnd();
+    if (this.storehouseId != null) {
+      if (isSetStorehouseId()) {
+        oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
+        oprot.writeString(this.storehouseId);
+        oprot.writeFieldEnd();
+      }
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -572,6 +655,16 @@ public class LockInfo implements TBase<LockInfo, LockInfo._Fields>, java.io.Seri
     sb.append("lockCount:");
     sb.append(this.lockCount);
     first = false;
+    if (isSetStorehouseId()) {
+      if (!first) sb.append(", ");
+      sb.append("storehouseId:");
+      if (this.storehouseId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.storehouseId);
+      }
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

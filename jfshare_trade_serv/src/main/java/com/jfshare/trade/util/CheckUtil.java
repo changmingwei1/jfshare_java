@@ -8,14 +8,15 @@ import com.jfshare.finagle.thrift.product.ProductResult;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.stock.LockInfo;
-import com.jfshare.finagle.thrift.trade.BuyInfo;
-import com.jfshare.finagle.thrift.trade.BuySellerDetail;
-import com.jfshare.finagle.thrift.trade.OrderConfirmResult;
+import com.jfshare.finagle.thrift.trade.*;
+import com.jfshare.score2cash.services.impl.ScoreToCashService;
+import com.jfshare.score2cash.utils.NumberUtil;
 import com.jfshare.trade.dao.redis.IBuyLimitRedis;
 import com.jfshare.trade.dao.redis.impl.BuyLimitRedisImpl;
 import com.jfshare.trade.model.manual.PaymentInfo;
 import com.jfshare.trade.server.depend.*;
 import com.jfshare.utils.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,10 @@ public class CheckUtil {
     private OrderClient orderClient;
     @Autowired
     private CartClient cartClient;
+    @Autowired
+    private ScoreClient scoreClient;
+    @Autowired
+    private ScoreToCashService scoreToCashService;
 
     /**
      * 确认订单参数检测
@@ -379,5 +384,66 @@ public class CheckUtil {
         }
 
         return stockClient.releaseStock(sellerOrderIdsMap, sellerDetailLockInfos);
+    }
+
+    public List<FailDesc> orderConfirmScore2Cash(BuyInfo buyInfo, List<Order> orderList) {
+        //未使用积分抵现, 直接返回
+        if(NumberUtil.parseInteger(buyInfo.getExchangeCash()) == 0 && buyInfo.getExchangeScore() == 0)
+            return null;
+
+        List<FailDesc> failDescs = new ArrayList<FailDesc>();
+        ExchangeParam param = new ExchangeParam();
+        param.setAmount(String.valueOf(TradeUtil.getPostageAmount(buyInfo, orderList)));
+        param.setScore(String.valueOf(buyInfo.getExchangeScore()));
+        param.setUserId(buyInfo.getUserId());
+        List<ExchangeProduct> productList = new ArrayList<ExchangeProduct>();
+
+        for(Order order : orderList) {
+            for(OrderInfo orderInfo : order.getProductList()) {
+                ExchangeProduct e = new ExchangeProduct();
+                e.setProductId(orderInfo.getProductId());
+                e.setSkuNum(orderInfo.getSkuNum());
+                e.setPrice(PriceUtils.intToStr(PriceUtils.strToInt(orderInfo.getRefPrice()) * orderInfo.getCount()));
+            }
+        }
+        param.setProductList(productList);
+        ExchangeResult exchangeScore = scoreToCashService.getExchangeScore(param);
+        Map<String, ExchangeDetail> orderExchangeResMap = new HashMap<String, ExchangeDetail>();
+        if(exchangeScore != null
+                && exchangeScore.getResult().getCode() == 0
+                && CollectionUtils.isNotEmpty(exchangeScore.getExchangeDetailList())) {
+            for(ExchangeDetail edetail : exchangeScore.getExchangeDetailList())
+                orderExchangeResMap.put(edetail.getProductId().concat(":").concat(edetail.getSkuNum()), edetail);
+        } else {
+            failDescs.addAll(exchangeScore.getResult().getFailDescList());
+            return failDescs;
+        }
+
+        for(Order order : orderList) {
+            int exchangeCashOrder = 0;
+            int exchangeScoreOrder = 0;
+            for(OrderInfo orderInfo : order.getProductList()) {
+                ExchangeDetail e = orderExchangeResMap.get(orderInfo.getProductId().concat(":").concat(orderInfo.getSkuNum()));
+                orderInfo.setExchangeCash(e.getAmount());
+                orderInfo.setExchangeScore(NumberUtil.parseInteger(e.getScore()));
+                exchangeCashOrder += NumberUtil.parseInteger(e.getAmount());
+                exchangeScoreOrder += NumberUtil.parseInteger(e.getScore());
+            }
+            order.setExchangeCash(String.valueOf(exchangeCashOrder));
+            order.setExchangeScore(exchangeScoreOrder);
+        }
+
+        //扣减用户积分
+        scoreClient.reduceScore(buyInfo.getUserId(), buyInfo.getExchangeScore());
+
+        return failDescs;
+    }
+
+    public List<FailDesc> orderConfirmPostage(BuyInfo buyInfo, List<Order> orderList) {
+        return null;
+    }
+
+    public void releaseScore2Cash(BuyInfo buyInfo, String transId) {
+        scoreClient.incomeScore(buyInfo.getUserId(), transId, buyInfo.getExchangeScore());
     }
 }

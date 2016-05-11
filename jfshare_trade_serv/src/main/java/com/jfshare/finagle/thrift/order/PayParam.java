@@ -440,13 +440,13 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
         case 2: // ORDER_ID_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list12 = iprot.readListBegin();
-            this.orderIdList = new ArrayList<String>(_list12.size);
-            for (int _i13 = 0; _i13 < _list12.size; ++_i13)
+            TList _list16 = iprot.readListBegin();
+            this.orderIdList = new ArrayList<String>(_list16.size);
+            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
             {
-              String _elem14;
-              _elem14 = iprot.readString();
-              this.orderIdList.add(_elem14);
+              String _elem18;
+              _elem18 = iprot.readString();
+              this.orderIdList.add(_elem18);
             }
             iprot.readListEnd();
             }
@@ -484,9 +484,9 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
       oprot.writeFieldBegin(ORDER_ID_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.orderIdList.size()));
-        for (String _iter15 : this.orderIdList)
+        for (String _iter19 : this.orderIdList)
         {
-          oprot.writeString(_iter15);
+          oprot.writeString(_iter19);
         }
         oprot.writeListEnd();
       }

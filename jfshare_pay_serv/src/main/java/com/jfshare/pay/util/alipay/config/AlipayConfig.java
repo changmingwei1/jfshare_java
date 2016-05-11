@@ -49,8 +49,13 @@ public class AlipayConfig {
 			"_input_charset=" + AlipayConfig.input_charset;
 
 	/**
+	 * RSA私钥
+	 */
+	public static final String ALIPAY_RSA_PRIVATE = "lBBK%2F0w5LOajrMrji7DUgEqNjIhQbidR13GovA5r3TgIbNqv231yC1NksLdw%2Ba3JnfHXoXuet6XNNHtn7VE%2BeCoRO1O%2BR1KugLrQEZMtG5jmJIe2pbjm%2F3kb%2FuGkpG%2BwYQYI51%2BhA3YBbvZHVQBYveBqK%2Bh8mUyb7GM1HxWs9k4%3D";
+
+	/**
 	 * 以下为商户配置参数
 	 */
-	public static String notify_url = "http://120.24.153.102:13005/pay/notify/alipay"; //后端支付通知地址
-	public static String return_url = "http://120.24.153.102:13003/pay/jump/alipay"; //前端支付通知地址
+//	public static String notify_url = "http://120.24.153.102:13005/pay/notify/alipay"; //后端支付通知地址
+//	public static String return_url = "http://120.24.153.102:13003/pay/jump/alipay"; //前端支付通知地址
 }

@@ -55,6 +55,11 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   private static final TField WI_FIELD_DESC = new TField("wi", TType.STRING, (short)21);
   private static final TField EXCHANGE_SCORE_FIELD_DESC = new TField("exchangeScore", TType.I32, (short)22);
   private static final TField EXCHANGE_CASH_FIELD_DESC = new TField("exchangeCash", TType.STRING, (short)23);
+  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.I32, (short)24);
+  private static final TField POSTAGE_TEMPLATE_ID_FIELD_DESC = new TField("postageTemplateId", TType.I32, (short)25);
+  private static final TField POSTAGE_FIELD_DESC = new TField("postage", TType.STRING, (short)26);
+  private static final TField REF_PRICE_FIELD_DESC = new TField("refPrice", TType.STRING, (short)27);
+  private static final TField THIRD_EXCHANGE_RATE_FIELD_DESC = new TField("thirdExchangeRate", TType.STRING, (short)28);
 
 
   public String orderId;
@@ -80,6 +85,11 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   public String wi;
   public int exchangeScore;
   public String exchangeCash;
+  public int storehouseId;
+  public int postageTemplateId;
+  public String postage;
+  public String refPrice;
+  public String thirdExchangeRate;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -105,7 +115,12 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     TYPE((short)20, "type"),
     WI((short)21, "wi"),
     EXCHANGE_SCORE((short)22, "exchangeScore"),
-    EXCHANGE_CASH((short)23, "exchangeCash");
+    EXCHANGE_CASH((short)23, "exchangeCash"),
+    STOREHOUSE_ID((short)24, "storehouseId"),
+    POSTAGE_TEMPLATE_ID((short)25, "postageTemplateId"),
+    POSTAGE((short)26, "postage"),
+    REF_PRICE((short)27, "refPrice"),
+    THIRD_EXCHANGE_RATE((short)28, "thirdExchangeRate");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -166,6 +181,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   	return EXCHANGE_SCORE;
         case 23: // EXCHANGE_CASH
   	return EXCHANGE_CASH;
+        case 24: // STOREHOUSE_ID
+  	return STOREHOUSE_ID;
+        case 25: // POSTAGE_TEMPLATE_ID
+  	return POSTAGE_TEMPLATE_ID;
+        case 26: // POSTAGE
+  	return POSTAGE;
+        case 27: // REF_PRICE
+  	return REF_PRICE;
+        case 28: // THIRD_EXCHANGE_RATE
+  	return THIRD_EXCHANGE_RATE;
         default:
   	return null;
       }
@@ -211,7 +236,9 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   private static final int __LASTUPDATEUSERID_ISSET_ID = 1;
   private static final int __CREATEUSERID_ISSET_ID = 2;
   private static final int __EXCHANGESCORE_ISSET_ID = 3;
-  private BitSet __isset_bit_vector = new BitSet(4);
+  private static final int __STOREHOUSEID_ISSET_ID = 4;
+  private static final int __POSTAGETEMPLATEID_ISSET_ID = 5;
+  private BitSet __isset_bit_vector = new BitSet(6);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -261,6 +288,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     tmpMap.put(_Fields.EXCHANGE_SCORE, new FieldMetaData("exchangeScore", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.EXCHANGE_CASH, new FieldMetaData("exchangeCash", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.STOREHOUSE_ID, new FieldMetaData("storehouseId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.POSTAGE_TEMPLATE_ID, new FieldMetaData("postageTemplateId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.POSTAGE, new FieldMetaData("postage", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.REF_PRICE, new FieldMetaData("refPrice", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.THIRD_EXCHANGE_RATE, new FieldMetaData("thirdExchangeRate", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(OrderInfo.class, metaDataMap);
@@ -387,6 +424,17 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     if (other.isSetExchangeCash()) {
       this.exchangeCash = other.exchangeCash;
     }
+    this.storehouseId = other.storehouseId;
+    this.postageTemplateId = other.postageTemplateId;
+    if (other.isSetPostage()) {
+      this.postage = other.postage;
+    }
+    if (other.isSetRefPrice()) {
+      this.refPrice = other.refPrice;
+    }
+    if (other.isSetThirdExchangeRate()) {
+      this.thirdExchangeRate = other.thirdExchangeRate;
+    }
   }
 
   public OrderInfo deepCopy() {
@@ -422,6 +470,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     setExchangeScoreIsSet(false);
     this.exchangeScore = 0;
     this.exchangeCash = null;
+    setStorehouseIdIsSet(false);
+    this.storehouseId = 0;
+    setPostageTemplateIdIsSet(false);
+    this.postageTemplateId = 0;
+    this.postage = null;
+    this.refPrice = null;
+    this.thirdExchangeRate = null;
   }
 
   public String getOrderId() {
@@ -995,6 +1050,129 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     }
   }
 
+  public int getStorehouseId() {
+    return this.storehouseId;
+  }
+
+  public OrderInfo setStorehouseId(int storehouseId) {
+    this.storehouseId = storehouseId;
+    setStorehouseIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetStorehouseId() {
+  __isset_bit_vector.clear(__STOREHOUSEID_ISSET_ID);
+  }
+
+  /** Returns true if field storehouseId is set (has been asigned a value) and false otherwise */
+  public boolean isSetStorehouseId() {
+    return __isset_bit_vector.get(__STOREHOUSEID_ISSET_ID);
+  }
+
+  public void setStorehouseIdIsSet(boolean value) {
+    __isset_bit_vector.set(__STOREHOUSEID_ISSET_ID, value);
+  }
+
+  public int getPostageTemplateId() {
+    return this.postageTemplateId;
+  }
+
+  public OrderInfo setPostageTemplateId(int postageTemplateId) {
+    this.postageTemplateId = postageTemplateId;
+    setPostageTemplateIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetPostageTemplateId() {
+  __isset_bit_vector.clear(__POSTAGETEMPLATEID_ISSET_ID);
+  }
+
+  /** Returns true if field postageTemplateId is set (has been asigned a value) and false otherwise */
+  public boolean isSetPostageTemplateId() {
+    return __isset_bit_vector.get(__POSTAGETEMPLATEID_ISSET_ID);
+  }
+
+  public void setPostageTemplateIdIsSet(boolean value) {
+    __isset_bit_vector.set(__POSTAGETEMPLATEID_ISSET_ID, value);
+  }
+
+  public String getPostage() {
+    return this.postage;
+  }
+
+  public OrderInfo setPostage(String postage) {
+    this.postage = postage;
+    
+    return this;
+  }
+
+  public void unsetPostage() {
+    this.postage = null;
+  }
+
+  /** Returns true if field postage is set (has been asigned a value) and false otherwise */
+  public boolean isSetPostage() {
+    return this.postage != null;
+  }
+
+  public void setPostageIsSet(boolean value) {
+    if (!value) {
+      this.postage = null;
+    }
+  }
+
+  public String getRefPrice() {
+    return this.refPrice;
+  }
+
+  public OrderInfo setRefPrice(String refPrice) {
+    this.refPrice = refPrice;
+    
+    return this;
+  }
+
+  public void unsetRefPrice() {
+    this.refPrice = null;
+  }
+
+  /** Returns true if field refPrice is set (has been asigned a value) and false otherwise */
+  public boolean isSetRefPrice() {
+    return this.refPrice != null;
+  }
+
+  public void setRefPriceIsSet(boolean value) {
+    if (!value) {
+      this.refPrice = null;
+    }
+  }
+
+  public String getThirdExchangeRate() {
+    return this.thirdExchangeRate;
+  }
+
+  public OrderInfo setThirdExchangeRate(String thirdExchangeRate) {
+    this.thirdExchangeRate = thirdExchangeRate;
+    
+    return this;
+  }
+
+  public void unsetThirdExchangeRate() {
+    this.thirdExchangeRate = null;
+  }
+
+  /** Returns true if field thirdExchangeRate is set (has been asigned a value) and false otherwise */
+  public boolean isSetThirdExchangeRate() {
+    return this.thirdExchangeRate != null;
+  }
+
+  public void setThirdExchangeRateIsSet(boolean value) {
+    if (!value) {
+      this.thirdExchangeRate = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ORDER_ID:
@@ -1158,6 +1336,41 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         setExchangeCash((String)value);
       }
       break;
+    case STOREHOUSE_ID:
+      if (value == null) {
+        unsetStorehouseId();
+      } else {
+        setStorehouseId((Integer)value);
+      }
+      break;
+    case POSTAGE_TEMPLATE_ID:
+      if (value == null) {
+        unsetPostageTemplateId();
+      } else {
+        setPostageTemplateId((Integer)value);
+      }
+      break;
+    case POSTAGE:
+      if (value == null) {
+        unsetPostage();
+      } else {
+        setPostage((String)value);
+      }
+      break;
+    case REF_PRICE:
+      if (value == null) {
+        unsetRefPrice();
+      } else {
+        setRefPrice((String)value);
+      }
+      break;
+    case THIRD_EXCHANGE_RATE:
+      if (value == null) {
+        unsetThirdExchangeRate();
+      } else {
+        setThirdExchangeRate((String)value);
+      }
+      break;
     }
   }
 
@@ -1209,6 +1422,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       return new Integer(getExchangeScore());
     case EXCHANGE_CASH:
       return getExchangeCash();
+    case STOREHOUSE_ID:
+      return new Integer(getStorehouseId());
+    case POSTAGE_TEMPLATE_ID:
+      return new Integer(getPostageTemplateId());
+    case POSTAGE:
+      return getPostage();
+    case REF_PRICE:
+      return getRefPrice();
+    case THIRD_EXCHANGE_RATE:
+      return getThirdExchangeRate();
     }
     throw new IllegalStateException();
   }
@@ -1266,6 +1489,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       return isSetExchangeScore();
     case EXCHANGE_CASH:
       return isSetExchangeCash();
+    case STOREHOUSE_ID:
+      return isSetStorehouseId();
+    case POSTAGE_TEMPLATE_ID:
+      return isSetPostageTemplateId();
+    case POSTAGE:
+      return isSetPostage();
+    case REF_PRICE:
+      return isSetRefPrice();
+    case THIRD_EXCHANGE_RATE:
+      return isSetThirdExchangeRate();
     }
     throw new IllegalStateException();
   }
@@ -1466,6 +1699,46 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       if (!this.exchangeCash.equals(that.exchangeCash))
         return false;
     }
+    boolean this_present_storehouseId = true && this.isSetStorehouseId();
+    boolean that_present_storehouseId = true && that.isSetStorehouseId();
+    if (this_present_storehouseId || that_present_storehouseId) {
+      if (!(this_present_storehouseId && that_present_storehouseId))
+        return false;
+      if (this.storehouseId != that.storehouseId)
+        return false;
+    }
+    boolean this_present_postageTemplateId = true && this.isSetPostageTemplateId();
+    boolean that_present_postageTemplateId = true && that.isSetPostageTemplateId();
+    if (this_present_postageTemplateId || that_present_postageTemplateId) {
+      if (!(this_present_postageTemplateId && that_present_postageTemplateId))
+        return false;
+      if (this.postageTemplateId != that.postageTemplateId)
+        return false;
+    }
+    boolean this_present_postage = true && this.isSetPostage();
+    boolean that_present_postage = true && that.isSetPostage();
+    if (this_present_postage || that_present_postage) {
+      if (!(this_present_postage && that_present_postage))
+        return false;
+      if (!this.postage.equals(that.postage))
+        return false;
+    }
+    boolean this_present_refPrice = true && this.isSetRefPrice();
+    boolean that_present_refPrice = true && that.isSetRefPrice();
+    if (this_present_refPrice || that_present_refPrice) {
+      if (!(this_present_refPrice && that_present_refPrice))
+        return false;
+      if (!this.refPrice.equals(that.refPrice))
+        return false;
+    }
+    boolean this_present_thirdExchangeRate = true && this.isSetThirdExchangeRate();
+    boolean that_present_thirdExchangeRate = true && that.isSetThirdExchangeRate();
+    if (this_present_thirdExchangeRate || that_present_thirdExchangeRate) {
+      if (!(this_present_thirdExchangeRate && that_present_thirdExchangeRate))
+        return false;
+      if (!this.thirdExchangeRate.equals(that.thirdExchangeRate))
+        return false;
+    }
 
     return true;
   }
@@ -1565,6 +1838,26 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     builder.append(present_exchangeCash);
     if (present_exchangeCash)
       builder.append(exchangeCash);
+    boolean present_storehouseId = true && (isSetStorehouseId());
+    builder.append(present_storehouseId);
+    if (present_storehouseId)
+      builder.append(storehouseId);
+    boolean present_postageTemplateId = true && (isSetPostageTemplateId());
+    builder.append(present_postageTemplateId);
+    if (present_postageTemplateId)
+      builder.append(postageTemplateId);
+    boolean present_postage = true && (isSetPostage());
+    builder.append(present_postage);
+    if (present_postage)
+      builder.append(postage);
+    boolean present_refPrice = true && (isSetRefPrice());
+    builder.append(present_refPrice);
+    if (present_refPrice)
+      builder.append(refPrice);
+    boolean present_thirdExchangeRate = true && (isSetThirdExchangeRate());
+    builder.append(present_thirdExchangeRate);
+    if (present_thirdExchangeRate)
+      builder.append(thirdExchangeRate);
     return builder.toHashCode();
   }
 
@@ -1806,6 +2099,56 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetStorehouseId()).compareTo(typedOther.isSetStorehouseId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetStorehouseId()) {
+      lastComparison = TBaseHelper.compareTo(this.storehouseId, typedOther.storehouseId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPostageTemplateId()).compareTo(typedOther.isSetPostageTemplateId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPostageTemplateId()) {
+      lastComparison = TBaseHelper.compareTo(this.postageTemplateId, typedOther.postageTemplateId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPostage()).compareTo(typedOther.isSetPostage());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPostage()) {
+      lastComparison = TBaseHelper.compareTo(this.postage, typedOther.postage);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetRefPrice()).compareTo(typedOther.isSetRefPrice());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetRefPrice()) {
+      lastComparison = TBaseHelper.compareTo(this.refPrice, typedOther.refPrice);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetThirdExchangeRate()).compareTo(typedOther.isSetThirdExchangeRate());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetThirdExchangeRate()) {
+      lastComparison = TBaseHelper.compareTo(this.thirdExchangeRate, typedOther.thirdExchangeRate);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1989,6 +2332,43 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 24: // STOREHOUSE_ID
+          if (field.type == TType.I32) {
+            this.storehouseId = iprot.readI32();
+            setStorehouseIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 25: // POSTAGE_TEMPLATE_ID
+          if (field.type == TType.I32) {
+            this.postageTemplateId = iprot.readI32();
+            setPostageTemplateIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 26: // POSTAGE
+          if (field.type == TType.STRING) {
+            this.postage = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 27: // REF_PRICE
+          if (field.type == TType.STRING) {
+            this.refPrice = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 28: // THIRD_EXCHANGE_RATE
+          if (field.type == TType.STRING) {
+            this.thirdExchangeRate = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -2112,6 +2492,37 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       if (isSetExchangeCash()) {
         oprot.writeFieldBegin(EXCHANGE_CASH_FIELD_DESC);
         oprot.writeString(this.exchangeCash);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (isSetStorehouseId()) {
+      oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
+      oprot.writeI32(this.storehouseId);
+      oprot.writeFieldEnd();
+    }
+    if (isSetPostageTemplateId()) {
+      oprot.writeFieldBegin(POSTAGE_TEMPLATE_ID_FIELD_DESC);
+      oprot.writeI32(this.postageTemplateId);
+      oprot.writeFieldEnd();
+    }
+    if (this.postage != null) {
+      if (isSetPostage()) {
+        oprot.writeFieldBegin(POSTAGE_FIELD_DESC);
+        oprot.writeString(this.postage);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.refPrice != null) {
+      if (isSetRefPrice()) {
+        oprot.writeFieldBegin(REF_PRICE_FIELD_DESC);
+        oprot.writeString(this.refPrice);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.thirdExchangeRate != null) {
+      if (isSetThirdExchangeRate()) {
+        oprot.writeFieldBegin(THIRD_EXCHANGE_RATE_FIELD_DESC);
+        oprot.writeString(this.thirdExchangeRate);
         oprot.writeFieldEnd();
       }
     }
@@ -2291,6 +2702,48 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         sb.append("null");
       } else {
         sb.append(this.exchangeCash);
+      }
+      first = false;
+      }
+    if (isSetStorehouseId()) {
+      if (!first) sb.append(", ");
+      sb.append("storehouseId:");
+      sb.append(this.storehouseId);
+      first = false;
+      }
+    if (isSetPostageTemplateId()) {
+      if (!first) sb.append(", ");
+      sb.append("postageTemplateId:");
+      sb.append(this.postageTemplateId);
+      first = false;
+      }
+    if (isSetPostage()) {
+      if (!first) sb.append(", ");
+      sb.append("postage:");
+      if (this.postage == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.postage);
+      }
+      first = false;
+      }
+    if (isSetRefPrice()) {
+      if (!first) sb.append(", ");
+      sb.append("refPrice:");
+      if (this.refPrice == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.refPrice);
+      }
+      first = false;
+      }
+    if (isSetThirdExchangeRate()) {
+      if (!first) sb.append(", ");
+      sb.append("thirdExchangeRate:");
+      if (this.thirdExchangeRate == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.thirdExchangeRate);
       }
       first = false;
       }

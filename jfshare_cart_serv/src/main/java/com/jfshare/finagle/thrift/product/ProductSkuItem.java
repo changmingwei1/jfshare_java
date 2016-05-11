@@ -38,6 +38,10 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
   private static final TField ORG_PRICE_FIELD_DESC = new TField("orgPrice", TType.STRING, (short)4);
   private static final TField V_PICTURE_FIELD_DESC = new TField("vPicture", TType.STRING, (short)5);
   private static final TField SKU_NAME_FIELD_DESC = new TField("skuName", TType.STRING, (short)6);
+  private static final TField WEIGHT_FIELD_DESC = new TField("weight", TType.STRING, (short)7);
+  private static final TField REF_PRICE_FIELD_DESC = new TField("refPrice", TType.STRING, (short)8);
+  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.STRING, (short)9);
+  private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)10);
 
 
   public String sellerClassNum;
@@ -46,6 +50,10 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
   public String orgPrice;
   public String vPicture;
   public String skuName;
+  public String weight;
+  public String refPrice;
+  public String storehouseId;
+  public String skuNum;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -54,7 +62,11 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     CUR_PRICE((short)3, "curPrice"),
     ORG_PRICE((short)4, "orgPrice"),
     V_PICTURE((short)5, "vPicture"),
-    SKU_NAME((short)6, "skuName");
+    SKU_NAME((short)6, "skuName"),
+    WEIGHT((short)7, "weight"),
+    REF_PRICE((short)8, "refPrice"),
+    STOREHOUSE_ID((short)9, "storehouseId"),
+    SKU_NUM((short)10, "skuNum");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -81,6 +93,14 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
   	return V_PICTURE;
         case 6: // SKU_NAME
   	return SKU_NAME;
+        case 7: // WEIGHT
+  	return WEIGHT;
+        case 8: // REF_PRICE
+  	return REF_PRICE;
+        case 9: // STOREHOUSE_ID
+  	return STOREHOUSE_ID;
+        case 10: // SKU_NUM
+  	return SKU_NUM;
         default:
   	return null;
       }
@@ -138,6 +158,14 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.SKU_NAME, new FieldMetaData("skuName", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.WEIGHT, new FieldMetaData("weight", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.REF_PRICE, new FieldMetaData("refPrice", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.STOREHOUSE_ID, new FieldMetaData("storehouseId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductSkuItem.class, metaDataMap);
   }
@@ -169,6 +197,18 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     if (other.isSetSkuName()) {
       this.skuName = other.skuName;
     }
+    if (other.isSetWeight()) {
+      this.weight = other.weight;
+    }
+    if (other.isSetRefPrice()) {
+      this.refPrice = other.refPrice;
+    }
+    if (other.isSetStorehouseId()) {
+      this.storehouseId = other.storehouseId;
+    }
+    if (other.isSetSkuNum()) {
+      this.skuNum = other.skuNum;
+    }
   }
 
   public ProductSkuItem deepCopy() {
@@ -183,6 +223,10 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     this.orgPrice = null;
     this.vPicture = null;
     this.skuName = null;
+    this.weight = null;
+    this.refPrice = null;
+    this.storehouseId = null;
+    this.skuNum = null;
   }
 
   public String getSellerClassNum() {
@@ -335,6 +379,106 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     }
   }
 
+  public String getWeight() {
+    return this.weight;
+  }
+
+  public ProductSkuItem setWeight(String weight) {
+    this.weight = weight;
+    
+    return this;
+  }
+
+  public void unsetWeight() {
+    this.weight = null;
+  }
+
+  /** Returns true if field weight is set (has been asigned a value) and false otherwise */
+  public boolean isSetWeight() {
+    return this.weight != null;
+  }
+
+  public void setWeightIsSet(boolean value) {
+    if (!value) {
+      this.weight = null;
+    }
+  }
+
+  public String getRefPrice() {
+    return this.refPrice;
+  }
+
+  public ProductSkuItem setRefPrice(String refPrice) {
+    this.refPrice = refPrice;
+    
+    return this;
+  }
+
+  public void unsetRefPrice() {
+    this.refPrice = null;
+  }
+
+  /** Returns true if field refPrice is set (has been asigned a value) and false otherwise */
+  public boolean isSetRefPrice() {
+    return this.refPrice != null;
+  }
+
+  public void setRefPriceIsSet(boolean value) {
+    if (!value) {
+      this.refPrice = null;
+    }
+  }
+
+  public String getStorehouseId() {
+    return this.storehouseId;
+  }
+
+  public ProductSkuItem setStorehouseId(String storehouseId) {
+    this.storehouseId = storehouseId;
+    
+    return this;
+  }
+
+  public void unsetStorehouseId() {
+    this.storehouseId = null;
+  }
+
+  /** Returns true if field storehouseId is set (has been asigned a value) and false otherwise */
+  public boolean isSetStorehouseId() {
+    return this.storehouseId != null;
+  }
+
+  public void setStorehouseIdIsSet(boolean value) {
+    if (!value) {
+      this.storehouseId = null;
+    }
+  }
+
+  public String getSkuNum() {
+    return this.skuNum;
+  }
+
+  public ProductSkuItem setSkuNum(String skuNum) {
+    this.skuNum = skuNum;
+    
+    return this;
+  }
+
+  public void unsetSkuNum() {
+    this.skuNum = null;
+  }
+
+  /** Returns true if field skuNum is set (has been asigned a value) and false otherwise */
+  public boolean isSetSkuNum() {
+    return this.skuNum != null;
+  }
+
+  public void setSkuNumIsSet(boolean value) {
+    if (!value) {
+      this.skuNum = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_CLASS_NUM:
@@ -379,6 +523,34 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
         setSkuName((String)value);
       }
       break;
+    case WEIGHT:
+      if (value == null) {
+        unsetWeight();
+      } else {
+        setWeight((String)value);
+      }
+      break;
+    case REF_PRICE:
+      if (value == null) {
+        unsetRefPrice();
+      } else {
+        setRefPrice((String)value);
+      }
+      break;
+    case STOREHOUSE_ID:
+      if (value == null) {
+        unsetStorehouseId();
+      } else {
+        setStorehouseId((String)value);
+      }
+      break;
+    case SKU_NUM:
+      if (value == null) {
+        unsetSkuNum();
+      } else {
+        setSkuNum((String)value);
+      }
+      break;
     }
   }
 
@@ -396,6 +568,14 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
       return getVPicture();
     case SKU_NAME:
       return getSkuName();
+    case WEIGHT:
+      return getWeight();
+    case REF_PRICE:
+      return getRefPrice();
+    case STOREHOUSE_ID:
+      return getStorehouseId();
+    case SKU_NUM:
+      return getSkuNum();
     }
     throw new IllegalStateException();
   }
@@ -419,6 +599,14 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
       return isSetVPicture();
     case SKU_NAME:
       return isSetSkuName();
+    case WEIGHT:
+      return isSetWeight();
+    case REF_PRICE:
+      return isSetRefPrice();
+    case STOREHOUSE_ID:
+      return isSetStorehouseId();
+    case SKU_NUM:
+      return isSetSkuNum();
     }
     throw new IllegalStateException();
   }
@@ -483,6 +671,38 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
       if (!this.skuName.equals(that.skuName))
         return false;
     }
+    boolean this_present_weight = true && this.isSetWeight();
+    boolean that_present_weight = true && that.isSetWeight();
+    if (this_present_weight || that_present_weight) {
+      if (!(this_present_weight && that_present_weight))
+        return false;
+      if (!this.weight.equals(that.weight))
+        return false;
+    }
+    boolean this_present_refPrice = true && this.isSetRefPrice();
+    boolean that_present_refPrice = true && that.isSetRefPrice();
+    if (this_present_refPrice || that_present_refPrice) {
+      if (!(this_present_refPrice && that_present_refPrice))
+        return false;
+      if (!this.refPrice.equals(that.refPrice))
+        return false;
+    }
+    boolean this_present_storehouseId = true && this.isSetStorehouseId();
+    boolean that_present_storehouseId = true && that.isSetStorehouseId();
+    if (this_present_storehouseId || that_present_storehouseId) {
+      if (!(this_present_storehouseId && that_present_storehouseId))
+        return false;
+      if (!this.storehouseId.equals(that.storehouseId))
+        return false;
+    }
+    boolean this_present_skuNum = true && this.isSetSkuNum();
+    boolean that_present_skuNum = true && that.isSetSkuNum();
+    if (this_present_skuNum || that_present_skuNum) {
+      if (!(this_present_skuNum && that_present_skuNum))
+        return false;
+      if (!this.skuNum.equals(that.skuNum))
+        return false;
+    }
 
     return true;
   }
@@ -514,6 +734,22 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     builder.append(present_skuName);
     if (present_skuName)
       builder.append(skuName);
+    boolean present_weight = true && (isSetWeight());
+    builder.append(present_weight);
+    if (present_weight)
+      builder.append(weight);
+    boolean present_refPrice = true && (isSetRefPrice());
+    builder.append(present_refPrice);
+    if (present_refPrice)
+      builder.append(refPrice);
+    boolean present_storehouseId = true && (isSetStorehouseId());
+    builder.append(present_storehouseId);
+    if (present_storehouseId)
+      builder.append(storehouseId);
+    boolean present_skuNum = true && (isSetSkuNum());
+    builder.append(present_skuNum);
+    if (present_skuNum)
+      builder.append(skuNum);
     return builder.toHashCode();
   }
 
@@ -585,6 +821,46 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetWeight()).compareTo(typedOther.isSetWeight());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetWeight()) {
+      lastComparison = TBaseHelper.compareTo(this.weight, typedOther.weight);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetRefPrice()).compareTo(typedOther.isSetRefPrice());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetRefPrice()) {
+      lastComparison = TBaseHelper.compareTo(this.refPrice, typedOther.refPrice);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetStorehouseId()).compareTo(typedOther.isSetStorehouseId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetStorehouseId()) {
+      lastComparison = TBaseHelper.compareTo(this.storehouseId, typedOther.storehouseId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetSkuNum()).compareTo(typedOther.isSetSkuNum());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSkuNum()) {
+      lastComparison = TBaseHelper.compareTo(this.skuNum, typedOther.skuNum);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -645,6 +921,34 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 7: // WEIGHT
+          if (field.type == TType.STRING) {
+            this.weight = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 8: // REF_PRICE
+          if (field.type == TType.STRING) {
+            this.refPrice = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 9: // STOREHOUSE_ID
+          if (field.type == TType.STRING) {
+            this.storehouseId = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 10: // SKU_NUM
+          if (field.type == TType.STRING) {
+            this.skuNum = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -699,6 +1003,34 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
       if (isSetSkuName()) {
         oprot.writeFieldBegin(SKU_NAME_FIELD_DESC);
         oprot.writeString(this.skuName);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.weight != null) {
+      if (isSetWeight()) {
+        oprot.writeFieldBegin(WEIGHT_FIELD_DESC);
+        oprot.writeString(this.weight);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.refPrice != null) {
+      if (isSetRefPrice()) {
+        oprot.writeFieldBegin(REF_PRICE_FIELD_DESC);
+        oprot.writeString(this.refPrice);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.storehouseId != null) {
+      if (isSetStorehouseId()) {
+        oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
+        oprot.writeString(this.storehouseId);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.skuNum != null) {
+      if (isSetSkuNum()) {
+        oprot.writeFieldBegin(SKU_NUM_FIELD_DESC);
+        oprot.writeString(this.skuNum);
         oprot.writeFieldEnd();
       }
     }
@@ -766,6 +1098,46 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
         sb.append("null");
       } else {
         sb.append(this.skuName);
+      }
+      first = false;
+      }
+    if (isSetWeight()) {
+      if (!first) sb.append(", ");
+      sb.append("weight:");
+      if (this.weight == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.weight);
+      }
+      first = false;
+      }
+    if (isSetRefPrice()) {
+      if (!first) sb.append(", ");
+      sb.append("refPrice:");
+      if (this.refPrice == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.refPrice);
+      }
+      first = false;
+      }
+    if (isSetStorehouseId()) {
+      if (!first) sb.append(", ");
+      sb.append("storehouseId:");
+      if (this.storehouseId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.storehouseId);
+      }
+      first = false;
+      }
+    if (isSetSkuNum()) {
+      if (!first) sb.append(", ");
+      sb.append("skuNum:");
+      if (this.skuNum == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.skuNum);
       }
       first = false;
       }

@@ -45,6 +45,10 @@ public class TbProduct {
 
     private Integer postageId;
 
+    private Integer clickRate;
+
+    private String thirdexchangerate;
+
     public String getId() {
         return id;
     }
@@ -211,5 +215,21 @@ public class TbProduct {
 
     public void setPostageId(Integer postageId) {
         this.postageId = postageId;
+    }
+
+    public Integer getClickRate() {
+        return clickRate;
+    }
+
+    public void setClickRate(Integer clickRate) {
+        this.clickRate = clickRate;
+    }
+
+    public String getThirdexchangerate() {
+        return thirdexchangerate;
+    }
+
+    public void setThirdexchangerate(String thirdexchangerate) {
+        this.thirdexchangerate = thirdexchangerate == null ? null : thirdexchangerate.trim();
     }
 }

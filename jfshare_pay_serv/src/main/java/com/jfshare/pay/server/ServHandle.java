@@ -75,6 +75,10 @@ public class ServHandle implements PayServ.Iface {
                 payUrl = PayUtil.getWeixinPay(payReq, payId);
             } else if (payReq.getPayChannel() == 6) {
                 payUrl = PayUtil.getHebaoH5(payReq, payId);
+            } else if (payReq.getPayChannel() == 5) {
+                payUrl = PayUtil.getReqAliH5(payReq, payId);
+            } else if (payReq.getPayChannel() == 7) {
+                payUrl = PayUtil.getReqAliApp(payReq, payId);
             }
 
             if (payId == null || payUrl == null) {

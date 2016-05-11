@@ -1454,6 +1454,136 @@ public class TbProductExample {
             addCriterion("postage_id not between", value1, value2, "postageId");
             return (Criteria) this;
         }
+
+        public Criteria andClickRateIsNull() {
+            addCriterion("click_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateIsNotNull() {
+            addCriterion("click_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateEqualTo(Integer value) {
+            addCriterion("click_rate =", value, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateNotEqualTo(Integer value) {
+            addCriterion("click_rate <>", value, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateGreaterThan(Integer value) {
+            addCriterion("click_rate >", value, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("click_rate >=", value, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateLessThan(Integer value) {
+            addCriterion("click_rate <", value, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateLessThanOrEqualTo(Integer value) {
+            addCriterion("click_rate <=", value, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateIn(List<Integer> values) {
+            addCriterion("click_rate in", values, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateNotIn(List<Integer> values) {
+            addCriterion("click_rate not in", values, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateBetween(Integer value1, Integer value2) {
+            addCriterion("click_rate between", value1, value2, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andClickRateNotBetween(Integer value1, Integer value2) {
+            addCriterion("click_rate not between", value1, value2, "clickRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateIsNull() {
+            addCriterion("thirdExchangeRate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateIsNotNull() {
+            addCriterion("thirdExchangeRate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateEqualTo(String value) {
+            addCriterion("thirdExchangeRate =", value, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateNotEqualTo(String value) {
+            addCriterion("thirdExchangeRate <>", value, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateGreaterThan(String value) {
+            addCriterion("thirdExchangeRate >", value, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateGreaterThanOrEqualTo(String value) {
+            addCriterion("thirdExchangeRate >=", value, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateLessThan(String value) {
+            addCriterion("thirdExchangeRate <", value, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateLessThanOrEqualTo(String value) {
+            addCriterion("thirdExchangeRate <=", value, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateLike(String value) {
+            addCriterion("thirdExchangeRate like", value, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateNotLike(String value) {
+            addCriterion("thirdExchangeRate not like", value, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateIn(List<String> values) {
+            addCriterion("thirdExchangeRate in", values, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateNotIn(List<String> values) {
+            addCriterion("thirdExchangeRate not in", values, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateBetween(String value1, String value2) {
+            addCriterion("thirdExchangeRate between", value1, value2, "thirdexchangerate");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdexchangerateNotBetween(String value1, String value2) {
+            addCriterion("thirdExchangeRate not between", value1, value2, "thirdexchangerate");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -6,7 +6,9 @@ import com.jfshare.order.dao.IOrderDao;
 import com.jfshare.order.exceptions.DaoManualException;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderRecordExample;
+import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.FailCode;
+import com.jfshare.utils.BizUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -47,7 +49,7 @@ public class DeliverService {
         OrderModel orderModel = new OrderModel();
         orderModel.setOrderId(deliverInfo.getOrderId());
         orderModel.setSellerId(sellerId);
-        orderModel.setOrderState(OrderConstant.FINISH_DELIVER_STATE);
+        orderModel.setOrderState(ConstantUtil.ORDER_STATE.FINISH_DELIVER.getEnumVal());
         orderModel.setUserId(deliverInfo.getUserId());
         if(StringUtils.isNotBlank(deliverInfo.getExpressId())) {
             orderModel.setExpressNo(deliverInfo.getExpressNo());
@@ -71,7 +73,7 @@ public class DeliverService {
 
         TbOrderRecordExample example = new TbOrderRecordExample();
         TbOrderRecordExample.Criteria criteria = example.createCriteria();
-        criteria.andOrderStateEqualTo(OrderConstant.WAIT_DELIVER_STATE);
+        criteria.andOrderStateEqualTo(ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal());
         criteria.andOrderIdEqualTo(deliverInfo.getOrderId());
         criteria.andSellerIdEqualTo(sellerId);
         criteria.andUserIdEqualTo(deliverInfo.getUserId());
@@ -83,6 +85,56 @@ public class DeliverService {
             throw new DaoManualException(FailCode.ORDER_UPDATE_ERROR);
         }
     }
+
+    public void updateDeliverInfo(OrderModel orderModel) {
+        OrderModel order = new OrderModel();
+        order.setUserId(orderModel.getUserId());
+        order.setSellerId(orderModel.getSellerId());
+        DateTime deliverTime = new DateTime();
+        order.setDeliverTime(deliverTime);
+        order.setExpressId(orderModel.getExpressId());
+        order.setExpressNo(orderModel.getExpressNo());
+
+        TbOrderRecordExample example = new TbOrderRecordExample();
+        TbOrderRecordExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderStateEqualTo(ConstantUtil.ORDER_STATE.FINISH_DELIVER.getEnumVal());
+        criteria.andOrderIdEqualTo(orderModel.getOrderId());
+        criteria.andSellerIdEqualTo(orderModel.getSellerId());
+        criteria.andUserIdEqualTo(orderModel.getUserId());
+        int ret = orderDao.updateOrderWithCriteria(order, BizUtil.USER_TYPE.BUYER.getEnumVal(),example);
+        if (ret > 0) {
+            ret = orderDao.updateOrderWithCriteria(order, BizUtil.USER_TYPE.SELLER.getEnumVal(),example);
+        }
+
+        if (ret <= 0) {
+            throw new DaoManualException(FailCode.ORDER_UPDATE_ERROR);
+        }
+    }
+
+    public void updateDeliverInfoVir(OrderModel orderModel) {
+        OrderModel order = new OrderModel();
+        order.setUserId(orderModel.getUserId());
+        order.setSellerId(orderModel.getSellerId());
+        DateTime deliverTime = new DateTime();
+        order.setDeliverTime(deliverTime);
+        order.setOrderState(ConstantUtil.ORDER_STATE.FINISH_DELIVER.getEnumVal());
+
+        TbOrderRecordExample example = new TbOrderRecordExample();
+        TbOrderRecordExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderStateEqualTo(ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal());
+        criteria.andOrderIdEqualTo(orderModel.getOrderId());
+        criteria.andSellerIdEqualTo(orderModel.getSellerId());
+        criteria.andUserIdEqualTo(orderModel.getUserId());
+        int ret = orderDao.updateOrderWithCriteria(order, BizUtil.USER_TYPE.BUYER.getEnumVal(),example);
+        if (ret > 0) {
+            ret = orderDao.updateOrderWithCriteria(order, BizUtil.USER_TYPE.SELLER.getEnumVal(),example);
+        }
+
+        if (ret <= 0) {
+            throw new DaoManualException(FailCode.ORDER_UPDATE_ERROR);
+        }
+    }
+
 
 }
  

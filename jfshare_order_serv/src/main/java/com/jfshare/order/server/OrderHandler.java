@@ -1,12 +1,14 @@
 package com.jfshare.order.server;
 
 import com.alibaba.fastjson.JSON;
+import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayReq;
 import com.jfshare.finagle.thrift.pay.PayRet;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
+import com.jfshare.order.common.OrderConstant;
 import com.jfshare.order.dao.IOrderJedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
@@ -29,8 +31,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service(value = "orderHandler")
 public class OrderHandler extends BaseHandler implements OrderServ.Iface {
@@ -50,6 +51,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     @Autowired
     private IOrderJedis orderJedis;
+
+    @Autowired
+    private FileOpUtil fileOpUtil;
 
     @Override
     public Result createOrder(List<Order> orderList) throws TException {
@@ -92,6 +96,80 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             return ResultBuilder.createFailNormalResult(FailCode.SYS_ERROR);
         }
         return ResultBuilder.createNormalResult();
+    }
+
+    @Override
+    public Result deliverVir(DeliverVirParam param) throws TException {
+        Result result = new Result(0);
+        try {
+            if (param == null || param.getSellerId() <= 0 || StringUtils.isBlank(param.getOrderId())) {
+                logger.warn(MessageFormat.format("deliverVir参数验证失败！sellerId[{0}],orderId[{1}]", param.getSellerId(), param.getOrderId()));
+                FailCode.addFails(result, FailCode.PARAM_ERROR);
+                return result;
+            }
+
+            OrderModel orderModel = orderService.sellerQueryDetail(param.getSellerId(), param.getOrderId());
+            if (orderModel == null) {
+                logger.warn(MessageFormat.format("deliverVir查询订单不存在！sellerId[{0}],orderId[{1}]", param.getSellerId(), param.getOrderId()));
+                FailCode.addFails(result, FailCode.ORDER_NO_EXIST);
+                return result;
+            }
+
+            if(orderModel.getTradeCode().equalsIgnoreCase(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAMI.getEnumVal()) == false) {
+                logger.warn(MessageFormat.format("deliverVir非卡密虚拟商品！sellerId[{0}],orderId[{1}],tradeCode[{2}]", param.getSellerId(), param.getOrderId()), orderModel.getTradeCode());
+                FailCode.addFails(result, FailCode.DELIVER_INVALIDATE_TRADECODE);
+                return result;
+            }
+
+            deliverService.updateDeliverInfo(orderModel);
+
+            //TODO 调用商品服务获取卡密
+            //TODO 发送短信
+        } catch (BaseException be) {
+            List<FailDesc> failDescs = be.getFailDescs();
+            logger.error("发货失败!");
+            return ResultBuilder.createFailNormalResult(failDescs);
+        } catch(Exception e) {
+            logger.error("发货失败，系统异常");
+            e.printStackTrace();
+            return ResultBuilder.createFailNormalResult(FailCode.SYS_ERROR);
+        }
+        return ResultBuilder.createNormalResult();
+    }
+
+    @Override
+    public Result updateExpressInfo(int sellerId, String orderId, String expressId, String expressNo, String expressName) throws TException {
+        Result result = new Result(0);
+        try {
+            if (sellerId<=0 || StringUtils.isBlank(expressId) || StringUtils.isBlank(expressNo) || StringUtils.isBlank(orderId)) {
+                logger.warn(MessageFormat.format("updateExpressInfo参数验证失败！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", sellerId, orderId, expressId, expressNo));
+                FailCode.addFails(result, FailCode.PARAM_ERROR);
+                return result;
+            }
+            OrderModel orderModel = orderService.sellerQueryDetail(sellerId, orderId);
+            if (orderModel == null) {
+                logger.warn(MessageFormat.format("updateExpressInfo订单不存在！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", sellerId, orderId, expressId, expressNo));
+                FailCode.addFails(result, FailCode.ORDER_NO_EXIST);
+                return result;
+            }
+
+            orderModel.setExpressId(Integer.parseInt(expressId));
+            orderModel.setExpressNo(expressNo);
+            orderModel.setExpressName(expressName);
+
+            deliverService.updateDeliverInfo(orderModel);
+
+        }catch (BaseException be) {
+            List<FailDesc> failDescs = be.getFailDescs();
+            logger.error(MessageFormat.format("$$$$修改订单快递信息----更新数据库失败！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", sellerId, orderId, expressId, expressNo));
+            return ResultBuilder.createFailNormalResult(failDescs);
+        } catch (Exception e) {
+            logger.error(MessageFormat.format("$$$$修改订单快递信息----程序异常错误！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", sellerId, orderId, expressId, expressNo));
+            FailCode.addFails(result, FailCode.SYS_ERROR);
+            throw new RuntimeException("$$$$$$$$修改订单快递信息发生异常");
+        }
+
+        return result;
     }
 
     @Override
@@ -154,6 +232,11 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return result;
+    }
+
+    @Override
+    public ExportOrderResult queryExportOrderInfo(int sellerId, OrderQueryConditions conditions) throws TException {
+        return null;
     }
 
     @Override
@@ -477,5 +560,228 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return payStateResult;
+    }
+
+    @Override
+    public StringResult batchExportOrder(int sellerId, OrderQueryConditions conditions) throws TException {
+        StringResult stringResult = new StringResult();
+        Result result = new Result();
+        result.setCode(1);
+        stringResult.setResult(result);
+        try {
+            if (sellerId <=0 || StringUtil.isNullOrEmpty(conditions)) {
+                logger.warn(MessageFormat.format("batchExportOrder参数验证失败！sellerId[{0}], OrderQueryConditions[{1}]]", sellerId, conditions));
+                FailCode.addFails(result, FailCode.PARAM_ERROR);
+                return stringResult;
+            }
+
+
+            List<OrderModel> orderModels = null;
+            conditions = super.verifyConditions(conditions);
+            conditions.setSellerId(sellerId);
+            //查询订单列表
+            orderModels = orderService.queryBatch(conditions);
+            List<Order> orderDetails = null;
+            for (OrderModel orderModel : orderModels) {
+                orderDetails.add(OrderUtil.rConvertOrderModel(orderModel));
+            }
+            byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
+            if (xlsBytes != null) {
+                String fileName =  FileOpUtil.getFileName(sellerId,null);
+                String fileKey = FileOpUtil.toFastDFS(xlsBytes, fileName);
+                stringResult.setValue(fileKey);
+                result.setCode(0);
+            }
+
+        } catch (Exception e) {
+            logger.error("批量导出订单失败，系统异常！", e);
+            FailCode.addFails(result, FailCode.SYS_ERROR);
+        }
+
+        return stringResult;
+    }
+
+    @Override
+    public BatchDeliverResult batchDeliverOrder(int sellerId, BatchDeliverParam param) throws TException {
+        BatchDeliverResult batchDeliverResult = new BatchDeliverResult();
+        Result result = new Result();
+        result.setCode(0);
+        batchDeliverResult.setResult(result);
+        try {
+            List<BatchDeliverFailInfo> failInfoList = new ArrayList<BatchDeliverFailInfo>();
+            List<Order> orderList = param.getOrderList();
+            //1、empty list
+            if (orderList == null || orderList.size() == 0) {
+                logger.info("无订单导入数据..........................");
+                result.setCode(1);
+                BatchDeliverFailInfo failInfo = new BatchDeliverFailInfo();
+                failInfo.setOrderId("无");
+                failInfo.setDesc("无订单导入数据");
+                failInfoList.add(failInfo);
+                batchDeliverResult.setFailInfo(failInfoList);
+                logger.warn("deliver$$deliverEx batchDeliverEx  无订单导入数据 failInfoList ==>", result);
+                return batchDeliverResult;
+            }
+
+            List<ExpressInfo> expressList = expressClient.query();
+            if (expressList.size() == 0) {
+                logger.error("sellerId:"+sellerId+",批量发货调用express的query接口获取物流信息失败！");
+                logger.error("$$$$ batchDeliverEx sellerId:" + sellerId + ",批量发货调用express的query接口获取物流信息失败！");
+                result.setCode(1);
+                BatchDeliverFailInfo failInfo = new BatchDeliverFailInfo();
+                failInfo.setOrderId("无");
+                failInfo.setDesc("获取物流信息失败");
+                failInfoList.add(failInfo);
+                batchDeliverResult.setFailInfo(failInfoList);
+                logger.warn("deliver$$deliverEx batchDeliverEx failInfoList BatchFailInfo =  {}", result);
+                return  batchDeliverResult;
+            }
+
+
+            //2、valid empty orderId & repeat id|
+            Set<String> orderIdSet = new HashSet<String>();
+            Map<String, Integer> orderIdIndexMap = new HashMap<String, Integer>(); // key:orderId,value:index
+            for(int i =0 ; i < orderList.size(); i++) {
+                if (StringUtil.isNullOrEmpty(orderList.get(i).getOrderId())) {
+                    BatchDeliverFailInfo failInfo = new BatchDeliverFailInfo();
+                    failInfo.setIndex(i);
+                    failInfo.setOrderId("无");
+                    failInfo.setDesc("订单号为空"); //缺少订单编号
+                    failInfo.setOrder(orderList.get(i));
+                    failInfoList.add(failInfo);
+                }
+                else {
+                    // trimallOrderId
+                    orderList.get(i).setOrderId(orderList.get(i).getOrderId().trim());
+                    if (orderIdSet.contains(orderList.get(i).getOrderId()) &&
+                            !ParamCheck.deliverCanSame(orderList, orderIdIndexMap.get(orderList.get(i).getOrderId()), i) ) {
+                        BatchDeliverFailInfo failInfo = new BatchDeliverFailInfo();
+                        failInfo.setOrderId(orderList.get(i).getOrderId());
+                        failInfo.setIndex(i);
+                        failInfo.setDesc("订单号重复");
+                        failInfo.setOrder(orderList.get(i));
+                        failInfoList.add(failInfo);
+                    }
+                    else {
+                        orderIdSet.add(orderList.get(i).getOrderId());
+                        orderIdIndexMap.put(orderList.get(i).getOrderId(), i);
+                    }
+                }
+            }
+
+            List<Order> resultOrderList = new ArrayList<Order>(); //合法订单列表
+            List<String> resultOrderIdList = new ArrayList<String>(); //合法订单ID
+            List<String> resultExpressNoList = new ArrayList<String>();
+
+
+            //3、valid empty expressName、expressNo; exist express; valid expressNo
+            List<BatchDeliverFailInfo> failExpressList  = ParamCheck.checkOrderExpressInfoEx(orderList,
+                    resultOrderList, resultOrderIdList, resultExpressNoList, expressList, param.getDeliverType());
+            if(failExpressList.size() > 0) {
+                logger.info("sellerId:"+sellerId+",快递信息错误的订单..........................");
+                logger.warn("batchDeliverEx sellerId:" + sellerId + ",快递信息错误的订单..........................");
+                failInfoList.addAll(failExpressList);
+            }
+
+            //验证全部是错误
+            if(resultOrderList.size() == 0) {
+                logger.info("订单都不存在错误的订单..........................");
+                logger.warn("batchDeliverEx 订单都不存在错误的订单..........................");
+            }
+
+
+            //4、valid order in db
+            List<OrderModel> existOrderList = resultOrderIdList.size()==0 ? new ArrayList<OrderModel>():orderService.getSellerOrderBatch(sellerId, resultOrderIdList);
+            List<Order> existOrderResultList = null;
+            if(existOrderList.size() < resultOrderList.size()) {
+                List<String> noExistOrderIdList = new ArrayList<String>();
+                existOrderResultList = new ArrayList<Order>();
+                //检测出是存在的订单
+                for(Order order : resultOrderList) {
+                    String existId = null;
+                    for(OrderModel existOrder : existOrderList) {
+                        if(existOrder.getOrderId().equals(order.getOrderId())) {
+                            existId = order.getOrderId();
+                            existOrderResultList.add(order);
+                            break;
+                        }
+
+                    }
+                    if(existId == null)
+                        noExistOrderIdList.add(order.getOrderId());
+                }
+
+                //不存在的订单的行号等信息
+                List<BatchDeliverFailInfo> noExistOrderList = ParamCheck.checkOrderNotExist(orderList, noExistOrderIdList);
+                if(noExistOrderList != null && noExistOrderList.size() > 0) {   //--------------订单不存在
+                    failInfoList.addAll(noExistOrderList);
+                    logger.info("sellerId:"+sellerId+",有不存在的订单..........................");
+                }
+            }
+
+
+            //5、valid error orderstate 检测是否存在非等待发货、非已发货的订单号
+            List<String> existOrderIds = new ArrayList<String>();
+            for (OrderModel orderProfile : existOrderList) {
+                existOrderIds.add(orderProfile.getOrderId());
+                if (orderProfile.getOrderState() != OrderConstant.ORDER_STATE_WAIT_DELIVER) {
+                    logger.info("存在订单状态错误的订单:"+orderProfile.getOrderId() + ",订单状态为：" + orderProfile.getOrderState());
+                    logger.warn("batchDeliverEx 存在订单状态错误的订单: {}   订单状态为： {}", orderProfile.getOrderId(), orderProfile.getOrderState());
+                    BatchDeliverFailInfo failInfo = new BatchDeliverFailInfo();
+                    if (orderIdIndexMap.containsKey(orderProfile.getOrderId())) {
+                        failInfo.setIndex(orderIdIndexMap.get(orderProfile.getOrderId()));
+                    }
+                    failInfo.setOrderId(orderProfile.getOrderId());
+                    failInfo.setDesc(ParamCheck.getOrderStateError(orderProfile));
+                    Order order = OrderUtil.rConvertOrderModel(orderProfile);
+                    ParamCheck.fillOrderExpress(order, orderList);
+                    failInfo.setOrder(order);
+                    failInfoList.add(failInfo);
+                }
+            }
+
+            //7. get failorders
+            Set<String> failOrderIds = new HashSet<String>();
+            if (failInfoList.size() > 0) {
+                result.setCode(1);
+                List<BatchDeliverFailInfo> validFailList = ParamCheck.getBatchDeliverFailInfo(failInfoList);
+                batchDeliverResult.setFailInfo(validFailList);
+                failOrderIds = ParamCheck.getFailOrders(validFailList);
+            }
+
+            //8. deliver part success orders
+            List<Order> deliverOrderList = ParamCheck.getCanDeliverList(orderList, failOrderIds);
+
+            if (deliverOrderList.size() > 0) {
+                for (Order order : deliverOrderList) {
+                    OrderModel tbOrder = orderService.sellerQueryDetail(sellerId, order.getOrderId());
+
+                    if(tbOrder != null) {
+                        ParamCheck.fillDeliverOrderInfo(order, tbOrder);
+                    }
+                }
+
+                int ret = orderService.batchDeliverOp(sellerId, deliverOrderList, expressList, param.getDeliverType());
+                if (ret < 0) {
+                    logger.info("sellerId:"+sellerId+",发货失败.........................");
+                    result.setCode(1);
+                    BatchDeliverFailInfo fail = new BatchDeliverFailInfo();
+                    fail.setDesc("发货失败");
+                    batchDeliverResult.addToFailInfo(fail);
+                }
+            }
+
+
+            if(1 == result.getCode()){
+                logger.warn("deliver$$deliverEx 操作有异常！  result: {}",result);
+            }
+            logger.info("batchDeliverEx 正常返回  返回的 result : {} ", result);
+            logger.info("batchDeliverEx 批量发结束(batchDeliver) --- <<< End");
+        } catch (Exception e) {
+            logger.error("批量发货失败，系统异常！", e);
+            FailCode.addFails(result, FailCode.SYS_ERROR);
+        }
+
+        return batchDeliverResult;
     }
 }

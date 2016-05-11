@@ -43,6 +43,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   private static final TField ACTIVE_STATE_FIELD_DESC = new TField("activeState", TType.I32, (short)9);
   private static final TField IMG_URL_FIELD_DESC = new TField("imgUrl", TType.STRING, (short)10);
   private static final TField VICE_NAME_FIELD_DESC = new TField("viceName", TType.STRING, (short)11);
+  private static final TField CREATE_TIME_FIELD_DESC = new TField("createTime", TType.STRING, (short)12);
+  private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)13);
 
 
   public String productId;
@@ -56,6 +58,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   public int activeState;
   public String imgUrl;
   public String viceName;
+  public String createTime;
+  public int sellerId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -69,7 +73,9 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     TOTAL_SALES((short)8, "totalSales"),
     ACTIVE_STATE((short)9, "activeState"),
     IMG_URL((short)10, "imgUrl"),
-    VICE_NAME((short)11, "viceName");
+    VICE_NAME((short)11, "viceName"),
+    CREATE_TIME((short)12, "createTime"),
+    SELLER_ID((short)13, "sellerId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -106,6 +112,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   	return IMG_URL;
         case 11: // VICE_NAME
   	return VICE_NAME;
+        case 12: // CREATE_TIME
+  	return CREATE_TIME;
+        case 13: // SELLER_ID
+  	return SELLER_ID;
         default:
   	return null;
       }
@@ -152,7 +162,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   private static final int __ACTIVESTOCK_ISSET_ID = 2;
   private static final int __TOTALSALES_ISSET_ID = 3;
   private static final int __ACTIVESTATE_ISSET_ID = 4;
-  private BitSet __isset_bit_vector = new BitSet(5);
+  private static final int __SELLERID_ISSET_ID = 5;
+  private BitSet __isset_bit_vector = new BitSet(6);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -179,6 +190,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.VICE_NAME, new FieldMetaData("viceName", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.CREATE_TIME, new FieldMetaData("createTime", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductSurvey.class, metaDataMap);
   }
@@ -246,6 +261,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     if (other.isSetViceName()) {
       this.viceName = other.viceName;
     }
+    if (other.isSetCreateTime()) {
+      this.createTime = other.createTime;
+    }
+    this.sellerId = other.sellerId;
   }
 
   public ProductSurvey deepCopy() {
@@ -270,6 +289,9 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     this.activeState = 0;
     this.imgUrl = null;
     this.viceName = null;
+    this.createTime = null;
+    setSellerIdIsSet(false);
+    this.sellerId = 0;
   }
 
   public String getProductId() {
@@ -542,6 +564,55 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     }
   }
 
+  public String getCreateTime() {
+    return this.createTime;
+  }
+
+  public ProductSurvey setCreateTime(String createTime) {
+    this.createTime = createTime;
+    
+    return this;
+  }
+
+  public void unsetCreateTime() {
+    this.createTime = null;
+  }
+
+  /** Returns true if field createTime is set (has been asigned a value) and false otherwise */
+  public boolean isSetCreateTime() {
+    return this.createTime != null;
+  }
+
+  public void setCreateTimeIsSet(boolean value) {
+    if (!value) {
+      this.createTime = null;
+    }
+  }
+
+  public int getSellerId() {
+    return this.sellerId;
+  }
+
+  public ProductSurvey setSellerId(int sellerId) {
+    this.sellerId = sellerId;
+    setSellerIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetSellerId() {
+  __isset_bit_vector.clear(__SELLERID_ISSET_ID);
+  }
+
+  /** Returns true if field sellerId is set (has been asigned a value) and false otherwise */
+  public boolean isSetSellerId() {
+    return __isset_bit_vector.get(__SELLERID_ISSET_ID);
+  }
+
+  public void setSellerIdIsSet(boolean value) {
+    __isset_bit_vector.set(__SELLERID_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -621,6 +692,20 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
         setViceName((String)value);
       }
       break;
+    case CREATE_TIME:
+      if (value == null) {
+        unsetCreateTime();
+      } else {
+        setCreateTime((String)value);
+      }
+      break;
+    case SELLER_ID:
+      if (value == null) {
+        unsetSellerId();
+      } else {
+        setSellerId((Integer)value);
+      }
+      break;
     }
   }
 
@@ -648,6 +733,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       return getImgUrl();
     case VICE_NAME:
       return getViceName();
+    case CREATE_TIME:
+      return getCreateTime();
+    case SELLER_ID:
+      return new Integer(getSellerId());
     }
     throw new IllegalStateException();
   }
@@ -681,6 +770,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       return isSetImgUrl();
     case VICE_NAME:
       return isSetViceName();
+    case CREATE_TIME:
+      return isSetCreateTime();
+    case SELLER_ID:
+      return isSetSellerId();
     }
     throw new IllegalStateException();
   }
@@ -785,6 +878,22 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       if (!this.viceName.equals(that.viceName))
         return false;
     }
+    boolean this_present_createTime = true && this.isSetCreateTime();
+    boolean that_present_createTime = true && that.isSetCreateTime();
+    if (this_present_createTime || that_present_createTime) {
+      if (!(this_present_createTime && that_present_createTime))
+        return false;
+      if (!this.createTime.equals(that.createTime))
+        return false;
+    }
+    boolean this_present_sellerId = true && this.isSetSellerId();
+    boolean that_present_sellerId = true && that.isSetSellerId();
+    if (this_present_sellerId || that_present_sellerId) {
+      if (!(this_present_sellerId && that_present_sellerId))
+        return false;
+      if (this.sellerId != that.sellerId)
+        return false;
+    }
 
     return true;
   }
@@ -836,6 +945,14 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     builder.append(present_viceName);
     if (present_viceName)
       builder.append(viceName);
+    boolean present_createTime = true && (isSetCreateTime());
+    builder.append(present_createTime);
+    if (present_createTime)
+      builder.append(createTime);
+    boolean present_sellerId = true && (isSetSellerId());
+    builder.append(present_sellerId);
+    if (present_sellerId)
+      builder.append(sellerId);
     return builder.toHashCode();
   }
 
@@ -957,6 +1074,26 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetCreateTime()).compareTo(typedOther.isSetCreateTime());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetCreateTime()) {
+      lastComparison = TBaseHelper.compareTo(this.createTime, typedOther.createTime);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetSellerId()).compareTo(typedOther.isSetSellerId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSellerId()) {
+      lastComparison = TBaseHelper.compareTo(this.sellerId, typedOther.sellerId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1057,6 +1194,21 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 12: // CREATE_TIME
+          if (field.type == TType.STRING) {
+            this.createTime = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 13: // SELLER_ID
+          if (field.type == TType.I32) {
+            this.sellerId = iprot.readI32();
+            setSellerIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -1118,6 +1270,18 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
         oprot.writeString(this.viceName);
         oprot.writeFieldEnd();
       }
+    }
+    if (this.createTime != null) {
+      if (isSetCreateTime()) {
+        oprot.writeFieldBegin(CREATE_TIME_FIELD_DESC);
+        oprot.writeString(this.createTime);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (isSetSellerId()) {
+      oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
+      oprot.writeI32(this.sellerId);
+      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -1194,6 +1358,22 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       } else {
         sb.append(this.viceName);
       }
+      first = false;
+      }
+    if (isSetCreateTime()) {
+      if (!first) sb.append(", ");
+      sb.append("createTime:");
+      if (this.createTime == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.createTime);
+      }
+      first = false;
+      }
+    if (isSetSellerId()) {
+      if (!first) sb.append(", ");
+      sb.append("sellerId:");
+      sb.append(this.sellerId);
       first = false;
       }
     sb.append(")");

@@ -44,8 +44,12 @@ public class ProductServ {
     public com.jfshare.finagle.thrift.result.StringResult addProduct(Product product) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult updateProduct(Product product) throws TException;
     public ProductSurveyResult productSurveyQuery(ProductSurveyQueryParam param) throws TException;
+    public ProductSurveyResult productSurveyQueryByHit(ProductSurveyQueryParam param) throws TException;
+    public ProductSurveyResult productSurveyBackendQuery(ProductSurveyQueryParam param) throws TException;
     public com.jfshare.finagle.thrift.result.Result setProductState(ProductOpt productOpt) throws TException;
     public ProductSurveyResult queryFloorProduct(int floorId) throws TException;
+    public ProductResult queryProductSnap(String snapId, ProductRetParam param) throws TException;
+    public ProductSurveyResult productSurveyQueryBatch(ProductSurveyQueryBatchParam param) throws TException;
   }
 
   public interface AsyncIface {
@@ -56,8 +60,12 @@ public class ProductServ {
     public void addProduct(Product product, AsyncMethodCallback<AsyncClient.addProduct_call> resultHandler) throws TException;
     public void updateProduct(Product product, AsyncMethodCallback<AsyncClient.updateProduct_call> resultHandler) throws TException;
     public void productSurveyQuery(ProductSurveyQueryParam param, AsyncMethodCallback<AsyncClient.productSurveyQuery_call> resultHandler) throws TException;
+    public void productSurveyQueryByHit(ProductSurveyQueryParam param, AsyncMethodCallback<AsyncClient.productSurveyQueryByHit_call> resultHandler) throws TException;
+    public void productSurveyBackendQuery(ProductSurveyQueryParam param, AsyncMethodCallback<AsyncClient.productSurveyBackendQuery_call> resultHandler) throws TException;
     public void setProductState(ProductOpt productOpt, AsyncMethodCallback<AsyncClient.setProductState_call> resultHandler) throws TException;
     public void queryFloorProduct(int floorId, AsyncMethodCallback<AsyncClient.queryFloorProduct_call> resultHandler) throws TException;
+    public void queryProductSnap(String snapId, ProductRetParam param, AsyncMethodCallback<AsyncClient.queryProductSnap_call> resultHandler) throws TException;
+    public void productSurveyQueryBatch(ProductSurveyQueryBatchParam param, AsyncMethodCallback<AsyncClient.productSurveyQueryBatch_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
@@ -68,8 +76,12 @@ public class ProductServ {
     public Future<com.jfshare.finagle.thrift.result.StringResult> addProduct(Product product);
     public Future<com.jfshare.finagle.thrift.result.StringResult> updateProduct(Product product);
     public Future<ProductSurveyResult> productSurveyQuery(ProductSurveyQueryParam param);
+    public Future<ProductSurveyResult> productSurveyQueryByHit(ProductSurveyQueryParam param);
+    public Future<ProductSurveyResult> productSurveyBackendQuery(ProductSurveyQueryParam param);
     public Future<com.jfshare.finagle.thrift.result.Result> setProductState(ProductOpt productOpt);
     public Future<ProductSurveyResult> queryFloorProduct(int floorId);
+    public Future<ProductResult> queryProductSnap(String snapId, ProductRetParam param);
+    public Future<ProductSurveyResult> productSurveyQueryBatch(ProductSurveyQueryBatchParam param);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -357,6 +369,76 @@ public class ProductServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "productSurveyQuery failed: unknown result");
     }
+    public ProductSurveyResult productSurveyQueryByHit(ProductSurveyQueryParam param) throws TException
+    {
+      send_productSurveyQueryByHit(param);
+      return recv_productSurveyQueryByHit();
+    }
+
+    public void send_productSurveyQueryByHit(ProductSurveyQueryParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("productSurveyQueryByHit", TMessageType.CALL, ++seqid_));
+      productSurveyQueryByHit_args args = new productSurveyQueryByHit_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public ProductSurveyResult recv_productSurveyQueryByHit() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "productSurveyQueryByHit failed: out of sequence response");
+      }
+      productSurveyQueryByHit_result result = new productSurveyQueryByHit_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "productSurveyQueryByHit failed: unknown result");
+    }
+    public ProductSurveyResult productSurveyBackendQuery(ProductSurveyQueryParam param) throws TException
+    {
+      send_productSurveyBackendQuery(param);
+      return recv_productSurveyBackendQuery();
+    }
+
+    public void send_productSurveyBackendQuery(ProductSurveyQueryParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("productSurveyBackendQuery", TMessageType.CALL, ++seqid_));
+      productSurveyBackendQuery_args args = new productSurveyBackendQuery_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public ProductSurveyResult recv_productSurveyBackendQuery() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "productSurveyBackendQuery failed: out of sequence response");
+      }
+      productSurveyBackendQuery_result result = new productSurveyBackendQuery_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "productSurveyBackendQuery failed: unknown result");
+    }
     public com.jfshare.finagle.thrift.result.Result setProductState(ProductOpt productOpt) throws TException
     {
       send_setProductState(productOpt);
@@ -426,6 +508,77 @@ public class ProductServ {
         return result.success;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryFloorProduct failed: unknown result");
+    }
+    public ProductResult queryProductSnap(String snapId, ProductRetParam param) throws TException
+    {
+      send_queryProductSnap(snapId, param);
+      return recv_queryProductSnap();
+    }
+
+    public void send_queryProductSnap(String snapId, ProductRetParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("queryProductSnap", TMessageType.CALL, ++seqid_));
+      queryProductSnap_args args = new queryProductSnap_args();
+      args.setSnapId(snapId);
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public ProductResult recv_queryProductSnap() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "queryProductSnap failed: out of sequence response");
+      }
+      queryProductSnap_result result = new queryProductSnap_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryProductSnap failed: unknown result");
+    }
+    public ProductSurveyResult productSurveyQueryBatch(ProductSurveyQueryBatchParam param) throws TException
+    {
+      send_productSurveyQueryBatch(param);
+      return recv_productSurveyQueryBatch();
+    }
+
+    public void send_productSurveyQueryBatch(ProductSurveyQueryBatchParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.CALL, ++seqid_));
+      productSurveyQueryBatch_args args = new productSurveyQueryBatch_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public ProductSurveyResult recv_productSurveyQueryBatch() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "productSurveyQueryBatch failed: out of sequence response");
+      }
+      productSurveyQueryBatch_result result = new productSurveyQueryBatch_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "productSurveyQueryBatch failed: unknown result");
     }
   }
 
@@ -672,6 +825,68 @@ public class ProductServ {
         return (new Client(prot)).recv_productSurveyQuery();
       }
      }
+    public void productSurveyQueryByHit(ProductSurveyQueryParam param, AsyncMethodCallback<productSurveyQueryByHit_call> resultHandler) throws TException {
+      checkReady();
+      productSurveyQueryByHit_call method_call = new productSurveyQueryByHit_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class productSurveyQueryByHit_call extends TAsyncMethodCall {
+      private ProductSurveyQueryParam param;
+
+      public productSurveyQueryByHit_call(ProductSurveyQueryParam param, AsyncMethodCallback<productSurveyQueryByHit_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("productSurveyQueryByHit", TMessageType.CALL, 0));
+        productSurveyQueryByHit_args args = new productSurveyQueryByHit_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ProductSurveyResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_productSurveyQueryByHit();
+      }
+     }
+    public void productSurveyBackendQuery(ProductSurveyQueryParam param, AsyncMethodCallback<productSurveyBackendQuery_call> resultHandler) throws TException {
+      checkReady();
+      productSurveyBackendQuery_call method_call = new productSurveyBackendQuery_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class productSurveyBackendQuery_call extends TAsyncMethodCall {
+      private ProductSurveyQueryParam param;
+
+      public productSurveyBackendQuery_call(ProductSurveyQueryParam param, AsyncMethodCallback<productSurveyBackendQuery_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("productSurveyBackendQuery", TMessageType.CALL, 0));
+        productSurveyBackendQuery_args args = new productSurveyBackendQuery_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ProductSurveyResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_productSurveyBackendQuery();
+      }
+     }
     public void setProductState(ProductOpt productOpt, AsyncMethodCallback<setProductState_call> resultHandler) throws TException {
       checkReady();
       setProductState_call method_call = new setProductState_call(productOpt, resultHandler, this, protocolFactory, transport);
@@ -732,6 +947,71 @@ public class ProductServ {
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         return (new Client(prot)).recv_queryFloorProduct();
+      }
+     }
+    public void queryProductSnap(String snapId, ProductRetParam param, AsyncMethodCallback<queryProductSnap_call> resultHandler) throws TException {
+      checkReady();
+      queryProductSnap_call method_call = new queryProductSnap_call(snapId, param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class queryProductSnap_call extends TAsyncMethodCall {
+      private String snapId;
+      private ProductRetParam param;
+
+      public queryProductSnap_call(String snapId, ProductRetParam param, AsyncMethodCallback<queryProductSnap_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.snapId = snapId;
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("queryProductSnap", TMessageType.CALL, 0));
+        queryProductSnap_args args = new queryProductSnap_args();
+        args.setSnapId(snapId);
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ProductResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_queryProductSnap();
+      }
+     }
+    public void productSurveyQueryBatch(ProductSurveyQueryBatchParam param, AsyncMethodCallback<productSurveyQueryBatch_call> resultHandler) throws TException {
+      checkReady();
+      productSurveyQueryBatch_call method_call = new productSurveyQueryBatch_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class productSurveyQueryBatch_call extends TAsyncMethodCall {
+      private ProductSurveyQueryBatchParam param;
+
+      public productSurveyQueryBatch_call(ProductSurveyQueryBatchParam param, AsyncMethodCallback<productSurveyQueryBatch_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.CALL, 0));
+        productSurveyQueryBatch_args args = new productSurveyQueryBatch_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ProductSurveyResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_productSurveyQueryBatch();
       }
      }
    }
@@ -959,6 +1239,66 @@ public class ProductServ {
         return Future.exception(e);
       }
     }
+    public Future<ProductSurveyResult> productSurveyQueryByHit(ProductSurveyQueryParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("productSurveyQueryByHit", TMessageType.CALL, 0));
+        productSurveyQueryByHit_args __args__ = new productSurveyQueryByHit_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<ProductSurveyResult>>() {
+          public Future<ProductSurveyResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_productSurveyQueryByHit());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<ProductSurveyResult> productSurveyBackendQuery(ProductSurveyQueryParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("productSurveyBackendQuery", TMessageType.CALL, 0));
+        productSurveyBackendQuery_args __args__ = new productSurveyBackendQuery_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<ProductSurveyResult>>() {
+          public Future<ProductSurveyResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_productSurveyBackendQuery());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<com.jfshare.finagle.thrift.result.Result> setProductState(ProductOpt productOpt) {
       try {
         // TODO: size
@@ -1019,6 +1359,67 @@ public class ProductServ {
         return Future.exception(e);
       }
     }
+    public Future<ProductResult> queryProductSnap(String snapId, ProductRetParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("queryProductSnap", TMessageType.CALL, 0));
+        queryProductSnap_args __args__ = new queryProductSnap_args();
+        __args__.setSnapId(snapId);
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<ProductResult>>() {
+          public Future<ProductResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_queryProductSnap());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<ProductSurveyResult> productSurveyQueryBatch(ProductSurveyQueryBatchParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.CALL, 0));
+        productSurveyQueryBatch_args __args__ = new productSurveyQueryBatch_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<ProductSurveyResult>>() {
+          public Future<ProductSurveyResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_productSurveyQueryBatch());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
   }
 
   public static class Processor implements TProcessor {
@@ -1033,8 +1434,12 @@ public class ProductServ {
       processMap_.put("addProduct", new addProduct());
       processMap_.put("updateProduct", new updateProduct());
       processMap_.put("productSurveyQuery", new productSurveyQuery());
+      processMap_.put("productSurveyQueryByHit", new productSurveyQueryByHit());
+      processMap_.put("productSurveyBackendQuery", new productSurveyBackendQuery());
       processMap_.put("setProductState", new setProductState());
       processMap_.put("queryFloorProduct", new queryFloorProduct());
+      processMap_.put("queryProductSnap", new queryProductSnap());
+      processMap_.put("productSurveyQueryBatch", new productSurveyQueryBatch());
     }
 
     protected static interface ProcessFunction {
@@ -1237,6 +1642,56 @@ public class ProductServ {
         oprot.getTransport().flush();
       }
     }
+    private class productSurveyQueryByHit implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        productSurveyQueryByHit_args args = new productSurveyQueryByHit_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("productSurveyQueryByHit", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        productSurveyQueryByHit_result result = new productSurveyQueryByHit_result();
+        result.success = iface_.productSurveyQueryByHit(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("productSurveyQueryByHit", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class productSurveyBackendQuery implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        productSurveyBackendQuery_args args = new productSurveyBackendQuery_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("productSurveyBackendQuery", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        productSurveyBackendQuery_result result = new productSurveyBackendQuery_result();
+        result.success = iface_.productSurveyBackendQuery(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("productSurveyBackendQuery", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
     private class setProductState implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
@@ -1282,6 +1737,56 @@ public class ProductServ {
         result.success = iface_.queryFloorProduct(args.floorId);
         
         oprot.writeMessageBegin(new TMessage("queryFloorProduct", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class queryProductSnap implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        queryProductSnap_args args = new queryProductSnap_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("queryProductSnap", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        queryProductSnap_result result = new queryProductSnap_result();
+        result.success = iface_.queryProductSnap(args.snapId, args.param);
+        
+        oprot.writeMessageBegin(new TMessage("queryProductSnap", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class productSurveyQueryBatch implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        productSurveyQueryBatch_args args = new productSurveyQueryBatch_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        productSurveyQueryBatch_result result = new productSurveyQueryBatch_result();
+        result.success = iface_.productSurveyQueryBatch(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -1765,6 +2270,140 @@ public class ProductServ {
           }
         }
       });
+      functionMap.put("productSurveyQueryByHit", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          productSurveyQueryByHit_args args = new productSurveyQueryByHit_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("productSurveyQueryByHit", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<ProductSurveyResult> future;
+          try {
+            future = iface.productSurveyQueryByHit(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<ProductSurveyResult, Future<byte[]>>() {
+              public Future<byte[]> apply(ProductSurveyResult value) {
+                productSurveyQueryByHit_result result = new productSurveyQueryByHit_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("productSurveyQueryByHit", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("productSurveyBackendQuery", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          productSurveyBackendQuery_args args = new productSurveyBackendQuery_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("productSurveyBackendQuery", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<ProductSurveyResult> future;
+          try {
+            future = iface.productSurveyBackendQuery(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<ProductSurveyResult, Future<byte[]>>() {
+              public Future<byte[]> apply(ProductSurveyResult value) {
+                productSurveyBackendQuery_result result = new productSurveyBackendQuery_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("productSurveyBackendQuery", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
       functionMap.put("setProductState", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
           setProductState_args args = new setProductState_args();
@@ -1881,6 +2520,140 @@ public class ProductServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("queryFloorProduct", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("queryProductSnap", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          queryProductSnap_args args = new queryProductSnap_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("queryProductSnap", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<ProductResult> future;
+          try {
+            future = iface.queryProductSnap(args.snapId, args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<ProductResult, Future<byte[]>>() {
+              public Future<byte[]> apply(ProductResult value) {
+                queryProductSnap_result result = new queryProductSnap_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("queryProductSnap", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("productSurveyQueryBatch", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          productSurveyQueryBatch_args args = new productSurveyQueryBatch_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<ProductSurveyResult> future;
+          try {
+            future = iface.productSurveyQueryBatch(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<ProductSurveyResult, Future<byte[]>>() {
+              public Future<byte[]> apply(ProductSurveyResult value) {
+                productSurveyQueryBatch_result result = new productSurveyQueryBatch_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -6217,6 +6990,1152 @@ public class ProductServ {
 }
 
 
+  public static class productSurveyQueryByHit_args implements TBase<productSurveyQueryByHit_args, productSurveyQueryByHit_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("productSurveyQueryByHit_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public ProductSurveyQueryParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductSurveyQueryParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(productSurveyQueryByHit_args.class, metaDataMap);
+  }
+
+
+  public productSurveyQueryByHit_args() {
+  }
+
+  public productSurveyQueryByHit_args(
+    ProductSurveyQueryParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public productSurveyQueryByHit_args(productSurveyQueryByHit_args other) {
+    if (other.isSetParam()) {
+      this.param = new ProductSurveyQueryParam(other.param);
+    }
+  }
+
+  public productSurveyQueryByHit_args deepCopy() {
+    return new productSurveyQueryByHit_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public ProductSurveyQueryParam getParam() {
+    return this.param;
+  }
+
+  public productSurveyQueryByHit_args setParam(ProductSurveyQueryParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((ProductSurveyQueryParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof productSurveyQueryByHit_args)
+      return this.equals((productSurveyQueryByHit_args)that);
+    return false;
+  }
+
+  public boolean equals(productSurveyQueryByHit_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(productSurveyQueryByHit_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    productSurveyQueryByHit_args typedOther = (productSurveyQueryByHit_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new ProductSurveyQueryParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("productSurveyQueryByHit_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class productSurveyQueryByHit_result implements TBase<productSurveyQueryByHit_result, productSurveyQueryByHit_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("productSurveyQueryByHit_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public ProductSurveyResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductSurveyResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(productSurveyQueryByHit_result.class, metaDataMap);
+  }
+
+
+  public productSurveyQueryByHit_result() {
+  }
+
+  public productSurveyQueryByHit_result(
+    ProductSurveyResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public productSurveyQueryByHit_result(productSurveyQueryByHit_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new ProductSurveyResult(other.success);
+    }
+  }
+
+  public productSurveyQueryByHit_result deepCopy() {
+    return new productSurveyQueryByHit_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public ProductSurveyResult getSuccess() {
+    return this.success;
+  }
+
+  public productSurveyQueryByHit_result setSuccess(ProductSurveyResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((ProductSurveyResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof productSurveyQueryByHit_result)
+      return this.equals((productSurveyQueryByHit_result)that);
+    return false;
+  }
+
+  public boolean equals(productSurveyQueryByHit_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(productSurveyQueryByHit_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    productSurveyQueryByHit_result typedOther = (productSurveyQueryByHit_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new ProductSurveyResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("productSurveyQueryByHit_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class productSurveyBackendQuery_args implements TBase<productSurveyBackendQuery_args, productSurveyBackendQuery_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("productSurveyBackendQuery_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public ProductSurveyQueryParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductSurveyQueryParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(productSurveyBackendQuery_args.class, metaDataMap);
+  }
+
+
+  public productSurveyBackendQuery_args() {
+  }
+
+  public productSurveyBackendQuery_args(
+    ProductSurveyQueryParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public productSurveyBackendQuery_args(productSurveyBackendQuery_args other) {
+    if (other.isSetParam()) {
+      this.param = new ProductSurveyQueryParam(other.param);
+    }
+  }
+
+  public productSurveyBackendQuery_args deepCopy() {
+    return new productSurveyBackendQuery_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public ProductSurveyQueryParam getParam() {
+    return this.param;
+  }
+
+  public productSurveyBackendQuery_args setParam(ProductSurveyQueryParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((ProductSurveyQueryParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof productSurveyBackendQuery_args)
+      return this.equals((productSurveyBackendQuery_args)that);
+    return false;
+  }
+
+  public boolean equals(productSurveyBackendQuery_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(productSurveyBackendQuery_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    productSurveyBackendQuery_args typedOther = (productSurveyBackendQuery_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new ProductSurveyQueryParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("productSurveyBackendQuery_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class productSurveyBackendQuery_result implements TBase<productSurveyBackendQuery_result, productSurveyBackendQuery_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("productSurveyBackendQuery_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public ProductSurveyResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductSurveyResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(productSurveyBackendQuery_result.class, metaDataMap);
+  }
+
+
+  public productSurveyBackendQuery_result() {
+  }
+
+  public productSurveyBackendQuery_result(
+    ProductSurveyResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public productSurveyBackendQuery_result(productSurveyBackendQuery_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new ProductSurveyResult(other.success);
+    }
+  }
+
+  public productSurveyBackendQuery_result deepCopy() {
+    return new productSurveyBackendQuery_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public ProductSurveyResult getSuccess() {
+    return this.success;
+  }
+
+  public productSurveyBackendQuery_result setSuccess(ProductSurveyResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((ProductSurveyResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof productSurveyBackendQuery_result)
+      return this.equals((productSurveyBackendQuery_result)that);
+    return false;
+  }
+
+  public boolean equals(productSurveyBackendQuery_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(productSurveyBackendQuery_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    productSurveyBackendQuery_result typedOther = (productSurveyBackendQuery_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new ProductSurveyResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("productSurveyBackendQuery_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
   public static class setProductState_args implements TBase<setProductState_args, setProductState_args._Fields>, java.io.Serializable, Cloneable {
   private static final TStruct STRUCT_DESC = new TStruct("setProductState_args");
 
@@ -7342,6 +9261,1243 @@ public class ProductServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("queryFloorProduct_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class queryProductSnap_args implements TBase<queryProductSnap_args, queryProductSnap_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryProductSnap_args");
+
+  private static final TField SNAP_ID_FIELD_DESC = new TField("snapId", TType.STRING, (short)1);
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)2);
+
+
+  public String snapId;
+  public ProductRetParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SNAP_ID((short)1, "snapId"),
+    PARAM((short)2, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // SNAP_ID
+  	return SNAP_ID;
+        case 2: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SNAP_ID, new FieldMetaData("snapId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductRetParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryProductSnap_args.class, metaDataMap);
+  }
+
+
+  public queryProductSnap_args() {
+  }
+
+  public queryProductSnap_args(
+    String snapId,
+    ProductRetParam param)
+  {
+    this();
+    this.snapId = snapId;
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryProductSnap_args(queryProductSnap_args other) {
+    if (other.isSetSnapId()) {
+      this.snapId = other.snapId;
+    }
+    if (other.isSetParam()) {
+      this.param = new ProductRetParam(other.param);
+    }
+  }
+
+  public queryProductSnap_args deepCopy() {
+    return new queryProductSnap_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.snapId = null;
+    this.param = null;
+  }
+
+  public String getSnapId() {
+    return this.snapId;
+  }
+
+  public queryProductSnap_args setSnapId(String snapId) {
+    this.snapId = snapId;
+    
+    return this;
+  }
+
+  public void unsetSnapId() {
+    this.snapId = null;
+  }
+
+  /** Returns true if field snapId is set (has been asigned a value) and false otherwise */
+  public boolean isSetSnapId() {
+    return this.snapId != null;
+  }
+
+  public void setSnapIdIsSet(boolean value) {
+    if (!value) {
+      this.snapId = null;
+    }
+  }
+
+  public ProductRetParam getParam() {
+    return this.param;
+  }
+
+  public queryProductSnap_args setParam(ProductRetParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SNAP_ID:
+      if (value == null) {
+        unsetSnapId();
+      } else {
+        setSnapId((String)value);
+      }
+      break;
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((ProductRetParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SNAP_ID:
+      return getSnapId();
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SNAP_ID:
+      return isSetSnapId();
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryProductSnap_args)
+      return this.equals((queryProductSnap_args)that);
+    return false;
+  }
+
+  public boolean equals(queryProductSnap_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_snapId = true && this.isSetSnapId();
+    boolean that_present_snapId = true && that.isSetSnapId();
+    if (this_present_snapId || that_present_snapId) {
+      if (!(this_present_snapId && that_present_snapId))
+        return false;
+      if (!this.snapId.equals(that.snapId))
+        return false;
+    }
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_snapId = true && (isSetSnapId());
+    builder.append(present_snapId);
+    if (present_snapId)
+      builder.append(snapId);
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryProductSnap_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryProductSnap_args typedOther = (queryProductSnap_args)other;
+
+    lastComparison = Boolean.valueOf(isSetSnapId()).compareTo(typedOther.isSetSnapId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSnapId()) {
+      lastComparison = TBaseHelper.compareTo(this.snapId, typedOther.snapId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // SNAP_ID
+          if (field.type == TType.STRING) {
+            this.snapId = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new ProductRetParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.snapId != null) {
+      oprot.writeFieldBegin(SNAP_ID_FIELD_DESC);
+      oprot.writeString(this.snapId);
+      oprot.writeFieldEnd();
+    }
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryProductSnap_args(");
+    boolean first = true;
+    sb.append("snapId:");
+    if (this.snapId == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.snapId);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class queryProductSnap_result implements TBase<queryProductSnap_result, queryProductSnap_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryProductSnap_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public ProductResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryProductSnap_result.class, metaDataMap);
+  }
+
+
+  public queryProductSnap_result() {
+  }
+
+  public queryProductSnap_result(
+    ProductResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryProductSnap_result(queryProductSnap_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new ProductResult(other.success);
+    }
+  }
+
+  public queryProductSnap_result deepCopy() {
+    return new queryProductSnap_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public ProductResult getSuccess() {
+    return this.success;
+  }
+
+  public queryProductSnap_result setSuccess(ProductResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((ProductResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryProductSnap_result)
+      return this.equals((queryProductSnap_result)that);
+    return false;
+  }
+
+  public boolean equals(queryProductSnap_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryProductSnap_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryProductSnap_result typedOther = (queryProductSnap_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new ProductResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryProductSnap_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class productSurveyQueryBatch_args implements TBase<productSurveyQueryBatch_args, productSurveyQueryBatch_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("productSurveyQueryBatch_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public ProductSurveyQueryBatchParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductSurveyQueryBatchParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(productSurveyQueryBatch_args.class, metaDataMap);
+  }
+
+
+  public productSurveyQueryBatch_args() {
+  }
+
+  public productSurveyQueryBatch_args(
+    ProductSurveyQueryBatchParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public productSurveyQueryBatch_args(productSurveyQueryBatch_args other) {
+    if (other.isSetParam()) {
+      this.param = new ProductSurveyQueryBatchParam(other.param);
+    }
+  }
+
+  public productSurveyQueryBatch_args deepCopy() {
+    return new productSurveyQueryBatch_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public ProductSurveyQueryBatchParam getParam() {
+    return this.param;
+  }
+
+  public productSurveyQueryBatch_args setParam(ProductSurveyQueryBatchParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((ProductSurveyQueryBatchParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof productSurveyQueryBatch_args)
+      return this.equals((productSurveyQueryBatch_args)that);
+    return false;
+  }
+
+  public boolean equals(productSurveyQueryBatch_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(productSurveyQueryBatch_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    productSurveyQueryBatch_args typedOther = (productSurveyQueryBatch_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new ProductSurveyQueryBatchParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("productSurveyQueryBatch_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class productSurveyQueryBatch_result implements TBase<productSurveyQueryBatch_result, productSurveyQueryBatch_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("productSurveyQueryBatch_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public ProductSurveyResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductSurveyResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(productSurveyQueryBatch_result.class, metaDataMap);
+  }
+
+
+  public productSurveyQueryBatch_result() {
+  }
+
+  public productSurveyQueryBatch_result(
+    ProductSurveyResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public productSurveyQueryBatch_result(productSurveyQueryBatch_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new ProductSurveyResult(other.success);
+    }
+  }
+
+  public productSurveyQueryBatch_result deepCopy() {
+    return new productSurveyQueryBatch_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public ProductSurveyResult getSuccess() {
+    return this.success;
+  }
+
+  public productSurveyQueryBatch_result setSuccess(ProductSurveyResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((ProductSurveyResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof productSurveyQueryBatch_result)
+      return this.equals((productSurveyQueryBatch_result)that);
+    return false;
+  }
+
+  public boolean equals(productSurveyQueryBatch_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(productSurveyQueryBatch_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    productSurveyQueryBatch_result typedOther = (productSurveyQueryBatch_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new ProductSurveyResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("productSurveyQueryBatch_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

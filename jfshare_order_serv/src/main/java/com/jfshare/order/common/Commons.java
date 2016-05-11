@@ -35,6 +35,6 @@ public class Commons {
     public static final String TABLE_NAME_ORDER_INFO_PREFIX = "tb_order_info_";
     public static final String TABLE_SELLER_PART = "seller_";
     public static final String TABLE_USER_PART = "user_";
-
+    public static final int DEFAULT_STOREHOUSE_ID = 1;
 }
   

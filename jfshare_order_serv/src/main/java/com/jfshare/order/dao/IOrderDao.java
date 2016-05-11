@@ -8,6 +8,8 @@
   
 package com.jfshare.order.dao;
 
+import com.jfshare.finagle.thrift.express.ExpressInfo;
+import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderRecordExample;
@@ -50,5 +52,11 @@ public interface IOrderDao {
     List<OrderModel> getOrderStateListByUser(int userId);
 
     List<OrderModel> getOrderStateListBySeller(int sellerId);
+
+    List<OrderModel> queryBatchBySeller(int sellerId, OrderQueryConditions conditions);
+
+    List<OrderModel> getSellerOrderBatch(int sellerId, List<String> orderIds);
+
+    int batchDeliverOp(int sellerId, List<Order> deliverOrderList);
 }
   
