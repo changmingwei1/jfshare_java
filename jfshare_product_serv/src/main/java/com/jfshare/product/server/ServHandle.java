@@ -217,7 +217,7 @@ public class ServHandle implements ProductServ.Iface {
 			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
 		}
 
-		logger.info(productSurveyResult.toString());
+//		logger.info(productSurveyResult.toString());
 		
 		return productSurveyResult;
 	}
@@ -236,7 +236,7 @@ public class ServHandle implements ProductServ.Iface {
             FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
         }
 
-        logger.info(productSurveyResult.toString());
+//        logger.info(productSurveyResult.toString());
 
         return productSurveyResult;
     }
@@ -287,7 +287,7 @@ public class ServHandle implements ProductServ.Iface {
 			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
 		}
 
-		logger.info(productSurveyResult.toString());
+//		logger.info(productSurveyResult.toString());
 		
 		return productSurveyResult;
 	}
