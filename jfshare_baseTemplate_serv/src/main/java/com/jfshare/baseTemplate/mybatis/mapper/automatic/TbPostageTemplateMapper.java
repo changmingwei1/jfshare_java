@@ -25,12 +25,12 @@ public interface TbPostageTemplateMapper {
     @Insert({
         "insert into tb_postage_template (seller_id, name, ",
         "type, postage_info, ",
-        "create_time, ",
+        "group, desc, create_time, ",
         "create_id, last_update_time, ",
         "last_update_id, deleted)",
         "values (#{sellerId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, ",
         "#{type,jdbcType=INTEGER}, #{postageInfo,jdbcType=VARCHAR}, ",
-        "#{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}, ",
+        "#{group,jdbcType=INTEGER}, #{desc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}, ",
         "#{createId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}, ",
         "#{lastUpdateId,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER})"
     })
@@ -43,8 +43,8 @@ public interface TbPostageTemplateMapper {
 
     @Select({
         "select",
-        "id, seller_id, name, type, postage_info, create_time, create_id, last_update_time, ",
-        "last_update_id, deleted",
+        "id, seller_id, name, type, postage_info, group, desc, create_time, create_id, ",
+        "last_update_time, last_update_id, deleted",
         "from tb_postage_template",
         "where id = #{id,jdbcType=INTEGER}"
     })
@@ -63,6 +63,8 @@ public interface TbPostageTemplateMapper {
           "name = #{name,jdbcType=VARCHAR},",
           "type = #{type,jdbcType=INTEGER},",
           "postage_info = #{postageInfo,jdbcType=VARCHAR},",
+          "group = #{group,jdbcType=INTEGER},",
+          "desc = #{desc,jdbcType=VARCHAR},",
           "create_time = #{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},",
           "create_id = #{createId,jdbcType=INTEGER},",
           "last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},",

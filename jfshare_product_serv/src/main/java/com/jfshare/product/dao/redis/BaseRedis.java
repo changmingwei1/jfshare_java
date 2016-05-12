@@ -33,7 +33,7 @@ public class BaseRedis {
      * @return
      */
     public boolean exists(String key){
-        logger.info( ">>>> exists ---- is exists key ---- " + key);
+        //logger.info( ">>>> exists ---- is exists key ---- " + key);
         boolean re = true;
         Jedis jedis =null;
         try {
@@ -42,7 +42,7 @@ public class BaseRedis {
         } finally {
             jedisPoolRead.returnResource(jedis);
         }
-        logger.info( "<<<< exists ---- is exists key ---- result: " + re);
+        //logger.info( "<<<< exists ---- is exists key ---- result: " + re);
         return re;
     }
 
@@ -53,7 +53,7 @@ public class BaseRedis {
      * @return
      */
     public boolean putKV(String key ,String value) {
-        logger.info(">>>> putKV ----- key : {}----value : {}", key, value);
+        //logger.info(">>>> putKV ----- key : {}----value : {}", key, value);
         boolean re = true;
         Jedis jedis =null;
         try {
@@ -63,7 +63,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< putKV ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< putKV ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -75,7 +75,7 @@ public class BaseRedis {
      * @return
      */
     public boolean putKV(String key, String value, int seconds) {
-        logger.info(">>>> putKV ---- life time: " + seconds + " -------key : {} ---", key);
+        //logger.info(">>>> putKV ---- life time: " + seconds + " -------key : {} ---", key);
         boolean re = true;
         Jedis jedis =null;
         try {
@@ -88,7 +88,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< putKV ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< putKV ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -99,7 +99,7 @@ public class BaseRedis {
      * @return
      */
     public boolean putNxKV(String key ,String value) {
-        logger.info(">>>> putNxKV ----- key : " + key);
+        //logger.info(">>>> putNxKV ----- key : " + key);
         boolean re = true;
         Jedis jedis =null;
         try {
@@ -109,7 +109,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< putNxKV ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< putNxKV ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -119,7 +119,7 @@ public class BaseRedis {
      * @return
      */
     public String getKV(String key) {
-        logger.info(">>>> getKV ----- key : " + key);
+        //logger.info(">>>> getKV ----- key : " + key);
         String re = null;
         Jedis jedis =null;
         try {
@@ -128,7 +128,7 @@ public class BaseRedis {
         } finally {
             jedisPoolRead.returnResource(jedis);
         }
-        logger.info("<<<< getKV ----- key : {}----result : {}", key, "success!");
+        //logger.info("<<<< getKV ----- key : {}----result : {}", key, "success!");
         return re;
     }
 
@@ -138,7 +138,7 @@ public class BaseRedis {
      * @return 删除条数
      */
     public String removeKV(String key) {
-        logger.info(">>>> removeKV ----- key : " + key);
+        //logger.info(">>>> removeKV ----- key : " + key);
         String re = null;
         Jedis jedis =null;
         try {
@@ -148,7 +148,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< removeKV ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< removeKV ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -158,7 +158,7 @@ public class BaseRedis {
      * @return 删除条数
      */
     public String removeKV(String... keys) {
-        logger.info(">>>> removeKV ----- keys : " + keys);
+        //logger.info(">>>> removeKV ----- keys : " + keys);
         String re = null;
         Jedis jedis =null;
         try {
@@ -168,7 +168,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< removeKV ----- keys : {}----result : {}", keys, re);
+        //logger.info("<<<< removeKV ----- keys : {}----result : {}", keys, re);
         return re;
     }
 
@@ -180,7 +180,7 @@ public class BaseRedis {
      * @return
      */
     public boolean putList(String key, String... values) {
-        logger.info(">>>> putList ----- key : {} ---- values : {}", key, JsonMapper.toJson(values));
+        //logger.info(">>>> putList ----- key : {} ---- values : {}", key, JsonMapper.toJson(values));
         boolean re = true;
         Jedis jedis =null;
         try {
@@ -192,7 +192,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< putList ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< putList ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -202,7 +202,7 @@ public class BaseRedis {
      * @return
      */
     public String getList(String key) {
-        logger.info(">>>> getList ----- get first value ----- key : {} ", key);
+        //logger.info(">>>> getList ----- get first value ----- key : {} ", key);
         String re = null;
         Jedis jedis =null;
         try {
@@ -212,7 +212,7 @@ public class BaseRedis {
         } finally {
             jedisPoolRead.returnResource(jedis);
         }
-        logger.info("<<<< getList ----- get first value ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< getList ----- get first value ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -222,7 +222,7 @@ public class BaseRedis {
      * @return
      */
     public String popList(String key) {
-        logger.info(">>>> popList ----- pop first value ----- key : {} ", key);
+        //logger.info(">>>> popList ----- pop first value ----- key : {} ", key);
         String re = null;
         Jedis jedis =null;
         try {
@@ -232,7 +232,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< popList ----- pop first value ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< popList ----- pop first value ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -244,7 +244,7 @@ public class BaseRedis {
      * @return
      */
     public boolean putMap(String key, String field, String value) {
-        logger.info(">>>> putMap ----- put value to key's field ----- key : " + key + " --- field : " + field + " --- value : " + value);
+        //logger.info(">>>> putMap ----- put value to key's field ----- key : " + key + " --- field : " + field + " --- value : " + value);
         boolean re = true;
         Jedis jedis = null;
         Long newCount = (long) 0;
@@ -255,7 +255,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< putMap ----- put value to key's field ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< putMap ----- put value to key's field ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -266,7 +266,7 @@ public class BaseRedis {
      * @return
      */
     public boolean putMap(String key,Map map) {
-        logger.info(">>>> putMap ----- put whole map ----- key : {} --- value : {}", key, JsonMapper.toJson(map));
+        //logger.info(">>>> putMap ----- put whole map ----- key : {} --- value : {}", key, JsonMapper.toJson(map));
         Jedis jedis = null;
         boolean re = true;
         try {
@@ -277,7 +277,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< putMap ----- put whole map ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< putMap ----- put whole map ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -289,7 +289,7 @@ public class BaseRedis {
      * @return
      */
     public boolean putMap(String key, Map map, int seconds) {
-        logger.info(">>>> putMap ----- put whole map with lifetime ----- key : {} --- value : {} --- lifetime : " + seconds , key, JsonMapper.toJson(map));
+        //logger.info(">>>> putMap ----- put whole map with lifetime ----- key : {} --- value : {} --- lifetime : " + seconds , key, JsonMapper.toJson(map));
         Jedis jedis = null;
         boolean re = true;
         try {
@@ -303,7 +303,7 @@ public class BaseRedis {
         } finally {
             jedisPoolWrite.returnResource(jedis);
         }
-        logger.info("<<<< putMap ----- put whole map ----- key : {}----result : {}", key, re);
+        //logger.info("<<<< putMap ----- put whole map ----- key : {}----result : {}", key, re);
         return re;
     }
 
@@ -314,7 +314,7 @@ public class BaseRedis {
      * @return
      */
     public String getMap(String key,String field) {
-        logger.info(">>>> getMap ----- get key's field value ----- key : {} --- field : {}", key, field);
+        //logger.info(">>>> getMap ----- get key's field value ----- key : {} --- field : {}", key, field);
         Jedis jedis = null;
         String re = null;
         try {
@@ -323,7 +323,7 @@ public class BaseRedis {
         } finally {
             jedisPoolRead.returnResource(jedis);
         }
-        logger.info("<<<< getMap ----- get key's field value ----- key : {}----result : {}", key, "success!");
+        //logger.info("<<<< getMap ----- get key's field value ----- key : {}----result : {}", key, "success!");
         return re;
     }
 
@@ -334,7 +334,7 @@ public class BaseRedis {
      * @return
      */
     public List<String> getMMap(String key, String... fields) {
-        logger.info(">>>> getMMap ----- get key's many field values ----- key : {} --- fields : {}", key, JsonMapper.toJson(fields));
+        //logger.info(">>>> getMMap ----- get key's many field values ----- key : {} --- fields : {}", key, JsonMapper.toJson(fields));
         List<String> values = new ArrayList<String>();
         Jedis jedis = null;
         try {
@@ -343,7 +343,7 @@ public class BaseRedis {
         } finally {
             jedisPoolRead.returnResource(jedis);
         }
-        logger.info("<<<< getMMap ----- get key's many field values ----- key : {} --- result : {}", key, "success!");
+        //logger.info("<<<< getMMap ----- get key's many field values ----- key : {} --- result : {}", key, "success!");
         return values;
     }
 
@@ -353,13 +353,13 @@ public class BaseRedis {
      * @return
      */
     public Map<String, String> getMapAll(String key) {
-        logger.info(">>>> getMapAll ----- get whole map ----- key : {} ", key);
+        //logger.info(">>>> getMapAll ----- get whole map ----- key : {} ", key);
         Jedis jedis = null;
         Map<String, String> map = null;
         try {
             jedis = jedisPoolRead.getResource();
             map = jedis.hgetAll(key);
-            logger.info("<<<< getMapAll ----- get whole map ----- key : {} --- result : {}", key, "success!");
+            //logger.info("<<<< getMapAll ----- get whole map ----- key : {} --- result : {}", key, "success!");
             return map.size() == 0 ? null : map;
         } finally {
             jedisPoolRead.returnResource(jedis);
@@ -379,13 +379,13 @@ public class BaseRedis {
      * @return
      */
     public Long incredMap(String key,String field,int value ) {
-        logger.info(">>>> incredMap ----- increase map field's value ----- key : " + key + " --- field : " + field + " --- value : " + value);
+        //logger.info(">>>> incredMap ----- increase map field's value ----- key : " + key + " --- field : " + field + " --- value : " + value);
         Jedis jedis =null;
         Long newCount = Long.parseLong("-1");
         try {
             jedis = jedisPoolWrite.getResource();
             newCount = jedis.hincrBy(key,field, value);
-            logger.info("<<<< incredMap ----- increase map field's value ----- key : {} --- field : {} --- result : " + newCount, key, field);
+            //logger.info("<<<< incredMap ----- increase map field's value ----- key : {} --- field : {} --- result : " + newCount, key, field);
             return newCount;
         } finally {
             jedisPoolWrite.returnResource(jedis);
@@ -400,7 +400,7 @@ public class BaseRedis {
      * @return
      */
     public boolean removeMap(String key,String field) {
-        logger.info(">>>> removeMap ----- remove map's field ----- key : {} --- field : {}", key, field);
+        //logger.info(">>>> removeMap ----- remove map's field ----- key : {} --- field : {}", key, field);
         Jedis jedis = null;
         Long newCount = (long) 0;
         boolean re = true;
@@ -408,7 +408,7 @@ public class BaseRedis {
             jedis = jedisPoolWrite.getResource();
             newCount = jedis.hdel(key, field);
             re = newCount == 0 ? false : true;
-            logger.info("<<<< removeMap ----- remove map's field ----- key : {} --- field : {} --- result : " + re, key, field);
+            //logger.info("<<<< removeMap ----- remove map's field ----- key : {} --- field : {} --- result : " + re, key, field);
             return re;
         } finally {
             jedisPoolWrite.returnResource(jedis);
@@ -446,7 +446,7 @@ public class BaseRedis {
      * @return
      */
     public Set<String> getSortSet(String key) {
-        logger.info(">>>> getSortSet ----- get sort set ----- key : {}", key);
+        //logger.info(">>>> getSortSet ----- get sort set ----- key : {}", key);
         Jedis jedis =null;
         try {
             jedis = jedisPoolRead.getResource();
@@ -516,13 +516,13 @@ public class BaseRedis {
      * @return
      */
     public boolean setExiperse(String key,int seconds) {
-        logger.info(">>>> setExiperse ----- set key's lifetime ----- key : {}", key);
+        //logger.info(">>>> setExiperse ----- set key's lifetime ----- key : {}", key);
         Jedis jedis =null;
         try {
             jedis = jedisPoolWrite.getResource();
             long r =  jedis.expire(key, seconds);
             if(r>0){
-                logger.info( "<<<< setExiperse---- set key's lifetime ----- key : {} --- seconds : {}", key, seconds);
+                //logger.info( "<<<< setExiperse---- set key's lifetime ----- key : {} --- seconds : {}", key, seconds);
                 return true;
             }else{
                 return false;

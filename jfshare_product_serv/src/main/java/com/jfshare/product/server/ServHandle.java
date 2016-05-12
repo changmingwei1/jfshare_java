@@ -147,6 +147,7 @@ public class ServHandle implements ProductServ.Iface {
 
 	@Override
 	public StringResult addProduct(Product product) throws TException {
+		logger.info(">>>> addProduct ---- product : {}", product.toString());
         StringResult stringResult = null;
         String productId = "";
         List<FailDesc> failDescs = ValidateUtil.productBasicValidate(product);
@@ -162,12 +163,13 @@ public class ServHandle implements ProductServ.Iface {
             stringResult = ResultUtil.createNormalFailStringResult(FailCode.SYSTEM_EXCEPTION);
             logger.error(FailCode.SYSTEM_EXCEPTION.getDesc(), e);
         }
-
+		logger.info("<<<< addProduct success ---- productId: {},  product : {}", stringResult.getValue(), product.toString());
         return stringResult;
     }
 
 	@Override
 	public StringResult updateProduct(Product product) throws TException {
+		logger.info(">>>> updateProduct ---- product : {}", product.toString());
         StringResult stringResult = null;
         String productId = "";
         List<FailDesc> failDescs = ValidateUtil.productBasicValidate(product);
@@ -192,7 +194,7 @@ public class ServHandle implements ProductServ.Iface {
             stringResult = ResultUtil.createNormalFailStringResult(FailCode.SYSTEM_EXCEPTION);
             logger.error(FailCode.SYSTEM_EXCEPTION.getDesc(), e);
         }
-
+		logger.info("<<<< updateProduct success ---- product : {}", product.toString());
         return stringResult;
 	}
 

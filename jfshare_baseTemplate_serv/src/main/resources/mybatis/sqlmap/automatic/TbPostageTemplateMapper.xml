@@ -7,6 +7,8 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="postage_info" property="postageInfo" jdbcType="VARCHAR" />
+    <result column="group" property="group" jdbcType="INTEGER" />
+    <result column="desc" property="desc" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
     <result column="create_id" property="createId" jdbcType="INTEGER" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
@@ -148,7 +150,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, seller_id, name, type, postage_info, create_time, create_id, last_update_time, 
+    id, seller_id, name, type, postage_info, group, desc, create_time, create_id, last_update_time, 
     last_update_id, deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jfshare.baseTemplate.mybatis.model.automatic.TbPostageTemplateExample" >
@@ -189,6 +191,12 @@
       <if test="postageInfo != null" >
         postage_info,
       </if>
+      <if test="group != null" >
+        group,
+      </if>
+      <if test="desc != null" >
+        desc,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
@@ -217,6 +225,12 @@
       </if>
       <if test="postageInfo != null" >
         #{postageInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="group != null" >
+        #{group,jdbcType=INTEGER},
+      </if>
+      <if test="desc != null" >
+        #{desc,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
@@ -259,6 +273,12 @@
       <if test="record.postageInfo != null" >
         postage_info = #{record.postageInfo,jdbcType=VARCHAR},
       </if>
+      <if test="record.group != null" >
+        group = #{record.group,jdbcType=INTEGER},
+      </if>
+      <if test="record.desc != null" >
+        desc = #{record.desc,jdbcType=VARCHAR},
+      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
       </if>
@@ -286,6 +306,8 @@
       name = #{record.name,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=INTEGER},
       postage_info = #{record.postageInfo,jdbcType=VARCHAR},
+      group = #{record.group,jdbcType=INTEGER},
+      desc = #{record.desc,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
       create_id = #{record.createId,jdbcType=INTEGER},
       last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},
@@ -309,6 +331,12 @@
       </if>
       <if test="postageInfo != null" >
         postage_info = #{postageInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="group != null" >
+        group = #{group,jdbcType=INTEGER},
+      </if>
+      <if test="desc != null" >
+        desc = #{desc,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},

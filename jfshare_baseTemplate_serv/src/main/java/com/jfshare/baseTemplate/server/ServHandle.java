@@ -2,22 +2,29 @@ package com.jfshare.baseTemplate.server;
 
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbPostageTemplate;
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbStorehouse;
-import com.jfshare.baseTemplate.mybatis.model.manual.CalculatePostageModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.ProductPostageModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.SellerPostageModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.SellerPostageReturnModel;
 import com.jfshare.baseTemplate.service.IPostageTemplateSvc;
 import com.jfshare.baseTemplate.service.IStorehouseSvc;
 import com.jfshare.baseTemplate.util.ConvertUtil;
 import com.jfshare.baseTemplate.util.FailCode;
 import com.jfshare.finagle.thrift.baseTemplate.BaseTemplateServ;
 import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageParam;
+import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageResult;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplate;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateQueryParam;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateResult;
+import com.jfshare.finagle.thrift.baseTemplate.ProductPostageBasic;
+import com.jfshare.finagle.thrift.baseTemplate.SellerPostageBasic;
+import com.jfshare.finagle.thrift.baseTemplate.SellerPostageReturn;
 import com.jfshare.finagle.thrift.baseTemplate.Storehouse;
 import com.jfshare.finagle.thrift.baseTemplate.StorehouseQueryParam;
 import com.jfshare.finagle.thrift.baseTemplate.StorehouseResult;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.kafka.common.metrics.Measurable;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -278,6 +285,7 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		queryMap.put("sellerId", param.getSellerId());
 		queryMap.put("type", param.getType());
 		queryMap.put("name", param.getName());
+		queryMap.put("group", param.getGroup());
 		List<PostageTemplate> postageTemplateList = new ArrayList<>();
 		try {
 			List<TbPostageTemplate> tbPostageTemplateList = this.postageTemplateSvc.queryPostageTemplate(queryMap);
@@ -322,36 +330,57 @@ public class ServHandle implements BaseTemplateServ.Iface {
 	}
 
 	@Override
-	public StringResult calculatePostage(CalculatePostageParam param) throws TException {
+	public CalculatePostageResult calculatePostage(CalculatePostageParam param) throws TException {
 
-		StringResult stringResult = new StringResult();
+		CalculatePostageResult calculatePostageResult = new CalculatePostageResult();
 		Result result = new Result();
-		stringResult.setResult(result);
+		calculatePostageResult.setResult(result);
 
-		CalculatePostageModel calculatePostageModel = new CalculatePostageModel();
-		calculatePostageModel.setTemplateId(param.getTemplateId());
-		calculatePostageModel.setNumber(param.getNumber());
-		calculatePostageModel.setWeight(param.getWeight());
-		calculatePostageModel.setOrderAmount(param.orderAmount);
-		calculatePostageModel.setSendToProvince(param.getSendToProvince());
+		List<SellerPostageModel> sellerPostageModels = new ArrayList<>();
+		List<ProductPostageModel> productPostageModels = new ArrayList<>();
 
-		String total = null;
+		String sendTProvince = param.getSendToProvince();
+
+		// 转换实体
+		for (SellerPostageBasic sellerPostageBasic : param.getSellerPostageBasicList()) {
+			SellerPostageModel sellerPostageModel = new SellerPostageModel();
+			for (ProductPostageBasic productPostageBasic : sellerPostageBasic.getProductPostageBasicList()) {
+				ProductPostageModel productPostageModel = new ProductPostageModel();
+				productPostageModel.setProductId(productPostageBasic.getProductId());
+				productPostageModel.setTemplateId(productPostageBasic.getTemplateId());
+				productPostageModel.setNumber(productPostageBasic.getNumber());
+				productPostageModel.setWeight(productPostageBasic.getWeight());
+				productPostageModel.setAmount(productPostageBasic.getAmount());
+				productPostageModels.add(productPostageModel);
+			}
+			sellerPostageModel.setSellerId(sellerPostageBasic.getSellerId());
+			sellerPostageModel.setProductPostageModels(productPostageModels);
+			sellerPostageModels.add(sellerPostageModel);
+		}
+		List<SellerPostageReturnModel> sellerPostageList = new ArrayList<>();
 		try {
-			total = this.postageTemplateSvc.calculatePostage(calculatePostageModel);
+//			total = this.postageTemplateSvc.calculatePostage(calculatePostageModel);
+			sellerPostageList = this.postageTemplateSvc.calculatePostage(sellerPostageModels, sendTProvince);
 		} catch (Exception e) {
 			logger.error("<<<<<<<< calculatePostage error !! param : " + param.toString(), e);
 			result.setCode(1);
 			result.addToFailDescList(FailCode.POSTAGE_CALCULATE_PARAM_ERROR);
-			return stringResult;
+			return calculatePostageResult;
 		}
-		if (total == null) {
+		if (CollectionUtils.isEmpty(sellerPostageList)) {
 			logger.error("<<<<<<<< calculatePostage error !! param : " + param.toString());
 			result.setCode(1);
 			result.addToFailDescList(FailCode.POSTAGE_CALCULATE_FAIL);
 		} else {
-			stringResult.setValue(total);
+			// 转换实体
+			int totalPostage = 0;
+			for (SellerPostageReturnModel model : sellerPostageList) {
+				calculatePostageResult.addToSellerPostageReturnList(new SellerPostageReturn(model.getSellerId(), model.getPostage() + ""));
+				totalPostage += model.getPostage();
+			}
+			calculatePostageResult.setTotalPostage(totalPostage + "");
 		}
 
-		return stringResult;
+		return calculatePostageResult;
 	}
 }

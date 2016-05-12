@@ -49,7 +49,7 @@ public class BaseTemplateServ {
     public com.jfshare.finagle.thrift.result.Result deletePostageTemplateBatch(List<PostageTemplate> postageTemplateList) throws TException;
     public PostageTemplateResult queryPostageTemplate(PostageTemplateQueryParam param) throws TException;
     public PostageTemplateResult getPostageTemplate(List<Integer> postageTemplateIds) throws TException;
-    public com.jfshare.finagle.thrift.result.StringResult calculatePostage(CalculatePostageParam param) throws TException;
+    public CalculatePostageResult calculatePostage(CalculatePostageParam param) throws TException;
   }
 
   public interface AsyncIface {
@@ -81,7 +81,7 @@ public class BaseTemplateServ {
     public Future<com.jfshare.finagle.thrift.result.Result> deletePostageTemplateBatch(List<PostageTemplate> postageTemplateList);
     public Future<PostageTemplateResult> queryPostageTemplate(PostageTemplateQueryParam param);
     public Future<PostageTemplateResult> getPostageTemplate(List<Integer> postageTemplateIds);
-    public Future<com.jfshare.finagle.thrift.result.StringResult> calculatePostage(CalculatePostageParam param);
+    public Future<CalculatePostageResult> calculatePostage(CalculatePostageParam param);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -543,7 +543,7 @@ public class BaseTemplateServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getPostageTemplate failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.StringResult calculatePostage(CalculatePostageParam param) throws TException
+    public CalculatePostageResult calculatePostage(CalculatePostageParam param) throws TException
     {
       send_calculatePostage(param);
       return recv_calculatePostage();
@@ -559,7 +559,7 @@ public class BaseTemplateServ {
       oprot_.getTransport().flush();
     }
 
-    public com.jfshare.finagle.thrift.result.StringResult recv_calculatePostage() throws TException
+    public CalculatePostageResult recv_calculatePostage() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -997,7 +997,7 @@ public class BaseTemplateServ {
         prot.writeMessageEnd();
       }
 
-      public com.jfshare.finagle.thrift.result.StringResult getResult() throws TException {
+      public CalculatePostageResult getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -1380,7 +1380,7 @@ public class BaseTemplateServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.StringResult> calculatePostage(CalculatePostageParam param) {
+    public Future<CalculatePostageResult> calculatePostage(CalculatePostageParam param) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
@@ -1395,8 +1395,8 @@ public class BaseTemplateServ {
         byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
         ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
         Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.StringResult>>() {
-          public Future<com.jfshare.finagle.thrift.result.StringResult> apply(byte[] __buffer__) {
+        return __done__.flatMap(new Function<byte[], Future<CalculatePostageResult>>() {
+          public Future<CalculatePostageResult> apply(byte[] __buffer__) {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
@@ -2625,7 +2625,7 @@ public class BaseTemplateServ {
           } catch (Exception e) {
             return Future.exception(e);
           }
-          Future<com.jfshare.finagle.thrift.result.StringResult> future;
+          Future<CalculatePostageResult> future;
           try {
             future = iface.calculatePostage(args.param);
           } catch (Exception e) {
@@ -2633,8 +2633,8 @@ public class BaseTemplateServ {
           }
 
           try {
-            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.StringResult, Future<byte[]>>() {
-              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.StringResult value) {
+            return future.flatMap(new Function<CalculatePostageResult, Future<byte[]>>() {
+              public Future<byte[]> apply(CalculatePostageResult value) {
                 calculatePostage_result result = new calculatePostage_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
@@ -4757,14 +4757,14 @@ public class BaseTemplateServ {
         case 1: // STOREHOUSE_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list12 = iprot.readListBegin();
-            this.storehouseList = new ArrayList<Storehouse>(_list12.size);
-            for (int _i13 = 0; _i13 < _list12.size; ++_i13)
+            TList _list24 = iprot.readListBegin();
+            this.storehouseList = new ArrayList<Storehouse>(_list24.size);
+            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
             {
-              Storehouse _elem14;
-              _elem14 = new Storehouse();
-              _elem14.read(iprot);
-              this.storehouseList.add(_elem14);
+              Storehouse _elem26;
+              _elem26 = new Storehouse();
+              _elem26.read(iprot);
+              this.storehouseList.add(_elem26);
             }
             iprot.readListEnd();
             }
@@ -4791,9 +4791,9 @@ public class BaseTemplateServ {
       oprot.writeFieldBegin(STOREHOUSE_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.storehouseList.size()));
-        for (Storehouse _iter15 : this.storehouseList)
+        for (Storehouse _iter27 : this.storehouseList)
         {
-          _iter15.write(oprot);
+          _iter27.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -5940,13 +5940,13 @@ public class BaseTemplateServ {
         case 1: // STOREHOUSE_IDS
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.storehouseIds = new ArrayList<Integer>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list28 = iprot.readListBegin();
+            this.storehouseIds = new ArrayList<Integer>(_list28.size);
+            for (int _i29 = 0; _i29 < _list28.size; ++_i29)
             {
-              int _elem18;
-              _elem18 = iprot.readI32();
-              this.storehouseIds.add(_elem18);
+              int _elem30;
+              _elem30 = iprot.readI32();
+              this.storehouseIds.add(_elem30);
             }
             iprot.readListEnd();
             }
@@ -5973,9 +5973,9 @@ public class BaseTemplateServ {
       oprot.writeFieldBegin(STOREHOUSE_IDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.I32, this.storehouseIds.size()));
-        for (int _iter19 : this.storehouseIds)
+        for (int _iter31 : this.storehouseIds)
         {
-          oprot.writeI32(_iter19);
+          oprot.writeI32(_iter31);
         }
         oprot.writeListEnd();
       }
@@ -8351,14 +8351,14 @@ public class BaseTemplateServ {
         case 1: // POSTAGE_TEMPLATE_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list20 = iprot.readListBegin();
-            this.postageTemplateList = new ArrayList<PostageTemplate>(_list20.size);
-            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
+            TList _list32 = iprot.readListBegin();
+            this.postageTemplateList = new ArrayList<PostageTemplate>(_list32.size);
+            for (int _i33 = 0; _i33 < _list32.size; ++_i33)
             {
-              PostageTemplate _elem22;
-              _elem22 = new PostageTemplate();
-              _elem22.read(iprot);
-              this.postageTemplateList.add(_elem22);
+              PostageTemplate _elem34;
+              _elem34 = new PostageTemplate();
+              _elem34.read(iprot);
+              this.postageTemplateList.add(_elem34);
             }
             iprot.readListEnd();
             }
@@ -8385,9 +8385,9 @@ public class BaseTemplateServ {
       oprot.writeFieldBegin(POSTAGE_TEMPLATE_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.postageTemplateList.size()));
-        for (PostageTemplate _iter23 : this.postageTemplateList)
+        for (PostageTemplate _iter35 : this.postageTemplateList)
         {
-          _iter23.write(oprot);
+          _iter35.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -9534,13 +9534,13 @@ public class BaseTemplateServ {
         case 1: // POSTAGE_TEMPLATE_IDS
           if (field.type == TType.LIST) {
             {
-            TList _list24 = iprot.readListBegin();
-            this.postageTemplateIds = new ArrayList<Integer>(_list24.size);
-            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
+            TList _list36 = iprot.readListBegin();
+            this.postageTemplateIds = new ArrayList<Integer>(_list36.size);
+            for (int _i37 = 0; _i37 < _list36.size; ++_i37)
             {
-              int _elem26;
-              _elem26 = iprot.readI32();
-              this.postageTemplateIds.add(_elem26);
+              int _elem38;
+              _elem38 = iprot.readI32();
+              this.postageTemplateIds.add(_elem38);
             }
             iprot.readListEnd();
             }
@@ -9567,9 +9567,9 @@ public class BaseTemplateServ {
       oprot.writeFieldBegin(POSTAGE_TEMPLATE_IDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.I32, this.postageTemplateIds.size()));
-        for (int _iter27 : this.postageTemplateIds)
+        for (int _iter39 : this.postageTemplateIds)
         {
-          oprot.writeI32(_iter27);
+          oprot.writeI32(_iter39);
         }
         oprot.writeListEnd();
       }
@@ -10178,7 +10178,7 @@ public class BaseTemplateServ {
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
 
-  public com.jfshare.finagle.thrift.result.StringResult success;
+  public CalculatePostageResult success;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -10245,7 +10245,7 @@ public class BaseTemplateServ {
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.StringResult.class)));
+      new StructMetaData(TType.STRUCT, CalculatePostageResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(calculatePostage_result.class, metaDataMap);
   }
@@ -10255,7 +10255,7 @@ public class BaseTemplateServ {
   }
 
   public calculatePostage_result(
-    com.jfshare.finagle.thrift.result.StringResult success)
+    CalculatePostageResult success)
   {
     this();
     this.success = success;
@@ -10266,7 +10266,7 @@ public class BaseTemplateServ {
    */
   public calculatePostage_result(calculatePostage_result other) {
     if (other.isSetSuccess()) {
-      this.success = new com.jfshare.finagle.thrift.result.StringResult(other.success);
+      this.success = new CalculatePostageResult(other.success);
     }
   }
 
@@ -10279,11 +10279,11 @@ public class BaseTemplateServ {
     this.success = null;
   }
 
-  public com.jfshare.finagle.thrift.result.StringResult getSuccess() {
+  public CalculatePostageResult getSuccess() {
     return this.success;
   }
 
-  public calculatePostage_result setSuccess(com.jfshare.finagle.thrift.result.StringResult success) {
+  public calculatePostage_result setSuccess(CalculatePostageResult success) {
     this.success = success;
     
     return this;
@@ -10310,7 +10310,7 @@ public class BaseTemplateServ {
       if (value == null) {
         unsetSuccess();
       } else {
-        setSuccess((com.jfshare.finagle.thrift.result.StringResult)value);
+        setSuccess((CalculatePostageResult)value);
       }
       break;
     }
@@ -10409,7 +10409,7 @@ public class BaseTemplateServ {
       switch (field.id) {
         case 0: // SUCCESS
           if (field.type == TType.STRUCT) {
-            this.success = new com.jfshare.finagle.thrift.result.StringResult();
+            this.success = new CalculatePostageResult();
             this.success.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);

@@ -33,6 +33,8 @@ public class ConvertUtil {
         postageTemplateMap.put("name", tbPostageTemplate.getName());
         postageTemplateMap.put("type", tbPostageTemplate.getType() + "");
         postageTemplateMap.put("postageInfo", tbPostageTemplate.getPostageInfo());
+        postageTemplateMap.put("group", tbPostageTemplate.getGroup() + "");
+        postageTemplateMap.put("desc", tbPostageTemplate.getDesc());
         return postageTemplateMap;
     }
 
@@ -48,6 +50,8 @@ public class ConvertUtil {
         tbPostageTemplate.setName(postageTemplateMap.get("name"));
         tbPostageTemplate.setType(Integer.parseInt(postageTemplateMap.get("type")));
         tbPostageTemplate.setPostageInfo(postageTemplateMap.get("postageInfo"));
+        tbPostageTemplate.setGroup(Integer.parseInt(postageTemplateMap.get("group")));
+        tbPostageTemplate.setDesc(postageTemplateMap.get("desc"));
         return tbPostageTemplate;
     }
 
@@ -67,6 +71,8 @@ public class ConvertUtil {
         for (PostageModel postageModel : postageModels) {
             postageTemplate.addToPostageList(new Postage(postageModel.getSupportProvince(), postageModel.getRule()));
         }
+        postageTemplate.setGroup(tbPostageTemplate.getGroup());
+        postageTemplate.setDesc(tbPostageTemplate.getDesc());
         return postageTemplate;
     }
 
@@ -94,6 +100,8 @@ public class ConvertUtil {
             }
             tbPostageTemplate.setPostageInfo(JsonMapper.toJson(postageModels));
         }
+        tbPostageTemplate.setGroup(postageTemplate.getGroup() == 0 ? null : postageTemplate.getGroup());
+        tbPostageTemplate.setDesc(postageTemplate.getDesc());
         return tbPostageTemplate;
     }
 

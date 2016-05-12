@@ -32,26 +32,17 @@ import org.apache.thrift.protocol.*;
 public class CalculatePostageParam implements TBase<CalculatePostageParam, CalculatePostageParam._Fields>, java.io.Serializable, Cloneable {
   private static final TStruct STRUCT_DESC = new TStruct("CalculatePostageParam");
 
-  private static final TField TEMPLATE_ID_FIELD_DESC = new TField("templateId", TType.I32, (short)1);
-  private static final TField NUMBER_FIELD_DESC = new TField("number", TType.I32, (short)2);
-  private static final TField WEIGHT_FIELD_DESC = new TField("weight", TType.I32, (short)3);
-  private static final TField ORDER_AMOUNT_FIELD_DESC = new TField("orderAmount", TType.STRING, (short)4);
-  private static final TField SEND_TO_PROVINCE_FIELD_DESC = new TField("sendToProvince", TType.STRING, (short)5);
+  private static final TField SELLER_POSTAGE_BASIC_LIST_FIELD_DESC = new TField("sellerPostageBasicList", TType.LIST, (short)1);
+  private static final TField SEND_TO_PROVINCE_FIELD_DESC = new TField("sendToProvince", TType.STRING, (short)2);
 
 
-  public int templateId;
-  public int number;
-  public int weight;
-  public String orderAmount;
+  public List<SellerPostageBasic> sellerPostageBasicList;
   public String sendToProvince;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    TEMPLATE_ID((short)1, "templateId"),
-    NUMBER((short)2, "number"),
-    WEIGHT((short)3, "weight"),
-    ORDER_AMOUNT((short)4, "orderAmount"),
-    SEND_TO_PROVINCE((short)5, "sendToProvince");
+    SELLER_POSTAGE_BASIC_LIST((short)1, "sellerPostageBasicList"),
+    SEND_TO_PROVINCE((short)2, "sendToProvince");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -66,15 +57,9 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // TEMPLATE_ID
-  	return TEMPLATE_ID;
-        case 2: // NUMBER
-  	return NUMBER;
-        case 3: // WEIGHT
-  	return WEIGHT;
-        case 4: // ORDER_AMOUNT
-  	return ORDER_AMOUNT;
-        case 5: // SEND_TO_PROVINCE
+        case 1: // SELLER_POSTAGE_BASIC_LIST
+  	return SELLER_POSTAGE_BASIC_LIST;
+        case 2: // SEND_TO_PROVINCE
   	return SEND_TO_PROVINCE;
         default:
   	return null;
@@ -117,22 +102,13 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
 
 
   // isset id assignments
-  private static final int __TEMPLATEID_ISSET_ID = 0;
-  private static final int __NUMBER_ISSET_ID = 1;
-  private static final int __WEIGHT_ISSET_ID = 2;
-  private BitSet __isset_bit_vector = new BitSet(3);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.TEMPLATE_ID, new FieldMetaData("templateId", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.NUMBER, new FieldMetaData("number", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.WEIGHT, new FieldMetaData("weight", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.ORDER_AMOUNT, new FieldMetaData("orderAmount", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.SELLER_POSTAGE_BASIC_LIST, new FieldMetaData("sellerPostageBasicList", TFieldRequirementType.DEFAULT,
+      new ListMetaData(TType.LIST,
+                new StructMetaData(TType.STRUCT, SellerPostageBasic.class))));
     tmpMap.put(_Fields.SEND_TO_PROVINCE, new FieldMetaData("sendToProvince", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -144,20 +120,11 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
   }
 
   public CalculatePostageParam(
-    int templateId,
-    int number,
-    int weight,
-    String orderAmount,
+    List<SellerPostageBasic> sellerPostageBasicList,
     String sendToProvince)
   {
     this();
-    this.templateId = templateId;
-    setTemplateIdIsSet(true);
-    this.number = number;
-    setNumberIsSet(true);
-    this.weight = weight;
-    setWeightIsSet(true);
-    this.orderAmount = orderAmount;
+    this.sellerPostageBasicList = sellerPostageBasicList;
     this.sendToProvince = sendToProvince;
   }
 
@@ -165,13 +132,12 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
    * Performs a deep copy on <i>other</i>.
    */
   public CalculatePostageParam(CalculatePostageParam other) {
-    __isset_bit_vector.clear();
-    __isset_bit_vector.or(other.__isset_bit_vector);
-    this.templateId = other.templateId;
-    this.number = other.number;
-    this.weight = other.weight;
-    if (other.isSetOrderAmount()) {
-      this.orderAmount = other.orderAmount;
+    if (other.isSetSellerPostageBasicList()) {
+      List<SellerPostageBasic> __this__sellerPostageBasicList = new ArrayList<SellerPostageBasic>();
+      for (SellerPostageBasic other_element : other.sellerPostageBasicList) {
+        __this__sellerPostageBasicList.add(new SellerPostageBasic(other_element));
+      }
+      this.sellerPostageBasicList = __this__sellerPostageBasicList;
     }
     if (other.isSetSendToProvince()) {
       this.sendToProvince = other.sendToProvince;
@@ -184,110 +150,47 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
 
   @Override
   public void clear() {
-    setTemplateIdIsSet(false);
-    this.templateId = 0;
-    setNumberIsSet(false);
-    this.number = 0;
-    setWeightIsSet(false);
-    this.weight = 0;
-    this.orderAmount = null;
+    this.sellerPostageBasicList = null;
     this.sendToProvince = null;
   }
 
-  public int getTemplateId() {
-    return this.templateId;
+  public int getSellerPostageBasicListSize() {
+    return (this.sellerPostageBasicList == null) ? 0 : this.sellerPostageBasicList.size();
   }
 
-  public CalculatePostageParam setTemplateId(int templateId) {
-    this.templateId = templateId;
-    setTemplateIdIsSet(true);
-
-    return this;
+  public java.util.Iterator<SellerPostageBasic> getSellerPostageBasicListIterator() {
+    return (this.sellerPostageBasicList == null) ? null : this.sellerPostageBasicList.iterator();
   }
 
-  public void unsetTemplateId() {
-  __isset_bit_vector.clear(__TEMPLATEID_ISSET_ID);
+  public void addToSellerPostageBasicList(SellerPostageBasic elem) {
+    if (this.sellerPostageBasicList == null) {
+      this.sellerPostageBasicList = new ArrayList<SellerPostageBasic>();
+    }
+    this.sellerPostageBasicList.add(elem);
   }
 
-  /** Returns true if field templateId is set (has been asigned a value) and false otherwise */
-  public boolean isSetTemplateId() {
-    return __isset_bit_vector.get(__TEMPLATEID_ISSET_ID);
+  public List<SellerPostageBasic> getSellerPostageBasicList() {
+    return this.sellerPostageBasicList;
   }
 
-  public void setTemplateIdIsSet(boolean value) {
-    __isset_bit_vector.set(__TEMPLATEID_ISSET_ID, value);
-  }
-
-  public int getNumber() {
-    return this.number;
-  }
-
-  public CalculatePostageParam setNumber(int number) {
-    this.number = number;
-    setNumberIsSet(true);
-
-    return this;
-  }
-
-  public void unsetNumber() {
-  __isset_bit_vector.clear(__NUMBER_ISSET_ID);
-  }
-
-  /** Returns true if field number is set (has been asigned a value) and false otherwise */
-  public boolean isSetNumber() {
-    return __isset_bit_vector.get(__NUMBER_ISSET_ID);
-  }
-
-  public void setNumberIsSet(boolean value) {
-    __isset_bit_vector.set(__NUMBER_ISSET_ID, value);
-  }
-
-  public int getWeight() {
-    return this.weight;
-  }
-
-  public CalculatePostageParam setWeight(int weight) {
-    this.weight = weight;
-    setWeightIsSet(true);
-
-    return this;
-  }
-
-  public void unsetWeight() {
-  __isset_bit_vector.clear(__WEIGHT_ISSET_ID);
-  }
-
-  /** Returns true if field weight is set (has been asigned a value) and false otherwise */
-  public boolean isSetWeight() {
-    return __isset_bit_vector.get(__WEIGHT_ISSET_ID);
-  }
-
-  public void setWeightIsSet(boolean value) {
-    __isset_bit_vector.set(__WEIGHT_ISSET_ID, value);
-  }
-
-  public String getOrderAmount() {
-    return this.orderAmount;
-  }
-
-  public CalculatePostageParam setOrderAmount(String orderAmount) {
-    this.orderAmount = orderAmount;
+  public CalculatePostageParam setSellerPostageBasicList(List<SellerPostageBasic> sellerPostageBasicList) {
+    this.sellerPostageBasicList = sellerPostageBasicList;
     
     return this;
   }
 
-  public void unsetOrderAmount() {
-    this.orderAmount = null;
+  public void unsetSellerPostageBasicList() {
+    this.sellerPostageBasicList = null;
   }
 
-  /** Returns true if field orderAmount is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrderAmount() {
-    return this.orderAmount != null;
+  /** Returns true if field sellerPostageBasicList is set (has been asigned a value) and false otherwise */
+  public boolean isSetSellerPostageBasicList() {
+    return this.sellerPostageBasicList != null;
   }
 
-  public void setOrderAmountIsSet(boolean value) {
+  public void setSellerPostageBasicListIsSet(boolean value) {
     if (!value) {
-      this.orderAmount = null;
+      this.sellerPostageBasicList = null;
     }
   }
 
@@ -318,32 +221,11 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case TEMPLATE_ID:
+    case SELLER_POSTAGE_BASIC_LIST:
       if (value == null) {
-        unsetTemplateId();
+        unsetSellerPostageBasicList();
       } else {
-        setTemplateId((Integer)value);
-      }
-      break;
-    case NUMBER:
-      if (value == null) {
-        unsetNumber();
-      } else {
-        setNumber((Integer)value);
-      }
-      break;
-    case WEIGHT:
-      if (value == null) {
-        unsetWeight();
-      } else {
-        setWeight((Integer)value);
-      }
-      break;
-    case ORDER_AMOUNT:
-      if (value == null) {
-        unsetOrderAmount();
-      } else {
-        setOrderAmount((String)value);
+        setSellerPostageBasicList((List<SellerPostageBasic>)value);
       }
       break;
     case SEND_TO_PROVINCE:
@@ -358,14 +240,8 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case TEMPLATE_ID:
-      return new Integer(getTemplateId());
-    case NUMBER:
-      return new Integer(getNumber());
-    case WEIGHT:
-      return new Integer(getWeight());
-    case ORDER_AMOUNT:
-      return getOrderAmount();
+    case SELLER_POSTAGE_BASIC_LIST:
+      return getSellerPostageBasicList();
     case SEND_TO_PROVINCE:
       return getSendToProvince();
     }
@@ -379,14 +255,8 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
     }
 
     switch (field) {
-    case TEMPLATE_ID:
-      return isSetTemplateId();
-    case NUMBER:
-      return isSetNumber();
-    case WEIGHT:
-      return isSetWeight();
-    case ORDER_AMOUNT:
-      return isSetOrderAmount();
+    case SELLER_POSTAGE_BASIC_LIST:
+      return isSetSellerPostageBasicList();
     case SEND_TO_PROVINCE:
       return isSetSendToProvince();
     }
@@ -405,36 +275,12 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
   public boolean equals(CalculatePostageParam that) {
     if (that == null)
       return false;
-    boolean this_present_templateId = true;
-    boolean that_present_templateId = true;
-    if (this_present_templateId || that_present_templateId) {
-      if (!(this_present_templateId && that_present_templateId))
+    boolean this_present_sellerPostageBasicList = true && this.isSetSellerPostageBasicList();
+    boolean that_present_sellerPostageBasicList = true && that.isSetSellerPostageBasicList();
+    if (this_present_sellerPostageBasicList || that_present_sellerPostageBasicList) {
+      if (!(this_present_sellerPostageBasicList && that_present_sellerPostageBasicList))
         return false;
-      if (this.templateId != that.templateId)
-        return false;
-    }
-    boolean this_present_number = true;
-    boolean that_present_number = true;
-    if (this_present_number || that_present_number) {
-      if (!(this_present_number && that_present_number))
-        return false;
-      if (this.number != that.number)
-        return false;
-    }
-    boolean this_present_weight = true;
-    boolean that_present_weight = true;
-    if (this_present_weight || that_present_weight) {
-      if (!(this_present_weight && that_present_weight))
-        return false;
-      if (this.weight != that.weight)
-        return false;
-    }
-    boolean this_present_orderAmount = true && this.isSetOrderAmount();
-    boolean that_present_orderAmount = true && that.isSetOrderAmount();
-    if (this_present_orderAmount || that_present_orderAmount) {
-      if (!(this_present_orderAmount && that_present_orderAmount))
-        return false;
-      if (!this.orderAmount.equals(that.orderAmount))
+      if (!this.sellerPostageBasicList.equals(that.sellerPostageBasicList))
         return false;
     }
     boolean this_present_sendToProvince = true && this.isSetSendToProvince();
@@ -452,22 +298,10 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_templateId = true;
-    builder.append(present_templateId);
-    if (present_templateId)
-      builder.append(templateId);
-    boolean present_number = true;
-    builder.append(present_number);
-    if (present_number)
-      builder.append(number);
-    boolean present_weight = true;
-    builder.append(present_weight);
-    if (present_weight)
-      builder.append(weight);
-    boolean present_orderAmount = true && (isSetOrderAmount());
-    builder.append(present_orderAmount);
-    if (present_orderAmount)
-      builder.append(orderAmount);
+    boolean present_sellerPostageBasicList = true && (isSetSellerPostageBasicList());
+    builder.append(present_sellerPostageBasicList);
+    if (present_sellerPostageBasicList)
+      builder.append(sellerPostageBasicList);
     boolean present_sendToProvince = true && (isSetSendToProvince());
     builder.append(present_sendToProvince);
     if (present_sendToProvince)
@@ -483,42 +317,12 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
     int lastComparison = 0;
     CalculatePostageParam typedOther = (CalculatePostageParam)other;
 
-    lastComparison = Boolean.valueOf(isSetTemplateId()).compareTo(typedOther.isSetTemplateId());
+    lastComparison = Boolean.valueOf(isSetSellerPostageBasicList()).compareTo(typedOther.isSetSellerPostageBasicList());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetTemplateId()) {
-      lastComparison = TBaseHelper.compareTo(this.templateId, typedOther.templateId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetNumber()).compareTo(typedOther.isSetNumber());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetNumber()) {
-      lastComparison = TBaseHelper.compareTo(this.number, typedOther.number);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetWeight()).compareTo(typedOther.isSetWeight());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetWeight()) {
-      lastComparison = TBaseHelper.compareTo(this.weight, typedOther.weight);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetOrderAmount()).compareTo(typedOther.isSetOrderAmount());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetOrderAmount()) {
-      lastComparison = TBaseHelper.compareTo(this.orderAmount, typedOther.orderAmount);
+    if (isSetSellerPostageBasicList()) {
+      lastComparison = TBaseHelper.compareTo(this.sellerPostageBasicList, typedOther.sellerPostageBasicList);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -551,38 +355,25 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
         break;
       }
       switch (field.id) {
-        case 1: // TEMPLATE_ID
-          if (field.type == TType.I32) {
-            this.templateId = iprot.readI32();
-            setTemplateIdIsSet(true);
+        case 1: // SELLER_POSTAGE_BASIC_LIST
+          if (field.type == TType.LIST) {
+            {
+            TList _list8 = iprot.readListBegin();
+            this.sellerPostageBasicList = new ArrayList<SellerPostageBasic>(_list8.size);
+            for (int _i9 = 0; _i9 < _list8.size; ++_i9)
+            {
+              SellerPostageBasic _elem10;
+              _elem10 = new SellerPostageBasic();
+              _elem10.read(iprot);
+              this.sellerPostageBasicList.add(_elem10);
+            }
+            iprot.readListEnd();
+            }
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // NUMBER
-          if (field.type == TType.I32) {
-            this.number = iprot.readI32();
-            setNumberIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 3: // WEIGHT
-          if (field.type == TType.I32) {
-            this.weight = iprot.readI32();
-            setWeightIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 4: // ORDER_AMOUNT
-          if (field.type == TType.STRING) {
-            this.orderAmount = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 5: // SEND_TO_PROVINCE
+        case 2: // SEND_TO_PROVINCE
           if (field.type == TType.STRING) {
             this.sendToProvince = iprot.readString();
           } else {
@@ -604,18 +395,16 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    oprot.writeFieldBegin(TEMPLATE_ID_FIELD_DESC);
-    oprot.writeI32(this.templateId);
-    oprot.writeFieldEnd();
-    oprot.writeFieldBegin(NUMBER_FIELD_DESC);
-    oprot.writeI32(this.number);
-    oprot.writeFieldEnd();
-    oprot.writeFieldBegin(WEIGHT_FIELD_DESC);
-    oprot.writeI32(this.weight);
-    oprot.writeFieldEnd();
-    if (this.orderAmount != null) {
-      oprot.writeFieldBegin(ORDER_AMOUNT_FIELD_DESC);
-      oprot.writeString(this.orderAmount);
+    if (this.sellerPostageBasicList != null) {
+      oprot.writeFieldBegin(SELLER_POSTAGE_BASIC_LIST_FIELD_DESC);
+      {
+        oprot.writeListBegin(new TList(TType.STRUCT, this.sellerPostageBasicList.size()));
+        for (SellerPostageBasic _iter11 : this.sellerPostageBasicList)
+        {
+          _iter11.write(oprot);
+        }
+        oprot.writeListEnd();
+      }
       oprot.writeFieldEnd();
     }
     if (this.sendToProvince != null) {
@@ -631,23 +420,11 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
   public String toString() {
     StringBuilder sb = new StringBuilder("CalculatePostageParam(");
     boolean first = true;
-    sb.append("templateId:");
-    sb.append(this.templateId);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("number:");
-    sb.append(this.number);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("weight:");
-    sb.append(this.weight);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("orderAmount:");
-    if (this.orderAmount == null) {
+    sb.append("sellerPostageBasicList:");
+    if (this.sellerPostageBasicList == null) {
       sb.append("null");
     } else {
-      sb.append(this.orderAmount);
+      sb.append(this.sellerPostageBasicList);
     }
     first = false;
     if (!first) sb.append(", ");

@@ -1,19 +1,26 @@
 package com.jfshare.baseTemplate.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.InetAddressCodec;
 import com.jfshare.baseTemplate.dao.mysql.IPostageTemplateDao;
 import com.jfshare.baseTemplate.dao.redis.BaseRedis;
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbPostageTemplate;
-import com.jfshare.baseTemplate.mybatis.model.manual.CalculatePostageModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.ProductPostageModel;
 import com.jfshare.baseTemplate.mybatis.model.manual.PostageModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.SellerPostageModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.SellerPostageReturnModel;
 import com.jfshare.baseTemplate.service.IPostageTemplateSvc;
 import com.jfshare.baseTemplate.util.Constant;
 import com.jfshare.baseTemplate.util.ConvertUtil;
 import com.jfshare.utils.JsonMapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +70,15 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
     }
 
     @Override
+    public List<TbPostageTemplate> getPostageTemplateBySellerId(int sellerId, int group) {
+        // TODO: 2016/5/11 先简单实现，后续需要在缓存里获取
+        Map queryMap = new HashMap();
+        queryMap.put("sellerId", sellerId);
+        queryMap.put("group", group);
+        return this.postageTemplateDao.queryPostageTemplate(queryMap);
+    }
+
+    @Override
     public TbPostageTemplate getById(int id) {
         TbPostageTemplate tbPostageTemplate = null;
         // 从缓存获取
@@ -92,9 +108,9 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
     }
 
     @Override
-    public String calculatePostage(CalculatePostageModel model) {
+    public String calculatePostage(ProductPostageModel model) {
 
-        int postageTotal = 0;
+        /*double postageTotal = 0;
         // 获取模板信息
         TbPostageTemplate tbPostageTemplate = this.getById(model.getTemplateId());
         // 模板不存在
@@ -115,7 +131,7 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
         // 按件数计算运费
         Map<String, String> map = JsonMapper.toMap(rule);
         if(tbPostageTemplate.getType() == 11) {
-            /* 例子： 2件内，10元，每增加1件，增加运费3元 */
+            *//* 例子： 2件内，10元，每增加1件，增加运费3元 *//*
 
             int number = Integer.parseInt(map.get("number"));
             int postage = Integer.parseInt(map.get("postage"));
@@ -130,7 +146,7 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
         }
         // 按重量计算运费
         if(tbPostageTemplate.getType() == 12) {
-            /*例子： 2kg内，10元，每增加1kg，增加运费3元*/
+            *//*例子： 2kg内，10元，每增加1kg，增加运费3元*//*
             int number = Integer.parseInt(map.get("number"));
             int postage = Integer.parseInt(map.get("postage"));
             int addNumber = Integer.parseInt(map.get("addNumber"));
@@ -150,7 +166,7 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
             int postage = Integer.parseInt(map.get("postage"));
 
             // 例： 2  件以上，100 元以上，运费  5  元
-            if(model.getNumber() > number || Integer.parseInt(model.getOrderAmount()) > amount) {
+            if(model.getNumber() > number || Integer.parseInt(model.getAmount()) > amount) {
                 postageTotal = postage;
             }
 
@@ -161,14 +177,14 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
             int amount = Integer.parseInt(map.get("amount"));
             int limit = Integer.parseInt(map.get("limit"));
             int postage = Integer.parseInt(map.get("postage"));
-            /* 类推示例：5kg以内，100元以上，运费3元；10kg以内，200元以上，运费6元…以此类推 */
+            *//* 类推示例：5kg以内，100元以上，运费3元；10kg以内，200元以上，运费6元…以此类推 *//*
             if (limit == 1) {
                 for (int i = 1; i < Integer.MAX_VALUE; i++) {
-                    if(model.getWeight() <= i * number && Integer.parseInt(model.getOrderAmount()) >= i * amount) {
+                    if(model.getWeight() <= i * number && Integer.parseInt(model.getAmount()) >= i * amount) {
                         postageTotal = i * postage;
                     }
                     // 如果重量超过n倍重量基础值，但金额没有到达n倍金额基础值，则没有匹配上规则，返回null
-                    if(model.getWeight() > i * number && Integer.parseInt(model.getOrderAmount()) < i * amount) {
+                    if(model.getWeight() > i * number && Integer.parseInt(model.getAmount()) < i * amount) {
                        return null;
                     }
                 }
@@ -176,7 +192,7 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
             }
             // 不类推，匹配不上直接返回null
             if(limit == 0) {
-                if (model.getWeight() <= number && Integer.parseInt(model.getOrderAmount()) >= amount) {
+                if (model.getWeight() <= number && Integer.parseInt(model.getAmount()) >= amount) {
                     postageTotal = postage;
                 } else {
                     return null;
@@ -184,6 +200,164 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
             }
         }
 
-        return postageTotal + "";
+        return postageTotal + "";*/
+
+        return null;
+    }
+
+    @Override
+    public List<SellerPostageReturnModel> calculatePostage(List<SellerPostageModel> sellerPostageModels, String sendToProvince) {
+
+        List<SellerPostageReturnModel> sellerPostageList = new ArrayList<>();
+
+        // 计算单个卖家商品总邮费
+        for (SellerPostageModel sellerPostageModel : sellerPostageModels) {
+            int sellerProductTotal = 0;
+            int sellerTotal = 0;
+            for (ProductPostageModel productPostageModel : sellerPostageModel.getProductPostageModels()) {
+                // 计算卖家单个商品的邮费
+                sellerProductTotal += getProductPostage(productPostageModel, sendToProvince);
+            }
+            // 计算商家维度邮费
+            sellerTotal = getShopPostage(sellerPostageModel.getSellerId(), sellerPostageModel.getProductPostageModels(), sendToProvince);
+            SellerPostageReturnModel sellerPostageReturnModel = new SellerPostageReturnModel();
+            sellerPostageReturnModel.setSellerId(sellerPostageModel.getSellerId());
+            sellerPostageReturnModel.setPostage(getMin(sellerProductTotal, sellerTotal));
+            sellerPostageList.add(sellerPostageReturnModel);
+        }
+        return sellerPostageList;
+    }
+
+    /**
+     * 获取商品维度邮费
+     * @param model
+     * @param sendToProvince
+     * @return
+     */
+    private int getProductPostage(ProductPostageModel model, String sendToProvince) {
+        int totalPostage = 0;
+        // 获取模板信息
+        TbPostageTemplate tbPostageTemplate = this.getById(model.getTemplateId());
+        // 模板不存在
+        if(tbPostageTemplate == null) {
+            return 0;
+        }
+        String postageInfo = tbPostageTemplate.getPostageInfo();
+        // 获取所有运费信息
+        List<PostageModel> postageModels = JSON.parseArray(postageInfo, PostageModel.class);
+        String rule = "";
+        // 找到发送到省份的运费规则
+        for (PostageModel postageModel : postageModels) {
+            if(("," + postageModel.getSupportProvince() + ",").contains("," + sendToProvince + ",")) {
+                rule = postageModel.getRule();
+                break;
+            }
+        }
+        JSONObject jsonObject = JSON.parseObject(rule);
+        int number = jsonObject.getInteger("number");
+        int postage = jsonObject.getInteger("postage");
+        int addNumber = jsonObject.getInteger("addNumber");
+        int addPostage = jsonObject.getInteger("addPostage");
+
+        // 按件数计算运费
+        if(tbPostageTemplate.getType() == 11) {
+            /* 例子： 2件内，10元，每增加1件，增加运费3元 */
+            if (model.getNumber() <= number) {
+                totalPostage = postage;
+            } else {
+                totalPostage = postage + (model.getNumber() - number) / addNumber * addPostage;
+            }
+        }
+        // 按重量计算运费
+        double weight = jsonObject.getDouble("number");
+        double addWeight = jsonObject.getDouble("addNumber");
+        if(tbPostageTemplate.getType() == 12) {
+            /*例子： 2kg内，10元，每增加1kg，增加运费3元*/
+            if(model.getWeight() <= weight) {
+                totalPostage = postage;
+            } else {
+                totalPostage = (int) (postage + (model.getWeight() - weight) / addWeight * addPostage);
+            }
+        }
+        return totalPostage;
+    }
+
+    private int getShopPostage(int sellerId, List<ProductPostageModel> models, String sendToProvince) {
+
+        int totalPostage = Integer.MAX_VALUE;
+
+        // 获取商家邮费优惠模板
+        List<TbPostageTemplate> templates = this.getPostageTemplateBySellerId(sellerId, 2);
+        if (CollectionUtils.isEmpty(templates)) {
+            return Integer.MAX_VALUE;
+        }
+
+        // 计算总金额,总重量和总件数
+        int totalAmount = 0;
+        double totalWeight = 0;
+        int totalNumber = 0;
+        for (ProductPostageModel model : models) {
+            totalAmount += Integer.parseInt(model.getAmount());
+            totalWeight += model.getWeight();
+            totalNumber += model.getNumber();
+        }
+
+        for (TbPostageTemplate template : templates) {
+            String postageInfo = template.getPostageInfo();
+            // 获取所有运费信息
+            List<PostageModel> postageModels = JSON.parseArray(postageInfo, PostageModel.class);
+            String rule = "";
+            // 找到发送到省份的运费规则
+            for (PostageModel postageModel : postageModels) {
+                if (("," + postageModel.getSupportProvince() + ",").contains("," + sendToProvince + ",")) {
+                    rule = postageModel.getRule();
+                    break;
+                }
+            }
+            JSONObject jsonObject = JSON.parseObject(rule);
+            int number = jsonObject.getInteger("number");
+            int amount = jsonObject.getInteger("amount");
+            int limit = jsonObject.getInteger("limit");
+            int postage = jsonObject.getInteger("postage");
+
+            // 按订单件数+订单金额计算运费
+            if (template.getType() == 21) {
+                // 例： 2  件以上，或 100 元以上，运费  5  元
+                if (totalNumber > number || totalAmount > amount) {
+                    // 取较小邮费金额
+                    totalPostage = getMin(totalPostage, postage);
+                }
+
+            }
+
+            // 按订单重量+订单金额计算运费
+            if (template.getType() == 22) {
+                /* 类推示例：5kg以内，100元以上，运费3元；10kg以内，200元以上，运费6元…以此类推 */
+                if (limit == 1) {
+                    for (int i = 1; i < Integer.MAX_VALUE; i++) {
+                        if (totalWeight <= i * number && totalAmount >= i * amount) {
+                            // 取较小邮费金额
+                            totalPostage = getMin(totalPostage, i * postage);
+                        }
+                        // 如果重量超过n倍重量基础值，但金额没有到达n倍金额基础值，则没有匹配上规则，运费总额不变
+                        if (totalWeight > i * number && totalAmount < i * amount) {
+                            break;
+                        }
+                    }
+                }
+                // 不类推，匹配不上邮费总额不变
+                if (limit == 0) {
+                    if (totalWeight <= number && totalAmount >= amount) {
+                        // 取较小邮费金额
+                        totalPostage = getMin(totalPostage, postage);
+                    }
+                }
+            }
+        }
+        return totalPostage;
+    }
+
+    private int getMin(int a, int b) {
+        return a > b ? b : a;
     }
 }

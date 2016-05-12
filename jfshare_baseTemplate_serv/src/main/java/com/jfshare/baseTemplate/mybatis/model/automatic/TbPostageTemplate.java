@@ -13,6 +13,10 @@ public class TbPostageTemplate {
 
     private String postageInfo;
 
+    private Integer group;
+
+    private String desc;
+
     private DateTime createTime;
 
     private Integer createId;
@@ -61,6 +65,22 @@ public class TbPostageTemplate {
 
     public void setPostageInfo(String postageInfo) {
         this.postageInfo = postageInfo == null ? null : postageInfo.trim();
+    }
+
+    public Integer getGroup() {
+        return group;
+    }
+
+    public void setGroup(Integer group) {
+        this.group = group;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc == null ? null : desc.trim();
     }
 
     public DateTime getCreateTime() {

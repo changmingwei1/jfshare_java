@@ -6,8 +6,8 @@
 <generatorConfiguration>
     <!-- db driver -->
     <!--<classPathEntry location="E:\workSpace\myMaven\mysql\mysql-connector-java\5.1.26\mysql-connector-java-5.1.26.jar" />-->
-    <!--<classPathEntry location="D:\devTools\apache-maven-3.2.1\m2\repository\mysql\mysql-connector-java\5.1.17\mysql-connector-java-5.1.17.jar" />-->
-    <classPathEntry location="/Users/bq/work/maven-res/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar" />
+    <classPathEntry location="D:\devTools\apache-maven-3.2.1\m2\repository\mysql\mysql-connector-java\5.1.17\mysql-connector-java-5.1.17.jar" />
+    <!--<classPathEntry location="/Users/bq/work/maven-res/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar" />-->
     <!-- introspectedColumnImpl prop define special column reflect -->
     <context id="mysqlStepyee" targetRuntime="MyBatis3"> 
         <!-- generator or not comments (extend DefaultCommentGenerator to special)-->

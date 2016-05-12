@@ -44,9 +44,9 @@
         </javaClientGenerator>
 
       <!--Run As  Maven build... goals mybatis-generator:generate -->
-        <table tableName="tb_storehouse" schema="jfshare">
+        <!--<table tableName="tb_storehouse" schema="jfshare">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
+        </table>-->
         <table tableName="tb_postage_template" schema="jfshare">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>

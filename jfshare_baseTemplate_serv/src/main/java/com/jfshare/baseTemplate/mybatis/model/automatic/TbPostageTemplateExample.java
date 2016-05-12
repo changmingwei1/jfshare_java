@@ -484,6 +484,136 @@ public class TbPostageTemplateExample {
             return (Criteria) this;
         }
 
+        public Criteria andGroupIsNull() {
+            addCriterion("group is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupIsNotNull() {
+            addCriterion("group is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupEqualTo(Integer value) {
+            addCriterion("group =", value, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupNotEqualTo(Integer value) {
+            addCriterion("group <>", value, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupGreaterThan(Integer value) {
+            addCriterion("group >", value, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupGreaterThanOrEqualTo(Integer value) {
+            addCriterion("group >=", value, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupLessThan(Integer value) {
+            addCriterion("group <", value, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupLessThanOrEqualTo(Integer value) {
+            addCriterion("group <=", value, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupIn(List<Integer> values) {
+            addCriterion("group in", values, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupNotIn(List<Integer> values) {
+            addCriterion("group not in", values, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupBetween(Integer value1, Integer value2) {
+            addCriterion("group between", value1, value2, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupNotBetween(Integer value1, Integer value2) {
+            addCriterion("group not between", value1, value2, "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescIsNull() {
+            addCriterion("desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescIsNotNull() {
+            addCriterion("desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescEqualTo(String value) {
+            addCriterion("desc =", value, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescNotEqualTo(String value) {
+            addCriterion("desc <>", value, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescGreaterThan(String value) {
+            addCriterion("desc >", value, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescGreaterThanOrEqualTo(String value) {
+            addCriterion("desc >=", value, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescLessThan(String value) {
+            addCriterion("desc <", value, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescLessThanOrEqualTo(String value) {
+            addCriterion("desc <=", value, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescLike(String value) {
+            addCriterion("desc like", value, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescNotLike(String value) {
+            addCriterion("desc not like", value, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescIn(List<String> values) {
+            addCriterion("desc in", values, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescNotIn(List<String> values) {
+            addCriterion("desc not in", values, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescBetween(String value1, String value2) {
+            addCriterion("desc between", value1, value2, "desc");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescNotBetween(String value1, String value2) {
+            addCriterion("desc not between", value1, value2, "desc");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
