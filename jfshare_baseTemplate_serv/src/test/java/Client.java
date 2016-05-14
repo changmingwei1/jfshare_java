@@ -1,8 +1,10 @@
 import com.jfshare.finagle.thrift.baseTemplate.BaseTemplateServ;
 import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageParam;
+import com.jfshare.finagle.thrift.baseTemplate.DeliverStorehouseParam;
 import com.jfshare.finagle.thrift.baseTemplate.Postage;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplate;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateQueryParam;
+import com.jfshare.finagle.thrift.baseTemplate.ProductRefProvince;
 import com.jfshare.finagle.thrift.baseTemplate.Storehouse;
 import com.jfshare.finagle.thrift.baseTemplate.StorehouseQueryParam;
 import com.jfshare.utils.JsonMapper;
@@ -90,6 +92,18 @@ public class Client extends TestCase{
         System.out.println(client.getStorehouse(storehouseIds).toString());
     }
 
+    public void testGetDeliverStorehouse() throws Exception {
+        DeliverStorehouseParam param = new DeliverStorehouseParam();
+        ProductRefProvince productRefProvince = new ProductRefProvince();
+        productRefProvince.setSellerId(1);
+        productRefProvince.setProductId("12345");
+        productRefProvince.setStorehouseIds("6,7");
+        productRefProvince.setSendToProvince("1");
+        param.addToProductRefProvinceList(productRefProvince);
+        System.out.println(this.client.getDeliverStorehouse(param));
+
+    }
+
     public void testAddPostageTemplate() throws Exception {
         PostageTemplate template = new PostageTemplate();
         template.setSellerId(1);
@@ -149,8 +163,6 @@ public class Client extends TestCase{
     public void testCalculatePostage() throws Exception {
         CalculatePostageParam postageParam = new CalculatePostageParam();
         postageParam.setSendToProvince("11111");
-        postageParam.setNumber(5);
-        postageParam.setTemplateId(11);
         System.out.println(client.calculatePostage(postageParam).toString());
     }
 

@@ -3,6 +3,8 @@ package com.jfshare.baseTemplate.service.impl;
 import com.jfshare.baseTemplate.dao.mysql.IStorehouseDao;
 import com.jfshare.baseTemplate.dao.redis.BaseRedis;
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbStorehouse;
+import com.jfshare.baseTemplate.mybatis.model.manual.ProductRefProvinceModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.ProductStorehouseModel;
 import com.jfshare.baseTemplate.service.IStorehouseSvc;
 import com.jfshare.baseTemplate.util.Constant;
 import com.jfshare.baseTemplate.util.ConvertUtil;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +78,32 @@ public class StorehouseSvcImpl implements IStorehouseSvc {
         return tbStorehouse;
     }
 
+    @Override
+    public List<ProductStorehouseModel> getDeliverStorehouse(List<ProductRefProvinceModel> models) {
+        List<ProductStorehouseModel> productStorehouseModels = new ArrayList<>();
+        for (ProductRefProvinceModel model : models) {
+            // 初始化返回结果
+            ProductStorehouseModel productStorehouseModel = new ProductStorehouseModel();
+            productStorehouseModel.setSellerId(model.getSellerId());
+            productStorehouseModel.setProductId(model.getProductId());
+            // 默认没有匹配到仓库
+            productStorehouseModel.setStorehouseId(0);
+            String[] storehouseIds = model.getStorehouseIds().split(",");
+            for (String storehouseId : storehouseIds) {
+                TbStorehouse tbStorehouse = this.getById(Integer.parseInt(storehouseId));
+                // 没有查询到仓库信息
+                if (tbStorehouse == null) {
+                    continue;
+                } else if (("," + tbStorehouse.getSupportProvince() + ",").contains("," + model.getSendToProvince() + ",")) {
+                    // 匹配上仓库
+                    productStorehouseModel.setStorehouseId(tbStorehouse.getId());
+                }
+            }
+            productStorehouseModels.add(productStorehouseModel);
+        }
+
+        return productStorehouseModels;
+    }
 
     @Override
     public void removeCache(int id) {

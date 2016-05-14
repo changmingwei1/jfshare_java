@@ -1,6 +1,9 @@
 package com.jfshare.baseTemplate.service;
 
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbStorehouse;
+import com.jfshare.baseTemplate.mybatis.model.manual.ProductRefProvinceModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.ProductStorehouseModel;
+import com.jfshare.finagle.thrift.baseTemplate.ProductStorehouse;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +35,12 @@ public interface IStorehouseSvc {
      */
     TbStorehouse getById(int id);
 
-
+    /**
+     * 根据商品中的仓库和发往的省份，匹配发货仓库
+     * @param models
+     * @return
+     */
+    List<ProductStorehouseModel> getDeliverStorehouse(List<ProductRefProvinceModel> models);
 
     /**
      * 清除仓库缓存

@@ -3,6 +3,8 @@ package com.jfshare.baseTemplate.server;
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbPostageTemplate;
 import com.jfshare.baseTemplate.mybatis.model.automatic.TbStorehouse;
 import com.jfshare.baseTemplate.mybatis.model.manual.ProductPostageModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.ProductRefProvinceModel;
+import com.jfshare.baseTemplate.mybatis.model.manual.ProductStorehouseModel;
 import com.jfshare.baseTemplate.mybatis.model.manual.SellerPostageModel;
 import com.jfshare.baseTemplate.mybatis.model.manual.SellerPostageReturnModel;
 import com.jfshare.baseTemplate.service.IPostageTemplateSvc;
@@ -12,10 +14,14 @@ import com.jfshare.baseTemplate.util.FailCode;
 import com.jfshare.finagle.thrift.baseTemplate.BaseTemplateServ;
 import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageParam;
 import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageResult;
+import com.jfshare.finagle.thrift.baseTemplate.DeliverStorehouseParam;
+import com.jfshare.finagle.thrift.baseTemplate.DeliverStorehouseResult;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplate;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateQueryParam;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateResult;
 import com.jfshare.finagle.thrift.baseTemplate.ProductPostageBasic;
+import com.jfshare.finagle.thrift.baseTemplate.ProductRefProvince;
+import com.jfshare.finagle.thrift.baseTemplate.ProductStorehouse;
 import com.jfshare.finagle.thrift.baseTemplate.SellerPostageBasic;
 import com.jfshare.finagle.thrift.baseTemplate.SellerPostageReturn;
 import com.jfshare.finagle.thrift.baseTemplate.Storehouse;
@@ -185,6 +191,45 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		}
 		storehouseResult.setStorehouseList(storehouseList);
 		return storehouseResult;
+	}
+
+	@Override
+	public DeliverStorehouseResult getDeliverStorehouse(DeliverStorehouseParam param) throws TException {
+		DeliverStorehouseResult deliverStorehouseResult = new DeliverStorehouseResult();
+		Result result = new Result();
+		deliverStorehouseResult.setResult(result);
+		if(CollectionUtils.isEmpty(param.getProductRefProvinceList())) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.PARAM_ERROR);
+			return deliverStorehouseResult;
+		}
+		List<ProductRefProvinceModel> productRefProvinceModels = new ArrayList<>();
+		try {
+			for (ProductRefProvince productRefProvince : param.getProductRefProvinceList()) {
+                ProductRefProvinceModel model = new ProductRefProvinceModel();
+                model.setSellerId(productRefProvince.getSellerId());
+                model.setProductId(productRefProvince.getProductId());
+                model.setStorehouseIds(productRefProvince.getStorehouseIds());
+                model.setSendToProvince(productRefProvince.getSendToProvince());
+                productRefProvinceModels.add(model);
+            }
+
+			List<ProductStorehouseModel> productStorehouseModels = this.storehouseSvc.getDeliverStorehouse(productRefProvinceModels);
+
+			for (ProductStorehouseModel productStorehouseModel : productStorehouseModels) {
+                ProductStorehouse productStorehouse = new ProductStorehouse();
+                productStorehouse.setSellerId(productStorehouseModel.getSellerId());
+                productStorehouse.setProductId(productStorehouseModel.getProductId());
+                productStorehouse.setStorehouseId(productStorehouseModel.getStorehouseId());
+                deliverStorehouseResult.addToProductStorehouseList(productStorehouse);
+            }
+		} catch (Exception e) {
+			logger.error("<<<<<<<< getDeliverStorehouse error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
+
+		return deliverStorehouseResult;
 	}
 
 	@Override

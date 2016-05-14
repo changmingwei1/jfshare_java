@@ -364,14 +364,14 @@ public class StorehouseResult implements TBase<StorehouseResult, StorehouseResul
         case 2: // STOREHOUSE_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list12 = iprot.readListBegin();
-            this.storehouseList = new ArrayList<Storehouse>(_list12.size);
-            for (int _i13 = 0; _i13 < _list12.size; ++_i13)
+            TList _list0 = iprot.readListBegin();
+            this.storehouseList = new ArrayList<Storehouse>(_list0.size);
+            for (int _i1 = 0; _i1 < _list0.size; ++_i1)
             {
-              Storehouse _elem14;
-              _elem14 = new Storehouse();
-              _elem14.read(iprot);
-              this.storehouseList.add(_elem14);
+              Storehouse _elem2;
+              _elem2 = new Storehouse();
+              _elem2.read(iprot);
+              this.storehouseList.add(_elem2);
             }
             iprot.readListEnd();
             }
@@ -404,9 +404,9 @@ public class StorehouseResult implements TBase<StorehouseResult, StorehouseResul
         oprot.writeFieldBegin(STOREHOUSE_LIST_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.storehouseList.size()));
-          for (Storehouse _iter15 : this.storehouseList)
+          for (Storehouse _iter3 : this.storehouseList)
           {
-            _iter15.write(oprot);
+            _iter3.write(oprot);
           }
           oprot.writeListEnd();
         }

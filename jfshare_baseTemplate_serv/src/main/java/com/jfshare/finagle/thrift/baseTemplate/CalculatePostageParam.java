@@ -358,14 +358,14 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
         case 1: // SELLER_POSTAGE_BASIC_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list8 = iprot.readListBegin();
-            this.sellerPostageBasicList = new ArrayList<SellerPostageBasic>(_list8.size);
-            for (int _i9 = 0; _i9 < _list8.size; ++_i9)
+            TList _list20 = iprot.readListBegin();
+            this.sellerPostageBasicList = new ArrayList<SellerPostageBasic>(_list20.size);
+            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
             {
-              SellerPostageBasic _elem10;
-              _elem10 = new SellerPostageBasic();
-              _elem10.read(iprot);
-              this.sellerPostageBasicList.add(_elem10);
+              SellerPostageBasic _elem22;
+              _elem22 = new SellerPostageBasic();
+              _elem22.read(iprot);
+              this.sellerPostageBasicList.add(_elem22);
             }
             iprot.readListEnd();
             }
@@ -399,9 +399,9 @@ public class CalculatePostageParam implements TBase<CalculatePostageParam, Calcu
       oprot.writeFieldBegin(SELLER_POSTAGE_BASIC_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.sellerPostageBasicList.size()));
-        for (SellerPostageBasic _iter11 : this.sellerPostageBasicList)
+        for (SellerPostageBasic _iter23 : this.sellerPostageBasicList)
         {
-          _iter11.write(oprot);
+          _iter23.write(oprot);
         }
         oprot.writeListEnd();
       }
