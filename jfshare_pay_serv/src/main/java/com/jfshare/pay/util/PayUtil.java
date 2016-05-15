@@ -235,7 +235,7 @@ public class PayUtil {
 //        payUrlMap.put("show_url", null);
 //        payUrlMap.put("anti_phishing_key", null);
 
-        Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap);
+        Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap, SignType.MD5);
         retMap.put("action", AlipayConfig.ALIPAY_GATEWAY_NEW);
 
         String payUrl = JSON.toJSONString(retMap);
@@ -259,7 +259,7 @@ public class PayUtil {
         payUrlMap.put("total_fee", PriceUtils.intToStr(payReq.getPrice()));
         payUrlMap.put("show_url", PropertiesUtil.getProperty("jfx_pay_serv", "aliwap_show_url"));
 
-        Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap);
+        Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap, SignType.MD5);
         retMap.put("action", AlipayConfig.ALIPAY_GATEWAY_NEW);
 
         String payUrl = JSON.toJSONString(retMap);
@@ -281,10 +281,8 @@ public class PayUtil {
         payUrlMap.put("subject", payReq.getTitle());
         payUrlMap.put("total_fee", PriceUtils.intToStr(payReq.getPrice()));
 
-        Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap);
-//        retMap.put("action", AlipayConfig.ALIPAY_GATEWAY_NEW);
-        retMap.put("sign", AlipayConfig.ALIPAY_RSA_PRIVATE);
-        retMap.put("sign_type", "RSA");
+        Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap, SignType.RSA);
+//        retMap.put("sign", AlipayConfig.ALIPAY_RSA_PRIVATE);
 
         String payUrl = JSON.toJSONString(retMap);
         logger.info("AliApp支付申请url ==> " + payUrl);

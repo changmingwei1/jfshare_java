@@ -42,7 +42,7 @@ public class AlipayConfig {
 	public static String input_charset = "utf-8";
 	
 	// 签名方式 不需修改
-	public static String sign_type = "MD5";
+//	public static String sign_type = "MD5";
 
 
 	public static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do?" +
@@ -64,6 +64,7 @@ public class AlipayConfig {
 			"Os3w9iQd6y7CGe/RrhOMjLyvUH+BcNgrIYQEZpLBaP00JguZD7jlT0j5ivtlUPMD\n" +
 			"Y3sRWygklx8P07J3s8UCQBcG6bYXhl0eYG+tqN0D385m2zL7f0pP5jcUv1kh1eZK\n" +
 			"hzzRcaDDY4SBsgZqVXtJARPldPwucSD2edfR2o6iNaw=";
+
 	//"lBBK%2F0w5LOajrMrji7DUgEqNjIhQbidR13GovA5r3TgIbNqv231yC1NksLdw%2Ba3JnfHXoXuet6XNNHtn7VE%2BeCoRO1O%2BR1KugLrQEZMtG5jmJIe2pbjm%2F3kb%2FuGkpG%2BwYQYI51%2BhA3YBbvZHVQBYveBqK%2Bh8mUyb7GM1HxWs9k4%3D";
 
 	/**

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.jfshare.pay.util.SignType;
+import com.jfshare.pay.util.alipay.sign.RSA;
 import org.apache.commons.httpclient.NameValuePair;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -43,29 +45,33 @@ public class AlipaySubmit {
      * @param sPara 要签名的数组
      * @return 签名结果字符串
      */
-	public static String buildRequestMysign(Map<String, String> sPara) {
+	public static String buildRequestMysign(Map<String, String> sPara, SignType signType) {
     	String prestr = AlipayCore.createLinkString(sPara); //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         String mysign = "";
-        if(AlipayConfig.sign_type.equals("MD5") ) {
+        if(signType == SignType.MD5) {
         	mysign = MD5.sign(prestr, AlipayConfig.key, AlipayConfig.input_charset);
+        } else if (signType == SignType.RSA) {
+            mysign = RSA.sign(prestr, AlipayConfig.ALIPAY_RSA_PRIVATE,  AlipayConfig.input_charset);
         }
+
         return mysign;
     }
 	
     /**
      * 生成要请求给支付宝的参数数组
      * @param sParaTemp 请求前的参数数组
+     * @param signType MD5
      * @return 要请求的参数数组
      */
-    public static Map<String, String> buildRequestPara(Map<String, String> sParaTemp) {
+    public static Map<String, String> buildRequestPara(Map<String, String> sParaTemp, SignType signType) {
         //除去数组中的空值和签名参数
         Map<String, String> sPara = AlipayCore.paraFilter(sParaTemp);
         //生成签名结果
-        String mysign = buildRequestMysign(sPara);
+        String mysign = buildRequestMysign(sPara, signType);
 
         //签名结果与签名方式加入请求提交参数组中
         sPara.put("sign", mysign);
-        sPara.put("sign_type", AlipayConfig.sign_type);
+        sPara.put("sign_type", signType.getEnumVal());
 
         return sPara;
     }
@@ -77,9 +83,9 @@ public class AlipaySubmit {
      * @param strButtonName 确认按钮显示文字
      * @return 提交表单HTML文本
      */
-    public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName) {
+    public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName, SignType signType) {
         //待请求参数数组
-        Map<String, String> sPara = buildRequestPara(sParaTemp);
+        Map<String, String> sPara = buildRequestPara(sParaTemp, signType);
         List<String> keys = new ArrayList<String>(sPara.keySet());
 
         StringBuffer sbHtml = new StringBuffer();
@@ -110,9 +116,9 @@ public class AlipaySubmit {
      * @param strParaFileName 文件上传的参数名
      * @return 提交表单HTML文本
      */
-    public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName, String strParaFileName) {
+    public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName, String strParaFileName, SignType signType) {
         //待请求参数数组
-        Map<String, String> sPara = buildRequestPara(sParaTemp);
+        Map<String, String> sPara = buildRequestPara(sParaTemp, signType);
         List<String> keys = new ArrayList<String>(sPara.keySet());
 
         StringBuffer sbHtml = new StringBuffer();
@@ -146,9 +152,9 @@ public class AlipaySubmit {
      * @return 支付宝处理结果
      * @throws Exception
      */
-    public static String buildRequest(String strParaFileName, String strFilePath,Map<String, String> sParaTemp) throws Exception {
+    public static String buildRequest(String strParaFileName, String strFilePath,Map<String, String> sParaTemp, SignType signType) throws Exception {
         //待请求参数数组
-        Map<String, String> sPara = buildRequestPara(sParaTemp);
+        Map<String, String> sPara = buildRequestPara(sParaTemp, signType);
 
         HttpProtocolHandler httpProtocolHandler = HttpProtocolHandler.getInstance();
 
