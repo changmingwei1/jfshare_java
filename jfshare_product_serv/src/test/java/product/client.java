@@ -1,5 +1,6 @@
 package product;
 
+import com.jfshare.finagle.thrift.pagination.Pagination;
 import com.jfshare.finagle.thrift.product.*;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
@@ -104,6 +105,15 @@ public class client {
         System.out.println(client.queryProduct("ze160505170956000167", param).toString());
     }
 
+    @Test
+    public void testQueryProductDetail() throws Exception {
+
+        ProductDetailParam param = new ProductDetailParam();
+        param.setProductId("ze160514130313000379");
+
+        System.out.println(this.client.queryProductDetail(param));
+    }
+
 
     @Test
     public void testAdd() throws Exception {
@@ -147,5 +157,16 @@ public class client {
         product.setProductSku(productSku);
 
         return product;
+    }
+
+    @Test
+    public void testQueryProductCardViewList() throws Exception {
+        ProductCardViewParam param = new ProductCardViewParam();
+        param.setSellerId(13);
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+
+        System.out.println(this.client.queryProductCardViewList(param, pagination));
     }
 }

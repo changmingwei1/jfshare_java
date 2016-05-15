@@ -59,7 +59,7 @@ public class ProductCardDaoImpl implements IProductCardDao {
 
     @Override
     public int queryProductCardViewListCount(Map queryMap) {
-        return this.queryProductCardViewListCount(queryMap);
+        return this.manualCardMapper.queryProductCardViewListCount(queryMap);
     }
 
     @Override

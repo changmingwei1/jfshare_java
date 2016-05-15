@@ -13,14 +13,14 @@
     <select id="selectAvailableCard" parameterType="map" resultType="com.jfshare.product.model.TbProductCard">
         select
         <include refid="com.jfshare.product.model.mapper.TbProductCardMapper.Base_Column_List"/>
-        from tb_product_cart
+        from tb_product_card
         <where>
             and product_id = #{productId} and state != 1 and transaction_id = #{transactionId}
         </where>
     </select>
 
     <update id="lockProductCard" parameterType="map">
-		UPDATE tb_product_cart
+		UPDATE tb_product_card
 		SET transaction_id = #{transactionId}, state = 2
 		WHERE state = 1 and product_id = #{productId}
 		ORDER BY create_time asc
@@ -28,15 +28,15 @@
 	</update>
 
     <update id="releaseProductCard" parameterType="map">
-		update tb_product_cart
+		update tb_product_card
 		SET transaction_id = '', state = 1
 		WHERE transaction_id = #{transactionId} and product_id = #{productId}
 	</update>
 
     <select id="queryProductCardViewListCount" parameterType="map" resultType="int">
         select
-        <include refid="com.jfshare.product.model.mapper.TbProductCardMapper.Base_Column_List"/>
-        from tb_product_cart
+        count(*)
+        from tb_product_card
         <where>
             and product_id = #{productId} and seller_id = #{sellerId}
             <if test="cardNumber != null">
@@ -51,7 +51,7 @@
     <select id="queryProductCardViewList" parameterType="map" resultType="com.jfshare.product.model.TbProductCard">
         select
         <include refid="com.jfshare.product.model.mapper.TbProductCardMapper.Base_Column_List"/>
-        from tb_product_cart
+        from tb_product_card
         <where>
             and product_id = #{productId} and seller_id = #{sellerId}
             <if test="cardNumber != null">
