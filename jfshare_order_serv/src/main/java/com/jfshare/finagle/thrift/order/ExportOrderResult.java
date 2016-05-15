@@ -519,14 +519,14 @@ public class ExportOrderResult implements TBase<ExportOrderResult, ExportOrderRe
         case 4: // EXPORT_ORDER_INFO
           if (field.type == TType.LIST) {
             {
-            TList _list28 = iprot.readListBegin();
-            this.exportOrderInfo = new ArrayList<ExportOrderInfo>(_list28.size);
-            for (int _i29 = 0; _i29 < _list28.size; ++_i29)
+            TList _list32 = iprot.readListBegin();
+            this.exportOrderInfo = new ArrayList<ExportOrderInfo>(_list32.size);
+            for (int _i33 = 0; _i33 < _list32.size; ++_i33)
             {
-              ExportOrderInfo _elem30;
-              _elem30 = new ExportOrderInfo();
-              _elem30.read(iprot);
-              this.exportOrderInfo.add(_elem30);
+              ExportOrderInfo _elem34;
+              _elem34 = new ExportOrderInfo();
+              _elem34.read(iprot);
+              this.exportOrderInfo.add(_elem34);
             }
             iprot.readListEnd();
             }
@@ -569,9 +569,9 @@ public class ExportOrderResult implements TBase<ExportOrderResult, ExportOrderRe
         oprot.writeFieldBegin(EXPORT_ORDER_INFO_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.exportOrderInfo.size()));
-          for (ExportOrderInfo _iter31 : this.exportOrderInfo)
+          for (ExportOrderInfo _iter35 : this.exportOrderInfo)
           {
-            _iter31.write(oprot);
+            _iter35.write(oprot);
           }
           oprot.writeListEnd();
         }

@@ -93,6 +93,10 @@
             <result column="exchange_cash" property="exchangeCash" jdbcType="INTEGER"/>
             <result column="exchange_rule" property="exchangeRule" jdbcType="VARCHAR"/>
             <result column="third_score" property="thirdScore"  jdbcType="INTEGER"/>
+            <result column="postage" jdbcType="INTEGER" property="postage" />
+            <result column="postage_template_id" jdbcType="INTEGER" property="postageTemplateId" />
+            <result column="storehouse_id" jdbcType="INTEGER" property="storehouseId" />
+            <result column="thirdExchangeRate" jdbcType="VARCHAR" property="thirdexchangerate" />
         </collection>
     </resultMap>
 
@@ -402,6 +406,12 @@
             <if test="conditions.orderTag != null and conditions.orderTag == 1">
                 AND a.order_tag = #{conditions.orderTag}
             </if>
+            <if test="conditions.orderIds != null">
+                AND a.order_id IN
+                <foreach collection="conditions.orderIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
 
@@ -538,6 +548,12 @@
             </if>
             <if test="conditions.orderTag != null and conditions.orderTag == 1">
                 AND a.order_tag = #{conditions.orderTag}
+            </if>
+            <if test="conditions.orderIds != null">
+                AND a.order_id IN
+                <foreach collection="conditions.orderIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
         </where>
         GROUP BY a.order_id

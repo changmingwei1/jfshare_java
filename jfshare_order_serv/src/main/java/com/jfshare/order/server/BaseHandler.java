@@ -5,6 +5,7 @@ import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.order.exceptions.DataVerifyException;
 import com.jfshare.order.server.support.IHandler;
 import com.jfshare.order.util.ParamCheck;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +101,10 @@ public abstract class BaseHandler implements IHandler {
             conditions.setEndTime(conditions.getEndTime().substring(0,10) + " 23:59:59");
         } else {
             conditions.setEndTime(null);
+        }
+
+        if (CollectionUtils.isEmpty(conditions.getOrderIds())) {
+            conditions.setOrderIds(null);
         }
         return conditions;
     }

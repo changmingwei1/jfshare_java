@@ -4,6 +4,7 @@ import com.jfshare.finagle.thrift.order.OrderInfo;
 import com.jfshare.finagle.thrift.product.ProductResult;
 import com.jfshare.finagle.thrift.product.ProductRetParam;
 import com.jfshare.finagle.thrift.product.ProductServ;
+import com.jfshare.finagle.thrift.product.ProductSkuParam;
 import com.jfshare.ridge.ConfigManager;
 import com.twitter.finagle.Service;
 import com.twitter.finagle.builder.ClientBuilder;
@@ -62,9 +63,9 @@ public class ProductClient {
         try {
             CountDownLatch latch = new CountDownLatch(productInfos.size());
             for (OrderInfo productInfo : productInfos) {
-                TradeFeature<ProductResult> productHotSkuListener =
-                        new TradeFeature<ProductResult>(latch, productInfo.getProductId(), productInfo.getSkuNum(), param);
-                service.queryHotSKU(productInfo.getProductId(), productInfo.getSkuNum(), param).addEventListener(productHotSkuListener);
+                TradeFeature<ProductResult> productHotSkuListener = new TradeFeature<ProductResult>(latch, productInfo.getProductId(), productInfo.getSkuNum(), param);
+                ProductSkuParam skuParam = new ProductSkuParam(productInfo.getProductId(), productInfo.getSkuNum(), productInfo.getStorehouseId());
+                service.queryHotSKUV1(skuParam, param).addEventListener(productHotSkuListener);
                 resultList.add(productHotSkuListener);
             }
 
