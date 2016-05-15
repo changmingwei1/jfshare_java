@@ -420,14 +420,15 @@ public class PayUtil {
         String payUrl = null;
         Map<String, String> payUrlMap = new LinkedHashMap<String, String>();
         payUrlMap.put("characterSet", "02");
-        payUrlMap.put("callbackUrl", HebaoConfig.return_url);
-        payUrlMap.put("notifyUrl", HebaoConfig.notify_url);
+        payUrlMap.put("callbackUrl", PropertiesUtil.getProperty("jfx_pay_serv", "hebaowap_return_url"));
+        payUrlMap.put("notifyUrl", PropertiesUtil.getProperty("jfx_pay_serv", "hebaopay_notify_url"));
         payUrlMap.put("ipAddress", StringUtil.isNullOrEmpty(payReq.getPayIp()) ? "127.0.0.1" : payReq.getPayIp());
         payUrlMap.put("merchantId", HebaoConfig.merchantId);
         payUrlMap.put("requestId", payId);
         payUrlMap.put("signType", "MD5");
         payUrlMap.put("type", "WAPDirectPayConfirm");
         payUrlMap.put("version", "2.0.0");
+
         payUrlMap.put("amount", ConvertUtil.getString(payReq.getPrice()));
         payUrlMap.put("bankAbbr", "");
         payUrlMap.put("currency", "00");
@@ -492,6 +493,93 @@ public class PayUtil {
         }
 
         logger.info("hebaoH5支付申请url ==> " + payUrl);
+        return payUrl;
+    }
+
+    /**
+     * 生成第三方支付请求
+     * 移动和包PC支付
+     * @param payReq
+     * @param payId
+     * @return
+     */
+    public static String getHebaoPay(PayReq payReq, String payId) {
+        String payUrl = null;
+        Map<String, String> payUrlMap = new LinkedHashMap<String, String>();
+        payUrlMap.put("characterSet", "02");
+        payUrlMap.put("callbackUrl", PropertiesUtil.getProperty("jfx_pay_serv", "hebaopay_return_url"));
+        payUrlMap.put("notifyUrl", PropertiesUtil.getProperty("jfx_pay_serv", "hebaopay_notify_url"));
+        payUrlMap.put("ipAddress", StringUtil.isNullOrEmpty(payReq.getPayIp()) ? "127.0.0.1" : payReq.getPayIp());
+        payUrlMap.put("merchantId", HebaoConfig.merchantId);
+        payUrlMap.put("requestId", payId);
+        payUrlMap.put("signType", "MD5");
+        payUrlMap.put("type", "DirectPayConfirm");
+        payUrlMap.put("version", "2.0.0");
+
+        payUrlMap.put("amount", ConvertUtil.getString(payReq.getPrice()));
+        payUrlMap.put("bankAbbr", "");
+        payUrlMap.put("currency", "00");
+        payUrlMap.put("orderDate", DateUtils.getCurrentStringDateYYYYMMDD());
+        payUrlMap.put("orderId", payId);
+        payUrlMap.put("merAcDate", DateUtils.getCurrentStringDateYYYYMMDD());
+        payUrlMap.put("period", "24");
+        payUrlMap.put("periodUnit", "01");
+        payUrlMap.put("merchantAbbr", "");
+        payUrlMap.put("productDesc", ConvertUtil.getString(payReq.getRemark(), "无"));
+        payUrlMap.put("productId", "");
+        payUrlMap.put("productName", payReq.getTitle());
+        payUrlMap.put("productNum", "");
+        payUrlMap.put("reserved1", "");
+        payUrlMap.put("reserved2", "");
+        payUrlMap.put("userToken", "");
+        payUrlMap.put("showUrl", "");
+        payUrlMap.put("couponsFlag", "00");
+        //1.签名
+        Map<String, String> paramSign = HebaoSubmit.buildRequestPara(payUrlMap);
+        payUrlMap.put("action", HebaoConfig.action);
+
+        //2.调用和包获取支付链接
+        String payPCReq = HebaoSubmit.getPayH5Ret(payUrlMap);
+        if (payPCReq == null) {
+            logger.error("组织和包pc支付链接失败！");
+            return null;
+        }
+
+        try {
+            String payPCRet = HttpUtils.httpPost(payPCReq);
+            //3.1 验证返回结果状态
+            if (!HebaoSubmit.getValue(payPCRet, "returnCode").equals("000000")) {
+                logger.warn("和包PC支付链接申请结果失败！" + payPCRet);
+                return null;
+            }
+            //3.2 验证返回结果签名
+            String hmac1 = HebaoSubmit.getValue(payPCRet, "hmac");
+            Map<String, String> payRetMap = new LinkedHashMap<String, String>();
+            payRetMap.put("merchantId", HebaoSubmit.getValue(payPCRet, "merchantId"));
+            payRetMap.put("requestId", HebaoSubmit.getValue(payPCRet, "requestId"));
+            payRetMap.put("signType", HebaoSubmit.getValue(payPCRet, "signType"));
+            payRetMap.put("type", HebaoSubmit.getValue(payPCRet, "type"));
+            payRetMap.put("version", HebaoSubmit.getValue(payPCRet, "version"));
+            payRetMap.put("returnCode", HebaoSubmit.getValue(payPCRet, "returnCode"));
+            payRetMap.put("message", URLDecoder.decode(HebaoSubmit.getValue(payPCRet, "message"), "UTF-8"));
+            payRetMap.put("payUrl",  HebaoSubmit.getValue(payPCRet, "payUrl"));
+            Map<String, String> retSign = HebaoSubmit.buildRequestPara(payRetMap);
+//            System.out.println("自生成retSign=" + retSign.get("hmac") + ",和包返回sign=" + hmac1);
+            if (!hmac1.equals(retSign.get("hmac"))) {
+                logger.warn("和包PC申请支付结果签名验证失败！");
+                return null;
+            }
+            String submit_url = HebaoSubmit.getRedirectUrl(HebaoSubmit.getValue(payPCRet, "payUrl"));
+            payUrlMap.put("action_submit", submit_url);
+
+            payUrl = JSON.toJSONString(payUrlMap);
+//            System.out.println("和包PC支付链接为===" + submit_url);
+        } catch (Exception e) {
+            logger.error("请求和包PC支付链接失败！", e);
+            return null;
+        }
+
+        logger.info("hebaoPC支付申请url ==> " + payUrl);
         return payUrl;
     }
 
