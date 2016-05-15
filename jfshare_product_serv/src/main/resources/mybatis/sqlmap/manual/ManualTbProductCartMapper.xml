@@ -81,7 +81,7 @@
         FROM
           tb_product_card t , tb_product p
           <where>
-              AND t.product_id = p.id AND p.seller_id = #{sellerId}
+              AND t.product_id = p.id AND t.seller_id = #{sellerId}
               <if test="productName != null">
                   p.name like concat{'%',#{productName} ,'%'}
               </if>
@@ -93,15 +93,14 @@
 
     <select id="statisticsProductCardCount" parameterType="map" resultType="int">
         SELECT
-        COUNT(t.sku_num)
+        COUNT(*)
         FROM
         tb_product_card t , tb_product p
         <where>
-            AND t.product_id = p.id AND p.seller_id = #{sellerId}
+            AND t.product_id = p.id AND t.seller_id = #{sellerId}
             <if test="productName != null">
                 p.name like concat{'%',#{productName} ,'%'}
             </if>
         </where>
-        GROUP BY t.sku_num
     </select>
 </mapper>
