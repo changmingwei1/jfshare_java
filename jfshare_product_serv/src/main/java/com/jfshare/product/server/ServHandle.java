@@ -527,7 +527,7 @@ public class ServHandle implements ProductServ.Iface {
 		queryMap.put("sellerId", param.getSellerId());
 		queryMap.put("productId", param.getProductId());
 		queryMap.put("cardNumber", param.getCardNumber());
-		queryMap.put("state", param.getState() == 0 ? null : param.getState());
+		queryMap.put("state", param.getState());
 		queryMap.put("start", page.getStart());
 		queryMap.put("count", page.getCount());
 
@@ -540,6 +540,7 @@ public class ServHandle implements ProductServ.Iface {
 			productCardViews.add(ConvertUtil.tbProductCard2ViewThrift(tbProductCard));
 		}
 		productCardViewListResult.setCardViewList(productCardViews);
+		productCardViewListResult.setPagination(ConvertUtil.page2Pagination(page));
 		return productCardViewListResult;
 	}
 
