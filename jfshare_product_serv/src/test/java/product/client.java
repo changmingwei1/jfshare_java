@@ -32,6 +32,7 @@ public class client {
     private ProductServ.Client client;
 
     private static final String IP = "127.0.0.1";
+//    private static final String IP = "120.24.153.155";
 
     private static final Integer PORT = 1980;
 
@@ -163,10 +164,25 @@ public class client {
     public void testQueryProductCardViewList() throws Exception {
         ProductCardViewParam param = new ProductCardViewParam();
         param.setSellerId(13);
+        param.setProductId("ze151210145613000059");
+//        param.setSkuNum("1:13");
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
         pagination.setNumPerPage(10);
 
         System.out.println(this.client.queryProductCardViewList(param, pagination));
+
+
+    }
+
+    @Test
+    public void testStatisticsProductCard() throws Exception {
+        ProductCardStatisticsParam param = new ProductCardStatisticsParam();
+        param.setSellerId(1);
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+
+        System.out.println(this.client.statisticsProductCard(param, pagination));
     }
 }

@@ -37,7 +37,7 @@
 <!--### set log levels - for more verbose logging change 'info' to 'debug'
 ### 级别：all<debug<info<warn<error<fatal<off ###-->
 <root>
-       <level value="INFO"/>
+       <level value="DEBUG"/>
        <appender-ref ref="console"/>
        <appender-ref ref="rollingFile"/>
 </root>

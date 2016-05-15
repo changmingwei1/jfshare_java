@@ -10,7 +10,7 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="selectAvailableCard" parameterType="map" resultType="com.jfshare.product.model.TbProductCard">
+    <select id="selectAvailableCard" parameterType="map" resultMap="com.jfshare.product.model.mapper.TbProductCardMapper.BaseResultMap">
         select
         <include refid="com.jfshare.product.model.mapper.TbProductCardMapper.Base_Column_List"/>
         from tb_product_card
@@ -40,7 +40,7 @@
         <where>
             and product_id = #{productId} and seller_id = #{sellerId}
             <if test="cardNumber != null">
-                and card_number like concat{'%',#{cardNumber} ,'%'}
+                and card_number like concat('%',#{cardNumber} ,'%')
             </if>
             <if test="state != 0">
                 and state = #{state}
@@ -48,14 +48,14 @@
         </where>
     </select>
 
-    <select id="queryProductCardViewList" parameterType="map" resultType="com.jfshare.product.model.TbProductCard">
+    <select id="queryProductCardViewList" parameterType="map" resultMap="com.jfshare.product.model.mapper.TbProductCardMapper.BaseResultMap">
         select
         <include refid="com.jfshare.product.model.mapper.TbProductCardMapper.Base_Column_List"/>
         from tb_product_card
         <where>
-            and product_id = #{productId} and seller_id = #{sellerId}
+            and product_id = #{productId,jdbcType=VARCHAR} and seller_id = #{sellerId}
             <if test="cardNumber != null">
-                and card_number like concat{'%',#{cardNumber} ,'%'}
+                and card_number like concat('%',#{cardNumber} ,'%')
             </if>
             <if test="state != 0">
                 and state = #{state}
@@ -83,7 +83,7 @@
           <where>
               AND t.product_id = p.id AND t.seller_id = #{sellerId}
               <if test="productName != null">
-                  p.name like concat{'%',#{productName} ,'%'}
+                  p.name like concat('%',#{productName} ,'%')
               </if>
           </where>
         GROUP BY t.product_id, t.sku_num
@@ -99,7 +99,7 @@
         <where>
             AND t.product_id = p.id AND t.seller_id = #{sellerId}
             <if test="productName != null">
-                p.name like concat{'%',#{productName} ,'%'}
+                p.name like concat('%',#{productName} ,'%')
             </if>
         </where>
     </select>
