@@ -337,14 +337,14 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
     				productRedis.setProductListMember(key, JSON.toJSONString(productSurvey), ProductUtil.getScore(key, productSurvey));
     			}
     		}
-    		//es中增加
+    		/*//es中增加
     		ESProductInfo eSProductInfo = new ESProductInfo();
     		eSProductInfo.setProductId(productSurvey.getProductId());
     		eSProductInfo.setName(productSurvey.getProductName() + " " + productSurvey.getViceName());
-    		eSProductInfoDao.insert(eSProductInfo);
+    		eSProductInfoDao.insert(eSProductInfo);*/
         }else{
         	//es 中删除
-        	eSProductInfoDao.delete(productSurvey.getProductId());
+        	/*eSProductInfoDao.delete(productSurvey.getProductId());*/
         }
         
         //放入异步队列
