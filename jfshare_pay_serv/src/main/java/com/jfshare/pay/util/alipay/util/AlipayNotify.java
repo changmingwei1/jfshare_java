@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import com.jfshare.pay.util.SignType;
 import com.jfshare.pay.util.alipay.config.AlipayConfig;
 import com.jfshare.pay.util.alipay.sign.MD5;
 
@@ -72,7 +73,7 @@ public class AlipayNotify {
         String preSignStr = AlipayCore.createLinkString(sParaNew);
         //获得签名验证结果
         boolean isSign = false;
-        if(AlipayConfig.sign_type.equals("MD5") ) {
+        if(SignType.MD5.getEnumVal().equals("MD5") ) {
         	isSign = MD5.verify(preSignStr, sign, AlipayConfig.key, AlipayConfig.input_charset);
         }
         return isSign;

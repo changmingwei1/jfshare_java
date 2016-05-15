@@ -282,7 +282,6 @@ public class PayUtil {
         payUrlMap.put("total_fee", PriceUtils.intToStr(payReq.getPrice()));
 
         Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap, SignType.RSA);
-//        retMap.put("sign", AlipayConfig.ALIPAY_RSA_PRIVATE);
 
         String payUrl = JSON.toJSONString(retMap);
         logger.info("AliApp支付申请url ==> " + payUrl);

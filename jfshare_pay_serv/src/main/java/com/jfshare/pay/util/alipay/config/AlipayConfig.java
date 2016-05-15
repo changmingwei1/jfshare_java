@@ -49,23 +49,22 @@ public class AlipayConfig {
 			"_input_charset=" + AlipayConfig.input_charset;
 
 	/**
-	 * RSA私钥
+	 * RSA私钥 pkcs8格式
 	 */
-	public static final String ALIPAY_RSA_PRIVATE = "MIICXAIBAAKBgQDGZlD7QjGX5l2GYhqEoVLG+pV9OWQsU0sqvYk8irAbTe1+wcP5\n" +
-			"04U9aVP8zSfJr0yX5/UY+QxNmCYH5xWmcc2YkfZlmFzs6FHhNPTbjHqejDQmDaKj\n" +
-			"y2ABzw8ky2R8rjYFemQgS8k9Dcd6UvTP/BVIab0G2Q6AWFda4+Zlm1Tv5QIDAQAB\n" +
-			"AoGAWxRBfPdIWRlyOezzi4ubuqjy04fzSr36NebJB7gLXJ2Lt7MwSpImCqk920I7\n" +
-			"T8Vf/iSISiyaz0xXuS0GrWB1JxR8wBVMGDexN844IkE/utp5gOQ14z7PHl8nwmWS\n" +
-			"tDg8vH7j4alouCnpOUbKxm13NNYBvTXRPu353uGMCdlk2MkCQQDjgNdwPhkhiI0l\n" +
-			"Za8onKc7CPS7IMHmVYZZ1tYvOyGVjkf5CJPEmIhH5EILy4T92hMQIYFnsy1D1GkU\n" +
-			"JUlVEk8bAkEA30A7wXeQB7bm+x8OOP/HnTxRa6LZxW+GPrGL2JUqd9y1735/vJbR\n" +
-			"K6SIakBxo367mAHW5Od+lZ6Oq5m8d/as/wJBAMNWaiTOvOdFBuQYVfgJ4bDXtMJD\n" +
-			"kxlBT9UtmMP/AowWGYgjLDV+Pm1z+J2GBs+sAfg0vJaciv4VkI+ioD9yNAcCQD/D\n" +
-			"Os3w9iQd6y7CGe/RrhOMjLyvUH+BcNgrIYQEZpLBaP00JguZD7jlT0j5ivtlUPMD\n" +
-			"Y3sRWygklx8P07J3s8UCQBcG6bYXhl0eYG+tqN0D385m2zL7f0pP5jcUv1kh1eZK\n" +
-			"hzzRcaDDY4SBsgZqVXtJARPldPwucSD2edfR2o6iNaw=";
-
-	//"lBBK%2F0w5LOajrMrji7DUgEqNjIhQbidR13GovA5r3TgIbNqv231yC1NksLdw%2Ba3JnfHXoXuet6XNNHtn7VE%2BeCoRO1O%2BR1KugLrQEZMtG5jmJIe2pbjm%2F3kb%2FuGkpG%2BwYQYI51%2BhA3YBbvZHVQBYveBqK%2Bh8mUyb7GM1HxWs9k4%3D";
+	public static final String ALIPAY_RSA_PRIVATE = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALI1lnv/l8H32qkk\n" +
+			"Fxkxmta6JR8VGH1HXh4P4uDODE6a73oxZHKfjEyUQ/YQe6GxRsVrrsHBCZjQQMYo\n" +
+			"veHvDcsdnSSOO69kdSZFKa83gHTpan7wRVDIaIhrKnhnjjp82pEqSi6XizpB7eMu\n" +
+			"UEiBZXAi6YBXRjY4NgiEYPglUQNfAgMBAAECgYA5/A220vdB+a+AEWoinG1RKMgj\n" +
+			"UO3i9XG+PlUH6INAoFEDZUbVtOwljqh+S+auOcxZOCxohrLksf4he+gst2e4/+UR\n" +
+			"A7wkDsbGF0zedL11rslPNQR0+p71xOdgjvNCxk7FoZ62EuWRgeD6M2cLV/wO3nhJ\n" +
+			"Txjjv2RWWGMBlaEu4QJBAOPGdmaU3pSei54mIOsTyYCRL5RSKG2akdSE9gFDr+xD\n" +
+			"v7JiRoBcdxAzH3txEL8jiTbgIYdPrkFDMkw5FrdeskMCQQDISsi/uGTTW5yk9iMM\n" +
+			"XY/XsYZQt4oi9POc4CAe4tfcG4yNtAwu3H9lLaE3Dw/RJrAZhcuipx5EW4Bx9PRj\n" +
+			"4H61AkEAxE+0lE0SWT0cUD3EeVcggHKhc1AsD+r8bRH7hLN12Ee73F7fLJqE861c\n" +
+			"IOQd7t8N0AH0Y87E/PKRUyiQ75HqSQJBAMb4y97xvm/dVYrm3cB9/dSHjegHvRmm\n" +
+			"/4+7cw1bypblY0auM2AmOgR4ROxecRcUeOKR8M7feAjuYXZToqjJrvUCQQChkZxp\n" +
+			"cULf/FebtjsTovixuyO0EI5N9cJgCOC9bQ5kFzRSTMKuzgAinnFsTQv3WUrayXMz\n" +
+			"amQ4CTa1bmbJjzrC";
 
 	/**
 	 * 以下为商户配置参数
