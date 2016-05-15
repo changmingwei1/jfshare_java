@@ -19,5 +19,5 @@ public class WeixinConfig {
     /**
      * 以下为商户配置参数
      */
-    public static String notify_url = "http://120.24.153.102:13005/pay/notify/weixinpay"; //后端支付通知地址
+//    public static String notify_url = "http://120.24.153.102:13005/pay/notify/weixinpay"; //后端支付通知地址
 }
