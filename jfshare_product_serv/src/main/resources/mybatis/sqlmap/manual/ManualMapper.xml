@@ -14,6 +14,7 @@
 	    <result column="vice_name" property="viceName" jdbcType="VARCHAR" />
     	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     	<result column="seller_id" property="sellerId" jdbcType="INTEGER" />
+    	<result column="type" property="type" jdbcType="INTEGER" />
 	    <!--
 	    <result column="active_stock" property="activeStock" jdbcType="INTEGER" />
 	    <result column="total_sales" property="totalSales" jdbcType="INTEGER" />
@@ -35,7 +36,8 @@
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
 			a.vice_name,
 			create_time,
-			a.seller_id
+			a.seller_id,
+			a.type
 		from tb_product a
 		<where>
 				<!-- AND b.sku_num = '' -->
@@ -100,7 +102,8 @@
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
 			a.vice_name,
 			create_time,
-			seller_id
+			a.seller_id,
+			a.type
 		from tb_product a
 		<where>
 				<!-- AND b.sku_num = '' -->
@@ -171,7 +174,8 @@
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
 			a.vice_name,
 			create_time,
-			seller_id
+			a.seller_id,
+			a.type
 		FROM
 			tb_product a
 		WHERE
@@ -213,7 +217,8 @@
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
 			a.vice_name,
 			create_time,
-			seller_id
+			a.seller_id,
+			a.type
 		from tb_product a
 		where a.id = #{productId,jdbcType=VARCHAR}
 	</select>
