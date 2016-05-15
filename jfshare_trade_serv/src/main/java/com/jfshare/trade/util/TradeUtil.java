@@ -8,6 +8,7 @@ import com.jfshare.finagle.thrift.order.PayInfo;
 import com.jfshare.finagle.thrift.product.Product;
 import com.jfshare.finagle.thrift.product.ProductResult;
 import com.jfshare.finagle.thrift.product.ProductSku;
+import com.jfshare.finagle.thrift.product.ProductSkuItem;
 import com.jfshare.finagle.thrift.stock.LockInfo;
 import com.jfshare.finagle.thrift.trade.BuyInfo;
 import com.jfshare.finagle.thrift.trade.BuySellerDetail;
@@ -16,6 +17,8 @@ import com.jfshare.utils.BeanUtil;
 import com.jfshare.utils.ConvertUtil;
 import com.jfshare.utils.PriceUtils;
 import com.jfshare.utils.StringUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -114,15 +117,15 @@ public class TradeUtil {
                 Product productDb = skuMaps.get(item.getProductId() + "#" + ConvertUtil.getStringPlus(item.getSkuNum()));
                 Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(productDb);
                 BeanUtil.fillBeanData(item, stringObjectMap);
-                ProductSku productSkuDb = productDb.getProductSku();
-                if (productSkuDb != null) {
-                    item.setSellerClassNum(productSkuDb.getSellerClassNum());
-                    item.setShelf(productSkuDb.getShelf());
-                    item.setCurPrice(productSkuDb.getCurPrice());
-                    item.setOrgPrice(productSkuDb.getOrgPrice());
+                ProductSkuItem skuItem = productDb.getProductSku().getSkuItems().get(0);
+                if (skuItem != null) {
+                    item.setSellerClassNum(skuItem.getSellerClassNum());
+                    item.setShelf(skuItem.getShelf());
+                    item.setCurPrice(skuItem.getCurPrice());
+                    item.setOrgPrice(skuItem.getOrgPrice());
                     //无sku图片取商品主图
-                    if (!StringUtil.isNullOrEmpty(productSkuDb.getVPicture())) {
-                        item.setImagesUrl(productSkuDb.getVPicture());
+                    if (!StringUtil.isNullOrEmpty(skuItem.getVPicture())) {
+                        item.setImagesUrl(skuItem.getVPicture());
                     } else {
                         String imgKey = productDb.getImgKey();
                         if (!StringUtil.isNullOrEmpty(imgKey)) {
@@ -132,8 +135,11 @@ public class TradeUtil {
                             }
                         }
                     }
-                    item.setSkuDesc(productSkuDb.getSkuName());
-                    totalPrice += PriceUtils.strToInt(productSkuDb.getCurPrice()) * item.getCount();
+                    item.setSkuDesc(skuItem.getSkuName());
+                    item.setThirdExchangeRate(productDb.getThirdExchangeRate());
+                    item.setStorehouseId(skuItem.getStorehouseId());
+                    item.setPostageTemplateId(productDb.getPostageId());
+                    totalPrice += PriceUtils.strToInt(skuItem.getCurPrice()) * item.getCount();
                 }
                 productInfos.add(item);
             }

@@ -3626,14 +3626,14 @@ public class OrderServ {
         case 1: // ORDER_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list32 = iprot.readListBegin();
-            this.orderList = new ArrayList<Order>(_list32.size);
-            for (int _i33 = 0; _i33 < _list32.size; ++_i33)
+            TList _list36 = iprot.readListBegin();
+            this.orderList = new ArrayList<Order>(_list36.size);
+            for (int _i37 = 0; _i37 < _list36.size; ++_i37)
             {
-              Order _elem34;
-              _elem34 = new Order();
-              _elem34.read(iprot);
-              this.orderList.add(_elem34);
+              Order _elem38;
+              _elem38 = new Order();
+              _elem38.read(iprot);
+              this.orderList.add(_elem38);
             }
             iprot.readListEnd();
             }
@@ -3660,9 +3660,9 @@ public class OrderServ {
       oprot.writeFieldBegin(ORDER_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.orderList.size()));
-        for (Order _iter35 : this.orderList)
+        for (Order _iter39 : this.orderList)
         {
-          _iter35.write(oprot);
+          _iter39.write(oprot);
         }
         oprot.writeListEnd();
       }

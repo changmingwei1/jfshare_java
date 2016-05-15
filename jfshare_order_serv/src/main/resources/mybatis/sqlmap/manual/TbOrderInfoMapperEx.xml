@@ -111,6 +111,18 @@
       <if test="record.thirdScore != null">
         third_score,
       </if>
+      <if test="record.postage != null">
+        postage,
+      </if>
+      <if test="record.postageTemplateId != null">
+        postage_template_id,
+      </if>
+      <if test="record.storehouseId != null">
+        storehouse_id,
+      </if>
+      <if test="record.thirdexchangerate != null">
+        thirdExchangeRate,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="record.id != null">
@@ -190,6 +202,18 @@
       </if>
       <if test="record.thirdScore != null">
         #{record.thirdScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.postage != null">
+        #{record.postage,jdbcType=INTEGER},
+      </if>
+      <if test="record.postageTemplateId != null">
+        #{record.postageTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.storehouseId != null">
+        #{record.storehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="record.thirdexchangerate != null">
+        #{record.thirdexchangerate,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

@@ -70,13 +70,8 @@ public class FailCode {
 
 	public static void addFails(Result result, List<FailDesc> failDescs) {
 		result.setCode(1);
-		List<FailDesc> fails = result.getFailDescList();
-		if (fails == null) {
-			fails = new ArrayList<FailDesc>();
-			result.setFailDescList(fails);
-		}
 		for (FailDesc item : failDescs) {
-			fails.add(item);
+			result.addToFailDescList(item);
 		}
 	}
     

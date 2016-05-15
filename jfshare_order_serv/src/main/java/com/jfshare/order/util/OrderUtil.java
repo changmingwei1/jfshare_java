@@ -232,6 +232,8 @@ public class OrderUtil {
             productInfo.setWi(tbOrderInfoRecord.getWi());
             productInfo.setExchangeScore(tbOrderInfoRecord.getExchangeScore());
             productInfo.setExchangeCash(PriceUtils.strToInt(tbOrderInfoRecord.getExchangeCash()));
+            productInfo.setStorehouseId(tbOrderInfoRecord.getStorehouseId());
+            productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
             productInfo.setThirdexchangerate(tbOrderInfoRecord.getThirdExchangeRate());
             productInfos. add(productInfo);
         }

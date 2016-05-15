@@ -124,7 +124,10 @@ public class ServHandle implements TradeServ.Iface {
 				FailCode.addFails(result, score2CashFailList);
 				return createOrderResult;
 			}
-			resourseOpts.push(ResourseOpt.score2cash);
+			if(buyInfo.getExchangeScore() > 0) {
+				//使用了积分抵现, 记录操作, 后续操作失败回滚积分
+				resourseOpts.push(ResourseOpt.score2cash);
+			}
 			logger.info("确认订单----积分抵现校验通过");
 
 
@@ -165,8 +168,8 @@ public class ServHandle implements TradeServ.Iface {
 		} finally {
 			//下单失败, 返还库存 积分等资源
 			if(isConfirmSucc == false) {
-				while(!resourseOpts.isEmpty()){
-					switch (resourseOpts.pop()) {
+				for(ResourseOpt opt : resourseOpts) {
+					switch (opt) {
 						case stock:{
 							checkUtil.releaseStock(sellerOrderIdsMap, buyInfo);	//释放库存
 							break;

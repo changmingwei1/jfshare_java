@@ -6,26 +6,12 @@
 package com.jfshare.finagle.thrift.product;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.EnumMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.EnumSet;
-import java.util.Collections;
-import java.util.BitSet;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.thrift.*;
-import org.apache.thrift.async.*;
-import org.apache.thrift.meta_data.*;
-import org.apache.thrift.transport.*;
+import org.apache.thrift.meta_data.FieldMetaData;
+import org.apache.thrift.meta_data.FieldValueMetaData;
 import org.apache.thrift.protocol.*;
+
+import java.util.*;
 
 // No additional import required for struct/union.
 
@@ -45,6 +31,7 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   private static final TField VICE_NAME_FIELD_DESC = new TField("viceName", TType.STRING, (short)11);
   private static final TField CREATE_TIME_FIELD_DESC = new TField("createTime", TType.STRING, (short)12);
   private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)13);
+  private static final TField TYPE_FIELD_DESC = new TField("type", TType.I32, (short)14);
 
 
   public String productId;
@@ -60,6 +47,7 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   public String viceName;
   public String createTime;
   public int sellerId;
+  public int type;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -75,7 +63,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     IMG_URL((short)10, "imgUrl"),
     VICE_NAME((short)11, "viceName"),
     CREATE_TIME((short)12, "createTime"),
-    SELLER_ID((short)13, "sellerId");
+    SELLER_ID((short)13, "sellerId"),
+    TYPE((short)14, "type");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -116,6 +105,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   	return CREATE_TIME;
         case 13: // SELLER_ID
   	return SELLER_ID;
+        case 14: // TYPE
+  	return TYPE;
         default:
   	return null;
       }
@@ -163,7 +154,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   private static final int __TOTALSALES_ISSET_ID = 3;
   private static final int __ACTIVESTATE_ISSET_ID = 4;
   private static final int __SELLERID_ISSET_ID = 5;
-  private BitSet __isset_bit_vector = new BitSet(6);
+  private static final int __TYPE_ISSET_ID = 6;
+  private BitSet __isset_bit_vector = new BitSet(7);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -193,6 +185,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     tmpMap.put(_Fields.CREATE_TIME, new FieldMetaData("createTime", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.TYPE, new FieldMetaData("type", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductSurvey.class, metaDataMap);
@@ -265,6 +259,7 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       this.createTime = other.createTime;
     }
     this.sellerId = other.sellerId;
+    this.type = other.type;
   }
 
   public ProductSurvey deepCopy() {
@@ -292,6 +287,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     this.createTime = null;
     setSellerIdIsSet(false);
     this.sellerId = 0;
+    setTypeIsSet(false);
+    this.type = 0;
   }
 
   public String getProductId() {
@@ -613,6 +610,30 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     __isset_bit_vector.set(__SELLERID_ISSET_ID, value);
   }
 
+  public int getType() {
+    return this.type;
+  }
+
+  public ProductSurvey setType(int type) {
+    this.type = type;
+    setTypeIsSet(true);
+
+    return this;
+  }
+
+  public void unsetType() {
+  __isset_bit_vector.clear(__TYPE_ISSET_ID);
+  }
+
+  /** Returns true if field type is set (has been asigned a value) and false otherwise */
+  public boolean isSetType() {
+    return __isset_bit_vector.get(__TYPE_ISSET_ID);
+  }
+
+  public void setTypeIsSet(boolean value) {
+    __isset_bit_vector.set(__TYPE_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -706,6 +727,13 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
         setSellerId((Integer)value);
       }
       break;
+    case TYPE:
+      if (value == null) {
+        unsetType();
+      } else {
+        setType((Integer)value);
+      }
+      break;
     }
   }
 
@@ -737,6 +765,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       return getCreateTime();
     case SELLER_ID:
       return new Integer(getSellerId());
+    case TYPE:
+      return new Integer(getType());
     }
     throw new IllegalStateException();
   }
@@ -774,6 +804,8 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       return isSetCreateTime();
     case SELLER_ID:
       return isSetSellerId();
+    case TYPE:
+      return isSetType();
     }
     throw new IllegalStateException();
   }
@@ -894,6 +926,14 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       if (this.sellerId != that.sellerId)
         return false;
     }
+    boolean this_present_type = true && this.isSetType();
+    boolean that_present_type = true && that.isSetType();
+    if (this_present_type || that_present_type) {
+      if (!(this_present_type && that_present_type))
+        return false;
+      if (this.type != that.type)
+        return false;
+    }
 
     return true;
   }
@@ -953,6 +993,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     builder.append(present_sellerId);
     if (present_sellerId)
       builder.append(sellerId);
+    boolean present_type = true && (isSetType());
+    builder.append(present_type);
+    if (present_type)
+      builder.append(type);
     return builder.toHashCode();
   }
 
@@ -1094,6 +1138,16 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetType()).compareTo(typedOther.isSetType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetType()) {
+      lastComparison = TBaseHelper.compareTo(this.type, typedOther.type);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1209,6 +1263,14 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 14: // TYPE
+          if (field.type == TType.I32) {
+            this.type = iprot.readI32();
+            setTypeIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -1281,6 +1343,11 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     if (isSetSellerId()) {
       oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
       oprot.writeI32(this.sellerId);
+      oprot.writeFieldEnd();
+    }
+    if (isSetType()) {
+      oprot.writeFieldBegin(TYPE_FIELD_DESC);
+      oprot.writeI32(this.type);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -1374,6 +1441,12 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       if (!first) sb.append(", ");
       sb.append("sellerId:");
       sb.append(this.sellerId);
+      first = false;
+      }
+    if (isSetType()) {
+      if (!first) sb.append(", ");
+      sb.append("type:");
+      sb.append(this.type);
       first = false;
       }
     sb.append(")");

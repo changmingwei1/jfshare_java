@@ -511,14 +511,14 @@ public class BatchDeliverParam implements TBase<BatchDeliverParam, BatchDeliverP
         case 2: // ORDER_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list24 = iprot.readListBegin();
-            this.orderList = new ArrayList<Order>(_list24.size);
-            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
+            TList _list28 = iprot.readListBegin();
+            this.orderList = new ArrayList<Order>(_list28.size);
+            for (int _i29 = 0; _i29 < _list28.size; ++_i29)
             {
-              Order _elem26;
-              _elem26 = new Order();
-              _elem26.read(iprot);
-              this.orderList.add(_elem26);
+              Order _elem30;
+              _elem30 = new Order();
+              _elem30.read(iprot);
+              this.orderList.add(_elem30);
             }
             iprot.readListEnd();
             }
@@ -562,9 +562,9 @@ public class BatchDeliverParam implements TBase<BatchDeliverParam, BatchDeliverP
       oprot.writeFieldBegin(ORDER_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.orderList.size()));
-        for (Order _iter27 : this.orderList)
+        for (Order _iter31 : this.orderList)
         {
-          _iter27.write(oprot);
+          _iter31.write(oprot);
         }
         oprot.writeListEnd();
       }

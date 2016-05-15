@@ -364,14 +364,14 @@ public class BatchDeliverResult implements TBase<BatchDeliverResult, BatchDelive
         case 2: // FAIL_INFO
           if (field.type == TType.LIST) {
             {
-            TList _list20 = iprot.readListBegin();
-            this.failInfo = new ArrayList<BatchDeliverFailInfo>(_list20.size);
-            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
+            TList _list24 = iprot.readListBegin();
+            this.failInfo = new ArrayList<BatchDeliverFailInfo>(_list24.size);
+            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
             {
-              BatchDeliverFailInfo _elem22;
-              _elem22 = new BatchDeliverFailInfo();
-              _elem22.read(iprot);
-              this.failInfo.add(_elem22);
+              BatchDeliverFailInfo _elem26;
+              _elem26 = new BatchDeliverFailInfo();
+              _elem26.read(iprot);
+              this.failInfo.add(_elem26);
             }
             iprot.readListEnd();
             }
@@ -404,9 +404,9 @@ public class BatchDeliverResult implements TBase<BatchDeliverResult, BatchDelive
         oprot.writeFieldBegin(FAIL_INFO_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.failInfo.size()));
-          for (BatchDeliverFailInfo _iter23 : this.failInfo)
+          for (BatchDeliverFailInfo _iter27 : this.failInfo)
           {
-            _iter23.write(oprot);
+            _iter27.write(oprot);
           }
           oprot.writeListEnd();
         }

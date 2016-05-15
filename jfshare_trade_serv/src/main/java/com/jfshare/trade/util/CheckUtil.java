@@ -17,6 +17,7 @@ import com.jfshare.trade.model.manual.PaymentInfo;
 import com.jfshare.trade.server.depend.*;
 import com.jfshare.utils.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,8 +167,12 @@ public class CheckUtil {
         }
 
         for(ProductResult productRet : productRets) {
-            if (productRet == null || productRet.getResult() == null ||
-                    productRet.getResult().getCode() == 1 || productRet.getProduct() == null) {
+            if (productRet == null
+                    || productRet.getResult() == null
+                    || productRet.getResult().getCode() == 1
+                    || productRet.getProduct() == null
+                    || productRet.getProduct().getProductSku() == null
+                    || CollectionUtils.isEmpty(productRet.getProduct().getProductSku().getSkuItems())) {
                 fails.add(FailCode.PRODUCT_GET_ERROR);
                 return fails;
             }
@@ -312,11 +317,12 @@ public class CheckUtil {
         for (Order item : orderList) {
             realAmount += TradeUtil.getRealPayPrice(item);
         }
+
         if(commitAmount <= 0) {
             fails.add(FailCode.PAY_PRICE_ERROR);
         } else if (commitAmount != realAmount)  {
             logger.error("$$$$校验商品价格变动错误！提交价格[" + PriceUtils.intToStr(commitAmount) + "]元，实际价格[" + PriceUtils.intToStr(realAmount) + "]元");
-            fails.add(FailCode.PAY_PRICE_CHANGE_ERROR.setDesc(FailCode.PAY_PRICE_CHANGE_ERROR + "，提交价格[" + PriceUtils.intToStr(commitAmount) + "]元，实际价格[" + PriceUtils.intToStr(realAmount) + "]元"));
+            fails.add(FailCode.PAY_PRICE_CHANGE_ERROR.setDesc("提交价格[" + PriceUtils.intToStr(commitAmount) + "]元，实际价格[" + PriceUtils.intToStr(realAmount) + "]元"));
         }
 
         return fails;
