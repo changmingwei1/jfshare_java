@@ -81,11 +81,11 @@ public class client {
         if (DO_IT == 0)
             return;
 
-        String productId = "ze151210231353000417";
+        String productId = "ze151220000824000900";
         ProductOpt productOpt = new ProductOpt();
         productOpt.setProductId(productId);
-        productOpt.setActiveState(101);
-        productOpt.setCurState(300);
+        productOpt.setActiveState(103);
+        productOpt.setCurState(203);
 //        productOpt.setDesc("审核通过");
         productOpt.setCreateTime("2015-12-21 12:12:12");
         productOpt.setOperatorType(1);
