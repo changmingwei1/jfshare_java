@@ -51,7 +51,20 @@ public class AlipayConfig {
 	/**
 	 * RSA私钥
 	 */
-	public static final String ALIPAY_RSA_PRIVATE = "lBBK%2F0w5LOajrMrji7DUgEqNjIhQbidR13GovA5r3TgIbNqv231yC1NksLdw%2Ba3JnfHXoXuet6XNNHtn7VE%2BeCoRO1O%2BR1KugLrQEZMtG5jmJIe2pbjm%2F3kb%2FuGkpG%2BwYQYI51%2BhA3YBbvZHVQBYveBqK%2Bh8mUyb7GM1HxWs9k4%3D";
+	public static final String ALIPAY_RSA_PRIVATE = "MIICXAIBAAKBgQDGZlD7QjGX5l2GYhqEoVLG+pV9OWQsU0sqvYk8irAbTe1+wcP5\n" +
+			"04U9aVP8zSfJr0yX5/UY+QxNmCYH5xWmcc2YkfZlmFzs6FHhNPTbjHqejDQmDaKj\n" +
+			"y2ABzw8ky2R8rjYFemQgS8k9Dcd6UvTP/BVIab0G2Q6AWFda4+Zlm1Tv5QIDAQAB\n" +
+			"AoGAWxRBfPdIWRlyOezzi4ubuqjy04fzSr36NebJB7gLXJ2Lt7MwSpImCqk920I7\n" +
+			"T8Vf/iSISiyaz0xXuS0GrWB1JxR8wBVMGDexN844IkE/utp5gOQ14z7PHl8nwmWS\n" +
+			"tDg8vH7j4alouCnpOUbKxm13NNYBvTXRPu353uGMCdlk2MkCQQDjgNdwPhkhiI0l\n" +
+			"Za8onKc7CPS7IMHmVYZZ1tYvOyGVjkf5CJPEmIhH5EILy4T92hMQIYFnsy1D1GkU\n" +
+			"JUlVEk8bAkEA30A7wXeQB7bm+x8OOP/HnTxRa6LZxW+GPrGL2JUqd9y1735/vJbR\n" +
+			"K6SIakBxo367mAHW5Od+lZ6Oq5m8d/as/wJBAMNWaiTOvOdFBuQYVfgJ4bDXtMJD\n" +
+			"kxlBT9UtmMP/AowWGYgjLDV+Pm1z+J2GBs+sAfg0vJaciv4VkI+ioD9yNAcCQD/D\n" +
+			"Os3w9iQd6y7CGe/RrhOMjLyvUH+BcNgrIYQEZpLBaP00JguZD7jlT0j5ivtlUPMD\n" +
+			"Y3sRWygklx8P07J3s8UCQBcG6bYXhl0eYG+tqN0D385m2zL7f0pP5jcUv1kh1eZK\n" +
+			"hzzRcaDDY4SBsgZqVXtJARPldPwucSD2edfR2o6iNaw=";
+	//"lBBK%2F0w5LOajrMrji7DUgEqNjIhQbidR13GovA5r3TgIbNqv231yC1NksLdw%2Ba3JnfHXoXuet6XNNHtn7VE%2BeCoRO1O%2BR1KugLrQEZMtG5jmJIe2pbjm%2F3kb%2FuGkpG%2BwYQYI51%2BhA3YBbvZHVQBYveBqK%2Bh8mUyb7GM1HxWs9k4%3D";
 
 	/**
 	 * 以下为商户配置参数
