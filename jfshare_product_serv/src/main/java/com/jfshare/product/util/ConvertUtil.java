@@ -115,6 +115,7 @@ public class ConvertUtil {
         productCard.setProductId(tbProductCard.getProductId());
         productCard.setCardNumber(tbProductCard.getCardNumber());
         productCard.setPassword(tbProductCard.getPassword());
+        productCard.setSkuNum(tbProductCard.getSkuNum());
         return productCard;
     }
 
@@ -127,6 +128,7 @@ public class ConvertUtil {
         productCardView.setCardNumber(tbProductCard.getCardNumber());
         productCardView.setPassword(tbProductCard.getPassword());
         productCardView.setState(tbProductCard.getState());
+        productCardView.setSkuNum(tbProductCard.getSkuNum());
         return productCardView;
     }
 
@@ -136,6 +138,7 @@ public class ConvertUtil {
         tbProductCard.setProductId(productCard.getProductId());
         tbProductCard.setCardNumber(productCard.getCardNumber());
         tbProductCard.setPassword(productCard.getPassword());
+        tbProductCard.setSkuNum(productCard.getSkuNum());
         return tbProductCard;
     }
 
@@ -152,6 +155,7 @@ public class ConvertUtil {
         ProductCardStatistics statistics = new ProductCardStatistics();
         statistics.setProductId(model.getProductId());
         statistics.setProductName(model.getProductName());
+        statistics.setSkuNum(model.getSkuNum());
         statistics.setTotal(model.getTotal());
         statistics.setUsedNum(model.getTotal() - model.getUnusedNum());
         statistics.setUnusedNum(model.getUnusedNum());

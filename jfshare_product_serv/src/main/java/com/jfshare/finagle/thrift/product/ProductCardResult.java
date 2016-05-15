@@ -366,14 +366,14 @@ public class ProductCardResult implements TBase<ProductCardResult, ProductCardRe
         case 2: // CARD_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list20 = iprot.readListBegin();
-            this.cardList = new ArrayList<ProductCard>(_list20.size);
-            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
+            TList _list28 = iprot.readListBegin();
+            this.cardList = new ArrayList<ProductCard>(_list28.size);
+            for (int _i29 = 0; _i29 < _list28.size; ++_i29)
             {
-              ProductCard _elem22;
-              _elem22 = new ProductCard();
-              _elem22.read(iprot);
-              this.cardList.add(_elem22);
+              ProductCard _elem30;
+              _elem30 = new ProductCard();
+              _elem30.read(iprot);
+              this.cardList.add(_elem30);
             }
             iprot.readListEnd();
             }
@@ -405,9 +405,9 @@ public class ProductCardResult implements TBase<ProductCardResult, ProductCardRe
       oprot.writeFieldBegin(CARD_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.cardList.size()));
-        for (ProductCard _iter23 : this.cardList)
+        for (ProductCard _iter31 : this.cardList)
         {
-          _iter23.write(oprot);
+          _iter31.write(oprot);
         }
         oprot.writeListEnd();
       }

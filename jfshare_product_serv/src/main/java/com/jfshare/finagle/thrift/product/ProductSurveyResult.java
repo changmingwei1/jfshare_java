@@ -441,14 +441,14 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
         case 3: // PRODUCT_SURVEY_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.productSurveyList = new ArrayList<ProductSurvey>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list24 = iprot.readListBegin();
+            this.productSurveyList = new ArrayList<ProductSurvey>(_list24.size);
+            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
             {
-              ProductSurvey _elem18;
-              _elem18 = new ProductSurvey();
-              _elem18.read(iprot);
-              this.productSurveyList.add(_elem18);
+              ProductSurvey _elem26;
+              _elem26 = new ProductSurvey();
+              _elem26.read(iprot);
+              this.productSurveyList.add(_elem26);
             }
             iprot.readListEnd();
             }
@@ -488,9 +488,9 @@ public class ProductSurveyResult implements TBase<ProductSurveyResult, ProductSu
         oprot.writeFieldBegin(PRODUCT_SURVEY_LIST_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.productSurveyList.size()));
-          for (ProductSurvey _iter19 : this.productSurveyList)
+          for (ProductSurvey _iter27 : this.productSurveyList)
           {
-            _iter19.write(oprot);
+            _iter27.write(oprot);
           }
           oprot.writeListEnd();
         }

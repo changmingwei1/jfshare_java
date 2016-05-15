@@ -190,5 +190,11 @@ public class ProductRedisImpl implements ProductRedis{
 		return baseRedis.removeSortSet(key, values);
 	}
 
+    @Override
+    public long addProductClickRate(String productId) {
+        long rate = this.baseRedis.incr(ConstRedis.PRODUCT_CLICK_RATE + productId);
+        // TODO: 2016/5/15 判断做处理
 
+        return rate;
+    }
 }

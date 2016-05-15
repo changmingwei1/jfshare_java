@@ -29,23 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class ProductCardViewListResult implements TBase<ProductCardViewListResult, ProductCardViewListResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("ProductCardViewListResult");
+public class ProductBatchResult implements TBase<ProductBatchResult, ProductBatchResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ProductBatchResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField CARD_VIEW_LIST_FIELD_DESC = new TField("cardViewList", TType.LIST, (short)2);
-  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)3);
+  private static final TField PRODUCT_LIST_FIELD_DESC = new TField("productList", TType.LIST, (short)2);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public List<ProductCardView> cardViewList;
-  public com.jfshare.finagle.thrift.pagination.Pagination pagination;
+  public List<Product> productList;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    CARD_VIEW_LIST((short)2, "cardViewList"),
-    PAGINATION((short)3, "pagination");
+    PRODUCT_LIST((short)2, "productList");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -62,10 +59,8 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // CARD_VIEW_LIST
-  	return CARD_VIEW_LIST;
-        case 3: // PAGINATION
-  	return PAGINATION;
+        case 2: // PRODUCT_LIST
+  	return PRODUCT_LIST;
         default:
   	return null;
       }
@@ -113,65 +108,57 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.CARD_VIEW_LIST, new FieldMetaData("cardViewList", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.PRODUCT_LIST, new FieldMetaData("productList", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, ProductCardView.class))));
-    tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
+                new StructMetaData(TType.STRUCT, Product.class))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(ProductCardViewListResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ProductBatchResult.class, metaDataMap);
   }
 
 
-  public ProductCardViewListResult() {
+  public ProductBatchResult() {
   }
 
-  public ProductCardViewListResult(
+  public ProductBatchResult(
     com.jfshare.finagle.thrift.result.Result result,
-    List<ProductCardView> cardViewList,
-    com.jfshare.finagle.thrift.pagination.Pagination pagination)
+    List<Product> productList)
   {
     this();
     this.result = result;
-    this.cardViewList = cardViewList;
-    this.pagination = pagination;
+    this.productList = productList;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public ProductCardViewListResult(ProductCardViewListResult other) {
+  public ProductBatchResult(ProductBatchResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetCardViewList()) {
-      List<ProductCardView> __this__cardViewList = new ArrayList<ProductCardView>();
-      for (ProductCardView other_element : other.cardViewList) {
-        __this__cardViewList.add(new ProductCardView(other_element));
+    if (other.isSetProductList()) {
+      List<Product> __this__productList = new ArrayList<Product>();
+      for (Product other_element : other.productList) {
+        __this__productList.add(new Product(other_element));
       }
-      this.cardViewList = __this__cardViewList;
-    }
-    if (other.isSetPagination()) {
-      this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
+      this.productList = __this__productList;
     }
   }
 
-  public ProductCardViewListResult deepCopy() {
-    return new ProductCardViewListResult(this);
+  public ProductBatchResult deepCopy() {
+    return new ProductBatchResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.cardViewList = null;
-    this.pagination = null;
+    this.productList = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public ProductCardViewListResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public ProductBatchResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -192,68 +179,43 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
     }
   }
 
-  public int getCardViewListSize() {
-    return (this.cardViewList == null) ? 0 : this.cardViewList.size();
+  public int getProductListSize() {
+    return (this.productList == null) ? 0 : this.productList.size();
   }
 
-  public java.util.Iterator<ProductCardView> getCardViewListIterator() {
-    return (this.cardViewList == null) ? null : this.cardViewList.iterator();
+  public java.util.Iterator<Product> getProductListIterator() {
+    return (this.productList == null) ? null : this.productList.iterator();
   }
 
-  public void addToCardViewList(ProductCardView elem) {
-    if (this.cardViewList == null) {
-      this.cardViewList = new ArrayList<ProductCardView>();
+  public void addToProductList(Product elem) {
+    if (this.productList == null) {
+      this.productList = new ArrayList<Product>();
     }
-    this.cardViewList.add(elem);
+    this.productList.add(elem);
   }
 
-  public List<ProductCardView> getCardViewList() {
-    return this.cardViewList;
+  public List<Product> getProductList() {
+    return this.productList;
   }
 
-  public ProductCardViewListResult setCardViewList(List<ProductCardView> cardViewList) {
-    this.cardViewList = cardViewList;
+  public ProductBatchResult setProductList(List<Product> productList) {
+    this.productList = productList;
     
     return this;
   }
 
-  public void unsetCardViewList() {
-    this.cardViewList = null;
+  public void unsetProductList() {
+    this.productList = null;
   }
 
-  /** Returns true if field cardViewList is set (has been asigned a value) and false otherwise */
-  public boolean isSetCardViewList() {
-    return this.cardViewList != null;
+  /** Returns true if field productList is set (has been asigned a value) and false otherwise */
+  public boolean isSetProductList() {
+    return this.productList != null;
   }
 
-  public void setCardViewListIsSet(boolean value) {
+  public void setProductListIsSet(boolean value) {
     if (!value) {
-      this.cardViewList = null;
-    }
-  }
-
-  public com.jfshare.finagle.thrift.pagination.Pagination getPagination() {
-    return this.pagination;
-  }
-
-  public ProductCardViewListResult setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
-    this.pagination = pagination;
-    
-    return this;
-  }
-
-  public void unsetPagination() {
-    this.pagination = null;
-  }
-
-  /** Returns true if field pagination is set (has been asigned a value) and false otherwise */
-  public boolean isSetPagination() {
-    return this.pagination != null;
-  }
-
-  public void setPaginationIsSet(boolean value) {
-    if (!value) {
-      this.pagination = null;
+      this.productList = null;
     }
   }
 
@@ -266,18 +228,11 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case CARD_VIEW_LIST:
+    case PRODUCT_LIST:
       if (value == null) {
-        unsetCardViewList();
+        unsetProductList();
       } else {
-        setCardViewList((List<ProductCardView>)value);
-      }
-      break;
-    case PAGINATION:
-      if (value == null) {
-        unsetPagination();
-      } else {
-        setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
+        setProductList((List<Product>)value);
       }
       break;
     }
@@ -287,10 +242,8 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
     switch (field) {
     case RESULT:
       return getResult();
-    case CARD_VIEW_LIST:
-      return getCardViewList();
-    case PAGINATION:
-      return getPagination();
+    case PRODUCT_LIST:
+      return getProductList();
     }
     throw new IllegalStateException();
   }
@@ -304,10 +257,8 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
     switch (field) {
     case RESULT:
       return isSetResult();
-    case CARD_VIEW_LIST:
-      return isSetCardViewList();
-    case PAGINATION:
-      return isSetPagination();
+    case PRODUCT_LIST:
+      return isSetProductList();
     }
     throw new IllegalStateException();
   }
@@ -316,12 +267,12 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof ProductCardViewListResult)
-      return this.equals((ProductCardViewListResult)that);
+    if (that instanceof ProductBatchResult)
+      return this.equals((ProductBatchResult)that);
     return false;
   }
 
-  public boolean equals(ProductCardViewListResult that) {
+  public boolean equals(ProductBatchResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -332,20 +283,12 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_cardViewList = true && this.isSetCardViewList();
-    boolean that_present_cardViewList = true && that.isSetCardViewList();
-    if (this_present_cardViewList || that_present_cardViewList) {
-      if (!(this_present_cardViewList && that_present_cardViewList))
+    boolean this_present_productList = true && this.isSetProductList();
+    boolean that_present_productList = true && that.isSetProductList();
+    if (this_present_productList || that_present_productList) {
+      if (!(this_present_productList && that_present_productList))
         return false;
-      if (!this.cardViewList.equals(that.cardViewList))
-        return false;
-    }
-    boolean this_present_pagination = true && this.isSetPagination();
-    boolean that_present_pagination = true && that.isSetPagination();
-    if (this_present_pagination || that_present_pagination) {
-      if (!(this_present_pagination && that_present_pagination))
-        return false;
-      if (!this.pagination.equals(that.pagination))
+      if (!this.productList.equals(that.productList))
         return false;
     }
 
@@ -359,24 +302,20 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_cardViewList = true && (isSetCardViewList());
-    builder.append(present_cardViewList);
-    if (present_cardViewList)
-      builder.append(cardViewList);
-    boolean present_pagination = true && (isSetPagination());
-    builder.append(present_pagination);
-    if (present_pagination)
-      builder.append(pagination);
+    boolean present_productList = true && (isSetProductList());
+    builder.append(present_productList);
+    if (present_productList)
+      builder.append(productList);
     return builder.toHashCode();
   }
 
-  public int compareTo(ProductCardViewListResult other) {
+  public int compareTo(ProductBatchResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    ProductCardViewListResult typedOther = (ProductCardViewListResult)other;
+    ProductBatchResult typedOther = (ProductBatchResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -388,22 +327,12 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetCardViewList()).compareTo(typedOther.isSetCardViewList());
+    lastComparison = Boolean.valueOf(isSetProductList()).compareTo(typedOther.isSetProductList());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetCardViewList()) {
-      lastComparison = TBaseHelper.compareTo(this.cardViewList, typedOther.cardViewList);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetPagination()).compareTo(typedOther.isSetPagination());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetPagination()) {
-      lastComparison = TBaseHelper.compareTo(this.pagination, typedOther.pagination);
+    if (isSetProductList()) {
+      lastComparison = TBaseHelper.compareTo(this.productList, typedOther.productList);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -434,28 +363,20 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // CARD_VIEW_LIST
+        case 2: // PRODUCT_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list32 = iprot.readListBegin();
-            this.cardViewList = new ArrayList<ProductCardView>(_list32.size);
-            for (int _i33 = 0; _i33 < _list32.size; ++_i33)
+            TList _list4 = iprot.readListBegin();
+            this.productList = new ArrayList<Product>(_list4.size);
+            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
             {
-              ProductCardView _elem34;
-              _elem34 = new ProductCardView();
-              _elem34.read(iprot);
-              this.cardViewList.add(_elem34);
+              Product _elem6;
+              _elem6 = new Product();
+              _elem6.read(iprot);
+              this.productList.add(_elem6);
             }
             iprot.readListEnd();
             }
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 3: // PAGINATION
-          if (field.type == TType.STRUCT) {
-            this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination();
-            this.pagination.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -480,21 +401,16 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.cardViewList != null) {
-      oprot.writeFieldBegin(CARD_VIEW_LIST_FIELD_DESC);
+    if (this.productList != null) {
+      oprot.writeFieldBegin(PRODUCT_LIST_FIELD_DESC);
       {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.cardViewList.size()));
-        for (ProductCardView _iter35 : this.cardViewList)
+        oprot.writeListBegin(new TList(TType.STRUCT, this.productList.size()));
+        for (Product _iter7 : this.productList)
         {
-          _iter35.write(oprot);
+          _iter7.write(oprot);
         }
         oprot.writeListEnd();
       }
-      oprot.writeFieldEnd();
-    }
-    if (this.pagination != null) {
-      oprot.writeFieldBegin(PAGINATION_FIELD_DESC);
-      this.pagination.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -503,7 +419,7 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("ProductCardViewListResult(");
+    StringBuilder sb = new StringBuilder("ProductBatchResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -513,19 +429,11 @@ public class ProductCardViewListResult implements TBase<ProductCardViewListResul
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("cardViewList:");
-    if (this.cardViewList == null) {
+    sb.append("productList:");
+    if (this.productList == null) {
       sb.append("null");
     } else {
-      sb.append(this.cardViewList);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("pagination:");
-    if (this.pagination == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.pagination);
+      sb.append(this.productList);
     }
     first = false;
     sb.append(")");

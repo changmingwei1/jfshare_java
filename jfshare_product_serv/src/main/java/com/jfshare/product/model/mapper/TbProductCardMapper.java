@@ -27,13 +27,13 @@ public interface TbProductCardMapper {
         "password, transaction_id, ",
         "create_time, create_id, ",
         "last_update_time, last_update_id, ",
-        "state)",
+        "state, sku_num)",
         "values (#{id,jdbcType=INTEGER}, #{sellerId,jdbcType=INTEGER}, ",
         "#{productId,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, ",
         "#{password,jdbcType=VARCHAR}, #{transactionId,jdbcType=VARCHAR}, ",
         "#{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=INTEGER}, ",
         "#{lastUpdateTime,jdbcType=TIMESTAMP}, #{lastUpdateId,jdbcType=INTEGER}, ",
-        "#{state,jdbcType=INTEGER})"
+        "#{state,jdbcType=INTEGER}, #{skuNum,jdbcType=VARCHAR})"
     })
     int insert(TbProductCard record);
 
@@ -44,7 +44,7 @@ public interface TbProductCardMapper {
     @Select({
         "select",
         "id, seller_id, product_id, card_number, password, transaction_id, create_time, ",
-        "create_id, last_update_time, last_update_id, state",
+        "create_id, last_update_time, last_update_id, state, sku_num",
         "from tb_product_card",
         "where id = #{id,jdbcType=INTEGER}"
     })
@@ -68,7 +68,8 @@ public interface TbProductCardMapper {
           "create_id = #{createId,jdbcType=INTEGER},",
           "last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},",
           "last_update_id = #{lastUpdateId,jdbcType=INTEGER},",
-          "state = #{state,jdbcType=INTEGER}",
+          "state = #{state,jdbcType=INTEGER},",
+          "sku_num = #{skuNum,jdbcType=VARCHAR}",
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(TbProductCard record);

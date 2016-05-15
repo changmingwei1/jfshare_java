@@ -373,6 +373,39 @@ public class ServHandle implements ProductServ.Iface {
 	}
 
 	@Override
+	public ProductBatchResult queryHotSKUBatch(ProductSkuBatchParam skuParam, ProductRetParam param) throws TException {
+		ProductBatchResult productBatchResult = new ProductBatchResult();
+		Result result = new Result(0);
+		productBatchResult.setResult(result);
+		if (param == null || CollectionUtils.isEmpty(skuParam.getProductSkuParams())) {
+			FailCode.addFails(result, FailCode.PARAM_ERROR);
+			return productBatchResult;
+		}
+		try {
+			for (ProductSkuParam productSkuParam : skuParam.getProductSkuParams()) {
+				param.setSkuTag(0);
+				Product product = productSvcImpl.queryProduct(productSkuParam.getProductId(), param);
+				if (product == null) {
+					FailCode.addFails(result, FailCode.PRODUCT_NULL_ERROR);
+					return productBatchResult;
+				}
+				ProductSku productHotSku = productSvcImpl.getProductHotSku(productSkuParam.getProductId(), productSkuParam.getStorehouseId(), productSkuParam.getSkuNum());
+				if (productHotSku != null) {
+					product.setProductSku(productHotSku);
+					productBatchResult.addToProductList(product);
+				} else {
+					FailCode.addFails(result, FailCode.PRODUCT_SKU_NULL_ERROR);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryHotSKUBatch error !! ---- skuParam : " + skuParam.toString() + ",param=" + param.toString(), e);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+		}
+
+		return productBatchResult;
+	}
+
+	@Override
 	public ProductCardResult getProductCard(ProductCardParam param) throws TException {
 		logger.info(">>>> getProductCard --- param : " + param.toString());
 		ProductCardResult productCardResult = new ProductCardResult();
@@ -508,6 +541,17 @@ public class ServHandle implements ProductServ.Iface {
 		}
 		productCardViewListResult.setCardViewList(productCardViews);
 		return productCardViewListResult;
+	}
+
+	@Override
+	public Result importProductCard(ProductCardImportParam param) throws TException {
+		Result result = new Result(0);
+		try {
+			this.productCartSvc.importProductCard(param.getSellerId(), param.getPath());
+		} catch (Exception e) {
+			logger.error("<<<<<<<< importProductCard error !! ---- param : " + param.toString(), e);
+		}
+		return result;
 	}
 
 	@Override

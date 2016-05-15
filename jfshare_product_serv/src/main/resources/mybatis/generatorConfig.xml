@@ -45,10 +45,10 @@
         </javaClientGenerator>
 
       <!--Run As  Maven build... goals mybatis-generator:generate -->
-      <table tableName="tb_product" schema="jfshare"/>
+      <!--<table tableName="tb_product" schema="jfshare"/>-->
       <!--<table tableName="tb_product_sku" schema="jfshare"/>-->
       <!--<table tableName="tb_product_history" schema="jfshare"/>-->
-      <!--<table tableName="tb_product_card" schema="jfshare"/>-->
+      <table tableName="tb_product_card" schema="jfshare"/>
     </context>
 </generatorConfiguration>
 

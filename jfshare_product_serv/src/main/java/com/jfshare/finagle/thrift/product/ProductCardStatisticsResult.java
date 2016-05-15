@@ -437,14 +437,14 @@ public class ProductCardStatisticsResult implements TBase<ProductCardStatisticsR
         case 2: // CARDTATISTICS_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list28 = iprot.readListBegin();
-            this.cardtatisticsList = new ArrayList<ProductCardStatistics>(_list28.size);
-            for (int _i29 = 0; _i29 < _list28.size; ++_i29)
+            TList _list36 = iprot.readListBegin();
+            this.cardtatisticsList = new ArrayList<ProductCardStatistics>(_list36.size);
+            for (int _i37 = 0; _i37 < _list36.size; ++_i37)
             {
-              ProductCardStatistics _elem30;
-              _elem30 = new ProductCardStatistics();
-              _elem30.read(iprot);
-              this.cardtatisticsList.add(_elem30);
+              ProductCardStatistics _elem38;
+              _elem38 = new ProductCardStatistics();
+              _elem38.read(iprot);
+              this.cardtatisticsList.add(_elem38);
             }
             iprot.readListEnd();
             }
@@ -484,9 +484,9 @@ public class ProductCardStatisticsResult implements TBase<ProductCardStatisticsR
       oprot.writeFieldBegin(CARDTATISTICS_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.cardtatisticsList.size()));
-        for (ProductCardStatistics _iter31 : this.cardtatisticsList)
+        for (ProductCardStatistics _iter39 : this.cardtatisticsList)
         {
-          _iter31.write(oprot);
+          _iter39.write(oprot);
         }
         oprot.writeListEnd();
       }

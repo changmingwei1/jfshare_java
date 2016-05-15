@@ -1,5 +1,6 @@
 package com.jfshare.product.service;
 
+import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 
@@ -10,6 +11,9 @@ import java.util.Map;
  * Created by Lenovo on 2016/4/28.
  */
 public interface IProductCartSvc {
+
+
+    List<String> importProductCard(int sellerId, String path);
 
     /**
      * 获取卡密信息，需要商品ID，交易唯一标识（transactionId）, 获取个数

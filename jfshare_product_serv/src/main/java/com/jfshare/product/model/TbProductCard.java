@@ -25,6 +25,8 @@ public class TbProductCard {
 
     private Integer state;
 
+    private String skuNum;
+
     public Integer getId() {
         return id;
     }
@@ -111,5 +113,13 @@ public class TbProductCard {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public String getSkuNum() {
+        return skuNum;
+    }
+
+    public void setSkuNum(String skuNum) {
+        this.skuNum = skuNum == null ? null : skuNum.trim();
     }
 }

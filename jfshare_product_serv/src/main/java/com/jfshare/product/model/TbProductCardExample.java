@@ -804,6 +804,76 @@ public class TbProductCardExample {
             addCriterion("state not between", value1, value2, "state");
             return (Criteria) this;
         }
+
+        public Criteria andSkuNumIsNull() {
+            addCriterion("sku_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumIsNotNull() {
+            addCriterion("sku_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumEqualTo(String value) {
+            addCriterion("sku_num =", value, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumNotEqualTo(String value) {
+            addCriterion("sku_num <>", value, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumGreaterThan(String value) {
+            addCriterion("sku_num >", value, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumGreaterThanOrEqualTo(String value) {
+            addCriterion("sku_num >=", value, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumLessThan(String value) {
+            addCriterion("sku_num <", value, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumLessThanOrEqualTo(String value) {
+            addCriterion("sku_num <=", value, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumLike(String value) {
+            addCriterion("sku_num like", value, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumNotLike(String value) {
+            addCriterion("sku_num not like", value, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumIn(List<String> values) {
+            addCriterion("sku_num in", values, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumNotIn(List<String> values) {
+            addCriterion("sku_num not in", values, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumBetween(String value1, String value2) {
+            addCriterion("sku_num between", value1, value2, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuNumNotBetween(String value1, String value2) {
+            addCriterion("sku_num not between", value1, value2, "skuNum");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

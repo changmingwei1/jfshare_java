@@ -510,6 +510,24 @@ public class BaseRedis {
     }
 
     /**
+     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作。
+     * 如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。
+     * 本操作的值限制在 64 位(bit)有符号数字表示之内。
+     * @param key
+     * @return
+     */
+    public long incr(String key) {
+        Jedis jedis =null;
+        try {
+            jedis = jedisPoolWrite.getResource();
+            Long res = jedis.incr(key)   ;
+            return  res;
+        } finally {
+            jedisPoolWrite.returnResource(jedis);
+        }
+    }
+
+    /**
      * 设置key的生存时间
      * @param key
      * @param seconds

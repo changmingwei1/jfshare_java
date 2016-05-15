@@ -41,4 +41,6 @@ public interface ProductRedis {
     public long removeProductListMember(String key,String... value);
     
     public Set<String> getProductList(String key);
+
+    public long addProductClickRate(String productId);
 }

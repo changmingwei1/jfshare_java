@@ -41,6 +41,7 @@ public class ProductServ {
     public ProductSkuResult queryProductSku(String productId) throws TException;
     public ProductResult queryHotSKU(String productId, String skuNum, ProductRetParam param) throws TException;
     public ProductResult queryHotSKUV1(ProductSkuParam skuParam, ProductRetParam param) throws TException;
+    public ProductBatchResult queryHotSKUBatch(ProductSkuBatchParam skuParam, ProductRetParam param) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult queryProductDetail(ProductDetailParam param) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult addProduct(Product product) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult updateProduct(Product product) throws TException;
@@ -51,6 +52,7 @@ public class ProductServ {
     public ProductSurveyResult queryFloorProduct(int floorId) throws TException;
     public ProductResult queryProductSnap(String snapId, ProductRetParam param) throws TException;
     public ProductSurveyResult productSurveyQueryBatch(ProductSurveyQueryBatchParam param) throws TException;
+    public com.jfshare.finagle.thrift.result.Result importProductCard(ProductCardImportParam param) throws TException;
     public ProductCardResult getProductCard(ProductCardParam param) throws TException;
     public ProductCardResult queryProductCard(ProductCardParam param) throws TException;
     public ProductCardStatisticsResult statisticsProductCard(ProductCardStatisticsParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException;
@@ -63,6 +65,7 @@ public class ProductServ {
     public void queryProductSku(String productId, AsyncMethodCallback<AsyncClient.queryProductSku_call> resultHandler) throws TException;
     public void queryHotSKU(String productId, String skuNum, ProductRetParam param, AsyncMethodCallback<AsyncClient.queryHotSKU_call> resultHandler) throws TException;
     public void queryHotSKUV1(ProductSkuParam skuParam, ProductRetParam param, AsyncMethodCallback<AsyncClient.queryHotSKUV1_call> resultHandler) throws TException;
+    public void queryHotSKUBatch(ProductSkuBatchParam skuParam, ProductRetParam param, AsyncMethodCallback<AsyncClient.queryHotSKUBatch_call> resultHandler) throws TException;
     public void queryProductDetail(ProductDetailParam param, AsyncMethodCallback<AsyncClient.queryProductDetail_call> resultHandler) throws TException;
     public void addProduct(Product product, AsyncMethodCallback<AsyncClient.addProduct_call> resultHandler) throws TException;
     public void updateProduct(Product product, AsyncMethodCallback<AsyncClient.updateProduct_call> resultHandler) throws TException;
@@ -73,6 +76,7 @@ public class ProductServ {
     public void queryFloorProduct(int floorId, AsyncMethodCallback<AsyncClient.queryFloorProduct_call> resultHandler) throws TException;
     public void queryProductSnap(String snapId, ProductRetParam param, AsyncMethodCallback<AsyncClient.queryProductSnap_call> resultHandler) throws TException;
     public void productSurveyQueryBatch(ProductSurveyQueryBatchParam param, AsyncMethodCallback<AsyncClient.productSurveyQueryBatch_call> resultHandler) throws TException;
+    public void importProductCard(ProductCardImportParam param, AsyncMethodCallback<AsyncClient.importProductCard_call> resultHandler) throws TException;
     public void getProductCard(ProductCardParam param, AsyncMethodCallback<AsyncClient.getProductCard_call> resultHandler) throws TException;
     public void queryProductCard(ProductCardParam param, AsyncMethodCallback<AsyncClient.queryProductCard_call> resultHandler) throws TException;
     public void statisticsProductCard(ProductCardStatisticsParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<AsyncClient.statisticsProductCard_call> resultHandler) throws TException;
@@ -85,6 +89,7 @@ public class ProductServ {
     public Future<ProductSkuResult> queryProductSku(String productId);
     public Future<ProductResult> queryHotSKU(String productId, String skuNum, ProductRetParam param);
     public Future<ProductResult> queryHotSKUV1(ProductSkuParam skuParam, ProductRetParam param);
+    public Future<ProductBatchResult> queryHotSKUBatch(ProductSkuBatchParam skuParam, ProductRetParam param);
     public Future<com.jfshare.finagle.thrift.result.StringResult> queryProductDetail(ProductDetailParam param);
     public Future<com.jfshare.finagle.thrift.result.StringResult> addProduct(Product product);
     public Future<com.jfshare.finagle.thrift.result.StringResult> updateProduct(Product product);
@@ -95,6 +100,7 @@ public class ProductServ {
     public Future<ProductSurveyResult> queryFloorProduct(int floorId);
     public Future<ProductResult> queryProductSnap(String snapId, ProductRetParam param);
     public Future<ProductSurveyResult> productSurveyQueryBatch(ProductSurveyQueryBatchParam param);
+    public Future<com.jfshare.finagle.thrift.result.Result> importProductCard(ProductCardImportParam param);
     public Future<ProductCardResult> getProductCard(ProductCardParam param);
     public Future<ProductCardResult> queryProductCard(ProductCardParam param);
     public Future<ProductCardStatisticsResult> statisticsProductCard(ProductCardStatisticsParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination);
@@ -282,6 +288,42 @@ public class ProductServ {
         return result.success;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryHotSKUV1 failed: unknown result");
+    }
+    public ProductBatchResult queryHotSKUBatch(ProductSkuBatchParam skuParam, ProductRetParam param) throws TException
+    {
+      send_queryHotSKUBatch(skuParam, param);
+      return recv_queryHotSKUBatch();
+    }
+
+    public void send_queryHotSKUBatch(ProductSkuBatchParam skuParam, ProductRetParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("queryHotSKUBatch", TMessageType.CALL, ++seqid_));
+      queryHotSKUBatch_args args = new queryHotSKUBatch_args();
+      args.setSkuParam(skuParam);
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public ProductBatchResult recv_queryHotSKUBatch() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "queryHotSKUBatch failed: out of sequence response");
+      }
+      queryHotSKUBatch_result result = new queryHotSKUBatch_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryHotSKUBatch failed: unknown result");
     }
     public com.jfshare.finagle.thrift.result.StringResult queryProductDetail(ProductDetailParam param) throws TException
     {
@@ -634,6 +676,41 @@ public class ProductServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "productSurveyQueryBatch failed: unknown result");
     }
+    public com.jfshare.finagle.thrift.result.Result importProductCard(ProductCardImportParam param) throws TException
+    {
+      send_importProductCard(param);
+      return recv_importProductCard();
+    }
+
+    public void send_importProductCard(ProductCardImportParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("importProductCard", TMessageType.CALL, ++seqid_));
+      importProductCard_args args = new importProductCard_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_importProductCard() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "importProductCard failed: out of sequence response");
+      }
+      importProductCard_result result = new importProductCard_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "importProductCard failed: unknown result");
+    }
     public ProductCardResult getProductCard(ProductCardParam param) throws TException
     {
       send_getProductCard(param);
@@ -966,6 +1043,40 @@ public class ProductServ {
         return (new Client(prot)).recv_queryHotSKUV1();
       }
      }
+    public void queryHotSKUBatch(ProductSkuBatchParam skuParam, ProductRetParam param, AsyncMethodCallback<queryHotSKUBatch_call> resultHandler) throws TException {
+      checkReady();
+      queryHotSKUBatch_call method_call = new queryHotSKUBatch_call(skuParam, param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class queryHotSKUBatch_call extends TAsyncMethodCall {
+      private ProductSkuBatchParam skuParam;
+      private ProductRetParam param;
+
+      public queryHotSKUBatch_call(ProductSkuBatchParam skuParam, ProductRetParam param, AsyncMethodCallback<queryHotSKUBatch_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.skuParam = skuParam;
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("queryHotSKUBatch", TMessageType.CALL, 0));
+        queryHotSKUBatch_args args = new queryHotSKUBatch_args();
+        args.setSkuParam(skuParam);
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ProductBatchResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_queryHotSKUBatch();
+      }
+     }
     public void queryProductDetail(ProductDetailParam param, AsyncMethodCallback<queryProductDetail_call> resultHandler) throws TException {
       checkReady();
       queryProductDetail_call method_call = new queryProductDetail_call(param, resultHandler, this, protocolFactory, transport);
@@ -1279,6 +1390,37 @@ public class ProductServ {
         return (new Client(prot)).recv_productSurveyQueryBatch();
       }
      }
+    public void importProductCard(ProductCardImportParam param, AsyncMethodCallback<importProductCard_call> resultHandler) throws TException {
+      checkReady();
+      importProductCard_call method_call = new importProductCard_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class importProductCard_call extends TAsyncMethodCall {
+      private ProductCardImportParam param;
+
+      public importProductCard_call(ProductCardImportParam param, AsyncMethodCallback<importProductCard_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("importProductCard", TMessageType.CALL, 0));
+        importProductCard_args args = new importProductCard_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_importProductCard();
+      }
+     }
     public void getProductCard(ProductCardParam param, AsyncMethodCallback<getProductCard_call> resultHandler) throws TException {
       checkReady();
       getProductCard_call method_call = new getProductCard_call(param, resultHandler, this, protocolFactory, transport);
@@ -1567,6 +1709,37 @@ public class ProductServ {
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
               return Future.value((new Client(__prot__)).recv_queryHotSKUV1());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<ProductBatchResult> queryHotSKUBatch(ProductSkuBatchParam skuParam, ProductRetParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("queryHotSKUBatch", TMessageType.CALL, 0));
+        queryHotSKUBatch_args __args__ = new queryHotSKUBatch_args();
+        __args__.setSkuParam(skuParam);
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<ProductBatchResult>>() {
+          public Future<ProductBatchResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_queryHotSKUBatch());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1877,6 +2050,36 @@ public class ProductServ {
         return Future.exception(e);
       }
     }
+    public Future<com.jfshare.finagle.thrift.result.Result> importProductCard(ProductCardImportParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("importProductCard", TMessageType.CALL, 0));
+        importProductCard_args __args__ = new importProductCard_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_importProductCard());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<ProductCardResult> getProductCard(ProductCardParam param) {
       try {
         // TODO: size
@@ -2040,6 +2243,7 @@ public class ProductServ {
       processMap_.put("queryProductSku", new queryProductSku());
       processMap_.put("queryHotSKU", new queryHotSKU());
       processMap_.put("queryHotSKUV1", new queryHotSKUV1());
+      processMap_.put("queryHotSKUBatch", new queryHotSKUBatch());
       processMap_.put("queryProductDetail", new queryProductDetail());
       processMap_.put("addProduct", new addProduct());
       processMap_.put("updateProduct", new updateProduct());
@@ -2050,6 +2254,7 @@ public class ProductServ {
       processMap_.put("queryFloorProduct", new queryFloorProduct());
       processMap_.put("queryProductSnap", new queryProductSnap());
       processMap_.put("productSurveyQueryBatch", new productSurveyQueryBatch());
+      processMap_.put("importProductCard", new importProductCard());
       processMap_.put("getProductCard", new getProductCard());
       processMap_.put("queryProductCard", new queryProductCard());
       processMap_.put("statisticsProductCard", new statisticsProductCard());
@@ -2177,6 +2382,31 @@ public class ProductServ {
         result.success = iface_.queryHotSKUV1(args.skuParam, args.param);
         
         oprot.writeMessageBegin(new TMessage("queryHotSKUV1", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class queryHotSKUBatch implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        queryHotSKUBatch_args args = new queryHotSKUBatch_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("queryHotSKUBatch", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        queryHotSKUBatch_result result = new queryHotSKUBatch_result();
+        result.success = iface_.queryHotSKUBatch(args.skuParam, args.param);
+        
+        oprot.writeMessageBegin(new TMessage("queryHotSKUBatch", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -2427,6 +2657,31 @@ public class ProductServ {
         result.success = iface_.productSurveyQueryBatch(args.param);
         
         oprot.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class importProductCard implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        importProductCard_args args = new importProductCard_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("importProductCard", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        importProductCard_result result = new importProductCard_result();
+        result.success = iface_.importProductCard(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("importProductCard", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -2816,6 +3071,73 @@ public class ProductServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("queryHotSKUV1", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("queryHotSKUBatch", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          queryHotSKUBatch_args args = new queryHotSKUBatch_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("queryHotSKUBatch", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<ProductBatchResult> future;
+          try {
+            future = iface.queryHotSKUBatch(args.skuParam, args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<ProductBatchResult, Future<byte[]>>() {
+              public Future<byte[]> apply(ProductBatchResult value) {
+                queryHotSKUBatch_result result = new queryHotSKUBatch_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("queryHotSKUBatch", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -3486,6 +3808,73 @@ public class ProductServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("productSurveyQueryBatch", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("importProductCard", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          importProductCard_args args = new importProductCard_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("importProductCard", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.importProductCard(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                importProductCard_result result = new importProductCard_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("importProductCard", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -6512,6 +6901,671 @@ public class ProductServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("queryHotSKUV1_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class queryHotSKUBatch_args implements TBase<queryHotSKUBatch_args, queryHotSKUBatch_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryHotSKUBatch_args");
+
+  private static final TField SKU_PARAM_FIELD_DESC = new TField("skuParam", TType.STRUCT, (short)1);
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)2);
+
+
+  public ProductSkuBatchParam skuParam;
+  public ProductRetParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SKU_PARAM((short)1, "skuParam"),
+    PARAM((short)2, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // SKU_PARAM
+  	return SKU_PARAM;
+        case 2: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SKU_PARAM, new FieldMetaData("skuParam", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductSkuBatchParam.class)));
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductRetParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryHotSKUBatch_args.class, metaDataMap);
+  }
+
+
+  public queryHotSKUBatch_args() {
+  }
+
+  public queryHotSKUBatch_args(
+    ProductSkuBatchParam skuParam,
+    ProductRetParam param)
+  {
+    this();
+    this.skuParam = skuParam;
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryHotSKUBatch_args(queryHotSKUBatch_args other) {
+    if (other.isSetSkuParam()) {
+      this.skuParam = new ProductSkuBatchParam(other.skuParam);
+    }
+    if (other.isSetParam()) {
+      this.param = new ProductRetParam(other.param);
+    }
+  }
+
+  public queryHotSKUBatch_args deepCopy() {
+    return new queryHotSKUBatch_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.skuParam = null;
+    this.param = null;
+  }
+
+  public ProductSkuBatchParam getSkuParam() {
+    return this.skuParam;
+  }
+
+  public queryHotSKUBatch_args setSkuParam(ProductSkuBatchParam skuParam) {
+    this.skuParam = skuParam;
+    
+    return this;
+  }
+
+  public void unsetSkuParam() {
+    this.skuParam = null;
+  }
+
+  /** Returns true if field skuParam is set (has been asigned a value) and false otherwise */
+  public boolean isSetSkuParam() {
+    return this.skuParam != null;
+  }
+
+  public void setSkuParamIsSet(boolean value) {
+    if (!value) {
+      this.skuParam = null;
+    }
+  }
+
+  public ProductRetParam getParam() {
+    return this.param;
+  }
+
+  public queryHotSKUBatch_args setParam(ProductRetParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SKU_PARAM:
+      if (value == null) {
+        unsetSkuParam();
+      } else {
+        setSkuParam((ProductSkuBatchParam)value);
+      }
+      break;
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((ProductRetParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SKU_PARAM:
+      return getSkuParam();
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SKU_PARAM:
+      return isSetSkuParam();
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryHotSKUBatch_args)
+      return this.equals((queryHotSKUBatch_args)that);
+    return false;
+  }
+
+  public boolean equals(queryHotSKUBatch_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_skuParam = true && this.isSetSkuParam();
+    boolean that_present_skuParam = true && that.isSetSkuParam();
+    if (this_present_skuParam || that_present_skuParam) {
+      if (!(this_present_skuParam && that_present_skuParam))
+        return false;
+      if (!this.skuParam.equals(that.skuParam))
+        return false;
+    }
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_skuParam = true && (isSetSkuParam());
+    builder.append(present_skuParam);
+    if (present_skuParam)
+      builder.append(skuParam);
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryHotSKUBatch_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryHotSKUBatch_args typedOther = (queryHotSKUBatch_args)other;
+
+    lastComparison = Boolean.valueOf(isSetSkuParam()).compareTo(typedOther.isSetSkuParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSkuParam()) {
+      lastComparison = TBaseHelper.compareTo(this.skuParam, typedOther.skuParam);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // SKU_PARAM
+          if (field.type == TType.STRUCT) {
+            this.skuParam = new ProductSkuBatchParam();
+            this.skuParam.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new ProductRetParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.skuParam != null) {
+      oprot.writeFieldBegin(SKU_PARAM_FIELD_DESC);
+      this.skuParam.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryHotSKUBatch_args(");
+    boolean first = true;
+    sb.append("skuParam:");
+    if (this.skuParam == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.skuParam);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class queryHotSKUBatch_result implements TBase<queryHotSKUBatch_result, queryHotSKUBatch_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryHotSKUBatch_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public ProductBatchResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductBatchResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryHotSKUBatch_result.class, metaDataMap);
+  }
+
+
+  public queryHotSKUBatch_result() {
+  }
+
+  public queryHotSKUBatch_result(
+    ProductBatchResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryHotSKUBatch_result(queryHotSKUBatch_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new ProductBatchResult(other.success);
+    }
+  }
+
+  public queryHotSKUBatch_result deepCopy() {
+    return new queryHotSKUBatch_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public ProductBatchResult getSuccess() {
+    return this.success;
+  }
+
+  public queryHotSKUBatch_result setSuccess(ProductBatchResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((ProductBatchResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryHotSKUBatch_result)
+      return this.equals((queryHotSKUBatch_result)that);
+    return false;
+  }
+
+  public boolean equals(queryHotSKUBatch_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryHotSKUBatch_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryHotSKUBatch_result typedOther = (queryHotSKUBatch_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new ProductBatchResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryHotSKUBatch_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -12330,6 +13384,579 @@ public class ProductServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("productSurveyQueryBatch_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class importProductCard_args implements TBase<importProductCard_args, importProductCard_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("importProductCard_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)-1);
+
+
+  public ProductCardImportParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)-1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case -1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ProductCardImportParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(importProductCard_args.class, metaDataMap);
+  }
+
+
+  public importProductCard_args() {
+  }
+
+  public importProductCard_args(
+    ProductCardImportParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public importProductCard_args(importProductCard_args other) {
+    if (other.isSetParam()) {
+      this.param = new ProductCardImportParam(other.param);
+    }
+  }
+
+  public importProductCard_args deepCopy() {
+    return new importProductCard_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public ProductCardImportParam getParam() {
+    return this.param;
+  }
+
+  public importProductCard_args setParam(ProductCardImportParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((ProductCardImportParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof importProductCard_args)
+      return this.equals((importProductCard_args)that);
+    return false;
+  }
+
+  public boolean equals(importProductCard_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(importProductCard_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    importProductCard_args typedOther = (importProductCard_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case -1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new ProductCardImportParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("importProductCard_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class importProductCard_result implements TBase<importProductCard_result, importProductCard_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("importProductCard_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(importProductCard_result.class, metaDataMap);
+  }
+
+
+  public importProductCard_result() {
+  }
+
+  public importProductCard_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public importProductCard_result(importProductCard_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public importProductCard_result deepCopy() {
+    return new importProductCard_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public importProductCard_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof importProductCard_result)
+      return this.equals((importProductCard_result)that);
+    return false;
+  }
+
+  public boolean equals(importProductCard_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(importProductCard_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    importProductCard_result typedOther = (importProductCard_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("importProductCard_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

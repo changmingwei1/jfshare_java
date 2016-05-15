@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 public class ProductCardStatisticsModel {
     private String productId;
     private String productName;
+    private String skuNum;
     private int total;
     private int usedNum;
     private int unusedNum;
@@ -27,6 +28,14 @@ public class ProductCardStatisticsModel {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getSkuNum() {
+        return skuNum;
+    }
+
+    public void setSkuNum(String skuNum) {
+        this.skuNum = skuNum;
     }
 
     public int getTotal() {

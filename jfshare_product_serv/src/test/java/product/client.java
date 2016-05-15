@@ -105,6 +105,12 @@ public class client {
     }
 
 
+    @Test
+    public void testAdd() throws Exception {
+//        this.client.p
+    }
+
+
     private Product initProduct(String productId) {
         Product product = new Product();
         product.setProductId(productId);

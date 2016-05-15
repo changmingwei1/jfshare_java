@@ -1,10 +1,13 @@
 package com.jfshare.product.service.impl;
 
 import com.jfshare.product.dao.mysql.IProductCardDao;
+import com.jfshare.product.model.TbProduct;
 import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.service.IProductCartSvc;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +21,23 @@ public class ProductCardSvcImpl implements IProductCartSvc {
 
     @Resource
     private IProductCardDao productCardDao;
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public List<String> importProductCard(int sellerId, String path) {
+
+        // TODO: 2016/5/13  读取文件中的数据
+
+        // 添加卡密信息
+        TbProductCard tbProductCard = new TbProductCard();
+        try {
+            this.productCardDao.add(tbProductCard);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     @Override
     public List<TbProductCard> getProductCard(Map queryMap) {

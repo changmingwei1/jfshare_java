@@ -23,4 +23,5 @@ public class ProductCommons {
     public static final String RK_PRODUCT_LIST = "jfshare:product:list_";
     
     public static final String RK_PRODUCTSURVEY_MAP = "jfshare:product:map:productId";
+
 }
