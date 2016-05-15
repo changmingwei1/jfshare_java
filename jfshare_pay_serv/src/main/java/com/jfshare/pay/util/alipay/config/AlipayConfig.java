@@ -51,20 +51,20 @@ public class AlipayConfig {
 	/**
 	 * RSA私钥 pkcs8格式
 	 */
-	public static final String ALIPAY_RSA_PRIVATE = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALI1lnv/l8H32qkk\n" +
-			"Fxkxmta6JR8VGH1HXh4P4uDODE6a73oxZHKfjEyUQ/YQe6GxRsVrrsHBCZjQQMYo\n" +
-			"veHvDcsdnSSOO69kdSZFKa83gHTpan7wRVDIaIhrKnhnjjp82pEqSi6XizpB7eMu\n" +
-			"UEiBZXAi6YBXRjY4NgiEYPglUQNfAgMBAAECgYA5/A220vdB+a+AEWoinG1RKMgj\n" +
-			"UO3i9XG+PlUH6INAoFEDZUbVtOwljqh+S+auOcxZOCxohrLksf4he+gst2e4/+UR\n" +
-			"A7wkDsbGF0zedL11rslPNQR0+p71xOdgjvNCxk7FoZ62EuWRgeD6M2cLV/wO3nhJ\n" +
-			"Txjjv2RWWGMBlaEu4QJBAOPGdmaU3pSei54mIOsTyYCRL5RSKG2akdSE9gFDr+xD\n" +
-			"v7JiRoBcdxAzH3txEL8jiTbgIYdPrkFDMkw5FrdeskMCQQDISsi/uGTTW5yk9iMM\n" +
-			"XY/XsYZQt4oi9POc4CAe4tfcG4yNtAwu3H9lLaE3Dw/RJrAZhcuipx5EW4Bx9PRj\n" +
-			"4H61AkEAxE+0lE0SWT0cUD3EeVcggHKhc1AsD+r8bRH7hLN12Ee73F7fLJqE861c\n" +
-			"IOQd7t8N0AH0Y87E/PKRUyiQ75HqSQJBAMb4y97xvm/dVYrm3cB9/dSHjegHvRmm\n" +
-			"/4+7cw1bypblY0auM2AmOgR4ROxecRcUeOKR8M7feAjuYXZToqjJrvUCQQChkZxp\n" +
-			"cULf/FebtjsTovixuyO0EI5N9cJgCOC9bQ5kFzRSTMKuzgAinnFsTQv3WUrayXMz\n" +
-			"amQ4CTa1bmbJjzrC";
+	public static final String ALIPAY_RSA_PRIVATE = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBANVmgr9np6ygCEqV" +
+			"oJiRBKxqQkOy0ihwlOtcKc2gUTmYVYbKYQ5a/CPiLLt1AJrAcTO5w1iqTKpQKZKb" +
+			"BoYRrkK//4VAkNgwh8KbeT8zPqfkmXUx8I7IQkmOqRDzwrDC/z46TJvU9oW0l5HB" +
+			"5KJqBiob1s2lYXqvYEZNcV9bDOipAgMBAAECgYBNsHM7IY5ujxhVpuF/iZQM/OZA" +
+			"5TITXOEqSjRB0vKfKDFC0BzDcCZJHgcw+6iLrjHIJgHTHrSocGSiJeQbHQa2RhTg" +
+			"Nee4GE93H1Gez7U72I1nlMvaKHNz1UHfaFouE2f85RHtnpGHFrkhdJke+6Gw+QEK" +
+			"5vn6ddzTn66x8+BDAQJBAPB9dChnRzjUllZabAolbcVw0H6UGxljhxRJtWDFzBfD" +
+			"KMLWWeZcwrkpejHLqVCqVKlrobDUb4jGfydkUhD9P4kCQQDjKc0UxcTxI1Yr+8T+" +
+			"alDyMtiLXewe6fVcg89jX7WPJ4XDWuOwDjx7jRPXs491AS7JJYwzVOwqRGV9/PuU" +
+			"Q/ghAkAW4Sia63B4NKl037dlo7f0z83WLQsC+FgSkwyhf0/ydsu69Z+p7etMqGiK" +
+			"skCSfxH86FOCukM+NPxF6CJyoVVZAkAbM95DJou29KxVCAlHDiQzXLNhvRWRfiLL" +
+			"uV0UYVm0kt8JzdCGPK4xfWtq4S3ErSeVHtHzM7A0P4yH0cuurZUBAkBuN2qOcmGF" +
+			"A/1+GJuCsDo86qFO0Dq3j1JWwq9Q1dUvDNjmn5DmHibq3+EncQ71NyuHmofWx3nB" +
+			"l+VYAAU1NpYI";
 
 	/**
 	 * 以下为商户配置参数
