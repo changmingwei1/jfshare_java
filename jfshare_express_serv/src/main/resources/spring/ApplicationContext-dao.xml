@@ -162,7 +162,8 @@
         <constructor-arg index="3">
             <value>2000</value>
         </constructor-arg>
-        <!--<constructor-arg index="4" value="#{configManager.getRedisConfig('trade_public_redis','7.1').pwd}"/>  -->
-
+        <constructor-arg index="4">
+            <value>#{configManager.getRedisConfig('jfx_public_redis','alone').pwd}</value>
+        </constructor-arg>
     </bean>
 </beans>
