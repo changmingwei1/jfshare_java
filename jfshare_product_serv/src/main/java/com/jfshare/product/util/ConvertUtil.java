@@ -147,6 +147,8 @@ public class ConvertUtil {
         Pagination pagination = new Pagination();
         pagination.setPageNumCount(page.getPageCount());
         pagination.setTotalCount(page.getTotal());
+        pagination.setNumPerPage(page.getCount());
+        pagination.setCurrentPage(page.getCurPage());
         return pagination;
     }
 

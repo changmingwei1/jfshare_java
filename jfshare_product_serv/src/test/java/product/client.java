@@ -32,6 +32,7 @@ public class client {
     private ProductServ.Client client;
 
     private static final String IP = "127.0.0.1";
+//    private static final String IP = "120.24.153.155";
 
     private static final Integer PORT = 1980;
 
@@ -80,11 +81,11 @@ public class client {
         if (DO_IT == 0)
             return;
 
-        String productId = "ze151210231353000417";
+        String productId = "ze151220000824000900";
         ProductOpt productOpt = new ProductOpt();
         productOpt.setProductId(productId);
-        productOpt.setActiveState(101);
-        productOpt.setCurState(300);
+        productOpt.setActiveState(103);
+        productOpt.setCurState(203);
 //        productOpt.setDesc("审核通过");
         productOpt.setCreateTime("2015-12-21 12:12:12");
         productOpt.setOperatorType(1);
@@ -163,10 +164,25 @@ public class client {
     public void testQueryProductCardViewList() throws Exception {
         ProductCardViewParam param = new ProductCardViewParam();
         param.setSellerId(13);
+        param.setProductId("ze151210145613000059");
+//        param.setSkuNum("1:13");
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
         pagination.setNumPerPage(10);
 
         System.out.println(this.client.queryProductCardViewList(param, pagination));
+
+
+    }
+
+    @Test
+    public void testStatisticsProductCard() throws Exception {
+        ProductCardStatisticsParam param = new ProductCardStatisticsParam();
+        param.setSellerId(1);
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+
+        System.out.println(this.client.statisticsProductCard(param, pagination));
     }
 }
