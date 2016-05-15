@@ -54,16 +54,20 @@ public class ProductUtil {
         		String key1 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_" + brandId + "_create_time DESC";
         		String key2 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_" + brandId + "_cur_price DESC";
         		String key3 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_" + brandId + "_cur_price ASC";
-        		String key4 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_create_time DESC";
-        		String key5 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_cur_price DESC";
-        		String key6 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_cur_price ASC";
-        		
+        		String key4 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_" + brandId + "_click_rate DESC";
+        		String key5 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_create_time DESC";
+        		String key6 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_cur_price DESC";
+        		String key7 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_cur_price ASC";
+        		String key8 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_click_rate DESC";
+
         		keyList.add(key1);
         		keyList.add(key2);
         		keyList.add(key3);
         		keyList.add(key4);
         		keyList.add(key5);
         		keyList.add(key6);
+        		keyList.add(key7);
+        		keyList.add(key8);
         	}
     	}
     	return keyList;
@@ -81,6 +85,10 @@ public class ProductUtil {
     		return Long.parseLong(productSurvey.getCurPrice());
     		
     	}
+		if(key.contains("click_rate DESC")){
+			return 0 - productSurvey.getClickRate();
+
+		}
     	return 0L;
     }
 

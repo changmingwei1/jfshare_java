@@ -193,7 +193,7 @@ public class client {
 //        param.setProductId("ze160515153359000306");
         param.setSubjectId(3107);
         param.setBrandId(591);
-        param.setSort("create_time DESC");
+        param.setSort("click_rate DESC");
 
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
@@ -201,6 +201,6 @@ public class client {
 
         param.setPagination(pagination);
 
-        System.out.println(this.client.productSurveyQuery(param));
+        System.out.println(this.client.productSurveyQuery(param).toString());
     }
 }
