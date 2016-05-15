@@ -185,4 +185,22 @@ public class client {
 
         System.out.println(this.client.statisticsProductCard(param, pagination));
     }
+
+    @Test
+    public void testProductSurveyQuery() throws Exception {
+
+        ProductSurveyQueryParam param = new ProductSurveyQueryParam();
+//        param.setProductId("ze160515153359000306");
+        param.setSubjectId(3107);
+        param.setBrandId(591);
+        param.setSort("create_time DESC");
+
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+
+        param.setPagination(pagination);
+
+        System.out.println(this.client.productSurveyQuery(param));
+    }
 }

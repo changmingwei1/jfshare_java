@@ -33,7 +33,9 @@
 			a.active_state,
 			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
-			a.vice_name,create_time,seller_id
+			a.vice_name,
+			create_time,
+			a.seller_id
 		from tb_product a
 		<where>
 				<!-- AND b.sku_num = '' -->
@@ -96,7 +98,9 @@
 			a.active_state,
 			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
-			a.vice_name,create_time
+			a.vice_name,
+			create_time,
+			seller_id
 		from tb_product a
 		<where>
 				<!-- AND b.sku_num = '' -->
@@ -165,7 +169,9 @@
 			a.active_state,
 			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
-			a.vice_name,create_time		
+			a.vice_name,
+			create_time,
+			seller_id
 		FROM
 			tb_product a
 		WHERE
@@ -205,7 +211,9 @@
 			a.active_state,
 			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
-			a.vice_name,create_time				
+			a.vice_name,
+			create_time,
+			seller_id
 		from tb_product a
 		where a.id = #{productId,jdbcType=VARCHAR}
 	</select>
