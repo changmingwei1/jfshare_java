@@ -4,7 +4,9 @@ import com.jfshare.finagle.thrift.baseTemplate.DeliverStorehouseParam;
 import com.jfshare.finagle.thrift.baseTemplate.Postage;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplate;
 import com.jfshare.finagle.thrift.baseTemplate.PostageTemplateQueryParam;
+import com.jfshare.finagle.thrift.baseTemplate.ProductPostageBasic;
 import com.jfshare.finagle.thrift.baseTemplate.ProductRefProvince;
+import com.jfshare.finagle.thrift.baseTemplate.SellerPostageBasic;
 import com.jfshare.finagle.thrift.baseTemplate.Storehouse;
 import com.jfshare.finagle.thrift.baseTemplate.StorehouseQueryParam;
 import com.jfshare.utils.JsonMapper;
@@ -162,7 +164,27 @@ public class Client extends TestCase{
 
     public void testCalculatePostage() throws Exception {
         CalculatePostageParam postageParam = new CalculatePostageParam();
-        postageParam.setSendToProvince("11111");
+//        postageParam.setSendToProvince("11111");
+        postageParam.setSendToProvince("12315");
+        SellerPostageBasic sellerPostageBasic = new SellerPostageBasic();
+        sellerPostageBasic.setSellerId(1);
+        // 初始化商品
+        ProductPostageBasic productPostageBasic = new ProductPostageBasic();
+        productPostageBasic.setProductId("112");
+        productPostageBasic.setTemplateId(11);
+        productPostageBasic.setAmount("12");
+        productPostageBasic.setWeight(12);
+        productPostageBasic.setNumber(10);
+        sellerPostageBasic.addToProductPostageBasicList(productPostageBasic);
+
+        productPostageBasic = new ProductPostageBasic();
+        productPostageBasic.setProductId("112");
+        productPostageBasic.setTemplateId(11);
+        productPostageBasic.setAmount("12");
+        productPostageBasic.setWeight(12);
+        productPostageBasic.setNumber(10);
+        sellerPostageBasic.addToProductPostageBasicList(productPostageBasic);
+        postageParam.addToSellerPostageBasicList(sellerPostageBasic);
         System.out.println(client.calculatePostage(postageParam).toString());
     }
 

@@ -330,7 +330,7 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		queryMap.put("sellerId", param.getSellerId());
 		queryMap.put("type", param.getType());
 		queryMap.put("name", param.getName());
-		queryMap.put("group", param.getGroup());
+		queryMap.put("templateGroup", param.getTemplateGroup());
 		List<PostageTemplate> postageTemplateList = new ArrayList<>();
 		try {
 			List<TbPostageTemplate> tbPostageTemplateList = this.postageTemplateSvc.queryPostageTemplate(queryMap);

@@ -33,8 +33,8 @@ public class ConvertUtil {
         postageTemplateMap.put("name", tbPostageTemplate.getName());
         postageTemplateMap.put("type", tbPostageTemplate.getType() + "");
         postageTemplateMap.put("postageInfo", tbPostageTemplate.getPostageInfo());
-        postageTemplateMap.put("group", tbPostageTemplate.getGroup() + "");
-        postageTemplateMap.put("desc", tbPostageTemplate.getDesc());
+        postageTemplateMap.put("templateGroup", tbPostageTemplate.getTemplateGroup() + "");
+        postageTemplateMap.put("templateDesc", tbPostageTemplate.getTemplateDesc());
         return postageTemplateMap;
     }
 
@@ -50,8 +50,8 @@ public class ConvertUtil {
         tbPostageTemplate.setName(postageTemplateMap.get("name"));
         tbPostageTemplate.setType(Integer.parseInt(postageTemplateMap.get("type")));
         tbPostageTemplate.setPostageInfo(postageTemplateMap.get("postageInfo"));
-        tbPostageTemplate.setGroup(Integer.parseInt(postageTemplateMap.get("group")));
-        tbPostageTemplate.setDesc(postageTemplateMap.get("desc"));
+        tbPostageTemplate.setTemplateGroup(Integer.parseInt(postageTemplateMap.get("templateGroup")));
+        tbPostageTemplate.setTemplateDesc(postageTemplateMap.get("templateDesc"));
         return tbPostageTemplate;
     }
 
@@ -71,8 +71,8 @@ public class ConvertUtil {
         for (PostageModel postageModel : postageModels) {
             postageTemplate.addToPostageList(new Postage(postageModel.getSupportProvince(), postageModel.getRule()));
         }
-        postageTemplate.setGroup(tbPostageTemplate.getGroup());
-        postageTemplate.setDesc(tbPostageTemplate.getDesc());
+        postageTemplate.setTemplateGroup(tbPostageTemplate.getTemplateGroup());
+        postageTemplate.setTemplateDesc(tbPostageTemplate.getTemplateDesc());
         return postageTemplate;
     }
 
@@ -100,8 +100,8 @@ public class ConvertUtil {
             }
             tbPostageTemplate.setPostageInfo(JsonMapper.toJson(postageModels));
         }
-        tbPostageTemplate.setGroup(postageTemplate.getGroup() == 0 ? null : postageTemplate.getGroup());
-        tbPostageTemplate.setDesc(postageTemplate.getDesc());
+        tbPostageTemplate.setTemplateGroup(postageTemplate.getTemplateGroup() == 0 ? null : postageTemplate.getTemplateGroup());
+        tbPostageTemplate.setTemplateDesc(postageTemplate.getTemplateDesc());
         return tbPostageTemplate;
     }
 

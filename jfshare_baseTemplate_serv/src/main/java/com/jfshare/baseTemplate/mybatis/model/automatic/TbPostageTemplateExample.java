@@ -484,133 +484,133 @@ public class TbPostageTemplateExample {
             return (Criteria) this;
         }
 
-        public Criteria andGroupIsNull() {
-            addCriterion("group is null");
+        public Criteria andTemplateGroupIsNull() {
+            addCriterion("template_group is null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIsNotNull() {
-            addCriterion("group is not null");
+        public Criteria andTemplateGroupIsNotNull() {
+            addCriterion("template_group is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupEqualTo(Integer value) {
-            addCriterion("group =", value, "group");
+        public Criteria andTemplateGroupEqualTo(Integer value) {
+            addCriterion("template_group =", value, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNotEqualTo(Integer value) {
-            addCriterion("group <>", value, "group");
+        public Criteria andTemplateGroupNotEqualTo(Integer value) {
+            addCriterion("template_group <>", value, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupGreaterThan(Integer value) {
-            addCriterion("group >", value, "group");
+        public Criteria andTemplateGroupGreaterThan(Integer value) {
+            addCriterion("template_group >", value, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupGreaterThanOrEqualTo(Integer value) {
-            addCriterion("group >=", value, "group");
+        public Criteria andTemplateGroupGreaterThanOrEqualTo(Integer value) {
+            addCriterion("template_group >=", value, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupLessThan(Integer value) {
-            addCriterion("group <", value, "group");
+        public Criteria andTemplateGroupLessThan(Integer value) {
+            addCriterion("template_group <", value, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupLessThanOrEqualTo(Integer value) {
-            addCriterion("group <=", value, "group");
+        public Criteria andTemplateGroupLessThanOrEqualTo(Integer value) {
+            addCriterion("template_group <=", value, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIn(List<Integer> values) {
-            addCriterion("group in", values, "group");
+        public Criteria andTemplateGroupIn(List<Integer> values) {
+            addCriterion("template_group in", values, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNotIn(List<Integer> values) {
-            addCriterion("group not in", values, "group");
+        public Criteria andTemplateGroupNotIn(List<Integer> values) {
+            addCriterion("template_group not in", values, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupBetween(Integer value1, Integer value2) {
-            addCriterion("group between", value1, value2, "group");
+        public Criteria andTemplateGroupBetween(Integer value1, Integer value2) {
+            addCriterion("template_group between", value1, value2, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNotBetween(Integer value1, Integer value2) {
-            addCriterion("group not between", value1, value2, "group");
+        public Criteria andTemplateGroupNotBetween(Integer value1, Integer value2) {
+            addCriterion("template_group not between", value1, value2, "templateGroup");
             return (Criteria) this;
         }
 
-        public Criteria andDescIsNull() {
-            addCriterion("desc is null");
+        public Criteria andTemplateDescIsNull() {
+            addCriterion("template_desc is null");
             return (Criteria) this;
         }
 
-        public Criteria andDescIsNotNull() {
-            addCriterion("desc is not null");
+        public Criteria andTemplateDescIsNotNull() {
+            addCriterion("template_desc is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDescEqualTo(String value) {
-            addCriterion("desc =", value, "desc");
+        public Criteria andTemplateDescEqualTo(String value) {
+            addCriterion("template_desc =", value, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescNotEqualTo(String value) {
-            addCriterion("desc <>", value, "desc");
+        public Criteria andTemplateDescNotEqualTo(String value) {
+            addCriterion("template_desc <>", value, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescGreaterThan(String value) {
-            addCriterion("desc >", value, "desc");
+        public Criteria andTemplateDescGreaterThan(String value) {
+            addCriterion("template_desc >", value, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescGreaterThanOrEqualTo(String value) {
-            addCriterion("desc >=", value, "desc");
+        public Criteria andTemplateDescGreaterThanOrEqualTo(String value) {
+            addCriterion("template_desc >=", value, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescLessThan(String value) {
-            addCriterion("desc <", value, "desc");
+        public Criteria andTemplateDescLessThan(String value) {
+            addCriterion("template_desc <", value, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescLessThanOrEqualTo(String value) {
-            addCriterion("desc <=", value, "desc");
+        public Criteria andTemplateDescLessThanOrEqualTo(String value) {
+            addCriterion("template_desc <=", value, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescLike(String value) {
-            addCriterion("desc like", value, "desc");
+        public Criteria andTemplateDescLike(String value) {
+            addCriterion("template_desc like", value, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescNotLike(String value) {
-            addCriterion("desc not like", value, "desc");
+        public Criteria andTemplateDescNotLike(String value) {
+            addCriterion("template_desc not like", value, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescIn(List<String> values) {
-            addCriterion("desc in", values, "desc");
+        public Criteria andTemplateDescIn(List<String> values) {
+            addCriterion("template_desc in", values, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescNotIn(List<String> values) {
-            addCriterion("desc not in", values, "desc");
+        public Criteria andTemplateDescNotIn(List<String> values) {
+            addCriterion("template_desc not in", values, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescBetween(String value1, String value2) {
-            addCriterion("desc between", value1, value2, "desc");
+        public Criteria andTemplateDescBetween(String value1, String value2) {
+            addCriterion("template_desc between", value1, value2, "templateDesc");
             return (Criteria) this;
         }
 
-        public Criteria andDescNotBetween(String value1, String value2) {
-            addCriterion("desc not between", value1, value2, "desc");
+        public Criteria andTemplateDescNotBetween(String value1, String value2) {
+            addCriterion("template_desc not between", value1, value2, "templateDesc");
             return (Criteria) this;
         }
 

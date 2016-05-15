@@ -18,8 +18,8 @@
             <if test="name != null">
                 and name = #{name, jdbcType=VARCHAR}
             </if>
-            <if test="group != 0">
-                and group = #{group}
+            <if test="templateGroup != 0">
+                and template_group = #{templateGroup}
             </if>
         </where>
         limit 60

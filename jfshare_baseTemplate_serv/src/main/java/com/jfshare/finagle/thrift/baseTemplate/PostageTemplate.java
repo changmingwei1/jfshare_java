@@ -37,8 +37,8 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
   private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)3);
   private static final TField TYPE_FIELD_DESC = new TField("type", TType.I32, (short)4);
   private static final TField POSTAGE_LIST_FIELD_DESC = new TField("postageList", TType.LIST, (short)5);
-  private static final TField GROUP_FIELD_DESC = new TField("group", TType.I32, (short)6);
-  private static final TField DESC_FIELD_DESC = new TField("desc", TType.STRING, (short)7);
+  private static final TField TEMPLATE_GROUP_FIELD_DESC = new TField("templateGroup", TType.I32, (short)6);
+  private static final TField TEMPLATE_DESC_FIELD_DESC = new TField("templateDesc", TType.STRING, (short)7);
 
 
   public int id;
@@ -46,8 +46,8 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
   public String name;
   public int type;
   public List<Postage> postageList;
-  public int group;
-  public String desc;
+  public int templateGroup;
+  public String templateDesc;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -56,8 +56,8 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
     NAME((short)3, "name"),
     TYPE((short)4, "type"),
     POSTAGE_LIST((short)5, "postageList"),
-    GROUP((short)6, "group"),
-    DESC((short)7, "desc");
+    TEMPLATE_GROUP((short)6, "templateGroup"),
+    TEMPLATE_DESC((short)7, "templateDesc");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -82,10 +82,10 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
   	return TYPE;
         case 5: // POSTAGE_LIST
   	return POSTAGE_LIST;
-        case 6: // GROUP
-  	return GROUP;
-        case 7: // DESC
-  	return DESC;
+        case 6: // TEMPLATE_GROUP
+  	return TEMPLATE_GROUP;
+        case 7: // TEMPLATE_DESC
+  	return TEMPLATE_DESC;
         default:
   	return null;
       }
@@ -130,7 +130,7 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
   private static final int __ID_ISSET_ID = 0;
   private static final int __SELLERID_ISSET_ID = 1;
   private static final int __TYPE_ISSET_ID = 2;
-  private static final int __GROUP_ISSET_ID = 3;
+  private static final int __TEMPLATEGROUP_ISSET_ID = 3;
   private BitSet __isset_bit_vector = new BitSet(4);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
@@ -147,9 +147,9 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
     tmpMap.put(_Fields.POSTAGE_LIST, new FieldMetaData("postageList", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
                 new StructMetaData(TType.STRUCT, Postage.class))));
-    tmpMap.put(_Fields.GROUP, new FieldMetaData("group", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.TEMPLATE_GROUP, new FieldMetaData("templateGroup", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.DESC, new FieldMetaData("desc", TFieldRequirementType.OPTIONAL,
+    tmpMap.put(_Fields.TEMPLATE_DESC, new FieldMetaData("templateDesc", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(PostageTemplate.class, metaDataMap);
@@ -165,7 +165,7 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
     String name,
     int type,
     List<Postage> postageList,
-    int group)
+    int templateGroup)
   {
     this();
     this.id = id;
@@ -176,8 +176,8 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
     this.type = type;
     setTypeIsSet(true);
     this.postageList = postageList;
-    this.group = group;
-    setGroupIsSet(true);
+    this.templateGroup = templateGroup;
+    setTemplateGroupIsSet(true);
   }
 
   /**
@@ -199,9 +199,9 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
       }
       this.postageList = __this__postageList;
     }
-    this.group = other.group;
-    if (other.isSetDesc()) {
-      this.desc = other.desc;
+    this.templateGroup = other.templateGroup;
+    if (other.isSetTemplateDesc()) {
+      this.templateDesc = other.templateDesc;
     }
   }
 
@@ -219,9 +219,9 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
     setTypeIsSet(false);
     this.type = 0;
     this.postageList = null;
-    setGroupIsSet(false);
-    this.group = 0;
-    this.desc = null;
+    setTemplateGroupIsSet(false);
+    this.templateGroup = 0;
+    this.templateDesc = null;
   }
 
   public int getId() {
@@ -361,52 +361,52 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
     }
   }
 
-  public int getGroup() {
-    return this.group;
+  public int getTemplateGroup() {
+    return this.templateGroup;
   }
 
-  public PostageTemplate setGroup(int group) {
-    this.group = group;
-    setGroupIsSet(true);
+  public PostageTemplate setTemplateGroup(int templateGroup) {
+    this.templateGroup = templateGroup;
+    setTemplateGroupIsSet(true);
 
     return this;
   }
 
-  public void unsetGroup() {
-  __isset_bit_vector.clear(__GROUP_ISSET_ID);
+  public void unsetTemplateGroup() {
+  __isset_bit_vector.clear(__TEMPLATEGROUP_ISSET_ID);
   }
 
-  /** Returns true if field group is set (has been asigned a value) and false otherwise */
-  public boolean isSetGroup() {
-    return __isset_bit_vector.get(__GROUP_ISSET_ID);
+  /** Returns true if field templateGroup is set (has been asigned a value) and false otherwise */
+  public boolean isSetTemplateGroup() {
+    return __isset_bit_vector.get(__TEMPLATEGROUP_ISSET_ID);
   }
 
-  public void setGroupIsSet(boolean value) {
-    __isset_bit_vector.set(__GROUP_ISSET_ID, value);
+  public void setTemplateGroupIsSet(boolean value) {
+    __isset_bit_vector.set(__TEMPLATEGROUP_ISSET_ID, value);
   }
 
-  public String getDesc() {
-    return this.desc;
+  public String getTemplateDesc() {
+    return this.templateDesc;
   }
 
-  public PostageTemplate setDesc(String desc) {
-    this.desc = desc;
+  public PostageTemplate setTemplateDesc(String templateDesc) {
+    this.templateDesc = templateDesc;
     
     return this;
   }
 
-  public void unsetDesc() {
-    this.desc = null;
+  public void unsetTemplateDesc() {
+    this.templateDesc = null;
   }
 
-  /** Returns true if field desc is set (has been asigned a value) and false otherwise */
-  public boolean isSetDesc() {
-    return this.desc != null;
+  /** Returns true if field templateDesc is set (has been asigned a value) and false otherwise */
+  public boolean isSetTemplateDesc() {
+    return this.templateDesc != null;
   }
 
-  public void setDescIsSet(boolean value) {
+  public void setTemplateDescIsSet(boolean value) {
     if (!value) {
-      this.desc = null;
+      this.templateDesc = null;
     }
   }
 
@@ -447,18 +447,18 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
         setPostageList((List<Postage>)value);
       }
       break;
-    case GROUP:
+    case TEMPLATE_GROUP:
       if (value == null) {
-        unsetGroup();
+        unsetTemplateGroup();
       } else {
-        setGroup((Integer)value);
+        setTemplateGroup((Integer)value);
       }
       break;
-    case DESC:
+    case TEMPLATE_DESC:
       if (value == null) {
-        unsetDesc();
+        unsetTemplateDesc();
       } else {
-        setDesc((String)value);
+        setTemplateDesc((String)value);
       }
       break;
     }
@@ -476,10 +476,10 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
       return new Integer(getType());
     case POSTAGE_LIST:
       return getPostageList();
-    case GROUP:
-      return new Integer(getGroup());
-    case DESC:
-      return getDesc();
+    case TEMPLATE_GROUP:
+      return new Integer(getTemplateGroup());
+    case TEMPLATE_DESC:
+      return getTemplateDesc();
     }
     throw new IllegalStateException();
   }
@@ -501,10 +501,10 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
       return isSetType();
     case POSTAGE_LIST:
       return isSetPostageList();
-    case GROUP:
-      return isSetGroup();
-    case DESC:
-      return isSetDesc();
+    case TEMPLATE_GROUP:
+      return isSetTemplateGroup();
+    case TEMPLATE_DESC:
+      return isSetTemplateDesc();
     }
     throw new IllegalStateException();
   }
@@ -561,20 +561,20 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
       if (!this.postageList.equals(that.postageList))
         return false;
     }
-    boolean this_present_group = true;
-    boolean that_present_group = true;
-    if (this_present_group || that_present_group) {
-      if (!(this_present_group && that_present_group))
+    boolean this_present_templateGroup = true;
+    boolean that_present_templateGroup = true;
+    if (this_present_templateGroup || that_present_templateGroup) {
+      if (!(this_present_templateGroup && that_present_templateGroup))
         return false;
-      if (this.group != that.group)
+      if (this.templateGroup != that.templateGroup)
         return false;
     }
-    boolean this_present_desc = true && this.isSetDesc();
-    boolean that_present_desc = true && that.isSetDesc();
-    if (this_present_desc || that_present_desc) {
-      if (!(this_present_desc && that_present_desc))
+    boolean this_present_templateDesc = true && this.isSetTemplateDesc();
+    boolean that_present_templateDesc = true && that.isSetTemplateDesc();
+    if (this_present_templateDesc || that_present_templateDesc) {
+      if (!(this_present_templateDesc && that_present_templateDesc))
         return false;
-      if (!this.desc.equals(that.desc))
+      if (!this.templateDesc.equals(that.templateDesc))
         return false;
     }
 
@@ -604,14 +604,14 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
     builder.append(present_postageList);
     if (present_postageList)
       builder.append(postageList);
-    boolean present_group = true;
-    builder.append(present_group);
-    if (present_group)
-      builder.append(group);
-    boolean present_desc = true && (isSetDesc());
-    builder.append(present_desc);
-    if (present_desc)
-      builder.append(desc);
+    boolean present_templateGroup = true;
+    builder.append(present_templateGroup);
+    if (present_templateGroup)
+      builder.append(templateGroup);
+    boolean present_templateDesc = true && (isSetTemplateDesc());
+    builder.append(present_templateDesc);
+    if (present_templateDesc)
+      builder.append(templateDesc);
     return builder.toHashCode();
   }
 
@@ -673,22 +673,22 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetGroup()).compareTo(typedOther.isSetGroup());
+    lastComparison = Boolean.valueOf(isSetTemplateGroup()).compareTo(typedOther.isSetTemplateGroup());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetGroup()) {
-      lastComparison = TBaseHelper.compareTo(this.group, typedOther.group);
+    if (isSetTemplateGroup()) {
+      lastComparison = TBaseHelper.compareTo(this.templateGroup, typedOther.templateGroup);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetDesc()).compareTo(typedOther.isSetDesc());
+    lastComparison = Boolean.valueOf(isSetTemplateDesc()).compareTo(typedOther.isSetTemplateDesc());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetDesc()) {
-      lastComparison = TBaseHelper.compareTo(this.desc, typedOther.desc);
+    if (isSetTemplateDesc()) {
+      lastComparison = TBaseHelper.compareTo(this.templateDesc, typedOther.templateDesc);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -760,17 +760,17 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 6: // GROUP
+        case 6: // TEMPLATE_GROUP
           if (field.type == TType.I32) {
-            this.group = iprot.readI32();
-            setGroupIsSet(true);
+            this.templateGroup = iprot.readI32();
+            setTemplateGroupIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 7: // DESC
+        case 7: // TEMPLATE_DESC
           if (field.type == TType.STRING) {
-            this.desc = iprot.readString();
+            this.templateDesc = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -816,13 +816,13 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
       }
       oprot.writeFieldEnd();
     }
-    oprot.writeFieldBegin(GROUP_FIELD_DESC);
-    oprot.writeI32(this.group);
+    oprot.writeFieldBegin(TEMPLATE_GROUP_FIELD_DESC);
+    oprot.writeI32(this.templateGroup);
     oprot.writeFieldEnd();
-    if (this.desc != null) {
-      if (isSetDesc()) {
-        oprot.writeFieldBegin(DESC_FIELD_DESC);
-        oprot.writeString(this.desc);
+    if (this.templateDesc != null) {
+      if (isSetTemplateDesc()) {
+        oprot.writeFieldBegin(TEMPLATE_DESC_FIELD_DESC);
+        oprot.writeString(this.templateDesc);
         oprot.writeFieldEnd();
       }
     }
@@ -862,16 +862,16 @@ public class PostageTemplate implements TBase<PostageTemplate, PostageTemplate._
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("group:");
-    sb.append(this.group);
+    sb.append("templateGroup:");
+    sb.append(this.templateGroup);
     first = false;
-    if (isSetDesc()) {
+    if (isSetTemplateDesc()) {
       if (!first) sb.append(", ");
-      sb.append("desc:");
-      if (this.desc == null) {
+      sb.append("templateDesc:");
+      if (this.templateDesc == null) {
         sb.append("null");
       } else {
-        sb.append(this.desc);
+        sb.append(this.templateDesc);
       }
       first = false;
       }
