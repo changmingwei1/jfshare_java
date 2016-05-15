@@ -156,7 +156,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
-                        <descriptor>assembly.xml</descriptor>
+                        <descriptor>src/main/resources/scripts/assembly.xml</descriptor>
                     </descriptors>
                 </configuration>
                 <executions>
