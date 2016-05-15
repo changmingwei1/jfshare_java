@@ -12,9 +12,12 @@
 	    <result column="org_price" property="orgPrice" jdbcType="VARCHAR" />
 	    <result column="cur_price" property="curPrice" jdbcType="VARCHAR" />
 	    <result column="vice_name" property="viceName" jdbcType="VARCHAR" />
-    	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="string"/>
     	<result column="seller_id" property="sellerId" jdbcType="INTEGER" />
     	<result column="type" property="type" jdbcType="INTEGER" />
+    	<result column="click_rate" property="clickRate" jdbcType="INTEGER" />
+		<result column="storehouse_ids" property="storehouseIds" jdbcType="VARCHAR" />
+		<result column="postage_id" property="postageId" jdbcType="INTEGER" />
 	    <!--
 	    <result column="active_stock" property="activeStock" jdbcType="INTEGER" />
 	    <result column="total_sales" property="totalSales" jdbcType="INTEGER" />
@@ -35,9 +38,12 @@
 			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
 			a.vice_name,
-			create_time,
+			a.create_time,
 			a.seller_id,
-			a.type
+			a.type,
+			a.click_rate,
+			a.storehouse_ids,
+			a.postage_id
 		from tb_product a
 		<where>
 				<!-- AND b.sku_num = '' -->
@@ -86,6 +92,9 @@
 			<if test=" sort == 'cur_price ASC'">
 				ORDER BY cur_price ASC
 			</if>
+			<if test="sort == 'click_rate DESC'">
+				ORDER BY click_rate DESC
+			</if>
 	</select>
 
 	<select id="productSurveyQuery"
@@ -101,9 +110,12 @@
 			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
 			a.vice_name,
-			create_time,
+			a.create_time,
 			a.seller_id,
-			a.type
+			a.type,
+			a.click_rate,
+			a.storehouse_ids,
+			a.postage_id
 		from tb_product a
 		<where>
 				<!-- AND b.sku_num = '' -->
@@ -173,9 +185,12 @@
 			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
 			a.vice_name,
-			create_time,
+			a.create_time,
 			a.seller_id,
-			a.type
+			a.type,
+			a.click_rate,
+			a.storehouse_ids,
+			a.postage_id
 		FROM
 			tb_product a
 		WHERE
@@ -216,9 +231,12 @@
 			(select max(cur_price) from tb_product_sku where product_id = a.id) cur_price,
 			(select max(org_price) from tb_product_sku where product_id = a.id) org_price,
 			a.vice_name,
-			create_time,
+			a.create_time,
 			a.seller_id,
-			a.type
+			a.type,
+			a.click_rate,
+			a.storehouse_ids,
+			a.postage_id
 		from tb_product a
 		where a.id = #{productId,jdbcType=VARCHAR}
 	</select>
