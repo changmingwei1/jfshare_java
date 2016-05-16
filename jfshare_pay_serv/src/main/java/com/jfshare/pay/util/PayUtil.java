@@ -282,6 +282,7 @@ public class PayUtil {
         payUrlMap.put("total_fee", PriceUtils.intToStr(payReq.getPrice()));
 
         Map<String, String> retMap = AlipaySubmit.buildRequestPara(payUrlMap, SignType.RSA);
+        retMap.put("sign", AlipayConfig.ALIPAY_RSA_PRIVATE); //TODO 临时方案 RSA加密有问题, 先由app拿到私钥自行加密
 
         String payUrl = JSON.toJSONString(retMap);
         logger.info("AliApp支付申请url ==> " + payUrl);
@@ -345,7 +346,13 @@ public class PayUtil {
         payUrlMap.put("time_start", curTime); //交易起始时间
         payUrlMap.put("time_expire", DateUtils.date2Str(now.plusHours(2).toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2)); //交易结束时间
         payUrlMap.put("notify_url", PropertiesUtil.getProperty("jfx_pay_serv", "weixinpay_notify_url")); //后端通知地址
-        payUrlMap.put("trade_type", payReq.getPayChannel() == 4 ? "JSAPI" : "NATIVE");
+        String tradeType = "NATIVE";
+        if (payReq.getPayChannel() == 4) {
+            tradeType = "JSAPI";
+        } else if (payReq.getPayChannel() == 9) {
+            tradeType = "APP";
+        }
+        payUrlMap.put("trade_type", tradeType);
         payUrlMap.put("product_id", payId);
         if (payReq.getPayChannel() == 4) {
             payUrlMap.put("openid", payReq.getCustId());
@@ -373,6 +380,17 @@ public class PayUtil {
                 payUrlMap.put("signType", "MD5");
                 Map<String, String> paramSign = WeixinSubmit.buildRequestPara(payUrlMap);
                 payUrlMap.put("paySign", paramSign.get("sign"));
+            } else if (payReq.getPayChannel() == 9) {
+                payUrlMap.clear();
+                payUrlMap.put("appId", WeixinConfig.appid);
+                payUrlMap.put("partnerid", WeixinConfig.mch_id);
+                payUrlMap.put("prepayid", retMap.get("prepay_id"));
+                payUrlMap.put("package", "Sign=WXPay");
+                payUrlMap.put("nonceStr", RandomStringUtils.randomAlphanumeric(20));
+                payUrlMap.put("timeStamp",ConvertUtil.getString(new DateTime().getMillis()/1000));
+                payUrlMap.put("signType", "MD5");
+                Map<String, String> paramSign = WeixinSubmit.buildRequestPara(payUrlMap);
+                payUrlMap.put("sign", paramSign.get("sign"));
             }
             String payUrl = JSON.toJSONString(payUrlMap);
             logger.info("WeixinPay支付申请url ==> " + payUrl);
