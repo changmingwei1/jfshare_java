@@ -4,6 +4,8 @@ import com.jfshare.finagle.thrift.pagination.Pagination;
 import com.jfshare.finagle.thrift.product.*;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
+import com.jfshare.product.util.HttpUtils;
+import com.jfshare.product.util.CodeUtil;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -14,9 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
 * Created by lenovo on 2015/9/28.
@@ -31,8 +31,8 @@ public class client {
 
     private ProductServ.Client client;
 
-    private static final String IP = "127.0.0.1";
-//    private static final String IP = "120.24.153.155";
+//    private static final String IP = "127.0.0.1";
+    private static final String IP = "120.24.153.155";
 
     private static final Integer PORT = 1980;
 
@@ -202,5 +202,20 @@ public class client {
         param.setPagination(pagination);
 
         System.out.println(this.client.productSurveyQuery(param).toString());
+    }
+
+    @Test
+    public void testHttp() throws Exception {
+//        String m = HttpUtils.httpPostUTF8("http://sandbox.womaiapp.com/api/rest?method=womai.inventory.get&appkey=425113&sign=D47441A31A305C595C68C3FA4DD74B46&param=%7b%22skuids%22%3a+%225178122%22%7d", null);
+
+        String code = "sdfasdfw我发是多少阿凡达";
+
+        System.out.println(CodeUtil.getMD5(code));
+        System.out.println(CodeUtil.getMD5Upper(code));
+        System.out.println(CodeUtil.getURLDecoder(null));
+
+
+        String str = HttpUtils.httpPostUTF8("http://sandbox.womaiapp.com/api/rest?method=womai.inventory.get&appkey=425113&sign=D47441A31A305C595C68C3FA4DD74B46&param=%7b%22skuids%22%3a+%225178122%22%7d", null);
+        System.out.println(str);
     }
 }
