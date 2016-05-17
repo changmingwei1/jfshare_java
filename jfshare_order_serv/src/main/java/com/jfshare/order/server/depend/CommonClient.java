@@ -34,8 +34,8 @@ public class CommonClient {
 
     @PostConstruct
     public void init() {
-        String ips = configManager.getConfigValue("jfx_public_client", "stock_serv_ips");
-        String port = configManager.getConfigValue("jfx_public_client", "stock_port");
+        String ips = configManager.getConfigValue("jfx_public_client", "common_serv_ips");
+        String port = configManager.getConfigValue("jfx_public_client", "common_port");
         StringBuilder hosts = new StringBuilder();
         String[] ipArray = ips.split(";");
         for(String ip : ipArray) {
@@ -71,7 +71,7 @@ public class CommonClient {
                 logger.error("发送短消息成功，手机号：{}, 消息内容：{}", mobile, content.replaceAll("\\d", "*"));
             }
         } catch (Exception e) {
-            logger.error("调用StockServ--releaseStock失败！", e);
+            logger.error("调用commonServ--发送短消息失败！", e);
         }
     }
 }

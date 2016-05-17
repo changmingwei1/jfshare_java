@@ -19,6 +19,7 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
+//        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
         transport = new TFramedTransport(new TSocket("localhost", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);

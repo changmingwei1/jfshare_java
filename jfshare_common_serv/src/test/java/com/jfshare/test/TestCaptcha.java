@@ -25,7 +25,8 @@ public class TestCaptcha {
     public static void main(String[] args) {
         try {
             TTransport transport;
-            transport = new TSocket("localhost", 1984);
+            transport = new TSocket("120.24.153.155", 1984);
+//            transport = new TSocket("localhost", 1984);
             transport.open();
 
             TProtocol protocol = new TBinaryProtocol(new TFramedTransport(transport));

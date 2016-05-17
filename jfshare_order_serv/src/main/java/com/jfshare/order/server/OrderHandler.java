@@ -171,9 +171,10 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return result;
             }
 
-            deliverService.updateDeliverInfoVir(orderModel);
             //获取卡密
             List<ProductCard> productCards = productClient.getProductCard(orderModel);
+            //修改订单状态
+            deliverService.updateDeliverInfoVir(orderModel);
 
             //发送短信
             StringBuilder msgContent = new StringBuilder();
