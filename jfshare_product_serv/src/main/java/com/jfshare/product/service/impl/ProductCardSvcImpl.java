@@ -5,6 +5,7 @@ import com.jfshare.product.model.TbProduct;
 import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.service.IProductCartSvc;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,11 @@ public class ProductCardSvcImpl implements IProductCartSvc {
 
     @Override
     public List<TbProductCard> getProductCard(Map queryMap) {
+        // 存在transactionId对应的卡密
+        List<TbProductCard> productCardList = this.productCardDao.selectAvailableCard(queryMap);
+        if (CollectionUtils.isNotEmpty(productCardList)) {
+            return productCardList;
+        }
         int num = Integer.parseInt(queryMap.get("num").toString());
         int lockNum = this.productCardDao.lockProductCard(queryMap);
         if(lockNum == 0) {
@@ -53,7 +59,7 @@ public class ProductCardSvcImpl implements IProductCartSvc {
             this.productCardDao.releaseProductCard(queryMap);
             return null;
         }
-        List<TbProductCard> productCardList = this.productCardDao.selectAvailableCard(queryMap);
+        productCardList = this.productCardDao.selectAvailableCard(queryMap);
         return productCardList;
     }
 
