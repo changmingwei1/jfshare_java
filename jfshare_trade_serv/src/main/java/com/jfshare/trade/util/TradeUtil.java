@@ -139,6 +139,7 @@ public class TradeUtil {
                     item.setThirdExchangeRate(productDb.getThirdExchangeRate());
                     item.setStorehouseId(skuItem.getStorehouseId());
                     item.setPostageTemplateId(productDb.getPostageId());
+                    item.setWeight(skuItem.getWeight());
                     totalPrice += PriceUtils.strToInt(skuItem.getCurPrice()) * item.getCount();
                 }
                 productInfos.add(item);

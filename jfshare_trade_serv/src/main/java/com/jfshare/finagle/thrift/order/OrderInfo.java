@@ -60,6 +60,7 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   private static final TField POSTAGE_FIELD_DESC = new TField("postage", TType.STRING, (short)26);
   private static final TField REF_PRICE_FIELD_DESC = new TField("refPrice", TType.STRING, (short)27);
   private static final TField THIRD_EXCHANGE_RATE_FIELD_DESC = new TField("thirdExchangeRate", TType.STRING, (short)28);
+  private static final TField WEIGHT_FIELD_DESC = new TField("weight", TType.STRING, (short)29);
 
 
   public String orderId;
@@ -90,6 +91,7 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   public String postage;
   public String refPrice;
   public String thirdExchangeRate;
+  public String weight;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -120,7 +122,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     POSTAGE_TEMPLATE_ID((short)25, "postageTemplateId"),
     POSTAGE((short)26, "postage"),
     REF_PRICE((short)27, "refPrice"),
-    THIRD_EXCHANGE_RATE((short)28, "thirdExchangeRate");
+    THIRD_EXCHANGE_RATE((short)28, "thirdExchangeRate"),
+    WEIGHT((short)29, "weight");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -191,6 +194,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   	return REF_PRICE;
         case 28: // THIRD_EXCHANGE_RATE
   	return THIRD_EXCHANGE_RATE;
+        case 29: // WEIGHT
+  	return WEIGHT;
         default:
   	return null;
       }
@@ -298,6 +303,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     tmpMap.put(_Fields.REF_PRICE, new FieldMetaData("refPrice", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.THIRD_EXCHANGE_RATE, new FieldMetaData("thirdExchangeRate", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.WEIGHT, new FieldMetaData("weight", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(OrderInfo.class, metaDataMap);
@@ -435,6 +442,9 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     if (other.isSetThirdExchangeRate()) {
       this.thirdExchangeRate = other.thirdExchangeRate;
     }
+    if (other.isSetWeight()) {
+      this.weight = other.weight;
+    }
   }
 
   public OrderInfo deepCopy() {
@@ -477,6 +487,7 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     this.postage = null;
     this.refPrice = null;
     this.thirdExchangeRate = null;
+    this.weight = null;
   }
 
   public String getOrderId() {
@@ -1173,6 +1184,31 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     }
   }
 
+  public String getWeight() {
+    return this.weight;
+  }
+
+  public OrderInfo setWeight(String weight) {
+    this.weight = weight;
+    
+    return this;
+  }
+
+  public void unsetWeight() {
+    this.weight = null;
+  }
+
+  /** Returns true if field weight is set (has been asigned a value) and false otherwise */
+  public boolean isSetWeight() {
+    return this.weight != null;
+  }
+
+  public void setWeightIsSet(boolean value) {
+    if (!value) {
+      this.weight = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ORDER_ID:
@@ -1371,6 +1407,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         setThirdExchangeRate((String)value);
       }
       break;
+    case WEIGHT:
+      if (value == null) {
+        unsetWeight();
+      } else {
+        setWeight((String)value);
+      }
+      break;
     }
   }
 
@@ -1432,6 +1475,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       return getRefPrice();
     case THIRD_EXCHANGE_RATE:
       return getThirdExchangeRate();
+    case WEIGHT:
+      return getWeight();
     }
     throw new IllegalStateException();
   }
@@ -1499,6 +1544,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       return isSetRefPrice();
     case THIRD_EXCHANGE_RATE:
       return isSetThirdExchangeRate();
+    case WEIGHT:
+      return isSetWeight();
     }
     throw new IllegalStateException();
   }
@@ -1739,6 +1786,14 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       if (!this.thirdExchangeRate.equals(that.thirdExchangeRate))
         return false;
     }
+    boolean this_present_weight = true && this.isSetWeight();
+    boolean that_present_weight = true && that.isSetWeight();
+    if (this_present_weight || that_present_weight) {
+      if (!(this_present_weight && that_present_weight))
+        return false;
+      if (!this.weight.equals(that.weight))
+        return false;
+    }
 
     return true;
   }
@@ -1858,6 +1913,10 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     builder.append(present_thirdExchangeRate);
     if (present_thirdExchangeRate)
       builder.append(thirdExchangeRate);
+    boolean present_weight = true && (isSetWeight());
+    builder.append(present_weight);
+    if (present_weight)
+      builder.append(weight);
     return builder.toHashCode();
   }
 
@@ -2149,6 +2208,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetWeight()).compareTo(typedOther.isSetWeight());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetWeight()) {
+      lastComparison = TBaseHelper.compareTo(this.weight, typedOther.weight);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -2369,6 +2438,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 29: // WEIGHT
+          if (field.type == TType.STRING) {
+            this.weight = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -2523,6 +2599,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       if (isSetThirdExchangeRate()) {
         oprot.writeFieldBegin(THIRD_EXCHANGE_RATE_FIELD_DESC);
         oprot.writeString(this.thirdExchangeRate);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.weight != null) {
+      if (isSetWeight()) {
+        oprot.writeFieldBegin(WEIGHT_FIELD_DESC);
+        oprot.writeString(this.weight);
         oprot.writeFieldEnd();
       }
     }
@@ -2744,6 +2827,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         sb.append("null");
       } else {
         sb.append(this.thirdExchangeRate);
+      }
+      first = false;
+      }
+    if (isSetWeight()) {
+      if (!first) sb.append(", ");
+      sb.append("weight:");
+      if (this.weight == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.weight);
       }
       first = false;
       }

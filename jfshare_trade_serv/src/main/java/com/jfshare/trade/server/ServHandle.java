@@ -111,11 +111,11 @@ public class ServHandle implements TradeServ.Iface {
 			//验证邮费
 			List<FailDesc> postageFailList = checkUtil.orderConfirmPostage(buyInfo, orderList);
 			if(CollectionUtils.isNotEmpty(postageFailList)) {
-				logger.error("$$$$确定订单----检测订单运费错误！fails=" + postageFailList);
+				logger.error("$$$$确定订单----获取订单运费错误！fails=" + postageFailList);
 				FailCode.addFails(result, postageFailList);
 				return createOrderResult;
 			}
-			logger.info("确认订单----运费校验通过");
+			logger.info("获取订单----运费获取通过");
 
 			//验证积分抵现
 			List<FailDesc> score2CashFailList = checkUtil.orderConfirmScore2Cash(buyInfo, orderList);

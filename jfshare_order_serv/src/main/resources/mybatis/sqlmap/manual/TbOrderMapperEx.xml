@@ -278,7 +278,8 @@
         b.order_id, b.product_id, b.product_name, b.vice_name, b.product_snapshoot_id, b.sku_num,
         b.sku_desc, b.seller_class_num, b.cur_price, b.org_price, b.images_url, b.last_update_user_id,
         b.create_time, b.create_user_id, b.type, b.shelf, b.count, b.last_update_time, b.subject_id, b.brand_id,
-        b.wi, b.exchange_score, b.exchange_cash, b.exchange_rule, b.third_score
+        b.wi, b.exchange_score, b.exchange_cash, b.exchange_rule, b.third_score, b.postage_template_id, b.storehouse_id,
+        b.thirdexchangerate
     </sql>
 
     <sql id="Select_Order_Profile_Sql">
@@ -287,7 +288,7 @@
         express_no, province_id, city_id, county_id, receiver_address, receiver_name, receiver_mobile,
         receiver_tele, order_state, seller_comment, buyer_comment, last_update_time, last_update_user_id,
         create_user_id, pay_state, address_id, province_name, city_name, county_name, post_code,
-        deliver_time, success_time, settlement_state, postage, order_state_type, order_state_type_desc,
+        deliver_time, success_time, settlement_state, a.postage, order_state_type, order_state_type_desc,
         settlement_time, order_tag, express_name, wi, from_source, trade_pay_id, order_delete_state,
         exchange_score, exchange_cash, order_batch, active_state, third_score
     </sql>

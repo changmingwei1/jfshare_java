@@ -56,7 +56,7 @@ public class DeliverService {
             orderModel.setExpressId(Integer.parseInt(deliverInfo.getExpressId()));
             orderModel.setExpressName(deliverInfo.getExpressName());
         }
-        orderModel.setBuyerComment(deliverInfo.getBuyerComment());
+//        orderModel.setBuyerComment(deliverInfo.getBuyerComment());
         orderModel.setSellerComment(deliverInfo.getSellerComment());
         orderModel.setReceiverName(deliverInfo.getReceiverName());
         orderModel.setReceiverMobile(deliverInfo.getReceiverMobile());
@@ -94,6 +94,8 @@ public class DeliverService {
         order.setDeliverTime(deliverTime);
         order.setExpressId(orderModel.getExpressId());
         order.setExpressNo(orderModel.getExpressNo());
+        order.setExpressName(orderModel.getExpressName());
+        order.setSellerComment(orderModel.getSellerComment());
 
         TbOrderRecordExample example = new TbOrderRecordExample();
         TbOrderRecordExample.Criteria criteria = example.createCriteria();

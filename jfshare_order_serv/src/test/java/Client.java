@@ -41,7 +41,7 @@ public class Client extends TestCase{
         try {
             ////////////////////////////////////////////////////
 
-            System.err.println(client.queryOrderDetail(2, 1000, orderId));
+            System.err.println(client.queryOrderDetail(1, 81, orderId));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

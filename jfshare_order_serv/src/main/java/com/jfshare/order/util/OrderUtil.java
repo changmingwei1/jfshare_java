@@ -59,6 +59,7 @@ public class OrderUtil {
         orderDetail.setActiveState(orderModel.getActiveState());
         orderDetail.setOrderBatch(orderModel.getOrderBatch());
         orderDetail.setThirdScore(orderModel.getThirdScore());
+        orderDetail.setPostage(PriceUtils.intToStr(orderModel.getPostage()));
 
         DeliverInfo deliverInfo = new DeliverInfo();
         deliverInfo.setReceiverTele(orderModel.getReceiverTele());

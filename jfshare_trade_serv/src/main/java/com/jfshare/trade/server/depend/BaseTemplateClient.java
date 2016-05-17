@@ -9,12 +9,14 @@ import com.jfshare.finagle.thrift.score.ScoreServ;
 import com.jfshare.finagle.thrift.score.ScoreTrade;
 import com.jfshare.finagle.thrift.trade.BuyInfo;
 import com.jfshare.ridge.ConfigManager;
+import com.jfshare.score2cash.utils.NumberUtil;
 import com.jfshare.utils.PriceUtils;
 import com.twitter.finagle.builder.ClientBuilder;
 import com.twitter.finagle.builder.ClientConfig;
 import com.twitter.finagle.thrift.ThriftClientFramedCodec;
 import com.twitter.finagle.thrift.ThriftClientRequest;
 import com.twitter.util.Await;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,11 +60,16 @@ public class BaseTemplateClient {
 		service = new BaseTemplateServ.ServiceToClient(client, new TBinaryProtocol.Factory());
 	}
 
-	public int calcPostage(BuyInfo buyInfo, List<Order> orders) {
-
+	/**
+	 * 计算运费
+	 * @param buyInfo
+	 * @param orders
+     * @return
+     */
+	public CalculatePostageResult calcPostage(BuyInfo buyInfo, List<Order> orders) {
+		CalculatePostageResult result = null;
 		long doneTime = System.currentTimeMillis();
-
-		List<SellerPostageBasic> sellerPostageBasics = new ArrayList<SellerPostageBasic>();
+		CalculatePostageParam param = new CalculatePostageParam();
 		for(Order order : orders) {
 			Map<String, ProductPostageBasic> productPostageMap = new HashMap<String, ProductPostageBasic>();
 			for(OrderInfo orderInfo : order.getProductList()) {
@@ -73,29 +80,48 @@ public class BaseTemplateClient {
 					productPostageBasic.setAmount(calcOrderInfoAmount(orderInfo));
 					productPostageBasic.setNumber(orderInfo.getCount());
 					productPostageBasic.setTemplateId(orderInfo.getPostageTemplateId());
-					productPostageBasic.setWeight(orderInfo.get)
+					productPostageBasic.setWeight(NumberUtils.toDouble(orderInfo.getWeight()));
+				} else {
+					productPostageBasic.setAmount(plusOrderInfoAmount(productPostageBasic.getAmount(), calcOrderInfoAmount(orderInfo)));
+					productPostageBasic.setWeight(plusOrderInfoWeight(productPostageBasic.getWeight(), orderInfo.getWeight()));
+					productPostageBasic.setNumber(productPostageBasic.getNumber() + orderInfo.getCount());
 				}
+
 			}
+
 			SellerPostageBasic sellerPostageBasic = new SellerPostageBasic();
 			sellerPostageBasic.setSellerId(order.getSellerId());
+			for(String key : productPostageMap.keySet()) {
+				sellerPostageBasic.addToProductPostageBasicList(productPostageMap.get(key));
+			}
+			param.addToSellerPostageBasicList(sellerPostageBasic);
 		}
 
-		int postage = 0;
+		param.setSendToProvince(String.valueOf(orders.get(0).getDeliverInfo().getProvinceId()));
+
 		try {
-			CalculatePostageParam param = new CalculatePostageParam();
-			CalculatePostageResult result = Await.result(this.service.calculatePostage(param));
+			result = Await.result(this.service.calculatePostage(param));
 			if(result != null && result.getResult().getCode() == 0) {
-				postage = PriceUtils.strToInt(result.getValue());
-				logger.info("{},用户积分：{}", buyerId, postage);
+				logger.info("获取计算后总运费：{}", result.getTotalPostage());
 			} else{
-				logger.warn("{},计算运费是吧:{}", buyerId, scoreResult);
+				logger.warn(",计算运费失败:{}", result);
 			}
 		} catch (Exception e) {
-			logger.error(buyerId + "积分服务异常!", e);
-			score = -1;
+			logger.error("计算运费发生异常!", e);
 		}
-		logger.info("{},积分服务user_score接口调用时间：{} ms!!", buyerId, (System.currentTimeMillis() - doneTime));
-		return score;
+		logger.info("调用basicTemplate服务calcPostage接口调用时间：{} ms!!", (System.currentTimeMillis() - doneTime));
+		return result;
+	}
+
+	private double plusOrderInfoWeight(double weight, String weight1) {
+		return weight + NumberUtils.toDouble(weight1);
+	}
+
+	private String plusOrderInfoAmount(String p1, String p2) {
+		int plus1 = PriceUtils.strToInt(p1);
+		int plus2 = PriceUtils.strToInt(p2);
+
+		return PriceUtils.intToStr(plus1 + plus2);
 	}
 
 	/**

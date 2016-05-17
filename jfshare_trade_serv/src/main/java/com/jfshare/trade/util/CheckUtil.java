@@ -2,6 +2,8 @@ package com.jfshare.trade.util;
 
 import com.jfshare.finagle.thrift.address.AddressInfo;
 import com.jfshare.finagle.thrift.baseTemplate.BaseTemplateServ;
+import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageResult;
+import com.jfshare.finagle.thrift.baseTemplate.SellerPostageReturn;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderInfo;
 import com.jfshare.finagle.thrift.product.Product;
@@ -451,10 +453,21 @@ public class CheckUtil {
     }
 
     public List<FailDesc> orderConfirmPostage(BuyInfo buyInfo, List<Order> orderList) {
-        for(Order order : orderList) {
-
+        List<FailDesc> failDescList = new ArrayList<FailDesc>();
+        CalculatePostageResult calculatePostageResult = baseTemplateClient.calcPostage(buyInfo, orderList);
+        if(calculatePostageResult == null || calculatePostageResult.getResult().getCode() == 1) {
+            failDescList.add(FailCode.SYSTEM_EXCEPTION);
+            return failDescList;
         }
-        return null;
+
+        for(Order order : orderList) {
+            for(SellerPostageReturn  s : calculatePostageResult.getSellerPostageReturnList()) {
+                if(order.getSellerId() == s.getSellerId()) {
+                    order.setPostage(s.getPostage());
+                }
+            }
+        }
+        return failDescList;
     }
 
     public void releaseScore2Cash(BuyInfo buyInfo, String transId) {

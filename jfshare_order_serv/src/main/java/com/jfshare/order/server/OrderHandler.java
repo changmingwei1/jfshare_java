@@ -77,7 +77,47 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     @Override
     public Result updateDeliverInfo(int userType, int userId, DeliverInfo deliverInfo) throws TException {
-        return null;
+        if(userType == BizUtil.USER_TYPE.SELLER.getEnumVal()) {
+            //TODO 校验参数
+            try {
+                OrderModel orderModel = orderService.sellerQueryDetail(userId, deliverInfo.getOrderId());
+                if (orderModel == null) {
+                    logger.warn(MessageFormat.format("updateExpressInfo订单不存在！sellerId[{0}],orderId[{1}],expressId[{2}],expressNo[{3}]", userId, deliverInfo.getOrderId(), deliverInfo.getExpressId(), deliverInfo.getExpressNo()));
+                    return ResultBuilder.createFailNormalResult(FailCode.ORDER_NO_EXIST);
+                }
+
+                if(StringUtils.isNotBlank(deliverInfo.getExpressId()) && NumberUtils.isNumber(deliverInfo.getExpressId())) {
+                    orderModel.setExpressId(Integer.parseInt(deliverInfo.getExpressId()));
+                }
+                if(StringUtils.isNotBlank(deliverInfo.getExpressNo())) {
+                    orderModel.setExpressNo(deliverInfo.getExpressNo());
+                }
+                if(StringUtils.isNotBlank(deliverInfo.getExpressName())) {
+                    orderModel.setExpressName(deliverInfo.getExpressName());
+                }
+                if(StringUtils.isNotBlank(deliverInfo.getSellerComment())) {
+                    orderModel.setSellerComment(deliverInfo.getSellerComment());
+                }
+
+                deliverService.updateDeliverInfo(orderModel);
+                deliverInfo.setExpressId(String.valueOf(orderModel.getExpressId()));
+                deliverInfo.setExpressNo(orderModel.getExpressNo());
+                expressClient.subscribeExpressPost(deliverInfo);
+            } catch (BaseException be) {
+                List<FailDesc> failDescs = be.getFailDescs();
+                logger.error("发货失败!");
+                return ResultBuilder.createFailNormalResult(failDescs);
+            } catch(Exception e) {
+                logger.error("发货失败，系统异常");
+                e.printStackTrace();
+                return ResultBuilder.createFailNormalResult(FailCode.SYS_ERROR);
+            }
+
+        } else if(userType == BizUtil.USER_TYPE.BUYER.getEnumVal()) {
+            return new Result(1);
+        }
+
+        return ResultBuilder.createNormalResult();
     }
 
     @Override
