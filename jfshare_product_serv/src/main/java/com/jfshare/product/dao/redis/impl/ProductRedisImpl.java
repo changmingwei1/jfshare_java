@@ -9,7 +9,6 @@ import com.jfshare.product.dao.redis.ProductRedis;
 import com.jfshare.utils.BeanUtil;
 import com.jfshare.utils.JsonMapper;
 import com.jfshare.utils.PriceUtils;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -214,8 +213,6 @@ public class ProductRedisImpl implements ProductRedis{
     @Override
     public long addProductClickRate(String productId) {
         long rate = this.baseRedis.incr(ConstRedis.PRODUCT_CLICK_RATE + productId);
-        // TODO: 2016/5/15 判断做处理
-
         return rate;
     }
 }

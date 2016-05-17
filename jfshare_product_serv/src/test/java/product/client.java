@@ -31,8 +31,8 @@ public class client {
 
     private ProductServ.Client client;
 
-//    private static final String IP = "127.0.0.1";
-    private static final String IP = "120.24.153.155";
+    private static final String IP = "127.0.0.1";
+//    private static final String IP = "120.24.153.155";
 
     private static final Integer PORT = 1980;
 
@@ -191,7 +191,7 @@ public class client {
 
         ProductSurveyQueryParam param = new ProductSurveyQueryParam();
 //        param.setProductId("ze160515153359000306");
-        param.setSubjectId(3107);
+        param.setSubjectId(3167);
         param.setBrandId(591);
         param.setSort("click_rate DESC");
 
