@@ -280,9 +280,13 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         }
         Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(tbProductSku);
         productSku = new ProductSku();
-        BeanUtil.fillBeanData(productSku, stringObjectMap);
+        /*BeanUtil.fillBeanData(productSku, stringObjectMap);
         productSku.setCurPrice(PriceUtils.intToStr(tbProductSku.getCurPrice()));
-        productSku.setOrgPrice(PriceUtils.intToStr(tbProductSku.getOrgPrice()));
+        productSku.setOrgPrice(PriceUtils.intToStr(tbProductSku.getOrgPrice()));*/
+
+        ProductSkuItem productSkuItem = new ProductSkuItem();
+        BeanUtil.fillBeanData(productSkuItem, stringObjectMap);
+        productSku.addToSkuItems(productSkuItem);
 
         //load cache
         this.productRedis.removeProductSkuCache(productId);
@@ -575,9 +579,13 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         }
         Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(tbProductSku);
         productSku = new ProductSku();
-        BeanUtil.fillBeanData(productSku, stringObjectMap);
+         /*BeanUtil.fillBeanData(productSku, stringObjectMap);
         productSku.setCurPrice(PriceUtils.intToStr(tbProductSku.getCurPrice()));
-        productSku.setOrgPrice(PriceUtils.intToStr(tbProductSku.getOrgPrice()));
+        productSku.setOrgPrice(PriceUtils.intToStr(tbProductSku.getOrgPrice()));*/
+
+        ProductSkuItem productSkuItem = new ProductSkuItem();
+        BeanUtil.fillBeanData(productSkuItem, stringObjectMap);
+        productSku.addToSkuItems(productSkuItem);
 
         //load cache
         this.productRedis.removeProductSkuCache(productId);
