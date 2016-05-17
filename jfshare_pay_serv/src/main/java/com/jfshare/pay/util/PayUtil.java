@@ -353,7 +353,9 @@ public class PayUtil {
             tradeType = "APP";
         }
         payUrlMap.put("trade_type", tradeType);
-        payUrlMap.put("product_id", payId);
+        if (payReq.getPayChannel() != 9) {
+            payUrlMap.put("product_id", payId);
+        }
         if (payReq.getPayChannel() == 4) {
             payUrlMap.put("openid", payReq.getCustId());
         }
@@ -627,13 +629,26 @@ public class PayUtil {
 //    }
 
     public static void main(String args[]) throws Exception {
-        PayReq payReq = new PayReq();
-        payReq.setPrice(1);
-        payReq.setRemark("dd");
-        payReq.setTitle("j的");
-        String payId = "ef3c240626f2e00ea032b4b00ff768f82";
+//        PayReq payReq = new PayReq();
+//        payReq.setPrice(1);
+//        payReq.setRemark("dd");
+//        payReq.setTitle("j的");
+//        String payId = "ef3c240626f2e00ea032b4b00ff768f82";
+//
+//        String hebaoH5 = getHebaoH5(payReq, payId);
 
-        String hebaoH5 = getHebaoH5(payReq, payId);
+        PayReq payReq1 = new PayReq();
+//        PayReq(tokenId:fvBLEJEHNOw=, orderNo:fa44514e9acb568385da064067e00feb, extraParam:24_4660024, title:jfx订单, price:1000, score:1, payChannel:9, payIp:null, returnUrl:null, remark:null, custId:100017286150, custType:7)
+        payReq1.setTokenId("fvBLEJEHNOw=");
+        payReq1.setOrderNo("fa44514e9acb568385da064067e00feb");
+        payReq1.setExtraParam("24_4660024");
+        payReq1.setTitle("jfx");
+        payReq1.setPrice(1000);
+        payReq1.setScore(1);
+        payReq1.setPayChannel(9);
+
+        getWeixinPay(payReq1, "9dc5c3c8981aa8d9be7c21c4366bc8c1");
+
 //        System.out.println(hebaoH5);
 //        JSONObject jsonObject = JSON.parseObject(hebaoH5);
 //        StringBuilder ss = new StringBuilder();

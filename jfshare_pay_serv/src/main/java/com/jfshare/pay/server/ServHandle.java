@@ -85,6 +85,7 @@ public class ServHandle implements PayServ.Iface {
             }
 
             if (payId == null || payUrl == null) {
+                logger.error("生成payId或payUrl失败! payId:" + payId + ", payUrl:" + payUrl);
                 FailCode.addFails(result, FailCode.PARAM_NOT_VALID);
                 return stringResult;
             }
