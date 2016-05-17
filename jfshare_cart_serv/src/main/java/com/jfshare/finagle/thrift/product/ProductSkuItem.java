@@ -40,7 +40,7 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
   private static final TField SKU_NAME_FIELD_DESC = new TField("skuName", TType.STRING, (short)6);
   private static final TField WEIGHT_FIELD_DESC = new TField("weight", TType.STRING, (short)7);
   private static final TField REF_PRICE_FIELD_DESC = new TField("refPrice", TType.STRING, (short)8);
-  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.STRING, (short)9);
+  private static final TField STOREHOUSE_ID_FIELD_DESC = new TField("storehouseId", TType.I32, (short)9);
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)10);
 
 
@@ -52,7 +52,7 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
   public String skuName;
   public String weight;
   public String refPrice;
-  public String storehouseId;
+  public int storehouseId;
   public String skuNum;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -142,6 +142,8 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
 
 
   // isset id assignments
+  private static final int __STOREHOUSEID_ISSET_ID = 0;
+  private BitSet __isset_bit_vector = new BitSet(1);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -163,7 +165,7 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     tmpMap.put(_Fields.REF_PRICE, new FieldMetaData("refPrice", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.STOREHOUSE_ID, new FieldMetaData("storehouseId", TFieldRequirementType.OPTIONAL,
-      new FieldValueMetaData(TType.STRING)));
+      new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -179,6 +181,8 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
    * Performs a deep copy on <i>other</i>.
    */
   public ProductSkuItem(ProductSkuItem other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetSellerClassNum()) {
       this.sellerClassNum = other.sellerClassNum;
     }
@@ -203,9 +207,7 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     if (other.isSetRefPrice()) {
       this.refPrice = other.refPrice;
     }
-    if (other.isSetStorehouseId()) {
-      this.storehouseId = other.storehouseId;
-    }
+    this.storehouseId = other.storehouseId;
     if (other.isSetSkuNum()) {
       this.skuNum = other.skuNum;
     }
@@ -225,7 +227,8 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     this.skuName = null;
     this.weight = null;
     this.refPrice = null;
-    this.storehouseId = null;
+    setStorehouseIdIsSet(false);
+    this.storehouseId = 0;
     this.skuNum = null;
   }
 
@@ -429,29 +432,28 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     }
   }
 
-  public String getStorehouseId() {
+  public int getStorehouseId() {
     return this.storehouseId;
   }
 
-  public ProductSkuItem setStorehouseId(String storehouseId) {
+  public ProductSkuItem setStorehouseId(int storehouseId) {
     this.storehouseId = storehouseId;
-    
+    setStorehouseIdIsSet(true);
+
     return this;
   }
 
   public void unsetStorehouseId() {
-    this.storehouseId = null;
+  __isset_bit_vector.clear(__STOREHOUSEID_ISSET_ID);
   }
 
   /** Returns true if field storehouseId is set (has been asigned a value) and false otherwise */
   public boolean isSetStorehouseId() {
-    return this.storehouseId != null;
+    return __isset_bit_vector.get(__STOREHOUSEID_ISSET_ID);
   }
 
   public void setStorehouseIdIsSet(boolean value) {
-    if (!value) {
-      this.storehouseId = null;
-    }
+    __isset_bit_vector.set(__STOREHOUSEID_ISSET_ID, value);
   }
 
   public String getSkuNum() {
@@ -541,7 +543,7 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
       if (value == null) {
         unsetStorehouseId();
       } else {
-        setStorehouseId((String)value);
+        setStorehouseId((Integer)value);
       }
       break;
     case SKU_NUM:
@@ -573,7 +575,7 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     case REF_PRICE:
       return getRefPrice();
     case STOREHOUSE_ID:
-      return getStorehouseId();
+      return new Integer(getStorehouseId());
     case SKU_NUM:
       return getSkuNum();
     }
@@ -692,7 +694,7 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     if (this_present_storehouseId || that_present_storehouseId) {
       if (!(this_present_storehouseId && that_present_storehouseId))
         return false;
-      if (!this.storehouseId.equals(that.storehouseId))
+      if (this.storehouseId != that.storehouseId)
         return false;
     }
     boolean this_present_skuNum = true && this.isSetSkuNum();
@@ -936,8 +938,9 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
           }
           break;
         case 9: // STOREHOUSE_ID
-          if (field.type == TType.STRING) {
-            this.storehouseId = iprot.readString();
+          if (field.type == TType.I32) {
+            this.storehouseId = iprot.readI32();
+            setStorehouseIdIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -1020,12 +1023,10 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
         oprot.writeFieldEnd();
       }
     }
-    if (this.storehouseId != null) {
-      if (isSetStorehouseId()) {
-        oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
-        oprot.writeString(this.storehouseId);
-        oprot.writeFieldEnd();
-      }
+    if (isSetStorehouseId()) {
+      oprot.writeFieldBegin(STOREHOUSE_ID_FIELD_DESC);
+      oprot.writeI32(this.storehouseId);
+      oprot.writeFieldEnd();
     }
     if (this.skuNum != null) {
       if (isSetSkuNum()) {
@@ -1124,11 +1125,7 @@ public class ProductSkuItem implements TBase<ProductSkuItem, ProductSkuItem._Fie
     if (isSetStorehouseId()) {
       if (!first) sb.append(", ");
       sb.append("storehouseId:");
-      if (this.storehouseId == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.storehouseId);
-      }
+      sb.append(this.storehouseId);
       first = false;
       }
     if (isSetSkuNum()) {
