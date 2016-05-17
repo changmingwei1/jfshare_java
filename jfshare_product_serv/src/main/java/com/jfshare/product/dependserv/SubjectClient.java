@@ -26,7 +26,7 @@ public class SubjectClient {
 		
 		TTransport transport = null;
 		try {
-			String ipClient = PropertiesUtil.getProperty("jfx_public_client","subject_serv_ip");
+			String ipClient = PropertiesUtil.getProperty("jfx_public_client","subject_serv_ips");
 			int port = Integer.parseInt(PropertiesUtil.getProperty("jfx_public_client","subject_port"));
             transport = new TFramedTransport(new TSocket(ipClient, port, socketTimeout));
             TProtocol protocol = new TBinaryProtocol(transport);
