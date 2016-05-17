@@ -1,6 +1,7 @@
 package com.jfshare.trade.util;
 
 import com.jfshare.finagle.thrift.address.AddressInfo;
+import com.jfshare.finagle.thrift.baseTemplate.BaseTemplateServ;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderInfo;
 import com.jfshare.finagle.thrift.product.Product;
@@ -51,6 +52,8 @@ public class CheckUtil {
     private ScoreClient scoreClient;
     @Autowired
     private ScoreToCashService scoreToCashService;
+    @Autowired
+    private BaseTemplateClient baseTemplateClient;
 
     /**
      * 确认订单参数检测
@@ -354,19 +357,21 @@ public class CheckUtil {
         if (createOrderResult.getResult().getCode() == 0) {
             if (orderList.size() > 0) {
                 int thirdScore = 0;
+                int thirdScore2cashAmount = 0;
                 List<String> orderIds = new ArrayList<String>();
                 for (Order item : orderList) {
                     orderIds.add(item.getOrderId());
                     for(OrderInfo info : item.getProductList()) {
                         if (PriceUtils.strToInt(info.getCurPrice()) >= 100) {
                             thirdScore += 100 * info.getCount();
+                            thirdScore2cashAmount += thirdScore * NumberUtils.toInt(info.getThirdExchangeRate(), 1);
                         }
                     }
                 }
                 PaymentInfo paymentInfo = new PaymentInfo();
                 paymentInfo.setCreateTime(orderList.get(0).getCreateTime());
                 paymentInfo.setCancelTime(orderList.get(0).getCancelTime());
-                paymentInfo.setPrice(buyInfo.getAmount());
+                paymentInfo.setPrice(PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScore2cashAmount));
                 paymentInfo.setThirdScore(String.valueOf(thirdScore)); //若使用第三方积分的总数
 
                 createOrderResult.setOrderIdList(orderIds);
@@ -446,6 +451,9 @@ public class CheckUtil {
     }
 
     public List<FailDesc> orderConfirmPostage(BuyInfo buyInfo, List<Order> orderList) {
+        for(Order order : orderList) {
+
+        }
         return null;
     }
 

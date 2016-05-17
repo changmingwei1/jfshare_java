@@ -29,29 +29,29 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTradeQueryParam._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("ScoreTradeQueryParam");
+public class ScoreUserQueryParam implements TBase<ScoreUserQueryParam, ScoreUserQueryParam._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ScoreUserQueryParam");
 
   private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.I32, (short)1);
-  private static final TField START_TIME_FIELD_DESC = new TField("startTime", TType.STRING, (short)2);
-  private static final TField END_TIME_FIELD_DESC = new TField("endTime", TType.STRING, (short)3);
-  private static final TField IN_OR_OUT_FIELD_DESC = new TField("inOrOut", TType.I32, (short)4);
-  private static final TField TYPE_FIELD_DESC = new TField("type", TType.I32, (short)5);
+  private static final TField MOBILE_FIELD_DESC = new TField("mobile", TType.STRING, (short)2);
+  private static final TField START_TIME_FIELD_DESC = new TField("startTime", TType.STRING, (short)3);
+  private static final TField END_TIME_FIELD_DESC = new TField("endTime", TType.STRING, (short)4);
+  private static final TField AMOUNT_FIELD_DESC = new TField("amount", TType.I32, (short)5);
 
 
   public int userId;
+  public String mobile;
   public String startTime;
   public String endTime;
-  public int inOrOut;
-  public int type;
+  public int amount;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     USER_ID((short)1, "userId"),
-    START_TIME((short)2, "startTime"),
-    END_TIME((short)3, "endTime"),
-    IN_OR_OUT((short)4, "inOrOut"),
-    TYPE((short)5, "type");
+    MOBILE((short)2, "mobile"),
+    START_TIME((short)3, "startTime"),
+    END_TIME((short)4, "endTime"),
+    AMOUNT((short)5, "amount");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -68,14 +68,14 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
       switch(fieldId) {
         case 1: // USER_ID
   	return USER_ID;
-        case 2: // START_TIME
+        case 2: // MOBILE
+  	return MOBILE;
+        case 3: // START_TIME
   	return START_TIME;
-        case 3: // END_TIME
+        case 4: // END_TIME
   	return END_TIME;
-        case 4: // IN_OR_OUT
-  	return IN_OR_OUT;
-        case 5: // TYPE
-  	return TYPE;
+        case 5: // AMOUNT
+  	return AMOUNT;
         default:
   	return null;
       }
@@ -118,87 +118,86 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
 
   // isset id assignments
   private static final int __USERID_ISSET_ID = 0;
-  private static final int __INOROUT_ISSET_ID = 1;
-  private static final int __TYPE_ISSET_ID = 2;
-  private BitSet __isset_bit_vector = new BitSet(3);
+  private static final int __AMOUNT_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.USER_ID, new FieldMetaData("userId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.MOBILE, new FieldMetaData("mobile", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.START_TIME, new FieldMetaData("startTime", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.END_TIME, new FieldMetaData("endTime", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.IN_OR_OUT, new FieldMetaData("inOrOut", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.TYPE, new FieldMetaData("type", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.AMOUNT, new FieldMetaData("amount", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(ScoreTradeQueryParam.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ScoreUserQueryParam.class, metaDataMap);
   }
 
 
-  public ScoreTradeQueryParam() {
+  public ScoreUserQueryParam() {
   }
 
-  public ScoreTradeQueryParam(
+  public ScoreUserQueryParam(
     int userId,
+    String mobile,
     String startTime,
     String endTime,
-    int inOrOut,
-    int type)
+    int amount)
   {
     this();
     this.userId = userId;
     setUserIdIsSet(true);
+    this.mobile = mobile;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.inOrOut = inOrOut;
-    setInOrOutIsSet(true);
-    this.type = type;
-    setTypeIsSet(true);
+    this.amount = amount;
+    setAmountIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public ScoreTradeQueryParam(ScoreTradeQueryParam other) {
+  public ScoreUserQueryParam(ScoreUserQueryParam other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
     this.userId = other.userId;
+    if (other.isSetMobile()) {
+      this.mobile = other.mobile;
+    }
     if (other.isSetStartTime()) {
       this.startTime = other.startTime;
     }
     if (other.isSetEndTime()) {
       this.endTime = other.endTime;
     }
-    this.inOrOut = other.inOrOut;
-    this.type = other.type;
+    this.amount = other.amount;
   }
 
-  public ScoreTradeQueryParam deepCopy() {
-    return new ScoreTradeQueryParam(this);
+  public ScoreUserQueryParam deepCopy() {
+    return new ScoreUserQueryParam(this);
   }
 
   @Override
   public void clear() {
     setUserIdIsSet(false);
     this.userId = 0;
+    this.mobile = null;
     this.startTime = null;
     this.endTime = null;
-    setInOrOutIsSet(false);
-    this.inOrOut = 0;
-    setTypeIsSet(false);
-    this.type = 0;
+    setAmountIsSet(false);
+    this.amount = 0;
   }
 
   public int getUserId() {
     return this.userId;
   }
 
-  public ScoreTradeQueryParam setUserId(int userId) {
+  public ScoreUserQueryParam setUserId(int userId) {
     this.userId = userId;
     setUserIdIsSet(true);
 
@@ -218,11 +217,36 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     __isset_bit_vector.set(__USERID_ISSET_ID, value);
   }
 
+  public String getMobile() {
+    return this.mobile;
+  }
+
+  public ScoreUserQueryParam setMobile(String mobile) {
+    this.mobile = mobile;
+    
+    return this;
+  }
+
+  public void unsetMobile() {
+    this.mobile = null;
+  }
+
+  /** Returns true if field mobile is set (has been asigned a value) and false otherwise */
+  public boolean isSetMobile() {
+    return this.mobile != null;
+  }
+
+  public void setMobileIsSet(boolean value) {
+    if (!value) {
+      this.mobile = null;
+    }
+  }
+
   public String getStartTime() {
     return this.startTime;
   }
 
-  public ScoreTradeQueryParam setStartTime(String startTime) {
+  public ScoreUserQueryParam setStartTime(String startTime) {
     this.startTime = startTime;
     
     return this;
@@ -247,7 +271,7 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     return this.endTime;
   }
 
-  public ScoreTradeQueryParam setEndTime(String endTime) {
+  public ScoreUserQueryParam setEndTime(String endTime) {
     this.endTime = endTime;
     
     return this;
@@ -268,52 +292,28 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     }
   }
 
-  public int getInOrOut() {
-    return this.inOrOut;
+  public int getAmount() {
+    return this.amount;
   }
 
-  public ScoreTradeQueryParam setInOrOut(int inOrOut) {
-    this.inOrOut = inOrOut;
-    setInOrOutIsSet(true);
+  public ScoreUserQueryParam setAmount(int amount) {
+    this.amount = amount;
+    setAmountIsSet(true);
 
     return this;
   }
 
-  public void unsetInOrOut() {
-  __isset_bit_vector.clear(__INOROUT_ISSET_ID);
+  public void unsetAmount() {
+  __isset_bit_vector.clear(__AMOUNT_ISSET_ID);
   }
 
-  /** Returns true if field inOrOut is set (has been asigned a value) and false otherwise */
-  public boolean isSetInOrOut() {
-    return __isset_bit_vector.get(__INOROUT_ISSET_ID);
+  /** Returns true if field amount is set (has been asigned a value) and false otherwise */
+  public boolean isSetAmount() {
+    return __isset_bit_vector.get(__AMOUNT_ISSET_ID);
   }
 
-  public void setInOrOutIsSet(boolean value) {
-    __isset_bit_vector.set(__INOROUT_ISSET_ID, value);
-  }
-
-  public int getType() {
-    return this.type;
-  }
-
-  public ScoreTradeQueryParam setType(int type) {
-    this.type = type;
-    setTypeIsSet(true);
-
-    return this;
-  }
-
-  public void unsetType() {
-  __isset_bit_vector.clear(__TYPE_ISSET_ID);
-  }
-
-  /** Returns true if field type is set (has been asigned a value) and false otherwise */
-  public boolean isSetType() {
-    return __isset_bit_vector.get(__TYPE_ISSET_ID);
-  }
-
-  public void setTypeIsSet(boolean value) {
-    __isset_bit_vector.set(__TYPE_ISSET_ID, value);
+  public void setAmountIsSet(boolean value) {
+    __isset_bit_vector.set(__AMOUNT_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -323,6 +323,13 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
         unsetUserId();
       } else {
         setUserId((Integer)value);
+      }
+      break;
+    case MOBILE:
+      if (value == null) {
+        unsetMobile();
+      } else {
+        setMobile((String)value);
       }
       break;
     case START_TIME:
@@ -339,18 +346,11 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
         setEndTime((String)value);
       }
       break;
-    case IN_OR_OUT:
+    case AMOUNT:
       if (value == null) {
-        unsetInOrOut();
+        unsetAmount();
       } else {
-        setInOrOut((Integer)value);
-      }
-      break;
-    case TYPE:
-      if (value == null) {
-        unsetType();
-      } else {
-        setType((Integer)value);
+        setAmount((Integer)value);
       }
       break;
     }
@@ -360,14 +360,14 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     switch (field) {
     case USER_ID:
       return new Integer(getUserId());
+    case MOBILE:
+      return getMobile();
     case START_TIME:
       return getStartTime();
     case END_TIME:
       return getEndTime();
-    case IN_OR_OUT:
-      return new Integer(getInOrOut());
-    case TYPE:
-      return new Integer(getType());
+    case AMOUNT:
+      return new Integer(getAmount());
     }
     throw new IllegalStateException();
   }
@@ -381,14 +381,14 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     switch (field) {
     case USER_ID:
       return isSetUserId();
+    case MOBILE:
+      return isSetMobile();
     case START_TIME:
       return isSetStartTime();
     case END_TIME:
       return isSetEndTime();
-    case IN_OR_OUT:
-      return isSetInOrOut();
-    case TYPE:
-      return isSetType();
+    case AMOUNT:
+      return isSetAmount();
     }
     throw new IllegalStateException();
   }
@@ -397,12 +397,12 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof ScoreTradeQueryParam)
-      return this.equals((ScoreTradeQueryParam)that);
+    if (that instanceof ScoreUserQueryParam)
+      return this.equals((ScoreUserQueryParam)that);
     return false;
   }
 
-  public boolean equals(ScoreTradeQueryParam that) {
+  public boolean equals(ScoreUserQueryParam that) {
     if (that == null)
       return false;
     boolean this_present_userId = true;
@@ -411,6 +411,14 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
       if (!(this_present_userId && that_present_userId))
         return false;
       if (this.userId != that.userId)
+        return false;
+    }
+    boolean this_present_mobile = true && this.isSetMobile();
+    boolean that_present_mobile = true && that.isSetMobile();
+    if (this_present_mobile || that_present_mobile) {
+      if (!(this_present_mobile && that_present_mobile))
+        return false;
+      if (!this.mobile.equals(that.mobile))
         return false;
     }
     boolean this_present_startTime = true && this.isSetStartTime();
@@ -429,20 +437,12 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
       if (!this.endTime.equals(that.endTime))
         return false;
     }
-    boolean this_present_inOrOut = true;
-    boolean that_present_inOrOut = true;
-    if (this_present_inOrOut || that_present_inOrOut) {
-      if (!(this_present_inOrOut && that_present_inOrOut))
+    boolean this_present_amount = true;
+    boolean that_present_amount = true;
+    if (this_present_amount || that_present_amount) {
+      if (!(this_present_amount && that_present_amount))
         return false;
-      if (this.inOrOut != that.inOrOut)
-        return false;
-    }
-    boolean this_present_type = true;
-    boolean that_present_type = true;
-    if (this_present_type || that_present_type) {
-      if (!(this_present_type && that_present_type))
-        return false;
-      if (this.type != that.type)
+      if (this.amount != that.amount)
         return false;
     }
 
@@ -456,6 +456,10 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     builder.append(present_userId);
     if (present_userId)
       builder.append(userId);
+    boolean present_mobile = true && (isSetMobile());
+    builder.append(present_mobile);
+    if (present_mobile)
+      builder.append(mobile);
     boolean present_startTime = true && (isSetStartTime());
     builder.append(present_startTime);
     if (present_startTime)
@@ -464,24 +468,20 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     builder.append(present_endTime);
     if (present_endTime)
       builder.append(endTime);
-    boolean present_inOrOut = true;
-    builder.append(present_inOrOut);
-    if (present_inOrOut)
-      builder.append(inOrOut);
-    boolean present_type = true;
-    builder.append(present_type);
-    if (present_type)
-      builder.append(type);
+    boolean present_amount = true;
+    builder.append(present_amount);
+    if (present_amount)
+      builder.append(amount);
     return builder.toHashCode();
   }
 
-  public int compareTo(ScoreTradeQueryParam other) {
+  public int compareTo(ScoreUserQueryParam other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    ScoreTradeQueryParam typedOther = (ScoreTradeQueryParam)other;
+    ScoreUserQueryParam typedOther = (ScoreUserQueryParam)other;
 
     lastComparison = Boolean.valueOf(isSetUserId()).compareTo(typedOther.isSetUserId());
     if (lastComparison != 0) {
@@ -489,6 +489,16 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     }
     if (isSetUserId()) {
       lastComparison = TBaseHelper.compareTo(this.userId, typedOther.userId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetMobile()).compareTo(typedOther.isSetMobile());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetMobile()) {
+      lastComparison = TBaseHelper.compareTo(this.mobile, typedOther.mobile);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -513,22 +523,12 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetInOrOut()).compareTo(typedOther.isSetInOrOut());
+    lastComparison = Boolean.valueOf(isSetAmount()).compareTo(typedOther.isSetAmount());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetInOrOut()) {
-      lastComparison = TBaseHelper.compareTo(this.inOrOut, typedOther.inOrOut);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetType()).compareTo(typedOther.isSetType());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetType()) {
-      lastComparison = TBaseHelper.compareTo(this.type, typedOther.type);
+    if (isSetAmount()) {
+      lastComparison = TBaseHelper.compareTo(this.amount, typedOther.amount);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -559,32 +559,31 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // START_TIME
+        case 2: // MOBILE
+          if (field.type == TType.STRING) {
+            this.mobile = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // START_TIME
           if (field.type == TType.STRING) {
             this.startTime = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // END_TIME
+        case 4: // END_TIME
           if (field.type == TType.STRING) {
             this.endTime = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 4: // IN_OR_OUT
+        case 5: // AMOUNT
           if (field.type == TType.I32) {
-            this.inOrOut = iprot.readI32();
-            setInOrOutIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 5: // TYPE
-          if (field.type == TType.I32) {
-            this.type = iprot.readI32();
-            setTypeIsSet(true);
+            this.amount = iprot.readI32();
+            setAmountIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -607,6 +606,11 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     oprot.writeFieldBegin(USER_ID_FIELD_DESC);
     oprot.writeI32(this.userId);
     oprot.writeFieldEnd();
+    if (this.mobile != null) {
+      oprot.writeFieldBegin(MOBILE_FIELD_DESC);
+      oprot.writeString(this.mobile);
+      oprot.writeFieldEnd();
+    }
     if (this.startTime != null) {
       oprot.writeFieldBegin(START_TIME_FIELD_DESC);
       oprot.writeString(this.startTime);
@@ -617,11 +621,8 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
       oprot.writeString(this.endTime);
       oprot.writeFieldEnd();
     }
-    oprot.writeFieldBegin(IN_OR_OUT_FIELD_DESC);
-    oprot.writeI32(this.inOrOut);
-    oprot.writeFieldEnd();
-    oprot.writeFieldBegin(TYPE_FIELD_DESC);
-    oprot.writeI32(this.type);
+    oprot.writeFieldBegin(AMOUNT_FIELD_DESC);
+    oprot.writeI32(this.amount);
     oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -629,10 +630,18 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("ScoreTradeQueryParam(");
+    StringBuilder sb = new StringBuilder("ScoreUserQueryParam(");
     boolean first = true;
     sb.append("userId:");
     sb.append(this.userId);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("mobile:");
+    if (this.mobile == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.mobile);
+    }
     first = false;
     if (!first) sb.append(", ");
     sb.append("startTime:");
@@ -651,12 +660,8 @@ public class ScoreTradeQueryParam implements TBase<ScoreTradeQueryParam, ScoreTr
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("inOrOut:");
-    sb.append(this.inOrOut);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("type:");
-    sb.append(this.type);
+    sb.append("amount:");
+    sb.append(this.amount);
     first = false;
     sb.append(")");
     return sb.toString();

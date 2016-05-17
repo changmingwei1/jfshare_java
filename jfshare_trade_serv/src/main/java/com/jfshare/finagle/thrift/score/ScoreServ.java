@@ -41,6 +41,10 @@ public class ScoreServ {
     public com.jfshare.finagle.thrift.result.StringResult expenditure(ScoreTrade scoreTrade) throws TException;
     public ScoreResult getScore(int userId) throws TException;
     public ScoreTradeResult queryScoreTrade(ScoreTradeQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException;
+    public ScoreUserResult queryScoreUser(ScoreUserQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException;
+    public CachAmountResult queryCachAmount(CachAmountQueryParam param) throws TException;
+    public StatusResult cachAmountCall(CachAmountCallParam param) throws TException;
+    public ResponseScoreResult enterAmountCall(ScoreRequestParam param) throws TException;
   }
 
   public interface AsyncIface {
@@ -48,6 +52,10 @@ public class ScoreServ {
     public void expenditure(ScoreTrade scoreTrade, AsyncMethodCallback<AsyncClient.expenditure_call> resultHandler) throws TException;
     public void getScore(int userId, AsyncMethodCallback<AsyncClient.getScore_call> resultHandler) throws TException;
     public void queryScoreTrade(ScoreTradeQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<AsyncClient.queryScoreTrade_call> resultHandler) throws TException;
+    public void queryScoreUser(ScoreUserQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<AsyncClient.queryScoreUser_call> resultHandler) throws TException;
+    public void queryCachAmount(CachAmountQueryParam param, AsyncMethodCallback<AsyncClient.queryCachAmount_call> resultHandler) throws TException;
+    public void cachAmountCall(CachAmountCallParam param, AsyncMethodCallback<AsyncClient.cachAmountCall_call> resultHandler) throws TException;
+    public void enterAmountCall(ScoreRequestParam param, AsyncMethodCallback<AsyncClient.enterAmountCall_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
@@ -55,6 +63,10 @@ public class ScoreServ {
     public Future<com.jfshare.finagle.thrift.result.StringResult> expenditure(ScoreTrade scoreTrade);
     public Future<ScoreResult> getScore(int userId);
     public Future<ScoreTradeResult> queryScoreTrade(ScoreTradeQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination);
+    public Future<ScoreUserResult> queryScoreUser(ScoreUserQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination);
+    public Future<CachAmountResult> queryCachAmount(CachAmountQueryParam param);
+    public Future<StatusResult> cachAmountCall(CachAmountCallParam param);
+    public Future<ResponseScoreResult> enterAmountCall(ScoreRequestParam param);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -235,6 +247,147 @@ public class ScoreServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryScoreTrade failed: unknown result");
     }
+    public ScoreUserResult queryScoreUser(ScoreUserQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException
+    {
+      send_queryScoreUser(param, pagination);
+      return recv_queryScoreUser();
+    }
+
+    public void send_queryScoreUser(ScoreUserQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("queryScoreUser", TMessageType.CALL, ++seqid_));
+      queryScoreUser_args args = new queryScoreUser_args();
+      args.setParam(param);
+      args.setPagination(pagination);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public ScoreUserResult recv_queryScoreUser() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "queryScoreUser failed: out of sequence response");
+      }
+      queryScoreUser_result result = new queryScoreUser_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryScoreUser failed: unknown result");
+    }
+    public CachAmountResult queryCachAmount(CachAmountQueryParam param) throws TException
+    {
+      send_queryCachAmount(param);
+      return recv_queryCachAmount();
+    }
+
+    public void send_queryCachAmount(CachAmountQueryParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("queryCachAmount", TMessageType.CALL, ++seqid_));
+      queryCachAmount_args args = new queryCachAmount_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public CachAmountResult recv_queryCachAmount() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "queryCachAmount failed: out of sequence response");
+      }
+      queryCachAmount_result result = new queryCachAmount_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryCachAmount failed: unknown result");
+    }
+    public StatusResult cachAmountCall(CachAmountCallParam param) throws TException
+    {
+      send_cachAmountCall(param);
+      return recv_cachAmountCall();
+    }
+
+    public void send_cachAmountCall(CachAmountCallParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("cachAmountCall", TMessageType.CALL, ++seqid_));
+      cachAmountCall_args args = new cachAmountCall_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public StatusResult recv_cachAmountCall() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "cachAmountCall failed: out of sequence response");
+      }
+      cachAmountCall_result result = new cachAmountCall_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "cachAmountCall failed: unknown result");
+    }
+    public ResponseScoreResult enterAmountCall(ScoreRequestParam param) throws TException
+    {
+      send_enterAmountCall(param);
+      return recv_enterAmountCall();
+    }
+
+    public void send_enterAmountCall(ScoreRequestParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("enterAmountCall", TMessageType.CALL, ++seqid_));
+      enterAmountCall_args args = new enterAmountCall_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public ResponseScoreResult recv_enterAmountCall() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "enterAmountCall failed: out of sequence response");
+      }
+      enterAmountCall_result result = new enterAmountCall_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "enterAmountCall failed: unknown result");
+    }
   }
 
   public static class AsyncClient extends TAsyncClient implements AsyncIface {
@@ -381,6 +534,133 @@ public class ScoreServ {
         return (new Client(prot)).recv_queryScoreTrade();
       }
      }
+    public void queryScoreUser(ScoreUserQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<queryScoreUser_call> resultHandler) throws TException {
+      checkReady();
+      queryScoreUser_call method_call = new queryScoreUser_call(param, pagination, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class queryScoreUser_call extends TAsyncMethodCall {
+      private ScoreUserQueryParam param;
+      private com.jfshare.finagle.thrift.pagination.Pagination pagination;
+
+      public queryScoreUser_call(ScoreUserQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<queryScoreUser_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+        this.pagination = pagination;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("queryScoreUser", TMessageType.CALL, 0));
+        queryScoreUser_args args = new queryScoreUser_args();
+        args.setParam(param);
+        args.setPagination(pagination);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ScoreUserResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_queryScoreUser();
+      }
+     }
+    public void queryCachAmount(CachAmountQueryParam param, AsyncMethodCallback<queryCachAmount_call> resultHandler) throws TException {
+      checkReady();
+      queryCachAmount_call method_call = new queryCachAmount_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class queryCachAmount_call extends TAsyncMethodCall {
+      private CachAmountQueryParam param;
+
+      public queryCachAmount_call(CachAmountQueryParam param, AsyncMethodCallback<queryCachAmount_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("queryCachAmount", TMessageType.CALL, 0));
+        queryCachAmount_args args = new queryCachAmount_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public CachAmountResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_queryCachAmount();
+      }
+     }
+    public void cachAmountCall(CachAmountCallParam param, AsyncMethodCallback<cachAmountCall_call> resultHandler) throws TException {
+      checkReady();
+      cachAmountCall_call method_call = new cachAmountCall_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class cachAmountCall_call extends TAsyncMethodCall {
+      private CachAmountCallParam param;
+
+      public cachAmountCall_call(CachAmountCallParam param, AsyncMethodCallback<cachAmountCall_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("cachAmountCall", TMessageType.CALL, 0));
+        cachAmountCall_args args = new cachAmountCall_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public StatusResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_cachAmountCall();
+      }
+     }
+    public void enterAmountCall(ScoreRequestParam param, AsyncMethodCallback<enterAmountCall_call> resultHandler) throws TException {
+      checkReady();
+      enterAmountCall_call method_call = new enterAmountCall_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class enterAmountCall_call extends TAsyncMethodCall {
+      private ScoreRequestParam param;
+
+      public enterAmountCall_call(ScoreRequestParam param, AsyncMethodCallback<enterAmountCall_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("enterAmountCall", TMessageType.CALL, 0));
+        enterAmountCall_args args = new enterAmountCall_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ResponseScoreResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_enterAmountCall();
+      }
+     }
    }
 
 
@@ -514,6 +794,127 @@ public class ScoreServ {
         return Future.exception(e);
       }
     }
+    public Future<ScoreUserResult> queryScoreUser(ScoreUserQueryParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("queryScoreUser", TMessageType.CALL, 0));
+        queryScoreUser_args __args__ = new queryScoreUser_args();
+        __args__.setParam(param);
+        __args__.setPagination(pagination);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<ScoreUserResult>>() {
+          public Future<ScoreUserResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_queryScoreUser());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<CachAmountResult> queryCachAmount(CachAmountQueryParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("queryCachAmount", TMessageType.CALL, 0));
+        queryCachAmount_args __args__ = new queryCachAmount_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<CachAmountResult>>() {
+          public Future<CachAmountResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_queryCachAmount());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<StatusResult> cachAmountCall(CachAmountCallParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("cachAmountCall", TMessageType.CALL, 0));
+        cachAmountCall_args __args__ = new cachAmountCall_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<StatusResult>>() {
+          public Future<StatusResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_cachAmountCall());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<ResponseScoreResult> enterAmountCall(ScoreRequestParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("enterAmountCall", TMessageType.CALL, 0));
+        enterAmountCall_args __args__ = new enterAmountCall_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<ResponseScoreResult>>() {
+          public Future<ResponseScoreResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_enterAmountCall());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
   }
 
   public static class Processor implements TProcessor {
@@ -525,6 +926,10 @@ public class ScoreServ {
       processMap_.put("expenditure", new expenditure());
       processMap_.put("getScore", new getScore());
       processMap_.put("queryScoreTrade", new queryScoreTrade());
+      processMap_.put("queryScoreUser", new queryScoreUser());
+      processMap_.put("queryCachAmount", new queryCachAmount());
+      processMap_.put("cachAmountCall", new cachAmountCall());
+      processMap_.put("enterAmountCall", new enterAmountCall());
     }
 
     protected static interface ProcessFunction {
@@ -647,6 +1052,106 @@ public class ScoreServ {
         result.success = iface_.queryScoreTrade(args.param, args.pagination);
         
         oprot.writeMessageBegin(new TMessage("queryScoreTrade", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class queryScoreUser implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        queryScoreUser_args args = new queryScoreUser_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("queryScoreUser", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        queryScoreUser_result result = new queryScoreUser_result();
+        result.success = iface_.queryScoreUser(args.param, args.pagination);
+        
+        oprot.writeMessageBegin(new TMessage("queryScoreUser", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class queryCachAmount implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        queryCachAmount_args args = new queryCachAmount_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("queryCachAmount", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        queryCachAmount_result result = new queryCachAmount_result();
+        result.success = iface_.queryCachAmount(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("queryCachAmount", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class cachAmountCall implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        cachAmountCall_args args = new cachAmountCall_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("cachAmountCall", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        cachAmountCall_result result = new cachAmountCall_result();
+        result.success = iface_.cachAmountCall(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("cachAmountCall", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class enterAmountCall implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        enterAmountCall_args args = new enterAmountCall_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("enterAmountCall", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        enterAmountCall_result result = new enterAmountCall_result();
+        result.success = iface_.enterAmountCall(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("enterAmountCall", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -911,6 +1416,274 @@ public class ScoreServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("queryScoreTrade", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("queryScoreUser", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          queryScoreUser_args args = new queryScoreUser_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("queryScoreUser", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<ScoreUserResult> future;
+          try {
+            future = iface.queryScoreUser(args.param, args.pagination);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<ScoreUserResult, Future<byte[]>>() {
+              public Future<byte[]> apply(ScoreUserResult value) {
+                queryScoreUser_result result = new queryScoreUser_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("queryScoreUser", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("queryCachAmount", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          queryCachAmount_args args = new queryCachAmount_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("queryCachAmount", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<CachAmountResult> future;
+          try {
+            future = iface.queryCachAmount(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<CachAmountResult, Future<byte[]>>() {
+              public Future<byte[]> apply(CachAmountResult value) {
+                queryCachAmount_result result = new queryCachAmount_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("queryCachAmount", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("cachAmountCall", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          cachAmountCall_args args = new cachAmountCall_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("cachAmountCall", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<StatusResult> future;
+          try {
+            future = iface.cachAmountCall(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<StatusResult, Future<byte[]>>() {
+              public Future<byte[]> apply(StatusResult value) {
+                cachAmountCall_result result = new cachAmountCall_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("cachAmountCall", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("enterAmountCall", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          enterAmountCall_args args = new enterAmountCall_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("enterAmountCall", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<ResponseScoreResult> future;
+          try {
+            future = iface.enterAmountCall(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<ResponseScoreResult, Future<byte[]>>() {
+              public Future<byte[]> apply(ResponseScoreResult value) {
+                enterAmountCall_result result = new enterAmountCall_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("enterAmountCall", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -3327,6 +4100,2390 @@ public class ScoreServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("queryScoreTrade_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class queryScoreUser_args implements TBase<queryScoreUser_args, queryScoreUser_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryScoreUser_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)2);
+
+
+  public ScoreUserQueryParam param;
+  public com.jfshare.finagle.thrift.pagination.Pagination pagination;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param"),
+    PAGINATION((short)2, "pagination");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        case 2: // PAGINATION
+  	return PAGINATION;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ScoreUserQueryParam.class)));
+    tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryScoreUser_args.class, metaDataMap);
+  }
+
+
+  public queryScoreUser_args() {
+  }
+
+  public queryScoreUser_args(
+    ScoreUserQueryParam param,
+    com.jfshare.finagle.thrift.pagination.Pagination pagination)
+  {
+    this();
+    this.param = param;
+    this.pagination = pagination;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryScoreUser_args(queryScoreUser_args other) {
+    if (other.isSetParam()) {
+      this.param = new ScoreUserQueryParam(other.param);
+    }
+    if (other.isSetPagination()) {
+      this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
+    }
+  }
+
+  public queryScoreUser_args deepCopy() {
+    return new queryScoreUser_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+    this.pagination = null;
+  }
+
+  public ScoreUserQueryParam getParam() {
+    return this.param;
+  }
+
+  public queryScoreUser_args setParam(ScoreUserQueryParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public com.jfshare.finagle.thrift.pagination.Pagination getPagination() {
+    return this.pagination;
+  }
+
+  public queryScoreUser_args setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
+    this.pagination = pagination;
+    
+    return this;
+  }
+
+  public void unsetPagination() {
+    this.pagination = null;
+  }
+
+  /** Returns true if field pagination is set (has been asigned a value) and false otherwise */
+  public boolean isSetPagination() {
+    return this.pagination != null;
+  }
+
+  public void setPaginationIsSet(boolean value) {
+    if (!value) {
+      this.pagination = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((ScoreUserQueryParam)value);
+      }
+      break;
+    case PAGINATION:
+      if (value == null) {
+        unsetPagination();
+      } else {
+        setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    case PAGINATION:
+      return getPagination();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    case PAGINATION:
+      return isSetPagination();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryScoreUser_args)
+      return this.equals((queryScoreUser_args)that);
+    return false;
+  }
+
+  public boolean equals(queryScoreUser_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+    boolean this_present_pagination = true && this.isSetPagination();
+    boolean that_present_pagination = true && that.isSetPagination();
+    if (this_present_pagination || that_present_pagination) {
+      if (!(this_present_pagination && that_present_pagination))
+        return false;
+      if (!this.pagination.equals(that.pagination))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    boolean present_pagination = true && (isSetPagination());
+    builder.append(present_pagination);
+    if (present_pagination)
+      builder.append(pagination);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryScoreUser_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryScoreUser_args typedOther = (queryScoreUser_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPagination()).compareTo(typedOther.isSetPagination());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPagination()) {
+      lastComparison = TBaseHelper.compareTo(this.pagination, typedOther.pagination);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new ScoreUserQueryParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // PAGINATION
+          if (field.type == TType.STRUCT) {
+            this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination();
+            this.pagination.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.pagination != null) {
+      oprot.writeFieldBegin(PAGINATION_FIELD_DESC);
+      this.pagination.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryScoreUser_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("pagination:");
+    if (this.pagination == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.pagination);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class queryScoreUser_result implements TBase<queryScoreUser_result, queryScoreUser_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryScoreUser_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public ScoreUserResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ScoreUserResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryScoreUser_result.class, metaDataMap);
+  }
+
+
+  public queryScoreUser_result() {
+  }
+
+  public queryScoreUser_result(
+    ScoreUserResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryScoreUser_result(queryScoreUser_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new ScoreUserResult(other.success);
+    }
+  }
+
+  public queryScoreUser_result deepCopy() {
+    return new queryScoreUser_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public ScoreUserResult getSuccess() {
+    return this.success;
+  }
+
+  public queryScoreUser_result setSuccess(ScoreUserResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((ScoreUserResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryScoreUser_result)
+      return this.equals((queryScoreUser_result)that);
+    return false;
+  }
+
+  public boolean equals(queryScoreUser_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryScoreUser_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryScoreUser_result typedOther = (queryScoreUser_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new ScoreUserResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryScoreUser_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class queryCachAmount_args implements TBase<queryCachAmount_args, queryCachAmount_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryCachAmount_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public CachAmountQueryParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, CachAmountQueryParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryCachAmount_args.class, metaDataMap);
+  }
+
+
+  public queryCachAmount_args() {
+  }
+
+  public queryCachAmount_args(
+    CachAmountQueryParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryCachAmount_args(queryCachAmount_args other) {
+    if (other.isSetParam()) {
+      this.param = new CachAmountQueryParam(other.param);
+    }
+  }
+
+  public queryCachAmount_args deepCopy() {
+    return new queryCachAmount_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public CachAmountQueryParam getParam() {
+    return this.param;
+  }
+
+  public queryCachAmount_args setParam(CachAmountQueryParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((CachAmountQueryParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryCachAmount_args)
+      return this.equals((queryCachAmount_args)that);
+    return false;
+  }
+
+  public boolean equals(queryCachAmount_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryCachAmount_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryCachAmount_args typedOther = (queryCachAmount_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new CachAmountQueryParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryCachAmount_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class queryCachAmount_result implements TBase<queryCachAmount_result, queryCachAmount_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryCachAmount_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public CachAmountResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, CachAmountResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryCachAmount_result.class, metaDataMap);
+  }
+
+
+  public queryCachAmount_result() {
+  }
+
+  public queryCachAmount_result(
+    CachAmountResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryCachAmount_result(queryCachAmount_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new CachAmountResult(other.success);
+    }
+  }
+
+  public queryCachAmount_result deepCopy() {
+    return new queryCachAmount_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public CachAmountResult getSuccess() {
+    return this.success;
+  }
+
+  public queryCachAmount_result setSuccess(CachAmountResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((CachAmountResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryCachAmount_result)
+      return this.equals((queryCachAmount_result)that);
+    return false;
+  }
+
+  public boolean equals(queryCachAmount_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryCachAmount_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryCachAmount_result typedOther = (queryCachAmount_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new CachAmountResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryCachAmount_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class cachAmountCall_args implements TBase<cachAmountCall_args, cachAmountCall_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("cachAmountCall_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public CachAmountCallParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, CachAmountCallParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(cachAmountCall_args.class, metaDataMap);
+  }
+
+
+  public cachAmountCall_args() {
+  }
+
+  public cachAmountCall_args(
+    CachAmountCallParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public cachAmountCall_args(cachAmountCall_args other) {
+    if (other.isSetParam()) {
+      this.param = new CachAmountCallParam(other.param);
+    }
+  }
+
+  public cachAmountCall_args deepCopy() {
+    return new cachAmountCall_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public CachAmountCallParam getParam() {
+    return this.param;
+  }
+
+  public cachAmountCall_args setParam(CachAmountCallParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((CachAmountCallParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof cachAmountCall_args)
+      return this.equals((cachAmountCall_args)that);
+    return false;
+  }
+
+  public boolean equals(cachAmountCall_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(cachAmountCall_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    cachAmountCall_args typedOther = (cachAmountCall_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new CachAmountCallParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("cachAmountCall_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class cachAmountCall_result implements TBase<cachAmountCall_result, cachAmountCall_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("cachAmountCall_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public StatusResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, StatusResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(cachAmountCall_result.class, metaDataMap);
+  }
+
+
+  public cachAmountCall_result() {
+  }
+
+  public cachAmountCall_result(
+    StatusResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public cachAmountCall_result(cachAmountCall_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new StatusResult(other.success);
+    }
+  }
+
+  public cachAmountCall_result deepCopy() {
+    return new cachAmountCall_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public StatusResult getSuccess() {
+    return this.success;
+  }
+
+  public cachAmountCall_result setSuccess(StatusResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((StatusResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof cachAmountCall_result)
+      return this.equals((cachAmountCall_result)that);
+    return false;
+  }
+
+  public boolean equals(cachAmountCall_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(cachAmountCall_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    cachAmountCall_result typedOther = (cachAmountCall_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new StatusResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("cachAmountCall_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class enterAmountCall_args implements TBase<enterAmountCall_args, enterAmountCall_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("enterAmountCall_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public ScoreRequestParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ScoreRequestParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(enterAmountCall_args.class, metaDataMap);
+  }
+
+
+  public enterAmountCall_args() {
+  }
+
+  public enterAmountCall_args(
+    ScoreRequestParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public enterAmountCall_args(enterAmountCall_args other) {
+    if (other.isSetParam()) {
+      this.param = new ScoreRequestParam(other.param);
+    }
+  }
+
+  public enterAmountCall_args deepCopy() {
+    return new enterAmountCall_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public ScoreRequestParam getParam() {
+    return this.param;
+  }
+
+  public enterAmountCall_args setParam(ScoreRequestParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((ScoreRequestParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof enterAmountCall_args)
+      return this.equals((enterAmountCall_args)that);
+    return false;
+  }
+
+  public boolean equals(enterAmountCall_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(enterAmountCall_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    enterAmountCall_args typedOther = (enterAmountCall_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new ScoreRequestParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("enterAmountCall_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class enterAmountCall_result implements TBase<enterAmountCall_result, enterAmountCall_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("enterAmountCall_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public ResponseScoreResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ResponseScoreResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(enterAmountCall_result.class, metaDataMap);
+  }
+
+
+  public enterAmountCall_result() {
+  }
+
+  public enterAmountCall_result(
+    ResponseScoreResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public enterAmountCall_result(enterAmountCall_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new ResponseScoreResult(other.success);
+    }
+  }
+
+  public enterAmountCall_result deepCopy() {
+    return new enterAmountCall_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public ResponseScoreResult getSuccess() {
+    return this.success;
+  }
+
+  public enterAmountCall_result setSuccess(ResponseScoreResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((ResponseScoreResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof enterAmountCall_result)
+      return this.equals((enterAmountCall_result)that);
+    return false;
+  }
+
+  public boolean equals(enterAmountCall_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(enterAmountCall_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    enterAmountCall_result typedOther = (enterAmountCall_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new ResponseScoreResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("enterAmountCall_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
