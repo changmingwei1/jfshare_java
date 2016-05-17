@@ -559,16 +559,18 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
             SubjectTreeResult subjectTreeResult = subjectClient.getSuperTree(productSurvey.getSubjectId());
             List<String> keyList = ProductUtil.buildProductListRK(subjectTreeResult, productSurvey.getBrandId());
             for(String key : keyList){
-                productRedis.removeProductListMember(key, JSON.toJSONString(productSurvey));
+//                productRedis.removeProductListMember(key, JSON.toJSONString(productSurvey));
+                baseRedis.removeKV(key);
             }
 
-            productSurvey = productDaoImpl.productSurveyQueryById(productSurveyQueryParam);
+            /*productSurvey = productDaoImpl.productSurveyQueryById(productSurveyQueryParam);
             for(String key : keyList){
                 Set<String> productSet = productRedis.getProductList(key);
                 if(productSet != null && productSet.size() > 0){
                     productRedis.setProductListMember(key, JSON.toJSONString(productSurvey), ProductUtil.getScore(key, productSurvey));
                 }
-            }
+            }*/
+
             /*//es中增加
     		ESProductInfo eSProductInfo = new ESProductInfo();
     		eSProductInfo.setProductId(productSurvey.getProductId());
