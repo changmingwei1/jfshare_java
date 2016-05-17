@@ -90,11 +90,11 @@ public class ProductService {
 		LOGGER.info(param + ",getProductSkuInfo接口调用时间：" + (System.currentTimeMillis() - doneTime) + " ms!!");
 		return p;
 	}
-	
+
 	public GoodsInfo getGoods(CartInfo cart){
 		if(cart == null)
 			return null;
-		
+
 		cart.setSkuNum(cart.getSkuNum() == null ? "" : cart.getSkuNum());
 
 		ProductRetParam pParam = new ProductRetParam(1, 0, 1, 0);
@@ -121,7 +121,7 @@ public class ProductService {
 			LOGGER.info(cart.getUserId() + "," + cart.getField() + ",getStockForSku库存信息返回错误");
 			return null;
 		}
-		
+
 		GoodsInfo goods = new GoodsInfo();
 		goods.setCount(cart.getCount());
 		goods.setLongTime(cart.getLongTime());
@@ -143,18 +143,20 @@ public class ProductService {
 		//填充productSku
 		productSku.setSkuNum(cart.getSkuNum());
 		//SKU
-		if(pHotSku.getProductSku() == null){	//SKU不存在，此商品失效
+		if(CollectionUtils.isEmpty(pHotSku.getProductSku().getSkuItems())){	//SKU不存在，此商品失效
 			goods.setInvalidProductInfo(itemPlus);
 		}else{
-			productSku.setCurPrice(pHotSku.getProductSku().getCurPrice());
+			/*productSku.setCurPrice(pHotSku.getProductSku().getCurPrice());
 			productSku.setOrgPrice(pHotSku.getProductSku().getOrgPrice());
 			if(!StringUtil.empty(pHotSku.getProductSku().getVPicture())) {
 				productSku.setVPicture(pHotSku.getProductSku().getVPicture());
 			}
-			productSku.setSkuName(pHotSku.getProductSku().getSkuName());
+			productSku.setSkuName(pHotSku.getProductSku().getSkuName());*/
+//			productSku.setSkuItems(pHotSku.getProductSku().getSkuItems());
+			product.setProductSku(pHotSku.getProductSku());
 			itemPlus.setSkuCount(stockForSku.getTotal()); //当前sku库存数
 			itemPlus.setLockCount(stockForSku.getLockTotal()); //当前sku锁定库存数
-			
+			itemPlus.setProduct(product);
 			goods.setProductInfo(itemPlus);
 		}
 
