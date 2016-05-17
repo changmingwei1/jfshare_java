@@ -989,13 +989,13 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         case 9: // SUBJECT_ID_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list4 = iprot.readListBegin();
-            this.subjectIdList = new ArrayList<Integer>(_list4.size);
-            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
+            TList _list8 = iprot.readListBegin();
+            this.subjectIdList = new ArrayList<Integer>(_list8.size);
+            for (int _i9 = 0; _i9 < _list8.size; ++_i9)
             {
-              int _elem6;
-              _elem6 = iprot.readI32();
-              this.subjectIdList.add(_elem6);
+              int _elem10;
+              _elem10 = iprot.readI32();
+              this.subjectIdList.add(_elem10);
             }
             iprot.readListEnd();
             }
@@ -1006,13 +1006,13 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         case 10: // PRODUCT_ID_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list7 = iprot.readListBegin();
-            this.productIdList = new ArrayList<String>(_list7.size);
-            for (int _i8 = 0; _i8 < _list7.size; ++_i8)
+            TList _list11 = iprot.readListBegin();
+            this.productIdList = new ArrayList<String>(_list11.size);
+            for (int _i12 = 0; _i12 < _list11.size; ++_i12)
             {
-              String _elem9;
-              _elem9 = iprot.readString();
-              this.productIdList.add(_elem9);
+              String _elem13;
+              _elem13 = iprot.readString();
+              this.productIdList.add(_elem13);
             }
             iprot.readListEnd();
             }
@@ -1086,9 +1086,9 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         oprot.writeFieldBegin(SUBJECT_ID_LIST_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.I32, this.subjectIdList.size()));
-          for (int _iter10 : this.subjectIdList)
+          for (int _iter14 : this.subjectIdList)
           {
-            oprot.writeI32(_iter10);
+            oprot.writeI32(_iter14);
           }
           oprot.writeListEnd();
         }
@@ -1100,9 +1100,9 @@ public class ProductSurveyQueryParam implements TBase<ProductSurveyQueryParam, P
         oprot.writeFieldBegin(PRODUCT_ID_LIST_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRING, this.productIdList.size()));
-          for (String _iter11 : this.productIdList)
+          for (String _iter15 : this.productIdList)
           {
-            oprot.writeString(_iter11);
+            oprot.writeString(_iter15);
           }
           oprot.writeListEnd();
         }

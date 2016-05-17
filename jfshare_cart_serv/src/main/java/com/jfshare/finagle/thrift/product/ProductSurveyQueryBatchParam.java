@@ -361,13 +361,13 @@ public class ProductSurveyQueryBatchParam implements TBase<ProductSurveyQueryBat
         case 1: // PRODUCT_IDS
           if (field.type == TType.LIST) {
             {
-            TList _list12 = iprot.readListBegin();
-            this.productIds = new ArrayList<String>(_list12.size);
-            for (int _i13 = 0; _i13 < _list12.size; ++_i13)
+            TList _list16 = iprot.readListBegin();
+            this.productIds = new ArrayList<String>(_list16.size);
+            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
             {
-              String _elem14;
-              _elem14 = iprot.readString();
-              this.productIds.add(_elem14);
+              String _elem18;
+              _elem18 = iprot.readString();
+              this.productIds.add(_elem18);
             }
             iprot.readListEnd();
             }
@@ -402,9 +402,9 @@ public class ProductSurveyQueryBatchParam implements TBase<ProductSurveyQueryBat
       oprot.writeFieldBegin(PRODUCT_IDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.productIds.size()));
-        for (String _iter15 : this.productIds)
+        for (String _iter19 : this.productIds)
         {
-          oprot.writeString(_iter15);
+          oprot.writeString(_iter19);
         }
         oprot.writeListEnd();
       }
