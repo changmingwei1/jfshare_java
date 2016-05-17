@@ -128,9 +128,12 @@ public class ProductRedisImpl implements ProductRedis{
         for (String key : cacheSkuMap.keySet()) {
             if(key.endsWith(skuNum)) {
                 ProductSkuItem productSkuItem = JsonMapper.toObject(cacheSkuMap.get(key), ProductSkuItem.class);
-                Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(productSkuItem);
+               /* Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(productSkuItem);
                 ProductSku productSku = new ProductSku();
                 BeanUtil.fillBeanData(productSku, stringObjectMap);
+                productSku.setSkuNum(skuNum);*/
+                ProductSku productSku = new ProductSku();
+                productSku.addToSkuItems(productSkuItem);
                 productSku.setSkuNum(skuNum);
                 return productSku;
             }
@@ -145,12 +148,12 @@ public class ProductRedisImpl implements ProductRedis{
             return null;
         }
         ProductSkuItem productSkuItem = JsonMapper.toObject(productSkuItemJson, ProductSkuItem.class);
-        Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(productSkuItem);
+       /* Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(productSkuItem);
         ProductSku productSku = new ProductSku();
-        BeanUtil.fillBeanData(productSku, stringObjectMap);
-        /*ProductSku productSku = new ProductSku();
+        BeanUtil.fillBeanData(productSku, stringObjectMap);*/
+        ProductSku productSku = new ProductSku();
         productSku.addToSkuItems(productSkuItem);
-        productSku.setSkuNum(skuNum);*/
+        productSku.setSkuNum(skuNum);
         return productSku;
     }
 

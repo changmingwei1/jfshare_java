@@ -97,7 +97,7 @@ public class ProductService {
 		
 		cart.setSkuNum(cart.getSkuNum() == null ? "" : cart.getSkuNum());
 
-		ProductRetParam pParam = new ProductRetParam(1, 0, 0, 0);
+		ProductRetParam pParam = new ProductRetParam(1, 0, 1, 0);
 		Product pHotSku = productClient.queryHotSKU(cart.getProductId(), cart.getSkuNum(), pParam);
 		if(pHotSku == null){
 			LOGGER.info(cart.getUserId() + "," + cart.getField() + ",queryHotSKU查询商品指定sku返回错误");

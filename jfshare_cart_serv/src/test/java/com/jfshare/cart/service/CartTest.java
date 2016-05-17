@@ -22,7 +22,8 @@ public class CartTest {
 
 	private CartServ.Client client;
 
-	 private static final String IP = "127.0.0.1";
+//	 private static final String IP = "127.0.0.1";
+	 private static final String IP = "120.24.153.155";
 
 	private static final Integer PORT = 1992;
 
@@ -149,9 +150,11 @@ public class CartTest {
 			for (int i = 0; i < 1; i++) {
 				// 45923658 压测用户； 淘老大361125
 				// 47763855 线上用户：淘学小二
-				CartResult result = client.listItem("2", 1);
+				CartResult result = client.listItem("318", 1);
 				System.out.println(result.getResult().getCode() + "---" + result.getItemList().size() + "---"
 						+ result.getInvalidItemList().size());
+				System.out.println(result.toString());
+				System.out.println(result.getItemList().get(0).getItemDetailList().get(0).getProduct().getProduct().getProductSku().getSkuItems().get(0));
 			}
 
 		} catch (Exception e) {

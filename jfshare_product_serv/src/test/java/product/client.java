@@ -205,6 +205,13 @@ public class client {
     }
 
     @Test
+    public void testQueryHotSKU() throws Exception {
+        ProductRetParam param = new ProductRetParam();
+        param.setSkuTag(1);
+        System.out.println(this.client.queryHotSKU("ze160515153359000306", "1-1:100-101", param));
+    }
+
+    @Test
     public void testHttp() throws Exception {
 //        String m = HttpUtils.httpPostUTF8("http://sandbox.womaiapp.com/api/rest?method=womai.inventory.get&appkey=425113&sign=D47441A31A305C595C68C3FA4DD74B46&param=%7b%22skuids%22%3a+%225178122%22%7d", null);
 
@@ -218,4 +225,6 @@ public class client {
         String str = HttpUtils.httpPostUTF8("http://sandbox.womaiapp.com/api/rest?method=womai.inventory.get&appkey=425113&sign=D47441A31A305C595C68C3FA4DD74B46&param=%7b%22skuids%22%3a+%225178122%22%7d", null);
         System.out.println(str);
     }
+
+
 }
