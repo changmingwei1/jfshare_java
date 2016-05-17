@@ -45,6 +45,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   private static final TField VICE_NAME_FIELD_DESC = new TField("viceName", TType.STRING, (short)11);
   private static final TField CREATE_TIME_FIELD_DESC = new TField("createTime", TType.STRING, (short)12);
   private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)13);
+  private static final TField TYPE_FIELD_DESC = new TField("type", TType.I32, (short)14);
+  private static final TField CLICK_RATE_FIELD_DESC = new TField("clickRate", TType.I64, (short)15);
+  private static final TField STOREHOUSE_IDS_FIELD_DESC = new TField("storehouseIds", TType.STRING, (short)16);
+  private static final TField POSTAGE_ID_FIELD_DESC = new TField("postageId", TType.I32, (short)17);
 
 
   public String productId;
@@ -60,6 +64,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   public String viceName;
   public String createTime;
   public int sellerId;
+  public int type;
+  public long clickRate;
+  public String storehouseIds;
+  public int postageId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -75,7 +83,11 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     IMG_URL((short)10, "imgUrl"),
     VICE_NAME((short)11, "viceName"),
     CREATE_TIME((short)12, "createTime"),
-    SELLER_ID((short)13, "sellerId");
+    SELLER_ID((short)13, "sellerId"),
+    TYPE((short)14, "type"),
+    CLICK_RATE((short)15, "clickRate"),
+    STOREHOUSE_IDS((short)16, "storehouseIds"),
+    POSTAGE_ID((short)17, "postageId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -116,6 +128,14 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   	return CREATE_TIME;
         case 13: // SELLER_ID
   	return SELLER_ID;
+        case 14: // TYPE
+  	return TYPE;
+        case 15: // CLICK_RATE
+  	return CLICK_RATE;
+        case 16: // STOREHOUSE_IDS
+  	return STOREHOUSE_IDS;
+        case 17: // POSTAGE_ID
+  	return POSTAGE_ID;
         default:
   	return null;
       }
@@ -163,7 +183,10 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
   private static final int __TOTALSALES_ISSET_ID = 3;
   private static final int __ACTIVESTATE_ISSET_ID = 4;
   private static final int __SELLERID_ISSET_ID = 5;
-  private BitSet __isset_bit_vector = new BitSet(6);
+  private static final int __TYPE_ISSET_ID = 6;
+  private static final int __CLICKRATE_ISSET_ID = 7;
+  private static final int __POSTAGEID_ISSET_ID = 8;
+  private BitSet __isset_bit_vector = new BitSet(9);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -193,6 +216,14 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     tmpMap.put(_Fields.CREATE_TIME, new FieldMetaData("createTime", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.TYPE, new FieldMetaData("type", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.CLICK_RATE, new FieldMetaData("clickRate", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I64)));
+    tmpMap.put(_Fields.STOREHOUSE_IDS, new FieldMetaData("storehouseIds", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.POSTAGE_ID, new FieldMetaData("postageId", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductSurvey.class, metaDataMap);
@@ -265,6 +296,12 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       this.createTime = other.createTime;
     }
     this.sellerId = other.sellerId;
+    this.type = other.type;
+    this.clickRate = other.clickRate;
+    if (other.isSetStorehouseIds()) {
+      this.storehouseIds = other.storehouseIds;
+    }
+    this.postageId = other.postageId;
   }
 
   public ProductSurvey deepCopy() {
@@ -292,6 +329,13 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     this.createTime = null;
     setSellerIdIsSet(false);
     this.sellerId = 0;
+    setTypeIsSet(false);
+    this.type = 0;
+    setClickRateIsSet(false);
+    this.clickRate = 0;
+    this.storehouseIds = null;
+    setPostageIdIsSet(false);
+    this.postageId = 0;
   }
 
   public String getProductId() {
@@ -613,6 +657,103 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     __isset_bit_vector.set(__SELLERID_ISSET_ID, value);
   }
 
+  public int getType() {
+    return this.type;
+  }
+
+  public ProductSurvey setType(int type) {
+    this.type = type;
+    setTypeIsSet(true);
+
+    return this;
+  }
+
+  public void unsetType() {
+  __isset_bit_vector.clear(__TYPE_ISSET_ID);
+  }
+
+  /** Returns true if field type is set (has been asigned a value) and false otherwise */
+  public boolean isSetType() {
+    return __isset_bit_vector.get(__TYPE_ISSET_ID);
+  }
+
+  public void setTypeIsSet(boolean value) {
+    __isset_bit_vector.set(__TYPE_ISSET_ID, value);
+  }
+
+  public long getClickRate() {
+    return this.clickRate;
+  }
+
+  public ProductSurvey setClickRate(long clickRate) {
+    this.clickRate = clickRate;
+    setClickRateIsSet(true);
+
+    return this;
+  }
+
+  public void unsetClickRate() {
+  __isset_bit_vector.clear(__CLICKRATE_ISSET_ID);
+  }
+
+  /** Returns true if field clickRate is set (has been asigned a value) and false otherwise */
+  public boolean isSetClickRate() {
+    return __isset_bit_vector.get(__CLICKRATE_ISSET_ID);
+  }
+
+  public void setClickRateIsSet(boolean value) {
+    __isset_bit_vector.set(__CLICKRATE_ISSET_ID, value);
+  }
+
+  public String getStorehouseIds() {
+    return this.storehouseIds;
+  }
+
+  public ProductSurvey setStorehouseIds(String storehouseIds) {
+    this.storehouseIds = storehouseIds;
+    
+    return this;
+  }
+
+  public void unsetStorehouseIds() {
+    this.storehouseIds = null;
+  }
+
+  /** Returns true if field storehouseIds is set (has been asigned a value) and false otherwise */
+  public boolean isSetStorehouseIds() {
+    return this.storehouseIds != null;
+  }
+
+  public void setStorehouseIdsIsSet(boolean value) {
+    if (!value) {
+      this.storehouseIds = null;
+    }
+  }
+
+  public int getPostageId() {
+    return this.postageId;
+  }
+
+  public ProductSurvey setPostageId(int postageId) {
+    this.postageId = postageId;
+    setPostageIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetPostageId() {
+  __isset_bit_vector.clear(__POSTAGEID_ISSET_ID);
+  }
+
+  /** Returns true if field postageId is set (has been asigned a value) and false otherwise */
+  public boolean isSetPostageId() {
+    return __isset_bit_vector.get(__POSTAGEID_ISSET_ID);
+  }
+
+  public void setPostageIdIsSet(boolean value) {
+    __isset_bit_vector.set(__POSTAGEID_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -706,6 +847,34 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
         setSellerId((Integer)value);
       }
       break;
+    case TYPE:
+      if (value == null) {
+        unsetType();
+      } else {
+        setType((Integer)value);
+      }
+      break;
+    case CLICK_RATE:
+      if (value == null) {
+        unsetClickRate();
+      } else {
+        setClickRate((Long)value);
+      }
+      break;
+    case STOREHOUSE_IDS:
+      if (value == null) {
+        unsetStorehouseIds();
+      } else {
+        setStorehouseIds((String)value);
+      }
+      break;
+    case POSTAGE_ID:
+      if (value == null) {
+        unsetPostageId();
+      } else {
+        setPostageId((Integer)value);
+      }
+      break;
     }
   }
 
@@ -737,6 +906,14 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       return getCreateTime();
     case SELLER_ID:
       return new Integer(getSellerId());
+    case TYPE:
+      return new Integer(getType());
+    case CLICK_RATE:
+      return new Long(getClickRate());
+    case STOREHOUSE_IDS:
+      return getStorehouseIds();
+    case POSTAGE_ID:
+      return new Integer(getPostageId());
     }
     throw new IllegalStateException();
   }
@@ -774,6 +951,14 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       return isSetCreateTime();
     case SELLER_ID:
       return isSetSellerId();
+    case TYPE:
+      return isSetType();
+    case CLICK_RATE:
+      return isSetClickRate();
+    case STOREHOUSE_IDS:
+      return isSetStorehouseIds();
+    case POSTAGE_ID:
+      return isSetPostageId();
     }
     throw new IllegalStateException();
   }
@@ -894,6 +1079,38 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       if (this.sellerId != that.sellerId)
         return false;
     }
+    boolean this_present_type = true && this.isSetType();
+    boolean that_present_type = true && that.isSetType();
+    if (this_present_type || that_present_type) {
+      if (!(this_present_type && that_present_type))
+        return false;
+      if (this.type != that.type)
+        return false;
+    }
+    boolean this_present_clickRate = true && this.isSetClickRate();
+    boolean that_present_clickRate = true && that.isSetClickRate();
+    if (this_present_clickRate || that_present_clickRate) {
+      if (!(this_present_clickRate && that_present_clickRate))
+        return false;
+      if (this.clickRate != that.clickRate)
+        return false;
+    }
+    boolean this_present_storehouseIds = true && this.isSetStorehouseIds();
+    boolean that_present_storehouseIds = true && that.isSetStorehouseIds();
+    if (this_present_storehouseIds || that_present_storehouseIds) {
+      if (!(this_present_storehouseIds && that_present_storehouseIds))
+        return false;
+      if (!this.storehouseIds.equals(that.storehouseIds))
+        return false;
+    }
+    boolean this_present_postageId = true && this.isSetPostageId();
+    boolean that_present_postageId = true && that.isSetPostageId();
+    if (this_present_postageId || that_present_postageId) {
+      if (!(this_present_postageId && that_present_postageId))
+        return false;
+      if (this.postageId != that.postageId)
+        return false;
+    }
 
     return true;
   }
@@ -953,6 +1170,22 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     builder.append(present_sellerId);
     if (present_sellerId)
       builder.append(sellerId);
+    boolean present_type = true && (isSetType());
+    builder.append(present_type);
+    if (present_type)
+      builder.append(type);
+    boolean present_clickRate = true && (isSetClickRate());
+    builder.append(present_clickRate);
+    if (present_clickRate)
+      builder.append(clickRate);
+    boolean present_storehouseIds = true && (isSetStorehouseIds());
+    builder.append(present_storehouseIds);
+    if (present_storehouseIds)
+      builder.append(storehouseIds);
+    boolean present_postageId = true && (isSetPostageId());
+    builder.append(present_postageId);
+    if (present_postageId)
+      builder.append(postageId);
     return builder.toHashCode();
   }
 
@@ -1094,6 +1327,46 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetType()).compareTo(typedOther.isSetType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetType()) {
+      lastComparison = TBaseHelper.compareTo(this.type, typedOther.type);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetClickRate()).compareTo(typedOther.isSetClickRate());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetClickRate()) {
+      lastComparison = TBaseHelper.compareTo(this.clickRate, typedOther.clickRate);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetStorehouseIds()).compareTo(typedOther.isSetStorehouseIds());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetStorehouseIds()) {
+      lastComparison = TBaseHelper.compareTo(this.storehouseIds, typedOther.storehouseIds);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPostageId()).compareTo(typedOther.isSetPostageId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPostageId()) {
+      lastComparison = TBaseHelper.compareTo(this.postageId, typedOther.postageId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1209,6 +1482,37 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 14: // TYPE
+          if (field.type == TType.I32) {
+            this.type = iprot.readI32();
+            setTypeIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 15: // CLICK_RATE
+          if (field.type == TType.I64) {
+            this.clickRate = iprot.readI64();
+            setClickRateIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 16: // STOREHOUSE_IDS
+          if (field.type == TType.STRING) {
+            this.storehouseIds = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 17: // POSTAGE_ID
+          if (field.type == TType.I32) {
+            this.postageId = iprot.readI32();
+            setPostageIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -1281,6 +1585,28 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
     if (isSetSellerId()) {
       oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
       oprot.writeI32(this.sellerId);
+      oprot.writeFieldEnd();
+    }
+    if (isSetType()) {
+      oprot.writeFieldBegin(TYPE_FIELD_DESC);
+      oprot.writeI32(this.type);
+      oprot.writeFieldEnd();
+    }
+    if (isSetClickRate()) {
+      oprot.writeFieldBegin(CLICK_RATE_FIELD_DESC);
+      oprot.writeI64(this.clickRate);
+      oprot.writeFieldEnd();
+    }
+    if (this.storehouseIds != null) {
+      if (isSetStorehouseIds()) {
+        oprot.writeFieldBegin(STOREHOUSE_IDS_FIELD_DESC);
+        oprot.writeString(this.storehouseIds);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (isSetPostageId()) {
+      oprot.writeFieldBegin(POSTAGE_ID_FIELD_DESC);
+      oprot.writeI32(this.postageId);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -1374,6 +1700,34 @@ public class ProductSurvey implements TBase<ProductSurvey, ProductSurvey._Fields
       if (!first) sb.append(", ");
       sb.append("sellerId:");
       sb.append(this.sellerId);
+      first = false;
+      }
+    if (isSetType()) {
+      if (!first) sb.append(", ");
+      sb.append("type:");
+      sb.append(this.type);
+      first = false;
+      }
+    if (isSetClickRate()) {
+      if (!first) sb.append(", ");
+      sb.append("clickRate:");
+      sb.append(this.clickRate);
+      first = false;
+      }
+    if (isSetStorehouseIds()) {
+      if (!first) sb.append(", ");
+      sb.append("storehouseIds:");
+      if (this.storehouseIds == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.storehouseIds);
+      }
+      first = false;
+      }
+    if (isSetPostageId()) {
+      if (!first) sb.append(", ");
+      sb.append("postageId:");
+      sb.append(this.postageId);
       first = false;
       }
     sb.append(")");

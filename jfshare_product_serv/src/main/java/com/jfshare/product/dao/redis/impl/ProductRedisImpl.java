@@ -72,7 +72,7 @@ public class ProductRedisImpl implements ProductRedis{
 //        Map<String, ProductSkuItem> productSkuMap = new HashMap<String, ProductSkuItem>();
         List<ProductSkuItem> skuItems = new ArrayList<ProductSkuItem>();
         for(String key : cacheSkuMap.keySet()) {
-            if ("".endsWith(key)) {
+            if ("".equals(key)) {
                 productSku = JsonMapper.toObject(cacheSkuMap.get(key), ProductSku.class);
             } else {
                 ProductSkuItem productSkuItem = JsonMapper.toObject(cacheSkuMap.get(key), ProductSkuItem.class);
@@ -108,7 +108,7 @@ public class ProductRedisImpl implements ProductRedis{
 
     @Override
     public ProductSku getProductSkuSingle(String productId, String skuNum) {
-        String productSkuItemJson = baseRedis.getMap(ConstRedis.CACHE_PRODUCT_SKU_PREFIX + productId, skuNum);
+       /* String productSkuItemJson = baseRedis.getMap(ConstRedis.CACHE_PRODUCT_SKU_PREFIX + productId, skuNum);
         if(StringUtils.isBlank(productSkuItemJson)) {
             return null;
         }
@@ -117,7 +117,28 @@ public class ProductRedisImpl implements ProductRedis{
         ProductSku productSku = new ProductSku();
         BeanUtil.fillBeanData(productSku, stringObjectMap);
         productSku.setSkuNum(skuNum);
-        return productSku;
+        return productSku;*/
+
+        Map<String, String> cacheSkuMap = baseRedis.getMapAll(ConstRedis.CACHE_PRODUCT_SKU_PREFIX + productId);
+        if(MapUtils.isEmpty(cacheSkuMap)) {
+            return null;
+        }
+
+        // 随便查出一个仓库的sku，临时解决方案（此方法已过期，不保证数据准确）
+        for (String key : cacheSkuMap.keySet()) {
+            if(key.endsWith(skuNum)) {
+                ProductSkuItem productSkuItem = JsonMapper.toObject(cacheSkuMap.get(key), ProductSkuItem.class);
+               /* Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(productSkuItem);
+                ProductSku productSku = new ProductSku();
+                BeanUtil.fillBeanData(productSku, stringObjectMap);
+                productSku.setSkuNum(skuNum);*/
+                ProductSku productSku = new ProductSku();
+                productSku.addToSkuItems(productSkuItem);
+                productSku.setSkuNum(skuNum);
+                return productSku;
+            }
+        }
+        return null;
     }
 
     @Override
