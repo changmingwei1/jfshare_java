@@ -70,7 +70,7 @@ public class ServHandle implements TradeServ.Iface {
 				FailCode.addFails(result, FailCode.RECEIVER_ADDRESS_NULL_ERROR);
 				return createOrderResult;
 			}
-			logger.info("确认订单----获取收货地址成功");
+			logger.info("确认订单----验证收货地址成功/虚拟商品手机号");
 			//endregion 收货地址
 
 			//获取商品sku

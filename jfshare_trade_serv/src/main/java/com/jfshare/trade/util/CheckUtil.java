@@ -73,10 +73,8 @@ public class CheckUtil {
         }
 
         if (isVirOrder(buyInfo.getTradeCode())) {
-            if (buyInfo.getTradeCode().equals(ConstantUtil.TRADE_CODE.ORDER_CODE_TEL_FARE.getEnumVal())) {
-                if(StringUtil.isNullOrEmpty(buyInfo.getDeliverInfo().getReceiverMobile())) {
-                    fails.add(FailCode.RECEIVER_ADDRESS_NULL_ERROR);
-                }
+            if(StringUtil.isNullOrEmpty(buyInfo.getDeliverInfo().getReceiverMobile())) {
+                fails.add(FailCode.RECEIVER_ADDRESS_NULL_ERROR);
             }
         } else {
             if (buyInfo.getDeliverInfo() == null || buyInfo.getDeliverInfo().getAddressId() <= 0) {

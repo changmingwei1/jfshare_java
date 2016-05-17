@@ -14,7 +14,7 @@ import org.junit.Test;
 */
 public class Test_product {
     // 执行次数，0的时候不执行测试用例
-    private static final Integer DO_IT = 1;
+    private static Integer DO_IT = 100;
 
     private TTransport transport;
 
@@ -23,7 +23,7 @@ public class Test_product {
     private ProductServ.Client client;
 
 //    private static final String IP = "127.0.0.1";
-    private static final String IP = "120.24.153.155";
+    private static final String IP = "101.201.38.182";
 
     private static final Integer PORT = 1980;
 
@@ -80,11 +80,15 @@ public class Test_product {
     public void testM3() throws Exception {
         if (DO_IT == 0)
             return;
+        while(DO_IT>0) {
+
         ProductDetailParam param = new ProductDetailParam();
 //        param.setDetailKey("5380eaefeaa797d9e53d6eef");
-        param.setProductId("jfx0001");
-        StringResult ret = client.queryProductDetail(param);
-        System.out.println("返回码="+ret);
+            param.setProductId("ze160414115412000461");
+            StringResult ret = client.queryProductDetail(param);
+            System.out.println("返回码="+ret);
+            --DO_IT;
+        }
     }
 
     @Test

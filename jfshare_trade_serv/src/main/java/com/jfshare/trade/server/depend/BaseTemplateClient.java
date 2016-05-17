@@ -81,6 +81,7 @@ public class BaseTemplateClient {
 					productPostageBasic.setNumber(orderInfo.getCount());
 					productPostageBasic.setTemplateId(orderInfo.getPostageTemplateId());
 					productPostageBasic.setWeight(NumberUtils.toDouble(orderInfo.getWeight()));
+					productPostageMap.put(orderInfo.getProductId(), productPostageBasic);
 				} else {
 					productPostageBasic.setAmount(plusOrderInfoAmount(productPostageBasic.getAmount(), calcOrderInfoAmount(orderInfo)));
 					productPostageBasic.setWeight(plusOrderInfoWeight(productPostageBasic.getWeight(), orderInfo.getWeight()));

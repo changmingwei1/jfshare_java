@@ -115,6 +115,25 @@ public class Client extends TestCase{
         }
     }
 
+    public void testDeliverVir() throws Exception {
+        //商品id
+        String orderId = "1";
+        try {
+            ////////////////////////////////////////////////////
+            DeliverVirParam param = new DeliverVirParam();
+            param.setOrderId("21330017");
+            param.setSellerId(1);
+            System.err.println(client.deliverVir(param));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
+
 
 
     public void testConfirmReceipt() throws Exception {
@@ -134,9 +153,9 @@ public class Client extends TestCase{
 
     public void testCancelOrder() throws Exception {
         //商品id
-        String orderId = "3450002";
+        String orderId = "21330017";
         try {
-            System.err.println(client.cancelOrder(1, 2, orderId, 9));
+            System.err.println(client.cancelOrder(1, 17, orderId, 9));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

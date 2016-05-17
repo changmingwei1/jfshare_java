@@ -7,6 +7,7 @@ import com.jfshare.finagle.thrift.pay.PayRet;
 import com.jfshare.order.dao.IOrderDao;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderRecordExample;
+import com.jfshare.order.server.depend.StockClient;
 import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.OrderUtil;
 import com.jfshare.utils.BizUtil;
@@ -46,6 +47,9 @@ public class OrderService {
 
     @Autowired
     private IOrderDao orderDao;
+
+    @Autowired
+    private StockClient stockClient;
 
     public OrderModel sellerQueryDetail(int sellerId, String orderId) {
         return orderDao.getOrderBySeller(orderId, sellerId);
@@ -156,6 +160,8 @@ public class OrderService {
             throw new RuntimeException("cancelOrder，更新卖家表失败, 更新返回："+ ret);
         }
 
+        stockClient.releaseStock(orderModel.getOrderId(), orderModel.getTbOrderInfoList());
+
         return ret;
     }
 
@@ -265,6 +271,8 @@ public class OrderService {
             throw new RuntimeException("updatePayRet，更新卖家表失败, 更新返回："+ ret);
         }
 
+        //释放库存锁定量
+        stockClient.releaseLockCount(order.getOrderId(), order.getTbOrderInfoList());
         //TODO 超卖
 
         return ret;

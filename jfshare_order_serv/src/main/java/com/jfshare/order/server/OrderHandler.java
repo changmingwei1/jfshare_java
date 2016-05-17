@@ -5,6 +5,7 @@ import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayReq;
 import com.jfshare.finagle.thrift.pay.PayRet;
+import com.jfshare.finagle.thrift.product.ProductCard;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
@@ -13,8 +14,11 @@ import com.jfshare.order.dao.IOrderJedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
 import com.jfshare.order.model.OrderModel;
+import com.jfshare.order.model.TbOrderInfoRecord;
+import com.jfshare.order.server.depend.CommonClient;
 import com.jfshare.order.server.depend.ExpressClient;
 import com.jfshare.order.server.depend.PayClient;
+import com.jfshare.order.server.depend.ProductClient;
 import com.jfshare.order.service.DeliverService;
 import com.jfshare.order.service.OrderService;
 import com.jfshare.order.util.*;
@@ -48,6 +52,12 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     @Autowired
     private ExpressClient expressClient;
+
+    @Autowired
+    private ProductClient productClient;
+
+    @Autowired
+    private CommonClient commonClient;
 
     @Autowired
     private IOrderJedis orderJedis;
@@ -161,10 +171,37 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return result;
             }
 
-            deliverService.updateDeliverInfo(orderModel);
+            deliverService.updateDeliverInfoVir(orderModel);
+            //获取卡密
+            List<ProductCard> productCards = productClient.getProductCard(orderModel);
 
-            //TODO 调用商品服务获取卡密
-            //TODO 发送短信
+            //发送短信
+            StringBuilder msgContent = new StringBuilder();
+            TbOrderInfoRecord orderInfo = orderModel.getTbOrderInfoList().get(0);
+            if(orderModel.getTradeCode().equals(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAMI.getEnumVal())) {
+                //您已成功购买*****（商品名称+规格）消费券*（数量）张，券码*********，密码*********，券码*********，密码*********，请前往商家验证消费。
+                msgContent.append("您已成功购买")
+                        .append(orderInfo.getProductName()).append(" ")
+                        .append(orderInfo.getSkuDesc()).append(" ")
+                        .append("消费券").append(orderInfo.getCount()).append("张");
+                for(ProductCard card : productCards) {
+                    msgContent.append("券码:").append(card.getCardNumber()).append("，密码:").append(card.getPassword()).append("，");
+                }
+                msgContent.append("请前往商家验证消费。");
+            } else if(orderModel.getTradeCode().equals(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAONLY.getEnumVal())) {
+                //您已成功购买*****（商品名称+规格）消费券*（数量）张，券码*********，*********，*********，请前往商家验证消费。
+                msgContent.append("您已成功购买")
+                        .append(orderInfo.getProductName()).append(" ")
+                        .append(orderInfo.getSkuDesc()).append(" ")
+                        .append("消费券").append(orderInfo.getCount()).append("张，券码：");
+                for(ProductCard card : productCards) {
+                    msgContent.append(card.getCardNumber()).append("，");
+                }
+                msgContent.append("请前往商家验证消费。");
+            }
+
+            commonClient.sendMsg(orderModel.getReceiverMobile(), msgContent.toString());
+
         } catch (BaseException be) {
             List<FailDesc> failDescs = be.getFailDescs();
             logger.error("发货失败!");
@@ -253,7 +290,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
                 return result;
             }
-            OrderModel orderModel = orderService.buyerQueryProfile(userId, orderId);
+            OrderModel orderModel = orderService.buyerQueryDetail(userId, orderId);
             if (orderModel == null) {
                 logger.warn(MessageFormat.format("cancelOrder订单不存在！userType[{0}],userId[{1}],orderId[{2}],reason[{3}]", userType, userId, orderId, reason));
                 FailCode.addFails(result, FailCode.ORDER_NO_EXIST);

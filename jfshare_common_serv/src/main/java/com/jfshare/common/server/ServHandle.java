@@ -517,6 +517,31 @@ public class ServHandle implements CommonServ.Iface {
     }
 
     @Override
+    public Result sendMsg(ShortMsg msg) throws TException {
+        Result result = new Result(0);
+
+        if(msg == null || StringUtils.isBlank(msg.getMobile()) || StringUtils.isBlank(msg.getContent())){
+            result.setCode(1);
+            result.addToFailDescList(FailCode.PARAM_EXCEPTION);
+            return result;
+        }
+
+        try {
+            boolean sendRet = signinMsgSender.send(msg.getContent(), msg.getMobile());
+            if(!sendRet) {
+                result.setCode(1);
+                result.addToFailDescList(FailCode.SEND_MSG_FAILURE);
+                return result;
+            }
+        } catch (Exception e) {
+            result.setCode(1);
+            result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+            logger.error("sendMsgCaptcha ==> Exception", e);
+        }
+        return result;
+    }
+
+    @Override
     public Result validateCaptcha(Captcha captcha) throws TException {
         boolean vRes = false;
         Result r = new Result(0);

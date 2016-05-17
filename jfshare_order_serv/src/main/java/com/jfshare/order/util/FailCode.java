@@ -35,6 +35,7 @@ public class FailCode {
 	public static final FailDesc PAY_STATE_GET_FAIL = new FailDesc("paystate", "3024", "支付状态获取失败");
 
 	public static final FailDesc DELIVER_INVALIDATE_TRADECODE = new FailDesc("DELIVER", "4000", "发货接口不支持该订单类型");
+	public static final FailDesc DELIVER_GET_PRODUCTCARD_FAIL = new FailDesc("DELIVER", "4001", "获取虚拟商品卡密/卡券失败");
 
 	/**
 	 * 结果集中添加错误码
