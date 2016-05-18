@@ -709,7 +709,7 @@ public class PayUtil {
 //            if (s.contains("o") || s.contains("l") || s.contains("1") || s.contains("O") || s.contains("0")) {
 //                continue;
 //            }
-//            System.out.println(RandomStringUtils.randomAlphanumeric(32));
+            System.out.println(RandomStringUtils.randomAlphanumeric(32));
 //            return;
 //        }
 
