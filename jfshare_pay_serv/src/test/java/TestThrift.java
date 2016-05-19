@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class TestThrift {
     // 0的时候不执行测试用例，其他值的时候执行
-    private  final Integer DO_IT = 0;
+    private  final Integer DO_IT = 1;
 
     private TTransport transport;
 
@@ -74,8 +74,9 @@ public class TestThrift {
                 payReq.setCustType("7");
                 payReq.setPayChannel(1);
                 payReq.setOrderNo("fa44514e9acb568385da064067e00feb");
-                payReq.setPrice(1000);
-                payReq.setScore(1);
+                payReq.setPrice(3000);
+                payReq.setScore2cashAmount(1000);
+                payReq.setScore(100);
                 payReq.setTitle("jfx订单");
                 StringResult stringResult = client.payUrl(payReq);
                 System.out.println(stringResult);

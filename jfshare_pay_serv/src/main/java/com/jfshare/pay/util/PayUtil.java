@@ -149,9 +149,9 @@ public class PayUtil {
             toSignStr.append("&DeviceNo=").append(payReq.getCustId());
             toSignStr.append("&SPID=").append(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid"));
             toSignStr.append("&DeviceType=").append(payReq.getCustType());
-            toSignStr.append("&PayIntegral=").append(ConvertUtil.getString(payReq.getScore() + payReq.getPrice()));
+            toSignStr.append("&PayIntegral=").append(ConvertUtil.getString(payReq.getPrice()));
             toSignStr.append("&PayDefaultIntegral=").append(ConvertUtil.getString(payReq.getScore()));
-            toSignStr.append("&PayDefaultMoney=").append(ConvertUtil.getString(payReq.getPrice()));
+            toSignStr.append("&PayDefaultMoney=").append(ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()));
             toSignStr.append("&CommodityName=").append(payReq.getTitle());
             toSignStr.append("&BusinessRemark=").append(ConvertUtil.getString(payReq.getRemark(), "无"));
             toSignStr.append("&SPOrderID=").append(payId);
@@ -170,9 +170,9 @@ public class PayUtil {
         payUrlMap.put("DeviceNo", payReq.getCustId());
         payUrlMap.put("DeviceType", payReq.getCustType());
         payUrlMap.put("ProvinceID", payReq.getProcustID());
-        payUrlMap.put("PayIntegral", ConvertUtil.getString(payReq.getScore() + payReq.getPrice()));
+        payUrlMap.put("PayIntegral", ConvertUtil.getString(payReq.getPrice()));
         payUrlMap.put("PayDefaultIntegral", ConvertUtil.getString(payReq.getScore()));
-        payUrlMap.put("PayDefaultMoney", ConvertUtil.getString(payReq.getPrice()));
+        payUrlMap.put("PayDefaultMoney", ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()));
         payUrlMap.put("CommodityName", payReq.getTitle());
         payUrlMap.put("BusinessRemark", ConvertUtil.getString(payReq.getRemark(), "无"));
         payUrlMap.put("SPOrderID", payId);

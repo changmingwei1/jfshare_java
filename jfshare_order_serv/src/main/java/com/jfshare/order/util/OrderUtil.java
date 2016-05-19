@@ -337,10 +337,6 @@ public class OrderUtil {
      */
     public static int getPayPrice(OrderModel order) {
         int orderPayPrice = order.getClosingPrice();
-        if (order.getPayChannel() == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
-            orderPayPrice -= order.getThirdScore() * ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"));
-        }
-
         return orderPayPrice;
     }
 
@@ -370,6 +366,24 @@ public class OrderUtil {
         }
 
         return thirdScores;
+    }
+
+    /**
+     * 获取第三方积分抵扣金额合计
+     * @param orderModels
+     * @param payChannel
+     * @return
+     */
+    public static int getThirdScore2Cash(List<OrderModel> orderModels, int payChannel) {
+        int thirdScore2CashAmount = 0;
+        if (payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
+            for (OrderModel order : orderModels) {
+                for (TbOrderInfoRecord orderInfo : order.getTbOrderInfoList()) {
+                    thirdScore2CashAmount += orderInfo.getThirdScore() * NumberUtils.toInt(orderInfo.getThirdexchangerate());
+                }
+            }
+        }
+        return thirdScore2CashAmount;
     }
 
     public static List<OrderCount> countOrdersByState(List<OrderModel> orderModels) {
