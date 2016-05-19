@@ -19,6 +19,19 @@ public class ConstantUtil {
         public String getEnumVal(){
             return this.enumVal;
         }
+
+        public static boolean isVirOrder(String tradeCode){
+            boolean isVir = false;
+            TRADE_CODE trade_code = null;
+            try {
+                trade_code = TRADE_CODE.valueOf(tradeCode);
+                if(trade_code.equals(ORDER_CODE_VIR_KAMI) || trade_code.equals(ORDER_CODE_VIR_KAONLY))
+                    isVir = true;
+            } catch (IllegalArgumentException e) {
+                //Do nothing
+            }
+            return isVir;
+        }
     };
 
     //订单状态， 10:待支付 11:支付中 20:审核中 30:待发货 40:已发货|待收货 50:待评价 51:已评价 60:交易自动关闭 61:交易买家取消

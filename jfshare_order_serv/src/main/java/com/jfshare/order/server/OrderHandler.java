@@ -604,6 +604,19 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             logger.info("7.支付通知----payUrl订单状态更新成功");
             orderJedis.addPayState(payRet.getPayId(), payRet.getRetCode(), orderModels.get(0).getCancelTime());
 
+            //虚拟商品需要自动发货
+            for(OrderModel orderModel : orderModels) {
+                if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
+                    DeliverVirParam param = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
+                    Result delverVirResult = deliverVir(param);
+                    if(delverVirResult != null && delverVirResult.getCode() == 0) {
+                        logger.info("8.支付通知----虚拟商品自动发货成功");
+                    } else {
+                        logger.error("8.支付通知----虚拟商品自动发货失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
+                    }
+                }
+            }
+
             stringResult.setValue("1");
         } catch (Exception e) {
             logger.error("$$$$支付通知----接收支付平台通知失败，系统异常！", e);

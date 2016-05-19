@@ -462,6 +462,9 @@ public class CheckUtil {
             for(SellerPostageReturn  s : calculatePostageResult.getSellerPostageReturnList()) {
                 if(order.getSellerId() == s.getSellerId()) {
                     order.setPostage(s.getPostage());
+                    int postage = PriceUtils.strToInt(s.getPostage());
+                    int closingPrice = PriceUtils.strToInt(order.getClosingPrice());
+                    order.setClosingPrice(PriceUtils.intToStr(closingPrice + postage));
                 }
             }
         }

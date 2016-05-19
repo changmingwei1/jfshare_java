@@ -108,8 +108,11 @@ public class ServHandle implements TradeServ.Iface {
             List<Order> orderList = TradeUtil.convertToOrder(buyInfo, sellerOrderIdsMap, productRets, addressInfo);
 			logger.info("确认订单----准备入库参数成功");
 
+
+
 			//验证邮费
 			List<FailDesc> postageFailList = checkUtil.orderConfirmPostage(buyInfo, orderList);
+
 			if(CollectionUtils.isNotEmpty(postageFailList)) {
 				logger.error("$$$$确定订单----获取订单运费错误！fails=" + postageFailList);
 				FailCode.addFails(result, postageFailList);
