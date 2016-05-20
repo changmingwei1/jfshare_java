@@ -41,6 +41,7 @@ public class ConvertUtil {
         tbProductWithBLOBs.setTags(product.getTags());
         tbProductWithBLOBs.setStorehouseIds(product.getStorehouseIds());
         tbProductWithBLOBs.setPostageId(product.getPostageId());
+        tbProductWithBLOBs.setType(product.getType());
 
         //set blobs
         tbProductWithBLOBs.setSkuTemplate(product.getSkuTemplate());
@@ -63,6 +64,7 @@ public class ConvertUtil {
         tbProductHistoryWithBLOBs.setMaxBuyLimit(tbProductWithBLOBs.getMaxBuyLimit());
         tbProductHistoryWithBLOBs.setActiveState(tbProductWithBLOBs.getActiveState());
         tbProductHistoryWithBLOBs.setTags(tbProductWithBLOBs.getTags());
+        tbProductHistoryWithBLOBs.setType(tbProductWithBLOBs.getType());
         //set blobs
         tbProductHistoryWithBLOBs.setSkuTemplate(tbProductWithBLOBs.getSkuTemplate());
         tbProductHistoryWithBLOBs.setAttribute(tbProductWithBLOBs.getAttribute());

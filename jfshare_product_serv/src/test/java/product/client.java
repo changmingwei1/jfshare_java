@@ -4,6 +4,8 @@ import com.jfshare.finagle.thrift.pagination.Pagination;
 import com.jfshare.finagle.thrift.product.*;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
+import com.jfshare.product.service.IWoMaiSvc;
+import com.jfshare.product.service.impl.WoMaiSvcImpl;
 import com.jfshare.product.util.HttpUtils;
 import com.jfshare.product.util.CodeUtil;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -11,12 +13,19 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
+import org.elasticsearch.common.netty.util.internal.NativeLibraryLoader;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
 * Created by lenovo on 2015/9/28.
@@ -45,6 +54,8 @@ public class client {
         protocol = new TBinaryProtocol(transport);
         client = new ProductServ.Client(protocol);
         transport.open();
+        ApplicationContext context = new ClassPathXmlApplicationContext("/spring/spring-context.xml");
+
     }
 
     @After
@@ -213,17 +224,9 @@ public class client {
 
     @Test
     public void testHttp() throws Exception {
-//        String m = HttpUtils.httpPostUTF8("http://sandbox.womaiapp.com/api/rest?method=womai.inventory.get&appkey=425113&sign=D47441A31A305C595C68C3FA4DD74B46&param=%7b%22skuids%22%3a+%225178122%22%7d", null);
 
-        String code = "sdfasdfw我发是多少阿凡达";
-
-        System.out.println(CodeUtil.getMD5(code));
-        System.out.println(CodeUtil.getMD5Upper(code));
-        System.out.println(CodeUtil.getURLDecoder(null));
-
-
-        String str = HttpUtils.httpPostUTF8("http://sandbox.womaiapp.com/api/rest?method=womai.inventory.get&appkey=425113&sign=D47441A31A305C595C68C3FA4DD74B46&param=%7b%22skuids%22%3a+%225178122%22%7d", null);
-        System.out.println(str);
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyyMMddHHmmss");
+        System.out.println(DateTime.parse("20160101050101", format));
     }
 
 
