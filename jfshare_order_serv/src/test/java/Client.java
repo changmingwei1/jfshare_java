@@ -19,7 +19,7 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
+        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
 //        transport = new TFramedTransport(new TSocket("localhost", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
@@ -195,12 +195,10 @@ public class Client extends TestCase{
     public void testPayApply() throws Exception {
         try {
             PayParam payParam = new PayParam();
-            List<String> orderIds = new ArrayList<String>();
-            orderIds.add("11240067");
-            payParam.setUserId(67);
-            payParam.setOrderIdList(orderIds);
+            payParam.setUserId(35);
+            payParam.addToOrderIdList("21860035");
             PayChannel payChannel = new PayChannel();
-            payChannel.setPayChannel(1);
+            payChannel.setPayChannel(9);
             payParam.setPayChannel(payChannel);
             System.err.println(client.payApply(payParam));
         } catch (Exception e) {

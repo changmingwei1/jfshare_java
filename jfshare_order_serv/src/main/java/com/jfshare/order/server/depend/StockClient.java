@@ -66,6 +66,11 @@ public class StockClient {
 
         try {
             Result result = Await.result(service.releaseStock(transId, lockInfos));
+            if(result == null || result.getCode() != 0) {
+                logger.warn("releaseStock ==> {}, 取消订单释放库存失败，原因: {}", transId, result.getFailDescList());
+            } else {
+                logger.info("releaseStock ==> {}, 取消订单释放库存成功");
+            }
         } catch (Exception e) {
             logger.error("调用StockServ--releaseStock失败！", e);
         }
