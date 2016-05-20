@@ -8,6 +8,7 @@ import org.elasticsearch.common.jackson.core.JsonStreamContext;
 import org.elasticsearch.common.lang3.StringUtils;
 import org.elasticsearch.common.util.CollectionUtils;
 import org.elasticsearch.index.engine.Engine;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Map;
 /**
  * Created by Lenovo on 2016/5/16.
  */
+@Service
 public class WoMaiSvcImpl implements IWoMaiSvc {
 
     @Override
@@ -23,23 +25,32 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
         return 0;
     }
 
-    private String getWoMaiUrl(String method, Map param) {
-        StringBuffer url = new StringBuffer();
+    public String getWoMaiUrl() {
         // TODO: 2016/5/17 通过配置获取
         String domain = "http://sandbox.womaiapp.com/api/rest";
-        String appKey = "425113";
-        String appSecret = "";
+
+        return domain;
+    }
+
+    public Map<String, String> getPostParams(String method, Map param) {
+        Map<String, String> postParams = new HashMap<String, String>();
+        // TODO: 2016/5/17 通过配置获取
+        String appKey = "160519";
+        String appSecret = "a8c5j5nh5g08mpeg401xkspdfjqgx9j6";
         String paramStr = JSON.toJSONString(param);
         StringBuffer sign = new StringBuffer();
-        sign.append(method).append(appKey).append(appSecret).append(paramStr);
+        sign.append(method).append(appKey).append(appSecret);
+        if(param != null) {
+            sign.append(paramStr);
+        }
 
-        url.append(domain).append("?")
-                .append("method=").append(method)
-                .append("&appKey=").append(appKey)
-                .append("&sign=").append(CodeUtil.getMD5Upper(sign.toString()))
-                .append("&param=").append(paramStr);
-
-        return url.toString();
+        postParams.put("method", method);
+        postParams.put("appKey", appKey);
+        postParams.put("sign", CodeUtil.getMD5Upper(sign.toString()));
+        if (param != null) {
+            postParams.put("param", JSON.toJSONString(param));
+        }
+        return postParams;
     }
 
     /**
@@ -50,7 +61,7 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
     private String getItemDetail(String productId) {
         Map param = new HashMap();
         param.put("skuid", productId);
-        String url = this.getWoMaiUrl("womai.itemdetail.get", param);
+        String url = this.getWoMaiUrl();
         try {
             HttpUtils.httpPostUTF8(url, null);
         } catch (Exception e) {
@@ -69,7 +80,8 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
         String ids = StringUtils.join(productIds, ",");
         Map param = new HashMap();
         param.put("skuid", ids);
-        String url = this.getWoMaiUrl("womai.itemstatus.get", param);
+        String url = this.getWoMaiUrl();
+
 
         return null;
     }
@@ -83,7 +95,7 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
         String ids = StringUtils.join(productIds, ",");
         Map param = new HashMap();
         param.put("skuid", ids);
-        String url = this.getWoMaiUrl("womai.itemimage.get", param);
+        String url = this.getWoMaiUrl();
 
         return null;
     }
