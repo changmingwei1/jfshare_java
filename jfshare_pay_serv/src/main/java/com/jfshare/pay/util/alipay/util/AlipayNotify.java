@@ -80,7 +80,8 @@ public class AlipayNotify {
         if(SignType.MD5.getEnumVal().equals(signType) ) {
         	isSign = MD5.verify(preSignStr, sign, AlipayConfig.key, AlipayConfig.input_charset);
         } else if (SignType.RSA.getEnumVal().equals(signType)) {
-            isSign = RSA.verify(preSignStr, sign, AlipayConfig.ALIPAY_RSA_PUBLIC, AlipayConfig.input_charset);
+            //TODO RSA 验证方式
+//            isSign = RSA.verify(preSignStr, sign, AlipayConfig.ALIPAY_RSA_PUBLIC, AlipayConfig.input_charset);
         }
         return isSign;
     }
