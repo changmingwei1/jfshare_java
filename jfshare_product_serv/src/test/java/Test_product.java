@@ -1,3 +1,6 @@
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jfshare.finagle.thrift.product.*;
 import com.jfshare.finagle.thrift.result.StringResult;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -8,6 +11,8 @@ import org.apache.thrift.transport.TTransport;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Map;
 
 /**
 * Created by lenovo on 2015/9/28.
@@ -112,5 +117,20 @@ public class Test_product {
         param.setSkuTag(1);
         ProductResult ret = client.queryProductSnap("zs151206195727000594", param);
         System.out.println("返回码="+ret);
+    }
+
+    @Test
+    public void testJson() {
+        String json = "{\"itemdetail\":[{\"goodsid\":\"516764\",\"weight\":\"40\",\"brandName\":\"\",\"category\":\"15073\",\"goodsname\":\"MISS\tFACE\t透明质酸清润焕采眼霜\t30g\",\"place_production\":\"杭州\",\"goodsbarcode\":\"6922239920352\",\"unit\":\"个\",\"prodescription\":\"\",\"specification\":\"1*30g\",\"pubflag\":\"1\"}]}";
+
+        JSONObject itemDetail = JSON.parseObject(json);
+        JSONArray details = itemDetail.getJSONArray("itemdetail");
+
+        System.out.println(((Map)details.get(0)).get("goodsid"));
+
+
+        String errorJson = "{\"error_response\":{\"code\":10001,\"msg\":null,\"sub_code\":11001,\"sub_msg\":null,\"memo\":\"查不到该商品信息\"}}";
+        JSONObject error = JSON.parseObject(errorJson);
+        System.out.println(error.getJSONObject("error_response").getString("code"));
     }
 }

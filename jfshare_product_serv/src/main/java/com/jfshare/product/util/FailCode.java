@@ -29,6 +29,7 @@ public class FailCode {
     //卡密信息错误提示
     public static FailDesc PRODUCT_CARD_GET_FAIL = new FailDesc("productCard", "5500", "获取商品卡密信息失败");
     public static FailDesc PRODUCT_CARD_USE_FAIL = new FailDesc("productCard", "5501", "商品卡密使用失败");
+    public static FailDesc PRODUCT_CARD_IMPORT_FAIL = new FailDesc("productCard", "5502", "商品卡密导入失败");
 
     /**
      * 结果集中添加错误码

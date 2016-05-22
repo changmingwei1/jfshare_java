@@ -167,8 +167,13 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         int fromIndex = param.getPagination().getNumPerPage()*(param.getPagination().getCurrentPage()-1);
         int toIndex = param.getPagination().getNumPerPage()*param.getPagination().getCurrentPage();
 
-        if(fromIndex < 0) fromIndex = 0;
-        if(toIndex > productSurveyList.size()) toIndex = productSurveyList.size();
+        if (fromIndex < 0) {
+            fromIndex = 0;
+        }
+
+        if (toIndex > productSurveyList.size()) {
+            toIndex = productSurveyList.size();
+        }
         productSurveyResult.setProductSurveyList(productSurveyList.subList(fromIndex, toIndex));
 
         //设置总记录数
@@ -337,13 +342,17 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         }
 
         // 点击率简单实现
-        long rate = this.productRedis.addProductClickRate(param.getProductId());
-        if(rate % 11 == 0) {
-            TbProductWithBLOBs productWithBLOBs = new TbProductWithBLOBs();
-            productWithBLOBs.setId(param.getProductId());
-            productWithBLOBs.setClickRate((int)rate);
-            this.productMapper.updateByPrimaryKeySelective(productWithBLOBs);
-            this.reloadProductListCache(param.getProductId());
+        try {
+            long rate = this.productRedis.addProductClickRate(param.getProductId());
+            if(rate % 11 == 0) {
+                TbProductWithBLOBs productWithBLOBs = new TbProductWithBLOBs();
+                productWithBLOBs.setId(param.getProductId());
+                productWithBLOBs.setClickRate((int)rate);
+                this.productMapper.updateByPrimaryKeySelective(productWithBLOBs);
+                this.reloadProductListCache(param.getProductId());
+            }
+        } catch (Exception e) {
+            logger.error("<<<<<<<< queryProductDetail update click rate error!!! param : " + param.toString(), e);
         }
         return productDetail == null ? null : productDetail.getDetailContent();
     }
