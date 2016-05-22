@@ -384,13 +384,12 @@ public class PayUtil {
                 payUrlMap.put("paySign", paramSign.get("sign"));
             } else if (payReq.getPayChannel() == 9) {
                 payUrlMap.clear();
-                payUrlMap.put("appId", WeixinConfig.appid);
+                payUrlMap.put("appid", WeixinConfig.appid);
                 payUrlMap.put("partnerid", WeixinConfig.mch_id);
                 payUrlMap.put("prepayid", retMap.get("prepay_id"));
                 payUrlMap.put("package", "Sign=WXPay");
                 payUrlMap.put("nonceStr", RandomStringUtils.randomAlphanumeric(20));
-                payUrlMap.put("timeStamp",ConvertUtil.getString(new DateTime().getMillis()/1000));
-                payUrlMap.put("signType", "MD5");
+                payUrlMap.put("timestamp",ConvertUtil.getString(new DateTime().getMillis()/1000));
                 Map<String, String> paramSign = WeixinSubmit.buildRequestPara(payUrlMap);
                 payUrlMap.put("sign", paramSign.get("sign"));
             }
