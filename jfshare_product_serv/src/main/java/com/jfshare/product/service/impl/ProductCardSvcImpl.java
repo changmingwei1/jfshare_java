@@ -5,12 +5,8 @@ import com.jfshare.product.dao.mysql.IProductCardDao;
 import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.service.IProductCartSvc;
-import com.jfshare.product.util.FileUtil;
 import com.jfshare.ridge.PropertiesUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,11 +14,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,12 +34,13 @@ public class ProductCardSvcImpl implements IProductCartSvc {
     @Override
     public boolean importProductCard(int sellerId, String path) {
 
+        // TODO: 2016/5/22  dsdfsdf sd 
         // 读取文件中的数据
-        HSSFWorkbook hssfWorkbook = null;
+        /*HSSFWorkbook hssfWorkbook = null;
         try {
             // 下载文件到本地
             localPath = localPath + sellerId + "/";
-            String fileName = "productCard" + System.currentTimeMillis() + ".xls";
+            String fileName = "" + System.currentTimeMillis() + ".xls";
             boolean flag = FileUtil.downloadFile(path, localPath, fileName);
             if (!flag) {
                 return flag;
@@ -72,10 +64,10 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 this.productCardDao.add(productCard);
 
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.error("<<<<<<<< importProductCard error !! --- sellerId : " + sellerId + ", path : " + path, e);
             return false;
-        }
+        }*/
 
         return true;
     }
