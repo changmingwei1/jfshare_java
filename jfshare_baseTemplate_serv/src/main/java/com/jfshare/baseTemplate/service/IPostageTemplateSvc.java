@@ -4,6 +4,7 @@ import com.jfshare.baseTemplate.mybatis.model.automatic.TbPostageTemplate;
 import com.jfshare.baseTemplate.mybatis.model.manual.ProductPostageModel;
 import com.jfshare.baseTemplate.mybatis.model.manual.SellerPostageModel;
 import com.jfshare.baseTemplate.mybatis.model.manual.SellerPostageReturnModel;
+import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageResult;
 
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public interface IPostageTemplateSvc {
      * @param sellerId
      * @return
      */
-    List<TbPostageTemplate> getPostageTemplateBySellerId(int sellerId, int group);
+    List<TbPostageTemplate> getPostageTemplateBySellerId(int sellerId, int group, int isUsed);
 
     /**
      * 根据id获取邮费模板信息
@@ -58,6 +59,8 @@ public interface IPostageTemplateSvc {
     String calculatePostage(ProductPostageModel model);
 
 
-    List<SellerPostageReturnModel> calculatePostage(List<SellerPostageModel> productPostageModels, String sendTopProvince);
+    CalculatePostageResult calculatePostage(List<SellerPostageModel> productPostageModels, String sendTopProvince);
+
+    boolean setDefaultPostageTemplate(TbPostageTemplate tbPostageTemplate);
 
 }

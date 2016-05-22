@@ -93,8 +93,9 @@ public class TestThrift {
             System.out.println("start:" + System.currentTimeMillis());
             for(int i=0; i<DO_IT; i++){
                 PayRes payRes = new PayRes();
-                payRes.setPayChannel(1);
-                payRes.setResUrl("xxxxxx");
+                payRes.setPayChannel(2);
+                payRes.setResUrl("{\"discount\":\"0.00\",\"payment_type\":\"1\",\"subject\":\"聚分享订单\",\"trade_no\":\"2016052221001004190216261526\",\"buyer_email\":\"huazhehuo110@163.com\",\"gmt_create\":\"2016-05-22 19:30:06\",\"notify_type\":\"trade_status_sync\",\"quantity\":\"1\",\"out_trade_no\":\"0c34b1140a80ab2c5d024213221d159b\",\"seller_id\":\"2088701691132875\",\"notify_time\":\"2016-05-22 19:44:51\",\"body\":\"订单支付\",\"trade_status\":\"TRADE_SUCCESS\",\"is_total_fee_adjust\":\"N\",\"total_fee\":\"0.01\",\"gmt_payment\":\"2016-05-22 19:30:07\",\"seller_email\":\"windy@jfshare.com\",\"price\":\"0.01\",\"buyer_id\":\"2088012954102192\",\"notify_id\":\"0e32c605099e9a23c7ad2886cf62b52hgu\",\"use_coupon\":\"N\",\"sign_type\":\"RSA\",\"sign\":\"aNrgIFblGOtum6pN6MyuRE8L3b9QlzICJzBkKt8xwU4iv4JJ3M+poW7mq66WdV3LWaBf2SwclGYugUBtKkfmxe5sVZ7XSCbsCrISUIZ1kuP3qCPr9qaOgAr4MkJr/elC47aGKMw5BUNRkAj32XdEYIKZGDfcVXXII8VSOd0xczI=\"}");
+
                 StringResult stringResult = client.payNotify(payRes);
                 System.out.println(stringResult);
             }

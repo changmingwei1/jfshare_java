@@ -6,20 +6,23 @@
         <include refid="com.jfshare.baseTemplate.mybatis.mapper.automatic.TbPostageTemplateMapper.Base_Column_List" />
         FROM tb_postage_template
         <where>
-            <if test="id != 0">
+            <if test="id != 0 and id != null">
                 and id = #{id}
             </if>
             <if test="sellerId != 0">
                 and seller_id = #{sellerId}
             </if>
-            <if test="type != 0">
+            <if test="type != 0 and type != null">
                 and type = #{type}
             </if>
             <if test="name != null">
                 and name = #{name, jdbcType=VARCHAR}
             </if>
-            <if test="templateGroup != 0">
+            <if test="templateGroup != 0 and templateGroup != null">
                 and template_group = #{templateGroup}
+            </if>
+            <if test="isUsed != 0 and isUsed != null">
+                and is_used = #{isUsed}
             </if>
         </where>
         limit 60

@@ -364,14 +364,14 @@ public class PostageTemplateResult implements TBase<PostageTemplateResult, Posta
         case 2: // POSTAGE_TEMPLATE_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list24 = iprot.readListBegin();
-            this.postageTemplateList = new ArrayList<PostageTemplate>(_list24.size);
-            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
+            TList _list28 = iprot.readListBegin();
+            this.postageTemplateList = new ArrayList<PostageTemplate>(_list28.size);
+            for (int _i29 = 0; _i29 < _list28.size; ++_i29)
             {
-              PostageTemplate _elem26;
-              _elem26 = new PostageTemplate();
-              _elem26.read(iprot);
-              this.postageTemplateList.add(_elem26);
+              PostageTemplate _elem30;
+              _elem30 = new PostageTemplate();
+              _elem30.read(iprot);
+              this.postageTemplateList.add(_elem30);
             }
             iprot.readListEnd();
             }
@@ -404,9 +404,9 @@ public class PostageTemplateResult implements TBase<PostageTemplateResult, Posta
         oprot.writeFieldBegin(POSTAGE_TEMPLATE_LIST_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.postageTemplateList.size()));
-          for (PostageTemplate _iter27 : this.postageTemplateList)
+          for (PostageTemplate _iter31 : this.postageTemplateList)
           {
-            _iter27.write(oprot);
+            _iter31.write(oprot);
           }
           oprot.writeListEnd();
         }

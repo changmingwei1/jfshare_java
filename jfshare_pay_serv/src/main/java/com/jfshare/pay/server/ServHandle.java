@@ -149,7 +149,7 @@ public class ServHandle implements PayServ.Iface {
                 Map<String, String> params = (Map)JSON.parseObject(payRes.getResUrl());
                 boolean verify = AlipayNotify.verify(params);
                 if (!verify) {
-                    logger.error(MessageFormat.format("$$$$支付通知----alipay支付参数非法! payRes[{0}]", payRes));
+                    logger.error(MessageFormat.format("$$$$支付通知----alipay支付参数非法,验证签名失败! payRes[{0}]", payRes));
                     FailCode.addFails(result, FailCode.PARAM_ERROR);
                     return stringResult;
                 }
@@ -166,7 +166,7 @@ public class ServHandle implements PayServ.Iface {
                 Map<String, String> signParams = WeixinSubmit.buildRequestPara(resMap);
                 boolean verify = WeixinSubmit.verify(resMap, signParams);
                 if (!verify) {
-                    logger.error(MessageFormat.format("$$$$支付通知----weinxin支付参数非法! payRes[{0}]", payRes));
+                    logger.error(MessageFormat.format("$$$$支付通知----weinxin支付参数非法,验证签名失败! payRes[{0}]", payRes));
                     FailCode.addFails(result, FailCode.PARAM_ERROR);
                     return stringResult;
                 }
@@ -175,7 +175,7 @@ public class ServHandle implements PayServ.Iface {
                 Map<String, String> params = (Map)JSON.parseObject(payRes.getResUrl());
                 boolean verify = HebaoSubmit.verify(params);
                 if (!verify) {
-                    logger.error(MessageFormat.format("$$$$支付通知----hebaopay支付参数非法! payRes[{0}]", payRes));
+                    logger.error(MessageFormat.format("$$$$支付通知----hebaopay支付参数非法,验证签名失败! payRes[{0}]", payRes));
                     FailCode.addFails(result, FailCode.PARAM_ERROR);
                     return stringResult;
                 }
