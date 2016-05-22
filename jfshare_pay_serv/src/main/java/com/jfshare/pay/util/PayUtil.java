@@ -617,7 +617,7 @@ public class PayUtil {
             tbPayRecord.setThirdScore(0);
             tbPayRecord.setThirdTime(DateUtils.strToDateTime(jsonObject.get("payDate"), DateUtils.PATTERN_YYYYMMDDHHMMSS2));
             tbPayRecord.setThirdAccount(jsonObject.get("mobile"));
-            tbPayRecord.setPayState(jsonObject.get("mobile").equals("SUCCESS") ? 2 : 3);
+            tbPayRecord.setPayState(jsonObject.get("status").equals("SUCCESS") ? 2 : 3);
             tbPayRecord.setProcessTime(new DateTime());
         } catch (Exception e) {
             logger.error("解析支付通知失败 ==> " + payRes);
