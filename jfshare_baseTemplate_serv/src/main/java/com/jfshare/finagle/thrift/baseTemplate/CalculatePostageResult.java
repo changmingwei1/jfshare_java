@@ -437,14 +437,14 @@ public class CalculatePostageResult implements TBase<CalculatePostageResult, Cal
         case 2: // SELLER_POSTAGE_RETURN_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list28 = iprot.readListBegin();
-            this.sellerPostageReturnList = new ArrayList<SellerPostageReturn>(_list28.size);
-            for (int _i29 = 0; _i29 < _list28.size; ++_i29)
+            TList _list32 = iprot.readListBegin();
+            this.sellerPostageReturnList = new ArrayList<SellerPostageReturn>(_list32.size);
+            for (int _i33 = 0; _i33 < _list32.size; ++_i33)
             {
-              SellerPostageReturn _elem30;
-              _elem30 = new SellerPostageReturn();
-              _elem30.read(iprot);
-              this.sellerPostageReturnList.add(_elem30);
+              SellerPostageReturn _elem34;
+              _elem34 = new SellerPostageReturn();
+              _elem34.read(iprot);
+              this.sellerPostageReturnList.add(_elem34);
             }
             iprot.readListEnd();
             }
@@ -483,9 +483,9 @@ public class CalculatePostageResult implements TBase<CalculatePostageResult, Cal
       oprot.writeFieldBegin(SELLER_POSTAGE_RETURN_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.sellerPostageReturnList.size()));
-        for (SellerPostageReturn _iter31 : this.sellerPostageReturnList)
+        for (SellerPostageReturn _iter35 : this.sellerPostageReturnList)
         {
-          _iter31.write(oprot);
+          _iter35.write(oprot);
         }
         oprot.writeListEnd();
       }

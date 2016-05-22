@@ -27,6 +27,8 @@ public class TbPostageTemplate {
 
     private Integer deleted;
 
+    private Integer isUsed;
+
     public Integer getId() {
         return id;
     }
@@ -121,5 +123,13 @@ public class TbPostageTemplate {
 
     public void setDeleted(Integer deleted) {
         this.deleted = deleted;
+    }
+
+    public Integer getIsUsed() {
+        return isUsed;
+    }
+
+    public void setIsUsed(Integer isUsed) {
+        this.isUsed = isUsed;
     }
 }

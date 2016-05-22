@@ -33,7 +33,7 @@ public interface IPostageTemplateSvc {
      * @param sellerId
      * @return
      */
-    List<TbPostageTemplate> getPostageTemplateBySellerId(int sellerId, int group);
+    List<TbPostageTemplate> getPostageTemplateBySellerId(int sellerId, int group, int isUsed);
 
     /**
      * 根据id获取邮费模板信息
@@ -59,5 +59,7 @@ public interface IPostageTemplateSvc {
 
 
     List<SellerPostageReturnModel> calculatePostage(List<SellerPostageModel> productPostageModels, String sendTopProvince);
+
+    boolean setDefaultPostageTemplate(TbPostageTemplate tbPostageTemplate);
 
 }
