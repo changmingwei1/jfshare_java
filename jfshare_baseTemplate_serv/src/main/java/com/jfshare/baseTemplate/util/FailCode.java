@@ -21,5 +21,6 @@ public class FailCode {
     public static FailDesc POSTAGE_NOT_EXIST = new FailDesc("postage", "10202", "邮费不存在");
     public static FailDesc POSTAGE_CALCULATE_FAIL = new FailDesc("postage", "10203", "邮费计算错误");
     public static FailDesc POSTAGE_CALCULATE_PARAM_ERROR = new FailDesc("postage", "10204", "邮费计算参数错误");
-
+    public static FailDesc POSTAGE_CALCULATE_PRODUCT_POSTAGE_TEMPLATE_NOT_EXIST = new FailDesc("postage", "10205", "商品模板不存在");
+    public static FailDesc POSTAGE_CALCULATE_CAN_NOT_SEND = new FailDesc("postage", "10206", "商品不支持收货地址");
 }
