@@ -28,13 +28,15 @@ public interface TbPostageTemplateMapper {
         "template_group, template_desc, ",
         "create_time, ",
         "create_id, last_update_time, ",
-        "last_update_id, deleted)",
+        "last_update_id, deleted, ",
+        "is_used)",
         "values (#{sellerId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, ",
         "#{type,jdbcType=INTEGER}, #{postageInfo,jdbcType=VARCHAR}, ",
         "#{templateGroup,jdbcType=INTEGER}, #{templateDesc,jdbcType=VARCHAR}, ",
         "#{createTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}, ",
         "#{createId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}, ",
-        "#{lastUpdateId,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER})"
+        "#{lastUpdateId,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER}, ",
+        "#{isUsed,jdbcType=INTEGER})"
     })
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
     int insert(TbPostageTemplate record);
@@ -46,7 +48,7 @@ public interface TbPostageTemplateMapper {
     @Select({
         "select",
         "id, seller_id, name, type, postage_info, template_group, template_desc, create_time, ",
-        "create_id, last_update_time, last_update_id, deleted",
+        "create_id, last_update_time, last_update_id, deleted, is_used",
         "from tb_postage_template",
         "where id = #{id,jdbcType=INTEGER}"
     })
@@ -71,7 +73,8 @@ public interface TbPostageTemplateMapper {
           "create_id = #{createId,jdbcType=INTEGER},",
           "last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler},",
           "last_update_id = #{lastUpdateId,jdbcType=INTEGER},",
-          "deleted = #{deleted,jdbcType=INTEGER}",
+          "deleted = #{deleted,jdbcType=INTEGER},",
+          "is_used = #{isUsed,jdbcType=INTEGER}",
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(TbPostageTemplate record);

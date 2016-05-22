@@ -50,6 +50,8 @@ public class BaseTemplateServ {
     public com.jfshare.finagle.thrift.result.Result deletePostageTemplateBatch(List<PostageTemplate> postageTemplateList) throws TException;
     public PostageTemplateResult queryPostageTemplate(PostageTemplateQueryParam param) throws TException;
     public PostageTemplateResult getPostageTemplate(List<Integer> postageTemplateIds) throws TException;
+    public PostageTemplateResult getSellerPostageTemplate(SellerPostageTemplateParam param) throws TException;
+    public com.jfshare.finagle.thrift.result.Result setDefaultPostageTemplate(PostageTemplate postageTemplate) throws TException;
     public CalculatePostageResult calculatePostage(CalculatePostageParam param) throws TException;
   }
 
@@ -67,6 +69,8 @@ public class BaseTemplateServ {
     public void deletePostageTemplateBatch(List<PostageTemplate> postageTemplateList, AsyncMethodCallback<AsyncClient.deletePostageTemplateBatch_call> resultHandler) throws TException;
     public void queryPostageTemplate(PostageTemplateQueryParam param, AsyncMethodCallback<AsyncClient.queryPostageTemplate_call> resultHandler) throws TException;
     public void getPostageTemplate(List<Integer> postageTemplateIds, AsyncMethodCallback<AsyncClient.getPostageTemplate_call> resultHandler) throws TException;
+    public void getSellerPostageTemplate(SellerPostageTemplateParam param, AsyncMethodCallback<AsyncClient.getSellerPostageTemplate_call> resultHandler) throws TException;
+    public void setDefaultPostageTemplate(PostageTemplate postageTemplate, AsyncMethodCallback<AsyncClient.setDefaultPostageTemplate_call> resultHandler) throws TException;
     public void calculatePostage(CalculatePostageParam param, AsyncMethodCallback<AsyncClient.calculatePostage_call> resultHandler) throws TException;
   }
 
@@ -84,6 +88,8 @@ public class BaseTemplateServ {
     public Future<com.jfshare.finagle.thrift.result.Result> deletePostageTemplateBatch(List<PostageTemplate> postageTemplateList);
     public Future<PostageTemplateResult> queryPostageTemplate(PostageTemplateQueryParam param);
     public Future<PostageTemplateResult> getPostageTemplate(List<Integer> postageTemplateIds);
+    public Future<PostageTemplateResult> getSellerPostageTemplate(SellerPostageTemplateParam param);
+    public Future<com.jfshare.finagle.thrift.result.Result> setDefaultPostageTemplate(PostageTemplate postageTemplate);
     public Future<CalculatePostageResult> calculatePostage(CalculatePostageParam param);
   }
 
@@ -581,6 +587,76 @@ public class BaseTemplateServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getPostageTemplate failed: unknown result");
     }
+    public PostageTemplateResult getSellerPostageTemplate(SellerPostageTemplateParam param) throws TException
+    {
+      send_getSellerPostageTemplate(param);
+      return recv_getSellerPostageTemplate();
+    }
+
+    public void send_getSellerPostageTemplate(SellerPostageTemplateParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("getSellerPostageTemplate", TMessageType.CALL, ++seqid_));
+      getSellerPostageTemplate_args args = new getSellerPostageTemplate_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public PostageTemplateResult recv_getSellerPostageTemplate() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "getSellerPostageTemplate failed: out of sequence response");
+      }
+      getSellerPostageTemplate_result result = new getSellerPostageTemplate_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "getSellerPostageTemplate failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result setDefaultPostageTemplate(PostageTemplate postageTemplate) throws TException
+    {
+      send_setDefaultPostageTemplate(postageTemplate);
+      return recv_setDefaultPostageTemplate();
+    }
+
+    public void send_setDefaultPostageTemplate(PostageTemplate postageTemplate) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("setDefaultPostageTemplate", TMessageType.CALL, ++seqid_));
+      setDefaultPostageTemplate_args args = new setDefaultPostageTemplate_args();
+      args.setPostageTemplate(postageTemplate);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_setDefaultPostageTemplate() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "setDefaultPostageTemplate failed: out of sequence response");
+      }
+      setDefaultPostageTemplate_result result = new setDefaultPostageTemplate_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "setDefaultPostageTemplate failed: unknown result");
+    }
     public CalculatePostageResult calculatePostage(CalculatePostageParam param) throws TException
     {
       send_calculatePostage(param);
@@ -1044,6 +1120,68 @@ public class BaseTemplateServ {
         return (new Client(prot)).recv_getPostageTemplate();
       }
      }
+    public void getSellerPostageTemplate(SellerPostageTemplateParam param, AsyncMethodCallback<getSellerPostageTemplate_call> resultHandler) throws TException {
+      checkReady();
+      getSellerPostageTemplate_call method_call = new getSellerPostageTemplate_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class getSellerPostageTemplate_call extends TAsyncMethodCall {
+      private SellerPostageTemplateParam param;
+
+      public getSellerPostageTemplate_call(SellerPostageTemplateParam param, AsyncMethodCallback<getSellerPostageTemplate_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("getSellerPostageTemplate", TMessageType.CALL, 0));
+        getSellerPostageTemplate_args args = new getSellerPostageTemplate_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public PostageTemplateResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getSellerPostageTemplate();
+      }
+     }
+    public void setDefaultPostageTemplate(PostageTemplate postageTemplate, AsyncMethodCallback<setDefaultPostageTemplate_call> resultHandler) throws TException {
+      checkReady();
+      setDefaultPostageTemplate_call method_call = new setDefaultPostageTemplate_call(postageTemplate, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class setDefaultPostageTemplate_call extends TAsyncMethodCall {
+      private PostageTemplate postageTemplate;
+
+      public setDefaultPostageTemplate_call(PostageTemplate postageTemplate, AsyncMethodCallback<setDefaultPostageTemplate_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.postageTemplate = postageTemplate;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("setDefaultPostageTemplate", TMessageType.CALL, 0));
+        setDefaultPostageTemplate_args args = new setDefaultPostageTemplate_args();
+        args.setPostageTemplate(postageTemplate);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_setDefaultPostageTemplate();
+      }
+     }
     public void calculatePostage(CalculatePostageParam param, AsyncMethodCallback<calculatePostage_call> resultHandler) throws TException {
       checkReady();
       calculatePostage_call method_call = new calculatePostage_call(param, resultHandler, this, protocolFactory, transport);
@@ -1479,6 +1617,66 @@ public class BaseTemplateServ {
         return Future.exception(e);
       }
     }
+    public Future<PostageTemplateResult> getSellerPostageTemplate(SellerPostageTemplateParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("getSellerPostageTemplate", TMessageType.CALL, 0));
+        getSellerPostageTemplate_args __args__ = new getSellerPostageTemplate_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<PostageTemplateResult>>() {
+          public Future<PostageTemplateResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_getSellerPostageTemplate());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> setDefaultPostageTemplate(PostageTemplate postageTemplate) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("setDefaultPostageTemplate", TMessageType.CALL, 0));
+        setDefaultPostageTemplate_args __args__ = new setDefaultPostageTemplate_args();
+        __args__.setPostageTemplate(postageTemplate);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_setDefaultPostageTemplate());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<CalculatePostageResult> calculatePostage(CalculatePostageParam param) {
       try {
         // TODO: size
@@ -1529,6 +1727,8 @@ public class BaseTemplateServ {
       processMap_.put("deletePostageTemplateBatch", new deletePostageTemplateBatch());
       processMap_.put("queryPostageTemplate", new queryPostageTemplate());
       processMap_.put("getPostageTemplate", new getPostageTemplate());
+      processMap_.put("getSellerPostageTemplate", new getSellerPostageTemplate());
+      processMap_.put("setDefaultPostageTemplate", new setDefaultPostageTemplate());
       processMap_.put("calculatePostage", new calculatePostage());
     }
 
@@ -1877,6 +2077,56 @@ public class BaseTemplateServ {
         result.success = iface_.getPostageTemplate(args.postageTemplateIds);
         
         oprot.writeMessageBegin(new TMessage("getPostageTemplate", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class getSellerPostageTemplate implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        getSellerPostageTemplate_args args = new getSellerPostageTemplate_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("getSellerPostageTemplate", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        getSellerPostageTemplate_result result = new getSellerPostageTemplate_result();
+        result.success = iface_.getSellerPostageTemplate(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("getSellerPostageTemplate", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class setDefaultPostageTemplate implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        setDefaultPostageTemplate_args args = new setDefaultPostageTemplate_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("setDefaultPostageTemplate", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        setDefaultPostageTemplate_result result = new setDefaultPostageTemplate_result();
+        result.success = iface_.setDefaultPostageTemplate(args.postageTemplate);
+        
+        oprot.writeMessageBegin(new TMessage("setDefaultPostageTemplate", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -2769,6 +3019,140 @@ public class BaseTemplateServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("getPostageTemplate", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("getSellerPostageTemplate", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          getSellerPostageTemplate_args args = new getSellerPostageTemplate_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("getSellerPostageTemplate", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<PostageTemplateResult> future;
+          try {
+            future = iface.getSellerPostageTemplate(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<PostageTemplateResult, Future<byte[]>>() {
+              public Future<byte[]> apply(PostageTemplateResult value) {
+                getSellerPostageTemplate_result result = new getSellerPostageTemplate_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("getSellerPostageTemplate", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("setDefaultPostageTemplate", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          setDefaultPostageTemplate_args args = new setDefaultPostageTemplate_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("setDefaultPostageTemplate", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.setDefaultPostageTemplate(args.postageTemplate);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                setDefaultPostageTemplate_result result = new setDefaultPostageTemplate_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("setDefaultPostageTemplate", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -4949,14 +5333,14 @@ public class BaseTemplateServ {
         case 1: // STOREHOUSE_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list32 = iprot.readListBegin();
-            this.storehouseList = new ArrayList<Storehouse>(_list32.size);
-            for (int _i33 = 0; _i33 < _list32.size; ++_i33)
+            TList _list36 = iprot.readListBegin();
+            this.storehouseList = new ArrayList<Storehouse>(_list36.size);
+            for (int _i37 = 0; _i37 < _list36.size; ++_i37)
             {
-              Storehouse _elem34;
-              _elem34 = new Storehouse();
-              _elem34.read(iprot);
-              this.storehouseList.add(_elem34);
+              Storehouse _elem38;
+              _elem38 = new Storehouse();
+              _elem38.read(iprot);
+              this.storehouseList.add(_elem38);
             }
             iprot.readListEnd();
             }
@@ -4983,9 +5367,9 @@ public class BaseTemplateServ {
       oprot.writeFieldBegin(STOREHOUSE_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.storehouseList.size()));
-        for (Storehouse _iter35 : this.storehouseList)
+        for (Storehouse _iter39 : this.storehouseList)
         {
-          _iter35.write(oprot);
+          _iter39.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -6132,13 +6516,13 @@ public class BaseTemplateServ {
         case 1: // STOREHOUSE_IDS
           if (field.type == TType.LIST) {
             {
-            TList _list36 = iprot.readListBegin();
-            this.storehouseIds = new ArrayList<Integer>(_list36.size);
-            for (int _i37 = 0; _i37 < _list36.size; ++_i37)
+            TList _list40 = iprot.readListBegin();
+            this.storehouseIds = new ArrayList<Integer>(_list40.size);
+            for (int _i41 = 0; _i41 < _list40.size; ++_i41)
             {
-              int _elem38;
-              _elem38 = iprot.readI32();
-              this.storehouseIds.add(_elem38);
+              int _elem42;
+              _elem42 = iprot.readI32();
+              this.storehouseIds.add(_elem42);
             }
             iprot.readListEnd();
             }
@@ -6165,9 +6549,9 @@ public class BaseTemplateServ {
       oprot.writeFieldBegin(STOREHOUSE_IDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.I32, this.storehouseIds.size()));
-        for (int _iter39 : this.storehouseIds)
+        for (int _iter43 : this.storehouseIds)
         {
-          oprot.writeI32(_iter39);
+          oprot.writeI32(_iter43);
         }
         oprot.writeListEnd();
       }
@@ -9116,14 +9500,14 @@ public class BaseTemplateServ {
         case 1: // POSTAGE_TEMPLATE_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list40 = iprot.readListBegin();
-            this.postageTemplateList = new ArrayList<PostageTemplate>(_list40.size);
-            for (int _i41 = 0; _i41 < _list40.size; ++_i41)
+            TList _list44 = iprot.readListBegin();
+            this.postageTemplateList = new ArrayList<PostageTemplate>(_list44.size);
+            for (int _i45 = 0; _i45 < _list44.size; ++_i45)
             {
-              PostageTemplate _elem42;
-              _elem42 = new PostageTemplate();
-              _elem42.read(iprot);
-              this.postageTemplateList.add(_elem42);
+              PostageTemplate _elem46;
+              _elem46 = new PostageTemplate();
+              _elem46.read(iprot);
+              this.postageTemplateList.add(_elem46);
             }
             iprot.readListEnd();
             }
@@ -9150,9 +9534,9 @@ public class BaseTemplateServ {
       oprot.writeFieldBegin(POSTAGE_TEMPLATE_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.postageTemplateList.size()));
-        for (PostageTemplate _iter43 : this.postageTemplateList)
+        for (PostageTemplate _iter47 : this.postageTemplateList)
         {
-          _iter43.write(oprot);
+          _iter47.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -10299,13 +10683,13 @@ public class BaseTemplateServ {
         case 1: // POSTAGE_TEMPLATE_IDS
           if (field.type == TType.LIST) {
             {
-            TList _list44 = iprot.readListBegin();
-            this.postageTemplateIds = new ArrayList<Integer>(_list44.size);
-            for (int _i45 = 0; _i45 < _list44.size; ++_i45)
+            TList _list48 = iprot.readListBegin();
+            this.postageTemplateIds = new ArrayList<Integer>(_list48.size);
+            for (int _i49 = 0; _i49 < _list48.size; ++_i49)
             {
-              int _elem46;
-              _elem46 = iprot.readI32();
-              this.postageTemplateIds.add(_elem46);
+              int _elem50;
+              _elem50 = iprot.readI32();
+              this.postageTemplateIds.add(_elem50);
             }
             iprot.readListEnd();
             }
@@ -10332,9 +10716,9 @@ public class BaseTemplateServ {
       oprot.writeFieldBegin(POSTAGE_TEMPLATE_IDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.I32, this.postageTemplateIds.size()));
-        for (int _iter47 : this.postageTemplateIds)
+        for (int _iter51 : this.postageTemplateIds)
         {
-          oprot.writeI32(_iter47);
+          oprot.writeI32(_iter51);
         }
         oprot.writeListEnd();
       }
@@ -10632,6 +11016,1152 @@ public class BaseTemplateServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("getPostageTemplate_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class getSellerPostageTemplate_args implements TBase<getSellerPostageTemplate_args, getSellerPostageTemplate_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getSellerPostageTemplate_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)-1);
+
+
+  public SellerPostageTemplateParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)-1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case -1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, SellerPostageTemplateParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getSellerPostageTemplate_args.class, metaDataMap);
+  }
+
+
+  public getSellerPostageTemplate_args() {
+  }
+
+  public getSellerPostageTemplate_args(
+    SellerPostageTemplateParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getSellerPostageTemplate_args(getSellerPostageTemplate_args other) {
+    if (other.isSetParam()) {
+      this.param = new SellerPostageTemplateParam(other.param);
+    }
+  }
+
+  public getSellerPostageTemplate_args deepCopy() {
+    return new getSellerPostageTemplate_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public SellerPostageTemplateParam getParam() {
+    return this.param;
+  }
+
+  public getSellerPostageTemplate_args setParam(SellerPostageTemplateParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((SellerPostageTemplateParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getSellerPostageTemplate_args)
+      return this.equals((getSellerPostageTemplate_args)that);
+    return false;
+  }
+
+  public boolean equals(getSellerPostageTemplate_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getSellerPostageTemplate_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getSellerPostageTemplate_args typedOther = (getSellerPostageTemplate_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case -1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new SellerPostageTemplateParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getSellerPostageTemplate_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class getSellerPostageTemplate_result implements TBase<getSellerPostageTemplate_result, getSellerPostageTemplate_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getSellerPostageTemplate_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public PostageTemplateResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, PostageTemplateResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getSellerPostageTemplate_result.class, metaDataMap);
+  }
+
+
+  public getSellerPostageTemplate_result() {
+  }
+
+  public getSellerPostageTemplate_result(
+    PostageTemplateResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getSellerPostageTemplate_result(getSellerPostageTemplate_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new PostageTemplateResult(other.success);
+    }
+  }
+
+  public getSellerPostageTemplate_result deepCopy() {
+    return new getSellerPostageTemplate_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public PostageTemplateResult getSuccess() {
+    return this.success;
+  }
+
+  public getSellerPostageTemplate_result setSuccess(PostageTemplateResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((PostageTemplateResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getSellerPostageTemplate_result)
+      return this.equals((getSellerPostageTemplate_result)that);
+    return false;
+  }
+
+  public boolean equals(getSellerPostageTemplate_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getSellerPostageTemplate_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getSellerPostageTemplate_result typedOther = (getSellerPostageTemplate_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new PostageTemplateResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getSellerPostageTemplate_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class setDefaultPostageTemplate_args implements TBase<setDefaultPostageTemplate_args, setDefaultPostageTemplate_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("setDefaultPostageTemplate_args");
+
+  private static final TField POSTAGE_TEMPLATE_FIELD_DESC = new TField("postageTemplate", TType.STRUCT, (short)-1);
+
+
+  public PostageTemplate postageTemplate;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    POSTAGE_TEMPLATE((short)-1, "postageTemplate");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case -1: // POSTAGE_TEMPLATE
+  	return POSTAGE_TEMPLATE;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.POSTAGE_TEMPLATE, new FieldMetaData("postageTemplate", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, PostageTemplate.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(setDefaultPostageTemplate_args.class, metaDataMap);
+  }
+
+
+  public setDefaultPostageTemplate_args() {
+  }
+
+  public setDefaultPostageTemplate_args(
+    PostageTemplate postageTemplate)
+  {
+    this();
+    this.postageTemplate = postageTemplate;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public setDefaultPostageTemplate_args(setDefaultPostageTemplate_args other) {
+    if (other.isSetPostageTemplate()) {
+      this.postageTemplate = new PostageTemplate(other.postageTemplate);
+    }
+  }
+
+  public setDefaultPostageTemplate_args deepCopy() {
+    return new setDefaultPostageTemplate_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.postageTemplate = null;
+  }
+
+  public PostageTemplate getPostageTemplate() {
+    return this.postageTemplate;
+  }
+
+  public setDefaultPostageTemplate_args setPostageTemplate(PostageTemplate postageTemplate) {
+    this.postageTemplate = postageTemplate;
+    
+    return this;
+  }
+
+  public void unsetPostageTemplate() {
+    this.postageTemplate = null;
+  }
+
+  /** Returns true if field postageTemplate is set (has been asigned a value) and false otherwise */
+  public boolean isSetPostageTemplate() {
+    return this.postageTemplate != null;
+  }
+
+  public void setPostageTemplateIsSet(boolean value) {
+    if (!value) {
+      this.postageTemplate = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case POSTAGE_TEMPLATE:
+      if (value == null) {
+        unsetPostageTemplate();
+      } else {
+        setPostageTemplate((PostageTemplate)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case POSTAGE_TEMPLATE:
+      return getPostageTemplate();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case POSTAGE_TEMPLATE:
+      return isSetPostageTemplate();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof setDefaultPostageTemplate_args)
+      return this.equals((setDefaultPostageTemplate_args)that);
+    return false;
+  }
+
+  public boolean equals(setDefaultPostageTemplate_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_postageTemplate = true && this.isSetPostageTemplate();
+    boolean that_present_postageTemplate = true && that.isSetPostageTemplate();
+    if (this_present_postageTemplate || that_present_postageTemplate) {
+      if (!(this_present_postageTemplate && that_present_postageTemplate))
+        return false;
+      if (!this.postageTemplate.equals(that.postageTemplate))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_postageTemplate = true && (isSetPostageTemplate());
+    builder.append(present_postageTemplate);
+    if (present_postageTemplate)
+      builder.append(postageTemplate);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(setDefaultPostageTemplate_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    setDefaultPostageTemplate_args typedOther = (setDefaultPostageTemplate_args)other;
+
+    lastComparison = Boolean.valueOf(isSetPostageTemplate()).compareTo(typedOther.isSetPostageTemplate());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPostageTemplate()) {
+      lastComparison = TBaseHelper.compareTo(this.postageTemplate, typedOther.postageTemplate);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case -1: // POSTAGE_TEMPLATE
+          if (field.type == TType.STRUCT) {
+            this.postageTemplate = new PostageTemplate();
+            this.postageTemplate.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.postageTemplate != null) {
+      oprot.writeFieldBegin(POSTAGE_TEMPLATE_FIELD_DESC);
+      this.postageTemplate.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("setDefaultPostageTemplate_args(");
+    boolean first = true;
+    sb.append("postageTemplate:");
+    if (this.postageTemplate == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.postageTemplate);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class setDefaultPostageTemplate_result implements TBase<setDefaultPostageTemplate_result, setDefaultPostageTemplate_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("setDefaultPostageTemplate_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(setDefaultPostageTemplate_result.class, metaDataMap);
+  }
+
+
+  public setDefaultPostageTemplate_result() {
+  }
+
+  public setDefaultPostageTemplate_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public setDefaultPostageTemplate_result(setDefaultPostageTemplate_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public setDefaultPostageTemplate_result deepCopy() {
+    return new setDefaultPostageTemplate_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public setDefaultPostageTemplate_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof setDefaultPostageTemplate_result)
+      return this.equals((setDefaultPostageTemplate_result)that);
+    return false;
+  }
+
+  public boolean equals(setDefaultPostageTemplate_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(setDefaultPostageTemplate_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    setDefaultPostageTemplate_result typedOther = (setDefaultPostageTemplate_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("setDefaultPostageTemplate_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

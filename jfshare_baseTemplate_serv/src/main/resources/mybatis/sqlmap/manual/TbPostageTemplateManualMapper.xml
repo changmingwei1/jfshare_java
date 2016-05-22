@@ -21,6 +21,9 @@
             <if test="templateGroup != 0">
                 and template_group = #{templateGroup}
             </if>
+            <if test="isUsed != 0">
+                and is_used = #{isUesd}
+            </if>
         </where>
         limit 60
 
