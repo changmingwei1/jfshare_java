@@ -913,6 +913,66 @@ public class TbPostageTemplateExample {
             addCriterion("deleted not between", value1, value2, "deleted");
             return (Criteria) this;
         }
+
+        public Criteria andIsUsedIsNull() {
+            addCriterion("is_used is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedIsNotNull() {
+            addCriterion("is_used is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedEqualTo(Integer value) {
+            addCriterion("is_used =", value, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedNotEqualTo(Integer value) {
+            addCriterion("is_used <>", value, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedGreaterThan(Integer value) {
+            addCriterion("is_used >", value, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedGreaterThanOrEqualTo(Integer value) {
+            addCriterion("is_used >=", value, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedLessThan(Integer value) {
+            addCriterion("is_used <", value, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedLessThanOrEqualTo(Integer value) {
+            addCriterion("is_used <=", value, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedIn(List<Integer> values) {
+            addCriterion("is_used in", values, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedNotIn(List<Integer> values) {
+            addCriterion("is_used not in", values, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedBetween(Integer value1, Integer value2) {
+            addCriterion("is_used between", value1, value2, "isUsed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUsedNotBetween(Integer value1, Integer value2) {
+            addCriterion("is_used not between", value1, value2, "isUsed");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

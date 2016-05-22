@@ -24,6 +24,7 @@ import com.jfshare.finagle.thrift.baseTemplate.ProductRefProvince;
 import com.jfshare.finagle.thrift.baseTemplate.ProductStorehouse;
 import com.jfshare.finagle.thrift.baseTemplate.SellerPostageBasic;
 import com.jfshare.finagle.thrift.baseTemplate.SellerPostageReturn;
+import com.jfshare.finagle.thrift.baseTemplate.SellerPostageTemplateParam;
 import com.jfshare.finagle.thrift.baseTemplate.Storehouse;
 import com.jfshare.finagle.thrift.baseTemplate.StorehouseQueryParam;
 import com.jfshare.finagle.thrift.baseTemplate.StorehouseResult;
@@ -331,6 +332,7 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		queryMap.put("type", param.getType());
 		queryMap.put("name", param.getName());
 		queryMap.put("templateGroup", param.getTemplateGroup());
+		queryMap.put("isUsed", param.getIsUsed());
 		List<PostageTemplate> postageTemplateList = new ArrayList<>();
 		try {
 			List<TbPostageTemplate> tbPostageTemplateList = this.postageTemplateSvc.queryPostageTemplate(queryMap);
@@ -372,6 +374,29 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		}
 		postageTemplateResult.setPostageTemplateList(postageTemplateList);
 		return postageTemplateResult;
+	}
+
+	@Override
+	public PostageTemplateResult getSellerPostageTemplate(SellerPostageTemplateParam param) throws TException {
+
+
+
+		return null;
+	}
+
+	@Override
+	public Result setDefaultPostageTemplate(PostageTemplate postageTemplate) throws TException {
+		logger.info(">>>> setDefaultPostageTemplate ---- postageTemplate : {}", postageTemplate.toString());
+		Result result = new Result(0);
+		try {
+			TbPostageTemplate tbPostageTemplate = ConvertUtil.thrift2TbPostageTemplate(postageTemplate);
+			this.postageTemplateSvc.setDefaultPostageTemplate(tbPostageTemplate);
+		} catch (Exception e) {
+			logger.error("<<<<<<<< setDefaultPostageTemplate error !! postageTemplate");
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
+		return result;
 	}
 
 	@Override

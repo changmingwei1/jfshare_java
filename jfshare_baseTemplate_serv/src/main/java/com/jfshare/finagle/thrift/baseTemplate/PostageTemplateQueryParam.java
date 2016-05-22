@@ -37,6 +37,7 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
   private static final TField TYPE_FIELD_DESC = new TField("type", TType.I32, (short)3);
   private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)4);
   private static final TField TEMPLATE_GROUP_FIELD_DESC = new TField("templateGroup", TType.I32, (short)5);
+  private static final TField IS_USED_FIELD_DESC = new TField("isUsed", TType.I32, (short)6);
 
 
   public int id;
@@ -44,6 +45,7 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
   public int type;
   public String name;
   public int templateGroup;
+  public int isUsed;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -51,7 +53,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     SELLER_ID((short)2, "sellerId"),
     TYPE((short)3, "type"),
     NAME((short)4, "name"),
-    TEMPLATE_GROUP((short)5, "templateGroup");
+    TEMPLATE_GROUP((short)5, "templateGroup"),
+    IS_USED((short)6, "isUsed");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -76,6 +79,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
   	return NAME;
         case 5: // TEMPLATE_GROUP
   	return TEMPLATE_GROUP;
+        case 6: // IS_USED
+  	return IS_USED;
         default:
   	return null;
       }
@@ -121,7 +126,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
   private static final int __SELLERID_ISSET_ID = 1;
   private static final int __TYPE_ISSET_ID = 2;
   private static final int __TEMPLATEGROUP_ISSET_ID = 3;
-  private BitSet __isset_bit_vector = new BitSet(4);
+  private static final int __ISUSED_ISSET_ID = 4;
+  private BitSet __isset_bit_vector = new BitSet(5);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -135,6 +141,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     tmpMap.put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.TEMPLATE_GROUP, new FieldMetaData("templateGroup", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.IS_USED, new FieldMetaData("isUsed", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(PostageTemplateQueryParam.class, metaDataMap);
@@ -174,6 +182,7 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       this.name = other.name;
     }
     this.templateGroup = other.templateGroup;
+    this.isUsed = other.isUsed;
   }
 
   public PostageTemplateQueryParam deepCopy() {
@@ -191,6 +200,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     this.name = null;
     setTemplateGroupIsSet(false);
     this.templateGroup = 0;
+    setIsUsedIsSet(false);
+    this.isUsed = 0;
   }
 
   public int getId() {
@@ -314,6 +325,30 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     __isset_bit_vector.set(__TEMPLATEGROUP_ISSET_ID, value);
   }
 
+  public int getIsUsed() {
+    return this.isUsed;
+  }
+
+  public PostageTemplateQueryParam setIsUsed(int isUsed) {
+    this.isUsed = isUsed;
+    setIsUsedIsSet(true);
+
+    return this;
+  }
+
+  public void unsetIsUsed() {
+  __isset_bit_vector.clear(__ISUSED_ISSET_ID);
+  }
+
+  /** Returns true if field isUsed is set (has been asigned a value) and false otherwise */
+  public boolean isSetIsUsed() {
+    return __isset_bit_vector.get(__ISUSED_ISSET_ID);
+  }
+
+  public void setIsUsedIsSet(boolean value) {
+    __isset_bit_vector.set(__ISUSED_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ID:
@@ -351,6 +386,13 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
         setTemplateGroup((Integer)value);
       }
       break;
+    case IS_USED:
+      if (value == null) {
+        unsetIsUsed();
+      } else {
+        setIsUsed((Integer)value);
+      }
+      break;
     }
   }
 
@@ -366,6 +408,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       return getName();
     case TEMPLATE_GROUP:
       return new Integer(getTemplateGroup());
+    case IS_USED:
+      return new Integer(getIsUsed());
     }
     throw new IllegalStateException();
   }
@@ -387,6 +431,8 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       return isSetName();
     case TEMPLATE_GROUP:
       return isSetTemplateGroup();
+    case IS_USED:
+      return isSetIsUsed();
     }
     throw new IllegalStateException();
   }
@@ -443,6 +489,14 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
       if (this.templateGroup != that.templateGroup)
         return false;
     }
+    boolean this_present_isUsed = true && this.isSetIsUsed();
+    boolean that_present_isUsed = true && that.isSetIsUsed();
+    if (this_present_isUsed || that_present_isUsed) {
+      if (!(this_present_isUsed && that_present_isUsed))
+        return false;
+      if (this.isUsed != that.isUsed)
+        return false;
+    }
 
     return true;
   }
@@ -470,6 +524,10 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     builder.append(present_templateGroup);
     if (present_templateGroup)
       builder.append(templateGroup);
+    boolean present_isUsed = true && (isSetIsUsed());
+    builder.append(present_isUsed);
+    if (present_isUsed)
+      builder.append(isUsed);
     return builder.toHashCode();
   }
 
@@ -531,6 +589,16 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetIsUsed()).compareTo(typedOther.isSetIsUsed());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetIsUsed()) {
+      lastComparison = TBaseHelper.compareTo(this.isUsed, typedOther.isUsed);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -588,6 +656,14 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 6: // IS_USED
+          if (field.type == TType.I32) {
+            this.isUsed = iprot.readI32();
+            setIsUsedIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -622,6 +698,11 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     oprot.writeFieldBegin(TEMPLATE_GROUP_FIELD_DESC);
     oprot.writeI32(this.templateGroup);
     oprot.writeFieldEnd();
+    if (isSetIsUsed()) {
+      oprot.writeFieldBegin(IS_USED_FIELD_DESC);
+      oprot.writeI32(this.isUsed);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -655,6 +736,12 @@ public class PostageTemplateQueryParam implements TBase<PostageTemplateQueryPara
     sb.append("templateGroup:");
     sb.append(this.templateGroup);
     first = false;
+    if (isSetIsUsed()) {
+      if (!first) sb.append(", ");
+      sb.append("isUsed:");
+      sb.append(this.isUsed);
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

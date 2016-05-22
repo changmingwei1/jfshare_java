@@ -17,6 +17,8 @@ import com.jfshare.utils.JsonMapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -70,11 +72,12 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
     }
 
     @Override
-    public List<TbPostageTemplate> getPostageTemplateBySellerId(int sellerId, int group) {
+    public List<TbPostageTemplate> getPostageTemplateBySellerId(int sellerId, int group, int isUsed) {
         // TODO: 2016/5/11 先简单实现，后续需要在缓存里获取
         Map queryMap = new HashMap();
         queryMap.put("sellerId", sellerId);
-        queryMap.put("group", group);
+        queryMap.put("templateGroup", group);
+        queryMap.put("isUsed", 1);
         return this.postageTemplateDao.queryPostageTemplate(queryMap);
     }
 
@@ -209,7 +212,7 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
     public List<SellerPostageReturnModel> calculatePostage(List<SellerPostageModel> sellerPostageModels, String sendToProvince) {
 
         List<SellerPostageReturnModel> sellerPostageList = new ArrayList<>();
-
+        // TODO: 2016/5/21 如何提示商品邮费无法计算
         // 计算单个卖家商品总邮费
         for (SellerPostageModel sellerPostageModel : sellerPostageModels) {
             int sellerProductTotal = 0;
@@ -228,6 +231,25 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
         return sellerPostageList;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public boolean setDefaultPostageTemplate(TbPostageTemplate tbPostageTemplate) {
+
+        List<TbPostageTemplate> tbPostageTemplateList = this.getPostageTemplateBySellerId(tbPostageTemplate.getSellerId(), tbPostageTemplate.getTemplateGroup(), 1);
+        if (CollectionUtils.isEmpty(tbPostageTemplateList)) {
+            // 将原来使用的模板修改成不使用
+            TbPostageTemplate oldUsed = new TbPostageTemplate();
+            oldUsed.setId(tbPostageTemplateList.get(0).getId());
+            oldUsed.setIsUsed(2);
+            this.updatePostageTemplate(oldUsed);
+        }
+        TbPostageTemplate newUsed = new TbPostageTemplate();
+        newUsed.setId(tbPostageTemplate.getId());
+        newUsed.setIsUsed(1);
+        this.updatePostageTemplate(newUsed);
+        return true;
+    }
+
     /**
      * 获取商品维度邮费
      * @param model
@@ -238,8 +260,12 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
         int totalPostage = 0;
         // 获取模板信息
         TbPostageTemplate tbPostageTemplate = this.getById(model.getTemplateId());
-        // 模板不存在
+        // 模板不存在，返回错误数据
         if(tbPostageTemplate == null) {
+            return -1;
+        }
+        // 全国包邮，统一模板id
+        if (tbPostageTemplate.getId() == 1) {
             return 0;
         }
         String postageInfo = tbPostageTemplate.getPostageInfo();
@@ -252,6 +278,10 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
                 rule = postageModel.getRule();
                 break;
             }
+        }
+        // 没有找到对应的省份，返回错误数据
+        if (rule == "") {
+            return -1;
         }
         JSONObject jsonObject = JSON.parseObject(rule);
         int number = jsonObject.getInteger("number");
@@ -287,7 +317,7 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
         int totalPostage = Integer.MAX_VALUE;
 
         // 获取商家邮费优惠模板
-        List<TbPostageTemplate> templates = this.getPostageTemplateBySellerId(sellerId, 2);
+        List<TbPostageTemplate> templates = this.getPostageTemplateBySellerId(sellerId, 2, 1);
         if (CollectionUtils.isEmpty(templates)) {
             return Integer.MAX_VALUE;
         }
@@ -313,6 +343,10 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
                     rule = postageModel.getRule();
                     break;
                 }
+            }
+            // 没有找到对应的省份，返回错误数据
+            if (rule == "") {
+                return totalPostage;
             }
             JSONObject jsonObject = JSON.parseObject(rule);
             int number = jsonObject.getInteger("number");
