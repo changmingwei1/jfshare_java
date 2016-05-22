@@ -3,6 +3,8 @@ package com.jfshare.cart.dao.redis;
 import java.util.List;
 import java.util.Map;
 
+import com.jfshare.cart.util.Constant;
+import com.jfshare.cart.util.NumberUtil;
 import com.jfshare.cart.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,23 @@ public class MapRedisManager extends BaseRedisManager {
 		} finally {
 			this.getJedisPool().returnResource(jedis);
 		}
+		return ret;
+	}
+
+	public int getMapTotal(String key) {
+		if (StringUtil.empty(key))
+			return 0;
+
+		int ret = 0;
+		Map<String, String> map = getMap(key);
+		for (Map.Entry<String, String> item :map.entrySet()) {
+			String value = item.getValue();
+			String[] values = value.split(Constant.SEPARATOR);
+			if (values == null || values.length < 3)
+				continue;
+			ret += NumberUtil.parseInteger(values[0]);
+		}
+
 		return ret;
 	}
 

@@ -388,7 +388,7 @@ public class PayUtil {
                 payUrlMap.put("partnerid", WeixinConfig.mch_id);
                 payUrlMap.put("prepayid", retMap.get("prepay_id"));
                 payUrlMap.put("package", "Sign=WXPay");
-                payUrlMap.put("nonceStr", RandomStringUtils.randomAlphanumeric(20));
+                payUrlMap.put("noncestr", RandomStringUtils.randomAlphanumeric(20));
                 payUrlMap.put("timestamp",ConvertUtil.getString(new DateTime().getMillis()/1000));
                 Map<String, String> paramSign = WeixinSubmit.buildRequestPara(payUrlMap);
                 payUrlMap.put("sign", paramSign.get("sign"));

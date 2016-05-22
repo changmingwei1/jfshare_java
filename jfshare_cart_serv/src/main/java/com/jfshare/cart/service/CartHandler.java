@@ -57,7 +57,7 @@ public class CartHandler implements CartServ.Iface {
 
 		String key = StringUtil.join(Constant.CART_KEY_PREFIX, userKey, Constant.SEPARATOR);
 
-		Integer count = readCartRedisManager.getMapSize(key);
+		Integer count = readCartRedisManager.getMapTotal(key);
 
 		/**** 重置失效时间,未登录数据设置过期时间 ****/
 		if (!StringUtil.isNumber(userKey))
