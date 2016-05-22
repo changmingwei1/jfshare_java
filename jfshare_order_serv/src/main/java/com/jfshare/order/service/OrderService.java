@@ -272,7 +272,7 @@ public class OrderService {
         }
 
         //释放库存锁定量
-        stockClient.releaseLockCount(order.getOrderId(), order.getTbOrderInfoList());
+        stockClient.releaseLockCount(order.getOrderId(), orderModel.getTbOrderInfoList());
         //TODO 超卖
 
         return ret;
