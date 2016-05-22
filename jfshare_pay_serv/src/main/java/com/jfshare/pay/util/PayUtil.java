@@ -600,6 +600,26 @@ public class PayUtil {
         return payUrl;
     }
 
+    public static TbPayRecordWithBLOBs getResHebaoPay(PayRes payRes, Map<String, String> jsonObject) {
+        TbPayRecordWithBLOBs tbPayRecord = null;
+        try {
+            tbPayRecord = new TbPayRecordWithBLOBs();
+            tbPayRecord.setPayId(jsonObject.get("orderId"));
+            tbPayRecord.setThirdRet(payRes.getResUrl());
+            tbPayRecord.setThirdId(jsonObject.get("payNo"));
+            tbPayRecord.setThirdPrice(ConvertUtil.getInt(jsonObject.get("amount")));
+            tbPayRecord.setThirdScore(0);
+            tbPayRecord.setThirdTime(DateUtils.strToDateTime(jsonObject.get("payDate"), DateUtils.PATTERN_YYYYMMDDHHMMSS2));
+            tbPayRecord.setThirdAccount(jsonObject.get("mobile"));
+            tbPayRecord.setPayState(jsonObject.get("mobile").equals("SUCCESS") ? 2 : 3);
+            tbPayRecord.setProcessTime(new DateTime());
+        } catch (Exception e) {
+            logger.error("解析支付通知失败 ==> " + payRes);
+        }
+
+        return tbPayRecord;
+    }
+
     /**
      * 生成二维码byte流
      * @param param

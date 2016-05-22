@@ -13,6 +13,7 @@ import com.jfshare.pay.service.IPaySvc;
 import com.jfshare.pay.util.FailCode;
 import com.jfshare.pay.util.PayUtil;
 import com.jfshare.pay.util.alipay.util.AlipayNotify;
+import com.jfshare.pay.util.hebaopay.HebaoSubmit;
 import com.jfshare.pay.util.weixinpay.WeixinSubmit;
 import com.jfshare.utils.CryptoUtil;
 import com.jfshare.utils.StringUtil;
@@ -143,7 +144,8 @@ public class ServHandle implements PayServ.Iface {
             //天翼
             if (payRes.getPayChannel() == 1) {
                 payResRecord = PayUtil.getResTianYi(payRes);
-            } else if (payRes.getPayChannel() == 2) {
+            } else if (payRes.getPayChannel() == 2 || payRes.getPayChannel() == 5 ||
+                    payRes.getPayChannel() == 7) {
                 Map<String, String> params = (Map)JSON.parseObject(payRes.getResUrl());
                 boolean verify = AlipayNotify.verify(params);
                 if (!verify) {
@@ -153,7 +155,8 @@ public class ServHandle implements PayServ.Iface {
                 }
 
                 payResRecord = PayUtil.getResAliPay(payRes, params);
-            } else if (payRes.getPayChannel() == 3) {
+            } else if (payRes.getPayChannel() == 3 || payRes.getPayChannel() == 4 ||
+                    payRes.getPayChannel() == 9) {
                 Map<String, String> params = (Map)JSON.parseObject(payRes.getResUrl());
                 String resUrlXml = null;
                 for (String key : params.keySet()) { //取json的key是xml内容
@@ -168,6 +171,16 @@ public class ServHandle implements PayServ.Iface {
                     return stringResult;
                 }
                 payResRecord = PayUtil.getResWeixinPay(payRes, resMap);
+            } else if (payRes.getPayChannel() == 8 || payRes.getPayChannel() == 6) {
+                Map<String, String> params = (Map)JSON.parseObject(payRes.getResUrl());
+                boolean verify = HebaoSubmit.verify(params);
+                if (!verify) {
+                    logger.error(MessageFormat.format("$$$$支付通知----hebaopay支付参数非法! payRes[{0}]", payRes));
+                    FailCode.addFails(result, FailCode.PARAM_ERROR);
+                    return stringResult;
+                }
+
+                payResRecord = PayUtil.getResHebaoPay(payRes, params);
             }
 
             if (payResRecord == null || StringUtil.isNullOrEmpty(payResRecord.getPayId())) {

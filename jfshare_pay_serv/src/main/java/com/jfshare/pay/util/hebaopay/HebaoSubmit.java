@@ -2,6 +2,7 @@ package com.jfshare.pay.util.hebaopay;
 
 import com.jfshare.pay.util.alipay.sign.MD5;
 import com.jfshare.pay.util.alipay.util.AlipayCore;
+import com.jfshare.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,5 +148,26 @@ public class HebaoSubmit {
 
 //        logger.info("params = [" + ss + "]");
         return ss.toString();
+    }
+
+    public static boolean verify(Map<String, String> params) {
+        String hmac = params.get("hmac");
+        if (StringUtil.isNullOrEmpty(hmac)) {
+            return false;
+        }
+
+        params.remove("hmac");
+        Map<String, String> retMac = buildRequestPara(params);
+        if (retMac.get("hmac") == null || !retMac.get("hmac").equals(hmac)) {
+            params.put("hmac", hmac);
+            logger.error("和包支付支付通知的签名验证fail!");
+            return false;
+        }
+        if (retMac.get("status") == null || !retMac.get("status").equals("SUCCESS")) {
+            logger.error("和包支付支付通知的返回状态fail!");
+            return false;
+        }
+
+        return true;
     }
 }
