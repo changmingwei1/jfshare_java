@@ -599,6 +599,13 @@ public class PayUtil {
         return payUrl;
     }
 
+    /**
+     * hebao notify demo
+     * {"hmac":"d0d0de92470f9d00ea4ad3c817c3f17e","merchantId":"888009953110701","payNo":"201605226650729006","returnCode":"000000","message":"SUCCESS","signType":"MD5","type":"OfflineNotify","version":"2.0.0","amount":"1","amtItem":"CNY_AMT=1#CMY_AMT=0#RED_AMT=0#VCH_AMT=0#POT_CHG_AMT=0","bankAbbr":"","mobile":"150****8779","orderId":"3404ab75feb1a15d9d34cce62385a5b2","payDate":"20160522173209","accountDate":"20160522","reserved1":"","reserved2":"","status":"SUCCESS","orderDate":"20160522","fee":"0"}
+     * @param payRes
+     * @param jsonObject
+     * @return
+     */
     public static TbPayRecordWithBLOBs getResHebaoPay(PayRes payRes, Map<String, String> jsonObject) {
         TbPayRecordWithBLOBs tbPayRecord = null;
         try {
