@@ -465,6 +465,7 @@ public class CheckUtil {
                     int postage = PriceUtils.strToInt(s.getPostage());
                     int closingPrice = PriceUtils.strToInt(order.getClosingPrice());
                     order.setClosingPrice(PriceUtils.intToStr(closingPrice + postage));
+                    order.setPostageExt(s.getPostageTemplate());
                 }
             }
         }

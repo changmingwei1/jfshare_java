@@ -60,7 +60,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   private static final TField POSTAGE_FIELD_DESC = new TField("postage", TType.STRING, (short)26);
   private static final TField REF_PRICE_FIELD_DESC = new TField("refPrice", TType.STRING, (short)27);
   private static final TField THIRD_EXCHANGE_RATE_FIELD_DESC = new TField("thirdExchangeRate", TType.STRING, (short)28);
-  private static final TField WEIGHT_FIELD_DESC = new TField("weight", TType.STRING, (short)29);
+  private static final TField POSTAGE_EXT_FIELD_DESC = new TField("postageExt", TType.STRING, (short)29);
+  private static final TField WEIGHT_FIELD_DESC = new TField("weight", TType.STRING, (short)30);
 
 
   public String orderId;
@@ -91,6 +92,7 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   public String postage;
   public String refPrice;
   public String thirdExchangeRate;
+  public String postageExt;
   public String weight;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -123,7 +125,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     POSTAGE((short)26, "postage"),
     REF_PRICE((short)27, "refPrice"),
     THIRD_EXCHANGE_RATE((short)28, "thirdExchangeRate"),
-    WEIGHT((short)29, "weight");
+    POSTAGE_EXT((short)29, "postageExt"),
+    WEIGHT((short)30, "weight");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -194,7 +197,9 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
   	return REF_PRICE;
         case 28: // THIRD_EXCHANGE_RATE
   	return THIRD_EXCHANGE_RATE;
-        case 29: // WEIGHT
+        case 29: // POSTAGE_EXT
+  	return POSTAGE_EXT;
+        case 30: // WEIGHT
   	return WEIGHT;
         default:
   	return null;
@@ -303,6 +308,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     tmpMap.put(_Fields.REF_PRICE, new FieldMetaData("refPrice", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.THIRD_EXCHANGE_RATE, new FieldMetaData("thirdExchangeRate", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.POSTAGE_EXT, new FieldMetaData("postageExt", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.WEIGHT, new FieldMetaData("weight", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
@@ -442,6 +449,9 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     if (other.isSetThirdExchangeRate()) {
       this.thirdExchangeRate = other.thirdExchangeRate;
     }
+    if (other.isSetPostageExt()) {
+      this.postageExt = other.postageExt;
+    }
     if (other.isSetWeight()) {
       this.weight = other.weight;
     }
@@ -487,6 +497,7 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     this.postage = null;
     this.refPrice = null;
     this.thirdExchangeRate = null;
+    this.postageExt = null;
     this.weight = null;
   }
 
@@ -1184,6 +1195,31 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     }
   }
 
+  public String getPostageExt() {
+    return this.postageExt;
+  }
+
+  public OrderInfo setPostageExt(String postageExt) {
+    this.postageExt = postageExt;
+    
+    return this;
+  }
+
+  public void unsetPostageExt() {
+    this.postageExt = null;
+  }
+
+  /** Returns true if field postageExt is set (has been asigned a value) and false otherwise */
+  public boolean isSetPostageExt() {
+    return this.postageExt != null;
+  }
+
+  public void setPostageExtIsSet(boolean value) {
+    if (!value) {
+      this.postageExt = null;
+    }
+  }
+
   public String getWeight() {
     return this.weight;
   }
@@ -1407,6 +1443,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         setThirdExchangeRate((String)value);
       }
       break;
+    case POSTAGE_EXT:
+      if (value == null) {
+        unsetPostageExt();
+      } else {
+        setPostageExt((String)value);
+      }
+      break;
     case WEIGHT:
       if (value == null) {
         unsetWeight();
@@ -1475,6 +1518,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       return getRefPrice();
     case THIRD_EXCHANGE_RATE:
       return getThirdExchangeRate();
+    case POSTAGE_EXT:
+      return getPostageExt();
     case WEIGHT:
       return getWeight();
     }
@@ -1544,6 +1589,8 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       return isSetRefPrice();
     case THIRD_EXCHANGE_RATE:
       return isSetThirdExchangeRate();
+    case POSTAGE_EXT:
+      return isSetPostageExt();
     case WEIGHT:
       return isSetWeight();
     }
@@ -1786,6 +1833,14 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       if (!this.thirdExchangeRate.equals(that.thirdExchangeRate))
         return false;
     }
+    boolean this_present_postageExt = true && this.isSetPostageExt();
+    boolean that_present_postageExt = true && that.isSetPostageExt();
+    if (this_present_postageExt || that_present_postageExt) {
+      if (!(this_present_postageExt && that_present_postageExt))
+        return false;
+      if (!this.postageExt.equals(that.postageExt))
+        return false;
+    }
     boolean this_present_weight = true && this.isSetWeight();
     boolean that_present_weight = true && that.isSetWeight();
     if (this_present_weight || that_present_weight) {
@@ -1913,6 +1968,10 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
     builder.append(present_thirdExchangeRate);
     if (present_thirdExchangeRate)
       builder.append(thirdExchangeRate);
+    boolean present_postageExt = true && (isSetPostageExt());
+    builder.append(present_postageExt);
+    if (present_postageExt)
+      builder.append(postageExt);
     boolean present_weight = true && (isSetWeight());
     builder.append(present_weight);
     if (present_weight)
@@ -2208,6 +2267,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetPostageExt()).compareTo(typedOther.isSetPostageExt());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPostageExt()) {
+      lastComparison = TBaseHelper.compareTo(this.postageExt, typedOther.postageExt);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     lastComparison = Boolean.valueOf(isSetWeight()).compareTo(typedOther.isSetWeight());
     if (lastComparison != 0) {
       return lastComparison;
@@ -2438,7 +2507,14 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 29: // WEIGHT
+        case 29: // POSTAGE_EXT
+          if (field.type == TType.STRING) {
+            this.postageExt = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 30: // WEIGHT
           if (field.type == TType.STRING) {
             this.weight = iprot.readString();
           } else {
@@ -2599,6 +2675,13 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
       if (isSetThirdExchangeRate()) {
         oprot.writeFieldBegin(THIRD_EXCHANGE_RATE_FIELD_DESC);
         oprot.writeString(this.thirdExchangeRate);
+        oprot.writeFieldEnd();
+      }
+    }
+    if (this.postageExt != null) {
+      if (isSetPostageExt()) {
+        oprot.writeFieldBegin(POSTAGE_EXT_FIELD_DESC);
+        oprot.writeString(this.postageExt);
         oprot.writeFieldEnd();
       }
     }
@@ -2827,6 +2910,16 @@ public class OrderInfo implements TBase<OrderInfo, OrderInfo._Fields>, java.io.S
         sb.append("null");
       } else {
         sb.append(this.thirdExchangeRate);
+      }
+      first = false;
+      }
+    if (isSetPostageExt()) {
+      if (!first) sb.append(", ");
+      sb.append("postageExt:");
+      if (this.postageExt == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.postageExt);
       }
       first = false;
       }

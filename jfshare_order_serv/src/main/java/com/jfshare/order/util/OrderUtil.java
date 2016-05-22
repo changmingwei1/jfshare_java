@@ -1,6 +1,7 @@
 package com.jfshare.order.util;
 
 import com.jfshare.finagle.thrift.order.*;
+import com.jfshare.finagle.thrift.trade.BuyInfo;
 import com.jfshare.order.common.Commons;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderInfoRecord;
@@ -60,6 +61,7 @@ public class OrderUtil {
         orderDetail.setOrderBatch(orderModel.getOrderBatch());
         orderDetail.setThirdScore(orderModel.getThirdScore());
         orderDetail.setPostage(PriceUtils.intToStr(orderModel.getPostage()));
+        orderDetail.setPostageExt(orderModel.getPostageext());
 
         DeliverInfo deliverInfo = new DeliverInfo();
         deliverInfo.setReceiverTele(orderModel.getReceiverTele());
@@ -127,6 +129,9 @@ public class OrderUtil {
                 productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
             if(tbOrderInfoRecord.getThirdexchangerate() != null)
                 productInfo.setThirdExchangeRate(tbOrderInfoRecord.getThirdexchangerate());
+            if(tbOrderInfoRecord.getPostageext() != null) {
+                productInfo.setPostageExt(tbOrderInfoRecord.getPostageext());
+            }
             productInfos.add(productInfo);
         }
         orderDetail.setProductList(productInfos);
@@ -176,6 +181,7 @@ public class OrderUtil {
         orderDetail.setOrderBatch(orderModel.getOrderBatch());
         orderDetail.setThirdScore(orderModel.getThirdScore());
         orderDetail.setPostage(PriceUtils.strToInt(orderModel.getPostage()));
+        orderDetail.setPostageext(orderModel.getPostageExt());
 
         DeliverInfo deliverInfo = orderModel.getDeliverInfo();
         if (deliverInfo != null) {
@@ -236,6 +242,7 @@ public class OrderUtil {
             productInfo.setStorehouseId(tbOrderInfoRecord.getStorehouseId());
             productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
             productInfo.setThirdexchangerate(tbOrderInfoRecord.getThirdExchangeRate());
+            productInfo.setPostageext(tbOrderInfoRecord.getPostageExt());
             productInfos. add(productInfo);
         }
         orderDetail.setTbOrderInfoList(productInfos);
@@ -409,5 +416,17 @@ public class OrderUtil {
         }
 
         return orderCounts;
+    }
+
+    /**
+     * 获取买家支付非邮费部分金额
+     * @param orderList
+     * @return
+     */
+    public static int getPostageAmount(List<OrderModel> orderList) {
+        int totalPostage = 0;
+        for(OrderModel order : orderList)
+            totalPostage += order.getClosingPrice();
+        return totalPostage;
     }
 }
