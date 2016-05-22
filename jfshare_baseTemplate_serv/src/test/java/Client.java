@@ -170,7 +170,7 @@ public class Client extends TestCase{
     public void testCalculatePostage() throws Exception {
         CalculatePostageParam postageParam = new CalculatePostageParam();
 //        postageParam.setSendToProvince("11111");
-        postageParam.setSendToProvince("");
+        postageParam.setSendToProvince("350000");
         SellerPostageBasic sellerPostageBasic = new SellerPostageBasic();
         sellerPostageBasic.setSellerId(13);
         // 初始化商品
