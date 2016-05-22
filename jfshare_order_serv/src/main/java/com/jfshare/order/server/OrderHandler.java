@@ -14,6 +14,7 @@ import com.jfshare.order.dao.IOrderJedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
 import com.jfshare.order.model.OrderModel;
+import com.jfshare.order.model.OrderOpt;
 import com.jfshare.order.model.TbOrderInfoRecord;
 import com.jfshare.order.server.depend.CommonClient;
 import com.jfshare.order.server.depend.ExpressClient;

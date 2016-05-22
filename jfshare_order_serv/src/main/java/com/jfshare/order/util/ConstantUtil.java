@@ -7,6 +7,10 @@ public class ConstantUtil {
     //支付状态前缀
     public static final String REDIS_KEY_PAY_STATE_PREFIX = "paystate:";
 
+    //订单操作日志
+    public static final String REDIS_KEY_ORDER_OPT_QUEUE = "order_opt_queue";
+
+
     //订单交易类型，Z0001积分兑换类，Z0002虚拟商品-话费直充，Z0003实体交易，Z0004货到付款，Z0005积分现金购，Z0006天天红包，Z9001一元抢，Z9002限时抢，Z9003拍下立减，Z8001虚拟商品-卡密，Z8002虚拟商品-密码（兑换码）
     public static enum TRADE_CODE {
         ORDER_CODE_EXCHANGE("Z0001"), ORDER_CODE_TEL_FARE("Z0002"), ORDER_CODE_ENTITY("Z0003"), ORDER_CODE_COD("Z0004"), ORDER_CODE_SCORE_CASH("Z0005"),
