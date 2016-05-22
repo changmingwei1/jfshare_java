@@ -9,6 +9,7 @@ import java.util.Map;
 import com.jfshare.pay.util.SignType;
 import com.jfshare.pay.util.alipay.config.AlipayConfig;
 import com.jfshare.pay.util.alipay.sign.MD5;
+import com.jfshare.pay.util.alipay.sign.RSA;
 
 /* *
  *类名：AlipayNotify
@@ -73,8 +74,13 @@ public class AlipayNotify {
         String preSignStr = AlipayCore.createLinkString(sParaNew);
         //获得签名验证结果
         boolean isSign = false;
-        if(SignType.MD5.getEnumVal().equals("MD5") ) {
+
+        String signType = "";
+        if(Params.get("sign_type") != null) {signType = Params.get("sign_type");}
+        if(SignType.MD5.getEnumVal().equals(signType) ) {
         	isSign = MD5.verify(preSignStr, sign, AlipayConfig.key, AlipayConfig.input_charset);
+        } else if (SignType.RSA.getEnumVal().equals(signType)) {
+            isSign = RSA.verify(preSignStr, sign, AlipayConfig.ALIPAY_RSA_PUBLIC, AlipayConfig.input_charset);
         }
         return isSign;
     }
