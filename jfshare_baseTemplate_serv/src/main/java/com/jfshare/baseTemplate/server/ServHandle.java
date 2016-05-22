@@ -389,7 +389,14 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		logger.info(">>>> setDefaultPostageTemplate ---- postageTemplate : {}", postageTemplate.toString());
 		Result result = new Result(0);
 		try {
+			TbPostageTemplate dbPostageTemplate = this.postageTemplateSvc.getById(postageTemplate.getId());
+			if (dbPostageTemplate.getTemplateGroup() == 1) {
+				result.setCode(1);
+				result.addToFailDescList(FailCode.PARAM_ERROR);
+				return result;
+			}
 			TbPostageTemplate tbPostageTemplate = ConvertUtil.thrift2TbPostageTemplate(postageTemplate);
+
 			this.postageTemplateSvc.setDefaultPostageTemplate(tbPostageTemplate);
 		} catch (Exception e) {
 			logger.error("<<<<<<<< setDefaultPostageTemplate error !! postageTemplate");
@@ -430,14 +437,14 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		List<SellerPostageReturnModel> sellerPostageList = new ArrayList<>();
 		try {
 //			total = this.postageTemplateSvc.calculatePostage(calculatePostageModel);
-			sellerPostageList = this.postageTemplateSvc.calculatePostage(sellerPostageModels, sendTProvince);
+			calculatePostageResult = this.postageTemplateSvc.calculatePostage(sellerPostageModels, sendTProvince);
 		} catch (Exception e) {
 			logger.error("<<<<<<<< calculatePostage error !! param : " + param.toString(), e);
 			result.setCode(1);
 			result.addToFailDescList(FailCode.POSTAGE_CALCULATE_PARAM_ERROR);
 			return calculatePostageResult;
 		}
-		if (CollectionUtils.isEmpty(sellerPostageList)) {
+		/*if (CollectionUtils.isEmpty(sellerPostageList)) {
 			logger.error("<<<<<<<< calculatePostage error !! param : " + param.toString());
 			result.setCode(1);
 			result.addToFailDescList(FailCode.POSTAGE_CALCULATE_FAIL);
@@ -449,7 +456,7 @@ public class ServHandle implements BaseTemplateServ.Iface {
 				totalPostage += model.getPostage();
 			}
 			calculatePostageResult.setTotalPostage(totalPostage + "");
-		}
+		}*/
 
 		return calculatePostageResult;
 	}
