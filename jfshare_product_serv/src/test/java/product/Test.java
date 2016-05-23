@@ -1,5 +1,8 @@
 package product;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jfshare.finagle.thrift.product.ProductSku;
 import com.jfshare.finagle.thrift.product.ProductSkuItem;
 import com.jfshare.utils.BeanUtil;
@@ -34,6 +37,15 @@ public class Test {
             productSku.setSkuItems(skuItems);
 
             System.err.println(productSku);
+
+
+            String json = "{\"itemdetail\":[{\"goodsid\":\"516764\",\"weight\":\"40\",\"brandName\":\"\",\"category\":\"15073\",\"goodsname\":\"MISS\tFACE\t透明质酸清润焕采眼霜\t30g\",\"place_production\":\"杭州\",\"goodsbarcode\":\"6922239920352\",\"unit\":\"个\",\"prodescription\":\"\",\"specification\":\"1*30g\",\"pubflag\":\"1\"}]}";
+
+            JSONObject itemDetail = JSON.parseObject(json);
+            JSONArray details = itemDetail.getJSONArray("itemdetail");
+
+            System.out.println(details.get(0));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

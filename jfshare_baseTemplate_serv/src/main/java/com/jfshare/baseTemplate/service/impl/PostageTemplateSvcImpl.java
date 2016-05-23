@@ -17,6 +17,7 @@ import com.jfshare.finagle.thrift.baseTemplate.CalculatePostageResult;
 import com.jfshare.finagle.thrift.baseTemplate.SellerPostageReturn;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
+import com.jfshare.utils.PriceUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
@@ -219,7 +220,6 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
         calculatePostageResult.setResult(result);
         int totalPostage = 0;
 
-        List<SellerPostageReturnModel> sellerPostageList = new ArrayList<>();
         // 计算单个卖家商品总邮费
         for (SellerPostageModel sellerPostageModel : sellerPostageModels) {
             int sellerProductTotal = 0;
@@ -247,10 +247,17 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
 
             }
             // 计算商家维度邮费
-            sellerTotal = getShopPostage(sellerPostageModel.getSellerId(), sellerPostageModel.getProductPostageModels(), sendToProvince);
-            // 无法计算卖家维度运费， 模板不存在或者无收货地址匹配的模板
-            if (sellerTotal < 0) {
+            // 获取商家邮费优惠模板
+            List<TbPostageTemplate> templates = this.getPostageTemplateBySellerId(sellerPostageModel.getSellerId(), 2, 1);
+            // 商家邮费优惠模板不存在
+            if (CollectionUtils.isEmpty(templates)) {
                 sellerTotal = Integer.MAX_VALUE;
+            } else {
+                sellerTotal = getShopPostage(templates, sellerPostageModel.getProductPostageModels(), sendToProvince);
+                // 无法计算卖家维度运费， 模板不存在或者无收货地址匹配的模板
+                if (sellerTotal < 0) {
+                    sellerTotal = Integer.MAX_VALUE;
+                }
             }
 
             // 如果两个结果都没计算成功
@@ -261,13 +268,13 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
             } else {
                 int minPostage = getMin(sellerProductTotal, sellerTotal);
                 totalPostage += minPostage;
-                calculatePostageResult.addToSellerPostageReturnList(new SellerPostageReturn(sellerPostageModel.getSellerId(), minPostage + ""));
+                calculatePostageResult.addToSellerPostageReturnList(new SellerPostageReturn(sellerPostageModel.getSellerId(), PriceUtils.intToStr(minPostage)));
             }
 
         }
         if (CollectionUtils.isEmpty(result.getFailDescList())) {
             result.setCode(0);
-            calculatePostageResult.setTotalPostage(totalPostage + "");
+            calculatePostageResult.setTotalPostage(PriceUtils.intToStr(totalPostage));
         } else {
             result.setCode(1);
         }
@@ -323,14 +330,14 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
             }
         }
         // 没有找到对应的省份，返回错误数据
-        if (rule == "") {
+        if ("".equals(rule)) {
             return -2;
         }
         JSONObject jsonObject = JSON.parseObject(rule);
         int number = jsonObject.getInteger("number");
-        int postage = jsonObject.getInteger("postage");
+        int postage = PriceUtils.strToInt(jsonObject.getString("postage"));
         int addNumber = jsonObject.getInteger("addNumber");
-        int addPostage = jsonObject.getInteger("addPostage");
+        int addPostage = PriceUtils.strToInt(jsonObject.getString("addPostage"));
 
         // 按件数计算运费
         if(tbPostageTemplate.getType() == 11) {
@@ -355,23 +362,16 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
         return totalPostage;
     }
 
-    private int getShopPostage(int sellerId, List<ProductPostageModel> models, String sendToProvince) {
+    private int getShopPostage(List<TbPostageTemplate> templates, List<ProductPostageModel> models, String sendToProvince) {
 
         int totalPostage = Integer.MAX_VALUE;
-
-        // 获取商家邮费优惠模板
-        List<TbPostageTemplate> templates = this.getPostageTemplateBySellerId(sellerId, 2, 1);
-        // 商家邮费优惠模板不存在
-        if (CollectionUtils.isEmpty(templates)) {
-            return -1;
-        }
 
         // 计算总金额,总重量和总件数
         int totalAmount = 0;
         double totalWeight = 0;
         int totalNumber = 0;
         for (ProductPostageModel model : models) {
-            totalAmount += Integer.parseInt(model.getAmount());
+            totalAmount += PriceUtils.strToInt(model.getAmount());
             totalWeight += model.getWeight();
             totalNumber += model.getNumber();
         }
@@ -389,14 +389,14 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
                 }
             }
             // 没有找到对应的省份，返回错误数据
-            if (rule == "") {
+            if ("".equals(rule)) {
                 return -2;
             }
             JSONObject jsonObject = JSON.parseObject(rule);
             int number = jsonObject.getInteger("number");
-            int amount = jsonObject.getInteger("amount");
+            int amount = PriceUtils.strToInt(jsonObject.getString("amount"));
             int limit = jsonObject.getInteger("limit");
-            int postage = jsonObject.getInteger("postage");
+            int postage = PriceUtils.strToInt(jsonObject.getString("postage"));
 
             // 按订单件数+订单金额计算运费
             if (template.getType() == 21) {

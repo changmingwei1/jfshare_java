@@ -8,6 +8,7 @@ import com.jfshare.product.service.IWoMaiSvc;
 import com.jfshare.product.service.impl.WoMaiSvcImpl;
 import com.jfshare.product.util.HttpUtils;
 import com.jfshare.product.util.CodeUtil;
+import org.apache.ibatis.annotations.Param;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -23,6 +24,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,7 @@ public class client {
 
     private static final String IP = "127.0.0.1";
 //    private static final String IP = "120.24.153.155";
+//    private static final String IP = "101.201.38.182";
 
     private static final Integer PORT = 1980;
 
@@ -54,7 +57,6 @@ public class client {
         protocol = new TBinaryProtocol(transport);
         client = new ProductServ.Client(protocol);
         transport.open();
-        ApplicationContext context = new ClassPathXmlApplicationContext("/spring/spring-context.xml");
 
     }
 
@@ -92,13 +94,13 @@ public class client {
         if (DO_IT == 0)
             return;
 
-        String productId = "ze151220000824000900";
+        String productId = "ze160520095236000796";
         ProductOpt productOpt = new ProductOpt();
         productOpt.setProductId(productId);
-        productOpt.setActiveState(103);
-        productOpt.setCurState(203);
+        productOpt.setActiveState(300);
+        productOpt.setCurState(100);
 //        productOpt.setDesc("审核通过");
-        productOpt.setCreateTime("2015-12-21 12:12:12");
+        productOpt.setCreateTime("2016-05-21 12:12:12");
         productOpt.setOperatorType(1);
         productOpt.setOperatorId("1");
 
@@ -167,6 +169,7 @@ public class client {
         product.setPostageId(124);
 
         product.setProductSku(productSku);
+        product.setType(3);
 
         return product;
     }
@@ -202,13 +205,13 @@ public class client {
 
         ProductSurveyQueryParam param = new ProductSurveyQueryParam();
 //        param.setProductId("ze160515153359000306");
-        param.setSubjectId(3167);
-        param.setBrandId(591);
+       /* param.setSubjectId(2077);
+        param.setBrandId(591);*/
         param.setSort("click_rate DESC");
 
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
-        pagination.setNumPerPage(10);
+        pagination.setNumPerPage(100);
 
         param.setPagination(pagination);
 
@@ -227,6 +230,15 @@ public class client {
 
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyyMMddHHmmss");
         System.out.println(DateTime.parse("20160101050101", format));
+    }
+
+    @Test
+    public void testImportProductCard() throws Exception {
+        String path = "https://apia.wd2go.com/api/1.0/rest/device_redirect?device_user_id=21397091&device_uri=%2Fapi%2F1.0%2Frest%2Ffile_contents%2Fshare%2F%25E8%2599%259A%25E6%258B%259F%25E5%2595%2586%25E5%2593%2581%25E4%25B8%258A%25E4%25BC%25A0%25E6%25A8%25A1%25E6%259D%25BF.xls%3Fdevice_user_id%3D21397091%26request_auth_code%3D4ede3472d20367f0c0bf9c3797b187824e948be306b875920eb2f3f63a3ae5a0";
+        ProductCardImportParam productCardImportParam = new ProductCardImportParam();
+        productCardImportParam.setSellerId(1);
+        productCardImportParam.setPath(path);
+        System.out.println(client.importProductCard(productCardImportParam));
     }
 
 

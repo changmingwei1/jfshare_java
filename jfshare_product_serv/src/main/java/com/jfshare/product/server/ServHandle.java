@@ -548,7 +548,12 @@ public class ServHandle implements ProductServ.Iface {
 	public Result importProductCard(ProductCardImportParam param) throws TException {
 		Result result = new Result(0);
 		try {
-			this.productCartSvc.importProductCard(param.getSellerId(), param.getPath());
+			boolean flag = this.productCartSvc.importProductCard(param.getSellerId(), param.getPath());
+			if (!flag) {
+				result.setCode(1);
+				result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_FAIL);
+				return result;
+			}
 		} catch (Exception e) {
 			logger.error("<<<<<<<< importProductCard error !! ---- param : " + param.toString(), e);
 		}

@@ -60,6 +60,11 @@ public class ProductUtil {
         		String key7 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_cur_price ASC";
         		String key8 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_click_rate DESC";
 
+				String key9 = ProductCommons.RK_PRODUCT_LIST + "0_0_create_time DESC";
+				String key10 = ProductCommons.RK_PRODUCT_LIST + "0_0_cur_price DESC";
+				String key11 = ProductCommons.RK_PRODUCT_LIST + "0_0_cur_price ASC";
+				String key12 = ProductCommons.RK_PRODUCT_LIST + "0_0_click_rate DESC";
+
         		keyList.add(key1);
         		keyList.add(key2);
         		keyList.add(key3);
@@ -68,6 +73,10 @@ public class ProductUtil {
         		keyList.add(key6);
         		keyList.add(key7);
         		keyList.add(key8);
+        		keyList.add(key9);
+        		keyList.add(key10);
+        		keyList.add(key11);
+        		keyList.add(key12);
         	}
     	}
     	return keyList;
