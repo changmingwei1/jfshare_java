@@ -121,6 +121,11 @@ public class DeliverService {
         if (ret <= 0) {
             throw new DaoManualException(FailCode.ORDER_UPDATE_ERROR);
         }
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay");
+        orderJedis.pushOrderNotification(orderOptPush);
     }
 
     public void updateDeliverInfoVir(OrderModel orderModel) {
@@ -145,6 +150,11 @@ public class DeliverService {
         if (ret <= 0) {
             throw new DaoManualException(FailCode.ORDER_UPDATE_ERROR);
         }
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay");
+        orderJedis.pushOrderNotification(orderOptPush);
     }
 
 

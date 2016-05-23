@@ -18,7 +18,7 @@ public class OrderOpt {
     public OrderOpt() {
     }
 
-    public OrderOpt(String orderId, String optTypeß) {
+    public OrderOpt(String orderId, String optType) {
         this.orderId = orderId;
         this.optType = optType;
         this.optTime = DateTimeUtil.DateTimeToStr(DateTime.now());
@@ -88,7 +88,7 @@ public class OrderOpt {
                 this.orderOpts = new ArrayList<>();
             }
 
-            this.orderOpts.add(new OrderOpt());
+            this.orderOpts.add(new OrderOpt(orderId, optType));
         }
     }
 }

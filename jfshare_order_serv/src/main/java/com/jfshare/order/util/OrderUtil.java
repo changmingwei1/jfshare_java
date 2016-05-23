@@ -426,7 +426,7 @@ public class OrderUtil {
     public static int getPostageAmount(List<OrderModel> orderList) {
         int totalPostage = 0;
         for(OrderModel order : orderList)
-            totalPostage += order.getClosingPrice();
+            totalPostage += order.getClosingPrice() - order.getPostage();
         return totalPostage;
     }
 }

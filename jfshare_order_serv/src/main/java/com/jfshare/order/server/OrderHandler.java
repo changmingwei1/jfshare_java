@@ -475,7 +475,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             }
 
             //拆分积分
-            if(lockScore == 0 && lockScore > 0){
+            if(lockScore == 0 && useScore > 0){
                 //验证积分抵现
                 BuyInfo buyInfo = new BuyInfo();
                 buyInfo.setAmount(PriceUtils.intToStr(OrderUtil.getPostageAmount(orderModels)));

@@ -195,10 +195,12 @@ public class Client extends TestCase{
     public void testPayApply() throws Exception {
         try {
             PayParam payParam = new PayParam();
-            payParam.setUserId(35);
-            payParam.addToOrderIdList("21860035");
+            payParam.setUserId(17);
+            payParam.addToOrderIdList("24920017");
             PayChannel payChannel = new PayChannel();
             payChannel.setPayChannel(9);
+            payParam.setExchangeCash("1000");
+            payParam.setExchangeScore(1001);
             payParam.setPayChannel(payChannel);
             System.err.println(client.payApply(payParam));
         } catch (Exception e) {

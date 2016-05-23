@@ -86,15 +86,14 @@ public class OrderJedisImpl implements IOrderJedis {
         Jedis jedis = null;
         long resRedis = 0;
         try {
-            List<String> msgs = new ArrayList<>(orderOpts.size());
-            for (OrderOpt orderOpt : orderOpts) {
-                msgs.add(JSON.toJSONString(orderOpt));
+            String[] msgs = new String[orderOpts.size()];
+            for (int i = 0; i < orderOpts.size(); i++) {
+                msgs[i] = JSON.toJSONString(orderOpts.get(i));
             }
 
-            String[] msgArr = (String[]) msgs.toArray(new String[msgs.size()]);
-
             jedis = jedisPool.getResource();
-            resRedis = jedis.lpush(ConstantUtil.REDIS_KEY_ORDER_OPT_QUEUE, msgArr);
+            resRedis = jedis.lpush(ConstantUtil.REDIS_KEY_ORDER_OPT_QUEUE, msgs);
+            logger.info("orderNotify ==> lpush={}, result={}", JSON.toJSONString(msgs), resRedis);
         }catch(Exception e) {
             logger.error("推送订单消息 ==> push消息发生异常, 原因:", e);
         } finally {

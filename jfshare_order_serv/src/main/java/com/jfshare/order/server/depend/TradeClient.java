@@ -73,7 +73,6 @@ public class TradeClient {
         param.setAmount(buyInfo.getAmount());
         param.setScore(String.valueOf(buyInfo.getExchangeScore()));
         param.setUserId(buyInfo.getUserId());
-        List<ExchangeProduct> productList = new ArrayList<ExchangeProduct>();
 
         for (OrderModel order : orderList) {
             for (TbOrderInfoRecord orderInfo : order.getTbOrderInfoList()) {
@@ -81,26 +80,27 @@ public class TradeClient {
                 e.setProductId(orderInfo.getProductId());
                 e.setSkuNum(orderInfo.getSkuNum());
                 e.setPrice(PriceUtils.intToStr(orderInfo.getCurPrice() * orderInfo.getCount()));
+                param.addToProductList(e);
             }
         }
-        param.setProductList(productList);
-        ExchangeResult exchangeScore = null;
+
+        Map<String, ExchangeDetail> orderExchangeResMap = new HashMap<String, ExchangeDetail>();
         try {
-            exchangeScore = Await.result(service.getExchangeScore(param));
+            ExchangeResult exchangeScore = Await.result(service.getExchangeScore(param));
+            if (exchangeScore != null
+                    && exchangeScore.getResult().getCode() == 0
+                    && CollectionUtils.isNotEmpty(exchangeScore.getExchangeDetailList())) {
+                for (ExchangeDetail edetail : exchangeScore.getExchangeDetailList()) {
+
+                    orderExchangeResMap.put(edetail.getProductId().concat(":").concat(edetail.getSkuNum()), edetail);
+                }
+            } else {
+                failDescs.addAll(exchangeScore.getResult().getFailDescList());
+                return failDescs;
+            }
         } catch (Exception e) {
             failDescs.add(FailCode.SYS_ERROR);
             logger.error("调用积分服务异常, buyerId={}, exchangeScore={}", buyInfo.getUserId(), buyInfo.getExchangeScore());
-            return failDescs;
-        }
-        Map<String, ExchangeDetail> orderExchangeResMap = new HashMap<String, ExchangeDetail>();
-
-        if (exchangeScore != null
-                && exchangeScore.getResult().getCode() == 0
-                && CollectionUtils.isNotEmpty(exchangeScore.getExchangeDetailList())) {
-            for (ExchangeDetail edetail : exchangeScore.getExchangeDetailList())
-                orderExchangeResMap.put(edetail.getProductId().concat(":").concat(edetail.getSkuNum()), edetail);
-        } else {
-            failDescs.addAll(exchangeScore.getResult().getFailDescList());
             return failDescs;
         }
 
