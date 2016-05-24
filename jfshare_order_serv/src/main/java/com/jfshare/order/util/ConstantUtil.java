@@ -26,10 +26,8 @@ public class ConstantUtil {
 
         public static boolean isVirOrder(String tradeCode){
             boolean isVir = false;
-            TRADE_CODE trade_code = null;
             try {
-                trade_code = TRADE_CODE.valueOf(tradeCode);
-                if(trade_code.equals(ORDER_CODE_VIR_KAMI) || trade_code.equals(ORDER_CODE_VIR_KAONLY))
+                if(tradeCode.equals(ORDER_CODE_VIR_KAMI.enumVal) || tradeCode.equals(ORDER_CODE_VIR_KAONLY.getEnumVal()))
                     isVir = true;
             } catch (IllegalArgumentException e) {
                 //Do nothing

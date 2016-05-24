@@ -429,4 +429,16 @@ public class OrderUtil {
             totalPostage += order.getClosingPrice() - order.getPostage();
         return totalPostage;
     }
+
+    /**
+     * 支付总金额
+     * @param orderList
+     * @return
+     */
+    public static int gettotalAmount(List<OrderModel> orderList) {
+        int totalPostage = 0;
+        for(OrderModel order : orderList)
+            totalPostage += order.getClosingPrice();
+        return totalPostage;
+    }
 }

@@ -40,7 +40,9 @@ public class OrderJedisImpl implements IOrderJedis {
             String strRet = jedis.setex(key, 3600 * 24, retCode + ":" + cancelTime.getMillis());
             if(strRet == null || strRet.isEmpty())
                 return 0;
-            ret = Integer.parseInt(strRet);
+            if("OK".equalsIgnoreCase(strRet)) {
+                return 1;
+            }
         } catch (Exception e) {
             logger.error("设置支付状态redis失败！", e);
             return -1;

@@ -1,9 +1,11 @@
 package com.jfshare.order.server.depend;
 
+import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.finagle.thrift.score.ScoreResult;
 import com.jfshare.finagle.thrift.score.ScoreServ;
 import com.jfshare.finagle.thrift.score.ScoreTrade;
+import com.jfshare.order.util.FailCode;
 import com.jfshare.ridge.ConfigManager;
 import com.twitter.finagle.builder.ClientBuilder;
 import com.twitter.finagle.builder.ClientConfig;
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -70,26 +74,35 @@ public class ScoreClient {
 		return score;
 	}
 
-	public void reduceScore(int buyerId, int score) {
+	public List<FailDesc> reduceScore(int buyerId, int score) {
+		List<FailDesc> failDescs = new ArrayList<>();
 		long doneTime = System.currentTimeMillis();
-		if (buyerId <= 0)
-			return;
+		if (buyerId <= 0) {
+			failDescs.add(FailCode.PARAM_ERROR);
+			return failDescs;
+		}
+
 		try {
 			ScoreTrade scoreTrade = new ScoreTrade();
 			scoreTrade.setAmount(score);
-			scoreTrade.setType(2);
+			scoreTrade.setInOrOut(2);
+			scoreTrade.setType(4);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.expenditure(scoreTrade));
 			if(scoreResult != null && scoreResult.getResult().getCode() == 0) {
 				logger.info("{},扣减用户积分：{}", buyerId, score);
 			} else{
 				logger.warn("{},扣减用户积分失败:{}", buyerId, scoreResult);
+				failDescs.add(FailCode.PAY_SCORE_REDUCE_FAIL);
+				return failDescs;
 			}
 		} catch (Exception e) {
 			logger.error(buyerId + "积分服务异常!", e);
-			score = -1;
+			failDescs.add(FailCode.PAY_SCORE_REDUCE_FAIL);
+			return failDescs;
 		}
 		logger.info("{},积分服务expenditure接口调用时间：{} ms!!", buyerId, (System.currentTimeMillis() - doneTime));
+		return null;
 	}
 
 	public void incomeScore(int buyerId, String transId, int score) {

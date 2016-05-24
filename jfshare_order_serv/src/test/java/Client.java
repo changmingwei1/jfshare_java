@@ -20,7 +20,7 @@ public class Client extends TestCase{
     public void setUp() throws Exception {
 
         transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
-//        transport = new TFramedTransport(new TSocket("localhost", 1986));
+//        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
@@ -199,8 +199,8 @@ public class Client extends TestCase{
             payParam.addToOrderIdList("24920017");
             PayChannel payChannel = new PayChannel();
             payChannel.setPayChannel(9);
-            payParam.setExchangeCash("1000");
-            payParam.setExchangeScore(1001);
+            payParam.setExchangeCash("0.10");
+            payParam.setExchangeScore(10);
             payParam.setPayChannel(payChannel);
             System.err.println(client.payApply(payParam));
         } catch (Exception e) {

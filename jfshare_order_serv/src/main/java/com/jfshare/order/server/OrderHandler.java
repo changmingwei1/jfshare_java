@@ -167,12 +167,6 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return result;
             }
 
-            if(orderModel.getTradeCode().equalsIgnoreCase(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAMI.getEnumVal()) == false) {
-                logger.warn(MessageFormat.format("deliverVir非卡密虚拟商品！sellerId[{0}],orderId[{1}],tradeCode[{2}]", param.getSellerId(), param.getOrderId()), orderModel.getTradeCode());
-                FailCode.addFails(result, FailCode.DELIVER_INVALIDATE_TRADECODE);
-                return result;
-            }
-
             //获取卡密
             List<ProductCard> productCards = productClient.getProductCard(orderModel);
             //修改订单状态
@@ -188,7 +182,10 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                         .append(orderInfo.getSkuDesc()).append(" ")
                         .append("消费券").append(orderInfo.getCount()).append("张");
                 for(ProductCard card : productCards) {
-                    msgContent.append("券码:").append(card.getCardNumber()).append("，密码:").append(card.getPassword()).append("，");
+                    msgContent.append("券码:").append(card.getCardNumber()).append(", ");
+                    if(StringUtils.isNotEmpty(card.getPassword())) {
+                        msgContent.append("密码:").append(card.getPassword()).append("，");
+                    }
                 }
                 msgContent.append("请前往商家验证消费。");
             } else if(orderModel.getTradeCode().equals(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAONLY.getEnumVal())) {
@@ -204,6 +201,8 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             }
 
             commonClient.sendMsg(orderModel.getReceiverMobile(), msgContent.toString());
+
+            this.confirmReceipt(BizUtil.USER_TYPE.BUYER.getEnumVal(), orderModel.getUserId(), param.getOrderId());
 
         } catch (BaseException be) {
             List<FailDesc> failDescs = be.getFailDescs();
@@ -450,14 +449,14 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         try {
             if (StringUtil.isNullOrEmpty(param) || param.getUserId() <= 0 || StringUtil.isNullOrEmpty(param.getOrderIdList()) || param.getOrderIdList().isEmpty() ||
                     StringUtil.isNullOrEmpty(param.getPayChannel()) || param.getPayChannel().getPayChannel() < 0) {
-                logger.warn(MessageFormat.format("申请支付----payApply参数验证失败！param[{0}]", param));
+                logger.warn("申请支付----payApply参数验证失败！param[{}]", param);
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
                 return stringResult;
             }
 
             List<OrderModel> orderModels = orderService.buyerQueryList(param.getUserId(), param.getOrderIdList());
             if (orderModels == null || orderModels.size() != param.getOrderIdList().size()) {
-                logger.warn(MessageFormat.format("申请支付----payApply获取订单信息有误！param[{0}]", param));
+                logger.warn("申请支付----payApply获取订单信息有误！param[{0}]", param);
                 FailCode.addFails(result, FailCode.ORDER_INFO_ERROR);
                 return stringResult;
             }
@@ -468,8 +467,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 lockScore += order.getExchangeScore();
             }
             //检查之前是否锁定了积分
+            logger.info("申请支付----积分参数校验, lockScore={}, useScore={}", lockScore, useScore);
             if(lockScore > 0 && lockScore != useScore){
-                logger.warn(MessageFormat.format("申请支付----积分校验失败, 之前锁定积分:{}, 当前是使用积分:{}", lockScore, useScore));
+                logger.warn("申请支付----积分校验失败, 之前锁定积分:{}, 当前是使用积分:{}", lockScore, useScore);
                 FailCode.addFails(result, FailCode.PAY_SCORE_CHECK_FAIL);
                 return stringResult;
             }
@@ -529,9 +529,11 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             orderService.updateOrderPaying(orderModels, tradePayId);
 
             //全积分支付
-            if(OrderUtil.getPostageAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash())) {
-                stringResult.setValue("支付成功");
+            if(OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash())) {
+                stringResult.setValue("全积分支付成功");
+                stringResult.getResult().setCode(2);
                 //TODO 全积分支付
+                orderService.payOnlyScore(orderModels);
                 logger.error("申请支付----成功，全积分支付！");
                 return stringResult;
             }

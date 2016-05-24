@@ -65,8 +65,10 @@ public class TradeClient {
 
     public List<FailDesc> score2cash(List<OrderModel> orderList, BuyInfo buyInfo) {
         //未使用积分抵现, 直接返回
-        if (NumberUtils.toInt(buyInfo.getExchangeCash()) == 0 && buyInfo.getExchangeScore() == 0)
+        if (PriceUtils.strToInt(buyInfo.getExchangeCash()) == 0 || buyInfo.getExchangeScore() == 0)
             return null;
+
+        logger.info("1.buyInfo==>" + buyInfo);
 
         List<FailDesc> failDescs = new ArrayList<FailDesc>();
         ExchangeParam param = new ExchangeParam();
@@ -84,12 +86,19 @@ public class TradeClient {
             }
         }
 
+        logger.info("2.param==>" + param);
+
         Map<String, ExchangeDetail> orderExchangeResMap = new HashMap<String, ExchangeDetail>();
         try {
             ExchangeResult exchangeScore = Await.result(service.getExchangeScore(param));
             if (exchangeScore != null
                     && exchangeScore.getResult().getCode() == 0
                     && CollectionUtils.isNotEmpty(exchangeScore.getExchangeDetailList())) {
+                if(PriceUtils.strToInt(exchangeScore.getAmount()) != PriceUtils.strToInt(buyInfo.getExchangeCash())) {
+                    failDescs.add(FailCode.PAY_EXCHANGE_AMOUNT_UNEQUAL);
+                    return failDescs;
+                }
+
                 for (ExchangeDetail edetail : exchangeScore.getExchangeDetailList()) {
 
                     orderExchangeResMap.put(edetail.getProductId().concat(":").concat(edetail.getSkuNum()), edetail);
@@ -98,11 +107,14 @@ public class TradeClient {
                 failDescs.addAll(exchangeScore.getResult().getFailDescList());
                 return failDescs;
             }
+            logger.info("3.exchangeScore==>" + exchangeScore);
         } catch (Exception e) {
             failDescs.add(FailCode.SYS_ERROR);
             logger.error("调用积分服务异常, buyerId={}, exchangeScore={}", buyInfo.getUserId(), buyInfo.getExchangeScore());
             return failDescs;
         }
+
+
 
         for (OrderModel order : orderList) {
             int exchangeCashOrder = 0;
@@ -118,10 +130,18 @@ public class TradeClient {
             order.setExchangeScore(exchangeScoreOrder);
         }
 
-        //扣减用户积分
-        scoreClient.reduceScore(buyInfo.getUserId(), buyInfo.getExchangeScore());
+        logger.info("4.orderList==>" + orderList);
 
-        return failDescs;
+        //扣减用户积分
+        List<FailDesc> reduceScoreFailDescList = scoreClient.reduceScore(buyInfo.getUserId(), buyInfo.getExchangeScore());
+        if(CollectionUtils.isNotEmpty(reduceScoreFailDescList)) {
+            failDescs.addAll(reduceScoreFailDescList);
+            return failDescs;
+        }
+
+        logger.info("5.==>" + orderList);
+
+        return null;
 
     }
 }
