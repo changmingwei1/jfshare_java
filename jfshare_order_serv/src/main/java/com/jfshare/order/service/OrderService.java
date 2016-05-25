@@ -102,7 +102,7 @@ public class OrderService {
         //推送订单操作通知
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
         for(Order item : orderList) {
-            orderOptPush.addToOrderOptList(item.getOrderId(), "order_create");
+            orderOptPush.addToOrderOptList(item.getOrderId(), "order_create", item.getUserId(), item.getSellerId());
         }
         orderJedis.pushOrderNotification(orderOptPush);
 
@@ -149,7 +149,7 @@ public class OrderService {
 
         //推送订单操作通知
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
-        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_confirm");
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_confirm", orderModel.getUserId(), orderModel.getSellerId());
         orderJedis.pushOrderNotification(orderOptPush);
 
         return ret;
@@ -189,7 +189,7 @@ public class OrderService {
 
         //推送订单操作通知
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
-        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_cancel");
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_cancel", orderModel.getUserId(), orderModel.getSellerId());
         orderJedis.pushOrderNotification(orderOptPush);
         return ret;
     }
@@ -223,7 +223,7 @@ public class OrderService {
 
         //推送订单操作通知
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
-        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_paying");
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_paying", orderModel.getUserId(), orderModel.getSellerId());
         orderJedis.pushOrderNotification(orderOptPush);
 
         return ret;
@@ -264,7 +264,7 @@ public class OrderService {
         //推送订单操作通知
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
         for(OrderModel item : orderModels) {
-            orderOptPush.addToOrderOptList(item.getOrderId(), "order_paying");
+            orderOptPush.addToOrderOptList(item.getOrderId(), "order_paying", item.getUserId(), item.getSellerId());
         }
         orderJedis.pushOrderNotification(orderOptPush);
 
@@ -309,7 +309,7 @@ public class OrderService {
 
             //推送订单操作通知
             OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
-            orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay");
+            orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay", orderModel.getUserId(), orderModel.getSellerId());
             orderJedis.pushOrderNotification(orderOptPush);
         }
 
@@ -367,7 +367,7 @@ public class OrderService {
 
         //推送订单操作通知
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
-        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay");
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay", orderModel.getUserId(), orderModel.getSellerId());
         orderJedis.pushOrderNotification(orderOptPush);
 
 
@@ -403,7 +403,7 @@ public class OrderService {
             //推送订单操作通知
             OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
             for(Order item : deliverOrderList) {
-                orderOptPush.addToOrderOptList(item.getOrderId(), "order_deliver_batch");
+                orderOptPush.addToOrderOptList(item.getOrderId(), "order_deliver_batch", item.getUserId(), item.getSellerId());
             }
             orderJedis.pushOrderNotification(orderOptPush);
         }

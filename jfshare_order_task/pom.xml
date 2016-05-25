@@ -8,10 +8,18 @@
     <artifactId>jfshare-order-task</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
+        <elasticsearch-drive.version>1.0.0-2.2.1-SNAPSHOT</elasticsearch-drive.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <!-- elasticsearch -->
+        <dependency>
+            <groupId>com.jfshare</groupId>
+            <artifactId>elasticsearch-drive</artifactId>
+            <version>${elasticsearch-drive.version}</version>
+        </dependency>
+
         <!--test-->
         <dependency>
             <groupId>junit</groupId>

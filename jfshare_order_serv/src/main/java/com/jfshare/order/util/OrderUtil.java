@@ -331,7 +331,7 @@ public class OrderUtil {
     public static int getPayPrice(List<OrderModel> orderModels) {
         int totalPayPrice = 0;
         for (OrderModel order: orderModels) {
-            totalPayPrice += getPayPrice(order);
+            totalPayPrice += getPayPrice(order) - order.getExchangeCash();
         }
 
         return totalPayPrice;
