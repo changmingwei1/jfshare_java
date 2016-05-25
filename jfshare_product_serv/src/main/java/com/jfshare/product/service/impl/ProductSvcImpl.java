@@ -84,8 +84,8 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
     @Resource
     private TbProductMapper productMapper;
     
-    @Autowired
-    private ESProductInfoDao eSProductInfoDao;
+   /* @Autowired
+    private ESProductInfoDao eSProductInfoDao;*/
     
     @Override
     public Product queryProduct(String productId, ProductRetParam param) {
