@@ -54,7 +54,7 @@
 				AND a.id = #{productId,jdbcType=VARCHAR}
 			</if>
 			<if test=" productName != null and productName != ''">
-				AND a.name = #{productName,jdbcType=VARCHAR}
+				AND a.name like CONCAT('%',#{productName},'%')
 			</if>
 			<if test=" activeState != 0">
 				AND a.active_state = #{activeState,jdbcType=INTEGER}
