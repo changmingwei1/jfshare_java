@@ -5,8 +5,12 @@ import com.jfshare.product.dao.mysql.IProductCardDao;
 import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.service.IProductCartSvc;
+import com.jfshare.product.util.FileUtil;
 import com.jfshare.ridge.PropertiesUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +44,7 @@ public class ProductCardSvcImpl implements IProductCartSvc {
 
         // TODO: 2016/5/22  dsdfsdf sd 
         // 读取文件中的数据
-        /*HSSFWorkbook hssfWorkbook = null;
+        HSSFWorkbook hssfWorkbook = null;
         try {
             // 下载文件到本地
             localPath = localPath + sellerId + "/";
@@ -52,7 +60,7 @@ public class ProductCardSvcImpl implements IProductCartSvc {
             HSSFSheet sheet = hssfWorkbook.getSheetAt(0);
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                Row row = sheet.getRow(i);
+                HSSFRow row = sheet.getRow(i);
                 TbProductCard productCard = new TbProductCard();
                 productCard.setSellerId(sellerId);
                 productCard.setProductId(row.getCell(0).getStringCellValue());
@@ -64,10 +72,10 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 this.productCardDao.add(productCard);
 
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("<<<<<<<< importProductCard error !! --- sellerId : " + sellerId + ", path : " + path, e);
             return false;
-        }*/
+        }
 
         return true;
     }
