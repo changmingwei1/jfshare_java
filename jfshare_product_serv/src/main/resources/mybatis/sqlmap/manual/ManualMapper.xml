@@ -59,23 +59,22 @@
 			<if test=" activeState != 0">
 				AND a.active_state = #{activeState,jdbcType=INTEGER}
 			</if>
-			<!-- 
 			<if test=" subjectId != 0">
 				AND a.subject_id = #{subjectId,jdbcType=INTEGER}
 			</if>
-			 -->
             <if test="productIdList != null">
                 AND a.id IN
                 <foreach collection="productIdList" index="index" item="item" open="(" separator="," close=")">
                     #{productIdList[${index}]}
                 </foreach>
             </if>
-			<if test="subjectIdList != null">
+			/*先不用了*/
+			<!--<if test="subjectIdList != null">
 				AND a.subject_id IN   
 			     <foreach collection="subjectIdList" index="index" item="item" open="(" separator="," close=")">  
 			        #{subjectIdList[${index}]}  
 			     </foreach> 
-			</if>
+			</if>-->
 			<if test=" brandId != 0">
 				AND a.brand_id = #{brandId,jdbcType=INTEGER}
 			</if>
@@ -131,23 +130,22 @@
 			<if test=" activeState != 0">
 				AND a.active_state = #{activeState,jdbcType=INTEGER}
 			</if>
-			<!-- 
 			<if test=" subjectId != 0">
 				AND a.subject_id = #{subjectId,jdbcType=INTEGER}
 			</if>
-			 -->
             <if test="productIdList != null">
                 AND a.id IN
                 <foreach collection="productIdList" index="index" item="item" open="(" separator="," close=")">
                     #{productIdList[${index}]}
                 </foreach>
             </if>
-			<if test="subjectIdList != null">
+			/*先不用了*/
+			<!--<if test="subjectIdList != null">
 				AND a.subject_id IN   
 			     <foreach collection="subjectIdList" index="index" item="item" open="(" separator="," close=")">  
 			        #{subjectIdList[${index}]}  
 			     </foreach> 
-			</if>
+			</if>-->
 			<if test=" brandId != 0">
 				AND a.brand_id = #{brandId,jdbcType=INTEGER}
 			</if>
