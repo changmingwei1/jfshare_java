@@ -533,8 +533,22 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 stringResult.setValue("全积分支付成功");
                 stringResult.getResult().setCode(2);
                 //TODO 全积分支付
-                orderService.payOnlyScore(orderModels);
-                logger.error("申请支付----成功，全积分支付！");
+                int ret = orderService.payOnlyScore(orderModels);
+                if(ret > 0) {
+                    logger.error("申请支付----成功，全积分支付！");
+                    //虚拟商品需要自动发货
+                    for(OrderModel orderModel : orderModels) {
+                        if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
+                            DeliverVirParam deliverVirParam = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
+                            Result delverVirResult = deliverVir(deliverVirParam);
+                            if(delverVirResult != null && delverVirResult.getCode() == 0) {
+                                logger.info("申请支付----全积分支付----虚拟商品自动发货成功");
+                            } else {
+                                logger.error("申请支付----全积分支付----虚拟商品自动发货失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
+                            }
+                        }
+                    }
+                }
                 return stringResult;
             }
 
