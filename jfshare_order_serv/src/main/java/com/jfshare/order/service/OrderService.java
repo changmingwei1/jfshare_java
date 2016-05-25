@@ -1,12 +1,17 @@
 package com.jfshare.order.service;
 
+import com.alibaba.fastjson.JSON;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
 import com.jfshare.finagle.thrift.pay.PayRet;
 import com.jfshare.order.dao.IOrderDao;
+import com.jfshare.order.dao.IOrderJedis;
 import com.jfshare.order.model.OrderModel;
+import com.jfshare.order.model.OrderOpt;
+import com.jfshare.order.model.TbOrderInfoRecord;
 import com.jfshare.order.model.TbOrderRecordExample;
+import com.jfshare.order.server.depend.ExpressClient;
 import com.jfshare.order.server.depend.StockClient;
 import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.OrderUtil;
@@ -51,6 +56,12 @@ public class OrderService {
     @Autowired
     private StockClient stockClient;
 
+    @Autowired
+    private ExpressClient expressClient;
+
+    @Autowired
+    private IOrderJedis orderJedis;
+
     public OrderModel sellerQueryDetail(int sellerId, String orderId) {
         return orderDao.getOrderBySeller(orderId, sellerId);
     }
@@ -86,6 +97,14 @@ public class OrderService {
                 ret = orderDao.insertOrder(orderModel, BizUtil.USER_TYPE.SELLER.getEnumVal());
             }
         }
+
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        for(Order item : orderList) {
+            orderOptPush.addToOrderOptList(item.getOrderId(), "order_create");
+        }
+        orderJedis.pushOrderNotification(orderOptPush);
 
         return ret;
     }
@@ -127,6 +146,12 @@ public class OrderService {
             throw new RuntimeException("confirmReceipt，更新卖家表失败, 更新返回："+ ret);
         }
 
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_confirm");
+        orderJedis.pushOrderNotification(orderOptPush);
+
         return ret;
     }
 
@@ -162,6 +187,10 @@ public class OrderService {
 
         stockClient.releaseStock(orderModel.getOrderId(), orderModel.getTbOrderInfoList());
 
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_cancel");
+        orderJedis.pushOrderNotification(orderOptPush);
         return ret;
     }
 
@@ -192,6 +221,11 @@ public class OrderService {
             throw new RuntimeException("updateOrderPaying，更新卖家表失败, 更新返回："+ ret);
         }
 
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_paying");
+        orderJedis.pushOrderNotification(orderOptPush);
+
         return ret;
     }
 
@@ -206,6 +240,8 @@ public class OrderService {
             order.setPayChannel(orderModel.getPayChannel());
             order.setTradePayId(tradePayId);
             order.setThirdScore(orderModel.getThirdScore());
+            order.setExchangeCash(orderModel.getExchangeCash());
+            order.setExchangeScore(orderModel.getExchangeScore());
 
             TbOrderRecordExample example = new TbOrderRecordExample();
             TbOrderRecordExample.Criteria criteria = example.createCriteria();
@@ -224,7 +260,61 @@ public class OrderService {
             }
         }
 
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        for(OrderModel item : orderModels) {
+            orderOptPush.addToOrderOptList(item.getOrderId(), "order_paying");
+        }
+        orderJedis.pushOrderNotification(orderOptPush);
+
         return orderModels.size();
+    }
+
+    /**
+     * 全积分支付
+     * @param orderModels
+     * @return
+     */
+    public int payOnlyScore(List<OrderModel> orderModels) {
+        for(OrderModel orderModel : orderModels) {
+            logger.info("payOnlyScore----全积分支付, orderId={}", orderModel.getOrderId());
+            OrderModel order = new OrderModel();
+            order.setUserId(orderModel.getUserId());
+            order.setSellerId(orderModel.getSellerId());
+            order.setPayChannel(0);
+
+            order.setPayState(1);
+            order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal());
+
+            TbOrderRecordExample example = new TbOrderRecordExample();
+            TbOrderRecordExample.Criteria criteria = example.createCriteria();
+            criteria.andOrderIdEqualTo(orderModel.getOrderId());
+            criteria.andSellerIdEqualTo(orderModel.getSellerId());
+            criteria.andUserIdEqualTo(orderModel.getUserId());
+            int ret = orderDao.updateOrderWithCriteria(order, BizUtil.USER_TYPE.BUYER.getEnumVal(),example);
+            if (ret <= 0) {
+                throw new RuntimeException("updatePayRet，更新买家表失败, 更新返回："+ ret);
+            }
+
+            ret = orderDao.updateOrderWithCriteria(order, BizUtil.USER_TYPE.SELLER.getEnumVal(),example);
+
+            if (ret <= 0) {
+                throw new RuntimeException("updatePayRet，更新卖家表失败, 更新返回："+ ret);
+            }
+
+            //释放库存锁定量
+            stockClient.releaseLockCount(order.getOrderId(), orderModel.getTbOrderInfoList());
+            //TODO 超卖
+
+            //推送订单操作通知
+            OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+            orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay");
+            orderJedis.pushOrderNotification(orderOptPush);
+        }
+
+
+        return 1;
     }
 
     public int payRet(OrderModel orderModel, PayRet payRet) {
@@ -275,6 +365,12 @@ public class OrderService {
         stockClient.releaseLockCount(order.getOrderId(), orderModel.getTbOrderInfoList());
         //TODO 超卖
 
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay");
+        orderJedis.pushOrderNotification(orderOptPush);
+
+
         return ret;
     }
 
@@ -297,8 +393,23 @@ public class OrderService {
     }
 
     public int batchDeliverOp(int sellerId, List<Order> deliverOrderList, List<ExpressInfo> expressList, int deliverType) {
-        return orderDao.batchDeliverOp(sellerId, deliverOrderList);
+        int ret = orderDao.batchDeliverOp(sellerId, deliverOrderList);
         //TODO 通知物流抓取
+        if(ret > 0) {
+            for(Order order : deliverOrderList) {
+                expressClient.subscribeExpressPost(order.getDeliverInfo());
+            }
+
+            //推送订单操作通知
+            OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+            for(Order item : deliverOrderList) {
+                orderOptPush.addToOrderOptList(item.getOrderId(), "order_deliver_batch");
+            }
+            orderJedis.pushOrderNotification(orderOptPush);
+        }
+
+
+        return ret;
     }
 }
  

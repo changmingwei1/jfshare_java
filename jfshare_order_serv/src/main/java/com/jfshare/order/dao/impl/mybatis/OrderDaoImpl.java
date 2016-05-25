@@ -8,6 +8,7 @@
   
 package com.jfshare.order.dao.impl.mybatis;
 
+import com.alibaba.fastjson.JSON;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.DeliverInfo;
 import com.jfshare.finagle.thrift.order.Order;
@@ -378,7 +379,7 @@ public class OrderDaoImpl implements IOrderDao {
         paraMap.put("_parameter", "1");
         paraMap.put("example", example);
         paraMap.put("record", orderModel);
-        logger.info("开始更新" + userTypeName + ", 表[" + tableName + "], data=" + orderModel);
+        logger.info("开始更新" + userTypeName + ", 表[" + tableName + "], data=" + JSON.toJSONString(orderModel));
         try {
             sqlSession = sqlSessionFactory.openSession();
             res = sqlSession.update("updateOrderWithCriteria", paraMap);
