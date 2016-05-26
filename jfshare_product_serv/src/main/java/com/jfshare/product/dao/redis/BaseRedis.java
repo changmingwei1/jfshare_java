@@ -450,7 +450,7 @@ public class BaseRedis {
         Jedis jedis =null;
         try {
             jedis = jedisPoolRead.getResource();
-            Set<String> res = jedis.zrangeByScore(key, "-int", "+int");
+            Set<String> res = jedis.zrangeByScore(key, "-inf", "+inf");
             return res.size() == 0 ? null : res;
         } finally {
             jedisPoolRead.returnResource(jedis);
