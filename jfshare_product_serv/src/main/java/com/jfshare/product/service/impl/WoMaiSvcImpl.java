@@ -3,6 +3,9 @@ package com.jfshare.product.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfshare.finagle.thrift.product.Product;
+import com.jfshare.finagle.thrift.product.ProductSku;
+import com.jfshare.finagle.thrift.product.ProductSkuItem;
 import com.jfshare.product.commons.ProductCommons;
 import com.jfshare.product.model.TbProduct;
 import com.jfshare.product.model.manual.WoMaiError;
@@ -41,6 +44,8 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public boolean importProduct(int sellerId, String path) {
+
+        Product product = new Product();
 
         // 读取文件中的数据
         HSSFWorkbook hssfWorkbook = null;
@@ -128,7 +133,7 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      * @param productId
      * @return
      */
-    private String getItemDetail(String productId) {
+    private String getItemDetail(String productId, Product product) {
 
         Map<String, String> param = new HashMap();
         param.put("skuid", productId);
@@ -138,6 +143,18 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
             String detailJson = HttpUtils.httpPostUTF8(url, httpParam);
             JSONObject itemDetail = JSON.parseObject(detailJson);
             JSONArray details = itemDetail.getJSONArray("itemdetail");
+
+            JSONObject productObject = details.getJSONObject(0);
+
+            // 商品名称
+            product.setProductName(productObject.getString("goodsname"));
+            // 商品描述
+            product.setDetailContent(productObject.getString("prodescription"));
+
+            ProductSku productSku = new ProductSku();
+            ProductSkuItem skuItem = new ProductSkuItem();
+            skuItem.setSkuNum("");
+
 
             System.out.println(((Map)details.get(0)).get("goodsid"));
         } catch (Exception e) {
@@ -265,7 +282,7 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
     private List<String> getStock(List<String> productIds) {
         String ids = StringUtils.join(productIds, ",");
         Map param = new HashMap();
-        param.put("skuid", ids);
+        param.put("skuids", ids);
         String url = this.getWoMaiUrl();
         Map<String, String> httpParam = this.getHttpParams("womai.inventory.get", param);
         try {
@@ -278,6 +295,24 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
         }
         return null;
 
+    }
+
+
+    private void getPrice(List<String> productIds) {
+
+        String ids = StringUtils.join(productIds, ",");
+        Map param = new HashMap();
+        param.put("skuids", ids);
+        String url = this.getWoMaiUrl();
+        Map<String, String> httpParam = this.getHttpParams("womai.price.get", param);
+        try {
+            String detailJson = HttpUtils.httpPostUTF8(url, httpParam);
+            JSONObject itemDetail = JSON.parseObject(detailJson);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private WoMaiError getFailInfo(String jsonStr) {
