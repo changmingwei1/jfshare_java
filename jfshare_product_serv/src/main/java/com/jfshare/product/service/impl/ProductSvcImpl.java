@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.jfshare.finagle.thrift.subject.SubjectNode;
 import com.jfshare.product.model.mapper.TbProductMapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -141,7 +142,12 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         Set<String> productSet  = productRedis.getProductList(key);
 
         if(productSet == null || productSet.size() == 0){
-            //数据库汇总查询
+            // 查询类目的叶子节点
+            List<SubjectNode> subjectNodes = this.subjectClient.getSubTree(param.getSubjectId());
+            for (SubjectNode subjectNode : subjectNodes) {
+                param.addToSubjectIdList(subjectNode.getId());
+                param.setSubjectId(0);
+            }
 
             //卖家查询，直接查询数据库
             productSurveyList = productDaoImpl.productSurveyQuery(param);

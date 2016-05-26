@@ -1,7 +1,10 @@
 package com.jfshare.product.dependserv;
 
-import java.util.List;
-
+import com.jfshare.finagle.thrift.subject.SubjectNode;
+import com.jfshare.finagle.thrift.subject.SubjectServ;
+import com.jfshare.finagle.thrift.subject.SubjectTreeResult;
+import com.jfshare.ridge.PropertiesUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -11,9 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.jfshare.finagle.thrift.subject.SubjectServ;
-import com.jfshare.finagle.thrift.subject.SubjectTreeResult;
-import com.jfshare.ridge.PropertiesUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SubjectClient {
@@ -35,8 +37,6 @@ public class SubjectClient {
 
             result = client.getSuperTree(subjectId);
             
-            transport.close();
-            
         } catch (Exception e) {
             //throw new Exception("调用 subject-serv 发生异常!");
             logger.warn("调用 subject-serv 发生异常!");
@@ -51,5 +51,40 @@ public class SubjectClient {
 		
 		return result;
 	}
+
+	public List<SubjectNode> getSubTree(Integer subjectId){
+		List<SubjectNode> subjectNodes = new ArrayList<SubjectNode>();
+
+		TTransport transport = null;
+		try {
+			String ipClient = PropertiesUtil.getProperty("jfx_public_client","subject_serv_ips");
+			int port = Integer.parseInt(PropertiesUtil.getProperty("jfx_public_client","subject_port"));
+			transport = new TFramedTransport(new TSocket(ipClient, port, socketTimeout));
+			TProtocol protocol = new TBinaryProtocol(transport);
+			SubjectServ.Client client = new SubjectServ.Client(protocol);
+			transport.open();
+
+			SubjectTreeResult result = client.getSubTree(subjectId);
+			if (result.getResult().getCode() == 1 || CollectionUtils.isEmpty(result.getSubjectNodes())) {
+				return subjectNodes;
+			}
+			return result.getSubjectNodes();
+
+		} catch (Exception e) {
+			//throw new Exception("调用 subject-serv 发生异常!");
+			logger.warn("调用 subject-serv 发生异常!");
+		} finally {
+			try {
+				if(transport != null)
+					transport.close();
+			} catch (Exception e) {
+				logger.info(e.getMessage());
+			}
+		}
+
+		return subjectNodes;
+	}
+
+
 
 }
