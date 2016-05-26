@@ -84,7 +84,7 @@
           <where>
               AND t.product_id = p.id AND t.seller_id = #{sellerId}
               <if test="productName != null">
-                  p.name like concat('%',#{productName} ,'%')
+                  AND p.name like concat('%',#{productName} ,'%')
               </if>
           </where>
         GROUP BY t.product_id, t.sku_num
@@ -100,7 +100,7 @@
         <where>
             AND t.product_id = p.id AND t.seller_id = #{sellerId}
             <if test="productName != null">
-                p.name like concat('%',#{productName} ,'%')
+                AND p.name like concat('%',#{productName} ,'%')
             </if>
         </where>
     </select>
