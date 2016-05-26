@@ -139,13 +139,12 @@
                     #{productIdList[${index}]}
                 </foreach>
             </if>
-			<!--先不用了-->
-			<!--<if test="subjectIdList != null">
+			<if test="subjectIdList != null">
 				AND a.subject_id IN   
 			     <foreach collection="subjectIdList" index="index" item="item" open="(" separator="," close=")">  
 			        #{subjectIdList[${index}]}  
 			     </foreach> 
-			</if>-->
+			</if>
 			<if test=" brandId != 0">
 				AND a.brand_id = #{brandId,jdbcType=INTEGER}
 			</if>
