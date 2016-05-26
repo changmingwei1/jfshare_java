@@ -35,8 +35,8 @@
 			a.brand_id,
 			a.img_key,
 			a.active_state,
-			(select min(cur_price) from tb_product_sku where product_id = a.id) cur_price,
-			(select min(org_price) from tb_product_sku where product_id = a.id) org_price,
+			(select min(cur_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) cur_price,
+			(select min(org_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) org_price,
 			a.vice_name,
 			a.create_time,
 			a.seller_id,
@@ -68,7 +68,7 @@
                     #{productIdList[${index}]}
                 </foreach>
             </if>
-			/*先不用了*/
+			<!--先不用了-->
 			<!--<if test="subjectIdList != null">
 				AND a.subject_id IN   
 			     <foreach collection="subjectIdList" index="index" item="item" open="(" separator="," close=")">  
@@ -106,8 +106,8 @@
 			a.brand_id,
 			a.img_key,
 			a.active_state,
-			(select min(cur_price) from tb_product_sku where product_id = a.id) cur_price,
-			(select min(org_price) from tb_product_sku where product_id = a.id) org_price,
+			(select min(cur_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) cur_price,
+			(select min(org_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) org_price,
 			a.vice_name,
 			a.create_time,
 			a.seller_id,
@@ -139,7 +139,7 @@
                     #{productIdList[${index}]}
                 </foreach>
             </if>
-			/*先不用了*/
+			<!--先不用了-->
 			<!--<if test="subjectIdList != null">
 				AND a.subject_id IN   
 			     <foreach collection="subjectIdList" index="index" item="item" open="(" separator="," close=")">  
@@ -180,8 +180,8 @@
 			a.brand_id,
 			a.img_key,
 			a.active_state,
-			(select min(cur_price) from tb_product_sku where product_id = a.id) cur_price,
-			(select min(org_price) from tb_product_sku where product_id = a.id) org_price,
+			(select min(cur_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) cur_price,
+			(select min(org_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) org_price,
 			a.vice_name,
 			a.create_time,
 			a.seller_id,
@@ -226,8 +226,8 @@
 			a.brand_id,
 			a.img_key,
 			a.active_state,
-			(select min(cur_price) from tb_product_sku where product_id = a.id) cur_price,
-			(select min(org_price) from tb_product_sku where product_id = a.id) org_price,
+			(select min(cur_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) cur_price,
+			(select min(org_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) org_price,
 			a.vice_name,
 			a.create_time,
 			a.seller_id,
