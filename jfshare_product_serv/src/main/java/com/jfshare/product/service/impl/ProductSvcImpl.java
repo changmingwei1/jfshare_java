@@ -143,11 +143,14 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
 
         if(productSet == null || productSet.size() == 0){
             // 查询类目的叶子节点
-            List<SubjectNode> subjectNodes = this.subjectClient.getSubTree(param.getSubjectId());
-            for (SubjectNode subjectNode : subjectNodes) {
-                param.addToSubjectIdList(subjectNode.getId());
-                param.setSubjectId(0);
+            if(param.getSubjectId() != 0) {
+                List<SubjectNode> subjectNodes = this.subjectClient.getSubTree(param.getSubjectId());
+                for (SubjectNode subjectNode : subjectNodes) {
+                    param.addToSubjectIdList(subjectNode.getId());
+                    param.setSubjectId(0);
+                }
             }
+
 
             //卖家查询，直接查询数据库
             productSurveyList = productDaoImpl.productSurveyQuery(param);
