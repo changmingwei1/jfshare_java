@@ -308,16 +308,17 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
      */
     private int getProductPostage(ProductPostageModel model, String sendToProvince) {
         int totalPostage = 0;
+        // 全国包邮，统一模板id
+        if (model.getTemplateId() == 1) {
+            return 0;
+        }
         // 获取模板信息
         TbPostageTemplate tbPostageTemplate = this.getById(model.getTemplateId());
         // 模板不存在，返回错误数据
         if(tbPostageTemplate == null) {
             return -1;
         }
-        // 全国包邮，统一模板id
-        if (tbPostageTemplate.getId() == 1) {
-            return 0;
-        }
+
         String postageInfo = tbPostageTemplate.getPostageInfo();
         // 获取所有运费信息
         List<PostageModel> postageModels = JSON.parseArray(postageInfo, PostageModel.class);
