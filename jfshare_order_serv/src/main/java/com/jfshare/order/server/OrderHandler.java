@@ -478,7 +478,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             if(lockScore == 0 && useScore > 0){
                 //验证积分抵现
                 BuyInfo buyInfo = new BuyInfo();
-                buyInfo.setAmount(PriceUtils.intToStr(OrderUtil.getPostageAmount(orderModels)));
+                buyInfo.setAmount(PriceUtils.intToStr(OrderUtil.gettotalAmount(orderModels)));
                 buyInfo.setExchangeScore(useScore);
                 buyInfo.setExchangeCash(param.getExchangeCash());
                 buyInfo.setUserId(param.getUserId());
