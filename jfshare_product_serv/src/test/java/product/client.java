@@ -42,9 +42,9 @@ public class client {
 
     private ProductServ.Client client;
 
-    private static final String IP = "127.0.0.1";
+//    private static final String IP = "127.0.0.1";
 //    private static final String IP = "120.24.153.155";
-//    private static final String IP = "101.201.38.182";
+    private static final String IP = "101.201.38.182";
 
     private static final Integer PORT = 1980;
 
@@ -94,13 +94,13 @@ public class client {
         if (DO_IT == 0)
             return;
 
-        String productId = "ze160520095236000796";
+        String productId = "ze160525212050000190";
         ProductOpt productOpt = new ProductOpt();
         productOpt.setProductId(productId);
         productOpt.setActiveState(300);
         productOpt.setCurState(100);
 //        productOpt.setDesc("审核通过");
-        productOpt.setCreateTime("2016-05-21 12:12:12");
+        productOpt.setCreateTime("2016-05-25 21:20:50");
         productOpt.setOperatorType(1);
         productOpt.setOperatorId("1");
 
@@ -211,7 +211,7 @@ public class client {
 
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
-        pagination.setNumPerPage(100);
+        pagination.setNumPerPage(10);
 
         param.setPagination(pagination);
 
@@ -223,6 +223,17 @@ public class client {
         ProductRetParam param = new ProductRetParam();
         param.setSkuTag(1);
         System.out.println(this.client.queryHotSKU("ze160515153359000306", "1-1:100-101", param));
+    }
+
+    @Test
+    public void testt() throws Exception {
+        ProductSurveyQueryParam param = new ProductSurveyQueryParam();
+        param.setSort("create_time DESC");
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+        param.setPagination(pagination);
+        System.out.println(this.client.productSurveyBackendQuery(param));
     }
 
     @Test
