@@ -19,8 +19,8 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
-//        transport = new TFramedTransport(new TSocket("localhost", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+        transport = new TFramedTransport(new TSocket("localhost", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
@@ -201,6 +201,20 @@ public class Client extends TestCase{
             payChannel.setPayChannel(9);
             payParam.setPayChannel(payChannel);
             System.err.println(client.payApply(payParam));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (transport != null) {
+                transport.close();
+            }
+        }
+    }
+
+    @Test
+    public void testPayFinish() throws Exception {
+        try {
+          String payRes = "{\"bizCode\":1,\"extraParam\":\"96_23110096\",\"orderNo\":\"bac65b3d404a2cfb8407f2e903d78e63\",\"payAccount\":\"150****8779\",\"payChannel\":6,\"payId\":\"7099e495ceca48da673aec21e1169981\",\"price\":1,\"processTime\":\"2016-05-22 18:28:33\",\"retCode\":3,\"score\":0,\"setBizCode\":true,\"setErrMsg\":false,\"setExtraParam\":true,\"setOrderNo\":true,\"setPayAccount\":true,\"setPayChannel\":true,\"setPayId\":true,\"setPrice\":true,\"setProcessTime\":true,\"setRetCode\":true,\"setScore\":true,\"setSign\":true,\"setThirdPrice\":true,\"setThirdScore\":true,\"setThirdTime\":true,\"setTokenId\":true,\"sign\":\"db656aadd3d46e9863bfddd5ab22d1b4\",\"thirdPrice\":1,\"thirdScore\":0,\"thirdTime\":\"2016-05-22T17:11:11.000+08:00\",\"tokenId\":\"fvBLEJEHNOw=\"}";
+            System.err.println(client.payFinish(payRes));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

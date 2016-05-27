@@ -3,11 +3,13 @@ package com.jfshare.pay.util.alipay.util;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.jfshare.pay.util.SignType;
+import com.jfshare.pay.util.alipay.sign.Base64;
 import com.jfshare.pay.util.alipay.sign.RSA;
 import org.apache.commons.httpclient.NameValuePair;
 import org.dom4j.Document;
@@ -56,7 +58,22 @@ public class AlipaySubmit {
 
         return mysign;
     }
-	
+
+    public static void main(String[] args) throws Exception {
+        String s1 = RSA.sign("a=1&b=2&c=2&d=1", AlipayConfig.ALIPAY_RSA_PRIVATE, AlipayConfig.input_charset);
+//        s1 = URLEncoder.encode(s1, "utf-8");
+//        s1 = URLEncoder.encode(s1, "UTF-8");
+        System.out.println(s1);
+
+        boolean verify = RSA.verify("a=1&b=2&c=2&d=1", s1, AlipayConfig.ALIPAY_RSA_PUBLIC, AlipayConfig.input_charset);
+        System.out.println(verify);
+//        String decrypt = RSA.decrypt(URLEncoder.encode(s1,"UTF-8"), AlipayConfig.ALIPAY_RSA_PRIVATE, AlipayConfig.input_charset);
+//        System.out.println(decrypt);
+//
+//        String decrypt2 = RSA.decrypt(s1, AlipayConfig.ALIPAY_RSA_PRIVATE, AlipayConfig.input_charset);
+//        System.out.println(decrypt2);
+    }
+
     /**
      * 生成要请求给支付宝的参数数组
      * @param sParaTemp 请求前的参数数组
