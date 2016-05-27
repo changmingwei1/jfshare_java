@@ -932,4 +932,19 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
         return batchDeliverResult;
     }
+
+    @Override
+    public OrderProfileResult orderProfileQueryFull(OrderQueryConditions conditions) throws TException {
+        return null;
+    }
+
+    @Override
+    public ScanOrderListResult queryScanOrders(QueryScanOrderParam param) throws TException {
+        return null;
+    }
+
+    @Override
+    public ScanOrderDetailResult queryScanOrderDetail(int sellerId, String orderId) throws TException {
+        return null;
+    }
 }
