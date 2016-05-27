@@ -451,6 +451,10 @@ public class CheckUtil {
     }
 
     public List<FailDesc> orderConfirmPostage(BuyInfo buyInfo, List<Order> orderList) {
+        if (isVirOrder(buyInfo.getTradeCode())) {
+            return null;
+        }
+
         List<FailDesc> failDescList = new ArrayList<FailDesc>();
         CalculatePostageResult calculatePostageResult = baseTemplateClient.calcPostage(buyInfo, orderList);
         if(calculatePostageResult == null || calculatePostageResult.getResult().getCode() == 1) {
@@ -465,6 +469,7 @@ public class CheckUtil {
                     int postage = PriceUtils.strToInt(s.getPostage());
                     int closingPrice = PriceUtils.strToInt(order.getClosingPrice());
                     order.setClosingPrice(PriceUtils.intToStr(closingPrice + postage));
+                    order.setPostageExt(s.getPostageTemplate());
                 }
             }
         }

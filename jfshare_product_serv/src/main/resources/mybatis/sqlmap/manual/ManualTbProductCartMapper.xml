@@ -5,6 +5,7 @@
     <resultMap id="statisticsResultMap" type="com.jfshare.product.model.manual.ProductCardStatisticsModel">
         <result column="product_id" property="productId" jdbcType="VARCHAR"/>
         <result column="name" property="productName" jdbcType="VARCHAR"/>
+        <result column="sku_num" property="skuNum" jdbcType="VARCHAR"/>
         <result column="total" property="total" jdbcType="INTEGER"/>
         <result column="unused" property="unusedNum" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -83,7 +84,7 @@
           <where>
               AND t.product_id = p.id AND t.seller_id = #{sellerId}
               <if test="productName != null">
-                  p.name like concat('%',#{productName} ,'%')
+                  AND p.name like concat('%',#{productName} ,'%')
               </if>
           </where>
         GROUP BY t.product_id, t.sku_num
@@ -99,7 +100,7 @@
         <where>
             AND t.product_id = p.id AND t.seller_id = #{sellerId}
             <if test="productName != null">
-                p.name like concat('%',#{productName} ,'%')
+                AND p.name like concat('%',#{productName} ,'%')
             </if>
         </where>
     </select>

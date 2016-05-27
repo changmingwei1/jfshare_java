@@ -1,8 +1,11 @@
 package com.jfshare.task.server.depend;
 
+import com.jfshare.finagle.thrift.order.Order;
+import com.jfshare.finagle.thrift.order.OrderDetailResult;
 import com.jfshare.finagle.thrift.order.OrderServ;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.ridge.ConfigManager;
+import com.jfshare.utils.BizUtil;
 import com.twitter.finagle.Service;
 import com.twitter.finagle.builder.ClientBuilder;
 import com.twitter.finagle.builder.ClientConfig;
@@ -76,5 +79,18 @@ public class OrderClient {
         }
 
         return 1;
+    }
+
+    public Order queryOrderDetail(BizUtil.USER_TYPE type, int userId, String orderId) {
+        try {
+            OrderDetailResult ret = Await.result(service.queryOrderDetail(type.getEnumVal(), userId, orderId));
+            if (ret != null && ret.getResult().getCode() ==  0) {
+                return ret.getOrder();
+            }
+        } catch (Exception e) {
+            logger.error("调用OrderServ--queryOrderDetail失败！", e);
+        }
+
+        return null;
     }
 }

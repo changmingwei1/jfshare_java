@@ -4,6 +4,9 @@ package com.jfshare.product.commons;
  * Created by Lenovo on 2015/10/20.
  */
 public class ProductCommons {
+
+    public static String APP_KEY = "jfx_product_serv";
+
     //下架状态
     public static int PRODUCT_STATE_CREATE = 100;
     public static int PRODUCT_STATE_OFFLINE_SELLER = 101;

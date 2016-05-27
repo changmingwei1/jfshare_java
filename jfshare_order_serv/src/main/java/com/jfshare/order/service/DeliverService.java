@@ -3,8 +3,10 @@ package com.jfshare.order.service;
 import com.jfshare.finagle.thrift.order.DeliverInfo;
 import com.jfshare.order.common.OrderConstant;
 import com.jfshare.order.dao.IOrderDao;
+import com.jfshare.order.dao.IOrderJedis;
 import com.jfshare.order.exceptions.DaoManualException;
 import com.jfshare.order.model.OrderModel;
+import com.jfshare.order.model.OrderOpt;
 import com.jfshare.order.model.TbOrderRecordExample;
 import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.FailCode;
@@ -43,6 +45,9 @@ public class DeliverService {
 
     @Autowired
     private IOrderDao orderDao;
+
+    @Autowired
+    private IOrderJedis orderJedis;
 
     @Transactional
     public void updateOrderDeliverInfo(int sellerId, DeliverInfo deliverInfo) {
@@ -84,6 +89,11 @@ public class DeliverService {
         if(res <= 0) {
             throw new DaoManualException(FailCode.ORDER_UPDATE_ERROR);
         }
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_deliver", orderModel.getUserId(), orderModel.getSellerId());
+        orderJedis.pushOrderNotification(orderOptPush);
     }
 
     public void updateDeliverInfo(OrderModel orderModel) {
@@ -111,6 +121,11 @@ public class DeliverService {
         if (ret <= 0) {
             throw new DaoManualException(FailCode.ORDER_UPDATE_ERROR);
         }
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_deliver", orderModel.getUserId(), orderModel.getSellerId());
+        orderJedis.pushOrderNotification(orderOptPush);
     }
 
     public void updateDeliverInfoVir(OrderModel orderModel) {
@@ -135,6 +150,11 @@ public class DeliverService {
         if (ret <= 0) {
             throw new DaoManualException(FailCode.ORDER_UPDATE_ERROR);
         }
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_deliver", orderModel.getUserId(), orderModel.getSellerId());
+        orderJedis.pushOrderNotification(orderOptPush);
     }
 
 

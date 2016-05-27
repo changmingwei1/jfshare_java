@@ -1,16 +1,27 @@
 package com.jfshare.product.service.impl;
 
+import com.jfshare.product.commons.ProductCommons;
 import com.jfshare.product.dao.mysql.IProductCardDao;
-import com.jfshare.product.model.TbProduct;
 import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.service.IProductCartSvc;
+import com.jfshare.product.util.FileUtil;
+import com.jfshare.ridge.PropertiesUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,24 +31,53 @@ import java.util.Map;
 @Service
 public class ProductCardSvcImpl implements IProductCartSvc {
 
+    private Logger logger = LoggerFactory.getLogger(ProductCardSvcImpl.class);
+
     @Resource
     private IProductCardDao productCardDao;
 
+    private String localPath = PropertiesUtil.getProperty(ProductCommons.APP_KEY, "womai_product_import_path");
+
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public List<String> importProductCard(int sellerId, String path) {
+    public boolean importProductCard(int sellerId, String path) {
 
-        // TODO: 2016/5/13  读取文件中的数据
-
-        // 添加卡密信息
-        TbProductCard tbProductCard = new TbProductCard();
+        // TODO: 2016/5/22  dsdfsdf sd 
+        // 读取文件中的数据
+        HSSFWorkbook hssfWorkbook = null;
         try {
-            this.productCardDao.add(tbProductCard);
+            // 下载文件到本地
+            localPath = localPath + sellerId + "/";
+            String fileName = "" + System.currentTimeMillis() + ".xls";
+            boolean flag = FileUtil.downloadFile(path, localPath, fileName);
+            if (!flag) {
+                return flag;
+            }
+
+            Date now = new Date();
+            InputStream is = new FileInputStream(new File(localPath + fileName));
+            hssfWorkbook = new HSSFWorkbook(is);
+            HSSFSheet sheet = hssfWorkbook.getSheetAt(0);
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                HSSFRow row = sheet.getRow(i);
+                TbProductCard productCard = new TbProductCard();
+                productCard.setSellerId(sellerId);
+                productCard.setProductId(row.getCell(0).getStringCellValue());
+                productCard.setSkuNum(row.getCell(1).getStringCellValue());
+                productCard.setCardNumber(row.getCell(2).getStringCellValue());
+                productCard.setPassword(row.getCell(3).getStringCellValue());
+                productCard.setCreateTime(now);
+                // 添加卡密信息
+                this.productCardDao.add(productCard);
+
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("<<<<<<<< importProductCard error !! --- sellerId : " + sellerId + ", path : " + path, e);
+            return false;
         }
 
-        return null;
+        return true;
     }
 
     @Override

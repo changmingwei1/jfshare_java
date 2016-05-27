@@ -108,13 +108,18 @@ public class Client extends TestCase{
 
     public void testAddPostageTemplate() throws Exception {
         PostageTemplate template = new PostageTemplate();
-        template.setSellerId(1);
+        template.setSellerId(13);
         template.setName("邮费模板1231");
-        template.setType(3);
-        Postage postage = new Postage("12313,12314,12315", "123123123");
+        template.setType(22);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("number", 6);
+        map.put("amount", 2);
+        map.put("limit", 3);
+        map.put("postage", 2);
+        Postage postage = new Postage("350000,410000,430000", JsonMapper.toJson(map));
         template.addToPostageList(postage);
-        postage = new Postage("11111,22222,33333", "12365443");
-        template.addToPostageList(postage);
+       /* postage = new Postage("11111,22222,33333", "12365443");
+        template.addToPostageList(postage);*/
         System.out.println(client.addPostageTemplate(template).toString());
     }
 
@@ -151,8 +156,8 @@ public class Client extends TestCase{
 
     public void testQueryPostageTemplate() throws Exception {
         PostageTemplateQueryParam param = new PostageTemplateQueryParam();
-        param.setSellerId(1);
-        param.setId(11);
+        param.setSellerId(13);
+        param.setId(17);
         System.out.println(client.queryPostageTemplate(param).toString());
     }
 
@@ -165,21 +170,21 @@ public class Client extends TestCase{
     public void testCalculatePostage() throws Exception {
         CalculatePostageParam postageParam = new CalculatePostageParam();
 //        postageParam.setSendToProvince("11111");
-        postageParam.setSendToProvince("12315");
+        postageParam.setSendToProvince("350000");
         SellerPostageBasic sellerPostageBasic = new SellerPostageBasic();
-        sellerPostageBasic.setSellerId(1);
+        sellerPostageBasic.setSellerId(13);
         // 初始化商品
         ProductPostageBasic productPostageBasic = new ProductPostageBasic();
         productPostageBasic.setProductId("112");
-        productPostageBasic.setTemplateId(11);
+        productPostageBasic.setTemplateId(19);
         productPostageBasic.setAmount("12");
         productPostageBasic.setWeight(12);
         productPostageBasic.setNumber(10);
         sellerPostageBasic.addToProductPostageBasicList(productPostageBasic);
 
         productPostageBasic = new ProductPostageBasic();
-        productPostageBasic.setProductId("112");
-        productPostageBasic.setTemplateId(11);
+        productPostageBasic.setProductId("113");
+        productPostageBasic.setTemplateId(20);
         productPostageBasic.setAmount("12");
         productPostageBasic.setWeight(12);
         productPostageBasic.setNumber(10);

@@ -83,7 +83,7 @@ public class ProductDaoImpl implements IProductDao {
 
     @Override
     public void updateProduct(TbProductWithBLOBs tbProduct) {
-        tbProductMapper.updateByPrimaryKeyWithBLOBs(tbProduct);
+        tbProductMapper.updateByPrimaryKeySelective(tbProduct);
     }
 
     @Override

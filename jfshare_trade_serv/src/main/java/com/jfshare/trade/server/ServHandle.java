@@ -108,8 +108,6 @@ public class ServHandle implements TradeServ.Iface {
             List<Order> orderList = TradeUtil.convertToOrder(buyInfo, sellerOrderIdsMap, productRets, addressInfo);
 			logger.info("确认订单----准备入库参数成功");
 
-
-
 			//验证邮费
 			List<FailDesc> postageFailList = checkUtil.orderConfirmPostage(buyInfo, orderList);
 
@@ -119,20 +117,6 @@ public class ServHandle implements TradeServ.Iface {
 				return createOrderResult;
 			}
 			logger.info("获取订单----运费获取通过");
-
-			//验证积分抵现
-			List<FailDesc> score2CashFailList = checkUtil.orderConfirmScore2Cash(buyInfo, orderList);
-			if(CollectionUtils.isNotEmpty(score2CashFailList)) {
-				logger.error("$$$$确定订单----检测订单使用积分抵现错误！fails=" + score2CashFailList);
-				FailCode.addFails(result, score2CashFailList);
-				return createOrderResult;
-			}
-			if(buyInfo.getExchangeScore() > 0) {
-				//使用了积分抵现, 记录操作, 后续操作失败回滚积分
-				resourseOpts.push(ResourseOpt.score2cash);
-			}
-			logger.info("确认订单----积分抵现校验通过");
-
 
 			//验证价格
 			List<FailDesc> priceFailList = checkUtil.orderConfirmPrice(buyInfo, orderList);

@@ -175,7 +175,6 @@ public class TradeUtil {
      */
     public static int getRealPayPrice(Order item) {
         int totalAmount = PriceUtils.strToInt(item.getClosingPrice());
-        totalAmount -= PriceUtils.strToInt(item.getExchangeCash());
         return totalAmount;
     }
 

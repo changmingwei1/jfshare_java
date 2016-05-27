@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-autowire="byName">
+    <!-- pool配置 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="100"/>
+        <property name="minIdle" value="30"/>
+        <property name="maxTotal" value="1000"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="maxWaitMillis" value="10000" />
+    </bean>
+
+    <!-- jedis pool配置 -->
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+
+        <constructor-arg index="1">
+            <value>#{configManager.getRedisConfig('jfx_public_redis','alone').ip}</value>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <value>#{configManager.getRedisConfig('jfx_public_redis','alone').port}</value>
+        </constructor-arg>
+        <constructor-arg index="3">
+            <value>2000</value>
+        </constructor-arg>
+        <constructor-arg index="4">
+            <value>#{configManager.getRedisConfig('jfx_public_redis','alone').pwd}</value>
+        </constructor-arg>
+    </bean>
+</beans>
