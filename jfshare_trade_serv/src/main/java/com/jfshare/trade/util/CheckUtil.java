@@ -479,4 +479,28 @@ public class CheckUtil {
     public void releaseScore2Cash(BuyInfo buyInfo, String transId) {
         scoreClient.incomeScore(buyInfo.getUserId(), transId, buyInfo.getExchangeScore());
     }
+
+    public List<FailDesc> orderConfirmParamOffline(BuyInfo buyInfo) {
+        List<FailDesc> fails = new ArrayList<FailDesc>();
+        if (buyInfo == null) {
+            fails.add(FailCode.PARAM_ERROR);
+            return fails;
+        }
+        if (buyInfo.getUserId() <= 0) {
+            fails.add(FailCode.USER_ID_ERROR);
+        }
+
+        if(CollectionUtils.isEmpty(buyInfo.getSellerDetailList()) ||
+              buyInfo.getSellerDetailList().size() != 1 || buyInfo.getSellerDetailList().get(0).getSellerId() <= 0) {
+            fails.add(FailCode.PRODUCT_UNSELECT_ERROR);
+            return fails;
+        }
+
+        if(PriceUtils.strToInt(buyInfo.getAmount()) <= 0) {
+            fails.add(FailCode.PAY_PRICE_ERROR);
+            return fails;
+        }
+
+        return fails;
+    }
 }

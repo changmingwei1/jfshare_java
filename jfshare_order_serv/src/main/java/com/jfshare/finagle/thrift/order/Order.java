@@ -69,6 +69,7 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
   private static final TField PRODUCT_LIST_FIELD_DESC = new TField("productList", TType.LIST, (short)35);
   private static final TField THIRD_SCORE_FIELD_DESC = new TField("thirdScore", TType.I32, (short)36);
   private static final TField POSTAGE_EXT_FIELD_DESC = new TField("postageExt", TType.STRING, (short)37);
+  private static final TField ORDER_TYPE_FIELD_DESC = new TField("orderType", TType.I32, (short)38);
 
 
   public String orderId;
@@ -108,6 +109,7 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
   public List<OrderInfo> productList;
   public int thirdScore;
   public String postageExt;
+  public int orderType;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -147,7 +149,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     ACTIVE_STATE((short)34, "activeState"),
     PRODUCT_LIST((short)35, "productList"),
     THIRD_SCORE((short)36, "thirdScore"),
-    POSTAGE_EXT((short)37, "postageExt");
+    POSTAGE_EXT((short)37, "postageExt"),
+    ORDER_TYPE((short)38, "orderType");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -236,6 +239,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
   	return THIRD_SCORE;
         case 37: // POSTAGE_EXT
   	return POSTAGE_EXT;
+        case 38: // ORDER_TYPE
+  	return ORDER_TYPE;
         default:
   	return null;
       }
@@ -289,7 +294,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
   private static final int __EXCHANGESCORE_ISSET_ID = 9;
   private static final int __ACTIVESTATE_ISSET_ID = 10;
   private static final int __THIRDSCORE_ISSET_ID = 11;
-  private BitSet __isset_bit_vector = new BitSet(12);
+  private static final int __ORDERTYPE_ISSET_ID = 12;
+  private BitSet __isset_bit_vector = new BitSet(13);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -369,6 +375,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.POSTAGE_EXT, new FieldMetaData("postageExt", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.ORDER_TYPE, new FieldMetaData("orderType", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(Order.class, metaDataMap);
   }
@@ -519,6 +527,7 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     if (other.isSetPostageExt()) {
       this.postageExt = other.postageExt;
     }
+    this.orderType = other.orderType;
   }
 
   public Order deepCopy() {
@@ -576,6 +585,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     setThirdScoreIsSet(false);
     this.thirdScore = 0;
     this.postageExt = null;
+    setOrderTypeIsSet(false);
+    this.orderType = 0;
   }
 
   public String getOrderId() {
@@ -1506,6 +1517,30 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     }
   }
 
+  public int getOrderType() {
+    return this.orderType;
+  }
+
+  public Order setOrderType(int orderType) {
+    this.orderType = orderType;
+    setOrderTypeIsSet(true);
+
+    return this;
+  }
+
+  public void unsetOrderType() {
+  __isset_bit_vector.clear(__ORDERTYPE_ISSET_ID);
+  }
+
+  /** Returns true if field orderType is set (has been asigned a value) and false otherwise */
+  public boolean isSetOrderType() {
+    return __isset_bit_vector.get(__ORDERTYPE_ISSET_ID);
+  }
+
+  public void setOrderTypeIsSet(boolean value) {
+    __isset_bit_vector.set(__ORDERTYPE_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ORDER_ID:
@@ -1767,6 +1802,13 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
         setPostageExt((String)value);
       }
       break;
+    case ORDER_TYPE:
+      if (value == null) {
+        unsetOrderType();
+      } else {
+        setOrderType((Integer)value);
+      }
+      break;
     }
   }
 
@@ -1846,6 +1888,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       return new Integer(getThirdScore());
     case POSTAGE_EXT:
       return getPostageExt();
+    case ORDER_TYPE:
+      return new Integer(getOrderType());
     }
     throw new IllegalStateException();
   }
@@ -1931,6 +1975,8 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       return isSetThirdScore();
     case POSTAGE_EXT:
       return isSetPostageExt();
+    case ORDER_TYPE:
+      return isSetOrderType();
     }
     throw new IllegalStateException();
   }
@@ -2243,6 +2289,14 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       if (!this.postageExt.equals(that.postageExt))
         return false;
     }
+    boolean this_present_orderType = true && this.isSetOrderType();
+    boolean that_present_orderType = true && that.isSetOrderType();
+    if (this_present_orderType || that_present_orderType) {
+      if (!(this_present_orderType && that_present_orderType))
+        return false;
+      if (this.orderType != that.orderType)
+        return false;
+    }
 
     return true;
   }
@@ -2398,6 +2452,10 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
     builder.append(present_postageExt);
     if (present_postageExt)
       builder.append(postageExt);
+    boolean present_orderType = true && (isSetOrderType());
+    builder.append(present_orderType);
+    if (present_orderType)
+      builder.append(orderType);
     return builder.toHashCode();
   }
 
@@ -2779,6 +2837,16 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetOrderType()).compareTo(typedOther.isSetOrderType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOrderType()) {
+      lastComparison = TBaseHelper.compareTo(this.orderType, typedOther.orderType);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -3081,6 +3149,14 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 38: // ORDER_TYPE
+          if (field.type == TType.I32) {
+            this.orderType = iprot.readI32();
+            setOrderTypeIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -3301,6 +3377,11 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
         oprot.writeString(this.postageExt);
         oprot.writeFieldEnd();
       }
+    }
+    if (isSetOrderType()) {
+      oprot.writeFieldBegin(ORDER_TYPE_FIELD_DESC);
+      oprot.writeI32(this.orderType);
+      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -3593,6 +3674,12 @@ public class Order implements TBase<Order, Order._Fields>, java.io.Serializable,
       } else {
         sb.append(this.postageExt);
       }
+      first = false;
+      }
+    if (isSetOrderType()) {
+      if (!first) sb.append(", ");
+      sb.append("orderType:");
+      sb.append(this.orderType);
       first = false;
       }
     sb.append(")");

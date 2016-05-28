@@ -43,4 +43,16 @@ public class ConstantUtil {
             return this.enumVal;
         }
     };
+
+    //订单类型，0普通，1线下
+    public static enum ORDER_TYPE {
+        INIT(0), OFFLINE(1);
+        private int enumVal=0;
+        private ORDER_TYPE(int enumVal){
+            this.enumVal = enumVal;
+        }
+        public int getEnumVal(){
+            return this.enumVal;
+        }
+    };
 }
