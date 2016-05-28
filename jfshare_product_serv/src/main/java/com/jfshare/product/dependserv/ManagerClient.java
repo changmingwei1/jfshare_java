@@ -30,7 +30,7 @@ public class ManagerClient {
 
     @PostConstruct
     public void init() {
-        String ips = configManager.getConfigValue("jfx_public_client", "manager_ips", "120.24.153.155");
+        String ips = configManager.getConfigValue("jfx_public_client", "manager_serv_ips", "120.24.153.155");
         String port = configManager.getConfigValue("jfx_public_client", "manager_port", "1988");
         StringBuilder hosts = new StringBuilder();
         String[] ipArray = ips.split(";");
