@@ -69,14 +69,14 @@ public class TestThrift {
 //                params[[PayReq(tokenId:fvBLEJEHNOw=, orderNo:fa44514e9acb568385da064067e00feb, extraParam:24_4660024, title:聚分享订单, price:10, score:100, payChannel:1, payIp:null, returnUrl:, remark:null, custId:100017286150)]
                 PayReq payReq = new PayReq();
                 payReq.setTokenId("fvBLEJEHNOw=");
-                payReq.setExtraParam("24_4660024");
-                payReq.setCustId("100017286150");
-                payReq.setCustType("7");
-                payReq.setPayChannel(1);
-                payReq.setOrderNo("fa44514e9acb568385da064067e00feb");
+                payReq.setExtraParam("112_38930112");
+//                payReq.setCustId("100017286150");
+//                payReq.setCustType("7");
+                payReq.setPayChannel(3);
+                payReq.setOrderNo("9f7724514ddd94cf5a60352a2a01aa742");
                 payReq.setPrice(3000);
                 payReq.setScore2cashAmount(1000);
-                payReq.setScore(100);
+//                payReq.setScore(100);
                 payReq.setTitle("jfx订单");
                 StringResult stringResult = client.payUrl(payReq);
                 System.out.println(stringResult);
