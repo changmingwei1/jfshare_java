@@ -242,7 +242,7 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         for(TbProductSku item : tbProductSkus) {
             Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
             //sku总
-            if (StringUtil.isNullOrEmpty(item.getSkuNum())) {
+            if (StringUtil.isNullOrEmpty(item.getSkuNum()) && item.getStorehouseId() == 0) {
                 BeanUtil.fillBeanData(productSku, stringObjectMap);
                 productSku.setCurPrice(PriceUtils.intToStr(item.getCurPrice()));
                 productSku.setOrgPrice(PriceUtils.intToStr(item.getOrgPrice()));
