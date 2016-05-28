@@ -40,22 +40,23 @@ public class ProductCardSvcImpl implements IProductCartSvc {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean importProductCard(int sellerId, String path) {
+    public boolean importProductCard(int sellerId, String path) throws Exception {
 
         // TODO: 2016/5/22  dsdfsdf sd 
         // 读取文件中的数据
         HSSFWorkbook hssfWorkbook = null;
+        File localFile = null;
         try {
             // 下载文件到本地
-            localPath = localPath + sellerId + "/";
+            String localFolder = localPath + sellerId + "/";
             String fileName = "" + System.currentTimeMillis() + ".xls";
-            boolean flag = FileUtil.downloadFile(path, localPath, fileName);
+            boolean flag = FileUtil.downloadFile(path, localFolder, fileName);
             if (!flag) {
                 return flag;
             }
-
+            localFile = new File(localFolder + fileName);
             Date now = new Date();
-            InputStream is = new FileInputStream(new File(localPath + fileName));
+            InputStream is = new FileInputStream(localFile);
             hssfWorkbook = new HSSFWorkbook(is);
             HSSFSheet sheet = hssfWorkbook.getSheetAt(0);
 
@@ -70,11 +71,14 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 productCard.setCreateTime(now);
                 // 添加卡密信息
                 this.productCardDao.add(productCard);
+                int error = 1/0;
 
             }
-        } catch (Exception e) {
-            logger.error("<<<<<<<< importProductCard error !! --- sellerId : " + sellerId + ", path : " + path, e);
-            return false;
+        } finally {
+            // TODO: 2016/5/28 删除文件
+            if (localFile != null) {
+                localFile.delete();
+            }
         }
 
         return true;

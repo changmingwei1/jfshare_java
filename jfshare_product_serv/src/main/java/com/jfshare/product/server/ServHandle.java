@@ -556,6 +556,8 @@ public class ServHandle implements ProductServ.Iface {
 			}
 		} catch (Exception e) {
 			logger.error("<<<<<<<< importProductCard error !! ---- param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_FAIL);
 		}
 		return result;
 	}
