@@ -12,7 +12,7 @@ import java.util.Map;
 public interface IProductCartSvc {
 
 
-    boolean importProductCard(int sellerId, String path);
+    boolean importProductCard(int sellerId, String path) throws Exception;
 
     /**
      * 获取卡密信息，需要商品ID，交易唯一标识（transactionId）, 获取个数
