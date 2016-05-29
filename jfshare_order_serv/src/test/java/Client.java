@@ -19,8 +19,8 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
-//        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
@@ -240,6 +240,19 @@ public class Client extends TestCase{
             payState.setRetCode(2);
             payState.setCancelTime(1212121);
             System.err.println(client.payState(payState));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
+
+    public void testBatchExport() throws Exception {
+        try {
+            OrderQueryConditions queryConditions = new OrderQueryConditions();
+            System.err.println(client.batchExportOrder(13, queryConditions));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
