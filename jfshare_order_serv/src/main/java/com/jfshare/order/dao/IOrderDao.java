@@ -47,7 +47,7 @@ public interface IOrderDao {
 
     OrderModel getOrderProfileBySeller(int sellerId, String orderId);
 
-    List<OrderModel> getOrderListByUser(int userId, List<String> orderIdList);
+    List<OrderModel> getOrderListByUserFull(int userId, List<String> orderIdList);
 
     List<OrderModel> getOrderStateListByUser(int userId);
 

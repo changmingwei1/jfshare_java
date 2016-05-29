@@ -185,7 +185,7 @@ public class OrderDaoImpl implements IOrderDao {
     }
 
     @Override
-    public List<OrderModel> getOrderListByUser(int userId, List<String> orderIdList) {
+    public List<OrderModel> getOrderListByUserFull(int userId, List<String> orderIdList) {
         SqlSession sqlSession = null;
         Map<String, Object> map = new HashMap<>();
         map.put("orderIds", orderIdList);
@@ -195,7 +195,7 @@ public class OrderDaoImpl implements IOrderDao {
         List<OrderModel> orderModels = null;
         try {
             sqlSession = sqlSessionFactoryRead.openSession();
-            orderModels = sqlSession.selectList("select_order_list", map);
+            orderModels = sqlSession.selectList("select_order_list_full", map);
         } finally {
             try {
                 if (sqlSession != null)

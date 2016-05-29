@@ -454,7 +454,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return stringResult;
             }
 
-            List<OrderModel> orderModels = orderService.buyerQueryList(param.getUserId(), param.getOrderIdList());
+            List<OrderModel> orderModels = orderService.buyerQueryListFull(param.getUserId(), param.getOrderIdList());
             if (orderModels == null || orderModels.size() != param.getOrderIdList().size()) {
                 logger.warn("申请支付----payApply获取订单信息有误！param[{0}]", param);
                 FailCode.addFails(result, FailCode.ORDER_INFO_ERROR);
@@ -634,7 +634,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             String[] orderIds = extra[1].split(",");
             List<String> orderIdList =  Arrays.asList(orderIds);
 
-            List<OrderModel> orderModels = orderService.buyerQueryList(userId, orderIdList);
+            List<OrderModel> orderModels = orderService.buyerQueryListFull(userId, orderIdList);
             if (orderModels == null || orderModels.size() != orderIdList.size()) {
                 logger.warn(MessageFormat.format("支付通知----接收支付平台通知获取订单信息有误！payRes[{0}]", payRes));
                 FailCode.addFails(result, FailCode.ORDER_INFO_ERROR);

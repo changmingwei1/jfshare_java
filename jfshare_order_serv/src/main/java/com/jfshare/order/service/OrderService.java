@@ -17,6 +17,7 @@ import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.OrderUtil;
 import com.jfshare.utils.BizUtil;
 import com.jfshare.utils.DateUtils;
+import com.twitter.concurrent.Spool;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,8 +195,8 @@ public class OrderService {
         return ret;
     }
 
-    public List<OrderModel> buyerQueryList(int userId, List<String> orderIdList) {
-        return orderDao.getOrderListByUser(userId, orderIdList);
+    public List<OrderModel> buyerQueryListFull(int userId, List<String> orderIdList) {
+        return orderDao.getOrderListByUserFull(userId, orderIdList);
     }
 
     @Transactional
@@ -335,6 +336,10 @@ public class OrderService {
         if (payRet.getRetCode() == 2) {
             order.setPayState(1);
             order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal());
+            //线下订单直接交易成功
+            if (orderModel.getOrderType() == 1) {
+                order.setOrderState(ConstantUtil.ORDER_STATE.FINISH_COMMENT.getEnumVal());
+            }
         } else {
             order.setPayState(-1);
         }
