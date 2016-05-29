@@ -16,20 +16,20 @@ import java.util.*;
 
 // No additional import required for struct/union.
 
-public class OrderStateResult implements TBase<OrderStateResult, OrderStateResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("OrderStateResult");
+public class BatchDeliverResult implements TBase<BatchDeliverResult, BatchDeliverResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("BatchDeliverResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField ORDER_COUNT_LIST_FIELD_DESC = new TField("orderCountList", TType.LIST, (short)2);
+  private static final TField FAIL_INFO_FIELD_DESC = new TField("failInfo", TType.LIST, (short)2);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public List<OrderCount> orderCountList;
+  public List<BatchDeliverFailInfo> failInfo;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    ORDER_COUNT_LIST((short)2, "orderCountList");
+    FAIL_INFO((short)2, "failInfo");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -46,8 +46,8 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // ORDER_COUNT_LIST
-  	return ORDER_COUNT_LIST;
+        case 2: // FAIL_INFO
+  	return FAIL_INFO;
         default:
   	return null;
       }
@@ -95,57 +95,55 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.ORDER_COUNT_LIST, new FieldMetaData("orderCountList", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.FAIL_INFO, new FieldMetaData("failInfo", TFieldRequirementType.OPTIONAL,
       new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, OrderCount.class))));
+                new StructMetaData(TType.STRUCT, BatchDeliverFailInfo.class))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(OrderStateResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(BatchDeliverResult.class, metaDataMap);
   }
 
 
-  public OrderStateResult() {
+  public BatchDeliverResult() {
   }
 
-  public OrderStateResult(
-    com.jfshare.finagle.thrift.result.Result result,
-    List<OrderCount> orderCountList)
+  public BatchDeliverResult(
+    com.jfshare.finagle.thrift.result.Result result)
   {
     this();
     this.result = result;
-    this.orderCountList = orderCountList;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public OrderStateResult(OrderStateResult other) {
+  public BatchDeliverResult(BatchDeliverResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetOrderCountList()) {
-      List<OrderCount> __this__orderCountList = new ArrayList<OrderCount>();
-      for (OrderCount other_element : other.orderCountList) {
-        __this__orderCountList.add(new OrderCount(other_element));
+    if (other.isSetFailInfo()) {
+      List<BatchDeliverFailInfo> __this__failInfo = new ArrayList<BatchDeliverFailInfo>();
+      for (BatchDeliverFailInfo other_element : other.failInfo) {
+        __this__failInfo.add(new BatchDeliverFailInfo(other_element));
       }
-      this.orderCountList = __this__orderCountList;
+      this.failInfo = __this__failInfo;
     }
   }
 
-  public OrderStateResult deepCopy() {
-    return new OrderStateResult(this);
+  public BatchDeliverResult deepCopy() {
+    return new BatchDeliverResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.orderCountList = null;
+    this.failInfo = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public OrderStateResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public BatchDeliverResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -166,43 +164,43 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     }
   }
 
-  public int getOrderCountListSize() {
-    return (this.orderCountList == null) ? 0 : this.orderCountList.size();
+  public int getFailInfoSize() {
+    return (this.failInfo == null) ? 0 : this.failInfo.size();
   }
 
-  public java.util.Iterator<OrderCount> getOrderCountListIterator() {
-    return (this.orderCountList == null) ? null : this.orderCountList.iterator();
+  public java.util.Iterator<BatchDeliverFailInfo> getFailInfoIterator() {
+    return (this.failInfo == null) ? null : this.failInfo.iterator();
   }
 
-  public void addToOrderCountList(OrderCount elem) {
-    if (this.orderCountList == null) {
-      this.orderCountList = new ArrayList<OrderCount>();
+  public void addToFailInfo(BatchDeliverFailInfo elem) {
+    if (this.failInfo == null) {
+      this.failInfo = new ArrayList<BatchDeliverFailInfo>();
     }
-    this.orderCountList.add(elem);
+    this.failInfo.add(elem);
   }
 
-  public List<OrderCount> getOrderCountList() {
-    return this.orderCountList;
+  public List<BatchDeliverFailInfo> getFailInfo() {
+    return this.failInfo;
   }
 
-  public OrderStateResult setOrderCountList(List<OrderCount> orderCountList) {
-    this.orderCountList = orderCountList;
+  public BatchDeliverResult setFailInfo(List<BatchDeliverFailInfo> failInfo) {
+    this.failInfo = failInfo;
     
     return this;
   }
 
-  public void unsetOrderCountList() {
-    this.orderCountList = null;
+  public void unsetFailInfo() {
+    this.failInfo = null;
   }
 
-  /** Returns true if field orderCountList is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrderCountList() {
-    return this.orderCountList != null;
+  /** Returns true if field failInfo is set (has been asigned a value) and false otherwise */
+  public boolean isSetFailInfo() {
+    return this.failInfo != null;
   }
 
-  public void setOrderCountListIsSet(boolean value) {
+  public void setFailInfoIsSet(boolean value) {
     if (!value) {
-      this.orderCountList = null;
+      this.failInfo = null;
     }
   }
 
@@ -215,11 +213,11 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case ORDER_COUNT_LIST:
+    case FAIL_INFO:
       if (value == null) {
-        unsetOrderCountList();
+        unsetFailInfo();
       } else {
-        setOrderCountList((List<OrderCount>)value);
+        setFailInfo((List<BatchDeliverFailInfo>)value);
       }
       break;
     }
@@ -229,8 +227,8 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     switch (field) {
     case RESULT:
       return getResult();
-    case ORDER_COUNT_LIST:
-      return getOrderCountList();
+    case FAIL_INFO:
+      return getFailInfo();
     }
     throw new IllegalStateException();
   }
@@ -244,8 +242,8 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     switch (field) {
     case RESULT:
       return isSetResult();
-    case ORDER_COUNT_LIST:
-      return isSetOrderCountList();
+    case FAIL_INFO:
+      return isSetFailInfo();
     }
     throw new IllegalStateException();
   }
@@ -254,12 +252,12 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof OrderStateResult)
-      return this.equals((OrderStateResult)that);
+    if (that instanceof BatchDeliverResult)
+      return this.equals((BatchDeliverResult)that);
     return false;
   }
 
-  public boolean equals(OrderStateResult that) {
+  public boolean equals(BatchDeliverResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -270,12 +268,12 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_orderCountList = true && this.isSetOrderCountList();
-    boolean that_present_orderCountList = true && that.isSetOrderCountList();
-    if (this_present_orderCountList || that_present_orderCountList) {
-      if (!(this_present_orderCountList && that_present_orderCountList))
+    boolean this_present_failInfo = true && this.isSetFailInfo();
+    boolean that_present_failInfo = true && that.isSetFailInfo();
+    if (this_present_failInfo || that_present_failInfo) {
+      if (!(this_present_failInfo && that_present_failInfo))
         return false;
-      if (!this.orderCountList.equals(that.orderCountList))
+      if (!this.failInfo.equals(that.failInfo))
         return false;
     }
 
@@ -289,20 +287,20 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_orderCountList = true && (isSetOrderCountList());
-    builder.append(present_orderCountList);
-    if (present_orderCountList)
-      builder.append(orderCountList);
+    boolean present_failInfo = true && (isSetFailInfo());
+    builder.append(present_failInfo);
+    if (present_failInfo)
+      builder.append(failInfo);
     return builder.toHashCode();
   }
 
-  public int compareTo(OrderStateResult other) {
+  public int compareTo(BatchDeliverResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    OrderStateResult typedOther = (OrderStateResult)other;
+    BatchDeliverResult typedOther = (BatchDeliverResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -314,12 +312,12 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetOrderCountList()).compareTo(typedOther.isSetOrderCountList());
+    lastComparison = Boolean.valueOf(isSetFailInfo()).compareTo(typedOther.isSetFailInfo());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetOrderCountList()) {
-      lastComparison = TBaseHelper.compareTo(this.orderCountList, typedOther.orderCountList);
+    if (isSetFailInfo()) {
+      lastComparison = TBaseHelper.compareTo(this.failInfo, typedOther.failInfo);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -350,17 +348,17 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // ORDER_COUNT_LIST
+        case 2: // FAIL_INFO
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.orderCountList = new ArrayList<OrderCount>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list24 = iprot.readListBegin();
+            this.failInfo = new ArrayList<BatchDeliverFailInfo>(_list24.size);
+            for (int _i25 = 0; _i25 < _list24.size; ++_i25)
             {
-              OrderCount _elem18;
-              _elem18 = new OrderCount();
-              _elem18.read(iprot);
-              this.orderCountList.add(_elem18);
+              BatchDeliverFailInfo _elem26;
+              _elem26 = new BatchDeliverFailInfo();
+              _elem26.read(iprot);
+              this.failInfo.add(_elem26);
             }
             iprot.readListEnd();
             }
@@ -388,17 +386,19 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.orderCountList != null) {
-      oprot.writeFieldBegin(ORDER_COUNT_LIST_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.orderCountList.size()));
-        for (OrderCount _iter19 : this.orderCountList)
+    if (this.failInfo != null) {
+      if (isSetFailInfo()) {
+        oprot.writeFieldBegin(FAIL_INFO_FIELD_DESC);
         {
-          _iter19.write(oprot);
+          oprot.writeListBegin(new TList(TType.STRUCT, this.failInfo.size()));
+          for (BatchDeliverFailInfo _iter27 : this.failInfo)
+          {
+            _iter27.write(oprot);
+          }
+          oprot.writeListEnd();
         }
-        oprot.writeListEnd();
+        oprot.writeFieldEnd();
       }
-      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -406,7 +406,7 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("OrderStateResult(");
+    StringBuilder sb = new StringBuilder("BatchDeliverResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -415,14 +415,16 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       sb.append(this.result);
     }
     first = false;
-    if (!first) sb.append(", ");
-    sb.append("orderCountList:");
-    if (this.orderCountList == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.orderCountList);
-    }
-    first = false;
+    if (isSetFailInfo()) {
+      if (!first) sb.append(", ");
+      sb.append("failInfo:");
+      if (this.failInfo == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.failInfo);
+      }
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

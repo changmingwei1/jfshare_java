@@ -17,32 +17,35 @@ import java.util.*;
 
 // No additional import required for struct/union.
 
-public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePage._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("OrderProfilePage");
+public class ScanOrderListResult implements TBase<ScanOrderListResult, ScanOrderListResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ScanOrderListResult");
 
-  private static final TField TOTAL_FIELD_DESC = new TField("total", TType.I32, (short)1);
-  private static final TField PAGE_COUNT_FIELD_DESC = new TField("pageCount", TType.I32, (short)2);
-  private static final TField COUNT_FIELD_DESC = new TField("count", TType.I32, (short)3);
-  private static final TField CUR_PAGE_FIELD_DESC = new TField("curPage", TType.I32, (short)4);
-  private static final TField ORDER_PROFILE_LIST_FIELD_DESC = new TField("orderProfileList", TType.LIST, (short)5);
-  private static final TField ORDER_COUNT_LIST_FIELD_DESC = new TField("orderCountList", TType.LIST, (short)6);
+  private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
+  private static final TField TOTAL_FIELD_DESC = new TField("total", TType.I32, (short)2);
+  private static final TField PAGE_COUNT_FIELD_DESC = new TField("pageCount", TType.I32, (short)3);
+  private static final TField COUNT_FIELD_DESC = new TField("count", TType.I32, (short)4);
+  private static final TField CUR_PAGE_FIELD_DESC = new TField("curPage", TType.I32, (short)5);
+  private static final TField SCAN_ORDER_LIST_FIELD_DESC = new TField("scanOrderList", TType.LIST, (short)6);
+  private static final TField TOTAL_AMOUNT_FIELD_DESC = new TField("totalAmount", TType.STRING, (short)7);
 
 
+  public com.jfshare.finagle.thrift.result.Result result;
   public int total;
   public int pageCount;
   public int count;
   public int curPage;
-  public List<Order> orderProfileList;
-  public List<OrderCount> orderCountList;
+  public List<ScanOrderDetail> scanOrderList;
+  public String totalAmount;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    TOTAL((short)1, "total"),
-    PAGE_COUNT((short)2, "pageCount"),
-    COUNT((short)3, "count"),
-    CUR_PAGE((short)4, "curPage"),
-    ORDER_PROFILE_LIST((short)5, "orderProfileList"),
-    ORDER_COUNT_LIST((short)6, "orderCountList");
+    RESULT((short)1, "result"),
+    TOTAL((short)2, "total"),
+    PAGE_COUNT((short)3, "pageCount"),
+    COUNT((short)4, "count"),
+    CUR_PAGE((short)5, "curPage"),
+    SCAN_ORDER_LIST((short)6, "scanOrderList"),
+    TOTAL_AMOUNT((short)7, "totalAmount");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -57,18 +60,20 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // TOTAL
+        case 1: // RESULT
+  	return RESULT;
+        case 2: // TOTAL
   	return TOTAL;
-        case 2: // PAGE_COUNT
+        case 3: // PAGE_COUNT
   	return PAGE_COUNT;
-        case 3: // COUNT
+        case 4: // COUNT
   	return COUNT;
-        case 4: // CUR_PAGE
+        case 5: // CUR_PAGE
   	return CUR_PAGE;
-        case 5: // ORDER_PROFILE_LIST
-  	return ORDER_PROFILE_LIST;
-        case 6: // ORDER_COUNT_LIST
-  	return ORDER_COUNT_LIST;
+        case 6: // SCAN_ORDER_LIST
+  	return SCAN_ORDER_LIST;
+        case 7: // TOTAL_AMOUNT
+  	return TOTAL_AMOUNT;
         default:
   	return null;
       }
@@ -119,6 +124,8 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
     tmpMap.put(_Fields.TOTAL, new FieldMetaData("total", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.PAGE_COUNT, new FieldMetaData("pageCount", TFieldRequirementType.DEFAULT,
@@ -127,28 +134,30 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.CUR_PAGE, new FieldMetaData("curPage", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.ORDER_PROFILE_LIST, new FieldMetaData("orderProfileList", TFieldRequirementType.OPTIONAL,
+    tmpMap.put(_Fields.SCAN_ORDER_LIST, new FieldMetaData("scanOrderList", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, Order.class))));
-    tmpMap.put(_Fields.ORDER_COUNT_LIST, new FieldMetaData("orderCountList", TFieldRequirementType.DEFAULT,
-      new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, OrderCount.class))));
+                new StructMetaData(TType.STRUCT, ScanOrderDetail.class))));
+    tmpMap.put(_Fields.TOTAL_AMOUNT, new FieldMetaData("totalAmount", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(OrderProfilePage.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ScanOrderListResult.class, metaDataMap);
   }
 
 
-  public OrderProfilePage() {
+  public ScanOrderListResult() {
   }
 
-  public OrderProfilePage(
+  public ScanOrderListResult(
+    com.jfshare.finagle.thrift.result.Result result,
     int total,
     int pageCount,
     int count,
     int curPage,
-    List<OrderCount> orderCountList)
+    List<ScanOrderDetail> scanOrderList,
+    String totalAmount)
   {
     this();
+    this.result = result;
     this.total = total;
     setTotalIsSet(true);
     this.pageCount = pageCount;
@@ -157,41 +166,42 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     setCountIsSet(true);
     this.curPage = curPage;
     setCurPageIsSet(true);
-    this.orderCountList = orderCountList;
+    this.scanOrderList = scanOrderList;
+    this.totalAmount = totalAmount;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public OrderProfilePage(OrderProfilePage other) {
+  public ScanOrderListResult(ScanOrderListResult other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
+    if (other.isSetResult()) {
+      this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
+    }
     this.total = other.total;
     this.pageCount = other.pageCount;
     this.count = other.count;
     this.curPage = other.curPage;
-    if (other.isSetOrderProfileList()) {
-      List<Order> __this__orderProfileList = new ArrayList<Order>();
-      for (Order other_element : other.orderProfileList) {
-        __this__orderProfileList.add(new Order(other_element));
+    if (other.isSetScanOrderList()) {
+      List<ScanOrderDetail> __this__scanOrderList = new ArrayList<ScanOrderDetail>();
+      for (ScanOrderDetail other_element : other.scanOrderList) {
+        __this__scanOrderList.add(new ScanOrderDetail(other_element));
       }
-      this.orderProfileList = __this__orderProfileList;
+      this.scanOrderList = __this__scanOrderList;
     }
-    if (other.isSetOrderCountList()) {
-      List<OrderCount> __this__orderCountList = new ArrayList<OrderCount>();
-      for (OrderCount other_element : other.orderCountList) {
-        __this__orderCountList.add(new OrderCount(other_element));
-      }
-      this.orderCountList = __this__orderCountList;
+    if (other.isSetTotalAmount()) {
+      this.totalAmount = other.totalAmount;
     }
   }
 
-  public OrderProfilePage deepCopy() {
-    return new OrderProfilePage(this);
+  public ScanOrderListResult deepCopy() {
+    return new ScanOrderListResult(this);
   }
 
   @Override
   public void clear() {
+    this.result = null;
     setTotalIsSet(false);
     this.total = 0;
     setPageCountIsSet(false);
@@ -200,15 +210,40 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     this.count = 0;
     setCurPageIsSet(false);
     this.curPage = 0;
-    this.orderProfileList = null;
-    this.orderCountList = null;
+    this.scanOrderList = null;
+    this.totalAmount = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getResult() {
+    return this.result;
+  }
+
+  public ScanOrderListResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+    this.result = result;
+    
+    return this;
+  }
+
+  public void unsetResult() {
+    this.result = null;
+  }
+
+  /** Returns true if field result is set (has been asigned a value) and false otherwise */
+  public boolean isSetResult() {
+    return this.result != null;
+  }
+
+  public void setResultIsSet(boolean value) {
+    if (!value) {
+      this.result = null;
+    }
   }
 
   public int getTotal() {
     return this.total;
   }
 
-  public OrderProfilePage setTotal(int total) {
+  public ScanOrderListResult setTotal(int total) {
     this.total = total;
     setTotalIsSet(true);
 
@@ -232,7 +267,7 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     return this.pageCount;
   }
 
-  public OrderProfilePage setPageCount(int pageCount) {
+  public ScanOrderListResult setPageCount(int pageCount) {
     this.pageCount = pageCount;
     setPageCountIsSet(true);
 
@@ -256,7 +291,7 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     return this.count;
   }
 
-  public OrderProfilePage setCount(int count) {
+  public ScanOrderListResult setCount(int count) {
     this.count = count;
     setCountIsSet(true);
 
@@ -280,7 +315,7 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     return this.curPage;
   }
 
-  public OrderProfilePage setCurPage(int curPage) {
+  public ScanOrderListResult setCurPage(int curPage) {
     this.curPage = curPage;
     setCurPageIsSet(true);
 
@@ -300,88 +335,80 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     __isset_bit_vector.set(__CURPAGE_ISSET_ID, value);
   }
 
-  public int getOrderProfileListSize() {
-    return (this.orderProfileList == null) ? 0 : this.orderProfileList.size();
+  public int getScanOrderListSize() {
+    return (this.scanOrderList == null) ? 0 : this.scanOrderList.size();
   }
 
-  public java.util.Iterator<Order> getOrderProfileListIterator() {
-    return (this.orderProfileList == null) ? null : this.orderProfileList.iterator();
+  public java.util.Iterator<ScanOrderDetail> getScanOrderListIterator() {
+    return (this.scanOrderList == null) ? null : this.scanOrderList.iterator();
   }
 
-  public void addToOrderProfileList(Order elem) {
-    if (this.orderProfileList == null) {
-      this.orderProfileList = new ArrayList<Order>();
+  public void addToScanOrderList(ScanOrderDetail elem) {
+    if (this.scanOrderList == null) {
+      this.scanOrderList = new ArrayList<ScanOrderDetail>();
     }
-    this.orderProfileList.add(elem);
+    this.scanOrderList.add(elem);
   }
 
-  public List<Order> getOrderProfileList() {
-    return this.orderProfileList;
+  public List<ScanOrderDetail> getScanOrderList() {
+    return this.scanOrderList;
   }
 
-  public OrderProfilePage setOrderProfileList(List<Order> orderProfileList) {
-    this.orderProfileList = orderProfileList;
+  public ScanOrderListResult setScanOrderList(List<ScanOrderDetail> scanOrderList) {
+    this.scanOrderList = scanOrderList;
     
     return this;
   }
 
-  public void unsetOrderProfileList() {
-    this.orderProfileList = null;
+  public void unsetScanOrderList() {
+    this.scanOrderList = null;
   }
 
-  /** Returns true if field orderProfileList is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrderProfileList() {
-    return this.orderProfileList != null;
+  /** Returns true if field scanOrderList is set (has been asigned a value) and false otherwise */
+  public boolean isSetScanOrderList() {
+    return this.scanOrderList != null;
   }
 
-  public void setOrderProfileListIsSet(boolean value) {
+  public void setScanOrderListIsSet(boolean value) {
     if (!value) {
-      this.orderProfileList = null;
+      this.scanOrderList = null;
     }
   }
 
-  public int getOrderCountListSize() {
-    return (this.orderCountList == null) ? 0 : this.orderCountList.size();
+  public String getTotalAmount() {
+    return this.totalAmount;
   }
 
-  public java.util.Iterator<OrderCount> getOrderCountListIterator() {
-    return (this.orderCountList == null) ? null : this.orderCountList.iterator();
-  }
-
-  public void addToOrderCountList(OrderCount elem) {
-    if (this.orderCountList == null) {
-      this.orderCountList = new ArrayList<OrderCount>();
-    }
-    this.orderCountList.add(elem);
-  }
-
-  public List<OrderCount> getOrderCountList() {
-    return this.orderCountList;
-  }
-
-  public OrderProfilePage setOrderCountList(List<OrderCount> orderCountList) {
-    this.orderCountList = orderCountList;
+  public ScanOrderListResult setTotalAmount(String totalAmount) {
+    this.totalAmount = totalAmount;
     
     return this;
   }
 
-  public void unsetOrderCountList() {
-    this.orderCountList = null;
+  public void unsetTotalAmount() {
+    this.totalAmount = null;
   }
 
-  /** Returns true if field orderCountList is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrderCountList() {
-    return this.orderCountList != null;
+  /** Returns true if field totalAmount is set (has been asigned a value) and false otherwise */
+  public boolean isSetTotalAmount() {
+    return this.totalAmount != null;
   }
 
-  public void setOrderCountListIsSet(boolean value) {
+  public void setTotalAmountIsSet(boolean value) {
     if (!value) {
-      this.orderCountList = null;
+      this.totalAmount = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
+    case RESULT:
+      if (value == null) {
+        unsetResult();
+      } else {
+        setResult((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
     case TOTAL:
       if (value == null) {
         unsetTotal();
@@ -410,18 +437,18 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
         setCurPage((Integer)value);
       }
       break;
-    case ORDER_PROFILE_LIST:
+    case SCAN_ORDER_LIST:
       if (value == null) {
-        unsetOrderProfileList();
+        unsetScanOrderList();
       } else {
-        setOrderProfileList((List<Order>)value);
+        setScanOrderList((List<ScanOrderDetail>)value);
       }
       break;
-    case ORDER_COUNT_LIST:
+    case TOTAL_AMOUNT:
       if (value == null) {
-        unsetOrderCountList();
+        unsetTotalAmount();
       } else {
-        setOrderCountList((List<OrderCount>)value);
+        setTotalAmount((String)value);
       }
       break;
     }
@@ -429,6 +456,8 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
+    case RESULT:
+      return getResult();
     case TOTAL:
       return new Integer(getTotal());
     case PAGE_COUNT:
@@ -437,10 +466,10 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
       return new Integer(getCount());
     case CUR_PAGE:
       return new Integer(getCurPage());
-    case ORDER_PROFILE_LIST:
-      return getOrderProfileList();
-    case ORDER_COUNT_LIST:
-      return getOrderCountList();
+    case SCAN_ORDER_LIST:
+      return getScanOrderList();
+    case TOTAL_AMOUNT:
+      return getTotalAmount();
     }
     throw new IllegalStateException();
   }
@@ -452,6 +481,8 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     }
 
     switch (field) {
+    case RESULT:
+      return isSetResult();
     case TOTAL:
       return isSetTotal();
     case PAGE_COUNT:
@@ -460,10 +491,10 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
       return isSetCount();
     case CUR_PAGE:
       return isSetCurPage();
-    case ORDER_PROFILE_LIST:
-      return isSetOrderProfileList();
-    case ORDER_COUNT_LIST:
-      return isSetOrderCountList();
+    case SCAN_ORDER_LIST:
+      return isSetScanOrderList();
+    case TOTAL_AMOUNT:
+      return isSetTotalAmount();
     }
     throw new IllegalStateException();
   }
@@ -472,14 +503,22 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof OrderProfilePage)
-      return this.equals((OrderProfilePage)that);
+    if (that instanceof ScanOrderListResult)
+      return this.equals((ScanOrderListResult)that);
     return false;
   }
 
-  public boolean equals(OrderProfilePage that) {
+  public boolean equals(ScanOrderListResult that) {
     if (that == null)
       return false;
+    boolean this_present_result = true && this.isSetResult();
+    boolean that_present_result = true && that.isSetResult();
+    if (this_present_result || that_present_result) {
+      if (!(this_present_result && that_present_result))
+        return false;
+      if (!this.result.equals(that.result))
+        return false;
+    }
     boolean this_present_total = true;
     boolean that_present_total = true;
     if (this_present_total || that_present_total) {
@@ -512,20 +551,20 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
       if (this.curPage != that.curPage)
         return false;
     }
-    boolean this_present_orderProfileList = true && this.isSetOrderProfileList();
-    boolean that_present_orderProfileList = true && that.isSetOrderProfileList();
-    if (this_present_orderProfileList || that_present_orderProfileList) {
-      if (!(this_present_orderProfileList && that_present_orderProfileList))
+    boolean this_present_scanOrderList = true && this.isSetScanOrderList();
+    boolean that_present_scanOrderList = true && that.isSetScanOrderList();
+    if (this_present_scanOrderList || that_present_scanOrderList) {
+      if (!(this_present_scanOrderList && that_present_scanOrderList))
         return false;
-      if (!this.orderProfileList.equals(that.orderProfileList))
+      if (!this.scanOrderList.equals(that.scanOrderList))
         return false;
     }
-    boolean this_present_orderCountList = true && this.isSetOrderCountList();
-    boolean that_present_orderCountList = true && that.isSetOrderCountList();
-    if (this_present_orderCountList || that_present_orderCountList) {
-      if (!(this_present_orderCountList && that_present_orderCountList))
+    boolean this_present_totalAmount = true && this.isSetTotalAmount();
+    boolean that_present_totalAmount = true && that.isSetTotalAmount();
+    if (this_present_totalAmount || that_present_totalAmount) {
+      if (!(this_present_totalAmount && that_present_totalAmount))
         return false;
-      if (!this.orderCountList.equals(that.orderCountList))
+      if (!this.totalAmount.equals(that.totalAmount))
         return false;
     }
 
@@ -535,6 +574,10 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_result = true && (isSetResult());
+    builder.append(present_result);
+    if (present_result)
+      builder.append(result);
     boolean present_total = true;
     builder.append(present_total);
     if (present_total)
@@ -551,25 +594,35 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     builder.append(present_curPage);
     if (present_curPage)
       builder.append(curPage);
-    boolean present_orderProfileList = true && (isSetOrderProfileList());
-    builder.append(present_orderProfileList);
-    if (present_orderProfileList)
-      builder.append(orderProfileList);
-    boolean present_orderCountList = true && (isSetOrderCountList());
-    builder.append(present_orderCountList);
-    if (present_orderCountList)
-      builder.append(orderCountList);
+    boolean present_scanOrderList = true && (isSetScanOrderList());
+    builder.append(present_scanOrderList);
+    if (present_scanOrderList)
+      builder.append(scanOrderList);
+    boolean present_totalAmount = true && (isSetTotalAmount());
+    builder.append(present_totalAmount);
+    if (present_totalAmount)
+      builder.append(totalAmount);
     return builder.toHashCode();
   }
 
-  public int compareTo(OrderProfilePage other) {
+  public int compareTo(ScanOrderListResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    OrderProfilePage typedOther = (OrderProfilePage)other;
+    ScanOrderListResult typedOther = (ScanOrderListResult)other;
 
+    lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetResult()) {
+      lastComparison = TBaseHelper.compareTo(this.result, typedOther.result);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     lastComparison = Boolean.valueOf(isSetTotal()).compareTo(typedOther.isSetTotal());
     if (lastComparison != 0) {
       return lastComparison;
@@ -610,22 +663,22 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetOrderProfileList()).compareTo(typedOther.isSetOrderProfileList());
+    lastComparison = Boolean.valueOf(isSetScanOrderList()).compareTo(typedOther.isSetScanOrderList());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetOrderProfileList()) {
-      lastComparison = TBaseHelper.compareTo(this.orderProfileList, typedOther.orderProfileList);
+    if (isSetScanOrderList()) {
+      lastComparison = TBaseHelper.compareTo(this.scanOrderList, typedOther.scanOrderList);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetOrderCountList()).compareTo(typedOther.isSetOrderCountList());
+    lastComparison = Boolean.valueOf(isSetTotalAmount()).compareTo(typedOther.isSetTotalAmount());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetOrderCountList()) {
-      lastComparison = TBaseHelper.compareTo(this.orderCountList, typedOther.orderCountList);
+    if (isSetTotalAmount()) {
+      lastComparison = TBaseHelper.compareTo(this.totalAmount, typedOther.totalAmount);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -648,7 +701,15 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
         break;
       }
       switch (field.id) {
-        case 1: // TOTAL
+        case 1: // RESULT
+          if (field.type == TType.STRUCT) {
+            this.result = new com.jfshare.finagle.thrift.result.Result();
+            this.result.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // TOTAL
           if (field.type == TType.I32) {
             this.total = iprot.readI32();
             setTotalIsSet(true);
@@ -656,7 +717,7 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // PAGE_COUNT
+        case 3: // PAGE_COUNT
           if (field.type == TType.I32) {
             this.pageCount = iprot.readI32();
             setPageCountIsSet(true);
@@ -664,7 +725,7 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // COUNT
+        case 4: // COUNT
           if (field.type == TType.I32) {
             this.count = iprot.readI32();
             setCountIsSet(true);
@@ -672,7 +733,7 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 4: // CUR_PAGE
+        case 5: // CUR_PAGE
           if (field.type == TType.I32) {
             this.curPage = iprot.readI32();
             setCurPageIsSet(true);
@@ -680,17 +741,17 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 5: // ORDER_PROFILE_LIST
+        case 6: // SCAN_ORDER_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list8 = iprot.readListBegin();
-            this.orderProfileList = new ArrayList<Order>(_list8.size);
-            for (int _i9 = 0; _i9 < _list8.size; ++_i9)
+            TList _list36 = iprot.readListBegin();
+            this.scanOrderList = new ArrayList<ScanOrderDetail>(_list36.size);
+            for (int _i37 = 0; _i37 < _list36.size; ++_i37)
             {
-              Order _elem10;
-              _elem10 = new Order();
-              _elem10.read(iprot);
-              this.orderProfileList.add(_elem10);
+              ScanOrderDetail _elem38;
+              _elem38 = new ScanOrderDetail();
+              _elem38.read(iprot);
+              this.scanOrderList.add(_elem38);
             }
             iprot.readListEnd();
             }
@@ -698,20 +759,9 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 6: // ORDER_COUNT_LIST
-          if (field.type == TType.LIST) {
-            {
-            TList _list11 = iprot.readListBegin();
-            this.orderCountList = new ArrayList<OrderCount>(_list11.size);
-            for (int _i12 = 0; _i12 < _list11.size; ++_i12)
-            {
-              OrderCount _elem13;
-              _elem13 = new OrderCount();
-              _elem13.read(iprot);
-              this.orderCountList.add(_elem13);
-            }
-            iprot.readListEnd();
-            }
+        case 7: // TOTAL_AMOUNT
+          if (field.type == TType.STRING) {
+            this.totalAmount = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -731,6 +781,11 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
+    if (this.result != null) {
+      oprot.writeFieldBegin(RESULT_FIELD_DESC);
+      this.result.write(oprot);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldBegin(TOTAL_FIELD_DESC);
     oprot.writeI32(this.total);
     oprot.writeFieldEnd();
@@ -743,30 +798,21 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     oprot.writeFieldBegin(CUR_PAGE_FIELD_DESC);
     oprot.writeI32(this.curPage);
     oprot.writeFieldEnd();
-    if (this.orderProfileList != null) {
-      if (isSetOrderProfileList()) {
-        oprot.writeFieldBegin(ORDER_PROFILE_LIST_FIELD_DESC);
-        {
-          oprot.writeListBegin(new TList(TType.STRUCT, this.orderProfileList.size()));
-          for (Order _iter14 : this.orderProfileList)
-          {
-            _iter14.write(oprot);
-          }
-          oprot.writeListEnd();
-        }
-        oprot.writeFieldEnd();
-      }
-    }
-    if (this.orderCountList != null) {
-      oprot.writeFieldBegin(ORDER_COUNT_LIST_FIELD_DESC);
+    if (this.scanOrderList != null) {
+      oprot.writeFieldBegin(SCAN_ORDER_LIST_FIELD_DESC);
       {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.orderCountList.size()));
-        for (OrderCount _iter15 : this.orderCountList)
+        oprot.writeListBegin(new TList(TType.STRUCT, this.scanOrderList.size()));
+        for (ScanOrderDetail _iter39 : this.scanOrderList)
         {
-          _iter15.write(oprot);
+          _iter39.write(oprot);
         }
         oprot.writeListEnd();
       }
+      oprot.writeFieldEnd();
+    }
+    if (this.totalAmount != null) {
+      oprot.writeFieldBegin(TOTAL_AMOUNT_FIELD_DESC);
+      oprot.writeString(this.totalAmount);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -775,8 +821,16 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("OrderProfilePage(");
+    StringBuilder sb = new StringBuilder("ScanOrderListResult(");
     boolean first = true;
+    sb.append("result:");
+    if (this.result == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.result);
+    }
+    first = false;
+    if (!first) sb.append(", ");
     sb.append("total:");
     sb.append(this.total);
     first = false;
@@ -792,22 +846,20 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
     sb.append("curPage:");
     sb.append(this.curPage);
     first = false;
-    if (isSetOrderProfileList()) {
-      if (!first) sb.append(", ");
-      sb.append("orderProfileList:");
-      if (this.orderProfileList == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.orderProfileList);
-      }
-      first = false;
-      }
     if (!first) sb.append(", ");
-    sb.append("orderCountList:");
-    if (this.orderCountList == null) {
+    sb.append("scanOrderList:");
+    if (this.scanOrderList == null) {
       sb.append("null");
     } else {
-      sb.append(this.orderCountList);
+      sb.append(this.scanOrderList);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("totalAmount:");
+    if (this.totalAmount == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.totalAmount);
     }
     first = false;
     sb.append(")");

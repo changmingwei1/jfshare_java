@@ -122,16 +122,16 @@ public class OrderService {
         OrderModel order = new OrderModel();
         order.setUserId(orderModel.getUserId());
         order.setSellerId(orderModel.getSellerId());
-        order.setOrderState(ConstantUtil.ORDER_STATE.FINISH_COMMENT.getEnumVal());
+        order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
         DateTime successTime = new DateTime();
         order.setSuccessTime(successTime);
 
-        orderModel.setOrderState(ConstantUtil.ORDER_STATE.FINISH_COMMENT.getEnumVal());
+        orderModel.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
         orderModel.setSuccessTime(successTime);
 
         TbOrderRecordExample example = new TbOrderRecordExample();
         TbOrderRecordExample.Criteria criteria = example.createCriteria();
-//        criteria.andOrderStateEqualTo(ConstantUtil.ORDER_STATE.FINISH_DELIVER.getEnumVal());
+        criteria.andOrderStateEqualTo(ConstantUtil.ORDER_STATE.FINISH_DELIVER.getEnumVal());
         criteria.andOrderIdEqualTo(orderModel.getOrderId());
         criteria.andSellerIdEqualTo(orderModel.getSellerId());
         criteria.andUserIdEqualTo(orderModel.getUserId());
@@ -189,7 +189,7 @@ public class OrderService {
 
         //推送订单操作通知
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
-        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_cancel", orderModel.getUserId(), orderModel.getSellerId());
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_close", orderModel.getUserId(), orderModel.getSellerId());
         orderJedis.pushOrderNotification(orderOptPush);
         return ret;
     }

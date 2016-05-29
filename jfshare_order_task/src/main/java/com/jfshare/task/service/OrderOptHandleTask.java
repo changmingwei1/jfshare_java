@@ -7,6 +7,7 @@ import com.jfshare.task.dao.redis.ListRedisManager;
 import com.jfshare.task.elasticsearch.IEsOrderHandler;
 import com.jfshare.task.elasticsearch.models.EsOrder;
 import com.jfshare.task.server.depend.OrderClient;
+import com.jfshare.task.service.impl.OrderService;
 import com.jfshare.task.util.Constant;
 import com.jfshare.utils.BizUtil;
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ public class OrderOptHandleTask {
 
     @Autowired
     private IEsOrderHandler esOrderHandler;
+
+    @Autowired
+    private OrderService orderService;
    
     public  void start()
     {
@@ -37,6 +41,7 @@ public class OrderOptHandleTask {
             int userId = jsonObject.getIntValue("userId");
             int sellerId = jsonObject.getIntValue("sellerId");
             String orderId = jsonObject.getString("orderId");
+            String optTypeStr = jsonObject.getString("OptType");
             Order order = null;
             if(userId > 0) {
                 order = orderClient.queryOrderDetail(BizUtil.USER_TYPE.BUYER, userId, orderId);
@@ -48,6 +53,24 @@ public class OrderOptHandleTask {
                 logger.error("订单操作日志OrderOptHandleTask----查询订单失败, 未成功同步订单数据，需要人工处理,，orderId={}", orderId);
                 continue;
             }
+
+            Constant.OptType optType = null;
+            try {
+                optType = Constant.OptType.valueOf(optTypeStr);
+            } catch (IllegalArgumentException e) {
+                //Do nothing
+            }
+
+            switch (optType) {
+                case order_pay:{
+                    orderService.afterOrderPay(order);
+                    break;
+                }
+                default:{
+                    break;
+                }
+            }
+
 
             EsOrder esOrder = new EsOrder(order);
             esOrderHandler.addOrUpdate(esOrder);
