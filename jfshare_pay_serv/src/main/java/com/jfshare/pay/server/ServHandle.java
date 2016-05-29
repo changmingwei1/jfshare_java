@@ -163,8 +163,8 @@ public class ServHandle implements PayServ.Iface {
                     resUrlXml = key;
                 }
                 Map<String, String> resMap = WeixinSubmit.xmlStr2Map(resUrlXml);
-                Map<String, String> signParams = WeixinSubmit.buildRequestPara(resMap);
-                boolean verify = WeixinSubmit.verify(resMap, signParams);
+                Map<String, String> signParams = WeixinSubmit.buildRequestPara(resMap, payRes.getPayChannel());
+                boolean verify = WeixinSubmit.verify(resMap, signParams, payRes.getPayChannel());
                 if (!verify) {
                     logger.error(MessageFormat.format("$$$$支付通知----weinxin支付参数非法,验证签名失败! payRes[{0}]", payRes));
                     FailCode.addFails(result, FailCode.PARAM_ERROR);

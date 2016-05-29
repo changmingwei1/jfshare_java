@@ -335,8 +335,8 @@ public class PayUtil {
         String curTime = DateUtils.date2Str(now.toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2);//.date2Str()DateUtils.getCurrentStringDateYYMDHMSS();
 
         Map<String, String> payUrlMap = new HashMap<String, String>();
-        payUrlMap.put("appid", WeixinConfig.appid);
-        payUrlMap.put("mch_id", WeixinConfig.mch_id);
+        payUrlMap.put("appid", payReq.getPayChannel() == 9 ? WeixinConfig.appid_app : WeixinConfig.appid_gzh);
+        payUrlMap.put("mch_id", payReq.getPayChannel() == 9 ? WeixinConfig.mch_id_app : WeixinConfig.mch_id_gzh);
         payUrlMap.put("device_info", "WEB");
         payUrlMap.put("nonce_str", RandomStringUtils.randomAlphanumeric(20));
         payUrlMap.put("body", ConvertUtil.getString(payReq.getRemark(), "无"));
@@ -375,7 +375,7 @@ public class PayUtil {
             //调起支付额外参数
             if (payReq.getPayChannel() == 4) {
                 payUrlMap.clear();
-                payUrlMap.put("appId", WeixinConfig.appid);
+                payUrlMap.put("appId", payReq.getPayChannel() == 9 ? WeixinConfig.appid_app : WeixinConfig.appid_gzh);
                 payUrlMap.put("timeStamp",ConvertUtil.getString(new DateTime().getMillis()/1000));
                 payUrlMap.put("nonceStr", RandomStringUtils.randomAlphanumeric(20));
                 payUrlMap.put("package", "prepay_id=" + retMap.get("prepay_id"));
@@ -384,8 +384,8 @@ public class PayUtil {
                 payUrlMap.put("paySign", paramSign.get("sign"));
             } else if (payReq.getPayChannel() == 9) {
                 payUrlMap.clear();
-                payUrlMap.put("appid", WeixinConfig.appid);
-                payUrlMap.put("partnerid", WeixinConfig.mch_id);
+                payUrlMap.put("appid", payReq.getPayChannel() == 9 ? WeixinConfig.appid_app : WeixinConfig.appid_gzh);
+                payUrlMap.put("partnerid", payReq.getPayChannel() == 9 ? WeixinConfig.mch_id_app : WeixinConfig.mch_id_gzh);
                 payUrlMap.put("prepayid", retMap.get("prepay_id"));
                 payUrlMap.put("package", "Sign=WXPay");
                 payUrlMap.put("noncestr", RandomStringUtils.randomAlphanumeric(20));

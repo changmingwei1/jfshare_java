@@ -22,11 +22,11 @@ public class WeixinSubmit {
      * @param sPara 要签名的数组
      * @return 签名结果字符串
      */
-	public static String buildRequestMysign(Map<String, String> sPara) {
+	public static String buildRequestMysign(Map<String, String> sPara, int payChannel) {
     	String prestr = AlipayCore.createLinkString(sPara); //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         String mysign = "";
         if(WeixinConfig.sign_type.equals("MD5") ) {
-        	mysign = MD5.sign(prestr, "&key=" + WeixinConfig.key, WeixinConfig.input_charset).toUpperCase();
+        	mysign = MD5.sign(prestr, "&key=" + (payChannel == 9 ? WeixinConfig.key_app : WeixinConfig.key_gzh), WeixinConfig.input_charset).toUpperCase();
         }
         return mysign;
     }
@@ -36,11 +36,11 @@ public class WeixinSubmit {
      * @param sParaTemp 请求前的参数数组
      * @return 要请求的参数数组
      */
-    public static Map<String, String> buildRequestPara(Map<String, String> sParaTemp) {
+    public static Map<String, String> buildRequestPara(Map<String, String> sParaTemp, int payChannel) {
         //除去数组中的空值和签名参数
         Map<String, String> sPara = AlipayCore.paraFilter(sParaTemp);
         //生成签名结果
-        String mysign = buildRequestMysign(sPara);
+        String mysign = buildRequestMysign(sPara, payChannel);
 
         //签名结果与签名方式加入请求提交参数组中
         sPara.put("sign", mysign);
@@ -102,13 +102,13 @@ public class WeixinSubmit {
         return s;
     }
 
-    public static boolean verify(Map<String, String> params, Map<String, String> signParams) {
+    public static boolean verify(Map<String, String> params, Map<String, String> signParams, int payChannel) {
         String responseTxt = "false";
 //        if(params.get("notify_id") != null) {
 //            String notify_id = params.get("notify_id");
 //            responseTxt = verifyResponse(notify_id);
 //        }
-        if (params.get("appid") != null && params.get("appid").equals(WeixinConfig.appid)) {
+        if (params.get("appid") != null && params.get("appid").equals(payChannel == 9 ? WeixinConfig.appid_app : WeixinConfig.appid_gzh)) {
             responseTxt = "true";
         }
 
