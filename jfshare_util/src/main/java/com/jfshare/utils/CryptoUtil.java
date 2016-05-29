@@ -189,6 +189,10 @@ public final class CryptoUtil {
         System.out.println(encryptString("order"));
         System.out.println(decryptString("fvBLEJEHNOw="));
 
+        System.out.println(encryptString("weixinnotify"));
+        System.out.println(decryptString("iLv6mU/tYV1Vu9zhav4XcA=="));
+
+
         String str = new String("amigoxiexiexingxing");
         System.out.println("原始：" + str);
         System.out.println("MD5后：" + md5Encode(str));

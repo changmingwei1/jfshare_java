@@ -338,7 +338,7 @@ public class OrderService {
             order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal());
             //线下订单直接交易成功
             if (orderModel.getOrderType() == 1) {
-                order.setOrderState(ConstantUtil.ORDER_STATE.FINISH_COMMENT.getEnumVal());
+                order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
             }
         } else {
             order.setPayState(-1);
@@ -415,6 +415,31 @@ public class OrderService {
 
 
         return ret;
+    }
+
+    public OrderModel buyerQueryDetailOffline(int userId, String orderId) {
+        return orderDao.getOrderByUserOffline(orderId, userId);
+    }
+
+    public OrderModel sellerQueryDetailOffline(int sellerId, String orderId) {
+        return orderDao.getOrderBySellerOffline(orderId, sellerId);
+    }
+
+    public int buyerQueryOrderStatOffline(OrderQueryConditions conditions) {
+        return orderDao.getOrderStatByUserOffline(conditions.getUserId(), conditions);
+    }
+
+    public List<OrderModel> buyerQueryListOffline(OrderQueryConditions conditions) {
+        return orderDao.getOrderListByUserOffline(conditions.getUserId(), conditions);
+    }
+
+    public int sellerQueryOrderStatOffline(OrderQueryConditions conditions) {
+        logger.info("卖家：" + conditions.getSellerId() + "：：：：：：：：：：：：查询订单，统计各种订单状态数量");
+        return orderDao.getOrderStatBySellerOffline(conditions.getSellerId(), conditions);
+    }
+
+    public List<OrderModel> sellerQueryListOffline(OrderQueryConditions conditions) {
+        return orderDao.getOrderListBySellerOffline(conditions.getSellerId(), conditions);
     }
 }
  

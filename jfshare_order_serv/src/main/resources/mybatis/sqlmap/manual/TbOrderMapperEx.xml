@@ -320,6 +320,24 @@
         and a.order_type = 0
     </select>
 
+    <select id="select_order_detail_offline"
+            parameterType="java.util.HashMap"
+            resultMap="OrderResultMap"
+    >
+        select
+        <include refid="Select_Order_Sql"/>
+        from ${orderTable} a, ${orderInfoTable} b
+        where a.order_id = b.order_id
+        and a.order_id = #{orderId,jdbcType=VARCHAR}
+        <if test="sellerId!=null and sellerId!=''">
+            and a.seller_id = #{sellerId,jdbcType=INTEGER}
+        </if>
+        <if test="userId!=null and userId!=''">
+            and a.user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        and a.order_type = 1
+    </select>
+
     <!-- 卖家根据条件查询订单数量 -->
     <select id="select_order_stat_count_by_seller" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         select count(*)
@@ -427,6 +445,46 @@
         </where>
     </select>
 
+    <select id="select_order_stat_count_by_seller_offline" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*)
+
+        FROM ${orderTable} a, ${orderInfoTable} b
+
+        <where>
+            a.order_id = b.order_id
+            <if test="conditions.orderState != null and conditions.orderState > 0">
+                <!--区间订单状态-->
+                <if test="10 > conditions.orderState">
+                    AND a.order_state >= #{conditions.orderState} * 10 AND  a.order_state <![CDATA[<]]> (#{conditions.orderState} + 1) * 10
+                </if>
+                <!--精准订单状态-->
+                <if test="conditions.orderState >= 10">
+                    AND a.order_state =#{conditions.orderState}
+                </if>
+            </if>
+            <if test="conditions.sellerId != null and conditions.sellerId > 0">
+                AND a.seller_id=#{conditions.sellerId}
+            </if>
+            <if test="conditions.orderId != null">
+                AND a.order_id = #{conditions.orderId}
+            </if>
+
+            <if test="conditions.startTime != null">
+                AND a.create_time >= #{conditions.startTime}
+            </if>
+            <if test="conditions.endTime != null">
+                <![CDATA[AND a.create_time <= #{conditions.endTime}]]>
+            </if>
+            <if test="conditions.orderIds != null">
+                AND a.order_id IN
+                <foreach collection="conditions.orderIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            and a.order_type = 1
+        </where>
+    </select>
+
     <!-- 买家根据条件查询订单数量 -->
     <select id="select_order_stat_count_by_user" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         SELECT count(DISTINCT a.order_id)
@@ -459,6 +517,41 @@
                 </choose>
             </if>
             and a.order_type = 0
+        </where>
+    </select>
+
+    <!-- 买家根据条件查询订单数量 -->
+    <select id="select_order_stat_count_by_user_offline" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        SELECT count(DISTINCT a.order_id)
+        FROM ${orderTable} a, ${orderInfoTable} b
+        <where>
+            a.order_id = b.order_id
+
+            <if test="conditions.orderId != null">
+                AND a.order_id = #{conditions.orderId}
+            </if>
+
+            <if test="conditions.userId != null and conditions.userId > 0">
+                AND a.user_id=#{conditions.userId}
+            </if>
+
+            <if test="conditions.orderState != null and conditions.orderState > 0">
+                <choose>
+                    <!--买家待发货特殊包含审核中订单-->
+                    <when test="conditions.orderState == 3">
+                        AND a.order_state >= (#{conditions.orderState} - 1) * 10 AND a.order_state <![CDATA[<]]> (#{conditions.orderState} + 1) * 10
+                    </when>
+                    <!--区间订单状态-->
+                    <when test="10 > conditions.orderState">
+                        AND a.order_state >= #{conditions.orderState} * 10 AND  a.order_state <![CDATA[<]]> (#{conditions.orderState} + 1) * 10
+                    </when>
+                    <!--精准订单状态-->
+                    <when test="conditions.orderState >= 10">
+                        AND a.order_state =#{conditions.orderState}
+                    </when>
+                </choose>
+            </if>
+            and a.order_type = 1
         </where>
     </select>
 
@@ -624,6 +717,104 @@
         order by a.create_time desc;
     </select>
 
+    <select id="select_order_list_by_seller_offline" parameterType="java.util.HashMap" resultMap="OrderResultMap">
+        select
+
+        <include refid="Select_Order_Sql"/>
+
+        from
+        (select a.order_id FROM ${orderTable} a, ${orderInfoTable} b
+        <where>
+
+            a.order_id = b.order_id
+
+            <if test="conditions.orderId != null">
+                AND a.order_id = #{conditions.orderId}
+            </if>
+            <if test="conditions.sellerId != null and conditions.sellerId > 0">
+                AND a.seller_id=#{conditions.sellerId}
+            </if>
+
+            <if test="conditions.orderState != null and conditions.orderState > 0">
+                <choose>
+                    <!--区间订单状态-->
+                    <when test="10 > conditions.orderState">
+                        AND a.order_state >= #{conditions.orderState} * 10 AND  a.order_state <![CDATA[<]]> (#{conditions.orderState} + 1) * 10
+                    </when>
+                    <!--精准订单状态-->
+                    <when test="conditions.orderState >= 10">
+                        AND a.order_state =#{conditions.orderState}
+                    </when>
+                </choose>
+            </if>
+            <if test="conditions.startTime != null">
+                AND a.create_time >= #{conditions.startTime}
+            </if>
+            <if test="conditions.endTime != null">
+                <![CDATA[AND a.create_time <= #{conditions.endTime}]]>
+            </if>
+            <if test="conditions.orderIds != null">
+                AND a.order_id IN
+                <foreach collection="conditions.orderIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            and a.order_type = 1
+        </where>
+        GROUP BY a.order_id
+        <!-- 排序 -->
+        <choose>
+            <when test="conditions.sortRule != null and conditions.sortRule == 0">
+                order by a.create_time desc,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 1">
+                order by a.create_time,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 2">
+                order by a.pay_time desc,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 3">
+                order by a.pay_time,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 4">
+                order by a.deliver_time desc,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 5">
+                order by a.deliver_time,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 6">
+                order by a.deliver_limit_time desc,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 7">
+                order by a.deliver_limit_time,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 8">
+                order by a.success_time desc,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 9">
+                order by a.success_time,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 10">
+                order by a.last_update_time desc,a.order_id
+            </when>
+            <when test="conditions.sortRule != null and conditions.sortRule == 11">
+                order by a.last_update_time,a.order_id
+            </when>
+            <!-- 默认按订单创建时间降序排序 -->
+            <otherwise>
+                order by a.create_time desc,a.order_id
+            </otherwise>
+        </choose>
+
+        <if test="start != null and end != null">
+            limit #{start} ,#{end}
+        </if>
+
+        )c,${orderTable} a,${orderInfoTable} b
+        where c.order_id = a.order_id AND c.order_id = b.order_id
+        order by a.create_time desc;
+    </select>
+
     <select id="select_order_list_by_user" parameterType="java.util.HashMap" resultMap="OrderResultMap">
         select
 
@@ -660,6 +851,54 @@
                 </choose>
              </if>
             and a.order_type = 0
+        </where>
+        GROUP BY a.order_id
+        order by a.create_time desc, a.order_id
+        <if test="start != null and end != null">
+            limit #{start} ,#{end}
+        </if>
+
+        )c,${orderTable} a,${orderInfoTable} b
+        where c.order_id = a.order_id AND c.order_id = b.order_id
+        order by a.create_time desc, a.order_id
+    </select>
+
+    <select id="select_order_list_by_user_offline" parameterType="java.util.HashMap" resultMap="OrderResultMap">
+        select
+
+        <include refid="Select_Order_Sql"/>
+
+        from
+        (select a.order_id FROM ${orderTable} a, ${orderInfoTable} b
+        <where>
+
+            a.order_id = b.order_id
+
+            <if test="conditions.orderId != null">
+                AND a.order_id = #{conditions.orderId}
+            </if>
+
+            <if test="conditions.userId != null and conditions.userId > 0">
+                AND a.user_id=#{conditions.userId}
+            </if>
+
+            <if test="conditions.orderState != null and conditions.orderState > 0">
+                <choose>
+                    <!--买家待发货特殊包含审核中订单-->
+                    <when test="conditions.orderState == 3">
+                        AND a.order_state >= (#{conditions.orderState} - 1) * 10 AND a.order_state <![CDATA[<]]> (#{conditions.orderState} + 1) * 10
+                    </when>
+                    <!--区间订单状态-->
+                    <when test="10 > conditions.orderState">
+                        AND a.order_state >= #{conditions.orderState} * 10 AND  a.order_state <![CDATA[<]]> (#{conditions.orderState} + 1) * 10
+                    </when>
+                    <!--精准订单状态-->
+                    <when test="conditions.orderState >= 10">
+                        AND a.order_state =#{conditions.orderState}
+                    </when>
+                </choose>
+            </if>
+            and a.order_type = 1
         </where>
         GROUP BY a.order_id
         order by a.create_time desc, a.order_id
