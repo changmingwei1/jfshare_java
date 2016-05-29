@@ -848,8 +848,16 @@
                     <when test="conditions.orderState >= 10">
                         AND a.order_state =#{conditions.orderState}
                     </when>
+
                 </choose>
              </if>
+            
+            <if test="conditions.orderIds != null">
+                AND a.order_id IN
+                <foreach collection="conditions.orderIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             and a.order_type = 0
         </where>
         GROUP BY a.order_id
