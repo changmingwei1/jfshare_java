@@ -1,6 +1,7 @@
 package com.jfshare.order.server;
 
 import com.alibaba.fastjson.JSON;
+import com.jfshare.elasticsearch.drive.ESClient;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayReq;
@@ -14,6 +15,7 @@ import com.jfshare.order.common.OrderConstant;
 import com.jfshare.order.dao.IOrderJedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
+import com.jfshare.order.model.EsOrder;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.OrderOpt;
 import com.jfshare.order.model.TbOrderInfoRecord;
@@ -26,7 +28,15 @@ import com.jfshare.utils.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.lucene.queryparser.xml.FilterBuilder;
+import org.apache.lucene.queryparser.xml.FilterBuilderFactory;
 import org.apache.thrift.TException;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.*;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +76,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     @Autowired
     private FileOpUtil fileOpUtil;
+
+    @Autowired
+    private ESClient esClient;
 
     @Override
     public Result createOrder(List<Order> orderList) throws TException {
@@ -935,7 +948,81 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     @Override
     public OrderProfileResult orderProfileQueryFull(OrderQueryConditions conditions) throws TException {
-        return null;
+        OrderProfileResult orderProfileResult = new OrderProfileResult();
+        orderProfileResult.setResult(new Result(0));
+        orderProfileResult.setOrderProfilePage(new OrderProfilePage());
+        if(StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) {
+            return ResultBuilder.createFailOrderProfileResult(FailCode.PARAM_ERROR);
+        }
+
+        if(conditions.getCurPage() <1) {
+            conditions.setCurPage(1);
+        }
+        if(conditions.getCount() <=0) {
+            conditions.setCount(30);
+        }
+
+        String startTime = conditions.getStartTime();
+        String endTime = conditions.getEndTime();
+        int orderState = conditions.getOrderState();
+        String[] monthArr = DateTimeUtil.getBetweenMonth(startTime, endTime);
+        String[] indexArr = new String[monthArr.length];
+        for(int i = 0; i<  monthArr.length; i++) {
+            indexArr[i] = "jfshare_order_" + monthArr[i];
+        }
+
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+
+
+        if(orderState > 0) {
+            if(orderState < 10) {
+                queryBuilder.must(QueryBuilders.rangeQuery("orderState")
+                    .from(orderState)
+                    .to((orderState + 1) * 10 - 1));
+            } else {
+                queryBuilder.must(QueryBuilders.matchQuery("orderState", orderState));
+            }
+        }
+
+        if(StringUtils.isNotBlank(conditions.getOrderId())) {
+            queryBuilder.must(QueryBuilders.matchQuery("orderId", conditions.getOrderId()));
+        }
+
+        if(conditions.getSellerId() > 0) {
+            queryBuilder.must(QueryBuilders.matchQuery("sellerId", conditions.getSellerId()));
+        }
+
+        if(conditions.getUserId() > 0) {
+            queryBuilder.must(QueryBuilders.matchQuery("UserId", conditions.getUserId()));
+        }
+
+        queryBuilder.filter(QueryBuilders.rangeQuery("orderCreateTime")
+                .from(DateTimeUtil.strToDateTime(startTime))
+                .to(DateTimeUtil.strToDateTime(endTime)));
+
+        SearchResponse searchResponse = this.esClient.getTransportClient().prepareSearch(indexArr)
+                .setTypes("esOrder")
+                .setQuery(queryBuilder)
+                .setFrom((conditions.getCurPage()-1)*conditions.getCount())
+                .setSize(conditions.getCurPage()*conditions.getCount())
+                .setExplain(true)
+                .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC))
+                .execute()
+                .actionGet();
+
+        logger.info("ES==| search {}$$查询结果", searchResponse.getHits().getHits());
+        int hitsTotal = (int)searchResponse.getHits().getTotalHits();
+        if(hitsTotal > 0) {
+            orderProfileResult.getOrderProfilePage().setCount(conditions.getCount());
+            orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
+            orderProfileResult.getOrderProfilePage().setTotal(hitsTotal);
+            for(SearchHit searchHit : searchResponse.getHits().getHits()) {
+                EsOrder esOrder = JSON.parseObject(searchHit.getSourceAsString(), EsOrder.class);
+                orderProfileResult.getOrderProfilePage().addToOrderProfileList(JSON.parseObject(esOrder.getOrderJson(), Order.class));
+            }
+        }
+
+        return orderProfileResult;
     }
 
     @Override

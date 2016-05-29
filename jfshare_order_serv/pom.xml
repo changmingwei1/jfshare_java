@@ -9,8 +9,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.2.7.RELEASE</spring.version>
+		<elasticsearch-drive.version>1.0.0-2.2.1-SNAPSHOT</elasticsearch-drive.version>
 	</properties>
 	<dependencies>
+		<!-- elasticsearch -->
+		<dependency>
+			<groupId>com.jfshare</groupId>
+			<artifactId>elasticsearch-drive</artifactId>
+			<version>${elasticsearch-drive.version}</version>
+		</dependency>
         <!--spring-->
         <dependency>
             <groupId>org.springframework</groupId>

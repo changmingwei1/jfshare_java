@@ -23,4 +23,9 @@
     <bean id="brainServ" class="com.jfshare.brain.finagle.server.FinagleServer">
         <constructor-arg name="cfg" ref="brainServCfg"/>
     </bean>
+
+    <bean id="esClient" class="com.jfshare.elasticsearch.drive.ESClient">
+        <constructor-arg index="0" value="jfshare-app"/>
+        <constructor-arg index="1" value="120.24.153.155:9300"/>
+    </bean>
 </beans>
