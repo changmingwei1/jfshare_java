@@ -1,5 +1,6 @@
 package com.jfshare.order.util;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
@@ -336,7 +337,7 @@ public class DateTimeUtil {
 	 * @param ds2
      * @return
      */
-	public static List<String> getBetweenMonth(String ds1, String ds2) {
+	public static String[] getBetweenMonth(String ds1, String ds2) {
 		List<String> months = new ArrayList<>();
 		DateTime start = strToDateTime(ds1);
 		DateTime end = strToDateTime(ds2);
@@ -344,7 +345,9 @@ public class DateTimeUtil {
 			months.add(dateToStrOfDefaulfFormat(start.toDate()).substring(0,7));
 			start = start.plusMonths(1);
 		} while (start.isBefore(end));
-		return months;
+		String[] monthArr = new String[months.size()];
+		months.toArray(monthArr);
+		return monthArr;
 	}
 
 }

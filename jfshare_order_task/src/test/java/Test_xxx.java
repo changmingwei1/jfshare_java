@@ -1,26 +1,148 @@
 import com.alibaba.fastjson.JSON;
 import com.jfshare.elasticsearch.drive.ESClient;
+import com.jfshare.finagle.thrift.order.Order;
+import com.jfshare.finagle.thrift.order.OrderProfilePage;
+import com.jfshare.finagle.thrift.order.OrderProfileResult;
+import com.jfshare.finagle.thrift.order.OrderQueryConditions;
+import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.task.elasticsearch.models.EsOrder;
 import com.jfshare.task.util.DateTimeUtil;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.thrift.TException;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lenovo on 2015/9/28.
  */
 public class Test_xxx {
-    public static void main(String[] str) {
-        ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
-        EsOrder esOrder = new EsOrder();
-        esOrder.setOrderId("111");
-        esOrder.setOrderCreateTime(DateTimeUtil.strToDateOfDefaulfFormat("2016-05-10 00:00:00"));
 
+
+    private static Logger logger = LoggerFactory.getLogger(Test_xxx.class);
+
+    public static void main(String[] str) {
+       OrderQueryConditions conditions = new OrderQueryConditions();
+        conditions.setStartTime("2016-05-20 00:00:00");
+        conditions.setEndTime("2016-05-30 00:00:00");
+        conditions.setOrderState(1);
+
+        ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
         try {
-            esClient.addOrUpdateByCustomId("jfshare_order_2016-05", "esOrder","111", JSON.toJSONString(esOrder));
-        } catch (Exception e) {
+            OrderProfileResult orderProfileResult = orderProfileQueryFull(conditions, esClient);
+            logger.info(orderProfileResult.toString());
+        } catch (TException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static OrderProfileResult orderProfileQueryFull(OrderQueryConditions conditions, ESClient esClient) throws TException {
+        OrderProfileResult orderProfileResult = new OrderProfileResult();
+        orderProfileResult.setResult(new Result(0));
+        orderProfileResult.setOrderProfilePage(new OrderProfilePage());
+        if(StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) {
+            logger.error("时间错误");
+        }
+
+        if(conditions.getCurPage() <1) {
+            conditions.setCurPage(1);
+        }
+        if(conditions.getCount() <=0) {
+            conditions.setCount(30);
+        }
+
+        String startTime = conditions.getStartTime();
+        String endTime = conditions.getEndTime();
+        int orderState = conditions.getOrderState();
+        String[] monthArr = getBetweenMonth(startTime, endTime);
+        String[] indexArr = new String[0];
+        for(String month : monthArr) {
+            ArrayUtils.add(indexArr, "jfshare_order_" + month);
+        }
+
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+
+
+        if(orderState > 0) {
+            if(orderState < 10) {
+                queryBuilder.must(QueryBuilders.rangeQuery("orderState")
+                        .from(orderState)
+                        .to((orderState+1) * 10 - 1));
+            } else {
+                queryBuilder.must(QueryBuilders.matchQuery("orderState", orderState));
+            }
+        }
+
+        if(StringUtils.isNotBlank(conditions.getOrderId())) {
+            queryBuilder.must(QueryBuilders.matchQuery("orderId", conditions.getOrderId()));
+        }
+
+        if(conditions.getSellerId() > 0) {
+            queryBuilder.must(QueryBuilders.matchQuery("sellerId", conditions.getSellerId()));
+        }
+
+        if(conditions.getUserId() > 0) {
+            queryBuilder.must(QueryBuilders.matchQuery("UserId", conditions.getUserId()));
+        }
+
+        queryBuilder.filter(QueryBuilders.rangeQuery("orderCreateTime")
+                .from(DateTimeUtil.strToDateTime(startTime))
+                .to(DateTimeUtil.strToDateTime(endTime)));
+
+        SearchResponse searchResponse = esClient.getTransportClient().prepareSearch(indexArr)
+                .setTypes("esOrder")
+                .setQuery(queryBuilder)
+                .setFrom((conditions.getCurPage()-1)*conditions.getCount())
+                .setSize(conditions.getCurPage()*conditions.getCount())
+                .setExplain(true)
+                .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC))
+                .execute()
+                .actionGet();
+
+        logger.info("ES==| search {}$$查询结果", searchResponse.getHits());
+        int hitsTotal = (int)searchResponse.getHits().getTotalHits();
+        if(hitsTotal > 0) {
+            orderProfileResult.getOrderProfilePage().setCount(conditions.getCount());
+            orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
+            orderProfileResult.getOrderProfilePage().setTotal(hitsTotal);
+            for(SearchHit searchHit : searchResponse.getHits().getHits()) {
+                logger.info("==>" + searchHit);
+                String orderJson = JSON.parseObject(searchHit.getSourceAsString()).getString("orderJson");
+                orderProfileResult.getOrderProfilePage().addToOrderProfileList(JSON.parseObject(orderJson, Order.class));
+            }
+        }
+
+        return orderProfileResult;
+    }
+
+    /**
+     * 返回2个日期区间内的全部月份, 格式yyyy-MM
+     * @param ds1
+     * @param ds2
+     * @return
+     */
+    public static String[] getBetweenMonth(String ds1, String ds2) {
+        List<String> months = new ArrayList<String>();
+        DateTime start = DateTimeUtil.strToDateTime(ds1);
+        DateTime end = DateTimeUtil.strToDateTime(ds2);
+        do{
+            months.add(DateTimeUtil.dateToStrOfDefaulfFormat(start.toDate()).substring(0,7));
+            start = start.plusMonths(1);
+        } while (start.isBefore(end));
+        String[] monthArr = new String[months.size()];
+        months.toArray(monthArr);
+        logger.info(months.toString());
+        return monthArr;
     }
 }

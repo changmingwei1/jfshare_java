@@ -34,6 +34,7 @@ public class OrderOptHandleTask {
         long start = System.nanoTime();
 		logger.info("订单操作日志OrderOptHandleTask----运行开始");
 		long optCount = listRedisManager.queryLength(Constant.ORDER_OPT_QUEUE_KEY);
+        logger.info("订单操作日志----order_opt_queue队列长度:{}", optCount);
         for(int i= 0; i < optCount; i++) {
             String optJson = listRedisManager.rpop(Constant.ORDER_OPT_QUEUE_KEY);
             logger.info("订单操作日志OrderOptHandleTask----处理订单信息， json={}", optJson);
@@ -61,20 +62,24 @@ public class OrderOptHandleTask {
                 //Do nothing
             }
 
-            switch (optType) {
-                case order_pay:{
-                    orderService.afterOrderPay(order);
-                    break;
-                }
-                default:{
-                    break;
-                }
-            }
+            orderAfterDeal(optType, order);
 
 
             EsOrder esOrder = new EsOrder(order);
             esOrderHandler.addOrUpdate(esOrder);
         }
 		logger.info("订单操作日志OrderOptHandleTask----运行结束, 共处理记录数：{}, 耗时：{}ms", optCount, (System.nanoTime() - start)/1000000);
+    }
+
+    private void orderAfterDeal(Constant.OptType optType, Order order) {
+        switch (optType) {
+            case order_pay:{
+                orderService.afterOrderPay(order);
+                break;
+            }
+            default:{
+                break;
+            }
+        }
     }
 }
