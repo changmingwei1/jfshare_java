@@ -729,15 +729,20 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             conditions.setSellerId(sellerId);
             //查询订单列表
             orderModels = orderService.queryBatch(conditions);
-            List<Order> orderDetails = null;
-            for (OrderModel orderModel : orderModels) {
-                orderDetails.add(OrderUtil.rConvertOrderModel(orderModel));
-            }
-            byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
-            if (xlsBytes != null) {
-                String fileName =  FileOpUtil.getFileName(sellerId,null);
-                String fileKey = FileOpUtil.toFastDFS(xlsBytes, fileName);
-                stringResult.setValue(fileKey);
+            if (orderModels.size() > 0) {
+                List<Order> orderDetails = null;
+                for (OrderModel orderModel : orderModels) {
+                    orderDetails.add(OrderUtil.rConvertOrderModel(orderModel));
+                }
+                byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
+                if (xlsBytes != null) {
+                    String fileName = FileOpUtil.getFileName(sellerId, null);
+                    String fileKey = FileOpUtil.toFastDFS(xlsBytes, fileName);
+                    stringResult.setValue(fileKey);
+                    result.setCode(0);
+                }
+            } else {
+                stringResult.setValue("");
                 result.setCode(0);
             }
 
