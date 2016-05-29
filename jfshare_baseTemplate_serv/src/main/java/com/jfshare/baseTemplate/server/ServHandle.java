@@ -413,13 +413,12 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		Result result = new Result();
 		calculatePostageResult.setResult(result);
 
-		List<SellerPostageModel> sellerPostageModels = new ArrayList<>();
-		List<ProductPostageModel> productPostageModels = new ArrayList<>();
-
 		String sendTProvince = param.getSendToProvince();
+		List<SellerPostageModel> sellerPostageModels = new ArrayList<>();
 
 		// 转换实体
 		for (SellerPostageBasic sellerPostageBasic : param.getSellerPostageBasicList()) {
+			List<ProductPostageModel> productPostageModels = new ArrayList<>();
 			SellerPostageModel sellerPostageModel = new SellerPostageModel();
 			for (ProductPostageBasic productPostageBasic : sellerPostageBasic.getProductPostageBasicList()) {
 				ProductPostageModel productPostageModel = new ProductPostageModel();
