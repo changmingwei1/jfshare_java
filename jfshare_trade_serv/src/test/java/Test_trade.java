@@ -91,4 +91,29 @@ public class Test_trade {
             System.out.println("end:" + System.currentTimeMillis());
         }catch(Exception e){System.out.println(e);}
     }
+
+    @org.junit.Test
+    public void offline() throws TException {
+        try{
+            if (DO_IT == 0)
+                return;
+            System.out.println("start:" + System.currentTimeMillis());
+            for(int i=0; i<DO_IT; i++){
+                BuyInfo buyInfo = new BuyInfo();
+                buyInfo.setUserId(33);
+
+
+                List<BuySellerDetail> sellerDetailList = new ArrayList<BuySellerDetail>();
+                BuySellerDetail sellerDetail = new BuySellerDetail();
+                sellerDetail.setSellerId(8888);
+                sellerDetailList.add(sellerDetail);
+                buyInfo.setSellerDetailList(sellerDetailList);
+                buyInfo.setAmount("81.76");
+                buyInfo.setFromBatch(1);
+                OrderConfirmResult createOrderResult = client.orderConfirmOffline(buyInfo);
+                System.out.println(createOrderResult);
+            }
+            System.out.println("end:" + System.currentTimeMillis());
+        }catch(Exception e){System.out.println(e);}
+    }
 }

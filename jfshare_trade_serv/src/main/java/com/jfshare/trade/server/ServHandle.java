@@ -174,6 +174,54 @@ public class ServHandle implements TradeServ.Iface {
 	}
 
 	@Override
+	public OrderConfirmResult orderConfirmOffline(BuyInfo buyInfo) throws TException {
+		OrderConfirmResult createOrderResult = new OrderConfirmResult();
+		Result result = new Result();
+		result.setCode(0);
+		createOrderResult.setResult(result);
+		try {
+			logger.info("确定线下订单----参数,buyInfo" + buyInfo);
+			Map<Integer, String> sellerOrderIdsMap = new HashMap<Integer, String>();
+			//region 基本参数校验
+			List<FailDesc> paramFailList = checkUtil.orderConfirmParamOffline(buyInfo);
+			if (paramFailList.size() > 0) {
+				logger.error("$$$$确定线下订单----参数校验错误！fails=" + paramFailList);
+				FailCode.addFails(result, paramFailList);
+				return createOrderResult;
+			}
+
+			//生成订单号
+			sellerOrderIdsMap = checkUtil.orderConfirmGerOrderId(buyInfo);
+			logger.info("确认线下订单----生成订单号成功");
+
+			//订单参数
+			List<Order> orderList = TradeUtil.convertToOrderOffline(buyInfo, sellerOrderIdsMap);
+			logger.info("确认线下订单----准备入库参数成功");
+			logger.info("确认线下订单----验证参数成功");
+			//endregion 基本参数校验
+
+			//订单入库
+			List<FailDesc> orderFailList = checkUtil.orderConfirmOrder(orderList);
+			if (orderFailList.size() > 0) {
+				logger.error("$$$$确定线下订单----订单入库错误！fails=" + orderFailList);
+				FailCode.addFails(result, orderFailList);
+				return createOrderResult;
+			}
+			logger.info("确认线下订单----入库成功");
+
+			//返回参数
+			checkUtil.orderConfirmSetRet(buyInfo, orderList, createOrderResult);
+			logger.info("确认线下订单----返回结果成功");
+		} catch (Exception e) {
+			logger.error("$$$$确定线下订单----程序异常错误！buyInfo=" + buyInfo, e);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+			throw new RuntimeException("$$$$$$$$确认线下订单发生异常");
+		}
+
+		return createOrderResult;
+	}
+
+	@Override
 	public StringResult buyCount(int userId, String productId) throws TException {
 		StringResult stringResult = new StringResult();
 		Result result = new Result();
@@ -242,5 +290,11 @@ public class ServHandle implements TradeServ.Iface {
 
 		logger.info(param.getUserId() + ",score2cash接口调用时间：" + (System.currentTimeMillis() - doneTime) + " ms!!");
 		return result;
+	}
+
+	@Override
+	public OrderConfirmResult payOrderCreate(PayOrderInfo payOrderInfo) throws TException {
+
+		return null;
 	}
 }

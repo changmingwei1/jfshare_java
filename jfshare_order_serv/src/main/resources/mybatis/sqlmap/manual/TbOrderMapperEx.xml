@@ -64,6 +64,7 @@
         <result column="active_state" property="activeState" jdbcType="INTEGER"/>
         <result column="third_score" property="thirdScore" jdbcType="INTEGER"/>
         <result column="postageExt" property="postageext" jdbcType="VARCHAR"/>
+        <result column="order_type" jdbcType="INTEGER" property="orderType" />
 
         <collection property="tbOrderInfoList" column="order_id" javaType="ArrayList"
                     ofType="com.jfshare.order.model.TbOrderInfoRecord">
@@ -267,6 +268,9 @@
             <if test="record.postageext != null">
                 postageExt = #{record.postageext,jdbcType=VARCHAR},
             </if>
+            <if test="record.orderType != null">
+                order_type = #{record.orderType,jdbcType=INTEGER},
+            </if>
         </set>
     </sql>
 
@@ -279,7 +283,7 @@
         a.create_user_id, a.pay_state, a.address_id, a.province_name, a.city_name, a.county_name, a.post_code,
         a.deliver_time, a.success_time, a.settlement_state, a.postage, a.order_state_type, a.order_state_type_desc,
         a.settlement_time, a.order_tag, a.express_name, a.wi, a.from_source, a.trade_pay_id, a.order_delete_state,
-        a.exchange_score, a.exchange_cash, a.order_batch, a.active_state, a.third_score,a.postageExt,
+        a.exchange_score, a.exchange_cash, a.order_batch, a.active_state, a.third_score,a.postageExt,a.order_type,
         b.order_id, b.product_id, b.product_name, b.vice_name, b.product_snapshoot_id, b.sku_num,
         b.sku_desc, b.seller_class_num, b.cur_price, b.org_price, b.images_url, b.last_update_user_id,
         b.create_time, b.create_user_id, b.type, b.shelf, b.count, b.last_update_time, b.subject_id, b.brand_id,
@@ -295,7 +299,7 @@
         create_user_id, pay_state, address_id, province_name, city_name, county_name, post_code,
         deliver_time, success_time, settlement_state, a.postage, order_state_type, order_state_type_desc,
         settlement_time, order_tag, express_name, wi, from_source, trade_pay_id, order_delete_state,
-        exchange_score, exchange_cash, order_batch, active_state, third_score
+        exchange_score, exchange_cash, order_batch, active_state, third_score, order_type
     </sql>
 
     <select id="select_order_detail"
@@ -828,6 +832,9 @@
             <if test="record.postageext != null">
                 postageExt,
             </if>
+            <if test="record.orderType != null">
+                order_type,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="record.orderId != null">
@@ -991,6 +998,9 @@
             </if>
             <if test="record.postageext != null">
                 #{record.postageext,jdbcType=VARCHAR},
+            </if>
+            <if test="record.orderType != null">
+                #{record.orderType,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>

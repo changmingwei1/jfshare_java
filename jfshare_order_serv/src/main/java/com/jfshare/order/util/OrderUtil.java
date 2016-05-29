@@ -62,6 +62,7 @@ public class OrderUtil {
         orderDetail.setThirdScore(orderModel.getThirdScore());
         orderDetail.setPostage(PriceUtils.intToStr(orderModel.getPostage()));
         orderDetail.setPostageExt(orderModel.getPostageext());
+        orderDetail.setOrderType(orderModel.getOrderType());
 
         DeliverInfo deliverInfo = new DeliverInfo();
         deliverInfo.setReceiverTele(orderModel.getReceiverTele());
@@ -182,6 +183,7 @@ public class OrderUtil {
         orderDetail.setThirdScore(orderModel.getThirdScore());
         orderDetail.setPostage(PriceUtils.strToInt(orderModel.getPostage()));
         orderDetail.setPostageext(orderModel.getPostageExt());
+        orderDetail.setOrderType(orderModel.getOrderType());
 
         DeliverInfo deliverInfo = orderModel.getDeliverInfo();
         if (deliverInfo != null) {

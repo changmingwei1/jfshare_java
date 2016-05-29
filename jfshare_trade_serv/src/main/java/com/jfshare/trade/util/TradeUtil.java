@@ -191,4 +191,56 @@ public class TradeUtil {
 
         return totalPostage;
     }
+
+    public static List<Order> convertToOrderOffline(BuyInfo buyInfo, Map<Integer, String> sellerOrderIdsMap) {
+        List<Order> orderList = new ArrayList<Order>();
+
+        List<BuySellerDetail> sellerDetails = buyInfo.getSellerDetailList();
+        for (BuySellerDetail sellerDetail : sellerDetails) {
+            Order order = new Order();
+            DateTime curTime = new DateTime();
+            long cancelMillis = ConvertUtil.getLong(PropertiesUtil.getProperty("jfx_trade_serv", "order_timeout", "30"))*60*1000;
+            String orderBatch = buyInfo.getFromBatch() + "-" + sellerOrderIdsMap.get(sellerDetails.get(0).getSellerId()) + "-" + sellerOrderIdsMap.size();
+
+            order.setOrderId(sellerOrderIdsMap.get(sellerDetail.getSellerId()));
+            order.setTradeCode(ConstantUtil.TRADE_CODE.ORDER_CODE_ENTITY.getEnumVal());
+            order.setUserId(buyInfo.getUserId());
+            order.setUserName(buyInfo.getUserName());
+            order.setCreateTime(ConvertUtil.DateTimeToStr(curTime));
+            order.setCancelTime(ConvertUtil.DateTimeToStr(new DateTime(curTime.getMillis() + cancelMillis)));
+            order.setSellerId(sellerDetail.getSellerId());
+            order.setSellerName(sellerDetail.getSellerName());
+            order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_PAY.getEnumVal());
+            order.setBuyerComment(StringUtil.delHTMLTag(sellerDetail.getBuyerComment()));
+            order.setLastUpdateTime(ConvertUtil.DateTimeToStr(curTime));
+            order.setLastUpdateUserId(buyInfo.getUserId());
+            order.setCreateUserId(buyInfo.getUserId());
+            order.setWi(buyInfo.getWi());
+            order.setFromSource(buyInfo.getFromSource());
+            order.setOrderBatch(orderBatch);
+
+            PayInfo payInfo = new PayInfo();
+            payInfo.setPayState(ConstantUtil.PAY_STATE.INIT.getEnumVal());
+            order.setPayInfo(payInfo);
+            order.setOrderType(ConstantUtil.ORDER_TYPE.OFFLINE.getEnumVal());
+
+            int totalPrice = PriceUtils.strToInt(buyInfo.getAmount());
+            int totalPostage = 0;
+            List<OrderInfo> productInfos = new ArrayList<OrderInfo>();
+            OrderInfo item = new OrderInfo();
+            item.setOrderId(order.getOrderId());
+            item.setProductId("offline");
+            item.setCurPrice(buyInfo.getAmount());
+            item.setCount(1);
+            item.setOrgPrice(buyInfo.getAmount());
+            productInfos.add(item);
+            order.setPostage(PriceUtils.intToStr(totalPostage));
+            order.setClosingPrice(PriceUtils.intToStr(totalPrice + totalPostage));
+            order.setProductList(productInfos);
+
+            orderList.add(order);
+        }
+
+        return orderList;
+    }
 }
