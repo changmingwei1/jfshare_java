@@ -185,7 +185,7 @@ public class OrderDaoImpl implements IOrderDao {
     }
 
     @Override
-    public List<OrderModel> getOrderListByUser(int userId, List<String> orderIdList) {
+    public List<OrderModel> getOrderListByUserFull(int userId, List<String> orderIdList) {
         SqlSession sqlSession = null;
         Map<String, Object> map = new HashMap<>();
         map.put("orderIds", orderIdList);
@@ -195,7 +195,7 @@ public class OrderDaoImpl implements IOrderDao {
         List<OrderModel> orderModels = null;
         try {
             sqlSession = sqlSessionFactoryRead.openSession();
-            orderModels = sqlSession.selectList("select_order_list", map);
+            orderModels = sqlSession.selectList("select_order_list_full", map);
         } finally {
             try {
                 if (sqlSession != null)
@@ -519,6 +519,156 @@ public class OrderDaoImpl implements IOrderDao {
 
 
         return  orderList.size();
+    }
+
+    @Override
+    public OrderModel getOrderByUserOffline(String orderId, int userId) {
+        SqlSession sqlSession = null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", orderId);
+        map.put("userId", userId);
+        map.put("orderTable", TableNameUtil.getOrderNameByUser(userId));
+        map.put("orderInfoTable", TableNameUtil.getOrderInfoNameByUser(userId));
+        OrderModel orderModel = null;
+        try {
+            sqlSession = sqlSessionFactoryRead.openSession();
+            orderModel = sqlSession.selectOne("select_order_detail_offline", map);
+        } finally {
+            try {
+                if (sqlSession != null)
+                    sqlSession.close();
+            } catch (Exception ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        return orderModel;
+    }
+
+    @Override
+    public OrderModel getOrderBySellerOffline(String orderId, int sellerId) {
+        SqlSession sqlSession = null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", orderId);
+        map.put("sellerId", sellerId);
+        map.put("orderTable", TableNameUtil.getOrderNameBySeller(sellerId));
+        map.put("orderInfoTable", TableNameUtil.getOrderInfoNameBySeller(sellerId));
+        OrderModel orderModel = null;
+        try {
+            sqlSession = sqlSessionFactoryRead.openSession();
+            orderModel = sqlSession.selectOne("select_order_detail_offline", map);
+        } finally {
+            try {
+                if (sqlSession != null)
+                    sqlSession.close();
+            } catch (Exception ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        return orderModel;
+    }
+
+    @Override
+    public int getOrderStatByUserOffline(int userId, OrderQueryConditions conditions) {
+        SqlSession sqlSession = null;
+        int res = 0;
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("orderTable", TableNameUtil.getOrderNameByUser(userId));
+        map.put("orderInfoTable", TableNameUtil.getOrderInfoNameByUser(userId));
+        map.put("conditions", conditions);
+        try {
+            sqlSession = sqlSessionFactoryRead.openSession();
+            res = sqlSession.selectOne("select_order_stat_count_by_user_offline", map);
+        } finally {
+            try {
+                if (sqlSession != null)
+                    sqlSession.close();
+            } catch (Exception ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public List<OrderModel> getOrderListByUserOffline(int userId, OrderQueryConditions conditions) {
+        SqlSession sqlSession = null;
+        List<OrderModel> orderModels = null;
+        Map<String, Object> map = new HashMap<>();
+
+        int start = (conditions.curPage - 1)*conditions.count;
+        int end = conditions.count;
+        map.put("start", start);
+        map.put("end", end);
+        map.put("userId", userId);
+        map.put("orderTable", TableNameUtil.getOrderNameByUser(userId));
+        map.put("orderInfoTable", TableNameUtil.getOrderInfoNameByUser(userId));
+        map.put("conditions", conditions);
+
+        try {
+            sqlSession = sqlSessionFactoryRead.openSession();
+            orderModels = sqlSession.selectList("select_order_list_by_user_offline", map);
+        } finally {
+            try {
+                if (sqlSession != null)
+                    sqlSession.close();
+            } catch (Exception ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        return orderModels;
+    }
+
+    @Override
+    public int getOrderStatBySellerOffline(int sellerId, OrderQueryConditions conditions) {
+        SqlSession sqlSession = null;
+        int res = 0;
+        Map<String, Object> map = new HashMap<>();
+        map.put("sellerId", sellerId);
+        map.put("orderTable", TableNameUtil.getOrderNameBySeller(sellerId));
+        map.put("orderInfoTable", TableNameUtil.getOrderInfoNameBySeller(sellerId));
+        map.put("conditions", conditions);
+        try {
+            sqlSession = sqlSessionFactoryRead.openSession();
+            res = sqlSession.selectOne("select_order_stat_count_by_seller_offline", map);
+        } finally {
+            try {
+                if (sqlSession != null)
+                    sqlSession.close();
+            } catch (Exception ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public List<OrderModel> getOrderListBySellerOffline(int sellerId, OrderQueryConditions conditions) {
+        SqlSession sqlSession = null;
+        List<OrderModel> orderModels = null;
+        Map<String, Object> map = new HashMap<>();
+
+        int start = (conditions.curPage - 1)*conditions.count;
+        int end = conditions.count;
+        map.put("start", start);
+        map.put("end", end);
+        map.put("sellerId", sellerId);
+        map.put("orderTable", TableNameUtil.getOrderNameBySeller(sellerId));
+        map.put("orderInfoTable", TableNameUtil.getOrderInfoNameBySeller(sellerId));
+        map.put("conditions", conditions);
+
+        try {
+            sqlSession = sqlSessionFactoryRead.openSession();
+            orderModels = sqlSession.selectList("select_order_list_by_seller_offline", map);
+        } finally {
+            try {
+                if (sqlSession != null)
+                    sqlSession.close();
+            } catch (Exception ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        return orderModels;
     }
 }
   

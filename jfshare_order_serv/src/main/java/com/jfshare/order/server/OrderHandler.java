@@ -467,7 +467,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return stringResult;
             }
 
-            List<OrderModel> orderModels = orderService.buyerQueryList(param.getUserId(), param.getOrderIdList());
+            List<OrderModel> orderModels = orderService.buyerQueryListFull(param.getUserId(), param.getOrderIdList());
             if (orderModels == null || orderModels.size() != param.getOrderIdList().size()) {
                 logger.warn("申请支付----payApply获取订单信息有误！param[{0}]", param);
                 FailCode.addFails(result, FailCode.ORDER_INFO_ERROR);
@@ -647,7 +647,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             String[] orderIds = extra[1].split(",");
             List<String> orderIdList =  Arrays.asList(orderIds);
 
-            List<OrderModel> orderModels = orderService.buyerQueryList(userId, orderIdList);
+            List<OrderModel> orderModels = orderService.buyerQueryListFull(userId, orderIdList);
             if (orderModels == null || orderModels.size() != orderIdList.size()) {
                 logger.warn(MessageFormat.format("支付通知----接收支付平台通知获取订单信息有误！payRes[{0}]", payRes));
                 FailCode.addFails(result, FailCode.ORDER_INFO_ERROR);
@@ -1023,6 +1023,70 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return orderProfileResult;
+    }
+
+    @Override
+    public OrderDetailResult queryOrderDetailOffline(int userType, int userId, String orderId) throws TException {
+        Order orderDetail = null;
+        try {
+            OrderModel orderModel = null;
+
+            if(userType == BizUtil.USER_TYPE.BUYER.getEnumVal()) {
+                orderModel = orderService.buyerQueryDetailOffline(userId, orderId);
+            } else if(userType == BizUtil.USER_TYPE.SELLER.getEnumVal()) {
+                orderModel = orderService.sellerQueryDetailOffline(userId, orderId);
+            } else {
+                return ResultBuilder.createFailOrderDetailResult(FailCode.PARAM_ERROR);
+            }
+
+            orderDetail = OrderUtil.rConvertOrderModel(orderModel);
+
+        } catch (Exception e) {
+            logger.error("查询失败！", e);
+            return ResultBuilder.createFailOrderDetailResult(FailCode.SYS_ERROR);
+        }
+
+        return ResultBuilder.createOrderDetailResult(orderDetail);
+    }
+
+    @Override
+    public OrderProfileResult orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions) throws TException {
+        List<Order> orderDetails = null;
+
+        int total = 0;
+        List<FailDesc> failDescs = ParamCheck.UserIdCheck(userId);
+        if(CollectionUtils.isNotEmpty(failDescs)) {
+            return ResultBuilder.createFailOrderProfileResult(failDescs);
+        }
+        try {
+            List<OrderModel> orderModels = null;
+            conditions = super.verifyConditions(conditions);
+
+            if(userType == BizUtil.USER_TYPE.BUYER.getEnumVal()) {
+                conditions.setUserId(userId);
+                total = orderService.buyerQueryOrderStatOffline(conditions);
+                if (total > 0) {
+                    orderModels = orderService.buyerQueryListOffline(conditions);
+                }
+            } else if(userType == BizUtil.USER_TYPE.SELLER.getEnumVal()) {
+                conditions.setSellerId(userId);
+                //查询订单数量
+                total = orderService.sellerQueryOrderStatOffline(conditions);
+                if (total > 0) {
+                    //查询订单列表
+                    orderModels = orderService.sellerQueryListOffline(conditions);
+                }
+            } else {
+                return ResultBuilder.createFailOrderProfileResult(FailCode.PARAM_ERROR);
+            }
+            orderDetails = OrderUtil.rConvertOrderModels(orderModels);
+
+        } catch (DataVerifyException e) {
+            logger.error("发生DataVerifyException", e);
+            return ResultBuilder.createFailOrderProfileResult(e.getFailDescs());
+        }
+
+        return ResultBuilder.createOrderProfileResult(conditions, orderDetails, total);
     }
 
     @Override

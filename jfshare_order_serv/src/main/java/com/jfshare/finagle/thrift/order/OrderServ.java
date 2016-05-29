@@ -54,6 +54,8 @@ public class OrderServ {
     public com.jfshare.finagle.thrift.result.StringResult batchExportOrder(int sellerId, OrderQueryConditions conditions) throws TException;
     public BatchDeliverResult batchDeliverOrder(int sellerId, BatchDeliverParam param) throws TException;
     public OrderProfileResult orderProfileQueryFull(OrderQueryConditions conditions) throws TException;
+    public OrderDetailResult queryOrderDetailOffline(int userType, int userId, String orderId) throws TException;
+    public OrderProfileResult orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions) throws TException;
     public ScanOrderListResult queryScanOrders(QueryScanOrderParam param) throws TException;
     public ScanOrderDetailResult queryScanOrderDetail(int sellerId, String orderId) throws TException;
   }
@@ -76,6 +78,8 @@ public class OrderServ {
     public void batchExportOrder(int sellerId, OrderQueryConditions conditions, AsyncMethodCallback<AsyncClient.batchExportOrder_call> resultHandler) throws TException;
     public void batchDeliverOrder(int sellerId, BatchDeliverParam param, AsyncMethodCallback<AsyncClient.batchDeliverOrder_call> resultHandler) throws TException;
     public void orderProfileQueryFull(OrderQueryConditions conditions, AsyncMethodCallback<AsyncClient.orderProfileQueryFull_call> resultHandler) throws TException;
+    public void queryOrderDetailOffline(int userType, int userId, String orderId, AsyncMethodCallback<AsyncClient.queryOrderDetailOffline_call> resultHandler) throws TException;
+    public void orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions, AsyncMethodCallback<AsyncClient.orderProfileQueryOffline_call> resultHandler) throws TException;
     public void queryScanOrders(QueryScanOrderParam param, AsyncMethodCallback<AsyncClient.queryScanOrders_call> resultHandler) throws TException;
     public void queryScanOrderDetail(int sellerId, String orderId, AsyncMethodCallback<AsyncClient.queryScanOrderDetail_call> resultHandler) throws TException;
   }
@@ -98,6 +102,8 @@ public class OrderServ {
     public Future<com.jfshare.finagle.thrift.result.StringResult> batchExportOrder(int sellerId, OrderQueryConditions conditions);
     public Future<BatchDeliverResult> batchDeliverOrder(int sellerId, BatchDeliverParam param);
     public Future<OrderProfileResult> orderProfileQueryFull(OrderQueryConditions conditions);
+    public Future<OrderDetailResult> queryOrderDetailOffline(int userType, int userId, String orderId);
+    public Future<OrderProfileResult> orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions);
     public Future<ScanOrderListResult> queryScanOrders(QueryScanOrderParam param);
     public Future<ScanOrderDetailResult> queryScanOrderDetail(int sellerId, String orderId);
   }
@@ -754,6 +760,80 @@ public class OrderServ {
         return result.success;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "orderProfileQueryFull failed: unknown result");
+    }
+    public OrderDetailResult queryOrderDetailOffline(int userType, int userId, String orderId) throws TException
+    {
+      send_queryOrderDetailOffline(userType, userId, orderId);
+      return recv_queryOrderDetailOffline();
+    }
+
+    public void send_queryOrderDetailOffline(int userType, int userId, String orderId) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("queryOrderDetailOffline", TMessageType.CALL, ++seqid_));
+      queryOrderDetailOffline_args args = new queryOrderDetailOffline_args();
+      args.setUserType(userType);
+      args.setUserId(userId);
+      args.setOrderId(orderId);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public OrderDetailResult recv_queryOrderDetailOffline() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "queryOrderDetailOffline failed: out of sequence response");
+      }
+      queryOrderDetailOffline_result result = new queryOrderDetailOffline_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryOrderDetailOffline failed: unknown result");
+    }
+    public OrderProfileResult orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions) throws TException
+    {
+      send_orderProfileQueryOffline(userType, userId, conditions);
+      return recv_orderProfileQueryOffline();
+    }
+
+    public void send_orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("orderProfileQueryOffline", TMessageType.CALL, ++seqid_));
+      orderProfileQueryOffline_args args = new orderProfileQueryOffline_args();
+      args.setUserType(userType);
+      args.setUserId(userId);
+      args.setConditions(conditions);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public OrderProfileResult recv_orderProfileQueryOffline() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "orderProfileQueryOffline failed: out of sequence response");
+      }
+      orderProfileQueryOffline_result result = new orderProfileQueryOffline_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "orderProfileQueryOffline failed: unknown result");
     }
     public ScanOrderListResult queryScanOrders(QueryScanOrderParam param) throws TException
     {
@@ -1435,6 +1515,80 @@ public class OrderServ {
         return (new Client(prot)).recv_orderProfileQueryFull();
       }
      }
+    public void queryOrderDetailOffline(int userType, int userId, String orderId, AsyncMethodCallback<queryOrderDetailOffline_call> resultHandler) throws TException {
+      checkReady();
+      queryOrderDetailOffline_call method_call = new queryOrderDetailOffline_call(userType, userId, orderId, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class queryOrderDetailOffline_call extends TAsyncMethodCall {
+      private int userType;
+      private int userId;
+      private String orderId;
+
+      public queryOrderDetailOffline_call(int userType, int userId, String orderId, AsyncMethodCallback<queryOrderDetailOffline_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.userType = userType;
+        this.userId = userId;
+        this.orderId = orderId;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("queryOrderDetailOffline", TMessageType.CALL, 0));
+        queryOrderDetailOffline_args args = new queryOrderDetailOffline_args();
+        args.setUserType(userType);
+        args.setUserId(userId);
+        args.setOrderId(orderId);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public OrderDetailResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_queryOrderDetailOffline();
+      }
+     }
+    public void orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions, AsyncMethodCallback<orderProfileQueryOffline_call> resultHandler) throws TException {
+      checkReady();
+      orderProfileQueryOffline_call method_call = new orderProfileQueryOffline_call(userType, userId, conditions, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class orderProfileQueryOffline_call extends TAsyncMethodCall {
+      private int userType;
+      private int userId;
+      private OrderQueryConditions conditions;
+
+      public orderProfileQueryOffline_call(int userType, int userId, OrderQueryConditions conditions, AsyncMethodCallback<orderProfileQueryOffline_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.userType = userType;
+        this.userId = userId;
+        this.conditions = conditions;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("orderProfileQueryOffline", TMessageType.CALL, 0));
+        orderProfileQueryOffline_args args = new orderProfileQueryOffline_args();
+        args.setUserType(userType);
+        args.setUserId(userId);
+        args.setConditions(conditions);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public OrderProfileResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_orderProfileQueryOffline();
+      }
+     }
     public void queryScanOrders(QueryScanOrderParam param, AsyncMethodCallback<queryScanOrders_call> resultHandler) throws TException {
       checkReady();
       queryScanOrders_call method_call = new queryScanOrders_call(param, resultHandler, this, protocolFactory, transport);
@@ -2043,6 +2197,70 @@ public class OrderServ {
         return Future.exception(e);
       }
     }
+    public Future<OrderDetailResult> queryOrderDetailOffline(int userType, int userId, String orderId) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("queryOrderDetailOffline", TMessageType.CALL, 0));
+        queryOrderDetailOffline_args __args__ = new queryOrderDetailOffline_args();
+        __args__.setUserType(userType);
+        __args__.setUserId(userId);
+        __args__.setOrderId(orderId);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<OrderDetailResult>>() {
+          public Future<OrderDetailResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_queryOrderDetailOffline());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<OrderProfileResult> orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("orderProfileQueryOffline", TMessageType.CALL, 0));
+        orderProfileQueryOffline_args __args__ = new orderProfileQueryOffline_args();
+        __args__.setUserType(userType);
+        __args__.setUserId(userId);
+        __args__.setConditions(conditions);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<OrderProfileResult>>() {
+          public Future<OrderProfileResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_orderProfileQueryOffline());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<ScanOrderListResult> queryScanOrders(QueryScanOrderParam param) {
       try {
         // TODO: size
@@ -2128,6 +2346,8 @@ public class OrderServ {
       processMap_.put("batchExportOrder", new batchExportOrder());
       processMap_.put("batchDeliverOrder", new batchDeliverOrder());
       processMap_.put("orderProfileQueryFull", new orderProfileQueryFull());
+      processMap_.put("queryOrderDetailOffline", new queryOrderDetailOffline());
+      processMap_.put("orderProfileQueryOffline", new orderProfileQueryOffline());
       processMap_.put("queryScanOrders", new queryScanOrders());
       processMap_.put("queryScanOrderDetail", new queryScanOrderDetail());
     }
@@ -2577,6 +2797,56 @@ public class OrderServ {
         result.success = iface_.orderProfileQueryFull(args.conditions);
         
         oprot.writeMessageBegin(new TMessage("orderProfileQueryFull", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class queryOrderDetailOffline implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        queryOrderDetailOffline_args args = new queryOrderDetailOffline_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("queryOrderDetailOffline", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        queryOrderDetailOffline_result result = new queryOrderDetailOffline_result();
+        result.success = iface_.queryOrderDetailOffline(args.userType, args.userId, args.orderId);
+        
+        oprot.writeMessageBegin(new TMessage("queryOrderDetailOffline", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class orderProfileQueryOffline implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        orderProfileQueryOffline_args args = new orderProfileQueryOffline_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("orderProfileQueryOffline", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        orderProfileQueryOffline_result result = new orderProfileQueryOffline_result();
+        result.success = iface_.orderProfileQueryOffline(args.userType, args.userId, args.conditions);
+        
+        oprot.writeMessageBegin(new TMessage("orderProfileQueryOffline", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -3762,6 +4032,140 @@ public class OrderServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("orderProfileQueryFull", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("queryOrderDetailOffline", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          queryOrderDetailOffline_args args = new queryOrderDetailOffline_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("queryOrderDetailOffline", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<OrderDetailResult> future;
+          try {
+            future = iface.queryOrderDetailOffline(args.userType, args.userId, args.orderId);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<OrderDetailResult, Future<byte[]>>() {
+              public Future<byte[]> apply(OrderDetailResult value) {
+                queryOrderDetailOffline_result result = new queryOrderDetailOffline_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("queryOrderDetailOffline", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("orderProfileQueryOffline", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          orderProfileQueryOffline_args args = new orderProfileQueryOffline_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("orderProfileQueryOffline", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<OrderProfileResult> future;
+          try {
+            future = iface.orderProfileQueryOffline(args.userType, args.userId, args.conditions);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<OrderProfileResult, Future<byte[]>>() {
+              public Future<byte[]> apply(OrderProfileResult value) {
+                orderProfileQueryOffline_result result = new orderProfileQueryOffline_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("orderProfileQueryOffline", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -15558,6 +15962,1501 @@ public class OrderServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("orderProfileQueryFull_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class queryOrderDetailOffline_args implements TBase<queryOrderDetailOffline_args, queryOrderDetailOffline_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryOrderDetailOffline_args");
+
+  private static final TField USER_TYPE_FIELD_DESC = new TField("userType", TType.I32, (short)1);
+  private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.I32, (short)2);
+  private static final TField ORDER_ID_FIELD_DESC = new TField("orderId", TType.STRING, (short)3);
+
+
+  public int userType;
+  public int userId;
+  public String orderId;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    USER_TYPE((short)1, "userType"),
+    USER_ID((short)2, "userId"),
+    ORDER_ID((short)3, "orderId");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // USER_TYPE
+  	return USER_TYPE;
+        case 2: // USER_ID
+  	return USER_ID;
+        case 3: // ORDER_ID
+  	return ORDER_ID;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+  private static final int __USERTYPE_ISSET_ID = 0;
+  private static final int __USERID_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.USER_TYPE, new FieldMetaData("userType", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.USER_ID, new FieldMetaData("userId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.ORDER_ID, new FieldMetaData("orderId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryOrderDetailOffline_args.class, metaDataMap);
+  }
+
+
+  public queryOrderDetailOffline_args() {
+  }
+
+  public queryOrderDetailOffline_args(
+    int userType,
+    int userId,
+    String orderId)
+  {
+    this();
+    this.userType = userType;
+    setUserTypeIsSet(true);
+    this.userId = userId;
+    setUserIdIsSet(true);
+    this.orderId = orderId;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryOrderDetailOffline_args(queryOrderDetailOffline_args other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
+    this.userType = other.userType;
+    this.userId = other.userId;
+    if (other.isSetOrderId()) {
+      this.orderId = other.orderId;
+    }
+  }
+
+  public queryOrderDetailOffline_args deepCopy() {
+    return new queryOrderDetailOffline_args(this);
+  }
+
+  @Override
+  public void clear() {
+    setUserTypeIsSet(false);
+    this.userType = 0;
+    setUserIdIsSet(false);
+    this.userId = 0;
+    this.orderId = null;
+  }
+
+  public int getUserType() {
+    return this.userType;
+  }
+
+  public queryOrderDetailOffline_args setUserType(int userType) {
+    this.userType = userType;
+    setUserTypeIsSet(true);
+
+    return this;
+  }
+
+  public void unsetUserType() {
+  __isset_bit_vector.clear(__USERTYPE_ISSET_ID);
+  }
+
+  /** Returns true if field userType is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserType() {
+    return __isset_bit_vector.get(__USERTYPE_ISSET_ID);
+  }
+
+  public void setUserTypeIsSet(boolean value) {
+    __isset_bit_vector.set(__USERTYPE_ISSET_ID, value);
+  }
+
+  public int getUserId() {
+    return this.userId;
+  }
+
+  public queryOrderDetailOffline_args setUserId(int userId) {
+    this.userId = userId;
+    setUserIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetUserId() {
+  __isset_bit_vector.clear(__USERID_ISSET_ID);
+  }
+
+  /** Returns true if field userId is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserId() {
+    return __isset_bit_vector.get(__USERID_ISSET_ID);
+  }
+
+  public void setUserIdIsSet(boolean value) {
+    __isset_bit_vector.set(__USERID_ISSET_ID, value);
+  }
+
+  public String getOrderId() {
+    return this.orderId;
+  }
+
+  public queryOrderDetailOffline_args setOrderId(String orderId) {
+    this.orderId = orderId;
+    
+    return this;
+  }
+
+  public void unsetOrderId() {
+    this.orderId = null;
+  }
+
+  /** Returns true if field orderId is set (has been asigned a value) and false otherwise */
+  public boolean isSetOrderId() {
+    return this.orderId != null;
+  }
+
+  public void setOrderIdIsSet(boolean value) {
+    if (!value) {
+      this.orderId = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case USER_TYPE:
+      if (value == null) {
+        unsetUserType();
+      } else {
+        setUserType((Integer)value);
+      }
+      break;
+    case USER_ID:
+      if (value == null) {
+        unsetUserId();
+      } else {
+        setUserId((Integer)value);
+      }
+      break;
+    case ORDER_ID:
+      if (value == null) {
+        unsetOrderId();
+      } else {
+        setOrderId((String)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case USER_TYPE:
+      return new Integer(getUserType());
+    case USER_ID:
+      return new Integer(getUserId());
+    case ORDER_ID:
+      return getOrderId();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case USER_TYPE:
+      return isSetUserType();
+    case USER_ID:
+      return isSetUserId();
+    case ORDER_ID:
+      return isSetOrderId();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryOrderDetailOffline_args)
+      return this.equals((queryOrderDetailOffline_args)that);
+    return false;
+  }
+
+  public boolean equals(queryOrderDetailOffline_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_userType = true;
+    boolean that_present_userType = true;
+    if (this_present_userType || that_present_userType) {
+      if (!(this_present_userType && that_present_userType))
+        return false;
+      if (this.userType != that.userType)
+        return false;
+    }
+    boolean this_present_userId = true;
+    boolean that_present_userId = true;
+    if (this_present_userId || that_present_userId) {
+      if (!(this_present_userId && that_present_userId))
+        return false;
+      if (this.userId != that.userId)
+        return false;
+    }
+    boolean this_present_orderId = true && this.isSetOrderId();
+    boolean that_present_orderId = true && that.isSetOrderId();
+    if (this_present_orderId || that_present_orderId) {
+      if (!(this_present_orderId && that_present_orderId))
+        return false;
+      if (!this.orderId.equals(that.orderId))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_userType = true;
+    builder.append(present_userType);
+    if (present_userType)
+      builder.append(userType);
+    boolean present_userId = true;
+    builder.append(present_userId);
+    if (present_userId)
+      builder.append(userId);
+    boolean present_orderId = true && (isSetOrderId());
+    builder.append(present_orderId);
+    if (present_orderId)
+      builder.append(orderId);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryOrderDetailOffline_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryOrderDetailOffline_args typedOther = (queryOrderDetailOffline_args)other;
+
+    lastComparison = Boolean.valueOf(isSetUserType()).compareTo(typedOther.isSetUserType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUserType()) {
+      lastComparison = TBaseHelper.compareTo(this.userType, typedOther.userType);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetUserId()).compareTo(typedOther.isSetUserId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUserId()) {
+      lastComparison = TBaseHelper.compareTo(this.userId, typedOther.userId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetOrderId()).compareTo(typedOther.isSetOrderId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOrderId()) {
+      lastComparison = TBaseHelper.compareTo(this.orderId, typedOther.orderId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // USER_TYPE
+          if (field.type == TType.I32) {
+            this.userType = iprot.readI32();
+            setUserTypeIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // USER_ID
+          if (field.type == TType.I32) {
+            this.userId = iprot.readI32();
+            setUserIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // ORDER_ID
+          if (field.type == TType.STRING) {
+            this.orderId = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    oprot.writeFieldBegin(USER_TYPE_FIELD_DESC);
+    oprot.writeI32(this.userType);
+    oprot.writeFieldEnd();
+    oprot.writeFieldBegin(USER_ID_FIELD_DESC);
+    oprot.writeI32(this.userId);
+    oprot.writeFieldEnd();
+    if (this.orderId != null) {
+      oprot.writeFieldBegin(ORDER_ID_FIELD_DESC);
+      oprot.writeString(this.orderId);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryOrderDetailOffline_args(");
+    boolean first = true;
+    sb.append("userType:");
+    sb.append(this.userType);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("userId:");
+    sb.append(this.userId);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("orderId:");
+    if (this.orderId == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.orderId);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class queryOrderDetailOffline_result implements TBase<queryOrderDetailOffline_result, queryOrderDetailOffline_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryOrderDetailOffline_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public OrderDetailResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, OrderDetailResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryOrderDetailOffline_result.class, metaDataMap);
+  }
+
+
+  public queryOrderDetailOffline_result() {
+  }
+
+  public queryOrderDetailOffline_result(
+    OrderDetailResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryOrderDetailOffline_result(queryOrderDetailOffline_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new OrderDetailResult(other.success);
+    }
+  }
+
+  public queryOrderDetailOffline_result deepCopy() {
+    return new queryOrderDetailOffline_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public OrderDetailResult getSuccess() {
+    return this.success;
+  }
+
+  public queryOrderDetailOffline_result setSuccess(OrderDetailResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((OrderDetailResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryOrderDetailOffline_result)
+      return this.equals((queryOrderDetailOffline_result)that);
+    return false;
+  }
+
+  public boolean equals(queryOrderDetailOffline_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryOrderDetailOffline_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryOrderDetailOffline_result typedOther = (queryOrderDetailOffline_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new OrderDetailResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryOrderDetailOffline_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class orderProfileQueryOffline_args implements TBase<orderProfileQueryOffline_args, orderProfileQueryOffline_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("orderProfileQueryOffline_args");
+
+  private static final TField USER_TYPE_FIELD_DESC = new TField("userType", TType.I32, (short)1);
+  private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.I32, (short)2);
+  private static final TField CONDITIONS_FIELD_DESC = new TField("conditions", TType.STRUCT, (short)3);
+
+
+  public int userType;
+  public int userId;
+  public OrderQueryConditions conditions;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    USER_TYPE((short)1, "userType"),
+    USER_ID((short)2, "userId"),
+    CONDITIONS((short)3, "conditions");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // USER_TYPE
+  	return USER_TYPE;
+        case 2: // USER_ID
+  	return USER_ID;
+        case 3: // CONDITIONS
+  	return CONDITIONS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+  private static final int __USERTYPE_ISSET_ID = 0;
+  private static final int __USERID_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.USER_TYPE, new FieldMetaData("userType", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.USER_ID, new FieldMetaData("userId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.CONDITIONS, new FieldMetaData("conditions", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, OrderQueryConditions.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(orderProfileQueryOffline_args.class, metaDataMap);
+  }
+
+
+  public orderProfileQueryOffline_args() {
+  }
+
+  public orderProfileQueryOffline_args(
+    int userType,
+    int userId,
+    OrderQueryConditions conditions)
+  {
+    this();
+    this.userType = userType;
+    setUserTypeIsSet(true);
+    this.userId = userId;
+    setUserIdIsSet(true);
+    this.conditions = conditions;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public orderProfileQueryOffline_args(orderProfileQueryOffline_args other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
+    this.userType = other.userType;
+    this.userId = other.userId;
+    if (other.isSetConditions()) {
+      this.conditions = new OrderQueryConditions(other.conditions);
+    }
+  }
+
+  public orderProfileQueryOffline_args deepCopy() {
+    return new orderProfileQueryOffline_args(this);
+  }
+
+  @Override
+  public void clear() {
+    setUserTypeIsSet(false);
+    this.userType = 0;
+    setUserIdIsSet(false);
+    this.userId = 0;
+    this.conditions = null;
+  }
+
+  public int getUserType() {
+    return this.userType;
+  }
+
+  public orderProfileQueryOffline_args setUserType(int userType) {
+    this.userType = userType;
+    setUserTypeIsSet(true);
+
+    return this;
+  }
+
+  public void unsetUserType() {
+  __isset_bit_vector.clear(__USERTYPE_ISSET_ID);
+  }
+
+  /** Returns true if field userType is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserType() {
+    return __isset_bit_vector.get(__USERTYPE_ISSET_ID);
+  }
+
+  public void setUserTypeIsSet(boolean value) {
+    __isset_bit_vector.set(__USERTYPE_ISSET_ID, value);
+  }
+
+  public int getUserId() {
+    return this.userId;
+  }
+
+  public orderProfileQueryOffline_args setUserId(int userId) {
+    this.userId = userId;
+    setUserIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetUserId() {
+  __isset_bit_vector.clear(__USERID_ISSET_ID);
+  }
+
+  /** Returns true if field userId is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserId() {
+    return __isset_bit_vector.get(__USERID_ISSET_ID);
+  }
+
+  public void setUserIdIsSet(boolean value) {
+    __isset_bit_vector.set(__USERID_ISSET_ID, value);
+  }
+
+  public OrderQueryConditions getConditions() {
+    return this.conditions;
+  }
+
+  public orderProfileQueryOffline_args setConditions(OrderQueryConditions conditions) {
+    this.conditions = conditions;
+    
+    return this;
+  }
+
+  public void unsetConditions() {
+    this.conditions = null;
+  }
+
+  /** Returns true if field conditions is set (has been asigned a value) and false otherwise */
+  public boolean isSetConditions() {
+    return this.conditions != null;
+  }
+
+  public void setConditionsIsSet(boolean value) {
+    if (!value) {
+      this.conditions = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case USER_TYPE:
+      if (value == null) {
+        unsetUserType();
+      } else {
+        setUserType((Integer)value);
+      }
+      break;
+    case USER_ID:
+      if (value == null) {
+        unsetUserId();
+      } else {
+        setUserId((Integer)value);
+      }
+      break;
+    case CONDITIONS:
+      if (value == null) {
+        unsetConditions();
+      } else {
+        setConditions((OrderQueryConditions)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case USER_TYPE:
+      return new Integer(getUserType());
+    case USER_ID:
+      return new Integer(getUserId());
+    case CONDITIONS:
+      return getConditions();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case USER_TYPE:
+      return isSetUserType();
+    case USER_ID:
+      return isSetUserId();
+    case CONDITIONS:
+      return isSetConditions();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof orderProfileQueryOffline_args)
+      return this.equals((orderProfileQueryOffline_args)that);
+    return false;
+  }
+
+  public boolean equals(orderProfileQueryOffline_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_userType = true;
+    boolean that_present_userType = true;
+    if (this_present_userType || that_present_userType) {
+      if (!(this_present_userType && that_present_userType))
+        return false;
+      if (this.userType != that.userType)
+        return false;
+    }
+    boolean this_present_userId = true;
+    boolean that_present_userId = true;
+    if (this_present_userId || that_present_userId) {
+      if (!(this_present_userId && that_present_userId))
+        return false;
+      if (this.userId != that.userId)
+        return false;
+    }
+    boolean this_present_conditions = true && this.isSetConditions();
+    boolean that_present_conditions = true && that.isSetConditions();
+    if (this_present_conditions || that_present_conditions) {
+      if (!(this_present_conditions && that_present_conditions))
+        return false;
+      if (!this.conditions.equals(that.conditions))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_userType = true;
+    builder.append(present_userType);
+    if (present_userType)
+      builder.append(userType);
+    boolean present_userId = true;
+    builder.append(present_userId);
+    if (present_userId)
+      builder.append(userId);
+    boolean present_conditions = true && (isSetConditions());
+    builder.append(present_conditions);
+    if (present_conditions)
+      builder.append(conditions);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(orderProfileQueryOffline_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    orderProfileQueryOffline_args typedOther = (orderProfileQueryOffline_args)other;
+
+    lastComparison = Boolean.valueOf(isSetUserType()).compareTo(typedOther.isSetUserType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUserType()) {
+      lastComparison = TBaseHelper.compareTo(this.userType, typedOther.userType);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetUserId()).compareTo(typedOther.isSetUserId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUserId()) {
+      lastComparison = TBaseHelper.compareTo(this.userId, typedOther.userId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetConditions()).compareTo(typedOther.isSetConditions());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetConditions()) {
+      lastComparison = TBaseHelper.compareTo(this.conditions, typedOther.conditions);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // USER_TYPE
+          if (field.type == TType.I32) {
+            this.userType = iprot.readI32();
+            setUserTypeIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // USER_ID
+          if (field.type == TType.I32) {
+            this.userId = iprot.readI32();
+            setUserIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // CONDITIONS
+          if (field.type == TType.STRUCT) {
+            this.conditions = new OrderQueryConditions();
+            this.conditions.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    oprot.writeFieldBegin(USER_TYPE_FIELD_DESC);
+    oprot.writeI32(this.userType);
+    oprot.writeFieldEnd();
+    oprot.writeFieldBegin(USER_ID_FIELD_DESC);
+    oprot.writeI32(this.userId);
+    oprot.writeFieldEnd();
+    if (this.conditions != null) {
+      oprot.writeFieldBegin(CONDITIONS_FIELD_DESC);
+      this.conditions.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("orderProfileQueryOffline_args(");
+    boolean first = true;
+    sb.append("userType:");
+    sb.append(this.userType);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("userId:");
+    sb.append(this.userId);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("conditions:");
+    if (this.conditions == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.conditions);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class orderProfileQueryOffline_result implements TBase<orderProfileQueryOffline_result, orderProfileQueryOffline_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("orderProfileQueryOffline_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public OrderProfileResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, OrderProfileResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(orderProfileQueryOffline_result.class, metaDataMap);
+  }
+
+
+  public orderProfileQueryOffline_result() {
+  }
+
+  public orderProfileQueryOffline_result(
+    OrderProfileResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public orderProfileQueryOffline_result(orderProfileQueryOffline_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new OrderProfileResult(other.success);
+    }
+  }
+
+  public orderProfileQueryOffline_result deepCopy() {
+    return new orderProfileQueryOffline_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public OrderProfileResult getSuccess() {
+    return this.success;
+  }
+
+  public orderProfileQueryOffline_result setSuccess(OrderProfileResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((OrderProfileResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof orderProfileQueryOffline_result)
+      return this.equals((orderProfileQueryOffline_result)that);
+    return false;
+  }
+
+  public boolean equals(orderProfileQueryOffline_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(orderProfileQueryOffline_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    orderProfileQueryOffline_result typedOther = (orderProfileQueryOffline_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new OrderProfileResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("orderProfileQueryOffline_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

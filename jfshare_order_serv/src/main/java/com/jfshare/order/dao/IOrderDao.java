@@ -47,7 +47,7 @@ public interface IOrderDao {
 
     OrderModel getOrderProfileBySeller(int sellerId, String orderId);
 
-    List<OrderModel> getOrderListByUser(int userId, List<String> orderIdList);
+    List<OrderModel> getOrderListByUserFull(int userId, List<String> orderIdList);
 
     List<OrderModel> getOrderStateListByUser(int userId);
 
@@ -58,5 +58,17 @@ public interface IOrderDao {
     List<OrderModel> getSellerOrderBatch(int sellerId, List<String> orderIds);
 
     int batchDeliverOp(int sellerId, List<Order> deliverOrderList);
+
+    OrderModel getOrderByUserOffline(String orderId, int userId);
+
+    OrderModel getOrderBySellerOffline(String orderId, int sellerId);
+
+    int getOrderStatByUserOffline(int userId, OrderQueryConditions conditions);
+
+    List<OrderModel> getOrderListByUserOffline(int userId, OrderQueryConditions conditions);
+
+    int getOrderStatBySellerOffline(int sellerId, OrderQueryConditions conditions);
+
+    List<OrderModel> getOrderListBySellerOffline(int sellerId, OrderQueryConditions conditions);
 }
   
