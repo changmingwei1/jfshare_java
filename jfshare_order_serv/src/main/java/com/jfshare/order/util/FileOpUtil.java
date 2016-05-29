@@ -342,7 +342,7 @@ class FastDFSUtils {
 
     static {
         try {
-            String trackerListStr = PropertiesUtil.getProperty("trade_public_fastdfs", "1.1").trim();
+            String trackerListStr = PropertiesUtil.getProperty("jfx_public_fastdfs", "1.1").trim();
 
             if (trackerListStr == null || "".equals(trackerListStr)) {
                 throw new Exception("从imago上获取tracker配置信息失败！");
