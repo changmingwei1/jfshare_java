@@ -8,6 +8,6 @@
 	<bean id="orderOptHandleTask" class="com.jfshare.task.service.OrderOptHandleTask"></bean>
 
 	<task:scheduled-tasks>
-		<task:scheduled ref="orderOptHandleTask" method="start" cron="0/60 * * * * ?" />
+		<task:scheduled ref="orderOptHandleTask" method="start" cron="0/5 * * * * ?" />
 	</task:scheduled-tasks>
 </beans>
