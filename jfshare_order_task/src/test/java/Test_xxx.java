@@ -39,6 +39,7 @@ public class Test_xxx {
 //        conditions.setOrderState(1);
         conditions.addToOrderIds("44140112");
         conditions.addToOrderIds("44130090");
+//        conditions.setSellerId(13);
 
         ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
         try {

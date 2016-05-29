@@ -133,7 +133,7 @@ public class TradeClient {
         logger.info("4.orderList==>" + orderList);
 
         //扣减用户积分
-        List<FailDesc> reduceScoreFailDescList = scoreClient.reduceScore(buyInfo.getUserId(), buyInfo.getExchangeScore());
+        List<FailDesc> reduceScoreFailDescList = scoreClient.reduceScore(buyInfo.getUserId(), buyInfo.getExchangeScore(), orderList.get(0).getOrderBatch());
         if(CollectionUtils.isNotEmpty(reduceScoreFailDescList)) {
             failDescs.addAll(reduceScoreFailDescList);
             return failDescs;

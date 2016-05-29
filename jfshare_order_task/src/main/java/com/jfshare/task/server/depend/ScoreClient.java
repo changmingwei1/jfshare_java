@@ -48,7 +48,7 @@ public class ScoreClient {
 		service = new ScoreServ.ServiceToClient(client, new TBinaryProtocol.Factory());
 	}
 
-	public void incomeScore(int buyerId, int score) {
+	public void incomeScore(int buyerId, int score, String orderId) {
 		long doneTime = System.currentTimeMillis();
 		if (buyerId <= 0)
 			return;
@@ -56,6 +56,8 @@ public class ScoreClient {
 			ScoreTrade scoreTrade = new ScoreTrade();
 			scoreTrade.setAmount(score);
 			scoreTrade.setType(5);
+			scoreTrade.setTrader(3);
+			scoreTrade.setTradeId("bonus_" + orderId);
 			scoreTrade.setInOrOut(1);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.income(scoreTrade));
@@ -70,7 +72,7 @@ public class ScoreClient {
 		logger.info("{},积分服务income接口调用时间：{} ms!!", buyerId, (System.currentTimeMillis() - doneTime));
 	}
 
-	public void reduceScore(int buyerId, int score) {
+	public void reduceScore(int buyerId, int score, String orderId) {
 		long doneTime = System.currentTimeMillis();
 		if (buyerId <= 0)
 			return;
@@ -79,6 +81,8 @@ public class ScoreClient {
 			scoreTrade.setAmount(score);
 			scoreTrade.setType(5);
 			scoreTrade.setInOrOut(2);
+			scoreTrade.setTrader(3);
+			scoreTrade.setTradeId("bonus_" + orderId);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.expenditure(scoreTrade));
 			if(scoreResult != null && scoreResult.getResult().getCode() == 0) {

@@ -29,7 +29,7 @@ public class OrderService {
 
         int incomeScore = getScoreWithOrder(order);
         if(incomeScore > 0)
-            scoreClient.incomeScore(order.getUserId(), incomeScore);
+            scoreClient.incomeScore(order.getUserId(), incomeScore, order.getOrderId());
     }
 
     /**
@@ -43,7 +43,7 @@ public class OrderService {
 
         int score = getScoreWithOrder(order);
         if(score > 0)
-            scoreClient.reduceScore(order.getUserId(), score);
+            scoreClient.reduceScore(order.getUserId(), score, order.getOrderId());
     }
 
     private int getScoreWithOrder(Order order) {

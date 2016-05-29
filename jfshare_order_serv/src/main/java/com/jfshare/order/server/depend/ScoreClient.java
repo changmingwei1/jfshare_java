@@ -74,7 +74,7 @@ public class ScoreClient {
 		return score;
 	}
 
-	public List<FailDesc> reduceScore(int buyerId, int score) {
+	public List<FailDesc> reduceScore(int buyerId, int score, String orderId) {
 		List<FailDesc> failDescs = new ArrayList<>();
 		long doneTime = System.currentTimeMillis();
 		if (buyerId <= 0) {
@@ -84,8 +84,10 @@ public class ScoreClient {
 
 		try {
 			ScoreTrade scoreTrade = new ScoreTrade();
+			scoreTrade.setTradeId("trade_" + orderId);
 			scoreTrade.setAmount(score);
 			scoreTrade.setInOrOut(2);
+			scoreTrade.setTrader(3);
 			scoreTrade.setType(4);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.expenditure(scoreTrade));
@@ -105,14 +107,16 @@ public class ScoreClient {
 		return null;
 	}
 
-	public void incomeScore(int buyerId, String transId, int score) {
+	public void incomeScore(int buyerId, String orderId, int score) {
 		long doneTime = System.currentTimeMillis();
 		if (buyerId <= 0)
 			return;
 		try {
 			ScoreTrade scoreTrade = new ScoreTrade();
+			scoreTrade.setTradeId("trade_" + orderId);
 			scoreTrade.setAmount(score);
 			scoreTrade.setInOrOut(1);
+			scoreTrade.setTrader(3);
 			scoreTrade.setType(1);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.income(scoreTrade));
