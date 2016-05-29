@@ -12,6 +12,7 @@ import com.jfshare.order.model.OrderOpt;
 import com.jfshare.order.model.TbOrderInfoRecord;
 import com.jfshare.order.model.TbOrderRecordExample;
 import com.jfshare.order.server.depend.ExpressClient;
+import com.jfshare.order.server.depend.SellerClient;
 import com.jfshare.order.server.depend.StockClient;
 import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.OrderUtil;
@@ -62,6 +63,9 @@ public class OrderService {
 
     @Autowired
     private IOrderJedis orderJedis;
+
+    @Autowired
+    private SellerClient sellerClient;
 
     public OrderModel sellerQueryDetail(int sellerId, String orderId) {
         return orderDao.getOrderBySeller(orderId, sellerId);
@@ -339,6 +343,10 @@ public class OrderService {
             //线下订单直接交易成功
             if (orderModel.getOrderType() == 1) {
                 order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
+                //将买家设置为卖家的会员
+                boolean b = sellerClient.insertUserSellerReal(orderModel.getUserId(), orderModel.getSellerId());
+                logger.info("线下支付订单将买家:" + orderModel.getUserId() + " 设置为卖家:" + orderModel.getSellerId() +
+                     "的会员结果为:" + b);
             }
         } else {
             order.setPayState(-1);
