@@ -147,8 +147,7 @@ public class ParamCheck {
             thirdScores += order.getThirdScore();
         }
         if (thirdPrices + thirdScores * ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"))
-                != payRet.getThirdPrice() + payRet.getThirdScore() * ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"))
-        ) {
+                != payRet.getThirdPrice() + payRet.getThirdScore() * ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"))) {
             logger.error("支付总金额或积分不符， 实际金额:" + thirdPrices + ", 支付结果金额:" + payRet.getThirdPrice()+ "， 实际积分:" + thirdScores + ", 支付结果积分:" + payRet.getThirdScore());
             failList.add(FailCode.THIRD_PRICE＿FAIL);
         } else {

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * Created by Lenovo on 2016/4/6.
  */
@@ -26,7 +28,7 @@ public class EsOrderHandlerTransport implements IEsOrderHandler {
     public void addOrUpdate(EsOrder esOrder) {
         try {
             logger.info("ES==> add {}$$参数信息", esOrder);
-            String _index = getIndex(esOrder.getCreateTime());
+            String _index = getIndex(esOrder.getOrderCreateTime());
             String _type = Constant.ES_ORDER_TYPE;
             String _id = esOrder.getOrderId().trim();
             String _content = esOrder.toJSONStr();
@@ -42,8 +44,8 @@ public class EsOrderHandlerTransport implements IEsOrderHandler {
      * @param crateTime
      * @return
      */
-    private String getIndex(DateTime crateTime) throws Exception {
+    private String getIndex(Date crateTime) throws Exception {
 //        DateTime time = new DateTime(crateTime);
-        return "jfshare_order_" + DateTimeUtil.dateToStrOfDefaulfFormat(crateTime.toDate()).substring(0,7);
+        return "jfshare_order_" + DateTimeUtil.dateToStrOfDefaulfFormat(crateTime).substring(0,7);
     }
 }

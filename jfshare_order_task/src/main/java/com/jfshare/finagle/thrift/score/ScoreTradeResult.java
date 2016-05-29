@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.order;
+package com.jfshare.finagle.thrift.score;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.*;
@@ -16,20 +16,23 @@ import java.util.*;
 
 // No additional import required for struct/union.
 
-public class OrderStateResult implements TBase<OrderStateResult, OrderStateResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("OrderStateResult");
+public class ScoreTradeResult implements TBase<ScoreTradeResult, ScoreTradeResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ScoreTradeResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField ORDER_COUNT_LIST_FIELD_DESC = new TField("orderCountList", TType.LIST, (short)2);
+  private static final TField SCORE_TRADES_FIELD_DESC = new TField("scoreTrades", TType.LIST, (short)2);
+  private static final TField PAGEINATION_FIELD_DESC = new TField("pageination", TType.STRUCT, (short)3);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public List<OrderCount> orderCountList;
+  public List<ScoreTrade> scoreTrades;
+  public com.jfshare.finagle.thrift.pagination.Pagination pageination;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    ORDER_COUNT_LIST((short)2, "orderCountList");
+    SCORE_TRADES((short)2, "scoreTrades"),
+    PAGEINATION((short)3, "pageination");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -46,8 +49,10 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // ORDER_COUNT_LIST
-  	return ORDER_COUNT_LIST;
+        case 2: // SCORE_TRADES
+  	return SCORE_TRADES;
+        case 3: // PAGEINATION
+  	return PAGEINATION;
         default:
   	return null;
       }
@@ -95,57 +100,65 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.ORDER_COUNT_LIST, new FieldMetaData("orderCountList", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.SCORE_TRADES, new FieldMetaData("scoreTrades", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, OrderCount.class))));
+                new StructMetaData(TType.STRUCT, ScoreTrade.class))));
+    tmpMap.put(_Fields.PAGEINATION, new FieldMetaData("pageination", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(OrderStateResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ScoreTradeResult.class, metaDataMap);
   }
 
 
-  public OrderStateResult() {
+  public ScoreTradeResult() {
   }
 
-  public OrderStateResult(
+  public ScoreTradeResult(
     com.jfshare.finagle.thrift.result.Result result,
-    List<OrderCount> orderCountList)
+    List<ScoreTrade> scoreTrades,
+    com.jfshare.finagle.thrift.pagination.Pagination pageination)
   {
     this();
     this.result = result;
-    this.orderCountList = orderCountList;
+    this.scoreTrades = scoreTrades;
+    this.pageination = pageination;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public OrderStateResult(OrderStateResult other) {
+  public ScoreTradeResult(ScoreTradeResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetOrderCountList()) {
-      List<OrderCount> __this__orderCountList = new ArrayList<OrderCount>();
-      for (OrderCount other_element : other.orderCountList) {
-        __this__orderCountList.add(new OrderCount(other_element));
+    if (other.isSetScoreTrades()) {
+      List<ScoreTrade> __this__scoreTrades = new ArrayList<ScoreTrade>();
+      for (ScoreTrade other_element : other.scoreTrades) {
+        __this__scoreTrades.add(new ScoreTrade(other_element));
       }
-      this.orderCountList = __this__orderCountList;
+      this.scoreTrades = __this__scoreTrades;
+    }
+    if (other.isSetPageination()) {
+      this.pageination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pageination);
     }
   }
 
-  public OrderStateResult deepCopy() {
-    return new OrderStateResult(this);
+  public ScoreTradeResult deepCopy() {
+    return new ScoreTradeResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.orderCountList = null;
+    this.scoreTrades = null;
+    this.pageination = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public OrderStateResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public ScoreTradeResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -166,43 +179,68 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     }
   }
 
-  public int getOrderCountListSize() {
-    return (this.orderCountList == null) ? 0 : this.orderCountList.size();
+  public int getScoreTradesSize() {
+    return (this.scoreTrades == null) ? 0 : this.scoreTrades.size();
   }
 
-  public java.util.Iterator<OrderCount> getOrderCountListIterator() {
-    return (this.orderCountList == null) ? null : this.orderCountList.iterator();
+  public Iterator<ScoreTrade> getScoreTradesIterator() {
+    return (this.scoreTrades == null) ? null : this.scoreTrades.iterator();
   }
 
-  public void addToOrderCountList(OrderCount elem) {
-    if (this.orderCountList == null) {
-      this.orderCountList = new ArrayList<OrderCount>();
+  public void addToScoreTrades(ScoreTrade elem) {
+    if (this.scoreTrades == null) {
+      this.scoreTrades = new ArrayList<ScoreTrade>();
     }
-    this.orderCountList.add(elem);
+    this.scoreTrades.add(elem);
   }
 
-  public List<OrderCount> getOrderCountList() {
-    return this.orderCountList;
+  public List<ScoreTrade> getScoreTrades() {
+    return this.scoreTrades;
   }
 
-  public OrderStateResult setOrderCountList(List<OrderCount> orderCountList) {
-    this.orderCountList = orderCountList;
+  public ScoreTradeResult setScoreTrades(List<ScoreTrade> scoreTrades) {
+    this.scoreTrades = scoreTrades;
     
     return this;
   }
 
-  public void unsetOrderCountList() {
-    this.orderCountList = null;
+  public void unsetScoreTrades() {
+    this.scoreTrades = null;
   }
 
-  /** Returns true if field orderCountList is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrderCountList() {
-    return this.orderCountList != null;
+  /** Returns true if field scoreTrades is set (has been asigned a value) and false otherwise */
+  public boolean isSetScoreTrades() {
+    return this.scoreTrades != null;
   }
 
-  public void setOrderCountListIsSet(boolean value) {
+  public void setScoreTradesIsSet(boolean value) {
     if (!value) {
-      this.orderCountList = null;
+      this.scoreTrades = null;
+    }
+  }
+
+  public com.jfshare.finagle.thrift.pagination.Pagination getPageination() {
+    return this.pageination;
+  }
+
+  public ScoreTradeResult setPageination(com.jfshare.finagle.thrift.pagination.Pagination pageination) {
+    this.pageination = pageination;
+    
+    return this;
+  }
+
+  public void unsetPageination() {
+    this.pageination = null;
+  }
+
+  /** Returns true if field pageination is set (has been asigned a value) and false otherwise */
+  public boolean isSetPageination() {
+    return this.pageination != null;
+  }
+
+  public void setPageinationIsSet(boolean value) {
+    if (!value) {
+      this.pageination = null;
     }
   }
 
@@ -215,11 +253,18 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case ORDER_COUNT_LIST:
+    case SCORE_TRADES:
       if (value == null) {
-        unsetOrderCountList();
+        unsetScoreTrades();
       } else {
-        setOrderCountList((List<OrderCount>)value);
+        setScoreTrades((List<ScoreTrade>)value);
+      }
+      break;
+    case PAGEINATION:
+      if (value == null) {
+        unsetPageination();
+      } else {
+        setPageination((com.jfshare.finagle.thrift.pagination.Pagination)value);
       }
       break;
     }
@@ -229,8 +274,10 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     switch (field) {
     case RESULT:
       return getResult();
-    case ORDER_COUNT_LIST:
-      return getOrderCountList();
+    case SCORE_TRADES:
+      return getScoreTrades();
+    case PAGEINATION:
+      return getPageination();
     }
     throw new IllegalStateException();
   }
@@ -244,8 +291,10 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     switch (field) {
     case RESULT:
       return isSetResult();
-    case ORDER_COUNT_LIST:
-      return isSetOrderCountList();
+    case SCORE_TRADES:
+      return isSetScoreTrades();
+    case PAGEINATION:
+      return isSetPageination();
     }
     throw new IllegalStateException();
   }
@@ -254,12 +303,12 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof OrderStateResult)
-      return this.equals((OrderStateResult)that);
+    if (that instanceof ScoreTradeResult)
+      return this.equals((ScoreTradeResult)that);
     return false;
   }
 
-  public boolean equals(OrderStateResult that) {
+  public boolean equals(ScoreTradeResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -270,12 +319,20 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_orderCountList = true && this.isSetOrderCountList();
-    boolean that_present_orderCountList = true && that.isSetOrderCountList();
-    if (this_present_orderCountList || that_present_orderCountList) {
-      if (!(this_present_orderCountList && that_present_orderCountList))
+    boolean this_present_scoreTrades = true && this.isSetScoreTrades();
+    boolean that_present_scoreTrades = true && that.isSetScoreTrades();
+    if (this_present_scoreTrades || that_present_scoreTrades) {
+      if (!(this_present_scoreTrades && that_present_scoreTrades))
         return false;
-      if (!this.orderCountList.equals(that.orderCountList))
+      if (!this.scoreTrades.equals(that.scoreTrades))
+        return false;
+    }
+    boolean this_present_pageination = true && this.isSetPageination();
+    boolean that_present_pageination = true && that.isSetPageination();
+    if (this_present_pageination || that_present_pageination) {
+      if (!(this_present_pageination && that_present_pageination))
+        return false;
+      if (!this.pageination.equals(that.pageination))
         return false;
     }
 
@@ -289,20 +346,24 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_orderCountList = true && (isSetOrderCountList());
-    builder.append(present_orderCountList);
-    if (present_orderCountList)
-      builder.append(orderCountList);
+    boolean present_scoreTrades = true && (isSetScoreTrades());
+    builder.append(present_scoreTrades);
+    if (present_scoreTrades)
+      builder.append(scoreTrades);
+    boolean present_pageination = true && (isSetPageination());
+    builder.append(present_pageination);
+    if (present_pageination)
+      builder.append(pageination);
     return builder.toHashCode();
   }
 
-  public int compareTo(OrderStateResult other) {
+  public int compareTo(ScoreTradeResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    OrderStateResult typedOther = (OrderStateResult)other;
+    ScoreTradeResult typedOther = (ScoreTradeResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -314,12 +375,22 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetOrderCountList()).compareTo(typedOther.isSetOrderCountList());
+    lastComparison = Boolean.valueOf(isSetScoreTrades()).compareTo(typedOther.isSetScoreTrades());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetOrderCountList()) {
-      lastComparison = TBaseHelper.compareTo(this.orderCountList, typedOther.orderCountList);
+    if (isSetScoreTrades()) {
+      lastComparison = TBaseHelper.compareTo(this.scoreTrades, typedOther.scoreTrades);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPageination()).compareTo(typedOther.isSetPageination());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPageination()) {
+      lastComparison = TBaseHelper.compareTo(this.pageination, typedOther.pageination);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -350,20 +421,28 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // ORDER_COUNT_LIST
+        case 2: // SCORE_TRADES
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.orderCountList = new ArrayList<OrderCount>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list0 = iprot.readListBegin();
+            this.scoreTrades = new ArrayList<ScoreTrade>(_list0.size);
+            for (int _i1 = 0; _i1 < _list0.size; ++_i1)
             {
-              OrderCount _elem18;
-              _elem18 = new OrderCount();
-              _elem18.read(iprot);
-              this.orderCountList.add(_elem18);
+              ScoreTrade _elem2;
+              _elem2 = new ScoreTrade();
+              _elem2.read(iprot);
+              this.scoreTrades.add(_elem2);
             }
             iprot.readListEnd();
             }
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // PAGEINATION
+          if (field.type == TType.STRUCT) {
+            this.pageination = new com.jfshare.finagle.thrift.pagination.Pagination();
+            this.pageination.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -388,16 +467,21 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.orderCountList != null) {
-      oprot.writeFieldBegin(ORDER_COUNT_LIST_FIELD_DESC);
+    if (this.scoreTrades != null) {
+      oprot.writeFieldBegin(SCORE_TRADES_FIELD_DESC);
       {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.orderCountList.size()));
-        for (OrderCount _iter19 : this.orderCountList)
+        oprot.writeListBegin(new TList(TType.STRUCT, this.scoreTrades.size()));
+        for (ScoreTrade _iter3 : this.scoreTrades)
         {
-          _iter19.write(oprot);
+          _iter3.write(oprot);
         }
         oprot.writeListEnd();
       }
+      oprot.writeFieldEnd();
+    }
+    if (this.pageination != null) {
+      oprot.writeFieldBegin(PAGEINATION_FIELD_DESC);
+      this.pageination.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -406,7 +490,7 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("OrderStateResult(");
+    StringBuilder sb = new StringBuilder("ScoreTradeResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -416,11 +500,19 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("orderCountList:");
-    if (this.orderCountList == null) {
+    sb.append("scoreTrades:");
+    if (this.scoreTrades == null) {
       sb.append("null");
     } else {
-      sb.append(this.orderCountList);
+      sb.append(this.scoreTrades);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("pageination:");
+    if (this.pageination == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.pageination);
     }
     first = false;
     sb.append(")");

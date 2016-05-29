@@ -3,12 +3,11 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.order;
+package com.jfshare.finagle.thrift.score;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.*;
 import org.apache.thrift.meta_data.FieldMetaData;
-import org.apache.thrift.meta_data.ListMetaData;
 import org.apache.thrift.meta_data.StructMetaData;
 import org.apache.thrift.protocol.*;
 
@@ -16,20 +15,20 @@ import java.util.*;
 
 // No additional import required for struct/union.
 
-public class OrderStateResult implements TBase<OrderStateResult, OrderStateResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("OrderStateResult");
+public class ResponseScoreResult implements TBase<ResponseScoreResult, ResponseScoreResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ResponseScoreResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField ORDER_COUNT_LIST_FIELD_DESC = new TField("orderCountList", TType.LIST, (short)2);
+  private static final TField RESPONSE_SCORE_FIELD_DESC = new TField("responseScore", TType.STRUCT, (short)2);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public List<OrderCount> orderCountList;
+  public ResponseScore responseScore;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    ORDER_COUNT_LIST((short)2, "orderCountList");
+    RESPONSE_SCORE((short)2, "responseScore");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -46,8 +45,8 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // ORDER_COUNT_LIST
-  	return ORDER_COUNT_LIST;
+        case 2: // RESPONSE_SCORE
+  	return RESPONSE_SCORE;
         default:
   	return null;
       }
@@ -95,57 +94,52 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.ORDER_COUNT_LIST, new FieldMetaData("orderCountList", TFieldRequirementType.DEFAULT,
-      new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, OrderCount.class))));
+    tmpMap.put(_Fields.RESPONSE_SCORE, new FieldMetaData("responseScore", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ResponseScore.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(OrderStateResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ResponseScoreResult.class, metaDataMap);
   }
 
 
-  public OrderStateResult() {
+  public ResponseScoreResult() {
   }
 
-  public OrderStateResult(
+  public ResponseScoreResult(
     com.jfshare.finagle.thrift.result.Result result,
-    List<OrderCount> orderCountList)
+    ResponseScore responseScore)
   {
     this();
     this.result = result;
-    this.orderCountList = orderCountList;
+    this.responseScore = responseScore;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public OrderStateResult(OrderStateResult other) {
+  public ResponseScoreResult(ResponseScoreResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetOrderCountList()) {
-      List<OrderCount> __this__orderCountList = new ArrayList<OrderCount>();
-      for (OrderCount other_element : other.orderCountList) {
-        __this__orderCountList.add(new OrderCount(other_element));
-      }
-      this.orderCountList = __this__orderCountList;
+    if (other.isSetResponseScore()) {
+      this.responseScore = new ResponseScore(other.responseScore);
     }
   }
 
-  public OrderStateResult deepCopy() {
-    return new OrderStateResult(this);
+  public ResponseScoreResult deepCopy() {
+    return new ResponseScoreResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.orderCountList = null;
+    this.responseScore = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public OrderStateResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public ResponseScoreResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -166,43 +160,28 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     }
   }
 
-  public int getOrderCountListSize() {
-    return (this.orderCountList == null) ? 0 : this.orderCountList.size();
+  public ResponseScore getResponseScore() {
+    return this.responseScore;
   }
 
-  public java.util.Iterator<OrderCount> getOrderCountListIterator() {
-    return (this.orderCountList == null) ? null : this.orderCountList.iterator();
-  }
-
-  public void addToOrderCountList(OrderCount elem) {
-    if (this.orderCountList == null) {
-      this.orderCountList = new ArrayList<OrderCount>();
-    }
-    this.orderCountList.add(elem);
-  }
-
-  public List<OrderCount> getOrderCountList() {
-    return this.orderCountList;
-  }
-
-  public OrderStateResult setOrderCountList(List<OrderCount> orderCountList) {
-    this.orderCountList = orderCountList;
+  public ResponseScoreResult setResponseScore(ResponseScore responseScore) {
+    this.responseScore = responseScore;
     
     return this;
   }
 
-  public void unsetOrderCountList() {
-    this.orderCountList = null;
+  public void unsetResponseScore() {
+    this.responseScore = null;
   }
 
-  /** Returns true if field orderCountList is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrderCountList() {
-    return this.orderCountList != null;
+  /** Returns true if field responseScore is set (has been asigned a value) and false otherwise */
+  public boolean isSetResponseScore() {
+    return this.responseScore != null;
   }
 
-  public void setOrderCountListIsSet(boolean value) {
+  public void setResponseScoreIsSet(boolean value) {
     if (!value) {
-      this.orderCountList = null;
+      this.responseScore = null;
     }
   }
 
@@ -215,11 +194,11 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case ORDER_COUNT_LIST:
+    case RESPONSE_SCORE:
       if (value == null) {
-        unsetOrderCountList();
+        unsetResponseScore();
       } else {
-        setOrderCountList((List<OrderCount>)value);
+        setResponseScore((ResponseScore)value);
       }
       break;
     }
@@ -229,8 +208,8 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     switch (field) {
     case RESULT:
       return getResult();
-    case ORDER_COUNT_LIST:
-      return getOrderCountList();
+    case RESPONSE_SCORE:
+      return getResponseScore();
     }
     throw new IllegalStateException();
   }
@@ -244,8 +223,8 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     switch (field) {
     case RESULT:
       return isSetResult();
-    case ORDER_COUNT_LIST:
-      return isSetOrderCountList();
+    case RESPONSE_SCORE:
+      return isSetResponseScore();
     }
     throw new IllegalStateException();
   }
@@ -254,12 +233,12 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof OrderStateResult)
-      return this.equals((OrderStateResult)that);
+    if (that instanceof ResponseScoreResult)
+      return this.equals((ResponseScoreResult)that);
     return false;
   }
 
-  public boolean equals(OrderStateResult that) {
+  public boolean equals(ResponseScoreResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -270,12 +249,12 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_orderCountList = true && this.isSetOrderCountList();
-    boolean that_present_orderCountList = true && that.isSetOrderCountList();
-    if (this_present_orderCountList || that_present_orderCountList) {
-      if (!(this_present_orderCountList && that_present_orderCountList))
+    boolean this_present_responseScore = true && this.isSetResponseScore();
+    boolean that_present_responseScore = true && that.isSetResponseScore();
+    if (this_present_responseScore || that_present_responseScore) {
+      if (!(this_present_responseScore && that_present_responseScore))
         return false;
-      if (!this.orderCountList.equals(that.orderCountList))
+      if (!this.responseScore.equals(that.responseScore))
         return false;
     }
 
@@ -289,20 +268,20 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_orderCountList = true && (isSetOrderCountList());
-    builder.append(present_orderCountList);
-    if (present_orderCountList)
-      builder.append(orderCountList);
+    boolean present_responseScore = true && (isSetResponseScore());
+    builder.append(present_responseScore);
+    if (present_responseScore)
+      builder.append(responseScore);
     return builder.toHashCode();
   }
 
-  public int compareTo(OrderStateResult other) {
+  public int compareTo(ResponseScoreResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    OrderStateResult typedOther = (OrderStateResult)other;
+    ResponseScoreResult typedOther = (ResponseScoreResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -314,12 +293,12 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetOrderCountList()).compareTo(typedOther.isSetOrderCountList());
+    lastComparison = Boolean.valueOf(isSetResponseScore()).compareTo(typedOther.isSetResponseScore());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetOrderCountList()) {
-      lastComparison = TBaseHelper.compareTo(this.orderCountList, typedOther.orderCountList);
+    if (isSetResponseScore()) {
+      lastComparison = TBaseHelper.compareTo(this.responseScore, typedOther.responseScore);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -350,20 +329,10 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // ORDER_COUNT_LIST
-          if (field.type == TType.LIST) {
-            {
-            TList _list16 = iprot.readListBegin();
-            this.orderCountList = new ArrayList<OrderCount>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
-            {
-              OrderCount _elem18;
-              _elem18 = new OrderCount();
-              _elem18.read(iprot);
-              this.orderCountList.add(_elem18);
-            }
-            iprot.readListEnd();
-            }
+        case 2: // RESPONSE_SCORE
+          if (field.type == TType.STRUCT) {
+            this.responseScore = new ResponseScore();
+            this.responseScore.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -388,16 +357,9 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.orderCountList != null) {
-      oprot.writeFieldBegin(ORDER_COUNT_LIST_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.orderCountList.size()));
-        for (OrderCount _iter19 : this.orderCountList)
-        {
-          _iter19.write(oprot);
-        }
-        oprot.writeListEnd();
-      }
+    if (this.responseScore != null) {
+      oprot.writeFieldBegin(RESPONSE_SCORE_FIELD_DESC);
+      this.responseScore.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -406,7 +368,7 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("OrderStateResult(");
+    StringBuilder sb = new StringBuilder("ResponseScoreResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -416,11 +378,11 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("orderCountList:");
-    if (this.orderCountList == null) {
+    sb.append("responseScore:");
+    if (this.responseScore == null) {
       sb.append("null");
     } else {
-      sb.append(this.orderCountList);
+      sb.append(this.responseScore);
     }
     first = false;
     sb.append(")");

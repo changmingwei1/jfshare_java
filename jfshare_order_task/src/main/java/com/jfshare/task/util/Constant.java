@@ -10,5 +10,20 @@ public class Constant {
 
     /* elasticsearch ========================================================*/
 
-    public static final String ES_ORDER_TYPE = "orderEs";
+    public static final String ES_ORDER_TYPE = "esOrder";
+
+    /* final constant defined */
+
+
+    /* order opt enum*/
+    public enum OptType {
+        order_create,
+        order_paying,
+        order_pay,
+        order_close,
+        order_deliver,
+        order_deliver_batch,
+        order_confirm
+        ;
+    }
 }

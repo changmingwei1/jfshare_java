@@ -3,7 +3,8 @@ package com.jfshare.task.elasticsearch.models;
 import com.alibaba.fastjson.JSON;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.task.util.DateTimeUtil;
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 /**
  * Created by Lenovo on 2016/3/28.
@@ -12,10 +13,9 @@ public class EsOrder {
     private String orderId;
     private int userId;
     private int sellerId;
-//    private long createTime;
-    private int order_state;
+    private int orderState;
     private String orderJson;
-    private DateTime createTime;
+    private Date orderCreateTime;
 
     public EsOrder() {}
 
@@ -23,9 +23,8 @@ public class EsOrder {
         this.orderId = order.getOrderId();
         this.userId = order.getUserId();
         this.sellerId = order.getSellerId();
-//        this.createTime = DateTimeUtil.strToDateTime(order.getCreateTime(), DateTimeUtil.FORMAT_DEFAULT).getMillis();
-        this.createTime = DateTimeUtil.strToDateTime(order.getCreateTime());
-        this.order_state = order.getOrderState();
+        this.orderCreateTime = DateTimeUtil.strToDateTime(order.getCreateTime()).toDate();
+        this.orderState = order.getOrderState();
         this.orderJson = JSON.toJSONString(order);
     }
 
@@ -53,20 +52,20 @@ public class EsOrder {
         this.sellerId = sellerId;
     }
 
-    public DateTime getCreateTime() {
-        return createTime;
+    public Date getOrderCreateTime() {
+        return orderCreateTime;
     }
 
-    public void setCreateTime(DateTime createTime) {
-        this.createTime = createTime;
+    public void setOrderCreateTime(Date orderCreateTime) {
+        this.orderCreateTime = orderCreateTime;
     }
 
-    public int getOrder_state() {
-        return order_state;
+    public int getOrderState() {
+        return orderState;
     }
 
-    public void setOrder_state(int order_state) {
-        this.order_state = order_state;
+    public void setOrderState(int orderState) {
+        this.orderState = orderState;
     }
 
     public String getOrderJson() {
@@ -85,8 +84,8 @@ public class EsOrder {
                 "orderId='" + orderId + '\'' +
                 ", userId=" + userId +
                 ", sellerId=" + sellerId +
-                ", createTime=" + createTime +
-                ", order_state=" + order_state +
+                ", orderCreateTime=" + orderCreateTime +
+                ", orderState=" + orderState +
                 ", orderJson='" + orderJson + '\'' +
                 '}';
     }
