@@ -96,6 +96,27 @@ public class Client extends TestCase{
         }
     }
 
+    public void testOrderProfileQueryFull() throws Exception {
+        //商品id
+        String orderId = "1";
+        try {
+            ////////////////////////////////////////////////////
+            OrderQueryConditions conditions = new OrderQueryConditions();
+            conditions.setCurPage(1);
+            conditions.setCount(3);
+            conditions.setStartTime("2016-05-02 00:00:00");
+            conditions.setStartTime("2016-05-30 00:00:00");
+            System.err.println(client.orderProfileQueryFull(conditions));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
+
 
     public void testDeliver() throws Exception {
         //商品id

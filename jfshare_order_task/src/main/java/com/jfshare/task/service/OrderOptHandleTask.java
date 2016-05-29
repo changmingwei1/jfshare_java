@@ -10,6 +10,7 @@ import com.jfshare.task.server.depend.OrderClient;
 import com.jfshare.task.service.impl.OrderService;
 import com.jfshare.task.util.Constant;
 import com.jfshare.utils.BizUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class OrderOptHandleTask {
             int userId = jsonObject.getIntValue("userId");
             int sellerId = jsonObject.getIntValue("sellerId");
             String orderId = jsonObject.getString("orderId");
-            String optTypeStr = jsonObject.getString("OptType");
+            String optTypeStr = jsonObject.getString("optType");
             Order order = null;
             if(userId > 0) {
                 order = orderClient.queryOrderDetail(BizUtil.USER_TYPE.BUYER, userId, orderId);
@@ -50,7 +51,7 @@ public class OrderOptHandleTask {
                 order = orderClient.queryOrderDetail(BizUtil.USER_TYPE.SELLER, userId, orderId);
             }
 
-            if(order == null) {
+            if(order == null || StringUtils.isBlank(order.getOrderId())) {
                 logger.error("订单操作日志OrderOptHandleTask----查询订单失败, 未成功同步订单数据，需要人工处理,，orderId={}", orderId);
                 continue;
             }
@@ -75,6 +76,10 @@ public class OrderOptHandleTask {
         switch (optType) {
             case order_pay:{
                 orderService.afterOrderPay(order);
+                break;
+            }
+            case order_close:{
+                orderService.afterOrderClose(order);
                 break;
             }
             default:{
