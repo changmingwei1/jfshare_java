@@ -360,7 +360,7 @@ public class PayUtil {
             payUrlMap.put("openid", payReq.getCustId());
         }
 
-        Map<String, String> paramMap = WeixinSubmit.buildRequestPara(payUrlMap);
+        Map<String, String> paramMap = WeixinSubmit.buildRequestPara(payUrlMap, payReq.getPayChannel());
         String paramXml = WeixinSubmit.map2XmlStr(paramMap);
         String retXml = HttpUtils.xmlHttpPost(paramXml, WeixinConfig.GATEWAY_NEW);
         logger.info("微信调起支付返回的结果为＝＝＝"+retXml);
@@ -380,7 +380,7 @@ public class PayUtil {
                 payUrlMap.put("nonceStr", RandomStringUtils.randomAlphanumeric(20));
                 payUrlMap.put("package", "prepay_id=" + retMap.get("prepay_id"));
                 payUrlMap.put("signType", "MD5");
-                Map<String, String> paramSign = WeixinSubmit.buildRequestPara(payUrlMap);
+                Map<String, String> paramSign = WeixinSubmit.buildRequestPara(payUrlMap, payReq.getPayChannel());
                 payUrlMap.put("paySign", paramSign.get("sign"));
             } else if (payReq.getPayChannel() == 9) {
                 payUrlMap.clear();
@@ -390,7 +390,7 @@ public class PayUtil {
                 payUrlMap.put("package", "Sign=WXPay");
                 payUrlMap.put("noncestr", RandomStringUtils.randomAlphanumeric(20));
                 payUrlMap.put("timestamp",ConvertUtil.getString(new DateTime().getMillis()/1000));
-                Map<String, String> paramSign = WeixinSubmit.buildRequestPara(payUrlMap);
+                Map<String, String> paramSign = WeixinSubmit.buildRequestPara(payUrlMap, payReq.getPayChannel());
                 payUrlMap.put("sign", paramSign.get("sign"));
             }
             String payUrl = JSON.toJSONString(payUrlMap);
@@ -666,14 +666,14 @@ public class PayUtil {
         PayReq payReq1 = new PayReq();
 //        PayReq(tokenId:fvBLEJEHNOw=, orderNo:fa44514e9acb568385da064067e00feb, extraParam:24_4660024, title:jfx订单, price:1000, score:1, payChannel:9, payIp:null, returnUrl:null, remark:null, custId:100017286150, custType:7)
         payReq1.setTokenId("fvBLEJEHNOw=");
-        payReq1.setOrderNo("fa44514e9acb568385da064067e00feb");
+        payReq1.setOrderNo("fa44514e9acb568wwwww064067e00jjj");
         payReq1.setExtraParam("24_4660024");
         payReq1.setTitle("jfx");
         payReq1.setPrice(1000);
         payReq1.setScore(1);
         payReq1.setPayChannel(9);
 
-        getWeixinPay(payReq1, "9dc5c3c8981aa8d9be7c21c4366bc8c1");
+        getWeixinPay(payReq1, "9dc5c3c8981aa8d9be7c21c4366bcsss");
 
 //        System.out.println(hebaoH5);
 //        JSONObject jsonObject = JSON.parseObject(hebaoH5);
