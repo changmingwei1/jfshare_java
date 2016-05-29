@@ -750,8 +750,8 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 }
                 byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
                 if (xlsBytes != null) {
-                    String fileName = FileOpUtil.getFileName(sellerId, null);
-                    String fileKey = FileOpUtil.toFastDFS(xlsBytes, fileName);
+                    String fileName = fileOpUtil.getFileName(sellerId, null);
+                    String fileKey = fileOpUtil.toFastDFS(xlsBytes, fileName);
                     stringResult.setValue(fileKey);
                     result.setCode(0);
                 }
