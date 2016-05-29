@@ -112,6 +112,7 @@ public class ScoreClient {
 		try {
 			ScoreTrade scoreTrade = new ScoreTrade();
 			scoreTrade.setAmount(score);
+			scoreTrade.setInOrOut(1);
 			scoreTrade.setType(1);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.income(scoreTrade));

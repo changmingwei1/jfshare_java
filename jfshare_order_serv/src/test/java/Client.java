@@ -19,8 +19,8 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-//        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
-        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
+        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+//        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
@@ -105,7 +105,7 @@ public class Client extends TestCase{
             conditions.setCurPage(1);
             conditions.setCount(3);
             conditions.setStartTime("2016-05-02 00:00:00");
-            conditions.setStartTime("2016-05-30 00:00:00");
+            conditions.setEndTime("2016-05-30 00:00:00");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block

@@ -56,6 +56,7 @@ public class ScoreClient {
 			ScoreTrade scoreTrade = new ScoreTrade();
 			scoreTrade.setAmount(score);
 			scoreTrade.setType(5);
+			scoreTrade.setInOrOut(1);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.income(scoreTrade));
 			if(scoreResult != null && scoreResult.getResult().getCode() == 0) {
@@ -77,6 +78,7 @@ public class ScoreClient {
 			ScoreTrade scoreTrade = new ScoreTrade();
 			scoreTrade.setAmount(score);
 			scoreTrade.setType(5);
+			scoreTrade.setInOrOut(2);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.expenditure(scoreTrade));
 			if(scoreResult != null && scoreResult.getResult().getCode() == 0) {

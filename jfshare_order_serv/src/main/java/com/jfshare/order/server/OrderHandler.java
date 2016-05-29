@@ -30,6 +30,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.lucene.queryparser.xml.FilterBuilder;
 import org.apache.lucene.queryparser.xml.FilterBuilderFactory;
+import org.apache.lucene.queryparser.xml.builders.BooleanQueryBuilder;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.thrift.TException;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -993,6 +995,14 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             queryBuilder.must(QueryBuilders.matchQuery("orderId", conditions.getOrderId()));
         }
 
+        if(CollectionUtils.isNotEmpty(conditions.getOrderIds())) {
+            BoolQueryBuilder orderIdsQuery = QueryBuilders.boolQuery();
+            for(String orderId : conditions.getOrderIds()) {
+                orderIdsQuery.should(QueryBuilders.matchQuery("orderId", orderId));
+            }
+            queryBuilder.must(orderIdsQuery);
+        }
+
         if(conditions.getSellerId() > 0) {
             queryBuilder.must(QueryBuilders.matchQuery("sellerId", conditions.getSellerId()));
         }
@@ -1019,6 +1029,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         int hitsTotal = (int)searchResponse.getHits().getTotalHits();
         if(hitsTotal > 0) {
             orderProfileResult.getOrderProfilePage().setCount(conditions.getCount());
+            orderProfileResult.getOrderProfilePage().setPageCount(searchResponse.getHits().getHits().length);
             orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
             orderProfileResult.getOrderProfilePage().setTotal(hitsTotal);
             for(SearchHit searchHit : searchResponse.getHits().getHits()) {

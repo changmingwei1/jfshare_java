@@ -7,6 +7,7 @@ import com.jfshare.finagle.thrift.order.OrderQueryConditions;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.task.elasticsearch.models.EsOrder;
 import com.jfshare.task.util.DateTimeUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.thrift.TException;
@@ -35,7 +36,9 @@ public class Test_xxx {
        OrderQueryConditions conditions = new OrderQueryConditions();
         conditions.setStartTime("2016-05-20 00:00:00");
         conditions.setEndTime("2016-05-30 00:00:00");
-        conditions.setOrderState(1);
+//        conditions.setOrderState(1);
+        conditions.addToOrderIds("44140112");
+        conditions.addToOrderIds("44130090");
 
         ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
         try {
@@ -86,6 +89,14 @@ public class Test_xxx {
 
         if(StringUtils.isNotBlank(conditions.getOrderId())) {
             queryBuilder.must(QueryBuilders.matchQuery("orderId", conditions.getOrderId()));
+        }
+
+        if(CollectionUtils.isNotEmpty(conditions.getOrderIds())) {
+            BoolQueryBuilder orderIdsQuery = QueryBuilders.boolQuery();
+            for(String orderId : conditions.getOrderIds()) {
+                orderIdsQuery.should(QueryBuilders.matchQuery("orderId", orderId));
+            }
+            queryBuilder.must(orderIdsQuery);
         }
 
         if(conditions.getSellerId() > 0) {
