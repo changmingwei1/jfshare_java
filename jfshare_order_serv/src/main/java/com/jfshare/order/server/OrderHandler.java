@@ -1,6 +1,7 @@
 package com.jfshare.order.server;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.jfshare.elasticsearch.drive.ESClient;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.*;
@@ -743,7 +744,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             //查询订单列表
             orderModels = orderService.queryBatch(conditions);
             if (orderModels.size() > 0) {
-                List<Order> orderDetails = null;
+                List<Order> orderDetails = Lists.newArrayList();
                 for (OrderModel orderModel : orderModels) {
                     orderDetails.add(OrderUtil.rConvertOrderModel(orderModel));
                 }
