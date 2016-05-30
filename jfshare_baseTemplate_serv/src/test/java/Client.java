@@ -34,7 +34,8 @@ public class Client extends TestCase{
 
     @Override
     public void setUp() throws Exception {
-        transport = new TFramedTransport(new TSocket("localhost", 2004));
+//        transport = new TFramedTransport(new TSocket("localhost", 2004));
+        transport = new TFramedTransport(new TSocket("101.201.38.182", 2004));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new BaseTemplateServ.Client(protocol);
@@ -170,26 +171,48 @@ public class Client extends TestCase{
     public void testCalculatePostage() throws Exception {
         CalculatePostageParam postageParam = new CalculatePostageParam();
 //        postageParam.setSendToProvince("11111");
-        postageParam.setSendToProvince("350000");
+        postageParam.setSendToProvince("110000");
         SellerPostageBasic sellerPostageBasic = new SellerPostageBasic();
         sellerPostageBasic.setSellerId(13);
         // 初始化商品
         ProductPostageBasic productPostageBasic = new ProductPostageBasic();
-        productPostageBasic.setProductId("112");
-        productPostageBasic.setTemplateId(19);
-        productPostageBasic.setAmount("12");
-        productPostageBasic.setWeight(12);
-        productPostageBasic.setNumber(10);
+        productPostageBasic.setProductId("ze160526172547000945");
+        productPostageBasic.setTemplateId(94);
+        productPostageBasic.setAmount("0.05");
+        productPostageBasic.setWeight(350);
+        productPostageBasic.setNumber(7);
         sellerPostageBasic.addToProductPostageBasicList(productPostageBasic);
 
         productPostageBasic = new ProductPostageBasic();
-        productPostageBasic.setProductId("113");
-        productPostageBasic.setTemplateId(20);
-        productPostageBasic.setAmount("12");
-        productPostageBasic.setWeight(12);
-        productPostageBasic.setNumber(10);
+        productPostageBasic.setProductId("ze160526172825000873");
+        productPostageBasic.setTemplateId(1);
+        productPostageBasic.setAmount("0.02");
+        productPostageBasic.setWeight(100);
+        productPostageBasic.setNumber(2);
+        sellerPostageBasic.addToProductPostageBasicList(productPostageBasic);
+
+        productPostageBasic = new ProductPostageBasic();
+        productPostageBasic.setProductId("ze160519222333000922");
+        productPostageBasic.setTemplateId(94);
+        productPostageBasic.setAmount("0.04");
+        productPostageBasic.setWeight(200);
+        productPostageBasic.setNumber(4);
         sellerPostageBasic.addToProductPostageBasicList(productPostageBasic);
         postageParam.addToSellerPostageBasicList(sellerPostageBasic);
+
+        SellerPostageBasic sellerPostageBasic2 = new SellerPostageBasic();
+        sellerPostageBasic2.setSellerId(14);
+
+        // 初始化商品
+        ProductPostageBasic productPostageBasic2 = new ProductPostageBasic();
+        productPostageBasic2.setProductId("ze160519222546000713");
+        productPostageBasic2.setTemplateId(15);
+        productPostageBasic2.setAmount("0.03");
+        productPostageBasic2.setWeight(150);
+        productPostageBasic2.setNumber(6);
+        sellerPostageBasic2.addToProductPostageBasicList(productPostageBasic2);
+        postageParam.addToSellerPostageBasicList(sellerPostageBasic2);
+
         System.out.println(client.calculatePostage(postageParam).toString());
     }
 
