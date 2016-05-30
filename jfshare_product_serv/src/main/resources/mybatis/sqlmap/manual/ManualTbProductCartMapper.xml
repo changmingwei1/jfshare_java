@@ -22,7 +22,7 @@
 
     <update id="lockProductCard" parameterType="map">
 		UPDATE tb_product_card
-		SET transaction_id = #{transactionId}, state = 2
+		SET transaction_id = #{transactionId}, state = 2, buyer_id = #{buyerId}
 		WHERE state = 1 and product_id = #{productId}
 		ORDER BY create_time asc
 		limit #{num}
@@ -30,7 +30,7 @@
 
     <update id="releaseProductCard" parameterType="map">
 		update tb_product_card
-		SET transaction_id = '', state = 1
+		SET transaction_id = '', state = 1, buyer_id = 0
 		WHERE transaction_id = #{transactionId} and product_id = #{productId}
 	</update>
 

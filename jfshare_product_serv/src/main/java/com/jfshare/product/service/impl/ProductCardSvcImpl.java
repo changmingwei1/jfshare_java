@@ -71,7 +71,6 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 productCard.setCreateTime(now);
                 // 添加卡密信息
                 this.productCardDao.add(productCard);
-                int error = 1/0;
 
             }
         } finally {

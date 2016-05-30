@@ -14,6 +14,8 @@
     <result column="last_update_id" property="lastUpdateId" jdbcType="INTEGER" />
     <result column="state" property="state" jdbcType="INTEGER" />
     <result column="sku_num" property="skuNum" jdbcType="VARCHAR" />
+    <result column="buyer_id" property="buyerId" jdbcType="INTEGER" />
+    <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -75,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, seller_id, product_id, card_number, password, transaction_id, create_time, create_id, 
-    last_update_time, last_update_id, state, sku_num
+    last_update_time, last_update_id, state, sku_num, buyer_id, check_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jfshare.product.model.TbProductCardExample" >
     select
@@ -136,6 +138,12 @@
       <if test="skuNum != null" >
         sku_num,
       </if>
+      <if test="buyerId != null" >
+        buyer_id,
+      </if>
+      <if test="checkTime != null" >
+        check_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -173,6 +181,12 @@
       </if>
       <if test="skuNum != null" >
         #{skuNum,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerId != null" >
+        #{buyerId,jdbcType=INTEGER},
+      </if>
+      <if test="checkTime != null" >
+        #{checkTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -221,6 +235,12 @@
       <if test="record.skuNum != null" >
         sku_num = #{record.skuNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.buyerId != null" >
+        buyer_id = #{record.buyerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkTime != null" >
+        check_time = #{record.checkTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -239,7 +259,9 @@
       last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
       last_update_id = #{record.lastUpdateId,jdbcType=INTEGER},
       state = #{record.state,jdbcType=INTEGER},
-      sku_num = #{record.skuNum,jdbcType=VARCHAR}
+      sku_num = #{record.skuNum,jdbcType=VARCHAR},
+      buyer_id = #{record.buyerId,jdbcType=INTEGER},
+      check_time = #{record.checkTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -279,6 +301,12 @@
       </if>
       <if test="skuNum != null" >
         sku_num = #{skuNum,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerId != null" >
+        buyer_id = #{buyerId,jdbcType=INTEGER},
+      </if>
+      <if test="checkTime != null" >
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
