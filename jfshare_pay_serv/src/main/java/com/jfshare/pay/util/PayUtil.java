@@ -345,13 +345,16 @@ public class PayUtil {
         payUrlMap.put("spbill_create_ip", StringUtil.isNullOrEmpty(payReq.getPayIp()) ? "127.0.0.1" : payReq.getPayIp());
         payUrlMap.put("time_start", curTime); //交易起始时间
         payUrlMap.put("time_expire", DateUtils.date2Str(now.plusHours(2).toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2)); //交易结束时间
-        payUrlMap.put("notify_url", PropertiesUtil.getProperty("jfx_pay_serv", "weixinpay_notify_url")); //后端通知地址
+        String notifyUrl = PropertiesUtil.getProperty("jfx_pay_serv", "weixinpay_notify_url");
         String tradeType = "NATIVE";
         if (payReq.getPayChannel() == 4) {
             tradeType = "JSAPI";
+            notifyUrl = PropertiesUtil.getProperty("jfx_pay_serv", "weixinwap_notify_url");
         } else if (payReq.getPayChannel() == 9) {
             tradeType = "APP";
+            notifyUrl = PropertiesUtil.getProperty("jfx_pay_serv", "weixinapp_notify_url");
         }
+        payUrlMap.put("notify_url", notifyUrl); //后端通知地址
         payUrlMap.put("trade_type", tradeType);
         if (payReq.getPayChannel() != 9) {
             payUrlMap.put("product_id", payId);
