@@ -19,6 +19,7 @@ import com.jfshare.order.exceptions.DaoManualException;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderInfoRecord;
 import com.jfshare.order.model.TbOrderRecordExample;
+import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.TableNameUtil;
 import com.jfshare.utils.BizUtil;
 import com.jfshare.utils.StringUtil;
@@ -493,19 +494,20 @@ public class OrderDaoImpl implements IOrderDao {
             tbOrder.setLastUpdateTime(new DateTime());
             tbOrder.setLastUpdateUserId(sellerId);
             //重新发货时保留上次发货时间
-            if(orderList.get(i).getOrderState() != OrderConstant.ORDER_STATE_FINISH_DELIVER)
+            if(orderList.get(i).getOrderState() != ConstantUtil.ORDER_STATE.FINISH_DELIVER.getEnumVal())
                 tbOrder.setDeliverTime(new DateTime());
 
             OrderModel orderProfile = this.getOrderProfileBySeller(sellerId, info.getOrderId());
-
+            tbOrder.setSellerId(orderProfile.getSellerId());
+            tbOrder.setUserId(orderProfile.getUserId());
             if(orderProfile == null)
                 return -1;
 
             TbOrderRecordExample example = new TbOrderRecordExample();
             TbOrderRecordExample.Criteria criteria = example.createCriteria();
             criteria.andOrderIdEqualTo(tbOrder.getOrderId());
-            criteria.andSellerIdEqualTo(tbOrder.getSellerId());
-            criteria.andUserIdEqualTo(tbOrder.getUserId());
+            criteria.andSellerIdEqualTo(orderProfile.getSellerId());
+            criteria.andUserIdEqualTo(orderProfile.getUserId());
             int ret = this.updateOrderWithCriteria(tbOrder, BizUtil.USER_TYPE.BUYER.getEnumVal(),example);
             if (ret <= 0) {
                 throw new RuntimeException("batchDeliverOp，更新买家表失败, 更新返回："+ ret);

@@ -893,7 +893,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             List<String> existOrderIds = new ArrayList<String>();
             for (OrderModel orderProfile : existOrderList) {
                 existOrderIds.add(orderProfile.getOrderId());
-                if (orderProfile.getOrderState() != OrderConstant.ORDER_STATE_WAIT_DELIVER) {
+                if (orderProfile.getOrderState() != ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal()) {
                     logger.info("存在订单状态错误的订单:"+orderProfile.getOrderId() + ",订单状态为：" + orderProfile.getOrderState());
                     logger.warn("batchDeliverEx 存在订单状态错误的订单: {}   订单状态为： {}", orderProfile.getOrderId(), orderProfile.getOrderState());
                     BatchDeliverFailInfo failInfo = new BatchDeliverFailInfo();

@@ -48,7 +48,7 @@ public class ScoreClient {
 		service = new ScoreServ.ServiceToClient(client, new TBinaryProtocol.Factory());
 	}
 
-	public void incomeScore(int buyerId, int score, String orderId) {
+	public void incomeScore(int buyerId, int score, String tradeId) {
 		long doneTime = System.currentTimeMillis();
 		if (buyerId <= 0)
 			return;
@@ -57,14 +57,14 @@ public class ScoreClient {
 			scoreTrade.setAmount(score);
 			scoreTrade.setType(5);
 			scoreTrade.setTrader(3);
-			scoreTrade.setTradeId("bonus_" + orderId);
+			scoreTrade.setTradeId(tradeId);
 			scoreTrade.setInOrOut(1);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.income(scoreTrade));
 			if(scoreResult != null && scoreResult.getResult().getCode() == 0) {
-				logger.info("{},购物赠送用户积分：{}", buyerId, score);
+				logger.info("userId={}, tradeId={}, 购物赠送用户积分：{}", buyerId, tradeId, score);
 			} else{
-				logger.warn("{},购物赠送积分失败:{}", buyerId, scoreResult);
+				logger.warn("userId={}, tradeId={}, 购物赠送积分失败:{}", buyerId, tradeId, scoreResult);
 			}
 		} catch (Exception e) {
 			logger.error(buyerId + "积分服务异常!", e);
@@ -72,7 +72,7 @@ public class ScoreClient {
 		logger.info("{},积分服务income接口调用时间：{} ms!!", buyerId, (System.currentTimeMillis() - doneTime));
 	}
 
-	public void reduceScore(int buyerId, int score, String orderId) {
+	public void reduceScore(int buyerId, int score, String tradeId) {
 		long doneTime = System.currentTimeMillis();
 		if (buyerId <= 0)
 			return;
@@ -82,13 +82,13 @@ public class ScoreClient {
 			scoreTrade.setType(5);
 			scoreTrade.setInOrOut(2);
 			scoreTrade.setTrader(3);
-			scoreTrade.setTradeId("bonus_" + orderId);
+			scoreTrade.setTradeId(tradeId);
 			scoreTrade.setUserId(buyerId);
 			StringResult scoreResult = Await.result(this.service.expenditure(scoreTrade));
 			if(scoreResult != null && scoreResult.getResult().getCode() == 0) {
-				logger.info("{},扣减购物赠送用户积分：{}", buyerId, score);
+				logger.info("userId={}, tradeId={}, 扣减用户积分：{}, tradeId={}", buyerId, tradeId, score);
 			} else{
-				logger.warn("{},扣减购物赠送积分失败:{}", buyerId, scoreResult);
+				logger.warn("userId={}, tradeId={}, 扣减积分失败:{}", buyerId, tradeId, scoreResult);
 			}
 		} catch (Exception e) {
 			logger.error(buyerId + "积分服务异常!", e);

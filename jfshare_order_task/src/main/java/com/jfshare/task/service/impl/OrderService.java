@@ -29,7 +29,7 @@ public class OrderService {
 
         int incomeScore = getScoreWithOrder(order);
         if(incomeScore > 0)
-            scoreClient.incomeScore(order.getUserId(), incomeScore, order.getOrderId());
+            scoreClient.incomeScore(order.getUserId(), incomeScore, "bonus_" + order.getOrderId());
     }
 
     /**
@@ -37,13 +37,17 @@ public class OrderService {
      * @param order
      */
     public void afterOrderClose(Order order) {
+        if(order.getExchangeScore() > 0) {
+            scoreClient.incomeScore(order.getUserId(), order.getExchangeScore(), "trade_" + order.getOrderId());
+        }
+
         if(order.getPayInfo().getPayState() != 1) {
             return;
         }
 
         int score = getScoreWithOrder(order);
         if(score > 0)
-            scoreClient.reduceScore(order.getUserId(), score, order.getOrderId());
+            scoreClient.reduceScore(order.getUserId(), score, "bonus_" + order.getOrderId());
     }
 
     private int getScoreWithOrder(Order order) {
