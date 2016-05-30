@@ -415,6 +415,7 @@ public class ServHandle implements ProductServ.Iface {
 		queryMap.put("productId", param.getProductId());
 		queryMap.put("transactionId", param.getTransactionId());
 		queryMap.put("num", param.getNum());
+		queryMap.put("buyerId", param.getBuyerId());
 
 		StringBuffer cards = null;
 		List<ProductCard> productCards = new ArrayList<ProductCard>();
@@ -575,5 +576,69 @@ public class ServHandle implements ProductServ.Iface {
 			logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString());
 		}
 		return result;
+	}
+
+	@Override
+	public CaptchaListResult queryCaptchaList(CaptchaQueryParam param) throws TException {
+
+		// TODO: 2016/5/30 造数据，后期实现
+		
+		CaptchaListResult captchaListResult = new CaptchaListResult();
+		Result result = new Result();
+		captchaListResult.setResult(result);
+
+		captchaListResult.setYedNum(88);
+		captchaListResult.setMonNum(999);
+		captchaListResult.addToItemList(new AldCaptchaItem("123132", "植物大战僵尸", 809, 120));
+		captchaListResult.addToItemList(new AldCaptchaItem("3534534", "黑客帝国", 546, 324));
+		captchaListResult.addToItemList(new AldCaptchaItem("123132", "星球大战", 555, 123));
+		captchaListResult.setPagination(param.getPagination());
+
+		return captchaListResult;
+	}
+
+	@Override
+	public DayCaptchaListResult queryCaptchaTotalList(CaptchaQueryParam param) throws TException {
+
+		// TODO: 2016/5/30 造数据，后期实现
+
+		DayCaptchaListResult dayCaptchaListResult = new DayCaptchaListResult();
+		Result result = new Result();
+		dayCaptchaListResult.setResult(result);
+
+		dayCaptchaListResult.setSoldNum(12312);
+		dayCaptchaListResult.setCheckedNum(333);
+		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "植物大战僵尸", 12, 34, "2016-05-30"));
+		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "植物大战僵尸", 56, 78, "2016-05-29"));
+		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "植物大战僵尸", 88, 99, "2016-05-28"));
+		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "黑客帝国", 11, 22, "2016-05-30"));
+		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "黑客帝国", 33, 44, "2016-05-29"));
+		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "黑客帝国", 55, 66, "2016-05-28"));
+
+		dayCaptchaListResult.setPagination(param.getPagination());
+
+		return dayCaptchaListResult;
+	}
+
+	@Override
+	public CaptchaDetailResult queryCaptchaDetails(CaptchaQueryParam param) throws TException {
+
+		// TODO: 2016/5/30 造数据，后期实现
+
+		CaptchaDetailResult captchaDetailResult = new CaptchaDetailResult();
+		Result result = new Result();
+		captchaDetailResult.setResult(result);
+
+		captchaDetailResult.setProductName("星球大战");
+		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(123).setCheckTime("2016-05-30"));
+		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(2222).setCheckTime("2016-05-30"));
+		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(333).setCheckTime("2016-05-30"));
+		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(44444).setCheckTime("2016-05-29"));
+		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(55555).setCheckTime("2016-05-29"));
+		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(666666).setCheckTime("2016-05-28"));
+		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(6676).setCheckTime("2016-05-28"));
+		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(7777).setCheckTime("2016-05-28"));
+
+		return captchaDetailResult;
 	}
 }

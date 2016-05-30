@@ -42,9 +42,9 @@ public class client {
 
     private ProductServ.Client client;
 
-//    private static final String IP = "127.0.0.1";
+    private static final String IP = "127.0.0.1";
 //    private static final String IP = "120.24.153.155";
-    private static final String IP = "101.201.38.182";
+//    private static final String IP = "101.201.38.182";
 
     private static final Integer PORT = 1980;
 
@@ -116,7 +116,7 @@ public class client {
         param.setSkuTag(1);
         param.setAttributeTag(1);
         param.setSkuTemplateTag(1);
-        System.out.println(client.queryProduct("ze160505170956000167", param).toString());
+        System.out.println(client.queryProduct("ze160528195652000128", param).toString());
     }
 
     @Test
@@ -178,7 +178,7 @@ public class client {
     public void testQueryProductCardViewList() throws Exception {
         ProductCardViewParam param = new ProductCardViewParam();
         param.setSellerId(13);
-        param.setProductId("ze151210145613000059");
+//        param.setProductId("ze151210145613000059");
 //        param.setSkuNum("1:13");
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
@@ -192,7 +192,8 @@ public class client {
     @Test
     public void testStatisticsProductCard() throws Exception {
         ProductCardStatisticsParam param = new ProductCardStatisticsParam();
-        param.setSellerId(1);
+        param.setSellerId(13);
+        param.setProductName("亿");
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
         pagination.setNumPerPage(10);
@@ -208,10 +209,12 @@ public class client {
        /* param.setSubjectId(2077);
         param.setBrandId(591);*/
         param.setSort("click_rate DESC");
+//        param.setSort("create_time DESC");
+        param.setActiveState(300);
 
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
-        pagination.setNumPerPage(10);
+        pagination.setNumPerPage(30);
 
         param.setPagination(pagination);
 
@@ -245,7 +248,8 @@ public class client {
 
     @Test
     public void testImportProductCard() throws Exception {
-        String path = "https://apia.wd2go.com/api/1.0/rest/device_redirect?device_user_id=21397091&device_uri=%2Fapi%2F1.0%2Frest%2Ffile_contents%2Fshare%2F%25E8%2599%259A%25E6%258B%259F%25E5%2595%2586%25E5%2593%2581%25E4%25B8%258A%25E4%25BC%25A0%25E6%25A8%25A1%25E6%259D%25BF.xls%3Fdevice_user_id%3D21397091%26request_auth_code%3D4ede3472d20367f0c0bf9c3797b187824e948be306b875920eb2f3f63a3ae5a0";
+//        String path = "https://apia.wd2go.com/api/1.0/rest/device_redirect?device_user_id=21397091&device_uri=%2Fapi%2F1.0%2Frest%2Ffile_contents%2Fshare%2F%25E8%2599%259A%25E6%258B%259F%25E5%2595%2586%25E5%2593%2581%25E4%25B8%258A%25E4%25BC%25A0%25E6%25A8%25A1%25E6%259D%25BF.xls%3Fdevice_user_id%3D21397091%26request_auth_code%3D4ede3472d20367f0c0bf9c3797b187824e948be306b875920eb2f3f63a3ae5a0";
+        String path = "http://101.201.39.61:3000/system/v1/jfs_image/D7FB66843726D29D4B51A21D12F4642A.jpg";
         ProductCardImportParam productCardImportParam = new ProductCardImportParam();
         productCardImportParam.setSellerId(1);
         productCardImportParam.setPath(path);

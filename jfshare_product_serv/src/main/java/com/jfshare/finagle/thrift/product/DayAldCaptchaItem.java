@@ -29,29 +29,29 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class ProductCardParam implements TBase<ProductCardParam, ProductCardParam._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("ProductCardParam");
+public class DayAldCaptchaItem implements TBase<DayAldCaptchaItem, DayAldCaptchaItem._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("DayAldCaptchaItem");
 
   private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)1);
-  private static final TField TRANSACTION_ID_FIELD_DESC = new TField("transactionId", TType.STRING, (short)2);
-  private static final TField NUM_FIELD_DESC = new TField("num", TType.I32, (short)3);
-  private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)4);
-  private static final TField BUYER_ID_FIELD_DESC = new TField("buyerId", TType.I32, (short)5);
+  private static final TField PRODUCT_NAME_FIELD_DESC = new TField("productName", TType.STRING, (short)2);
+  private static final TField ALD_SOLD_FIELD_DESC = new TField("aldSold", TType.I32, (short)3);
+  private static final TField ALD_CAPTCHA_FIELD_DESC = new TField("aldCaptcha", TType.I32, (short)4);
+  private static final TField DATE_FIELD_DESC = new TField("date", TType.STRING, (short)5);
 
 
   public String productId;
-  public String transactionId;
-  public int num;
-  public String skuNum;
-  public int buyerId;
+  public String productName;
+  public int aldSold;
+  public int aldCaptcha;
+  public String date;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     PRODUCT_ID((short)1, "productId"),
-    TRANSACTION_ID((short)2, "transactionId"),
-    NUM((short)3, "num"),
-    SKU_NUM((short)4, "skuNum"),
-    BUYER_ID((short)5, "buyerId");
+    PRODUCT_NAME((short)2, "productName"),
+    ALD_SOLD((short)3, "aldSold"),
+    ALD_CAPTCHA((short)4, "aldCaptcha"),
+    DATE((short)5, "date");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -68,14 +68,14 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       switch(fieldId) {
         case 1: // PRODUCT_ID
   	return PRODUCT_ID;
-        case 2: // TRANSACTION_ID
-  	return TRANSACTION_ID;
-        case 3: // NUM
-  	return NUM;
-        case 4: // SKU_NUM
-  	return SKU_NUM;
-        case 5: // BUYER_ID
-  	return BUYER_ID;
+        case 2: // PRODUCT_NAME
+  	return PRODUCT_NAME;
+        case 3: // ALD_SOLD
+  	return ALD_SOLD;
+        case 4: // ALD_CAPTCHA
+  	return ALD_CAPTCHA;
+        case 5: // DATE
+  	return DATE;
         default:
   	return null;
       }
@@ -117,8 +117,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
 
 
   // isset id assignments
-  private static final int __NUM_ISSET_ID = 0;
-  private static final int __BUYERID_ISSET_ID = 1;
+  private static final int __ALDSOLD_ISSET_ID = 0;
+  private static final int __ALDCAPTCHA_ISSET_ID = 1;
   private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
@@ -126,75 +126,78 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.PRODUCT_ID, new FieldMetaData("productId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.TRANSACTION_ID, new FieldMetaData("transactionId", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.PRODUCT_NAME, new FieldMetaData("productName", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.NUM, new FieldMetaData("num", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.ALD_SOLD, new FieldMetaData("aldSold", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.ALD_CAPTCHA, new FieldMetaData("aldCaptcha", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.DATE, new FieldMetaData("date", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.BUYER_ID, new FieldMetaData("buyerId", TFieldRequirementType.OPTIONAL,
-      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(ProductCardParam.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(DayAldCaptchaItem.class, metaDataMap);
   }
 
 
-  public ProductCardParam() {
+  public DayAldCaptchaItem() {
   }
 
-  public ProductCardParam(
+  public DayAldCaptchaItem(
     String productId,
-    String transactionId,
-    int num,
-    String skuNum)
+    String productName,
+    int aldSold,
+    int aldCaptcha,
+    String date)
   {
     this();
     this.productId = productId;
-    this.transactionId = transactionId;
-    this.num = num;
-    setNumIsSet(true);
-    this.skuNum = skuNum;
+    this.productName = productName;
+    this.aldSold = aldSold;
+    setAldSoldIsSet(true);
+    this.aldCaptcha = aldCaptcha;
+    setAldCaptchaIsSet(true);
+    this.date = date;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public ProductCardParam(ProductCardParam other) {
+  public DayAldCaptchaItem(DayAldCaptchaItem other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetProductId()) {
       this.productId = other.productId;
     }
-    if (other.isSetTransactionId()) {
-      this.transactionId = other.transactionId;
+    if (other.isSetProductName()) {
+      this.productName = other.productName;
     }
-    this.num = other.num;
-    if (other.isSetSkuNum()) {
-      this.skuNum = other.skuNum;
+    this.aldSold = other.aldSold;
+    this.aldCaptcha = other.aldCaptcha;
+    if (other.isSetDate()) {
+      this.date = other.date;
     }
-    this.buyerId = other.buyerId;
   }
 
-  public ProductCardParam deepCopy() {
-    return new ProductCardParam(this);
+  public DayAldCaptchaItem deepCopy() {
+    return new DayAldCaptchaItem(this);
   }
 
   @Override
   public void clear() {
     this.productId = null;
-    this.transactionId = null;
-    setNumIsSet(false);
-    this.num = 0;
-    this.skuNum = null;
-    setBuyerIdIsSet(false);
-    this.buyerId = 0;
+    this.productName = null;
+    setAldSoldIsSet(false);
+    this.aldSold = 0;
+    setAldCaptchaIsSet(false);
+    this.aldCaptcha = 0;
+    this.date = null;
   }
 
   public String getProductId() {
     return this.productId;
   }
 
-  public ProductCardParam setProductId(String productId) {
+  public DayAldCaptchaItem setProductId(String productId) {
     this.productId = productId;
     
     return this;
@@ -215,102 +218,102 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     }
   }
 
-  public String getTransactionId() {
-    return this.transactionId;
+  public String getProductName() {
+    return this.productName;
   }
 
-  public ProductCardParam setTransactionId(String transactionId) {
-    this.transactionId = transactionId;
+  public DayAldCaptchaItem setProductName(String productName) {
+    this.productName = productName;
     
     return this;
   }
 
-  public void unsetTransactionId() {
-    this.transactionId = null;
+  public void unsetProductName() {
+    this.productName = null;
   }
 
-  /** Returns true if field transactionId is set (has been asigned a value) and false otherwise */
-  public boolean isSetTransactionId() {
-    return this.transactionId != null;
+  /** Returns true if field productName is set (has been asigned a value) and false otherwise */
+  public boolean isSetProductName() {
+    return this.productName != null;
   }
 
-  public void setTransactionIdIsSet(boolean value) {
+  public void setProductNameIsSet(boolean value) {
     if (!value) {
-      this.transactionId = null;
+      this.productName = null;
     }
   }
 
-  public int getNum() {
-    return this.num;
+  public int getAldSold() {
+    return this.aldSold;
   }
 
-  public ProductCardParam setNum(int num) {
-    this.num = num;
-    setNumIsSet(true);
+  public DayAldCaptchaItem setAldSold(int aldSold) {
+    this.aldSold = aldSold;
+    setAldSoldIsSet(true);
 
     return this;
   }
 
-  public void unsetNum() {
-  __isset_bit_vector.clear(__NUM_ISSET_ID);
+  public void unsetAldSold() {
+  __isset_bit_vector.clear(__ALDSOLD_ISSET_ID);
   }
 
-  /** Returns true if field num is set (has been asigned a value) and false otherwise */
-  public boolean isSetNum() {
-    return __isset_bit_vector.get(__NUM_ISSET_ID);
+  /** Returns true if field aldSold is set (has been asigned a value) and false otherwise */
+  public boolean isSetAldSold() {
+    return __isset_bit_vector.get(__ALDSOLD_ISSET_ID);
   }
 
-  public void setNumIsSet(boolean value) {
-    __isset_bit_vector.set(__NUM_ISSET_ID, value);
+  public void setAldSoldIsSet(boolean value) {
+    __isset_bit_vector.set(__ALDSOLD_ISSET_ID, value);
   }
 
-  public String getSkuNum() {
-    return this.skuNum;
+  public int getAldCaptcha() {
+    return this.aldCaptcha;
   }
 
-  public ProductCardParam setSkuNum(String skuNum) {
-    this.skuNum = skuNum;
+  public DayAldCaptchaItem setAldCaptcha(int aldCaptcha) {
+    this.aldCaptcha = aldCaptcha;
+    setAldCaptchaIsSet(true);
+
+    return this;
+  }
+
+  public void unsetAldCaptcha() {
+  __isset_bit_vector.clear(__ALDCAPTCHA_ISSET_ID);
+  }
+
+  /** Returns true if field aldCaptcha is set (has been asigned a value) and false otherwise */
+  public boolean isSetAldCaptcha() {
+    return __isset_bit_vector.get(__ALDCAPTCHA_ISSET_ID);
+  }
+
+  public void setAldCaptchaIsSet(boolean value) {
+    __isset_bit_vector.set(__ALDCAPTCHA_ISSET_ID, value);
+  }
+
+  public String getDate() {
+    return this.date;
+  }
+
+  public DayAldCaptchaItem setDate(String date) {
+    this.date = date;
     
     return this;
   }
 
-  public void unsetSkuNum() {
-    this.skuNum = null;
+  public void unsetDate() {
+    this.date = null;
   }
 
-  /** Returns true if field skuNum is set (has been asigned a value) and false otherwise */
-  public boolean isSetSkuNum() {
-    return this.skuNum != null;
+  /** Returns true if field date is set (has been asigned a value) and false otherwise */
+  public boolean isSetDate() {
+    return this.date != null;
   }
 
-  public void setSkuNumIsSet(boolean value) {
+  public void setDateIsSet(boolean value) {
     if (!value) {
-      this.skuNum = null;
+      this.date = null;
     }
-  }
-
-  public int getBuyerId() {
-    return this.buyerId;
-  }
-
-  public ProductCardParam setBuyerId(int buyerId) {
-    this.buyerId = buyerId;
-    setBuyerIdIsSet(true);
-
-    return this;
-  }
-
-  public void unsetBuyerId() {
-  __isset_bit_vector.clear(__BUYERID_ISSET_ID);
-  }
-
-  /** Returns true if field buyerId is set (has been asigned a value) and false otherwise */
-  public boolean isSetBuyerId() {
-    return __isset_bit_vector.get(__BUYERID_ISSET_ID);
-  }
-
-  public void setBuyerIdIsSet(boolean value) {
-    __isset_bit_vector.set(__BUYERID_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -322,32 +325,32 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
         setProductId((String)value);
       }
       break;
-    case TRANSACTION_ID:
+    case PRODUCT_NAME:
       if (value == null) {
-        unsetTransactionId();
+        unsetProductName();
       } else {
-        setTransactionId((String)value);
+        setProductName((String)value);
       }
       break;
-    case NUM:
+    case ALD_SOLD:
       if (value == null) {
-        unsetNum();
+        unsetAldSold();
       } else {
-        setNum((Integer)value);
+        setAldSold((Integer)value);
       }
       break;
-    case SKU_NUM:
+    case ALD_CAPTCHA:
       if (value == null) {
-        unsetSkuNum();
+        unsetAldCaptcha();
       } else {
-        setSkuNum((String)value);
+        setAldCaptcha((Integer)value);
       }
       break;
-    case BUYER_ID:
+    case DATE:
       if (value == null) {
-        unsetBuyerId();
+        unsetDate();
       } else {
-        setBuyerId((Integer)value);
+        setDate((String)value);
       }
       break;
     }
@@ -357,14 +360,14 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     switch (field) {
     case PRODUCT_ID:
       return getProductId();
-    case TRANSACTION_ID:
-      return getTransactionId();
-    case NUM:
-      return new Integer(getNum());
-    case SKU_NUM:
-      return getSkuNum();
-    case BUYER_ID:
-      return new Integer(getBuyerId());
+    case PRODUCT_NAME:
+      return getProductName();
+    case ALD_SOLD:
+      return new Integer(getAldSold());
+    case ALD_CAPTCHA:
+      return new Integer(getAldCaptcha());
+    case DATE:
+      return getDate();
     }
     throw new IllegalStateException();
   }
@@ -378,14 +381,14 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     switch (field) {
     case PRODUCT_ID:
       return isSetProductId();
-    case TRANSACTION_ID:
-      return isSetTransactionId();
-    case NUM:
-      return isSetNum();
-    case SKU_NUM:
-      return isSetSkuNum();
-    case BUYER_ID:
-      return isSetBuyerId();
+    case PRODUCT_NAME:
+      return isSetProductName();
+    case ALD_SOLD:
+      return isSetAldSold();
+    case ALD_CAPTCHA:
+      return isSetAldCaptcha();
+    case DATE:
+      return isSetDate();
     }
     throw new IllegalStateException();
   }
@@ -394,12 +397,12 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof ProductCardParam)
-      return this.equals((ProductCardParam)that);
+    if (that instanceof DayAldCaptchaItem)
+      return this.equals((DayAldCaptchaItem)that);
     return false;
   }
 
-  public boolean equals(ProductCardParam that) {
+  public boolean equals(DayAldCaptchaItem that) {
     if (that == null)
       return false;
     boolean this_present_productId = true && this.isSetProductId();
@@ -410,36 +413,36 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       if (!this.productId.equals(that.productId))
         return false;
     }
-    boolean this_present_transactionId = true && this.isSetTransactionId();
-    boolean that_present_transactionId = true && that.isSetTransactionId();
-    if (this_present_transactionId || that_present_transactionId) {
-      if (!(this_present_transactionId && that_present_transactionId))
+    boolean this_present_productName = true && this.isSetProductName();
+    boolean that_present_productName = true && that.isSetProductName();
+    if (this_present_productName || that_present_productName) {
+      if (!(this_present_productName && that_present_productName))
         return false;
-      if (!this.transactionId.equals(that.transactionId))
-        return false;
-    }
-    boolean this_present_num = true;
-    boolean that_present_num = true;
-    if (this_present_num || that_present_num) {
-      if (!(this_present_num && that_present_num))
-        return false;
-      if (this.num != that.num)
+      if (!this.productName.equals(that.productName))
         return false;
     }
-    boolean this_present_skuNum = true && this.isSetSkuNum();
-    boolean that_present_skuNum = true && that.isSetSkuNum();
-    if (this_present_skuNum || that_present_skuNum) {
-      if (!(this_present_skuNum && that_present_skuNum))
+    boolean this_present_aldSold = true;
+    boolean that_present_aldSold = true;
+    if (this_present_aldSold || that_present_aldSold) {
+      if (!(this_present_aldSold && that_present_aldSold))
         return false;
-      if (!this.skuNum.equals(that.skuNum))
+      if (this.aldSold != that.aldSold)
         return false;
     }
-    boolean this_present_buyerId = true && this.isSetBuyerId();
-    boolean that_present_buyerId = true && that.isSetBuyerId();
-    if (this_present_buyerId || that_present_buyerId) {
-      if (!(this_present_buyerId && that_present_buyerId))
+    boolean this_present_aldCaptcha = true;
+    boolean that_present_aldCaptcha = true;
+    if (this_present_aldCaptcha || that_present_aldCaptcha) {
+      if (!(this_present_aldCaptcha && that_present_aldCaptcha))
         return false;
-      if (this.buyerId != that.buyerId)
+      if (this.aldCaptcha != that.aldCaptcha)
+        return false;
+    }
+    boolean this_present_date = true && this.isSetDate();
+    boolean that_present_date = true && that.isSetDate();
+    if (this_present_date || that_present_date) {
+      if (!(this_present_date && that_present_date))
+        return false;
+      if (!this.date.equals(that.date))
         return false;
     }
 
@@ -453,32 +456,32 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     builder.append(present_productId);
     if (present_productId)
       builder.append(productId);
-    boolean present_transactionId = true && (isSetTransactionId());
-    builder.append(present_transactionId);
-    if (present_transactionId)
-      builder.append(transactionId);
-    boolean present_num = true;
-    builder.append(present_num);
-    if (present_num)
-      builder.append(num);
-    boolean present_skuNum = true && (isSetSkuNum());
-    builder.append(present_skuNum);
-    if (present_skuNum)
-      builder.append(skuNum);
-    boolean present_buyerId = true && (isSetBuyerId());
-    builder.append(present_buyerId);
-    if (present_buyerId)
-      builder.append(buyerId);
+    boolean present_productName = true && (isSetProductName());
+    builder.append(present_productName);
+    if (present_productName)
+      builder.append(productName);
+    boolean present_aldSold = true;
+    builder.append(present_aldSold);
+    if (present_aldSold)
+      builder.append(aldSold);
+    boolean present_aldCaptcha = true;
+    builder.append(present_aldCaptcha);
+    if (present_aldCaptcha)
+      builder.append(aldCaptcha);
+    boolean present_date = true && (isSetDate());
+    builder.append(present_date);
+    if (present_date)
+      builder.append(date);
     return builder.toHashCode();
   }
 
-  public int compareTo(ProductCardParam other) {
+  public int compareTo(DayAldCaptchaItem other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    ProductCardParam typedOther = (ProductCardParam)other;
+    DayAldCaptchaItem typedOther = (DayAldCaptchaItem)other;
 
     lastComparison = Boolean.valueOf(isSetProductId()).compareTo(typedOther.isSetProductId());
     if (lastComparison != 0) {
@@ -490,42 +493,42 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetTransactionId()).compareTo(typedOther.isSetTransactionId());
+    lastComparison = Boolean.valueOf(isSetProductName()).compareTo(typedOther.isSetProductName());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetTransactionId()) {
-      lastComparison = TBaseHelper.compareTo(this.transactionId, typedOther.transactionId);
+    if (isSetProductName()) {
+      lastComparison = TBaseHelper.compareTo(this.productName, typedOther.productName);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetNum()).compareTo(typedOther.isSetNum());
+    lastComparison = Boolean.valueOf(isSetAldSold()).compareTo(typedOther.isSetAldSold());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetNum()) {
-      lastComparison = TBaseHelper.compareTo(this.num, typedOther.num);
+    if (isSetAldSold()) {
+      lastComparison = TBaseHelper.compareTo(this.aldSold, typedOther.aldSold);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSkuNum()).compareTo(typedOther.isSetSkuNum());
+    lastComparison = Boolean.valueOf(isSetAldCaptcha()).compareTo(typedOther.isSetAldCaptcha());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSkuNum()) {
-      lastComparison = TBaseHelper.compareTo(this.skuNum, typedOther.skuNum);
+    if (isSetAldCaptcha()) {
+      lastComparison = TBaseHelper.compareTo(this.aldCaptcha, typedOther.aldCaptcha);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetBuyerId()).compareTo(typedOther.isSetBuyerId());
+    lastComparison = Boolean.valueOf(isSetDate()).compareTo(typedOther.isSetDate());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetBuyerId()) {
-      lastComparison = TBaseHelper.compareTo(this.buyerId, typedOther.buyerId);
+    if (isSetDate()) {
+      lastComparison = TBaseHelper.compareTo(this.date, typedOther.date);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -555,32 +558,32 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // TRANSACTION_ID
+        case 2: // PRODUCT_NAME
           if (field.type == TType.STRING) {
-            this.transactionId = iprot.readString();
+            this.productName = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // NUM
+        case 3: // ALD_SOLD
           if (field.type == TType.I32) {
-            this.num = iprot.readI32();
-            setNumIsSet(true);
+            this.aldSold = iprot.readI32();
+            setAldSoldIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 4: // SKU_NUM
+        case 4: // ALD_CAPTCHA
+          if (field.type == TType.I32) {
+            this.aldCaptcha = iprot.readI32();
+            setAldCaptchaIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 5: // DATE
           if (field.type == TType.STRING) {
-            this.skuNum = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 5: // BUYER_ID
-          if (field.type == TType.I32) {
-            this.buyerId = iprot.readI32();
-            setBuyerIdIsSet(true);
+            this.date = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -605,22 +608,20 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       oprot.writeString(this.productId);
       oprot.writeFieldEnd();
     }
-    if (this.transactionId != null) {
-      oprot.writeFieldBegin(TRANSACTION_ID_FIELD_DESC);
-      oprot.writeString(this.transactionId);
+    if (this.productName != null) {
+      oprot.writeFieldBegin(PRODUCT_NAME_FIELD_DESC);
+      oprot.writeString(this.productName);
       oprot.writeFieldEnd();
     }
-    oprot.writeFieldBegin(NUM_FIELD_DESC);
-    oprot.writeI32(this.num);
+    oprot.writeFieldBegin(ALD_SOLD_FIELD_DESC);
+    oprot.writeI32(this.aldSold);
     oprot.writeFieldEnd();
-    if (this.skuNum != null) {
-      oprot.writeFieldBegin(SKU_NUM_FIELD_DESC);
-      oprot.writeString(this.skuNum);
-      oprot.writeFieldEnd();
-    }
-    if (isSetBuyerId()) {
-      oprot.writeFieldBegin(BUYER_ID_FIELD_DESC);
-      oprot.writeI32(this.buyerId);
+    oprot.writeFieldBegin(ALD_CAPTCHA_FIELD_DESC);
+    oprot.writeI32(this.aldCaptcha);
+    oprot.writeFieldEnd();
+    if (this.date != null) {
+      oprot.writeFieldBegin(DATE_FIELD_DESC);
+      oprot.writeString(this.date);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -629,7 +630,7 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("ProductCardParam(");
+    StringBuilder sb = new StringBuilder("DayAldCaptchaItem(");
     boolean first = true;
     sb.append("productId:");
     if (this.productId == null) {
@@ -639,31 +640,29 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("transactionId:");
-    if (this.transactionId == null) {
+    sb.append("productName:");
+    if (this.productName == null) {
       sb.append("null");
     } else {
-      sb.append(this.transactionId);
+      sb.append(this.productName);
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("num:");
-    sb.append(this.num);
+    sb.append("aldSold:");
+    sb.append(this.aldSold);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("skuNum:");
-    if (this.skuNum == null) {
+    sb.append("aldCaptcha:");
+    sb.append(this.aldCaptcha);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("date:");
+    if (this.date == null) {
       sb.append("null");
     } else {
-      sb.append(this.skuNum);
+      sb.append(this.date);
     }
     first = false;
-    if (isSetBuyerId()) {
-      if (!first) sb.append(", ");
-      sb.append("buyerId:");
-      sb.append(this.buyerId);
-      first = false;
-      }
     sb.append(")");
     return sb.toString();
   }
