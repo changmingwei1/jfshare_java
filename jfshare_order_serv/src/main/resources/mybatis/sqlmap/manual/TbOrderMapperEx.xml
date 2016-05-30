@@ -317,7 +317,7 @@
         <if test="userId!=null and userId!=''">
             and a.user_id = #{userId,jdbcType=INTEGER}
         </if>
-        and a.order_type = 0
+        <!-- and a.order_type = 0 -->
     </select>
 
     <select id="select_order_detail_offline"
