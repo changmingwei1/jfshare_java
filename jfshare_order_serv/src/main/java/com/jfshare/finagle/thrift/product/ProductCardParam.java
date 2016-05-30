@@ -22,19 +22,22 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
   private static final TField TRANSACTION_ID_FIELD_DESC = new TField("transactionId", TType.STRING, (short)2);
   private static final TField NUM_FIELD_DESC = new TField("num", TType.I32, (short)3);
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)4);
+  private static final TField BUYER_ID_FIELD_DESC = new TField("buyerId", TType.I32, (short)5);
 
 
   public String productId;
   public String transactionId;
   public int num;
   public String skuNum;
+  public int buyerId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     PRODUCT_ID((short)1, "productId"),
     TRANSACTION_ID((short)2, "transactionId"),
     NUM((short)3, "num"),
-    SKU_NUM((short)4, "skuNum");
+    SKU_NUM((short)4, "skuNum"),
+    BUYER_ID((short)5, "buyerId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -57,6 +60,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
   	return NUM;
         case 4: // SKU_NUM
   	return SKU_NUM;
+        case 5: // BUYER_ID
+  	return BUYER_ID;
         default:
   	return null;
       }
@@ -99,7 +104,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
 
   // isset id assignments
   private static final int __NUM_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
+  private static final int __BUYERID_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -112,6 +118,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.BUYER_ID, new FieldMetaData("buyerId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductCardParam.class, metaDataMap);
   }
@@ -150,6 +158,7 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     if (other.isSetSkuNum()) {
       this.skuNum = other.skuNum;
     }
+    this.buyerId = other.buyerId;
   }
 
   public ProductCardParam deepCopy() {
@@ -163,6 +172,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     setNumIsSet(false);
     this.num = 0;
     this.skuNum = null;
+    setBuyerIdIsSet(false);
+    this.buyerId = 0;
   }
 
   public String getProductId() {
@@ -264,6 +275,30 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     }
   }
 
+  public int getBuyerId() {
+    return this.buyerId;
+  }
+
+  public ProductCardParam setBuyerId(int buyerId) {
+    this.buyerId = buyerId;
+    setBuyerIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetBuyerId() {
+  __isset_bit_vector.clear(__BUYERID_ISSET_ID);
+  }
+
+  /** Returns true if field buyerId is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyerId() {
+    return __isset_bit_vector.get(__BUYERID_ISSET_ID);
+  }
+
+  public void setBuyerIdIsSet(boolean value) {
+    __isset_bit_vector.set(__BUYERID_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_ID:
@@ -294,6 +329,13 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
         setSkuNum((String)value);
       }
       break;
+    case BUYER_ID:
+      if (value == null) {
+        unsetBuyerId();
+      } else {
+        setBuyerId((Integer)value);
+      }
+      break;
     }
   }
 
@@ -307,6 +349,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       return new Integer(getNum());
     case SKU_NUM:
       return getSkuNum();
+    case BUYER_ID:
+      return new Integer(getBuyerId());
     }
     throw new IllegalStateException();
   }
@@ -326,6 +370,8 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       return isSetNum();
     case SKU_NUM:
       return isSetSkuNum();
+    case BUYER_ID:
+      return isSetBuyerId();
     }
     throw new IllegalStateException();
   }
@@ -374,6 +420,14 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       if (!this.skuNum.equals(that.skuNum))
         return false;
     }
+    boolean this_present_buyerId = true && this.isSetBuyerId();
+    boolean that_present_buyerId = true && that.isSetBuyerId();
+    if (this_present_buyerId || that_present_buyerId) {
+      if (!(this_present_buyerId && that_present_buyerId))
+        return false;
+      if (this.buyerId != that.buyerId)
+        return false;
+    }
 
     return true;
   }
@@ -397,6 +451,10 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     builder.append(present_skuNum);
     if (present_skuNum)
       builder.append(skuNum);
+    boolean present_buyerId = true && (isSetBuyerId());
+    builder.append(present_buyerId);
+    if (present_buyerId)
+      builder.append(buyerId);
     return builder.toHashCode();
   }
 
@@ -448,6 +506,16 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetBuyerId()).compareTo(typedOther.isSetBuyerId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBuyerId()) {
+      lastComparison = TBaseHelper.compareTo(this.buyerId, typedOther.buyerId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -495,6 +563,14 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 5: // BUYER_ID
+          if (field.type == TType.I32) {
+            this.buyerId = iprot.readI32();
+            setBuyerIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -526,6 +602,11 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
     if (this.skuNum != null) {
       oprot.writeFieldBegin(SKU_NUM_FIELD_DESC);
       oprot.writeString(this.skuNum);
+      oprot.writeFieldEnd();
+    }
+    if (isSetBuyerId()) {
+      oprot.writeFieldBegin(BUYER_ID_FIELD_DESC);
+      oprot.writeI32(this.buyerId);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -563,6 +644,12 @@ public class ProductCardParam implements TBase<ProductCardParam, ProductCardPara
       sb.append(this.skuNum);
     }
     first = false;
+    if (isSetBuyerId()) {
+      if (!first) sb.append(", ");
+      sb.append("buyerId:");
+      sb.append(this.buyerId);
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

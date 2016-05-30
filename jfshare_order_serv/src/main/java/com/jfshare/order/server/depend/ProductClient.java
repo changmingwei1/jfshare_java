@@ -67,6 +67,7 @@ public class ProductClient {
         param.setSkuNum(orderInfo.getSkuNum());
         param.setNum(orderInfo.getCount());
         param.setTransactionId(orderModel.getOrderId());
+        param.setBuyerId(orderModel.getUserId());
         ProductCardResult result = null;
         result = Await.result(service.getProductCard(param));
         if(result == null || result.getResult().getCode() != 0) {

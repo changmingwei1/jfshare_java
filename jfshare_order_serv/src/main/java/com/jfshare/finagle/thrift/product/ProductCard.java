@@ -23,6 +23,8 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
   private static final TField CARD_NUMBER_FIELD_DESC = new TField("cardNumber", TType.STRING, (short)3);
   private static final TField PASSWORD_FIELD_DESC = new TField("password", TType.STRING, (short)4);
   private static final TField SKU_NUM_FIELD_DESC = new TField("skuNum", TType.STRING, (short)5);
+  private static final TField BUYER_ID_FIELD_DESC = new TField("buyerId", TType.I32, (short)6);
+  private static final TField CHECK_TIME_FIELD_DESC = new TField("checkTime", TType.STRING, (short)7);
 
 
   public int sellerId;
@@ -30,6 +32,8 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
   public String cardNumber;
   public String password;
   public String skuNum;
+  public int buyerId;
+  public String checkTime;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -37,7 +41,9 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
     PRODUCT_ID((short)2, "productId"),
     CARD_NUMBER((short)3, "cardNumber"),
     PASSWORD((short)4, "password"),
-    SKU_NUM((short)5, "skuNum");
+    SKU_NUM((short)5, "skuNum"),
+    BUYER_ID((short)6, "buyerId"),
+    CHECK_TIME((short)7, "checkTime");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -62,6 +68,10 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
   	return PASSWORD;
         case 5: // SKU_NUM
   	return SKU_NUM;
+        case 6: // BUYER_ID
+  	return BUYER_ID;
+        case 7: // CHECK_TIME
+  	return CHECK_TIME;
         default:
   	return null;
       }
@@ -104,7 +114,8 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
 
   // isset id assignments
   private static final int __SELLERID_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
+  private static final int __BUYERID_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -118,6 +129,10 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
     tmpMap.put(_Fields.PASSWORD, new FieldMetaData("password", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.SKU_NUM, new FieldMetaData("skuNum", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.BUYER_ID, new FieldMetaData("buyerId", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.CHECK_TIME, new FieldMetaData("checkTime", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductCard.class, metaDataMap);
@@ -162,6 +177,10 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
     if (other.isSetSkuNum()) {
       this.skuNum = other.skuNum;
     }
+    this.buyerId = other.buyerId;
+    if (other.isSetCheckTime()) {
+      this.checkTime = other.checkTime;
+    }
   }
 
   public ProductCard deepCopy() {
@@ -176,6 +195,9 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
     this.cardNumber = null;
     this.password = null;
     this.skuNum = null;
+    setBuyerIdIsSet(false);
+    this.buyerId = 0;
+    this.checkTime = null;
   }
 
   public int getSellerId() {
@@ -302,6 +324,55 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
     }
   }
 
+  public int getBuyerId() {
+    return this.buyerId;
+  }
+
+  public ProductCard setBuyerId(int buyerId) {
+    this.buyerId = buyerId;
+    setBuyerIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetBuyerId() {
+  __isset_bit_vector.clear(__BUYERID_ISSET_ID);
+  }
+
+  /** Returns true if field buyerId is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyerId() {
+    return __isset_bit_vector.get(__BUYERID_ISSET_ID);
+  }
+
+  public void setBuyerIdIsSet(boolean value) {
+    __isset_bit_vector.set(__BUYERID_ISSET_ID, value);
+  }
+
+  public String getCheckTime() {
+    return this.checkTime;
+  }
+
+  public ProductCard setCheckTime(String checkTime) {
+    this.checkTime = checkTime;
+    
+    return this;
+  }
+
+  public void unsetCheckTime() {
+    this.checkTime = null;
+  }
+
+  /** Returns true if field checkTime is set (has been asigned a value) and false otherwise */
+  public boolean isSetCheckTime() {
+    return this.checkTime != null;
+  }
+
+  public void setCheckTimeIsSet(boolean value) {
+    if (!value) {
+      this.checkTime = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_ID:
@@ -339,6 +410,20 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
         setSkuNum((String)value);
       }
       break;
+    case BUYER_ID:
+      if (value == null) {
+        unsetBuyerId();
+      } else {
+        setBuyerId((Integer)value);
+      }
+      break;
+    case CHECK_TIME:
+      if (value == null) {
+        unsetCheckTime();
+      } else {
+        setCheckTime((String)value);
+      }
+      break;
     }
   }
 
@@ -354,6 +439,10 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
       return getPassword();
     case SKU_NUM:
       return getSkuNum();
+    case BUYER_ID:
+      return new Integer(getBuyerId());
+    case CHECK_TIME:
+      return getCheckTime();
     }
     throw new IllegalStateException();
   }
@@ -375,6 +464,10 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
       return isSetPassword();
     case SKU_NUM:
       return isSetSkuNum();
+    case BUYER_ID:
+      return isSetBuyerId();
+    case CHECK_TIME:
+      return isSetCheckTime();
     }
     throw new IllegalStateException();
   }
@@ -431,6 +524,22 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
       if (!this.skuNum.equals(that.skuNum))
         return false;
     }
+    boolean this_present_buyerId = true && this.isSetBuyerId();
+    boolean that_present_buyerId = true && that.isSetBuyerId();
+    if (this_present_buyerId || that_present_buyerId) {
+      if (!(this_present_buyerId && that_present_buyerId))
+        return false;
+      if (this.buyerId != that.buyerId)
+        return false;
+    }
+    boolean this_present_checkTime = true && this.isSetCheckTime();
+    boolean that_present_checkTime = true && that.isSetCheckTime();
+    if (this_present_checkTime || that_present_checkTime) {
+      if (!(this_present_checkTime && that_present_checkTime))
+        return false;
+      if (!this.checkTime.equals(that.checkTime))
+        return false;
+    }
 
     return true;
   }
@@ -458,6 +567,14 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
     builder.append(present_skuNum);
     if (present_skuNum)
       builder.append(skuNum);
+    boolean present_buyerId = true && (isSetBuyerId());
+    builder.append(present_buyerId);
+    if (present_buyerId)
+      builder.append(buyerId);
+    boolean present_checkTime = true && (isSetCheckTime());
+    builder.append(present_checkTime);
+    if (present_checkTime)
+      builder.append(checkTime);
     return builder.toHashCode();
   }
 
@@ -519,6 +636,26 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetBuyerId()).compareTo(typedOther.isSetBuyerId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBuyerId()) {
+      lastComparison = TBaseHelper.compareTo(this.buyerId, typedOther.buyerId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetCheckTime()).compareTo(typedOther.isSetCheckTime());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetCheckTime()) {
+      lastComparison = TBaseHelper.compareTo(this.checkTime, typedOther.checkTime);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -573,6 +710,21 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 6: // BUYER_ID
+          if (field.type == TType.I32) {
+            this.buyerId = iprot.readI32();
+            setBuyerIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 7: // CHECK_TIME
+          if (field.type == TType.STRING) {
+            this.checkTime = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -610,6 +762,18 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
       oprot.writeFieldBegin(SKU_NUM_FIELD_DESC);
       oprot.writeString(this.skuNum);
       oprot.writeFieldEnd();
+    }
+    if (isSetBuyerId()) {
+      oprot.writeFieldBegin(BUYER_ID_FIELD_DESC);
+      oprot.writeI32(this.buyerId);
+      oprot.writeFieldEnd();
+    }
+    if (this.checkTime != null) {
+      if (isSetCheckTime()) {
+        oprot.writeFieldBegin(CHECK_TIME_FIELD_DESC);
+        oprot.writeString(this.checkTime);
+        oprot.writeFieldEnd();
+      }
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -654,6 +818,22 @@ public class ProductCard implements TBase<ProductCard, ProductCard._Fields>, jav
       sb.append(this.skuNum);
     }
     first = false;
+    if (isSetBuyerId()) {
+      if (!first) sb.append(", ");
+      sb.append("buyerId:");
+      sb.append(this.buyerId);
+      first = false;
+      }
+    if (isSetCheckTime()) {
+      if (!first) sb.append(", ");
+      sb.append("checkTime:");
+      if (this.checkTime == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.checkTime);
+      }
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }
