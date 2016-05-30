@@ -10,7 +10,7 @@
                 and id = #{id}
             </if>
             <if test="sellerId != 0">
-                and seller_id = #{sellerId}
+                and (seller_id = #{sellerId} or sellerId = 0)
             </if>
         </where>
         limit 60
