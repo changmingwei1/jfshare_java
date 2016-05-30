@@ -7,13 +7,13 @@ import com.jfshare.finagle.thrift.product.Product;
 import com.jfshare.finagle.thrift.product.ProductSku;
 import com.jfshare.finagle.thrift.product.ProductSkuItem;
 import com.jfshare.product.commons.ProductCommons;
-import com.jfshare.product.model.TbProduct;
 import com.jfshare.product.model.manual.WoMaiError;
 import com.jfshare.product.service.IWoMaiSvc;
 import com.jfshare.product.util.CodeUtil;
 import com.jfshare.product.util.FileUtil;
 import com.jfshare.product.util.HttpUtils;
 import com.jfshare.ridge.PropertiesUtil;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.elasticsearch.common.lang3.StringUtils;
@@ -72,6 +72,7 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
             return false;
         }
 
+        // 获取商品sku
 
         // 获取商品详情
 
@@ -104,7 +105,8 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
 
         postParams.put("method", method);
         postParams.put("appKey", appKey);
-        postParams.put("sign", CodeUtil.getMD5Upper(sign.toString()));
+//        postParams.put("sign", CodeUtil.getMD5Upper(sign.toString()));
+        postParams.put("sign", DigestUtils.md5Hex(sign.toString()).toUpperCase());
         if (param != null) {
             postParams.put("param", JSON.toJSONString(param));
         }
@@ -130,13 +132,13 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      *        }
      *    ]
      * }
-     * @param productId
+     * @param woMaiId
      * @return
      */
-    private String getItemDetail(String productId, Product product) {
+    private String getItemDetail(String woMaiId, Product product) {
 
         Map<String, String> param = new HashMap();
-        param.put("skuid", productId);
+        param.put("skuid", woMaiId);
         String url = this.getWoMaiUrl();
         Map<String, String> httpParam = this.getHttpParams("womai.itemdetail.get", param);
         try {
@@ -179,11 +181,11 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      *    ]
      *    }
      * 注：state1为上架，0为下架。
-     * @param productIds
+     * @param woMaiIds
      * @return
      */
-    private List<String> getItemstatus(List<String> productIds) {
-        String ids = StringUtils.join(productIds, ",");
+    private List<String> getItemstatus(List<String> woMaiIds, List<Product> products) {
+        String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuid", ids);
         String url = this.getWoMaiUrl();
@@ -248,11 +250,11 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      *        }
      *    ]
      * }
-     * @param productIds
+     * @param woMaiIds
      * @return
      */
-    private List<String> getItemimage(List<String> productIds) {
-        String ids = StringUtils.join(productIds, ",");
+    private List<String> getItemimage(List<String> woMaiIds, List<Product> products) {
+        String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuid", ids);
         String url = this.getWoMaiUrl();
@@ -276,11 +278,11 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      *  "warehouseid": "100",
      *  "skuids": "5178122,	3418933,	5367933,	510986"
      * }
-     * @param productIds
+     * @param woMaiIds
      * @return
      */
-    private List<String> getStock(List<String> productIds) {
-        String ids = StringUtils.join(productIds, ",");
+    private List<String> getStock(List<String> woMaiIds, List<Product> products) {
+        String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuids", ids);
         String url = this.getWoMaiUrl();
@@ -299,9 +301,9 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
     }
 
 
-    private void getPrice(List<String> productIds) {
+    private void getPrice(List<String> woMaiIds, List<Product> products) {
 
-        String ids = StringUtils.join(productIds, ",");
+        String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuids", ids);
         String url = this.getWoMaiUrl();

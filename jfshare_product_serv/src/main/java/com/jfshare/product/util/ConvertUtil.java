@@ -15,8 +15,10 @@ import com.jfshare.product.model.TbProductWithBLOBs;
 import com.jfshare.product.model.enums.ProductOptEnum;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.model.vo.Page;
+import com.jfshare.utils.DateUtil;
 import com.jfshare.utils.PriceUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +120,8 @@ public class ConvertUtil {
         productCard.setCardNumber(tbProductCard.getCardNumber());
         productCard.setPassword(tbProductCard.getPassword());
         productCard.setSkuNum(tbProductCard.getSkuNum());
+        productCard.setBuyerId(tbProductCard.getBuyerId());
+        productCard.setCheckTime(DateUtil.date2Str(tbProductCard.getCheckTime()));
         return productCard;
     }
 
@@ -141,6 +145,8 @@ public class ConvertUtil {
         tbProductCard.setCardNumber(productCard.getCardNumber());
         tbProductCard.setPassword(productCard.getPassword());
         tbProductCard.setSkuNum(productCard.getSkuNum());
+        tbProductCard.setBuyerId(productCard.getBuyerId());
+        tbProductCard.setCheckTime(DateUtil.str2Date(productCard.getCheckTime()));
         return tbProductCard;
     }
 

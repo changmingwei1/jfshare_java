@@ -874,6 +874,126 @@ public class TbProductCardExample {
             addCriterion("sku_num not between", value1, value2, "skuNum");
             return (Criteria) this;
         }
+
+        public Criteria andBuyerIdIsNull() {
+            addCriterion("buyer_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdIsNotNull() {
+            addCriterion("buyer_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdEqualTo(Integer value) {
+            addCriterion("buyer_id =", value, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdNotEqualTo(Integer value) {
+            addCriterion("buyer_id <>", value, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdGreaterThan(Integer value) {
+            addCriterion("buyer_id >", value, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("buyer_id >=", value, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdLessThan(Integer value) {
+            addCriterion("buyer_id <", value, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdLessThanOrEqualTo(Integer value) {
+            addCriterion("buyer_id <=", value, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdIn(List<Integer> values) {
+            addCriterion("buyer_id in", values, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdNotIn(List<Integer> values) {
+            addCriterion("buyer_id not in", values, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdBetween(Integer value1, Integer value2) {
+            addCriterion("buyer_id between", value1, value2, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("buyer_id not between", value1, value2, "buyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIsNull() {
+            addCriterion("check_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIsNotNull() {
+            addCriterion("check_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeEqualTo(Date value) {
+            addCriterion("check_time =", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotEqualTo(Date value) {
+            addCriterion("check_time <>", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeGreaterThan(Date value) {
+            addCriterion("check_time >", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("check_time >=", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeLessThan(Date value) {
+            addCriterion("check_time <", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeLessThanOrEqualTo(Date value) {
+            addCriterion("check_time <=", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIn(List<Date> values) {
+            addCriterion("check_time in", values, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotIn(List<Date> values) {
+            addCriterion("check_time not in", values, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeBetween(Date value1, Date value2) {
+            addCriterion("check_time between", value1, value2, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotBetween(Date value1, Date value2) {
+            addCriterion("check_time not between", value1, value2, "checkTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

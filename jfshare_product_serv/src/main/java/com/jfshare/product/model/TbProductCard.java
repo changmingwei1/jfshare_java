@@ -27,6 +27,10 @@ public class TbProductCard {
 
     private String skuNum;
 
+    private Integer buyerId;
+
+    private Date checkTime;
+
     public Integer getId() {
         return id;
     }
@@ -121,5 +125,21 @@ public class TbProductCard {
 
     public void setSkuNum(String skuNum) {
         this.skuNum = skuNum == null ? null : skuNum.trim();
+    }
+
+    public Integer getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(Integer buyerId) {
+        this.buyerId = buyerId;
+    }
+
+    public Date getCheckTime() {
+        return checkTime;
+    }
+
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
     }
 }
