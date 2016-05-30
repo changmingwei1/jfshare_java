@@ -16,7 +16,7 @@
    
 
     <!-- jedis pool配置 -->
-    <bean id="eSProductInfoDao" class="com.jfshare.product.dao.es.ESProductInfoDao">
+    <!--<bean id="eSProductInfoDao" class="com.jfshare.product.dao.es.ESProductInfoDao">
         <constructor-arg index="0">
         	<value>#{configManager.getConfigValue('jfx_public_es','ip')}</value>
         </constructor-arg>
@@ -33,5 +33,5 @@
             <value>#{configManager.getConfigValue('jfx_product_serv','es.type')}</value>
         </constructor-arg>
     </bean>
-
+-->
 </beans>
