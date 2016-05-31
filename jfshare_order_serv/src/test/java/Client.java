@@ -261,4 +261,20 @@ public class Client extends TestCase{
             }
         }
     }
+
+    public void testBatchExportFull() throws Exception {
+        try {
+            OrderQueryConditions queryConditions = new OrderQueryConditions();
+//            queryConditions.setUserId(99);
+            queryConditions.setStartTime("2016-05-01 00:00:00");
+            queryConditions.setEndTime("2016-05-31 00:00:00");
+            System.err.println(client.batchExportOrderFull(queryConditions));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
 }

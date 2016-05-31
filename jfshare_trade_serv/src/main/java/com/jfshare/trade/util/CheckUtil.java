@@ -470,10 +470,18 @@ public class CheckUtil {
                     int closingPrice = PriceUtils.strToInt(order.getClosingPrice());
                     order.setClosingPrice(PriceUtils.intToStr(closingPrice + postage));
                     order.setPostageExt(s.getPostageTemplate());
+                    splitPostateWithProduct(order);
                 }
             }
         }
         return failDescList;
+    }
+
+    private void splitPostateWithProduct(Order order) {
+        
+        for(OrderInfo orderInfo : order.getProductList()) {
+            if
+        }
     }
 
     public void releaseScore2Cash(BuyInfo buyInfo, String transId) {

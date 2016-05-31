@@ -300,6 +300,22 @@ public class FileOpUtil {
             return "ExportOrder_" + sellerID+"_" + timeFormat.format(date) + ".xls";
     }
 
+    /**
+     * 导出文件命名规则
+     * @param prefix
+     * @param date
+     * @return
+     */
+    public static String getFileName(String prefix,Date date) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyyMMddHHmm");
+
+        if (date == null) {
+            Long cur = Calendar.getInstance().getTimeInMillis();
+            return "ExportOrder_" + prefix+"_" + timeFormat.format(new Date(cur)) + ".xls";
+        } else
+            return "ExportOrder_" + prefix+"_" + timeFormat.format(date) + ".xls";
+    }
+
     private static String convertStr(Object obj) {
         String des = "";
         try {
