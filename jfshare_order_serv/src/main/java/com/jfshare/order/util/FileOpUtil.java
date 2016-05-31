@@ -4,6 +4,7 @@ import com.jfshare.finagle.thrift.order.DeliverInfo;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderInfo;
 import com.jfshare.finagle.thrift.order.PayInfo;
+import com.jfshare.order.common.OrderConstant;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.PriceUtils;
@@ -40,13 +41,25 @@ public class FileOpUtil {
         if (orderState == null) {
             orderState = new HashMap<Integer, String>();
         }
-        orderState.put(1, "等待买家付款");
-        orderState.put(2, "等待发货");
-        orderState.put(3, "卖家已发货");
-        orderState.put(5, "交易成功");
-        orderState.put(7, "交易关闭");
-        orderState.put(8, "订单审核中");
-        orderState.put(99, "等待返回付款信息");
+       //'ENUM订单状态: 10:待支付 11:支付中 20:审核中 30:待发货 40:已发货|待收货 50:待评价 51:已评价 60:交易自动关闭 61:交易买家取消'
+        for (int i = 10 ; i< 20; i++) {
+            orderState.put(i, "等待买家付款");
+        }
+        for (int i = 20 ; i< 30; i++) {
+            orderState.put(i, "订单审核中");
+        }
+        for (int i = 30; i< 40; i++) {
+            orderState.put(i, "等待发货");
+        }
+        for (int i = 40; i< 50; i++) {
+            orderState.put(i, "卖家已发货");
+        }
+        for (int i = 50; i< 60; i++) {
+            orderState.put(i, "交易成功");
+        }
+        for (int i = 60; i< 70; i++) {
+            orderState.put(i, "交易关闭");
+        }
 
         if (payState == null) {
             payState =  new HashMap<Integer, String>();
@@ -136,86 +149,88 @@ public class FileOpUtil {
                     cell0.setCellValue(convertStr(order.getOrderId()));
 
                     HSSFCell cell1 = row.createCell(1, Cell.CELL_TYPE_STRING);
-                    cell1.setCellValue(convertStr(orderState.get(order.getOrderState())));
+                    cell1.setCellValue(convertStr(order.getSellerId()));
 
                     HSSFCell cell2 = row.createCell(2, Cell.CELL_TYPE_STRING);
-                    cell2.setCellValue(convertStr(order.getSellerName()));
+                    cell2.setCellValue(convertStr(order.getCreateTime()));
 
                     HSSFCell cell3 = row.createCell(3, Cell.CELL_TYPE_STRING);
-                    cell3.setCellValue(convertStr(deliverInfo.getReceiverName()));
+                    String payTimeDisplay = payInfo.getPayState() == payStateSuccess ? payInfo.getPayTime() : "";
+                    cell3.setCellValue(convertStr(payTimeDisplay));
 
                     HSSFCell cell4 = row.createCell(4, Cell.CELL_TYPE_STRING);
-                    cell4.setCellValue(convertStr(getTelFormat(deliverInfo.getReceiverMobile(), deliverInfo.getReceiverTele())));
+                    cell4.setCellValue(convertStr(orderState.get(order.getOrderState())));
 
                     HSSFCell cell5 = row.createCell(5, Cell.CELL_TYPE_STRING);
-                    cell5.setCellValue(convertStr(deliverInfo.getProvinceName()));
+                    cell5.setCellValue(convertStr(productInfo.getProductName()));
 
                     HSSFCell cell6 = row.createCell(6, Cell.CELL_TYPE_STRING);
-                    cell6.setCellValue(convertStr(deliverInfo.getCityName()));
+                    cell6.setCellValue(convertStr(productInfo.getSkuDesc()).replaceAll(":", ", "));
 
-                    HSSFCell cell7 = row.createCell(7, Cell.CELL_TYPE_STRING);
-                    cell7.setCellValue(convertStr(deliverInfo.getCountyName()));
+                    HSSFCell cell7 = row.createCell(7, Cell.CELL_TYPE_NUMERIC);
+                    cell7.setCellValue(getInt(productInfo.getCount(), 0));
 
-                    HSSFCell cell8 = row.createCell(8, Cell.CELL_TYPE_STRING);
-                    cell8.setCellValue(convertStr(deliverInfo.getReceiverAddress()));
+                    HSSFCell cell8 = row.createCell(8, Cell.CELL_TYPE_NUMERIC);
+                    cell8.setCellValue(getAmount2(productInfo.getCurPrice()).doubleValue());
 
-                    HSSFCell cell9 = row.createCell(9, Cell.CELL_TYPE_STRING);
-                    cell9.setCellValue(convertStr(deliverInfo.getPostCode()));
+                    HSSFCell cell9 = row.createCell(9, Cell.CELL_TYPE_NUMERIC);
+                    cell9.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getPostage()))).doubleValue());
 
-                    //-----------------------------------10-19----------------------------------//
-                    HSSFCell cell10 = row.createCell(10, Cell.CELL_TYPE_STRING);
-                    cell10.setCellValue(convertStr(order.getUserName()));
+                    HSSFCell cell10 = row.createCell(10, Cell.CELL_TYPE_NUMERIC);
+                    cell10.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getClosingPrice()))).doubleValue());
+
+//                    HSSFCell cell2 = row.createCell(2, Cell.CELL_TYPE_STRING);
+//                    cell2.setCellValue(convertStr(order.getSellerName()));
 
                     HSSFCell cell11 = row.createCell(11, Cell.CELL_TYPE_STRING);
-                    cell11.setCellValue(convertStr(productInfo.getProductName()));
+                    cell11.setCellValue(convertStr(deliverInfo.getReceiverName()));
 
                     HSSFCell cell12 = row.createCell(12, Cell.CELL_TYPE_STRING);
-                    cell12.setCellValue(convertStr(productInfo.getSkuDesc()).replaceAll(":", ", "));
+                    cell12.setCellValue(convertStr(getTelFormat(deliverInfo.getReceiverMobile(), deliverInfo.getReceiverTele())));
 
                     HSSFCell cell13 = row.createCell(13, Cell.CELL_TYPE_STRING);
-                    cell13.setCellValue(convertStr(productInfo.getSkuNum()));
+                    cell13.setCellValue(convertStr(deliverInfo.getProvinceName()));
 
-                    HSSFCell cell14 = row.createCell(14, Cell.CELL_TYPE_NUMERIC);
-                    cell14.setCellValue(getInt(productInfo.getCount(), 0));
+                    HSSFCell cell14 = row.createCell(14, Cell.CELL_TYPE_STRING);
+                    cell14.setCellValue(convertStr(deliverInfo.getCityName()));
 
-                    HSSFCell cell15 = row.createCell(15, Cell.CELL_TYPE_NUMERIC);
-                    cell15.setCellValue(getAmount2(productInfo.getCurPrice()).doubleValue());
+                    HSSFCell cell15 = row.createCell(15, Cell.CELL_TYPE_STRING);
+                    cell15.setCellValue(convertStr(deliverInfo.getCountyName()));
 
-                    HSSFCell cell16 = row.createCell(16, Cell.CELL_TYPE_NUMERIC);
-                    cell16.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getPostage()))).doubleValue());
+                    HSSFCell cell16 = row.createCell(16, Cell.CELL_TYPE_STRING);
+                    cell16.setCellValue(convertStr(deliverInfo.getReceiverAddress()));
 
-                    HSSFCell cell17 = row.createCell(17, Cell.CELL_TYPE_NUMERIC);
-                    cell17.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getClosingPrice()))).doubleValue());
+                    HSSFCell cell17 = row.createCell(17, Cell.CELL_TYPE_STRING);
+                    cell17.setCellValue(convertStr(deliverInfo.getPostCode()));
 
                     HSSFCell cell18 = row.createCell(18, Cell.CELL_TYPE_STRING);
-                    cell18.setCellValue(convertStr(order.getCreateTime()));
+                    cell18.setCellValue(convertStr(order.getBuyerComment()));
+                    //-----------------------------------10-19----------------------------------//
+//                    HSSFCell cell10 = row.createCell(10, Cell.CELL_TYPE_STRING);
+//                    cell10.setCellValue(convertStr(order.getUserName()));
 
-                    //-----------------------------------20-29----------------------------------//
+//                    HSSFCell cell13 = row.createCell(13, Cell.CELL_TYPE_STRING);
+//                    cell13.setCellValue(convertStr(productInfo.getSkuNum()));
+
                     HSSFCell cell19 = row.createCell(19, Cell.CELL_TYPE_STRING);
-                    String payTimeDisplay = payInfo.getPayState() == payStateSuccess ? payInfo.getPayTime() : "";
-                    cell19.setCellValue(convertStr(payTimeDisplay));
+                    cell19.setCellValue(convertStr(order.getDeliverTime()));
 
                     HSSFCell cell20 = row.createCell(20, Cell.CELL_TYPE_STRING);
-                    cell20.setCellValue(convertStr(order.getDeliverTime()));
+                    cell20.setCellValue(convertStr(order.getSuccessTime()));
 
                     HSSFCell cell21 = row.createCell(21, Cell.CELL_TYPE_STRING);
-                    cell21.setCellValue(convertStr(order.getSuccessTime()));
+                    cell21.setCellValue(convertStr(deliverInfo.getExpressName()));
 
                     HSSFCell cell22 = row.createCell(22, Cell.CELL_TYPE_STRING);
-                    cell22.setCellValue(convertStr(deliverInfo.getExpressName()));
+                    cell22.setCellValue(convertStr(deliverInfo.getExpressNo()));
 
-                    HSSFCell cell23 = row.createCell(23, Cell.CELL_TYPE_STRING);
-                    cell23.setCellValue(convertStr(deliverInfo.getExpressNo()));
 
-                    HSSFCell cell24 = row.createCell(24, Cell.CELL_TYPE_STRING);
-                    cell24.setCellValue(convertStr(order.getBuyerComment()));
-
-                    HSSFCell cell25 = row.createCell(25, Cell.CELL_TYPE_STRING);
-                    cell25.setCellValue(convertStr(payState.get(payInfo.getPayState())));
+//                    HSSFCell cell25 = row.createCell(25, Cell.CELL_TYPE_STRING);
+//                    cell25.setCellValue(convertStr(payState.get(payInfo.getPayState())));
 
                     String state1 =  stateType.get(order.getActiveState());
-                    HSSFCell cell26 = row.createCell(26, Cell.CELL_TYPE_STRING);
-                    cell26.setCellValue(convertStr(state1));
+                    HSSFCell cell23 = row.createCell(23, Cell.CELL_TYPE_STRING);
+                    cell23.setCellValue(convertStr(state1));
                 }
             }
         } catch (Exception e) {
@@ -252,10 +267,11 @@ public class FileOpUtil {
 	 */
     @Deprecated
     private static String[] getExportColNames() {
-        return new String[]{"订单号", "订单状态", "单位名称", "联系人", "联系电话", "省", "市", "区",
-                "邮寄地址", "邮编", "买家昵称", "商品名称", "商品规格", "物品数量",
-                "单价（元）", "买家支付的邮费", "订单金额", "店铺优惠（元）", "成交时间", "付款时间", "发货时间", "确认收货时间", "快递公司",
-                "快递号码", "买家留言", "支付状态", "关闭原因"};
+        return new String[]{"订单号", "商家编号", "成交时间", "付款时间", "订单状态",  "商品名称", "商品规格", "物品数量",
+                "单价（元）", "买家支付的邮费", "订单金额",
+                "联系人", "联系电话", "省", "市", "区",
+                "邮寄地址", "邮编",  "买家留言", "发货时间", "确认收货时间", "快递公司",
+                "快递号码", "关闭原因"};
     }
 
     /*
