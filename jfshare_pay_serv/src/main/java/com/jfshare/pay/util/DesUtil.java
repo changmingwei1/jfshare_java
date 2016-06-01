@@ -9,6 +9,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.SecureRandom;
 
 /**
@@ -110,5 +112,12 @@ public class DesUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void main(String[] s) throws Exception {
+        String requestXML= "5XjbC6AJKswuM7pnCFzoM4Z24r6RvxS90HUNOPzACVGNE0FqNDGKrcokbkfJGdLC%2bw7WaQmBB99eRqyEQX1xitZnSjP89UvzmuXJ5VhD7bjDz9mbxxKFwAUh7EsdVGRtBlb%2bsBhkgAU1zrSEN5WmkkEEFM%2bEt%2fdS2s2X9xnBixVCXSgZxyOvn9RA4tK7";
+        String urlDecrypt = URLDecoder.decode(requestXML, "UTF-8");
+        String data = decrypt(urlDecrypt, "telefenpaytes@pay17$#3#$", "13386191");
+        System.err.println("data");
     }
 }
