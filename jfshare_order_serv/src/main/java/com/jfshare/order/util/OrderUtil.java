@@ -216,35 +216,36 @@ public class OrderUtil {
         }
 
         List<TbOrderInfoRecord> productInfos = new ArrayList<TbOrderInfoRecord>();
-        for(OrderInfo tbOrderInfoRecord : orderModel.getProductList()) {
+        for(OrderInfo orderInfo : orderModel.getProductList()) {
             TbOrderInfoRecord productInfo = new TbOrderInfoRecord();
             productInfo.setOrderId(orderModel.getOrderId());
-            productInfo.setProductId(tbOrderInfoRecord.getProductId());
-            productInfo.setProductName(tbOrderInfoRecord.getProductName());
-            productInfo.setViceName(tbOrderInfoRecord.getViceName());
-            productInfo.setSubjectId(ConvertUtil.getInt(tbOrderInfoRecord.getSubjectId(), 0));
-            productInfo.setBrandId((ConvertUtil.getInt(tbOrderInfoRecord.getBrandId(), 0)));
-            productInfo.setProductSnapshootId(tbOrderInfoRecord.getProductSnapshootId());
-            productInfo.setSkuNum(tbOrderInfoRecord.getSkuNum());
-            productInfo.setSkuDesc(tbOrderInfoRecord.getSkuDesc());
-            productInfo.setCurPrice(PriceUtils.strToInt(tbOrderInfoRecord.getCurPrice()));
-            productInfo.setOrgPrice(PriceUtils.strToInt(tbOrderInfoRecord.getOrgPrice()));
-            productInfo.setImagesUrl(tbOrderInfoRecord.getImagesUrl());
-            productInfo.setShelf(tbOrderInfoRecord.getShelf());
-            productInfo.setSellerClassNum(tbOrderInfoRecord.getSellerClassNum());
-            productInfo.setCount(tbOrderInfoRecord.getCount());
-            productInfo.setLastUpdateTime(DateTimeUtil.strToDateTime(tbOrderInfoRecord.getLastUpdateTime()));
-            productInfo.setLastUpdateUserId(tbOrderInfoRecord.getLastUpdateUserId());
-            productInfo.setCreateTime(DateTimeUtil.strToDateTime(tbOrderInfoRecord.getCreateTime()));
-            productInfo.setCreateUserId(tbOrderInfoRecord.getCreateUserId());
-            productInfo.setType(ConvertUtil.getInt(tbOrderInfoRecord.getType(), 0));
-            productInfo.setWi(tbOrderInfoRecord.getWi());
-            productInfo.setExchangeScore(tbOrderInfoRecord.getExchangeScore());
-            productInfo.setExchangeCash(PriceUtils.strToInt(tbOrderInfoRecord.getExchangeCash()));
-            productInfo.setStorehouseId(tbOrderInfoRecord.getStorehouseId());
-            productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
-            productInfo.setThirdexchangerate(tbOrderInfoRecord.getThirdExchangeRate());
-            productInfo.setPostageext(tbOrderInfoRecord.getPostageExt());
+            productInfo.setProductId(orderInfo.getProductId());
+            productInfo.setProductName(orderInfo.getProductName());
+            productInfo.setViceName(orderInfo.getViceName());
+            productInfo.setSubjectId(ConvertUtil.getInt(orderInfo.getSubjectId(), 0));
+            productInfo.setBrandId((ConvertUtil.getInt(orderInfo.getBrandId(), 0)));
+            productInfo.setProductSnapshootId(orderInfo.getProductSnapshootId());
+            productInfo.setSkuNum(orderInfo.getSkuNum());
+            productInfo.setSkuDesc(orderInfo.getSkuDesc());
+            productInfo.setCurPrice(PriceUtils.strToInt(orderInfo.getCurPrice()));
+            productInfo.setOrgPrice(PriceUtils.strToInt(orderInfo.getOrgPrice()));
+            productInfo.setImagesUrl(orderInfo.getImagesUrl());
+            productInfo.setShelf(orderInfo.getShelf());
+            productInfo.setSellerClassNum(orderInfo.getSellerClassNum());
+            productInfo.setCount(orderInfo.getCount());
+            productInfo.setLastUpdateTime(DateTimeUtil.strToDateTime(orderInfo.getLastUpdateTime()));
+            productInfo.setLastUpdateUserId(orderInfo.getLastUpdateUserId());
+            productInfo.setCreateTime(DateTimeUtil.strToDateTime(orderInfo.getCreateTime()));
+            productInfo.setCreateUserId(orderInfo.getCreateUserId());
+            productInfo.setType(ConvertUtil.getInt(orderInfo.getType(), 0));
+            productInfo.setWi(orderInfo.getWi());
+            productInfo.setExchangeScore(orderInfo.getExchangeScore());
+            productInfo.setExchangeCash(PriceUtils.strToInt(orderInfo.getExchangeCash()));
+            productInfo.setStorehouseId(orderInfo.getStorehouseId());
+            productInfo.setPostage(PriceUtils.strToInt(orderInfo.getPostage()));
+            productInfo.setPostageTemplateId(orderInfo.getPostageTemplateId());
+            productInfo.setThirdexchangerate(orderInfo.getThirdExchangeRate());
+            productInfo.setPostageext(orderInfo.getPostageExt());
             productInfos. add(productInfo);
         }
         orderDetail.setTbOrderInfoList(productInfos);

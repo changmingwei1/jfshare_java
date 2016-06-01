@@ -166,7 +166,7 @@ public class ScoreToCashService {
 	 * @param num
 	 * @return
 	 */
-	private int parseInteger(double num) {
+	public static int parseInteger(double num) {
 		BigDecimal b = new BigDecimal(num);
 		return b.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
 	}
