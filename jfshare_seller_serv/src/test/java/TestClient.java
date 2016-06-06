@@ -25,7 +25,8 @@ public class TestClient {
 
     private SellerServ.Client client;
 
-    private  final String IP = "127.0.0.1";//"120.24.153.155"; //
+    private  final String IP = "101.201.38.182";//"120.24.153.155"; //
+//    private  final String IP = "127.0.0.1";//"120.24.153.155"; //
 
     private  final Integer PORT = 1991;
 

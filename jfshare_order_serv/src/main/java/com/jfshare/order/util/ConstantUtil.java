@@ -59,4 +59,8 @@ public class ConstantUtil {
             return this.enumVal;
         }
     };
+
+    public static enum ExportState {
+        query, export, exception, expired
+    }
 }

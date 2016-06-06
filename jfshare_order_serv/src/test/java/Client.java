@@ -9,6 +9,7 @@ import org.apache.thrift.transport.TTransport;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Client extends TestCase{
@@ -25,6 +26,7 @@ public class Client extends TestCase{
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
         transport.open();
+        HashMap
     }
 
     @Override

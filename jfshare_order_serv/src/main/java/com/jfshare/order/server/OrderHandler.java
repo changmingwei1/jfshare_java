@@ -15,6 +15,7 @@ import com.jfshare.finagle.thrift.trade.BuyInfo;
 import com.jfshare.order.dao.IOrderEs;
 import com.jfshare.order.dao.IOrderJedis;
 import com.jfshare.order.dao.impl.elasticsearch.OrderEsImpl;
+import com.jfshare.order.dao.impl.jedis.BasicRedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
 import com.jfshare.order.model.EsOrder;
@@ -22,10 +23,12 @@ import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderInfoRecord;
 import com.jfshare.order.server.depend.*;
 import com.jfshare.order.service.DeliverService;
+import com.jfshare.order.service.ExportService;
 import com.jfshare.order.service.OrderService;
 import com.jfshare.order.util.*;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -80,6 +83,12 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     @Autowired
     private IOrderEs orderEs;
 
+    @Autowired
+    private ExportService exportService;
+
+    @Autowired
+    private BasicRedis basicRedis;
+
     @Override
     public Result createOrder(List<Order> orderList) throws TException {
         Result result = new Result();
@@ -99,6 +108,8 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
         return result;
     }
+
+
 
     @Override
     public Result updateDeliverInfo(int userType, int userId, DeliverInfo deliverInfo) throws TException {
@@ -776,33 +787,31 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return stringResult;
             }
 
-            SearchHits hits = orderEs.search(conditions);
+            String queryKey = DigestUtils.md5Hex(DateTimeUtil.getCurrentDateYMDHMS());
+            exportService.asyncExport(conditions, queryKey);
+            stringResult.setValue(queryKey);
 
-            if(hits.getTotalHits() == 0) {
-                logger.info("----未查询到订单数据!");
-                stringResult.getResult().setCode(0);
-                return stringResult;
-            }
-
-            List<Order> orderDetails = Lists.newArrayList();
-            for(SearchHit searchHit : hits.getHits()) {
-                EsOrder esOrder = JSON.parseObject(searchHit.getSourceAsString(), EsOrder.class);
-                orderDetails.add(JSON.parseObject(esOrder.getOrderJson(), Order.class));
-            }
-
-            byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
-            if (xlsBytes != null) {
-                String fileName = fileOpUtil.getFileName("full", null);
-                String fileKey = fileOpUtil.toFastDFS(xlsBytes, fileName);
-                stringResult.setValue(fileKey);
-                result.setCode(0);
-            }
 
         } catch (Exception e) {
             logger.error("批量导出订单失败，系统异常！", e);
             FailCode.addFails(result, FailCode.SYS_ERROR);
         }
 
+        return stringResult;
+    }
+
+    @Override
+    public StringResult getExportOrderResult(String queryKey) throws TException {
+        StringResult stringResult = new StringResult(new Result(1));
+        if(StringUtils.isBlank(queryKey)) {
+            stringResult.getResult().addToFailDescList(FailCode.PARAM_ERROR);
+            return stringResult;
+        }
+        String exportRet =  basicRedis.getKV(queryKey);
+        if(StringUtils.isBlank(exportRet)) {
+           exportRet = "expired";
+        }
+        stringResult.setValue(exportRet);
         return stringResult;
     }
 

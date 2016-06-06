@@ -52,6 +52,7 @@ public class OrderServ {
     public PayStateResult payState(PayState payState) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult batchExportOrder(int sellerId, OrderQueryConditions conditions) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult batchExportOrderFull(OrderQueryConditions conditions) throws TException;
+    public com.jfshare.finagle.thrift.result.StringResult getExportOrderResult(String queryKey) throws TException;
     public BatchDeliverResult batchDeliverOrder(int sellerId, BatchDeliverParam param) throws TException;
     public OrderProfileResult orderProfileQueryFull(OrderQueryConditions conditions) throws TException;
     public OrderDetailResult queryOrderDetailOffline(int userType, int userId, String orderId) throws TException;
@@ -74,6 +75,7 @@ public class OrderServ {
     public void payState(PayState payState, AsyncMethodCallback<AsyncClient.payState_call> resultHandler) throws TException;
     public void batchExportOrder(int sellerId, OrderQueryConditions conditions, AsyncMethodCallback<AsyncClient.batchExportOrder_call> resultHandler) throws TException;
     public void batchExportOrderFull(OrderQueryConditions conditions, AsyncMethodCallback<AsyncClient.batchExportOrderFull_call> resultHandler) throws TException;
+    public void getExportOrderResult(String queryKey, AsyncMethodCallback<AsyncClient.getExportOrderResult_call> resultHandler) throws TException;
     public void batchDeliverOrder(int sellerId, BatchDeliverParam param, AsyncMethodCallback<AsyncClient.batchDeliverOrder_call> resultHandler) throws TException;
     public void orderProfileQueryFull(OrderQueryConditions conditions, AsyncMethodCallback<AsyncClient.orderProfileQueryFull_call> resultHandler) throws TException;
     public void queryOrderDetailOffline(int userType, int userId, String orderId, AsyncMethodCallback<AsyncClient.queryOrderDetailOffline_call> resultHandler) throws TException;
@@ -96,6 +98,7 @@ public class OrderServ {
     public Future<PayStateResult> payState(PayState payState);
     public Future<com.jfshare.finagle.thrift.result.StringResult> batchExportOrder(int sellerId, OrderQueryConditions conditions);
     public Future<com.jfshare.finagle.thrift.result.StringResult> batchExportOrderFull(OrderQueryConditions conditions);
+    public Future<com.jfshare.finagle.thrift.result.StringResult> getExportOrderResult(String queryKey);
     public Future<BatchDeliverResult> batchDeliverOrder(int sellerId, BatchDeliverParam param);
     public Future<OrderProfileResult> orderProfileQueryFull(OrderQueryConditions conditions);
     public Future<OrderDetailResult> queryOrderDetailOffline(int userType, int userId, String orderId);
@@ -682,6 +685,41 @@ public class OrderServ {
         return result.success;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "batchExportOrderFull failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.StringResult getExportOrderResult(String queryKey) throws TException
+    {
+      send_getExportOrderResult(queryKey);
+      return recv_getExportOrderResult();
+    }
+
+    public void send_getExportOrderResult(String queryKey) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("getExportOrderResult", TMessageType.CALL, ++seqid_));
+      getExportOrderResult_args args = new getExportOrderResult_args();
+      args.setQueryKey(queryKey);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.StringResult recv_getExportOrderResult() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "getExportOrderResult failed: out of sequence response");
+      }
+      getExportOrderResult_result result = new getExportOrderResult_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "getExportOrderResult failed: unknown result");
     }
     public BatchDeliverResult batchDeliverOrder(int sellerId, BatchDeliverParam param) throws TException
     {
@@ -1369,6 +1407,37 @@ public class OrderServ {
         return (new Client(prot)).recv_batchExportOrderFull();
       }
      }
+    public void getExportOrderResult(String queryKey, AsyncMethodCallback<getExportOrderResult_call> resultHandler) throws TException {
+      checkReady();
+      getExportOrderResult_call method_call = new getExportOrderResult_call(queryKey, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class getExportOrderResult_call extends TAsyncMethodCall {
+      private String queryKey;
+
+      public getExportOrderResult_call(String queryKey, AsyncMethodCallback<getExportOrderResult_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.queryKey = queryKey;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("getExportOrderResult", TMessageType.CALL, 0));
+        getExportOrderResult_args args = new getExportOrderResult_args();
+        args.setQueryKey(queryKey);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.StringResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getExportOrderResult();
+      }
+     }
     public void batchDeliverOrder(int sellerId, BatchDeliverParam param, AsyncMethodCallback<batchDeliverOrder_call> resultHandler) throws TException {
       checkReady();
       batchDeliverOrder_call method_call = new batchDeliverOrder_call(sellerId, param, resultHandler, this, protocolFactory, transport);
@@ -1989,6 +2058,36 @@ public class OrderServ {
         return Future.exception(e);
       }
     }
+    public Future<com.jfshare.finagle.thrift.result.StringResult> getExportOrderResult(String queryKey) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("getExportOrderResult", TMessageType.CALL, 0));
+        getExportOrderResult_args __args__ = new getExportOrderResult_args();
+        __args__.setQueryKey(queryKey);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.StringResult>>() {
+          public Future<com.jfshare.finagle.thrift.result.StringResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_getExportOrderResult());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<BatchDeliverResult> batchDeliverOrder(int sellerId, BatchDeliverParam param) {
       try {
         // TODO: size
@@ -2136,6 +2235,7 @@ public class OrderServ {
       processMap_.put("payState", new payState());
       processMap_.put("batchExportOrder", new batchExportOrder());
       processMap_.put("batchExportOrderFull", new batchExportOrderFull());
+      processMap_.put("getExportOrderResult", new getExportOrderResult());
       processMap_.put("batchDeliverOrder", new batchDeliverOrder());
       processMap_.put("orderProfileQueryFull", new orderProfileQueryFull());
       processMap_.put("queryOrderDetailOffline", new queryOrderDetailOffline());
@@ -2537,6 +2637,31 @@ public class OrderServ {
         result.success = iface_.batchExportOrderFull(args.conditions);
         
         oprot.writeMessageBegin(new TMessage("batchExportOrderFull", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class getExportOrderResult implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        getExportOrderResult_args args = new getExportOrderResult_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("getExportOrderResult", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        getExportOrderResult_result result = new getExportOrderResult_result();
+        result.success = iface_.getExportOrderResult(args.queryKey);
+        
+        oprot.writeMessageBegin(new TMessage("getExportOrderResult", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -3638,6 +3763,73 @@ public class OrderServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("batchExportOrderFull", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("getExportOrderResult", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          getExportOrderResult_args args = new getExportOrderResult_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("getExportOrderResult", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.StringResult> future;
+          try {
+            future = iface.getExportOrderResult(args.queryKey);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.StringResult, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.StringResult value) {
+                getExportOrderResult_result result = new getExportOrderResult_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("getExportOrderResult", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -14244,6 +14436,578 @@ public class OrderServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("batchExportOrderFull_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class getExportOrderResult_args implements TBase<getExportOrderResult_args, getExportOrderResult_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getExportOrderResult_args");
+
+  private static final TField QUERY_KEY_FIELD_DESC = new TField("queryKey", TType.STRING, (short)1);
+
+
+  public String queryKey;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    QUERY_KEY((short)1, "queryKey");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // QUERY_KEY
+  	return QUERY_KEY;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.QUERY_KEY, new FieldMetaData("queryKey", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getExportOrderResult_args.class, metaDataMap);
+  }
+
+
+  public getExportOrderResult_args() {
+  }
+
+  public getExportOrderResult_args(
+    String queryKey)
+  {
+    this();
+    this.queryKey = queryKey;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getExportOrderResult_args(getExportOrderResult_args other) {
+    if (other.isSetQueryKey()) {
+      this.queryKey = other.queryKey;
+    }
+  }
+
+  public getExportOrderResult_args deepCopy() {
+    return new getExportOrderResult_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.queryKey = null;
+  }
+
+  public String getQueryKey() {
+    return this.queryKey;
+  }
+
+  public getExportOrderResult_args setQueryKey(String queryKey) {
+    this.queryKey = queryKey;
+    
+    return this;
+  }
+
+  public void unsetQueryKey() {
+    this.queryKey = null;
+  }
+
+  /** Returns true if field queryKey is set (has been asigned a value) and false otherwise */
+  public boolean isSetQueryKey() {
+    return this.queryKey != null;
+  }
+
+  public void setQueryKeyIsSet(boolean value) {
+    if (!value) {
+      this.queryKey = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case QUERY_KEY:
+      if (value == null) {
+        unsetQueryKey();
+      } else {
+        setQueryKey((String)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case QUERY_KEY:
+      return getQueryKey();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case QUERY_KEY:
+      return isSetQueryKey();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getExportOrderResult_args)
+      return this.equals((getExportOrderResult_args)that);
+    return false;
+  }
+
+  public boolean equals(getExportOrderResult_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_queryKey = true && this.isSetQueryKey();
+    boolean that_present_queryKey = true && that.isSetQueryKey();
+    if (this_present_queryKey || that_present_queryKey) {
+      if (!(this_present_queryKey && that_present_queryKey))
+        return false;
+      if (!this.queryKey.equals(that.queryKey))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_queryKey = true && (isSetQueryKey());
+    builder.append(present_queryKey);
+    if (present_queryKey)
+      builder.append(queryKey);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getExportOrderResult_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getExportOrderResult_args typedOther = (getExportOrderResult_args)other;
+
+    lastComparison = Boolean.valueOf(isSetQueryKey()).compareTo(typedOther.isSetQueryKey());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetQueryKey()) {
+      lastComparison = TBaseHelper.compareTo(this.queryKey, typedOther.queryKey);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // QUERY_KEY
+          if (field.type == TType.STRING) {
+            this.queryKey = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.queryKey != null) {
+      oprot.writeFieldBegin(QUERY_KEY_FIELD_DESC);
+      oprot.writeString(this.queryKey);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getExportOrderResult_args(");
+    boolean first = true;
+    sb.append("queryKey:");
+    if (this.queryKey == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.queryKey);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class getExportOrderResult_result implements TBase<getExportOrderResult_result, getExportOrderResult_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getExportOrderResult_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.StringResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.StringResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getExportOrderResult_result.class, metaDataMap);
+  }
+
+
+  public getExportOrderResult_result() {
+  }
+
+  public getExportOrderResult_result(
+    com.jfshare.finagle.thrift.result.StringResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getExportOrderResult_result(getExportOrderResult_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.StringResult(other.success);
+    }
+  }
+
+  public getExportOrderResult_result deepCopy() {
+    return new getExportOrderResult_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.StringResult getSuccess() {
+    return this.success;
+  }
+
+  public getExportOrderResult_result setSuccess(com.jfshare.finagle.thrift.result.StringResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.StringResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getExportOrderResult_result)
+      return this.equals((getExportOrderResult_result)that);
+    return false;
+  }
+
+  public boolean equals(getExportOrderResult_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getExportOrderResult_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getExportOrderResult_result typedOther = (getExportOrderResult_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.StringResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getExportOrderResult_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

@@ -53,7 +53,7 @@ public class OrderOptHandleTask {
 
             if(order == null || StringUtils.isBlank(order.getOrderId())) {
                 logger.error("订单操作日志OrderOptHandleTask----查询订单失败, 稍后重试,，orderId={}", orderId);
-                listRedisManager.lpush(optJson);
+                listRedisManager.lpush(Constant.ORDER_OPT_QUEUE_KEY, optJson);
                 continue;
             }
 

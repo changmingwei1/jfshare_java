@@ -68,7 +68,7 @@ public class OrderEsImpl implements IOrderEs{
         }
 
         if(conditions.getUserId() > 0) {
-            queryBuilder.must(QueryBuilders.matchQuery("UserId", conditions.getUserId()));
+            queryBuilder.must(QueryBuilders.matchQuery("userId", conditions.getUserId()));
         }
 
         queryBuilder.filter(QueryBuilders.rangeQuery("orderCreateTime")
@@ -82,7 +82,7 @@ public class OrderEsImpl implements IOrderEs{
                 .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC));
 
         if(conditions.getCount() > 0 && conditions.getCurPage() > 1) {
-            searchRequestBuilder.setSize(conditions.getCurPage() * conditions.getCount());
+            searchRequestBuilder.setSize(conditions.getCount());
         }
 
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();

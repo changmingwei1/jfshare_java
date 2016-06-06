@@ -34,17 +34,21 @@ public class Test_xxx {
 
     public static void main(String[] str) {
        OrderQueryConditions conditions = new OrderQueryConditions();
-        conditions.setStartTime("2016-05-20 00:00:00");
+        conditions.setStartTime("2016-05-10 00:00:00");
         conditions.setEndTime("2016-05-30 00:00:00");
-//        conditions.setOrderState(1);
-        conditions.addToOrderIds("44140112");
-        conditions.addToOrderIds("44130090");
-//        conditions.setSellerId(13);
+        conditions.setOrderState(3);
+//        conditions.addToOrderIds("44140112");
+//        conditions.addToOrderIds("44130090");
+        conditions.setSellerId(13);
 
-        ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
+        ESClient esClient = new ESClient("jfshare-app", "101.201.39.61:9300,101.201.39.62:9300");
         try {
-            OrderProfileResult orderProfileResult = orderProfileQueryFull(conditions, esClient);
-            logger.info(orderProfileResult.toString());
+            for(int i=0; i < 100; i++) {
+                long start = System.nanoTime();
+                OrderProfileResult orderProfileResult = orderProfileQueryFull(conditions, esClient);
+                logger.info("第{}次，耗时：{}", i, (System.nanoTime()-start)/1000000);
+            }
+
         } catch (TException e) {
             e.printStackTrace();
         }
@@ -115,8 +119,8 @@ public class Test_xxx {
         SearchResponse searchResponse = esClient.getTransportClient().prepareSearch(indexArr)
                 .setTypes("esOrder")
                 .setQuery(queryBuilder)
-                .setFrom((conditions.getCurPage()-1)*conditions.getCount())
-                .setSize(conditions.getCurPage()*conditions.getCount())
+                .setFrom(0)
+                .setSize(2000)
                 .setExplain(true)
                 .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC))
                 .execute()
@@ -129,7 +133,7 @@ public class Test_xxx {
             orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
             orderProfileResult.getOrderProfilePage().setTotal(hitsTotal);
             for(SearchHit searchHit : searchResponse.getHits().getHits()) {
-                logger.info("==>" + searchHit);
+//                logger.info("==>" + searchHit);
                 String orderJson = JSON.parseObject(searchHit.getSourceAsString()).getString("orderJson");
                 orderProfileResult.getOrderProfilePage().addToOrderProfileList(JSON.parseObject(orderJson, Order.class));
             }
