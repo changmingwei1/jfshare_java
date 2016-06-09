@@ -362,9 +362,12 @@ public class CheckUtil {
                 for (Order item : orderList) {
                     orderIds.add(item.getOrderId());
                     for(OrderInfo info : item.getProductList()) {
-                        if (PriceUtils.strToInt(info.getCurPrice()) >= 100) {
+                        if (NumberUtils.toInt(info.getThirdExchangeRate(), 1) > 1) {
                             thirdScore += 100 * info.getCount();
                             thirdScore2cashAmount += thirdScore * NumberUtils.toInt(info.getThirdExchangeRate(), 1);
+                        } else {
+                            thirdScore += PriceUtils.strToInt(info.getCurPrice()) * info.getCount();
+                            thirdScore2cashAmount += thirdScore;
                         }
                     }
                 }
