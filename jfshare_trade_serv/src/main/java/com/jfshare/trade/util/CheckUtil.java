@@ -473,10 +473,40 @@ public class CheckUtil {
                     int closingPrice = PriceUtils.strToInt(order.getClosingPrice());
                     order.setClosingPrice(PriceUtils.intToStr(closingPrice + postage));
                     order.setPostageExt(s.getPostageTemplate());
+                    splitPostateWithProduct(order);
                 }
             }
         }
         return failDescList;
+    }
+
+    private void splitPostateWithProduct(Order order) {
+        int s = PriceUtils.strToInt(order.getPostage());    //订单邮费
+        int amount = PriceUtils.strToInt(order.getClosingPrice()) - s;  //订单商品金额（不含邮费）
+        int a = 0; // 累计邮费
+        String splitPostageLog = "orderId="+order.getOrderId()+", postage="+s+", 拆分结果:";
+        /** 按商品拆分积分和金额 */
+        List<OrderInfo> orderInfos = order.getProductList();
+        for (int i = 0; i < orderInfos.size(); i++) {
+            OrderInfo e = orderInfos.get(i);
+
+            /** 每个商品可分配的邮费(单位分) */
+            int pPostage = 0;
+
+            if (i == orderInfos.size() - 1) { // 最后一次用总数量减去已经分配的钱和积分(避免四舍五入不相等的情况)
+                pPostage = s - a;
+            } else {
+                double pPrice = PriceUtils.strToInt(e.getCurPrice());
+                pPostage = NumberUtil.parseInteger((pPrice / amount) * s);
+
+                a += pPostage;
+            }
+
+            e.setPostage(PriceUtils.intToStr(pPostage));
+            splitPostageLog += pPostage + "|";
+        }
+
+        logger.info("订单邮费拆分----" + splitPostageLog);
     }
 
     public void releaseScore2Cash(BuyInfo buyInfo, String transId) {

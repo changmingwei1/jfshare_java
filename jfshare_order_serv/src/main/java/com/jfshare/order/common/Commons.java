@@ -36,5 +36,7 @@ public class Commons {
     public static final String TABLE_SELLER_PART = "seller_";
     public static final String TABLE_USER_PART = "user_";
     public static final int DEFAULT_STOREHOUSE_ID = 1;
+
+    public static final int exportKeyExpired = 60 * 60 * 24;
 }
   

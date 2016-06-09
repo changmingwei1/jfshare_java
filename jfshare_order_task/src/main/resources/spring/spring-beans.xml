@@ -10,8 +10,8 @@
     </bean>
 
     <bean id="esClient" class="com.jfshare.elasticsearch.drive.ESClient">
-        <constructor-arg index="0" value="jfshare-app"/>
-        <constructor-arg index="1" value="120.24.153.155:9300"/>
+        <constructor-arg index="0" value="#{configManager.getConfigValue('jfx_public_elasticsearch','jfshare_java_name')}"/>
+        <constructor-arg index="1" value="#{configManager.getConfigValue('jfx_public_elasticsearch','jfshare_java_nodes')}"/>
     </bean>
 
 </beans>

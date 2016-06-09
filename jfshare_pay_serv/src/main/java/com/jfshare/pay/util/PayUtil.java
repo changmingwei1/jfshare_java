@@ -10,13 +10,19 @@ import com.jfshare.pay.util.alipay.config.AlipayConfig;
 import com.jfshare.pay.util.alipay.util.AlipaySubmit;
 import com.jfshare.pay.util.hebaopay.HebaoConfig;
 import com.jfshare.pay.util.hebaopay.HebaoSubmit;
+import com.jfshare.pay.util.tianyipay.TianYiSubmit;
 import com.jfshare.pay.util.weixinpay.WeixinConfig;
 import com.jfshare.pay.util.weixinpay.WeixinSubmit;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.*;
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
+import net.sf.json.JSONSerializer;
+import net.sf.json.xml.XMLSerializer;
+import org.apache.commons.beanutils.converters.URLConverter;
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,12 +142,15 @@ public class PayUtil {
      * @param payId
      * @return
      */
-    public static String getReqTY(PayReq payReq, String payId) {
+    public static String getReqTYOld(PayReq payReq, String payId) {
         DateTime now = new DateTime();
         String curTime = DateUtils.date2Str(now.toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2);//.date2Str()DateUtils.getCurrentStringDateYYMDHMSS();
         String sign = "";
 
         try {
+
+
+
             StringBuilder toSignStr = new StringBuilder(100);
             toSignStr.append("AppCode=").append(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_appcode"));
             toSignStr.append("&SingKey=").append(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey"));
@@ -180,6 +189,102 @@ public class PayUtil {
         String payUrl = JSON.toJSONString(payUrlMap);
         logger.info("TY支付申请url ==> " + payUrl);
         return payUrl;
+    }
+
+    public static String getReqTY(PayReq payReq, String payId){
+        DateTime now = new DateTime();
+        String curTime = DateUtils.date2Str(now.toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2);//.date2Str()DateUtils.getCurrentStringDateYYMDHMSS();
+
+        try {
+            String AppID = "AppID";
+//            String AppID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_appcode");
+//            String SPID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid");
+            String SPID = "SPID";
+            String RequestNo = "1234567890123456789012";
+            String SpOrderID = payId;
+            String PayContent = ConvertUtil.getString(payReq.getRemark(), "无");
+            String BankID = "";
+            String ProvinceID = payReq.getProcustID();
+            String DeviceNo = payReq.getCustId();
+            String DeviceType = payReq.getCustType();
+            String OrderPrice = ConvertUtil.getString(payReq.getPrice());
+            String PayPoint = ConvertUtil.getString(payReq.getScore());
+            String PayMoney = ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount());
+            String RequestTime = DateUtils.date2Str(now.toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2);
+            String Token = "Token";
+//            String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
+
+            String waitStr= AppID + SPID + RequestNo + SpOrderID + PayContent + BankID + ProvinceID + DeviceNo + DeviceType + OrderPrice + PayPoint + PayMoney + RequestTime + Token;
+            String Sign = CryptoUtil.md5Encode(waitStr);
+
+            Map<String, String> payUrlMap = new LinkedHashMap<String, String>();
+            payUrlMap.put("AppID", AppID);
+            payUrlMap.put("SPID", SPID);
+            payUrlMap.put("RequestNo", RequestNo);
+            payUrlMap.put("SpOrderID", SpOrderID);
+            payUrlMap.put("PayContent", PayContent);
+            payUrlMap.put("BankID", BankID);
+            payUrlMap.put("ProvinceID", ProvinceID);
+            payUrlMap.put("DeviceNo", DeviceNo);
+            payUrlMap.put("DeviceType", DeviceType);
+            payUrlMap.put("OrderPrice", OrderPrice);
+            payUrlMap.put("PayPoint", PayPoint);
+            payUrlMap.put("PayMoney", PayMoney);
+            payUrlMap.put("RequestTime", RequestTime);
+            payUrlMap.put("Sign", Sign);
+            String requestXml = TianYiSubmit.map2XmlStr(payUrlMap);
+
+            String encodeCBCKey = "telefenpaytes@pay17$#3#$";
+            String encodeCBCVi = "13386191";
+
+            String encodeCBCStr = Des3.des3EncodeCBC(encodeCBCKey, encodeCBCVi, requestXml);
+//            String encodeUrlStr = URLEncoder.encode(encodeCBCStr, "utf-8");
+
+            requestXml = "<?xmlversion=\"1.0\"encoding=\"utf-8\" ?><AcceptRequestRoot><AcceptRequest><AppID>10000</AppID><SPID>12306</SPID><RequestNo>20160525135681811818</RequestNo><SpOrderID>12306_2016052513568</SpOrderID><PayContent>福利彩票</PayContent><BankID></BankID><ProvinceID>02</ProvinceID><DeviceNo>18180888888</DeviceNo><DeviceType>7</DeviceType><OrderPrice>2000</OrderPrice><PayPoint>0</PayPoint><PayMoney>0</PayMoney><RequestTime>2016052513568</RequestTime><AccessChannel>WEB</AccessChannel><Sign>fy9qehrf43y7ef9qefqef34</Sign></AcceptRequest></AcceptRequestRoot>";
+            logger.error("==> {}", requestXml);
+            logger.error("==> {}", encodeCBCStr);
+//            logger.error("==> {}", encodeUrlStr);
+
+
+//            StringBuilder toSignStr = new StringBuilder(100);
+//            toSignStr.append("AppCode=").append(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_appcode"));
+//            toSignStr.append("&SingKey=").append(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey"));
+//            toSignStr.append("&Date=").append(DateUtils.date2Str(now.plusMinutes(5).toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2));
+//            toSignStr.append("&DeviceNo=").append(payReq.getCustId());
+//            toSignStr.append("&SPID=").append(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid"));
+//            toSignStr.append("&DeviceType=").append(payReq.getCustType());
+//            toSignStr.append("&PayIntegral=").append(ConvertUtil.getString(payReq.getPrice()));
+//            toSignStr.append("&PayDefaultIntegral=").append(ConvertUtil.getString(payReq.getScore()));
+//            toSignStr.append("&PayDefaultMoney=").append(ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()));
+//            toSignStr.append("&CommodityName=").append(payReq.getTitle());
+//            toSignStr.append("&BusinessRemark=").append(ConvertUtil.getString(payReq.getRemark(), "无"));
+//            toSignStr.append("&SPOrderID=").append(payId);
+//            sign = CryptoUtil.md5Encode(toSignStr.toString());
+        } catch (Exception e) {
+            logger.error("支付申请Sign生成失败！", e);
+            return null;
+        }
+
+//        Map<String, String> payUrlMap = new HashMap<String, String>();
+//        payUrlMap.put("action", PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_url"));
+//        payUrlMap.put("AppCode", PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_appcode"));
+//        payUrlMap.put("RequestDate", curTime);
+////        payUrlMap.put("Sign", sign);
+//        payUrlMap.put("SpId",PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid"));
+//        payUrlMap.put("DeviceNo", payReq.getCustId());
+//        payUrlMap.put("DeviceType", payReq.getCustType());
+//        payUrlMap.put("ProvinceID", payReq.getProcustID());
+//        payUrlMap.put("PayIntegral", ConvertUtil.getString(payReq.getPrice()));
+//        payUrlMap.put("PayDefaultIntegral", ConvertUtil.getString(payReq.getScore()));
+//        payUrlMap.put("PayDefaultMoney", ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()));
+//        payUrlMap.put("CommodityName", payReq.getTitle());
+//        payUrlMap.put("BusinessRemark", ConvertUtil.getString(payReq.getRemark(), "无"));
+//        payUrlMap.put("SPOrderID", payId);
+//
+//        String payUrl = JSON.toJSONString(payUrlMap);
+//        logger.info("TY支付申请url ==> " + payUrl);
+        return "";
+
     }
 
     /**
@@ -629,11 +734,6 @@ public class PayUtil {
         return tbPayRecord;
     }
 
-    /**
-     * 生成二维码byte流
-     * @param param
-     * @return
-     */
 //    public static ByteBuffer gerQRCode(String param) {
 //        ByteBuffer ret = null;
 //        ByteArrayOutputStream out = null;
@@ -675,8 +775,12 @@ public class PayUtil {
         payReq1.setPrice(1000);
         payReq1.setScore(1);
         payReq1.setPayChannel(9);
-
-        getWeixinPay(payReq1, "9dc5c3c8981aa8d9be7c21c4366bcsss");
+        payReq1.setCustId("15812544789");
+        payReq1.setScore2cashAmount(100);
+        payReq1.setCustType("08");
+        payReq1.setProcustID("09");
+        getReqTY(payReq1, "9dc5c3c8981aa8d9be7c21c4366bcsss");
+//        getWeixinPay(payReq1, "9dc5c3c8981aa8d9be7c21c4366bcsss");
 
 //        System.out.println(hebaoH5);
 //        JSONObject jsonObject = JSON.parseObject(hebaoH5);

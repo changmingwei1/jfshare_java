@@ -12,32 +12,32 @@ import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.finagle.thrift.trade.BuyInfo;
-import com.jfshare.order.common.OrderConstant;
+import com.jfshare.order.dao.IOrderEs;
 import com.jfshare.order.dao.IOrderJedis;
+import com.jfshare.order.dao.impl.elasticsearch.OrderEsImpl;
+import com.jfshare.order.dao.impl.jedis.BasicRedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
 import com.jfshare.order.model.EsOrder;
 import com.jfshare.order.model.OrderModel;
-import com.jfshare.order.model.OrderOpt;
 import com.jfshare.order.model.TbOrderInfoRecord;
 import com.jfshare.order.server.depend.*;
 import com.jfshare.order.service.DeliverService;
+import com.jfshare.order.service.ExportService;
 import com.jfshare.order.service.OrderService;
 import com.jfshare.order.util.*;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.lucene.queryparser.xml.FilterBuilder;
-import org.apache.lucene.queryparser.xml.FilterBuilderFactory;
-import org.apache.lucene.queryparser.xml.builders.BooleanQueryBuilder;
-import org.apache.lucene.search.BooleanQuery;
 import org.apache.thrift.TException;
-import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -81,7 +81,13 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     private FileOpUtil fileOpUtil;
 
     @Autowired
-    private ESClient esClient;
+    private IOrderEs orderEs;
+
+    @Autowired
+    private ExportService exportService;
+
+    @Autowired
+    private BasicRedis basicRedis;
 
     @Override
     public Result createOrder(List<Order> orderList) throws TException {
@@ -102,6 +108,8 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
         return result;
     }
+
+
 
     @Override
     public Result updateDeliverInfo(int userType, int userId, DeliverInfo deliverInfo) throws TException {
@@ -327,11 +335,6 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return result;
-    }
-
-    @Override
-    public ExportOrderResult queryExportOrderInfo(int sellerId, OrderQueryConditions conditions) throws TException {
-        return null;
     }
 
     @Override
@@ -771,6 +774,48 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     }
 
     @Override
+    public StringResult batchExportOrderFull(OrderQueryConditions conditions) throws TException {
+        StringResult stringResult = new StringResult();
+        Result result = new Result();
+        result.setCode(1);
+        stringResult.setResult(result);
+        stringResult.setValue("");
+        try {
+            if (StringUtil.isNullOrEmpty(conditions) || StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) {
+                logger.warn("batchExportOrder参数验证失败！, OrderQueryConditions:{}", conditions);
+                FailCode.addFails(result, FailCode.PARAM_ERROR);
+                return stringResult;
+            }
+
+            String queryKey = DigestUtils.md5Hex(DateTimeUtil.getCurrentDateYMDHMS());
+            exportService.asyncExport(conditions, queryKey);
+            stringResult.setValue(queryKey);
+
+
+        } catch (Exception e) {
+            logger.error("批量导出订单失败，系统异常！", e);
+            FailCode.addFails(result, FailCode.SYS_ERROR);
+        }
+
+        return stringResult;
+    }
+
+    @Override
+    public StringResult getExportOrderResult(String queryKey) throws TException {
+        StringResult stringResult = new StringResult(new Result(1));
+        if(StringUtils.isBlank(queryKey)) {
+            stringResult.getResult().addToFailDescList(FailCode.PARAM_ERROR);
+            return stringResult;
+        }
+        String exportRet =  basicRedis.getKV(queryKey);
+        if(StringUtils.isBlank(exportRet)) {
+           exportRet = "expired";
+        }
+        stringResult.setValue(exportRet);
+        return stringResult;
+    }
+
+    @Override
     public BatchDeliverResult batchDeliverOrder(int sellerId, BatchDeliverParam param) throws TException {
         BatchDeliverResult batchDeliverResult = new BatchDeliverResult();
         Result result = new Result();
@@ -963,77 +1008,14 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             return ResultBuilder.createFailOrderProfileResult(FailCode.PARAM_ERROR);
         }
 
-        if(conditions.getCurPage() <1) {
-            conditions.setCurPage(1);
-        }
-        if(conditions.getCount() <=0) {
-            conditions.setCount(30);
-        }
-
-        String startTime = conditions.getStartTime();
-        String endTime = conditions.getEndTime();
-        int orderState = conditions.getOrderState();
-        String[] monthArr = DateTimeUtil.getBetweenMonth(startTime, endTime);
-        String[] indexArr = new String[monthArr.length];
-        for(int i = 0; i<  monthArr.length; i++) {
-            indexArr[i] = "jfshare_order_" + monthArr[i];
-        }
-
-        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-
-
-        if(orderState > 0) {
-            if(orderState < 10) {
-                queryBuilder.must(QueryBuilders.rangeQuery("orderState")
-                    .from(orderState)
-                    .to((orderState + 1) * 10 - 1));
-            } else {
-                queryBuilder.must(QueryBuilders.matchQuery("orderState", orderState));
-            }
-        }
-
-        if(StringUtils.isNotBlank(conditions.getOrderId())) {
-            queryBuilder.must(QueryBuilders.matchQuery("orderId", conditions.getOrderId()));
-        }
-
-        if(CollectionUtils.isNotEmpty(conditions.getOrderIds())) {
-            BoolQueryBuilder orderIdsQuery = QueryBuilders.boolQuery();
-            for(String orderId : conditions.getOrderIds()) {
-                orderIdsQuery.should(QueryBuilders.matchQuery("orderId", orderId));
-            }
-            queryBuilder.must(orderIdsQuery);
-        }
-
-        if(conditions.getSellerId() > 0) {
-            queryBuilder.must(QueryBuilders.matchQuery("sellerId", conditions.getSellerId()));
-        }
-
-        if(conditions.getUserId() > 0) {
-            queryBuilder.must(QueryBuilders.matchQuery("UserId", conditions.getUserId()));
-        }
-
-        queryBuilder.filter(QueryBuilders.rangeQuery("orderCreateTime")
-                .from(DateTimeUtil.strToDateTime(startTime))
-                .to(DateTimeUtil.strToDateTime(endTime)));
-
-        SearchResponse searchResponse = this.esClient.getTransportClient().prepareSearch(indexArr)
-                .setTypes("esOrder")
-                .setQuery(queryBuilder)
-                .setFrom((conditions.getCurPage()-1)*conditions.getCount())
-                .setSize(conditions.getCurPage()*conditions.getCount())
-                .setExplain(true)
-                .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC))
-                .execute()
-                .actionGet();
-
-        logger.info("ES==| search {}$$查询结果", searchResponse.getHits().getHits());
-        int hitsTotal = (int)searchResponse.getHits().getTotalHits();
+        SearchHits searchHits = orderEs.search(conditions);
+        long hitsTotal = searchHits.getTotalHits();
         if(hitsTotal > 0) {
             orderProfileResult.getOrderProfilePage().setCount(conditions.getCount());
-            orderProfileResult.getOrderProfilePage().setPageCount(searchResponse.getHits().getHits().length);
+            orderProfileResult.getOrderProfilePage().setPageCount(searchHits.getHits().length);
             orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
-            orderProfileResult.getOrderProfilePage().setTotal(hitsTotal);
-            for(SearchHit searchHit : searchResponse.getHits().getHits()) {
+            orderProfileResult.getOrderProfilePage().setTotal((int)hitsTotal);
+            for(SearchHit searchHit : searchHits.getHits()) {
                 EsOrder esOrder = JSON.parseObject(searchHit.getSourceAsString(), EsOrder.class);
                 orderProfileResult.getOrderProfilePage().addToOrderProfileList(JSON.parseObject(esOrder.getOrderJson(), Order.class));
             }
@@ -1104,15 +1086,5 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return ResultBuilder.createOrderProfileResult(conditions, orderDetails, total);
-    }
-
-    @Override
-    public ScanOrderListResult queryScanOrders(QueryScanOrderParam param) throws TException {
-        return null;
-    }
-
-    @Override
-    public ScanOrderDetailResult queryScanOrderDetail(int sellerId, String orderId) throws TException {
-        return null;
     }
 }
