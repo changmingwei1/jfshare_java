@@ -81,7 +81,7 @@ public class TradeClient {
                 ExchangeProduct e = new ExchangeProduct();
                 e.setProductId(orderInfo.getProductId());
                 e.setSkuNum(orderInfo.getSkuNum());
-                e.setPrice(PriceUtils.intToStr(orderInfo.getCurPrice() * orderInfo.getCount()));
+                e.setPrice(PriceUtils.intToStr(orderInfo.getCurPrice() * orderInfo.getCount() + orderInfo.getPostage()));
                 param.addToProductList(e);
             }
         }

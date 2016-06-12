@@ -22,7 +22,7 @@ public class Constants {
 	/**
 	 * 如果dns解析失败在会加载该默认配置
 	 */
-	public static final String DEFAULT_PRODUCTION_ZKADDRESS = "120.24.153.155:2181";
+	public static final String DEFAULT_PRODUCTION_ZKADDRESS = "101.201.39.63:2181";
 	
 	/**
 	 * 获取zk地址的域名

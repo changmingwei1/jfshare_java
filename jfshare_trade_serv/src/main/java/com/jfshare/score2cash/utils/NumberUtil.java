@@ -254,6 +254,17 @@ public class NumberUtil {
 		return value;
 	}
 
+	/**
+	 * 四舍五入
+	 *
+	 * @param num
+	 * @return
+	 */
+	public static int parseInteger(double num) {
+		BigDecimal b = new BigDecimal(num);
+		return b.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+	}
+
 	public static void main(String[] args) {
 		System.out.println(parseInteger("2147483647"));
 	}

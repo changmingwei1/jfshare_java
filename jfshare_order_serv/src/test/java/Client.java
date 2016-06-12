@@ -9,6 +9,7 @@ import org.apache.thrift.transport.TTransport;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Client extends TestCase{
@@ -25,6 +26,7 @@ public class Client extends TestCase{
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
         transport.open();
+        HashMap
     }
 
     @Override
@@ -253,6 +255,22 @@ public class Client extends TestCase{
         try {
             OrderQueryConditions queryConditions = new OrderQueryConditions();
             System.err.println(client.batchExportOrder(13, queryConditions));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
+
+    public void testBatchExportFull() throws Exception {
+        try {
+            OrderQueryConditions queryConditions = new OrderQueryConditions();
+//            queryConditions.setUserId(99);
+            queryConditions.setStartTime("2016-05-01 00:00:00");
+            queryConditions.setEndTime("2016-05-31 00:00:00");
+            System.err.println(client.batchExportOrderFull(queryConditions));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

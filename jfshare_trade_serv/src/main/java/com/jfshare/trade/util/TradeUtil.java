@@ -179,7 +179,7 @@ public class TradeUtil {
     }
 
     /**
-     * 获取买家支付非邮费部分金额
+     * 获取买家支付邮费部分金额
      * @param buyInfo
      * @param orderList
      * @return
