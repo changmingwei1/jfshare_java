@@ -57,13 +57,12 @@ public class TianYiSubmit {
      */
     public static String map2XmlStr(Map<String, String> map) {
         Document document = DocumentHelper.createDocument();
-        Element nodeElement = document.addElement("xml");
+        Element nodeElement = document.addElement("AcceptRequest");
         for (String obj : map.keySet()) {
             Element keyElement = nodeElement.addElement(obj);
             keyElement.setText(map.get(obj));
         }
         return document.getRootElement().asXML();
-//        return doc2String(document);
     }
 
     public static Map<String, String> xmlStr2Map(String xml) {

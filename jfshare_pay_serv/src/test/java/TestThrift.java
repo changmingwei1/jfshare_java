@@ -28,7 +28,7 @@ public class TestThrift {
 
     private PayServ.Client client;
 
-    private  final String IP = "127.0.0.1";//"120.24.153.155";
+    private  final String IP = "101.201.38.182";//"120.24.153.155";
 
     private  final Integer PORT = 1993;
 
@@ -69,14 +69,16 @@ public class TestThrift {
 //                params[[PayReq(tokenId:fvBLEJEHNOw=, orderNo:fa44514e9acb568385da064067e00feb, extraParam:24_4660024, title:聚分享订单, price:10, score:100, payChannel:1, payIp:null, returnUrl:, remark:null, custId:100017286150)]
                 PayReq payReq = new PayReq();
                 payReq.setTokenId("fvBLEJEHNOw=");
-                payReq.setExtraParam("112_38930112");
-//                payReq.setCustId("100017286150");
-//                payReq.setCustType("7");
-                payReq.setPayChannel(3);
-                payReq.setOrderNo("9f7724514ddd94cf5a60352a2a01aa742");
-                payReq.setPrice(3000);
-                payReq.setScore2cashAmount(1000);
-//                payReq.setScore(100);
+                payReq.setPayChannel(1);
+                payReq.setOrderNo("9f7724514ddd94cf5a60352a2a01aa733");
+
+                payReq.setPrice(1000);
+                payReq.setScore(100);
+                payReq.setPayChannel(1);
+                payReq.setCustId("18979177165");
+                payReq.setScore2cashAmount(100);
+                payReq.setCustType("7");
+                payReq.setProcustID("15");
                 payReq.setTitle("jfx订单");
                 StringResult stringResult = client.payUrl(payReq);
                 System.out.println(stringResult);
