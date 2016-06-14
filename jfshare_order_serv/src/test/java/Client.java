@@ -26,7 +26,6 @@ public class Client extends TestCase{
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
         transport.open();
-        HashMap
     }
 
     @Override

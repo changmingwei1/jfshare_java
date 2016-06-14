@@ -151,7 +151,7 @@ public class PayUtil {
             String DeviceType = payReq.getCustType();
             String OrderPrice = ConvertUtil.getString(payReq.getPrice());
             String PayPoint = ConvertUtil.getString(payReq.getScore());
-            String PayMoney = ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount());
+            String PayMoney = payReq.getScore() > 0 ? ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()) : "0";
             String RequestTime = curTime;
             String AccessChannel = "WEB";
 //            String AppID = "BFZX";

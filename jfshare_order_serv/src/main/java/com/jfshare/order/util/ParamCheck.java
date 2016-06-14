@@ -5,6 +5,7 @@ import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.BatchDeliverFailInfo;
 import com.jfshare.finagle.thrift.order.DeliverInfo;
 import com.jfshare.finagle.thrift.order.Order;
+import com.jfshare.finagle.thrift.order.OrderInfo;
 import com.jfshare.finagle.thrift.pay.PayRet;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.order.common.OrderConstant;
@@ -15,6 +16,7 @@ import com.jfshare.utils.BizUtil;
 import com.jfshare.utils.ConvertUtil;
 import com.jfshare.utils.PriceUtils;
 import com.jfshare.utils.StringUtil;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.scalactic.Fail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,13 +144,19 @@ public class ParamCheck {
         List<FailDesc> failList = new ArrayList<FailDesc>();
         int thirdPrices = 0;
         int thirdScores = 0;
+        int thirdScore2Cach = 0;
         for (OrderModel order : orderModels) {
             thirdPrices += OrderUtil.getPayPrice(order);
             thirdScores += order.getThirdScore();
+            for(TbOrderInfoRecord orderInfo : order.getTbOrderInfoList()) {
+                thirdScore2Cach += NumberUtils.toInt(orderInfo.getThirdexchangerate());
+            }
         }
-        if (thirdPrices + thirdScores * ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"))
-                != payRet.getThirdPrice() + payRet.getThirdScore() * ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"))) {
-            logger.error("支付总金额或积分不符， 实际金额:" + thirdPrices + ", 支付结果金额:" + payRet.getThirdPrice()+ "， 实际积分:" + thirdScores + ", 支付结果积分:" + payRet.getThirdScore());
+
+        logger.info("支付金额校验， order.thirdScores={}, order.thirdScore2Cash={}, order.thirdPrices={}, pay.thirdPrices={}, pay.thirdScores={}", thirdScores, thirdScore2Cach, thirdPrices, payRet.getThirdPrice(), payRet.getThirdScore());
+        //天翼尊享模式支付
+        if((thirdScores > 0 && thirdScore2Cach > 0 && thirdPrices != payRet.getThirdPrice() + thirdScore2Cach) || (thirdPrices != payRet.getThirdPrice() + payRet.getThirdScore())) {
+            logger.error("支付总金额或积分不符， 实际金额:" + thirdPrices + ", 支付结果金额:" + payRet.getThirdPrice()+ "， 实际积分:" + thirdScores + ", 第三方积分抵扣金额:"  + thirdScore2Cach + "支付结果积分:" + payRet.getThirdScore());
             failList.add(FailCode.THIRD_PRICE＿FAIL);
         } else {
             if (thirdScores != payRet.getThirdScore()) {

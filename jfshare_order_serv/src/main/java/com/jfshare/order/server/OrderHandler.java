@@ -578,8 +578,8 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             payReq.setExtraParam(param.getUserId() + "_" + StringUtils.join(param.getOrderIdList().toArray(),",")); //userId_orderId1,orderId2 ...
             payReq.setTitle(OrderUtil.getPayTitle(orderModels));
             payReq.setScore(thirdScores);
-            payReq.setPrice(OrderUtil.getPayPrice(orderModels));
             payReq.setScore2cashAmount(thirdScore2Cash);
+            payReq.setPrice(OrderUtil.getPayPrice(orderModels));
             payReq.setPayChannel(param.getPayChannel().getPayChannel());
             payReq.setPayIp(param.getPayChannel().getPayIp());
             payReq.setReturnUrl(param.getPayChannel().getReturnUrl());
