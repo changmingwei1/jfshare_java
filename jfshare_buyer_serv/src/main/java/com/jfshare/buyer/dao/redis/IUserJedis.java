@@ -112,4 +112,8 @@ public interface IUserJedis {
 	 * @return
 	 */
 	int updateTimeOut(String uId, int timeout);
+	
+	int setTokenTimestamp(String uId, String time,int clientType);
+	String getTokenTimestamp(String uId,int clientType);
+
 }

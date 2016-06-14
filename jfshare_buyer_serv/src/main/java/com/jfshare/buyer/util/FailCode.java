@@ -28,7 +28,6 @@ public class FailCode {
 		loginNameHasExist = new FailDesc("longName", "1006", "用户名已存在");
 		noOnlineUser = new FailDesc("tokenId", "1007", "在线用户不存在");
         THIRDPARTY_BIND_ERROR = new FailDesc("thirdParty", "1008", "绑定账号与登录账号不一致");
-
         SYSTEM_EXCEPTION = new FailDesc("system", "2000", "系统异常");
         PARAM_ERROR = new FailDesc("param", "2001", "参数有误");
     }

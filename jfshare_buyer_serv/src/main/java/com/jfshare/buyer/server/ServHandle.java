@@ -1,25 +1,31 @@
 package com.jfshare.buyer.server;
 
-import com.jfshare.buyer.model.TbUser;
-import com.jfshare.buyer.model.ThirdPartyType;
-import com.jfshare.buyer.service.IBuyerSvc;
-import com.jfshare.buyer.util.AuthenticationUtil;
-import com.jfshare.buyer.util.BuyerUtil;
-import com.jfshare.buyer.util.FailCode;
-import com.jfshare.finagle.thrift.buyer.*;
-import com.jfshare.finagle.thrift.result.BoolResult;
-import com.jfshare.finagle.thrift.result.Result;
-import com.jfshare.finagle.thrift.result.StringResult;
-import com.jfshare.utils.CryptoUtil;
-import com.jfshare.utils.StringUtil;
+import java.text.MessageFormat;
+import java.util.UUID;
+
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
-import java.util.UUID;
+import com.jfshare.buyer.model.TbUser;
+import com.jfshare.buyer.model.ThirdPartyType;
+import com.jfshare.buyer.service.IBuyerSvc;
+import com.jfshare.buyer.util.AuthenticationUtil;
+import com.jfshare.buyer.util.BuyerUtil;
+import com.jfshare.buyer.util.FailCode;
+import com.jfshare.finagle.thrift.buyer.AuthInfo;
+import com.jfshare.finagle.thrift.buyer.AuthInfoResult;
+import com.jfshare.finagle.thrift.buyer.Buyer;
+import com.jfshare.finagle.thrift.buyer.BuyerResult;
+import com.jfshare.finagle.thrift.buyer.BuyerServ;
+import com.jfshare.finagle.thrift.buyer.LoginLog;
+import com.jfshare.finagle.thrift.buyer.ThirdpartyUser;
+import com.jfshare.finagle.thrift.result.BoolResult;
+import com.jfshare.finagle.thrift.result.Result;
+import com.jfshare.finagle.thrift.result.StringResult;
+import com.jfshare.utils.StringUtil;
 
 @Service(value="handler")
 public class ServHandle implements BuyerServ.Iface {
@@ -203,7 +209,13 @@ public class ServHandle implements BuyerServ.Iface {
                 return buyerResult;
             }
             Buyer rBuyer = buyerSvcImpl.getBuyer(buyer.getUserId());
+            if(StringUtil.isNullOrEmpty(rBuyer)){
+            	FailCode.addFails(result, FailCode.loginNameNotExist);
+            	buyerResult.setBuyer(rBuyer);
+				return buyerResult;
+            }
             buyerResult.setBuyer(rBuyer);
+            
         } catch (Exception e) {
             logger.error("获取用户信息失败！loginLog=" + buyer, e);
             FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
@@ -315,13 +327,14 @@ public class ServHandle implements BuyerServ.Iface {
             buyerSvcImpl.clearTryFail(user);
             //add to success mq
             
-            String token = AuthenticationUtil.getToken(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
-			String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail());
+//          String token = AuthenticationUtil.getToken(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
+//			String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail());
 			
-			loginLog.setTokenId(token);
-			AuthInfo authInfo = new AuthInfo();
-			authInfo.setToken(token);
-			authInfo.setPpInfo(ppInfo);
+			
+			AuthInfo authInfo = buyerSvcImpl.createAuth(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
+//			authInfo.setToken(token);
+//			authInfo.setPpInfo(ppInfo);
+			loginLog.setTokenId(authInfo.getToken());
 			
 			buyerResult.setAuthInfo(authInfo);
             buyerResult.setBuyer(buyer);
@@ -370,6 +383,7 @@ public class ServHandle implements BuyerServ.Iface {
 		Result result = new Result();
 		result.setCode(0);
 		try {
+			logger.warn("signin参数验证失败！buyer=" + buyer);
 			if (StringUtil.isNullOrEmpty(buyer) || StringUtil.isNullOrEmpty(buyer.getMobile())) {
 				logger.warn("signin参数验证失败！buyer=" + buyer);
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
@@ -400,10 +414,10 @@ public class ServHandle implements BuyerServ.Iface {
 		result.setCode(0);
 		buyerResult.setResult(result);
 		
-		AuthInfo authInfo = new AuthInfo();
-		buyerResult.setAuthInfo(authInfo);
+//		AuthInfo authInfo = new AuthInfo();
+//		buyerResult.setAuthInfo(authInfo);
 		try {
-			if (StringUtil.isNullOrEmpty(buyer) || StringUtil.isNullOrEmpty(buyer.getMobile()) || StringUtil.isNullOrEmpty(buyer.getPwdEnc())) {
+			if (StringUtil.isNullOrEmpty(buyer) || StringUtil.isNullOrEmpty(buyer.getMobile()) || StringUtil.isNullOrEmpty(buyer.getPwdEnc()) || loginLog.getClientType()<=0) {
 				logger.warn(MessageFormat.format("login参数验证失败！buyer[{0}],loginLog[{1}]", buyer, loginLog));
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				return buyerResult;
@@ -414,7 +428,7 @@ public class ServHandle implements BuyerServ.Iface {
 			if(StringUtil.isNullOrEmpty(buyer.getLoginName())) 
 				buyer.setLoginName(buyer.getMobile());
 			
-			buyerSvcImpl.validLogin(result, buyer);
+			buyerSvcImpl.validLogin(result, buyer);//校验登陆密码
 			if (result.getCode() == 1) {
 				logger.warn("登陆校验失败，" + "[user:" + buyer.getLoginName() + "]" + result.getFailDescList());
 				//user fail times cache，fail log queue
@@ -430,19 +444,21 @@ public class ServHandle implements BuyerServ.Iface {
 				TbUser user = BuyerUtil.buyer2TbUser(buyer);
 				
 				//add to success mq
-				String token = AuthenticationUtil.getToken(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
-				String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail());
-				
-				loginLog.setTokenId(token);
+//				String token = AuthenticationUtil.getToken(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
+//				String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail());
+				logger.info("----------------------------登陆开始啦--------------------------");
+				AuthInfo authInfo = buyerSvcImpl.createAuth(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
+				loginLog.setTokenId(authInfo.getToken());
 				//write online cache
 				buyerSvcImpl.addOnline(user, loginLog);
 				buyerSvcImpl.clearTryFail(user);
 				
-				authInfo.setToken(token);
-				authInfo.setPpInfo(ppInfo);
+//				authInfo.setToken(token);
+//				authInfo.setPpInfo(ppInfo);
 				buyerResult.setAuthInfo(authInfo);
 				buyerResult.setBuyer(buyer);
 				buyerResult.setLoginLog(loginLog);
+				logger.info("----------------------------登陆结束啦--------------------------");
 			}
 		} catch (Exception e) {
 			logger.error("登陆失败！", e);
@@ -459,10 +475,10 @@ public class ServHandle implements BuyerServ.Iface {
 		result.setCode(0);
 		buyerResult.setResult(result);
 		
-		AuthInfo authInfo = new AuthInfo();
-		buyerResult.setAuthInfo(authInfo);
+//		AuthInfo authInfo = new AuthInfo();
+//		buyerResult.setAuthInfo(authInfo);
 		try {
-			if (StringUtil.isNullOrEmpty(buyer) || StringUtil.isNullOrEmpty(buyer.getMobile())) {
+			if (StringUtil.isNullOrEmpty(buyer) || StringUtil.isNullOrEmpty(buyer.getMobile()) || loginLog.getClientType() <= 0) {
 				logger.warn(MessageFormat.format("login参数验证失败！buyer[{0}],loginLog[{1}]", buyer, loginLog));
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				return buyerResult;
@@ -486,16 +502,16 @@ public class ServHandle implements BuyerServ.Iface {
 			TbUser user = BuyerUtil.buyer2TbUser(dbBuyer);
 			
 			//add to success mq
-			String token = AuthenticationUtil.getToken(user.getUserId().toString(), dbBuyer.getMobile(), dbBuyer.getEmail(), loginLog.getBrowser());
-			String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), dbBuyer.getMobile(), dbBuyer.getEmail());
-			
-			loginLog.setTokenId(token);
+//			String token = AuthenticationUtil.getToken(user.getUserId().toString(), dbBuyer.getMobile(), dbBuyer.getEmail(), loginLog.getBrowser());
+//			String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), dbBuyer.getMobile(), dbBuyer.getEmail());
+			AuthInfo authInfo = buyerSvcImpl.createAuth(user.getUserId().toString(), dbBuyer.getMobile(), dbBuyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
+			loginLog.setTokenId(authInfo.getToken());
 			//write online cache
 			buyerSvcImpl.addOnline(user, loginLog);
 			buyerSvcImpl.clearTryFail(user);
 			
-			authInfo.setToken(token);
-			authInfo.setPpInfo(ppInfo);
+//			authInfo.setToken(token);
+//			authInfo.setPpInfo(ppInfo);
 			buyerResult.setAuthInfo(authInfo);
 			buyerResult.setBuyer(dbBuyer);
 			buyerResult.setLoginLog(loginLog);
@@ -520,8 +536,10 @@ public class ServHandle implements BuyerServ.Iface {
                 return result;
             }
 
-            String pwd = AuthenticationUtil.spa512Encode(buyer.getPwdEnc());
-
+            String pwd = AuthenticationUtil.spa512Encode(newPwd);
+            if(buyer.getUserId() <= 0)
+            	buyer = buyerSvcImpl.getBuyerByLoginName(buyer.getMobile());
+            
             buyerSvcImpl.updatePwd(buyer.getUserId(), pwd);
             logger.info("修改密码成功，buyer[{}]", buyer.getLoginName());
         } catch (Exception e) {
@@ -531,7 +549,8 @@ public class ServHandle implements BuyerServ.Iface {
 
         return result;
 	}
-
+    
+	//获取鉴权信息
 	@Override
 	public AuthInfoResult getAuthInfo(AuthInfo authInfo1, Buyer buyer, LoginLog loginLog) throws TException {
 		AuthInfoResult authInfoResult = new AuthInfoResult();
@@ -539,23 +558,24 @@ public class ServHandle implements BuyerServ.Iface {
 		result.setCode(0);
 		authInfoResult.setResult(result);
 		try {
-			if(StringUtil.isNullOrEmpty(buyer) || buyer.getUserId() <= 0 || StringUtil.isNullOrEmpty(buyer.getMobile())){
+			if(StringUtil.isNullOrEmpty(buyer) || buyer.getUserId() <= 0 || StringUtil.isNullOrEmpty(buyer.getMobile()) || loginLog.getClientType() <= 0){
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				return authInfoResult;
 			}
 			
-			AuthInfo authInfo = new AuthInfo();
-			
-			String token =AuthenticationUtil.getToken(String.valueOf(buyer.getUserId()), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
-			String ppInfo = AuthenticationUtil.getPPInfo(String.valueOf(buyer.getUserId()), buyer.getMobile(), buyer.getEmail());
-			authInfo.setToken(token);
-			authInfo.setPpInfo(ppInfo);
+//			AuthInfo authInfo = new AuthInfo();
+//			
+//			String token =AuthenticationUtil.getToken(String.valueOf(buyer.getUserId()), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
+//			String ppInfo = AuthenticationUtil.getPPInfo(String.valueOf(buyer.getUserId()), buyer.getMobile(), buyer.getEmail());
+//			authInfo.setToken(token);
+//			authInfo.setPpInfo(ppInfo);
+			AuthInfo authInfo = buyerSvcImpl.createAuth(String.valueOf(buyer.getUserId()), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
 			authInfoResult.setAuthInfo(authInfo);
 			
 			Buyer buyerInRedis = buyerSvcImpl.getOnline(buyer.getUserId(), authInfo1.getToken());
 			TbUser user = BuyerUtil.buyer2TbUser(buyerInRedis);
 			buyerSvcImpl.removeOnline(new Result(), buyer.getUserId(), authInfo1.getToken());
-			loginLog.setTokenId(token);
+			loginLog.setTokenId(authInfo.getToken());
 			buyerSvcImpl.addOnline(user, loginLog);
 			
 		} catch(Exception ex) {
@@ -570,15 +590,19 @@ public class ServHandle implements BuyerServ.Iface {
 	public Result validAuth(LoginLog loginLog, AuthInfo authInfo) throws TException {
 		Result result = new Result();
 		result.setCode(0);
+		
 		try{
-			if(StringUtil.isNullOrEmpty(loginLog) || loginLog.getUserId() <= 0 || StringUtil.isNullOrEmpty(authInfo)){
+			logger.warn("validAuth验证鉴权开始！param1={"+authInfo+"}"+"param2={"+loginLog+"}");
+			if(StringUtil.isNullOrEmpty(loginLog) || loginLog.getUserId() <= 0 || StringUtil.isNullOrEmpty(authInfo) || loginLog.getClientType() <= 0){
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				return result;
 			}
 			
-			boolean flg = AuthenticationUtil.tokenVerification(authInfo.getToken(), authInfo.ppInfo, loginLog.getBrowser());
+//			boolean flg = AuthenticationUtil.tokenVerification(authInfo.getToken(), authInfo.ppInfo, loginLog.getBrowser());
+			boolean flg = buyerSvcImpl.verificationToken(String.valueOf(loginLog.getUserId()), authInfo, loginLog.getBrowser(),loginLog.getClientType());
 			if(!flg){
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
+				
 			}
 		}catch (Exception ex) {
 			logger.error("获取鉴权失败！buyer=" + loginLog.getUserId(), ex);

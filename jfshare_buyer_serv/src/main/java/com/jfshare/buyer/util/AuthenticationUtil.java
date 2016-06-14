@@ -7,6 +7,10 @@ import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.jfshare.buyer.server.ServHandle;
 
 /**
  * 密码加密
@@ -16,6 +20,7 @@ import org.apache.commons.codec.binary.Base64;
  * @author zhaoshenghai
  */
 public class AuthenticationUtil {
+	private static final transient Logger logger = LoggerFactory.getLogger(ServHandle.class);
 	private final static String KEY = "jfshareP";
 //	private final static String IV = "";
 	
@@ -41,11 +46,10 @@ public class AuthenticationUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	public static String getToken(String userId, String mobile, String email, String deviceId) throws Exception {
-		String md5Str = MD5Util.md5Encode(String.format("%s%s%s%s", userId, mobile, email, deviceId));
+	public static String getToken(String userId, String mobile, String email, String deviceId, String time) throws Exception {
+		String md5Str = MD5Util.md5Encode(String.format("%s%s%s%s%s", userId, mobile, email, deviceId,time));
 		String disorderText = disorder(md5Str);
 		String ciphertext =  encryptDES(disorderText.getBytes("UTF-8"), KEY.getBytes("UTF-8"), KEY.getBytes("UTF-8")); 
-		
 		return ciphertext;
 	}
 	/**
@@ -57,15 +61,23 @@ public class AuthenticationUtil {
 	 */
 	public static String getPPInfo(String userId, String mobile, String email) throws Exception {
 		String base64Str = Base64.encodeBase64String(String.format("%s%s%s", userId, mobile, email).getBytes());
-		
+		//logger.info("加密ppInfo开始:String base64Str = Base64.encodeBase64String(String.format(%s%s%s, userId, mobile, email).getBytes())值为："+base64Str);
 		return disorder(base64Str);
 	}
 	
-	public static boolean tokenVerification(String Token, String ppInfo, String deviceId) throws Exception{
+	public static boolean tokenVerification(String Token, String ppInfo, String deviceId, String time) throws Exception{
+		logger.info("校验开始准备，redis存储的时间："+time);
+		logger.info("校验开始准备，ppinfo值为："+ppInfo);
+		logger.info("校验开始准备，deviceId值为："+deviceId);
+		logger.info("校验开始准备，Token值为："+Token);
 		String str = new String(Base64.decodeBase64(restore(ppInfo)), "UTF-8");
-		String md5Str = MD5Util.md5Encode(str + deviceId);
+		logger.info("校验开始1，String str = new String(Base64.decodeBase64(restore(ppInfo)), UTF-8)为值为："+str);
+		String md5Str = MD5Util.md5Encode(str + deviceId + time);
+		logger.info("校验开始2，String md5Str = MD5Util.md5Encode(str + deviceId + time)值为："+md5Str);
 		String disorderText = disorder(md5Str);
+		logger.info("校验开始3，String disorderText = disorder(md5Str)值为："+disorderText);
 		String ciphertext =  encryptDES(disorderText.getBytes("UTF-8"), KEY.getBytes("UTF-8"), KEY.getBytes("UTF-8")); 
+		logger.info("校验结束4，最后值为："+ciphertext);
 		if(Token.equals(ciphertext)){
 			return true;
 		} else {
@@ -174,12 +186,12 @@ public class AuthenticationUtil {
     		System.out.println("false" + pwd);
     	}
     	
-    	String token = getToken("1", "15010938534", "123@132.com", "aaaaaaaaaa");
+    	String token = getToken("1", "15010938534", "123@132.com", "aaaaaaaaaa", "");
     	String ppInfo = getPPInfo("1", "15010938534", "123@132.com");
     	
     	System.out.println("token:" + token + "  ppinfo:" + ppInfo);
     	
-    	boolean b =  tokenVerification(token, ppInfo, "aaaaaaaaaa");
+    	boolean b =  tokenVerification(token, ppInfo, "aaaaaaaaaa", "");
     	System.out.println("resut:" + b);
     }
     
