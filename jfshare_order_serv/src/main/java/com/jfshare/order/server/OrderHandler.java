@@ -1004,7 +1004,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         OrderProfileResult orderProfileResult = new OrderProfileResult();
         orderProfileResult.setResult(new Result(0));
         orderProfileResult.setOrderProfilePage(new OrderProfilePage());
-        if(StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) {
+        if((StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) && StringUtils.isBlank(conditions.getOrderId())) {
             return ResultBuilder.createFailOrderProfileResult(FailCode.PARAM_ERROR);
         }
 

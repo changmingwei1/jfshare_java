@@ -26,7 +26,6 @@ public class Client extends TestCase{
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
         transport.open();
-        HashMap
     }
 
     @Override
@@ -104,10 +103,11 @@ public class Client extends TestCase{
         try {
             ////////////////////////////////////////////////////
             OrderQueryConditions conditions = new OrderQueryConditions();
-            conditions.setCurPage(1);
-            conditions.setCount(3);
-            conditions.setStartTime("2016-05-02 00:00:00");
-            conditions.setEndTime("2016-05-30 00:00:00");
+//            conditions.setCurPage(1);
+//            conditions.setCount(3);
+//            conditions.setStartTime("2016-05-02 00:00:00");
+//            conditions.setEndTime("2016-05-30 00:00:00");
+            conditions.setOrderId("47390131");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block

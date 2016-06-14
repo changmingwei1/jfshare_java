@@ -29,8 +29,8 @@ public class OrderEsImpl implements IOrderEs{
     private ESClient esClient;
 
     public SearchHits search(OrderQueryConditions conditions) {
-        String startTime = conditions.getStartTime();
-        String endTime = conditions.getEndTime();
+        String startTime = StringUtils.isBlank(conditions.getStartTime()) ? "2016-05-31 00:00:00" : conditions.getStartTime();
+        String endTime = StringUtils.isBlank(conditions.getEndTime()) ? DateTimeUtil.getCurrentDate(DateTimeUtil.FORMAT_DEFAULT) : conditions.getEndTime();
         int orderState = conditions.getOrderState();
         String[] monthArr = DateTimeUtil.getBetweenMonth(startTime, endTime);
         String[] indexArr = new String[monthArr.length];
@@ -44,7 +44,7 @@ public class OrderEsImpl implements IOrderEs{
         if(orderState > 0) {
             if(orderState < 10) {
                 queryBuilder.must(QueryBuilders.rangeQuery("orderState")
-                        .from(orderState)
+                        .from(orderState * 10)
                         .to((orderState + 1) * 10 - 1));
             } else {
                 queryBuilder.must(QueryBuilders.matchQuery("orderState", orderState));
@@ -71,9 +71,12 @@ public class OrderEsImpl implements IOrderEs{
             queryBuilder.must(QueryBuilders.matchQuery("userId", conditions.getUserId()));
         }
 
-        queryBuilder.filter(QueryBuilders.rangeQuery("orderCreateTime")
-                .from(DateTimeUtil.strToDateTime(startTime))
-                .to(DateTimeUtil.strToDateTime(endTime)));
+        if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+            queryBuilder.filter(QueryBuilders.rangeQuery("orderCreateTime")
+                    .from(DateTimeUtil.strToDateTime(startTime))
+                    .to(DateTimeUtil.strToDateTime(endTime)));
+        }
+
         SearchRequestBuilder searchRequestBuilder = this.esClient.getTransportClient().prepareSearch(indexArr)
                 .setTypes("esOrder")
                 .setQuery(queryBuilder)

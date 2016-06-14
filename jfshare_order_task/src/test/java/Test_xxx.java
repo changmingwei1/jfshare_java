@@ -34,16 +34,16 @@ public class Test_xxx {
 
     public static void main(String[] str) {
        OrderQueryConditions conditions = new OrderQueryConditions();
-        conditions.setStartTime("2016-05-10 00:00:00");
-        conditions.setEndTime("2016-05-30 00:00:00");
-        conditions.setOrderState(3);
+        conditions.setStartTime("2016-05-01 00:00:00");
+        conditions.setEndTime("2016-06-30 00:00:00");
+//        conditions.setOrderState(5);
 //        conditions.addToOrderIds("44140112");
-//        conditions.addToOrderIds("44130090");
-        conditions.setSellerId(13);
+        conditions.addToOrderIds("44130090");
+//        conditions.setSellerId(13);
 
         ESClient esClient = new ESClient("jfshare-app", "101.201.39.61:9300,101.201.39.62:9300");
         try {
-            for(int i=0; i < 100; i++) {
+            for(int i=0; i < 1; i++) {
                 long start = System.nanoTime();
                 OrderProfileResult orderProfileResult = orderProfileQueryFull(conditions, esClient);
                 logger.info("第{}次，耗时：{}", i, (System.nanoTime()-start)/1000000);
@@ -51,6 +51,8 @@ public class Test_xxx {
 
         } catch (TException e) {
             e.printStackTrace();
+        } finally {
+            esClient.close();
         }
     }
 
@@ -67,7 +69,7 @@ public class Test_xxx {
             conditions.setCurPage(1);
         }
         if(conditions.getCount() <=0) {
-            conditions.setCount(30);
+            conditions.setCount(10);
         }
 
         String startTime = conditions.getStartTime();
@@ -85,7 +87,7 @@ public class Test_xxx {
         if(orderState > 0) {
             if(orderState < 10) {
                 queryBuilder.must(QueryBuilders.rangeQuery("orderState")
-                        .from(orderState)
+                        .from(orderState * 10)
                         .to((orderState+1) * 10 - 1));
             } else {
                 queryBuilder.must(QueryBuilders.matchQuery("orderState", orderState));
@@ -120,22 +122,23 @@ public class Test_xxx {
                 .setTypes("esOrder")
                 .setQuery(queryBuilder)
                 .setFrom(0)
-                .setSize(2000)
+                .setSize(30)
                 .setExplain(true)
                 .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC))
                 .execute()
                 .actionGet();
 
-        logger.info("ES==| search {}$$查询结果", searchResponse.getHits());
         int hitsTotal = (int)searchResponse.getHits().getTotalHits();
+        logger.info("ES==| search {}$$查询结果", searchResponse.getHits().getTotalHits());
         if(hitsTotal > 0) {
             orderProfileResult.getOrderProfilePage().setCount(conditions.getCount());
             orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
             orderProfileResult.getOrderProfilePage().setTotal(hitsTotal);
             for(SearchHit searchHit : searchResponse.getHits().getHits()) {
-//                logger.info("==>" + searchHit);
                 String orderJson = JSON.parseObject(searchHit.getSourceAsString()).getString("orderJson");
-                orderProfileResult.getOrderProfilePage().addToOrderProfileList(JSON.parseObject(orderJson, Order.class));
+                Order order = JSON.parseObject(orderJson, Order.class);
+                logger.info("==> orderId={}, orderState={}", order.getOrderId(), order.getOrderState());
+                orderProfileResult.getOrderProfilePage().addToOrderProfileList(order);
             }
         }
 
