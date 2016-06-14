@@ -1,6 +1,7 @@
 package com.jfshare.buyer.service;
 
 import com.jfshare.buyer.model.TbUser;
+import com.jfshare.finagle.thrift.buyer.AuthInfo;
 import com.jfshare.finagle.thrift.buyer.Buyer;
 import com.jfshare.finagle.thrift.buyer.LoginLog;
 import com.jfshare.finagle.thrift.buyer.ThirdpartyUser;
@@ -47,4 +48,8 @@ public interface IBuyerSvc {
     Buyer getBuyerByLoginName(String loginName);
 
     Buyer createUserThird(ThirdpartyUser thirdUser);
+    
+    AuthInfo createAuth(String userId, String mobile, String email, String appId,int clientType) throws Exception;
+    boolean verificationToken(String uid, AuthInfo authInfo, String appId,int clientType) throws Exception;
+    
 }

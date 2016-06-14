@@ -32,4 +32,6 @@ public class ConstantUtil {
     public static final String REDIS_UID_TIMEOUT_PREFIX = "user:timeout:";
     public static final java.lang.String SIGNIN_MODEL = "login_way";
     //[end]
+    
+    public static final String REDIS_UID_TOKEN_TIMESTAMP = "user:token:timestamp:";
 }

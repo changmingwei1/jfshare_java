@@ -23,6 +23,7 @@ import org.apache.commons.beanutils.converters.URLConverter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -151,7 +152,7 @@ public class PayUtil {
             String DeviceType = payReq.getCustType();
             String OrderPrice = ConvertUtil.getString(payReq.getPrice());
             String PayPoint = ConvertUtil.getString(payReq.getScore());
-            String PayMoney = ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount());
+            String PayMoney = payReq.getScore() > 0 ? ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()) : "0";
             String RequestTime = curTime;
             String AccessChannel = "WEB";
 //            String AppID = "BFZX";
@@ -221,11 +222,39 @@ public class PayUtil {
      * @return
      */
     public static TbPayRecordWithBLOBs getResTianYi(PayRes payRes) {
+        String payResStr = payRes.getResUrl();
+        if(StringUtils.isBlank(payResStr)) {
+            logger.error("解析天翼支付通知----支付通知内容为空");
+            return null;
+        }
+
+        String encodeCBCKey = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_deskey");
+        String encodeCBCVi = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_desvi");
+
         TbPayRecordWithBLOBs tbPayRecord = null;
+        try {
+            String des3DecodeRet = Des3.des3DecodeCBC(encodeCBCKey, encodeCBCVi, payResStr);
+            String xmlRes = DesUtil.unicode2String(des3DecodeRet);
+            Map<String, String> xmlMap = TianYiSubmit.xmlStr2Map(xmlRes);
+            tbPayRecord = new TbPayRecordWithBLOBs();
+            tbPayRecord.setPayId(xmlMap.get("SPOrderID"));
+            tbPayRecord.setThirdRet(payRes.getResUrl());
+            tbPayRecord.setThirdId(jsonObject.getString("OrderID"));
+            tbPayRecord.setThirdPrice(jsonObject.getInteger("PayMoney"));
+            tbPayRecord.setThirdScore(jsonObject.getInteger("PayIntegral"));
+            tbPayRecord.setThirdTime(DateUtils.strToDateTime(jsonObject.getString("RequestsDate"), DateUtils.PATTERN_YYYYMMDDHHMMSS2));
+            tbPayRecord.setThirdAccount(jsonObject.getString("UserNameTX"));
+            tbPayRecord.setPayState(2);
+            tbPayRecord.setProcessTime(new DateTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String requestXml = Des3.des3EncodeCBC(encodeCBCKey, encodeCBCVi, toUnicode);
+
         try {
             JSONObject jsonObject = JSON.parseObject(payRes.getResUrl());
             tbPayRecord = new TbPayRecordWithBLOBs();
-            tbPayRecord.setPayId(jsonObject.getString("SPOrderID"));
+            tbPayRecord.setPayId(xmlMap.get("SPOrderID"));
             tbPayRecord.setThirdRet(payRes.getResUrl());
             tbPayRecord.setThirdId(jsonObject.getString("OrderID"));
             tbPayRecord.setThirdPrice(jsonObject.getInteger("PayMoney"));

@@ -363,10 +363,10 @@ public class OrderUtil {
             for (TbOrderInfoRecord orderInfo : order.getTbOrderInfoList()) {
                 orderInfo.setThirdScore(0);
                 if (payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
-                    int scorePer = ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_per")); //天翼支付时单件商品需要使用的天翼积分
-                    int scoreRate = ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"));
-                    if (orderInfo.getCurPrice() >= scorePer * scoreRate) {
-                        orderInfo.setThirdScore(orderInfo.getCount() * scorePer);
+                    if(NumberUtils.toInt(orderInfo.getThirdexchangerate()) > 0) {
+                        orderInfo.setThirdScore(orderInfo.getCount() * 100);
+                    } else {
+                        orderInfo.setThirdScore(orderInfo.getCount() * orderInfo.getCurPrice());
                     }
                 }
                 orderThirdScore += orderInfo.getThirdScore();
@@ -389,7 +389,11 @@ public class OrderUtil {
         if (payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
             for (OrderModel order : orderModels) {
                 for (TbOrderInfoRecord orderInfo : order.getTbOrderInfoList()) {
-                    thirdScore2CashAmount += orderInfo.getThirdScore() * NumberUtils.toInt(orderInfo.getThirdexchangerate());
+                    if(NumberUtils.toInt(orderInfo.getThirdexchangerate()) > 0) {
+                        thirdScore2CashAmount += NumberUtils.toInt(orderInfo.getThirdexchangerate()) * orderInfo.getCount();
+                    } else {
+                        thirdScore2CashAmount += orderInfo.getCurPrice() * orderInfo.getCount();
+                    }
                 }
             }
         }
