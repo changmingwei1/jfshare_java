@@ -40,6 +40,8 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
   private static final TField LOGIN_AUTO_FIELD_DESC = new TField("loginAuto", TType.I32, (short)6);
   private static final TField LOGIN_TIME_FIELD_DESC = new TField("loginTime", TType.STRING, (short)7);
   private static final TField LOGOUT_TIME_FIELD_DESC = new TField("logoutTime", TType.STRING, (short)8);
+  private static final TField CLIENT_TYPE_FIELD_DESC = new TField("clientType", TType.I32, (short)9);
+  private static final TField VERSION_FIELD_DESC = new TField("version", TType.STRING, (short)10);
 
 
   public int userId;
@@ -50,6 +52,8 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
   public int loginAuto;
   public String loginTime;
   public String logoutTime;
+  public int clientType;
+  public String version;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -60,7 +64,9 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
     FROM_SOURCE((short)5, "fromSource"),
     LOGIN_AUTO((short)6, "loginAuto"),
     LOGIN_TIME((short)7, "loginTime"),
-    LOGOUT_TIME((short)8, "logoutTime");
+    LOGOUT_TIME((short)8, "logoutTime"),
+    CLIENT_TYPE((short)9, "clientType"),
+    VERSION((short)10, "version");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -91,6 +97,10 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
   	return LOGIN_TIME;
         case 8: // LOGOUT_TIME
   	return LOGOUT_TIME;
+        case 9: // CLIENT_TYPE
+  	return CLIENT_TYPE;
+        case 10: // VERSION
+  	return VERSION;
         default:
   	return null;
       }
@@ -135,7 +145,8 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
   private static final int __USERID_ISSET_ID = 0;
   private static final int __FROMSOURCE_ISSET_ID = 1;
   private static final int __LOGINAUTO_ISSET_ID = 2;
-  private BitSet __isset_bit_vector = new BitSet(3);
+  private static final int __CLIENTTYPE_ISSET_ID = 3;
+  private BitSet __isset_bit_vector = new BitSet(4);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -156,6 +167,10 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.LOGOUT_TIME, new FieldMetaData("logoutTime", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.CLIENT_TYPE, new FieldMetaData("clientType", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.VERSION, new FieldMetaData("version", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(LoginLog.class, metaDataMap);
   }
@@ -172,7 +187,9 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
     int fromSource,
     int loginAuto,
     String loginTime,
-    String logoutTime)
+    String logoutTime,
+    int clientType,
+    String version)
   {
     this();
     this.userId = userId;
@@ -186,6 +203,9 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
     setLoginAutoIsSet(true);
     this.loginTime = loginTime;
     this.logoutTime = logoutTime;
+    this.clientType = clientType;
+    setClientTypeIsSet(true);
+    this.version = version;
   }
 
   /**
@@ -212,6 +232,10 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
     if (other.isSetLogoutTime()) {
       this.logoutTime = other.logoutTime;
     }
+    this.clientType = other.clientType;
+    if (other.isSetVersion()) {
+      this.version = other.version;
+    }
   }
 
   public LoginLog deepCopy() {
@@ -231,6 +255,9 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
     this.loginAuto = 0;
     this.loginTime = null;
     this.logoutTime = null;
+    setClientTypeIsSet(false);
+    this.clientType = 0;
+    this.version = null;
   }
 
   public int getUserId() {
@@ -430,6 +457,55 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
     }
   }
 
+  public int getClientType() {
+    return this.clientType;
+  }
+
+  public LoginLog setClientType(int clientType) {
+    this.clientType = clientType;
+    setClientTypeIsSet(true);
+
+    return this;
+  }
+
+  public void unsetClientType() {
+  __isset_bit_vector.clear(__CLIENTTYPE_ISSET_ID);
+  }
+
+  /** Returns true if field clientType is set (has been asigned a value) and false otherwise */
+  public boolean isSetClientType() {
+    return __isset_bit_vector.get(__CLIENTTYPE_ISSET_ID);
+  }
+
+  public void setClientTypeIsSet(boolean value) {
+    __isset_bit_vector.set(__CLIENTTYPE_ISSET_ID, value);
+  }
+
+  public String getVersion() {
+    return this.version;
+  }
+
+  public LoginLog setVersion(String version) {
+    this.version = version;
+    
+    return this;
+  }
+
+  public void unsetVersion() {
+    this.version = null;
+  }
+
+  /** Returns true if field version is set (has been asigned a value) and false otherwise */
+  public boolean isSetVersion() {
+    return this.version != null;
+  }
+
+  public void setVersionIsSet(boolean value) {
+    if (!value) {
+      this.version = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case USER_ID:
@@ -488,6 +564,20 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
         setLogoutTime((String)value);
       }
       break;
+    case CLIENT_TYPE:
+      if (value == null) {
+        unsetClientType();
+      } else {
+        setClientType((Integer)value);
+      }
+      break;
+    case VERSION:
+      if (value == null) {
+        unsetVersion();
+      } else {
+        setVersion((String)value);
+      }
+      break;
     }
   }
 
@@ -509,6 +599,10 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
       return getLoginTime();
     case LOGOUT_TIME:
       return getLogoutTime();
+    case CLIENT_TYPE:
+      return new Integer(getClientType());
+    case VERSION:
+      return getVersion();
     }
     throw new IllegalStateException();
   }
@@ -536,6 +630,10 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
       return isSetLoginTime();
     case LOGOUT_TIME:
       return isSetLogoutTime();
+    case CLIENT_TYPE:
+      return isSetClientType();
+    case VERSION:
+      return isSetVersion();
     }
     throw new IllegalStateException();
   }
@@ -616,6 +714,22 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
       if (!this.logoutTime.equals(that.logoutTime))
         return false;
     }
+    boolean this_present_clientType = true;
+    boolean that_present_clientType = true;
+    if (this_present_clientType || that_present_clientType) {
+      if (!(this_present_clientType && that_present_clientType))
+        return false;
+      if (this.clientType != that.clientType)
+        return false;
+    }
+    boolean this_present_version = true && this.isSetVersion();
+    boolean that_present_version = true && that.isSetVersion();
+    if (this_present_version || that_present_version) {
+      if (!(this_present_version && that_present_version))
+        return false;
+      if (!this.version.equals(that.version))
+        return false;
+    }
 
     return true;
   }
@@ -655,6 +769,14 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
     builder.append(present_logoutTime);
     if (present_logoutTime)
       builder.append(logoutTime);
+    boolean present_clientType = true;
+    builder.append(present_clientType);
+    if (present_clientType)
+      builder.append(clientType);
+    boolean present_version = true && (isSetVersion());
+    builder.append(present_version);
+    if (present_version)
+      builder.append(version);
     return builder.toHashCode();
   }
 
@@ -746,6 +868,26 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetClientType()).compareTo(typedOther.isSetClientType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetClientType()) {
+      lastComparison = TBaseHelper.compareTo(this.clientType, typedOther.clientType);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetVersion()).compareTo(typedOther.isSetVersion());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetVersion()) {
+      lastComparison = TBaseHelper.compareTo(this.version, typedOther.version);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -823,6 +965,21 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 9: // CLIENT_TYPE
+          if (field.type == TType.I32) {
+            this.clientType = iprot.readI32();
+            setClientTypeIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 10: // VERSION
+          if (field.type == TType.STRING) {
+            this.version = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -870,6 +1027,14 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
     if (this.logoutTime != null) {
       oprot.writeFieldBegin(LOGOUT_TIME_FIELD_DESC);
       oprot.writeString(this.logoutTime);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldBegin(CLIENT_TYPE_FIELD_DESC);
+    oprot.writeI32(this.clientType);
+    oprot.writeFieldEnd();
+    if (this.version != null) {
+      oprot.writeFieldBegin(VERSION_FIELD_DESC);
+      oprot.writeString(this.version);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -929,6 +1094,18 @@ public class LoginLog implements TBase<LoginLog, LoginLog._Fields>, java.io.Seri
       sb.append("null");
     } else {
       sb.append(this.logoutTime);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("clientType:");
+    sb.append(this.clientType);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("version:");
+    if (this.version == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.version);
     }
     first = false;
     sb.append(")");

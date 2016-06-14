@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Response;
 import redis.clients.jedis.Transaction;
 
 import javax.annotation.Resource;
@@ -339,5 +340,51 @@ public class UserJedisImpl implements IUserJedis {
 		}
 
 		return ret;
+	}
+	@Override
+	public int setTokenTimestamp(String uId, String time,int clientType) {
+		Jedis jedis = null;
+		int ret = 0;
+		try {
+			jedis = jedisUserPool.getResource();
+			if(jedis != null) {
+				int timeOut = getTimeOutByUID(jedis, uId);
+				
+				String key = clientType+ConstantUtil.REDIS_UID_TOKEN_TIMESTAMP + uId;
+				logger.info("登陆开始准备！time的key为:"+ key);
+				logger.info("登陆开始准备！key的过期时为:"+ timeOut);
+				String sId = jedis.get(ConstantUtil.REDIS_UID_PREFIX + uId);
+				Transaction transaction = jedis.multi();
+				transaction.set(key, ConvertUtil.getString(time));
+				transaction.expire(key, timeOut);
+				transaction.exec();
+				ret = 1;
+				logger.debug(MessageFormat.format("用户[{0}],更新登陆超时时间[{1}]成功", uId, time));
+			}
+		} catch (Exception e) {
+			logger.error("set token Timestamp error！", e);
+		} finally {
+			jedisUserPool.returnResource(jedis);
+		}
+		return ret;
+	}
+	@Override
+	public String getTokenTimestamp(String uId,int clientType) {
+		String timestamp = "";
+		Jedis jedis = null;
+		int ret = 0;
+		try {
+			jedis = jedisUserPool.getResource();
+			if(jedis != null) {
+				timestamp = jedis.get(clientType+ConstantUtil.REDIS_UID_TOKEN_TIMESTAMP + uId);
+		        logger.debug(MessageFormat.format("用户[{0}],最近登陆失败尝试次数为[{1}]", uId, ret));
+			}
+		} catch (Exception e) {
+			logger.error("get login fail times error！", e);
+		} finally {
+			jedisUserPool.returnResource(jedis);
+		}
+		
+		return timestamp;
 	}
 }
