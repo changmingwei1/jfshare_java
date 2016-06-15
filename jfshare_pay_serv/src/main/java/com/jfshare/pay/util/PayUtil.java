@@ -135,7 +135,7 @@ public class PayUtil {
 //			http://jf.189.cn/preview/CommonPage/PTLGCK.aspx?Partner=160260&Sign=F71E34303426963F3ABF713D3370EA09
 //			http://jf.189.cn/preview/CommonPage/Default.aspx?Partner=160260&Sign=F71E34303426963F3ABF713D3370EA09
     public static String getTianYiPayId() {
-        return PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid") + "_" + DateUtils.date2Str(new DateTime().toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2) + RandomStringUtils.randomNumeric(4);
+        return DateUtils.date2Str(new DateTime().toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2) + RandomStringUtils.randomNumeric(8);
     }
 
     public static String getReqTY(PayReq payReq, String payId){
@@ -229,6 +229,8 @@ public class PayUtil {
             return null;
         }
 
+        payResStr = payResStr.replaceAll(" ", "+");    //电信的奇葩加密方式， 把+替换成了空格
+
         String encodeCBCKey = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_deskey");
         String encodeCBCVi = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_desvi");
 //        String encodeCBCKey = "telefenpaytes@pay17$#3#$";
@@ -262,10 +264,9 @@ public class PayUtil {
             extInfo.put("PayIntegral".toLowerCase(), PayIntegral);
             extInfo.put("PayVoucher".toLowerCase(), PayVoucher);
             tbPayRecord = new TbPayRecordWithBLOBs();
-            tbPayRecord.setPayId(SpOrderID);
+            tbPayRecord.setPayId(RequestPayNo);
             tbPayRecord.setThirdRet(payRes.getResUrl());
             tbPayRecord.setThirdReq(RequestPayNo);
-            tbPayRecord.setExtraParam(JSON.toJSONString(extInfo));
             tbPayRecord.setThirdId(ResponsePayNo);
             tbPayRecord.setThirdPrice(NumberUtils.toInt(PayMoney));
             tbPayRecord.setThirdScore(NumberUtils.toInt(PayVoucher) + NumberUtils.toInt(PayIntegral));

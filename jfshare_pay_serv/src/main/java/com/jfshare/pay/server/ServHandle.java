@@ -188,6 +188,7 @@ public class ServHandle implements PayServ.Iface {
                 return stringResult;
             }
 
+            logger.info("$$$$支付通知----获取支付申请pay_id={}", payResRecord.getPayId());
             TbPayRecordWithBLOBs dbRecord = paySvcImpl.queryByPayId(payResRecord.getPayId());
             if (dbRecord == null) {
                 logger.error(MessageFormat.format("$$$$支付通知----支付申请数据不存在，payRes{0}, payResRecord{1}", payRes, payResRecord));
