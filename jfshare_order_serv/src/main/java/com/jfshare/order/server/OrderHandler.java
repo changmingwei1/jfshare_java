@@ -544,6 +544,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             OrderUtil.setPayLimit(orderModels, param.getPayChannel().getPayChannel());
             int thirdScores = OrderUtil.setThirdScore(orderModels, param.getPayChannel().getPayChannel());
             int thirdScore2Cash = OrderUtil.getThirdScore2Cash(orderModels, param.getPayChannel().getPayChannel());
+            logger.info("申请支付----请求url, thirdScores={}, thirdScore2Cash={}", thirdScores, thirdScore2Cash);
             String tradePayId = IdCreator.getTradePayId(param.getUserId(), param.getOrderIdList());
             orderService.updateOrderPaying(orderModels, tradePayId);
 

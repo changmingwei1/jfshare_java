@@ -23,6 +23,7 @@ import org.apache.commons.beanutils.converters.URLConverter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.joda.time.DateTime;
@@ -144,8 +145,8 @@ public class PayUtil {
             String AppID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_appcode");
             String SPID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid");
             String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
-            String SpOrderID = payId;
-            String RequestNo = curTime + DateUtils.getRandom(8);
+            String SpOrderID = payReq.getOrderNo();
+            String RequestNo = payId;
             String PayContent = ConvertUtil.getString(payReq.getRemark(), "尊享订单");
             String ProvinceID = payReq.getProcustID();
             String DeviceNo = payReq.getCustId();
@@ -230,41 +231,51 @@ public class PayUtil {
 
         String encodeCBCKey = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_deskey");
         String encodeCBCVi = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_desvi");
+//        String encodeCBCKey = "telefenpaytes@pay17$#3#$";
+//        String encodeCBCVi = "13386191";
 
         TbPayRecordWithBLOBs tbPayRecord = null;
         try {
+            logger.info("解析天翼支付通知----开始3DesDecode");
             String des3DecodeRet = Des3.des3DecodeCBC(encodeCBCKey, encodeCBCVi, payResStr);
+            logger.info("解析天翼支付通知----3DesDecode完成");
             String xmlRes = DesUtil.unicode2String(des3DecodeRet);
+            logger.info("解析天翼支付通知----unicode转String完成");
             Map<String, String> xmlMap = TianYiSubmit.xmlStr2Map(xmlRes);
-            tbPayRecord = new TbPayRecordWithBLOBs();
-            tbPayRecord.setPayId(xmlMap.get("SPOrderID"));
-            tbPayRecord.setThirdRet(payRes.getResUrl());
-            tbPayRecord.setThirdId(jsonObject.getString("OrderID"));
-            tbPayRecord.setThirdPrice(jsonObject.getInteger("PayMoney"));
-            tbPayRecord.setThirdScore(jsonObject.getInteger("PayIntegral"));
-            tbPayRecord.setThirdTime(DateUtils.strToDateTime(jsonObject.getString("RequestsDate"), DateUtils.PATTERN_YYYYMMDDHHMMSS2));
-            tbPayRecord.setThirdAccount(jsonObject.getString("UserNameTX"));
-            tbPayRecord.setPayState(2);
-            tbPayRecord.setProcessTime(new DateTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String requestXml = Des3.des3EncodeCBC(encodeCBCKey, encodeCBCVi, toUnicode);
+            logger.info("解析天翼支付通知----xml转map完成, {}", xmlMap);
 
-        try {
-            JSONObject jsonObject = JSON.parseObject(payRes.getResUrl());
+            String AppCode = xmlMap.get("AppCode");
+            String SPID = xmlMap.get("SPID");
+            String ResponseDate = xmlMap.get("ResponseDate");
+            String RequestPayNo = xmlMap.get("RequestPayNo");
+            String SpOrderID = xmlMap.get("SpOrderID");
+            String ResponsePayNo = xmlMap.get("ResponsePayNo");
+            String PayMoney = xmlMap.get("PayMoney");
+            String PayIntegral = xmlMap.get("PayIntegral");
+            String PayVoucher = xmlMap.get("PayVoucher");
+            String DeviceNo = xmlMap.get("DeviceNo");
+            String Sign = xmlMap.get("Sign");
+
+            //TODO Sign验证
+//            String signStr = AppCode + SPID + RequestPayNo
+            Map<String, String> extInfo = new HashMap<String, String>();
+            extInfo.put("PayIntegral".toLowerCase(), PayIntegral);
+            extInfo.put("PayVoucher".toLowerCase(), PayVoucher);
             tbPayRecord = new TbPayRecordWithBLOBs();
-            tbPayRecord.setPayId(xmlMap.get("SPOrderID"));
+            tbPayRecord.setPayId(SpOrderID);
             tbPayRecord.setThirdRet(payRes.getResUrl());
-            tbPayRecord.setThirdId(jsonObject.getString("OrderID"));
-            tbPayRecord.setThirdPrice(jsonObject.getInteger("PayMoney"));
-            tbPayRecord.setThirdScore(jsonObject.getInteger("PayIntegral"));
-            tbPayRecord.setThirdTime(DateUtils.strToDateTime(jsonObject.getString("RequestsDate"), DateUtils.PATTERN_YYYYMMDDHHMMSS2));
-            tbPayRecord.setThirdAccount(jsonObject.getString("UserNameTX"));
+            tbPayRecord.setThirdReq(RequestPayNo);
+            tbPayRecord.setExtraParam(JSON.toJSONString(extInfo));
+            tbPayRecord.setThirdId(ResponsePayNo);
+            tbPayRecord.setThirdPrice(NumberUtils.toInt(PayMoney));
+            tbPayRecord.setThirdScore(NumberUtils.toInt(PayVoucher) + NumberUtils.toInt(PayIntegral));
+            tbPayRecord.setThirdTime(DateUtils.strToDateTime(ResponseDate, DateUtils.PATTERN_YYYYMMDDHHMMSS2));
+            tbPayRecord.setThirdAccount(DeviceNo);
             tbPayRecord.setPayState(2);
             tbPayRecord.setProcessTime(new DateTime());
+
         } catch (Exception e) {
-            logger.error("解析支付通知失败 ==> " + payRes);
+            logger.error("解析支付通知失败 ==> " + payRes, e);
         }
 
         return tbPayRecord;
@@ -722,21 +733,21 @@ public class PayUtil {
 //
 //        String hebaoH5 = getHebaoH5(payReq, payId);
 
-        PayReq payReq1 = new PayReq();
+//        PayReq payReq1 = new PayReq();
 //        PayReq(tokenId:fvBLEJEHNOw=, orderNo:fa44514e9acb568385da064067e00feb, extraParam:24_4660024, title:jfx订单, price:1000, score:1, payChannel:9, payIp:null, returnUrl:null, remark:null, custId:100017286150, custType:7)
-        payReq1.setTokenId("fvBLEJEHNOw=");
-        payReq1.setOrderNo("fa44514e9acb568wwwww064067e00jjj");
-        payReq1.setExtraParam("24_4660024");
-        payReq1.setTitle("jfx");
-        payReq1.setPrice(1000);
-        payReq1.setScore(100);
-        payReq1.setPayChannel(1);
-        payReq1.setCustId("18979177165");
-        payReq1.setScore2cashAmount(500);
-        payReq1.setCustType("7");
-        payReq1.setProcustID("15");
-        String reqTY = getReqTY(payReq1, "9dc5c3c8981aa8d9be7c21c4366bc000");
-        logger.error(reqTY);
+//        payReq1.setTokenId("fvBLEJEHNOw=");
+//        payReq1.setOrderNo("fa44514e9acb568wwwww064067e00jjj");
+//        payReq1.setExtraParam("24_4660024");
+//        payReq1.setTitle("jfx");
+//        payReq1.setPrice(1000);
+//        payReq1.setScore(100);
+//        payReq1.setPayChannel(1);
+//        payReq1.setCustId("18979177165");
+//        payReq1.setScore2cashAmount(500);
+//        payReq1.setCustType("7");
+//        payReq1.setProcustID("15");
+//        String reqTY = getReqTY(payReq1, "9dc5c3c8981aa8d9be7c21c4366bc000");
+//        logger.error(reqTY);
 //        getWeixinPay(payReq1, "9dc5c3c8981aa8d9be7c21c4366bcsss");
 
 //        System.out.println(hebaoH5);
@@ -799,7 +810,7 @@ public class PayUtil {
 //            if (s.contains("o") || s.contains("l") || s.contains("1") || s.contains("O") || s.contains("0")) {
 //                continue;
 //            }
-            System.out.println(RandomStringUtils.randomAlphanumeric(32));
+//            System.out.println(RandomStringUtils.randomAlphanumeric(32));
 //            return;
 //        }
 
@@ -846,6 +857,11 @@ public class PayUtil {
 //        //       Website Link (URLs) QR Code in Java
 //        ByteArrayOutputStream out1 = QRCode.from("http://viralpatel.net")
 //                .to(ImageType.PNG).stream();
-}
+        String tyResStr = "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";
+        PayRes payRes = new PayRes();
+        payRes.setResUrl(tyResStr);
+        TbPayRecordWithBLOBs resTianYi = getResTianYi(payRes);
+        logger.info(JSON.toJSONString(resTianYi));
+    }
 
 }

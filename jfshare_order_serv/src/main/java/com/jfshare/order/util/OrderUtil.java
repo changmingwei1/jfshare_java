@@ -365,8 +365,6 @@ public class OrderUtil {
                 if (payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
                     if(NumberUtils.toInt(orderInfo.getThirdexchangerate()) > 0) {
                         orderInfo.setThirdScore(orderInfo.getCount() * 100);
-                    } else {
-                        orderInfo.setThirdScore(orderInfo.getCount() * orderInfo.getCurPrice());
                     }
                 }
                 orderThirdScore += orderInfo.getThirdScore();
