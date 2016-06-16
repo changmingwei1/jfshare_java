@@ -165,6 +165,7 @@ public class CheckUtil {
     public List<FailDesc> orderConfirmProduct(BuyInfo buyInfo, List<ProductResult> productRets) {
         List<FailDesc> fails = new ArrayList<FailDesc>();
         if (productRets == null || productRets.size() <= 0) {
+            logger.info("orderConfirmProduct-----查询商品信息为空");
             fails.add(FailCode.PRODUCT_GET_ERROR);
             return fails;
         }
@@ -177,11 +178,13 @@ public class CheckUtil {
                     || productRet.getProduct().getProductSku() == null
                     || CollectionUtils.isEmpty(productRet.getProduct().getProductSku().getSkuItems())) {
                 fails.add(FailCode.PRODUCT_GET_ERROR);
+                logger.info("orderConfirmProduct-----查询商品信息数据不合法：{}", productRet);
                 return fails;
             }
             Product product = productRet.getProduct();
             if (!this.productOnSale(product.getActiveState())) {
                 fails.add(FailCode.PRODUCT_GET_ERROR);
+                logger.info("orderConfirmProduct-----查询商品非销售状态：", productRet);
                 return fails;
             }
         }
