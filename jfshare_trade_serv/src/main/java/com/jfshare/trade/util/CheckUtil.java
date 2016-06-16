@@ -360,12 +360,14 @@ public class CheckUtil {
         if (createOrderResult.getResult().getCode() == 0) {
             if (orderList.size() > 0) {
                 int thirdScore = 0;
+                int thirdScoreExchangeCash = 0;
                 List<String> orderIds = new ArrayList<String>();
                 for (Order item : orderList) {
                     orderIds.add(item.getOrderId());
                     for(OrderInfo info : item.getProductList()) {
                         if (NumberUtils.toInt(info.getThirdExchangeRate()) > 0) {
                             thirdScore += 100 * info.getCount();
+                            thirdScoreExchangeCash += NumberUtils.toInt(info.getThirdExchangeRate()) * info.getCount();
                         } else {
                             thirdScore += PriceUtils.strToInt(info.getCurPrice()) * info.getCount();
                         }
@@ -374,7 +376,7 @@ public class CheckUtil {
                 PaymentInfo paymentInfo = new PaymentInfo();
                 paymentInfo.setCreateTime(orderList.get(0).getCreateTime());
                 paymentInfo.setCancelTime(orderList.get(0).getCancelTime());
-                paymentInfo.setPrice(PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScore));
+                paymentInfo.setPrice(PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScoreExchangeCash));
                 paymentInfo.setThirdScore(String.valueOf(thirdScore)); //若使用第三方积分的总数
 
                 createOrderResult.setOrderIdList(orderIds);
