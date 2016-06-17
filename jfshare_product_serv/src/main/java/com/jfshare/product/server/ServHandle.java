@@ -585,18 +585,16 @@ public class ServHandle implements ProductServ.Iface {
 	@Override
 	public CaptchaListResult queryCaptchaList(CaptchaQueryParam param) throws TException {
 
-		// TODO: 2016/5/30 造数据，后期实现
-		
 		CaptchaListResult captchaListResult = new CaptchaListResult();
 		Result result = new Result();
 		captchaListResult.setResult(result);
 
-		captchaListResult.setYedNum(88);
+		/*captchaListResult.setYedNum(88);
 		captchaListResult.setMonNum(999);
 		captchaListResult.addToItemList(new AldCaptchaItem("123132", "植物大战僵尸", 809, 120));
 		captchaListResult.addToItemList(new AldCaptchaItem("3534534", "黑客帝国", 546, 324));
 		captchaListResult.addToItemList(new AldCaptchaItem("123132", "星球大战", 555, 123));
-		captchaListResult.setPagination(param.getPagination());
+		captchaListResult.setPagination(param.getPagination());*/
 
 
 
@@ -689,13 +687,11 @@ public class ServHandle implements ProductServ.Iface {
 	@Override
 	public CaptchaDetailResult queryCaptchaDetails(CaptchaQueryParam param) throws TException {
 
-		// TODO: 2016/5/30 造数据，后期实现
-
 		CaptchaDetailResult captchaDetailResult = new CaptchaDetailResult();
 		Result result = new Result();
 		captchaDetailResult.setResult(result);
 
-		captchaDetailResult.setProductName("星球大战");
+		/*captchaDetailResult.setProductName("星球大战");
 		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(123).setCheckTime("2016-05-30"));
 		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(2222).setCheckTime("2016-05-30"));
 		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(333).setCheckTime("2016-05-30"));
@@ -704,7 +700,7 @@ public class ServHandle implements ProductServ.Iface {
 		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(666666).setCheckTime("2016-05-28"));
 		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(6676).setCheckTime("2016-05-28"));
 		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(7777).setCheckTime("2016-05-28"));
-
+*/
 
 		Page page = new Page(param.getPagination().getCurrentPage(), param.getPagination().getNumPerPage());
 
