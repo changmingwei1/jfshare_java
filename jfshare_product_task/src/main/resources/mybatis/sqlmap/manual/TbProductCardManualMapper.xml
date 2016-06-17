@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.productTask.mybatis.mapper.manual.TbProductCardManualMapper" >
+
+  <select id="statisticsProductCard" parameterType="string" resultMap="com.jfshare.productTask.mybatis.mapper.automatic.TbProductCardStatisticsMapper.BaseResultMap">
+    select
+    seller_id,
+    product_id,
+    SUM(CASE WHEN DATE_FORMAT(sold_time,'%Y-%m-%d') = #{date} THEN 1 ELSE 0 END) sold_num,
+    SUM(CASE WHEN DATE_FORMAT(checked_time,'%Y-%m-%d') = #{date} THEN 1 ELSE 0 END) checked_num
+    from tb_product_card
+    <where>
+      and (DATE_FORMAT(sold_time,'%Y-%m-%d') = #{date} or DATE_FORMAT(checked_time,'%Y-%m-%d') = #{date})
+    </where>
+    GROUP BY seller_id, product_id
+  </select>
+
+</mapper>

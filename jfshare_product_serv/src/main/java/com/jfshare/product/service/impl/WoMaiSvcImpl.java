@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -84,14 +85,24 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
         return false;
     }
 
-    public String getWoMaiUrl() {
+    @Override
+    public String getWoMaiWarehouseId(String storehouseId) {
+        return null;
+    }
+
+    @Override
+    public String getStorehouseId(String warehouseId) {
+        return null;
+    }
+
+    private String getWoMaiUrl() {
         // TODO: 2016/5/17 通过配置获取
         String domain = "http://sandbox.womaiapp.com/api/rest";
 
         return domain;
     }
 
-    public Map<String, String> getHttpParams(String method, Map param) {
+    private Map<String, String> getHttpParams(String method, Map param) {
         Map<String, String> postParams = new HashMap<String, String>();
         // TODO: 2016/5/17 通过配置获取
         String appKey = "160519";
@@ -135,7 +146,7 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      * @param woMaiId
      * @return
      */
-    private String getItemDetail(String woMaiId, Product product) {
+    private void getItemDetail(String woMaiId, Product product) {
 
         Map<String, String> param = new HashMap();
         param.put("skuid", woMaiId);
@@ -162,8 +173,6 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 
     /**
@@ -184,7 +193,7 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      * @param woMaiIds
      * @return
      */
-    private List<String> getItemstatus(List<String> woMaiIds, List<Product> products) {
+    private void getItemstatus(List<String> woMaiIds, List<Product> products) {
         String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuid", ids);
@@ -199,7 +208,6 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
             e.printStackTrace();
         }
 
-        return null;
     }
 
     /**
@@ -253,7 +261,7 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      * @param woMaiIds
      * @return
      */
-    private List<String> getItemimage(List<String> woMaiIds, List<Product> products) {
+    private void getItemimage(List<String> woMaiIds, List<Product> products) {
         String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuid", ids);
@@ -268,7 +276,6 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
             e.printStackTrace();
         }
 
-        return null;
     }
 
     /**
@@ -281,11 +288,12 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      * @param woMaiIds
      * @return
      */
-    private List<String> getStock(List<String> woMaiIds, List<Product> products) {
+    private void getStock(List<String> woMaiIds, List<Product> products) {
         String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuids", ids);
         String url = this.getWoMaiUrl();
+        List<String> warehouseIds = new ArrayList<String>();
         Map<String, String> httpParam = this.getHttpParams("womai.inventory.get", param);
         try {
             String detailJson = HttpUtils.httpPostUTF8(url, httpParam);
@@ -296,7 +304,6 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
 
     }
 

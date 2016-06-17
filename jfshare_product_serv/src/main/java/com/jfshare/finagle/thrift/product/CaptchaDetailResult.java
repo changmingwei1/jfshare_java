@@ -35,17 +35,20 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
   private static final TField PRODUCT_NAME_FIELD_DESC = new TField("productName", TType.STRING, (short)2);
   private static final TField PRODUCT_CARDS_FIELD_DESC = new TField("productCards", TType.LIST, (short)3);
+  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)4);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
   public String productName;
   public List<ProductCard> productCards;
+  public com.jfshare.finagle.thrift.pagination.Pagination pagination;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
     PRODUCT_NAME((short)2, "productName"),
-    PRODUCT_CARDS((short)3, "productCards");
+    PRODUCT_CARDS((short)3, "productCards"),
+    PAGINATION((short)4, "pagination");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -66,6 +69,8 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
   	return PRODUCT_NAME;
         case 3: // PRODUCT_CARDS
   	return PRODUCT_CARDS;
+        case 4: // PAGINATION
+  	return PAGINATION;
         default:
   	return null;
       }
@@ -118,6 +123,8 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     tmpMap.put(_Fields.PRODUCT_CARDS, new FieldMetaData("productCards", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
                 new StructMetaData(TType.STRUCT, ProductCard.class))));
+    tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(CaptchaDetailResult.class, metaDataMap);
   }
@@ -129,12 +136,14 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
   public CaptchaDetailResult(
     com.jfshare.finagle.thrift.result.Result result,
     String productName,
-    List<ProductCard> productCards)
+    List<ProductCard> productCards,
+    com.jfshare.finagle.thrift.pagination.Pagination pagination)
   {
     this();
     this.result = result;
     this.productName = productName;
     this.productCards = productCards;
+    this.pagination = pagination;
   }
 
   /**
@@ -154,6 +163,9 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       }
       this.productCards = __this__productCards;
     }
+    if (other.isSetPagination()) {
+      this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
+    }
   }
 
   public CaptchaDetailResult deepCopy() {
@@ -165,6 +177,7 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     this.result = null;
     this.productName = null;
     this.productCards = null;
+    this.pagination = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
@@ -257,6 +270,31 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     }
   }
 
+  public com.jfshare.finagle.thrift.pagination.Pagination getPagination() {
+    return this.pagination;
+  }
+
+  public CaptchaDetailResult setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
+    this.pagination = pagination;
+    
+    return this;
+  }
+
+  public void unsetPagination() {
+    this.pagination = null;
+  }
+
+  /** Returns true if field pagination is set (has been asigned a value) and false otherwise */
+  public boolean isSetPagination() {
+    return this.pagination != null;
+  }
+
+  public void setPaginationIsSet(boolean value) {
+    if (!value) {
+      this.pagination = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case RESULT:
@@ -280,6 +318,13 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
         setProductCards((List<ProductCard>)value);
       }
       break;
+    case PAGINATION:
+      if (value == null) {
+        unsetPagination();
+      } else {
+        setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
+      }
+      break;
     }
   }
 
@@ -291,6 +336,8 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       return getProductName();
     case PRODUCT_CARDS:
       return getProductCards();
+    case PAGINATION:
+      return getPagination();
     }
     throw new IllegalStateException();
   }
@@ -308,6 +355,8 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       return isSetProductName();
     case PRODUCT_CARDS:
       return isSetProductCards();
+    case PAGINATION:
+      return isSetPagination();
     }
     throw new IllegalStateException();
   }
@@ -348,6 +397,14 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       if (!this.productCards.equals(that.productCards))
         return false;
     }
+    boolean this_present_pagination = true && this.isSetPagination();
+    boolean that_present_pagination = true && that.isSetPagination();
+    if (this_present_pagination || that_present_pagination) {
+      if (!(this_present_pagination && that_present_pagination))
+        return false;
+      if (!this.pagination.equals(that.pagination))
+        return false;
+    }
 
     return true;
   }
@@ -367,6 +424,10 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     builder.append(present_productCards);
     if (present_productCards)
       builder.append(productCards);
+    boolean present_pagination = true && (isSetPagination());
+    builder.append(present_pagination);
+    if (present_pagination)
+      builder.append(pagination);
     return builder.toHashCode();
   }
 
@@ -404,6 +465,16 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     }
     if (isSetProductCards()) {
       lastComparison = TBaseHelper.compareTo(this.productCards, typedOther.productCards);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPagination()).compareTo(typedOther.isSetPagination());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPagination()) {
+      lastComparison = TBaseHelper.compareTo(this.pagination, typedOther.pagination);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -459,6 +530,14 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 4: // PAGINATION
+          if (field.type == TType.STRUCT) {
+            this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination();
+            this.pagination.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -496,6 +575,11 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       }
       oprot.writeFieldEnd();
     }
+    if (this.pagination != null) {
+      oprot.writeFieldBegin(PAGINATION_FIELD_DESC);
+      this.pagination.write(oprot);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -525,6 +609,14 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       sb.append("null");
     } else {
       sb.append(this.productCards);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("pagination:");
+    if (this.pagination == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.pagination);
     }
     first = false;
     sb.append(")");

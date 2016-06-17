@@ -935,63 +935,123 @@ public class TbProductCardExample {
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeIsNull() {
-            addCriterion("check_time is null");
+        public Criteria andCheckedTimeIsNull() {
+            addCriterion("checked_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeIsNotNull() {
-            addCriterion("check_time is not null");
+        public Criteria andCheckedTimeIsNotNull() {
+            addCriterion("checked_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeEqualTo(Date value) {
-            addCriterion("check_time =", value, "checkTime");
+        public Criteria andCheckedTimeEqualTo(Date value) {
+            addCriterion("checked_time =", value, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeNotEqualTo(Date value) {
-            addCriterion("check_time <>", value, "checkTime");
+        public Criteria andCheckedTimeNotEqualTo(Date value) {
+            addCriterion("checked_time <>", value, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeGreaterThan(Date value) {
-            addCriterion("check_time >", value, "checkTime");
+        public Criteria andCheckedTimeGreaterThan(Date value) {
+            addCriterion("checked_time >", value, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("check_time >=", value, "checkTime");
+        public Criteria andCheckedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("checked_time >=", value, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeLessThan(Date value) {
-            addCriterion("check_time <", value, "checkTime");
+        public Criteria andCheckedTimeLessThan(Date value) {
+            addCriterion("checked_time <", value, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeLessThanOrEqualTo(Date value) {
-            addCriterion("check_time <=", value, "checkTime");
+        public Criteria andCheckedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("checked_time <=", value, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeIn(List<Date> values) {
-            addCriterion("check_time in", values, "checkTime");
+        public Criteria andCheckedTimeIn(List<Date> values) {
+            addCriterion("checked_time in", values, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeNotIn(List<Date> values) {
-            addCriterion("check_time not in", values, "checkTime");
+        public Criteria andCheckedTimeNotIn(List<Date> values) {
+            addCriterion("checked_time not in", values, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeBetween(Date value1, Date value2) {
-            addCriterion("check_time between", value1, value2, "checkTime");
+        public Criteria andCheckedTimeBetween(Date value1, Date value2) {
+            addCriterion("checked_time between", value1, value2, "checkedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCheckTimeNotBetween(Date value1, Date value2) {
-            addCriterion("check_time not between", value1, value2, "checkTime");
+        public Criteria andCheckedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("checked_time not between", value1, value2, "checkedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeIsNull() {
+            addCriterion("sold_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeIsNotNull() {
+            addCriterion("sold_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeEqualTo(Date value) {
+            addCriterion("sold_time =", value, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeNotEqualTo(Date value) {
+            addCriterion("sold_time <>", value, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeGreaterThan(Date value) {
+            addCriterion("sold_time >", value, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("sold_time >=", value, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeLessThan(Date value) {
+            addCriterion("sold_time <", value, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeLessThanOrEqualTo(Date value) {
+            addCriterion("sold_time <=", value, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeIn(List<Date> values) {
+            addCriterion("sold_time in", values, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeNotIn(List<Date> values) {
+            addCriterion("sold_time not in", values, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeBetween(Date value1, Date value2) {
+            addCriterion("sold_time between", value1, value2, "soldTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSoldTimeNotBetween(Date value1, Date value2) {
+            addCriterion("sold_time not between", value1, value2, "soldTime");
             return (Criteria) this;
         }
     }
