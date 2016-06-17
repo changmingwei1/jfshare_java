@@ -80,12 +80,14 @@ public class WoMaiTest{
         String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuids", ids);
-        param.put("warehouseid", "100");
+        param.put("warehouseid", "0");
+//        param.put("area", "100");
 
         Map<String, String> httpParam = this.initPostParams("womai.inventory.get", param);
         String detailJson = HttpUtils.httpPostUTF8(domain, httpParam);
         System.out.println(detailJson);
         JSONObject itemDetail = JSON.parseObject(detailJson);
+
     }
 
 }

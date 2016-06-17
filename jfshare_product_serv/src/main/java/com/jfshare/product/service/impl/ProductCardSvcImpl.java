@@ -1,5 +1,7 @@
 package com.jfshare.product.service.impl;
 
+import com.jfshare.finagle.thrift.product.AldCaptchaItem;
+import com.jfshare.finagle.thrift.product.DayAldCaptchaItem;
 import com.jfshare.product.commons.ProductCommons;
 import com.jfshare.product.dao.mysql.IProductCardDao;
 import com.jfshare.product.model.TbProductCard;
@@ -138,5 +140,40 @@ public class ProductCardSvcImpl implements IProductCartSvc {
     @Override
     public int useProductCard(TbProductCard productCard) {
         return this.productCardDao.useProductCard(productCard);
+    }
+
+    @Override
+    public int sellerProductCardCount(Map queryMap) {
+        return this.productCardDao.sellerProductCardCount(queryMap);
+    }
+
+    @Override
+    public List<AldCaptchaItem> sellerProductCardList(Map queryMap) {
+        return this.productCardDao.sellerProductCardList(queryMap);
+    }
+
+    @Override
+    public int sellerProductCardDayCount(Map queryMap) {
+        return this.productCardDao.sellerProductCardDayCount(queryMap);
+    }
+
+    @Override
+    public List<DayAldCaptchaItem> sellerProductCardDayList(Map queryMap) {
+        return this.productCardDao.sellerProductCardDayList(queryMap);
+    }
+
+    @Override
+    public int getProductCardCount(Map queryMap) {
+        return this.productCardDao.getProductCardCount(queryMap);
+    }
+
+    @Override
+    public int queryProductCardCheckCount(Map queryMap) {
+        return this.productCardDao.queryProductCardCheckCount(queryMap);
+    }
+
+    @Override
+    public List<TbProductCard> queryProductCardCheckList(Map queryMap) {
+        return this.productCardDao.queryProductCardCheckList(queryMap);
     }
 }

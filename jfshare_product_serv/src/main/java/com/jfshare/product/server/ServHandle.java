@@ -16,9 +16,12 @@ import com.jfshare.product.util.ConvertUtil;
 import com.jfshare.product.util.FailCode;
 import com.jfshare.product.util.ResultUtil;
 import com.jfshare.product.util.ValidateUtil;
+import com.jfshare.utils.DateUtil;
+import com.jfshare.utils.DateUtils;
 import com.jfshare.utils.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.project.artifact.ProjectArtifactMetadata;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +31,7 @@ import scala.collection.parallel.ParMap;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -594,6 +598,42 @@ public class ServHandle implements ProductServ.Iface {
 		captchaListResult.addToItemList(new AldCaptchaItem("123132", "星球大战", 555, 123));
 		captchaListResult.setPagination(param.getPagination());
 
+
+
+
+		Page page = new Page(param.getPagination().getCurrentPage(), param.getPagination().getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("sellerId", param.getSellerId());
+//		queryMap.put("month", param.getMonthQuery());
+//		queryMap.put("productId", param.getProductId());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		try {
+			// 查询总数
+			int total = this.productCartSvc.sellerProductCardCount(queryMap);
+			page.setTotal(total);
+
+			List<AldCaptchaItem> itemList = this.productCartSvc.sellerProductCardList(queryMap);
+			captchaListResult.setItemList(itemList);
+
+			// 昨天验证
+			queryMap.put("day", DateUtils.dateToStr(DateUtils.addDay(new Date(), -1)));
+			queryMap.put("state", 3);
+			captchaListResult.setYedNum(this.productCartSvc.getProductCardCount(queryMap));
+
+			queryMap.remove("day");
+			// 本月验证
+			queryMap.put("month", DateUtils.getNowMonth(DateUtils.date2Str(DateUtils.getNow())));
+			captchaListResult.setMonNum(this.productCartSvc.getProductCardCount(queryMap));
+
+			captchaListResult.setPagination(ConvertUtil.page2Pagination(page));
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryCaptchaList error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
 		return captchaListResult;
 	}
 
@@ -617,6 +657,32 @@ public class ServHandle implements ProductServ.Iface {
 
 		dayCaptchaListResult.setPagination(param.getPagination());
 
+		Page page = new Page(param.getPagination().getCurrentPage(), param.getPagination().getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("sellerId", param.getSellerId());
+		queryMap.put("month", param.getMonthQuery());
+//		queryMap.put("productId", param.getProductId());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		// 查询总数
+		int total = this.productCartSvc.sellerProductCardDayCount(queryMap);
+		page.setTotal(total);
+
+		List<DayAldCaptchaItem> dayAldCaptchaItems = this.productCartSvc.sellerProductCardDayList(queryMap);
+		dayCaptchaListResult.setItemList(dayAldCaptchaItems);
+
+		// 当月销售
+		queryMap.put("state", 2);
+		dayCaptchaListResult.setSoldNum(this.productCartSvc.getProductCardCount(queryMap));
+
+		// 当月验证
+		queryMap.put("state", 3);
+		dayCaptchaListResult.setCheckedNum(this.productCartSvc.getProductCardCount(queryMap));
+
+
+		dayCaptchaListResult.setPagination(ConvertUtil.page2Pagination(page));
 		return dayCaptchaListResult;
 	}
 
@@ -639,6 +705,32 @@ public class ServHandle implements ProductServ.Iface {
 		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(6676).setCheckTime("2016-05-28"));
 		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(7777).setCheckTime("2016-05-28"));
 
+
+		Page page = new Page(param.getPagination().getCurrentPage(), param.getPagination().getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("sellerId", param.getSellerId());
+		queryMap.put("productId", param.getProductId());
+		queryMap.put("month", param.getMonthQuery());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		try {
+			// 查询总数
+			int total = this.productCartSvc.queryProductCardCheckCount(queryMap);
+			page.setTotal(total);
+
+			List<TbProductCard> productCardList = this.productCartSvc.queryProductCardCheckList(queryMap);
+			for (TbProductCard tbProductCard : productCardList) {
+                captchaDetailResult.addToProductCards(ConvertUtil.tbProductCard2Thrift(tbProductCard));
+            }
+
+			captchaDetailResult.setPagination(ConvertUtil.page2Pagination(page));
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryCaptchaDetails error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
 		return captchaDetailResult;
 	}
 }

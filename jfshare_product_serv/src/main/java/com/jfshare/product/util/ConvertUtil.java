@@ -121,7 +121,7 @@ public class ConvertUtil {
         productCard.setPassword(tbProductCard.getPassword());
         productCard.setSkuNum(tbProductCard.getSkuNum());
         productCard.setBuyerId(tbProductCard.getBuyerId());
-        productCard.setCheckTime(DateUtil.date2Str(tbProductCard.getCheckTime()));
+        productCard.setCheckTime(DateUtil.date2Str(tbProductCard.getCheckedTime()));
         return productCard;
     }
 
@@ -146,7 +146,7 @@ public class ConvertUtil {
         tbProductCard.setPassword(productCard.getPassword());
         tbProductCard.setSkuNum(productCard.getSkuNum());
         tbProductCard.setBuyerId(productCard.getBuyerId());
-        tbProductCard.setCheckTime(DateUtil.str2Date(productCard.getCheckTime()));
+        tbProductCard.setCheckedTime(DateUtil.str2Date(productCard.getCheckTime()));
         return tbProductCard;
     }
 

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.jfshare.finagle.thrift.subject.SubjectNode;
 import com.jfshare.product.model.mapper.TbProductMapper;
+import com.jfshare.utils.DateUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +107,8 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
                     ProductUtil.fillAliasProduct(product, tbProductWithBLOBs);
                     product.setSkuTemplate(tbProductWithBLOBs.getSkuTemplate());
                     product.setAttribute(tbProductWithBLOBs.getAttribute());
+                    product.setCreateTime(DateUtils.date2Str(tbProductWithBLOBs.getCreateTime()));
+                    product.setLastUpdateTime(DateUtils.date2Str(tbProductWithBLOBs.getLastUpdateTime()));
 
                     //reload cache
                     this.productRedis.removeProductCache(productId);
@@ -556,6 +559,8 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
 
         ProductSkuItem productSkuItem = new ProductSkuItem();
         BeanUtil.fillBeanData(productSkuItem, stringObjectMap);
+        productSkuItem.setCurPrice(PriceUtils.intToStr(tbProductSku.getCurPrice()));
+        productSkuItem.setOrgPrice(PriceUtils.intToStr(tbProductSku.getOrgPrice()));
         productSku.addToSkuItems(productSkuItem);
 
         //load cache

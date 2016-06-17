@@ -11,6 +11,13 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <resultMap id="aldCaptchaItemMap" type="com.jfshare.finagle.thrift.product.AldCaptchaItem">
+        <result column="id" property="productId" jdbcType="VARCHAR"/>
+        <result column="name" property="productName" jdbcType="VARCHAR"/>
+        <result column="sold_num" property="aldSold" jdbcType="INTEGER"/>
+        <result column="check_num" property="aldCaptcha" jdbcType="INTEGER"/>
+    </resultMap>
+
     <select id="selectAvailableCard" parameterType="map" resultMap="com.jfshare.product.model.mapper.TbProductCardMapper.BaseResultMap">
         select
         <include refid="com.jfshare.product.model.mapper.TbProductCardMapper.Base_Column_List"/>
@@ -22,7 +29,7 @@
 
     <update id="lockProductCard" parameterType="map">
 		UPDATE tb_product_card
-		SET transaction_id = #{transactionId}, state = 2, buyer_id = #{buyerId}
+		SET transaction_id = #{transactionId}, state = 2, buyer_id = #{buyerId}, sold_time = CURRENT_TIMESTAMP
 		WHERE state = 1 and product_id = #{productId}
 		ORDER BY create_time asc
 		limit #{num}
@@ -30,7 +37,7 @@
 
     <update id="releaseProductCard" parameterType="map">
 		update tb_product_card
-		SET transaction_id = '', state = 1, buyer_id = 0
+		SET transaction_id = '', state = 1, buyer_id = 0, sold_time = null
 		WHERE transaction_id = #{transactionId} and product_id = #{productId}
 	</update>
 
@@ -102,6 +109,86 @@
             <if test="productName != null">
                 AND p.name like concat('%',#{productName} ,'%')
             </if>
+        </where>
+    </select>
+
+    <select id="sellerProductCardCount" parameterType="map" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        tb_product p, tb_product_card_statistics s
+        <where>
+            AND s.product_id = p.id AND s.seller_id = #{sellerId}
+        </where>
+    </select>
+    
+    <select id="sellerProductCardList" parameterType="map" resultMap="aldCaptchaItemMap">
+        SELECT
+        p.id, p.name, sum(s.sold_num) sold_num, sum(s.checked_num) checked_num
+        FROM
+        tb_product p, tb_product_card_statistics s
+        <where>
+            AND s.product_id = p.id AND s.seller_id = #{sellerId}
+        </where>
+        GROUP BY p.name
+        ORDER BY checked_num desc, sold_num asc
+        LIMIT #{start}, #{count}
+    </select>
+    
+    <select id="sellerProductCardDayCount" parameterType="map" resultType="int">
+      select * from tb_product_card_statistics
+    </select>
+
+    <select id="sellerProductCardDayList" parameterType="map" resultMap="aldCaptchaItemMap">
+      select * from tb_product_card_statistics
+    </select>
+
+    <select id="getProductCardCount" parameterType="map" resultType="int">
+        select
+        <if test="state = 2">
+            sum(s.sold_num)
+        </if>
+        <if test="state = 3">
+            sum(s.check_num)
+        </if>
+
+        from tb_product p, tb_product_card_statistics s
+        <where>
+            and p.id = s.product_id and s.seller_id = #{sellerId}
+            <if test="productId != null">
+              and s.product_id = #{productId}
+            </if>
+            <if test="day != null">
+              and s.statistics_date = #{day}
+            </if>
+            <if test="month != null">
+              and LEFT(s.`statistics_date`,7) = #{month}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="queryProductCardCheckCount" parameterType="map" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        tb_product p, tb_product_card c
+        <where>
+            AND c.product_id = p.id AND c.seller_id = #{sellerId} and c.product_id = #{productId} and c.state = 3
+            and DATE_FORMAT(c.`check_time`,'%Y-%m') = #{month}
+        </where>
+    </select>
+
+    <select id="queryProductCardCheckList" parameterType="map" resultMap="com.jfshare.product.model.mapper.TbProductCardMapper.BaseResultMap">
+        SELECT
+        c.*
+        FROM
+        tb_product p, tb_product_card c
+        <where>
+            AND c.product_id = p.id AND c.seller_id = #{sellerId} and c.product_id = #{productId} and c.state = 3
+            and DATE_FORMAT(c.checked_time,'%Y-%m') = #{month}
+            order by c.checked_time DESC
+            LIMIT #{start}, #{count}
         </where>
     </select>
 </mapper>
