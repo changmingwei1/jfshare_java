@@ -155,13 +155,13 @@ public class ParamCheck {
 
         logger.info("支付金额校验， order.thirdScores={}, order.thirdScore2Cash={}, order.thirdPrices={}, pay.thirdPrices={}, pay.thirdScores={}", thirdScores, thirdScore2Cach, thirdPrices, payRet.getThirdPrice(), payRet.getThirdScore());
         //天翼尊享模式支付
-        if((thirdScores > 0 && thirdScore2Cach > 0 && thirdPrices != payRet.getThirdPrice() + thirdScore2Cach) || (thirdPrices != payRet.getThirdPrice() + payRet.getThirdScore())) {
-            logger.error("支付总金额或积分不符， 实际金额:" + thirdPrices + ", 支付结果金额:" + payRet.getThirdPrice()+ "， 实际积分:" + thirdScores + ", 第三方积分抵扣金额:"  + thirdScore2Cach + "支付结果积分:" + payRet.getThirdScore());
-            failList.add(FailCode.THIRD_PRICE＿FAIL);
-        } else {
+        if((thirdScores > 0 && thirdScore2Cach > 0 && thirdPrices == payRet.getThirdPrice() + thirdScore2Cach) || (thirdPrices == payRet.getThirdPrice() + payRet.getThirdScore())) {
             if (thirdScores != payRet.getThirdScore()) {
                 logger.warn("TODO 支付后改变了金额和积分的支付形式，后续更新订单中商品使用的积分");
             }
+        } else {
+            logger.error("支付总金额或积分不符， 实际金额:" + thirdPrices + ", 支付结果金额:" + payRet.getThirdPrice()+ "， 实际积分:" + thirdScores + ", 第三方积分抵扣金额:"  + thirdScore2Cach + "支付结果积分:" + payRet.getThirdScore());
+            failList.add(FailCode.THIRD_PRICE＿FAIL);
         }
 
         return failList;

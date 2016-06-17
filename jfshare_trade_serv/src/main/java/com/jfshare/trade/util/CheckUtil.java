@@ -376,7 +376,7 @@ public class CheckUtil {
                 PaymentInfo paymentInfo = new PaymentInfo();
                 paymentInfo.setCreateTime(orderList.get(0).getCreateTime());
                 paymentInfo.setCancelTime(orderList.get(0).getCancelTime());
-                paymentInfo.setPrice(PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScoreExchangeCash));
+                paymentInfo.setPrice(thirdScoreExchangeCash > 0 ? PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScoreExchangeCash) : PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScore));
                 paymentInfo.setThirdScore(String.valueOf(thirdScore)); //若使用第三方积分的总数
 
                 createOrderResult.setOrderIdList(orderIds);
