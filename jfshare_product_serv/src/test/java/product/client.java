@@ -116,14 +116,14 @@ public class client {
         param.setSkuTag(1);
         param.setAttributeTag(1);
         param.setSkuTemplateTag(1);
-        System.out.println(client.queryProduct("ze160528195652000128", param).toString());
+        System.out.println(client.queryProduct("ze160525101844000096", param).toString());
     }
 
     @Test
     public void testQueryProductDetail() throws Exception {
 
         ProductDetailParam param = new ProductDetailParam();
-        param.setProductId("ze160514130313000379");
+        param.setProductId("ze160526111619000994");
 
         System.out.println(this.client.queryProductDetail(param));
     }
@@ -177,7 +177,7 @@ public class client {
     @Test
     public void testQueryProductCardViewList() throws Exception {
         ProductCardViewParam param = new ProductCardViewParam();
-        param.setSellerId(13);
+        param.setSellerId(14);
 //        param.setProductId("ze151210145613000059");
 //        param.setSkuNum("1:13");
         Pagination pagination = new Pagination();
@@ -225,11 +225,16 @@ public class client {
     public void testQueryHotSKU() throws Exception {
         ProductRetParam param = new ProductRetParam();
         param.setSkuTag(1);
-        System.out.println(this.client.queryHotSKU("ze160515153359000306", "1-1:100-101", param));
+        System.out.println(this.client.queryHotSKU("ze160526111619000994", "", param));
+        ProductSkuParam skuParam = new ProductSkuParam();
+        skuParam.setProductId("ze160526111619000994");
+        skuParam.setSkuNum("");
+        skuParam.setStorehouseId(0);
+        System.out.println(this.client.queryHotSKUV1(skuParam, param));
     }
 
     @Test
-    public void testt() throws Exception {
+    public void testProductSurveyBackendQuery() throws Exception {
         ProductSurveyQueryParam param = new ProductSurveyQueryParam();
         param.setSort("create_time DESC");
         Pagination pagination = new Pagination();
@@ -254,6 +259,22 @@ public class client {
         productCardImportParam.setSellerId(1);
         productCardImportParam.setPath(path);
         System.out.println(client.importProductCard(productCardImportParam));
+    }
+
+    @Test
+    public void testQueryCaptchaDetails() throws Exception {
+        System.out.println(this.client.queryCaptchaDetails(new CaptchaQueryParam()));
+    }
+
+    @Test
+    public void testQueryCaptchaList() throws Exception {
+        System.out.println(this.client.queryCaptchaList(new CaptchaQueryParam()));
+    }
+
+    @Test
+    public void testQueryCaptchaTotalList() throws Exception {
+
+        System.out.println(this.client.queryCaptchaTotalList(new CaptchaQueryParam()));
     }
 
 

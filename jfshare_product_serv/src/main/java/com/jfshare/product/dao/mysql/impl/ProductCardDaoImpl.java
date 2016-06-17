@@ -1,5 +1,7 @@
 package com.jfshare.product.dao.mysql.impl;
 
+import com.jfshare.finagle.thrift.product.AldCaptchaItem;
+import com.jfshare.finagle.thrift.product.DayAldCaptchaItem;
 import com.jfshare.product.dao.mysql.IProductCardDao;
 import com.jfshare.product.model.TbProduct;
 import com.jfshare.product.model.TbProductCard;
@@ -11,6 +13,7 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -73,11 +76,48 @@ public class ProductCardDaoImpl implements IProductCardDao {
 
         TbProductCard tbproductCard = new TbProductCard();
         tbproductCard.setState(3);
-        tbproductCard.setLastUpdateTime(new DateTime().toDate());
+        Date now = new Date();
+        tbproductCard.setLastUpdateTime(now);
+        tbproductCard.setCheckedTime(now);
 
         int num = this.cardMapper.updateByExampleSelective(tbproductCard, example);
 
         return num;
+    }
+
+    @Override
+    public int sellerProductCardCount(Map queryMap) {
+        return this.manualCardMapper.sellerProductCardCount(queryMap);
+    }
+
+    @Override
+    public List<AldCaptchaItem> sellerProductCardList(Map queryMap) {
+        return this.manualCardMapper.sellerProductCardList(queryMap);
+    }
+
+    @Override
+    public int sellerProductCardDayCount(Map queryMap) {
+        return this.manualCardMapper.sellerProductCardDayCount(queryMap);
+    }
+
+    @Override
+    public List<DayAldCaptchaItem> sellerProductCardDayList(Map queryMap) {
+        return this.manualCardMapper.sellerProductCardDayList(queryMap);
+    }
+
+    @Override
+    public int getProductCardCount(Map queryMap) {
+        return this.manualCardMapper.getProductCardCount(queryMap);
+    }
+
+    @Override
+    public int queryProductCardCheckCount(Map queryMap) {
+        return this.manualCardMapper.queryProductCardCheckCount(queryMap);
+    }
+
+    @Override
+    public List<TbProductCard> queryProductCardCheckList(Map queryMap) {
+        return this.manualCardMapper.queryProductCardCheckList(queryMap);
     }
 
     @Override

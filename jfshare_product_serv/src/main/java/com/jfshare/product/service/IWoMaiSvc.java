@@ -7,4 +7,8 @@ public interface IWoMaiSvc {
 
     boolean importProduct(int sellerId, String path);
 
+    String getWoMaiWarehouseId(String storehouseId);
+
+    String getStorehouseId(String warehouseId);
+
 }

@@ -29,7 +29,9 @@ public class TbProductCard {
 
     private Integer buyerId;
 
-    private Date checkTime;
+    private Date checkedTime;
+
+    private Date soldTime;
 
     public Integer getId() {
         return id;
@@ -135,11 +137,19 @@ public class TbProductCard {
         this.buyerId = buyerId;
     }
 
-    public Date getCheckTime() {
-        return checkTime;
+    public Date getCheckedTime() {
+        return checkedTime;
     }
 
-    public void setCheckTime(Date checkTime) {
-        this.checkTime = checkTime;
+    public void setCheckedTime(Date checkedTime) {
+        this.checkedTime = checkedTime;
+    }
+
+    public Date getSoldTime() {
+        return soldTime;
+    }
+
+    public void setSoldTime(Date soldTime) {
+        this.soldTime = soldTime;
     }
 }

@@ -12,7 +12,7 @@
 	    <result column="org_price" property="orgPrice" jdbcType="VARCHAR" />
 	    <result column="cur_price" property="curPrice" jdbcType="VARCHAR" />
 	    <result column="vice_name" property="viceName" jdbcType="VARCHAR" />
-    	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="string"/>
+    	<result column="create_time" property="createTime" />
     	<result column="seller_id" property="sellerId" jdbcType="INTEGER" />
     	<result column="type" property="type" jdbcType="INTEGER" />
     	<result column="click_rate" property="clickRate" jdbcType="INTEGER" />
@@ -38,7 +38,7 @@
 			(select min(cur_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) cur_price,
 			(select min(org_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) org_price,
 			a.vice_name,
-			a.create_time,
+			date_format(a.create_time,'%Y-%c-%d %h:%i:%s') create_time,
 			a.seller_id,
 			a.type,
 			a.click_rate,
@@ -109,7 +109,7 @@
 			(select min(cur_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) cur_price,
 			(select min(org_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) org_price,
 			a.vice_name,
-			a.create_time,
+			date_format(a.create_time,'%Y-%c-%d %h:%i:%s') create_time,
 			a.seller_id,
 			a.type,
 			a.click_rate,
@@ -182,7 +182,7 @@
 			(select min(cur_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) cur_price,
 			(select min(org_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) org_price,
 			a.vice_name,
-			a.create_time,
+			date_format(a.create_time,'%Y-%c-%d %h:%i:%s') create_time,
 			a.seller_id,
 			a.type,
 			a.click_rate,
@@ -228,7 +228,7 @@
 			(select min(cur_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) cur_price,
 			(select min(org_price) from tb_product_sku where product_id = a.id and storehouse_id != 0) org_price,
 			a.vice_name,
-			a.create_time,
+			date_format(a.create_time,'%Y-%c-%d %h:%i:%s') create_time,
 			a.seller_id,
 			a.type,
 			a.click_rate,
