@@ -36,14 +36,14 @@ public class Test_xxx {
        OrderQueryConditions conditions = new OrderQueryConditions();
         conditions.setStartTime("2016-05-01 00:00:00");
         conditions.setEndTime("2016-06-30 00:00:00");
-//        conditions.setOrderState(5);
-//        conditions.addToOrderIds("44140112");
-        conditions.addToOrderIds("44130090");
-//        conditions.setSellerId(13);
+        conditions.setOrderState(6);
+//        conditions.setOrderId("49090129");
+        conditions.addToOrderIds("49090129");
+        conditions.setSellerId(13);
 
         ESClient esClient = new ESClient("jfshare-app", "101.201.39.61:9300,101.201.39.62:9300");
         try {
-            for(int i=0; i < 1; i++) {
+            for(int i=0; i < 10; i++) {
                 long start = System.nanoTime();
                 OrderProfileResult orderProfileResult = orderProfileQueryFull(conditions, esClient);
                 logger.info("第{}次，耗时：{}", i, (System.nanoTime()-start)/1000000);
@@ -122,7 +122,7 @@ public class Test_xxx {
                 .setTypes("esOrder")
                 .setQuery(queryBuilder)
                 .setFrom(0)
-                .setSize(30)
+                .setSize(50)
                 .setExplain(true)
                 .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC))
                 .execute()

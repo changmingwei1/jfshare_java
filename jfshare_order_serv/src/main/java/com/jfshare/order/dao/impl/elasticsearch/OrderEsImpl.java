@@ -29,6 +29,9 @@ public class OrderEsImpl implements IOrderEs{
     private ESClient esClient;
 
     public SearchHits search(OrderQueryConditions conditions) {
+        if(conditions.getCurPage() <= 0) {
+            conditions.setCurPage(1);
+        }
         String startTime = StringUtils.isBlank(conditions.getStartTime()) ? "2016-05-31 00:00:00" : conditions.getStartTime();
         String endTime = StringUtils.isBlank(conditions.getEndTime()) ? DateTimeUtil.getCurrentDate(DateTimeUtil.FORMAT_DEFAULT) : conditions.getEndTime();
         int orderState = conditions.getOrderState();
