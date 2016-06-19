@@ -32,8 +32,13 @@ public class OrderEsImpl implements IOrderEs{
         if(conditions.getCurPage() <= 0) {
             conditions.setCurPage(1);
         }
-        String startTime = StringUtils.isBlank(conditions.getStartTime()) ? "2016-05-31 00:00:00" : conditions.getStartTime();
+        String startTime = conditions.getStartTime();
+        if(StringUtils.isBlank(startTime)
+                || DateTimeUtil.strToDateTime(startTime).isBefore(DateTimeUtil.strToDateTime("2016-05-01 00:00:00"))) {
+            startTime = "2016-05-01 00:00:00";
+        }
         String endTime = StringUtils.isBlank(conditions.getEndTime()) ? DateTimeUtil.getCurrentDate(DateTimeUtil.FORMAT_DEFAULT) : conditions.getEndTime();
+        logger.info("esSearch----params:startTime={}, endTime={}, orderId={}, orderIds={}", startTime, endTime, conditions.getOrderId(), conditions.getOrderIds());
         int orderState = conditions.getOrderState();
         String[] monthArr = DateTimeUtil.getBetweenMonth(startTime, endTime);
         String[] indexArr = new String[monthArr.length];
@@ -43,6 +48,9 @@ public class OrderEsImpl implements IOrderEs{
 
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 
+        if(StringUtils.isNotBlank(conditions.getOrderId())) {
+            queryBuilder.must(QueryBuilders.matchQuery("orderId", conditions.getOrderId()));
+        }
 
         if(orderState > 0) {
             if(orderState < 10) {
@@ -52,10 +60,6 @@ public class OrderEsImpl implements IOrderEs{
             } else {
                 queryBuilder.must(QueryBuilders.matchQuery("orderState", orderState));
             }
-        }
-
-        if(StringUtils.isNotBlank(conditions.getOrderId())) {
-            queryBuilder.must(QueryBuilders.matchQuery("orderId", conditions.getOrderId()));
         }
 
         if(CollectionUtils.isNotEmpty(conditions.getOrderIds())) {
@@ -74,7 +78,10 @@ public class OrderEsImpl implements IOrderEs{
             queryBuilder.must(QueryBuilders.matchQuery("userId", conditions.getUserId()));
         }
 
-        if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+        //传入orderId或orderIds忽略时间限制
+        if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)
+                && CollectionUtils.isEmpty(conditions.getOrderIds())
+                && StringUtils.isNotBlank(conditions.getOrderId())) {
             queryBuilder.filter(QueryBuilders.rangeQuery("orderCreateTime")
                     .from(DateTimeUtil.strToDateTime(startTime))
                     .to(DateTimeUtil.strToDateTime(endTime)));
@@ -87,7 +94,7 @@ public class OrderEsImpl implements IOrderEs{
                 .setExplain(true)
                 .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC));
 
-        if(conditions.getCount() > 0 && conditions.getCurPage() > 1) {
+        if(conditions.getCount() > 0 && conditions.getCurPage() >= 1) {
             searchRequestBuilder.setSize(conditions.getCount());
         }
 

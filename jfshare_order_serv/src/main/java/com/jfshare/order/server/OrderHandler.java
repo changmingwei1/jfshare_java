@@ -778,7 +778,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     public StringResult batchExportOrderFull(OrderQueryConditions conditions) throws TException {
         StringResult stringResult = new StringResult();
         Result result = new Result();
-        result.setCode(1);
+        result.setCode(0);
         stringResult.setResult(result);
         stringResult.setValue("");
         try {
@@ -808,11 +808,11 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             stringResult.getResult().addToFailDescList(FailCode.PARAM_ERROR);
             return stringResult;
         }
-        String exportRet =  basicRedis.getKV(queryKey);
-        if(StringUtils.isBlank(exportRet)) {
-           exportRet = "expired";
-        }
+
+        String exportRet =  exportService.getExportResult(queryKey);
         stringResult.setValue(exportRet);
+        stringResult.getResult().setCode(0);
+
         return stringResult;
     }
 
@@ -1005,20 +1005,26 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         OrderProfileResult orderProfileResult = new OrderProfileResult();
         orderProfileResult.setResult(new Result(0));
         orderProfileResult.setOrderProfilePage(new OrderProfilePage());
-        if((StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) && StringUtils.isBlank(conditions.getOrderId())) {
+        if((StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime()))
+                && StringUtils.isBlank(conditions.getOrderId())
+                && CollectionUtils.isEmpty(conditions.getOrderIds())) {
             return ResultBuilder.createFailOrderProfileResult(FailCode.PARAM_ERROR);
         }
 
         SearchHits searchHits = orderEs.search(conditions);
-        long hitsTotal = searchHits.getTotalHits();
-        if(hitsTotal > 0) {
-            orderProfileResult.getOrderProfilePage().setCount(conditions.getCount());
-            orderProfileResult.getOrderProfilePage().setPageCount(searchHits.getHits().length);
-            orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
-            orderProfileResult.getOrderProfilePage().setTotal((int)hitsTotal);
+        int total = (int)searchHits.getTotalHits();
+
+        if(total > 0) {
+            orderProfileResult.getOrderProfilePage().setTotal(total);
             for(SearchHit searchHit : searchHits.getHits()) {
                 EsOrder esOrder = JSON.parseObject(searchHit.getSourceAsString(), EsOrder.class);
                 orderProfileResult.getOrderProfilePage().addToOrderProfileList(JSON.parseObject(esOrder.getOrderJson(), Order.class));
+            }
+            orderProfileResult.getOrderProfilePage().setCount(searchHits.getHits().length);
+            orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
+            if(conditions.getCount() > 0) {
+                int pageCount = total % conditions.getCount() == 0 ? total / conditions.getCount() : total / conditions.getCount() + 1;
+                orderProfileResult.getOrderProfilePage().setPageCount(pageCount);
             }
         }
 

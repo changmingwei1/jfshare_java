@@ -383,6 +383,8 @@ public class ParamCheck {
                         deliverInfo.setExpressName(importDeliverInfo.getExpressName());
                     if (importDeliverInfo.getExpressNo() != null && !importDeliverInfo.getExpressNo().isEmpty())
                         deliverInfo.setExpressNo(importDeliverInfo.getExpressNo());
+                    if (importDeliverInfo.getSellerComment() != null && !importDeliverInfo.getSellerComment().isEmpty())
+                        deliverInfo.setSellerComment(importDeliverInfo.getSellerComment());
                 }
             }
         }

@@ -34,12 +34,14 @@ public class Test_xxx {
 
     public static void main(String[] str) {
        OrderQueryConditions conditions = new OrderQueryConditions();
-        conditions.setStartTime("2016-05-01 00:00:00");
+        conditions.setStartTime("2016-06-010 00:00:00");
         conditions.setEndTime("2016-06-30 00:00:00");
-        conditions.setOrderState(6);
+//        conditions.setOrderState(6);
 //        conditions.setOrderId("49090129");
-        conditions.addToOrderIds("49090129");
-        conditions.setSellerId(13);
+//        conditions.addToOrderIds("49090129");
+//        conditions.setSellerId(13);
+        conditions.setCurPage(6);
+        conditions.setCount(100);
 
         ESClient esClient = new ESClient("jfshare-app", "101.201.39.61:9300,101.201.39.62:9300");
         try {
@@ -121,8 +123,8 @@ public class Test_xxx {
         SearchResponse searchResponse = esClient.getTransportClient().prepareSearch(indexArr)
                 .setTypes("esOrder")
                 .setQuery(queryBuilder)
-                .setFrom(0)
-                .setSize(50)
+                .setFrom((conditions.getCurPage() - 1) * conditions.getCount())
+                .setSize(conditions.getCount())
                 .setExplain(true)
                 .addSort(SortBuilders.fieldSort("orderCreateTime").order(SortOrder.DESC))
                 .execute()

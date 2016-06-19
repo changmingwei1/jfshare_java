@@ -1,8 +1,10 @@
 package com.jfshare.task.elasticsearch.models;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.PropertyFilter;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.task.util.DateTimeUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 
@@ -91,6 +93,17 @@ public class EsOrder {
     }
 
     public String toJSONStr(){
-        return JSON.toJSONString(this);
+        PropertyFilter filter = new PropertyFilter() {
+            //过滤不需要的字段
+            public boolean apply(Object source, String name, Object value) {
+                if(value == null || StringUtils.isBlank(String.valueOf(value))
+                        || (name.length()>3 && name.startsWith("set") && name.charAt(3) >=65 && name.charAt(3) <=90)){
+                    return false;
+                }
+                return true;
+            }
+        };
+
+        return JSON.toJSONString(this, filter);
     }
 }

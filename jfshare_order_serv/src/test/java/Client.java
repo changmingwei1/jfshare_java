@@ -1,6 +1,7 @@
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayChannel;
 import junit.framework.TestCase;
+import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -98,16 +99,17 @@ public class Client extends TestCase{
     }
 
     public void testOrderProfileQueryFull() throws Exception {
-        //商品id
+
         String orderId = "1";
         try {
             ////////////////////////////////////////////////////
             OrderQueryConditions conditions = new OrderQueryConditions();
-//            conditions.setCurPage(1);
+//            conditions.setCurPage(2);
 //            conditions.setCount(3);
-//            conditions.setStartTime("2016-05-02 00:00:00");
-//            conditions.setEndTime("2016-05-30 00:00:00");
-            conditions.setOrderId("47390131");
+//            conditions.setStartTime("2016-01-29 00:00:00");
+//            conditions.setEndTime("2016-06-30 00:00:00");
+            conditions.setOrderId("58870112");
+//            conditions.addToOrderIds("59700017");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -270,6 +272,7 @@ public class Client extends TestCase{
 //            queryConditions.setUserId(99);
             queryConditions.setStartTime("2016-05-01 00:00:00");
             queryConditions.setEndTime("2016-05-31 00:00:00");
+//                queryConditions.setOrderId("58870112");
             System.err.println(client.batchExportOrderFull(queryConditions));
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,5 +281,9 @@ public class Client extends TestCase{
                 transport.close();
             }
         }
+    }
+
+    public void testQueryExportFileKey() throws TException {
+        System.err.println(client.getExportOrderResult("0bc72301bd5fb99e0b1c8db9dcf3bdf3"));
     }
 }
