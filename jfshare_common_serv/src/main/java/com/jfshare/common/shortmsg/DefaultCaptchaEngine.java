@@ -37,7 +37,7 @@ public class DefaultCaptchaEngine implements ICaptchaFactory {
         }
 
         CaptchaWithKey captchaWithKey = new CaptchaWithKey();
-        captchaWithKey.setCaptcha(RandomUtil.generateUpperString(CAPTCHA_LENGTH));
+        captchaWithKey.setCaptcha(RandomUtil.getStringWithModel(CAPTCHA_LENGTH, RandomUtil.NUMBERCHAR));
         captchaWithKey.setKey(key);
         captchaWithKey.setExp(EXPIRED_SEC);
         captchaJedis.write(captchaWithKey);

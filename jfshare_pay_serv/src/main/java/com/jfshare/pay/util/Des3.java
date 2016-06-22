@@ -8,6 +8,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -20,6 +21,8 @@ public class Des3 {
         String str6 = des3DecodeCBC("telefenpaytes@pay17$#3#$", "13386191", str5);
         System.out.println(str5);
         System.out.println(str6);
+        String s = DigestUtils.md5Hex("BFZX171445201606221853362016062218530306831635201606221853091278441100186104182810000支付成功!");
+        System.out.print(s);
     }
 
     public static String des3EncodeCBC(String key, String keyiv, String data) throws Exception {

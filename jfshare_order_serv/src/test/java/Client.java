@@ -106,10 +106,11 @@ public class Client extends TestCase{
             OrderQueryConditions conditions = new OrderQueryConditions();
 //            conditions.setCurPage(2);
 //            conditions.setCount(3);
-//            conditions.setStartTime("2016-01-29 00:00:00");
-//            conditions.setEndTime("2016-06-30 00:00:00");
-            conditions.setOrderId("58870112");
-//            conditions.addToOrderIds("59700017");
+            conditions.setStartTime("2016-05-01 00:00:00");
+            conditions.setEndTime("2016-06-20 00:00:00");
+//            conditions.setOrderState(5);
+//            conditions.setOrderId("59090131");
+            conditions.addToOrderIds("59700017");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block

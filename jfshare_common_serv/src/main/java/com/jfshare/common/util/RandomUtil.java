@@ -132,16 +132,33 @@ public class RandomUtil {
         return result;
     }
 
+    /**
+     * 每次生成的指定模式的随机字符串
+     * @param len
+     * @param MODEL
+     * @return 定长的数字
+     */
+    public static String getStringWithModel(int len, String MODEL)
+    {
+        StringBuffer sb = new StringBuffer();
+        Random random = new Random();
+        for (int i = 0; i < len; i++)
+        {
+            sb.append(MODEL.charAt(random.nextInt(MODEL.length())));
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
-        System.out.println(generateString(10));
+        System.out.println(getStringWithModel(10, NUMBERCHAR));
         System.out.println(generateMixString(10));
         System.out.println(generateLowerString(10));
         System.out.println(generateUpperString(10));
         System.out.println(generateZeroString(10));
         System.out.println(toFixdLengthString(123, 10));
         System.out.println(toFixdLengthString(123L, 10));
-        int[] in = {1,2,3,4,5,6,7};
-        System.out.println(getNotSimple(in,3));
+        int[] in = {1,2,3,4,5,6,7,8,9,0};
+        System.out.println(getNotSimple(in,4));
     }
 }
 

@@ -246,37 +246,51 @@ public class PayUtil {
             Map<String, String> xmlMap = TianYiSubmit.xmlStr2Map(xmlRes);
             logger.info("解析天翼支付通知----xml转map完成, {}", xmlMap);
 
-            String AppCode = xmlMap.get("AppCode");
+            String AppID = xmlMap.get("AppID");
             String SPID = xmlMap.get("SPID");
             String ResponseDate = xmlMap.get("ResponseDate");
-            String RequestPayNo = xmlMap.get("RequestPayNo");
+            String RequestNo = xmlMap.get("RequestNo");
             String SpOrderID = xmlMap.get("SpOrderID");
-            String ResponsePayNo = xmlMap.get("ResponsePayNo");
+            String ResponseNo = xmlMap.get("ResponseNo");
+            String PayTotal = xmlMap.get("PayTotal");
             String PayMoney = xmlMap.get("PayMoney");
             String PayIntegral = xmlMap.get("PayIntegral");
             String PayVoucher = xmlMap.get("PayVoucher");
             String DeviceNo = xmlMap.get("DeviceNo");
+            String MsgCode = xmlMap.get("MsgCode");
+            String MsgContent = xmlMap.get("MsgContent");
             String Sign = xmlMap.get("Sign");
+            if(!"0000".equals(MsgCode)) {
+                logger.warn("解析天翼支付通知----支付结果失败, MsgCode={}， MsgContent={}", MsgCode, MsgContent);
+                return tbPayRecord;
+            }
 
             //TODO Sign验证
-//            String signStr = AppCode + SPID + RequestPayNo
+            String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
+            String signStr = AppID + SPID + ResponseDate + RequestNo + ResponseNo + PayTotal + PayMoney + PayIntegral + PayVoucher + DeviceNo + MsgCode + MsgContent + Token;
+            String signMake = DigestUtils.md5Hex(signStr);
+            if(!signMake.equalsIgnoreCase(Sign)) {
+                logger.warn("解析天翼支付通知----签名验证失败, 通知中sign={}， 生成sign={}", Sign, signMake);
+//                return tbPayRecord;
+            }
+
             Map<String, String> extInfo = new HashMap<String, String>();
             extInfo.put("PayIntegral".toLowerCase(), PayIntegral);
             extInfo.put("PayVoucher".toLowerCase(), PayVoucher);
             tbPayRecord = new TbPayRecordWithBLOBs();
-            tbPayRecord.setPayId(RequestPayNo);
+            tbPayRecord.setPayId(RequestNo);
             tbPayRecord.setThirdRet(payRes.getResUrl());
-            tbPayRecord.setThirdReq(RequestPayNo);
-            tbPayRecord.setThirdId(ResponsePayNo);
+            tbPayRecord.setThirdReq(RequestNo);
+            tbPayRecord.setThirdId(ResponseNo);
             tbPayRecord.setThirdPrice(NumberUtils.toInt(PayMoney));
             tbPayRecord.setThirdScore(NumberUtils.toInt(PayVoucher) + NumberUtils.toInt(PayIntegral));
             tbPayRecord.setThirdTime(DateUtils.strToDateTime(ResponseDate, DateUtils.PATTERN_YYYYMMDDHHMMSS2));
             tbPayRecord.setThirdAccount(DeviceNo);
             tbPayRecord.setPayState(2);
             tbPayRecord.setProcessTime(new DateTime());
-
+            logger.info("解析天翼支付通知----构建tbPayRecord={}", JSON.toJSON(tbPayRecord));
         } catch (Exception e) {
-            logger.error("解析支付通知失败 ==> " + payRes, e);
+            logger.error("解析支付支付通知----解析失败，发生异常 PayRes==> {}" + payRes, e);
         }
 
         return tbPayRecord;

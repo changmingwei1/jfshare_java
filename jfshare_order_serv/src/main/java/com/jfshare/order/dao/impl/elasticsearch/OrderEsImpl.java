@@ -81,7 +81,7 @@ public class OrderEsImpl implements IOrderEs{
         //传入orderId或orderIds忽略时间限制
         if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)
                 && CollectionUtils.isEmpty(conditions.getOrderIds())
-                && StringUtils.isNotBlank(conditions.getOrderId())) {
+                && StringUtils.isBlank(conditions.getOrderId())) {
             queryBuilder.filter(QueryBuilders.rangeQuery("orderCreateTime")
                     .from(DateTimeUtil.strToDateTime(startTime))
                     .to(DateTimeUtil.strToDateTime(endTime)));

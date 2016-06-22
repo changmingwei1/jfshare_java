@@ -339,7 +339,8 @@ public class DateTimeUtil {
      */
 	public static String[] getBetweenMonth(String ds1, String ds2) {
 		List<String> months = new ArrayList<>();
-		DateTime start = strToDateTime(ds1);
+		DateTime dt1 = DateTimeUtil.strToDateTime(ds1);
+		DateTime start = new DateTime().withDate(dt1.getYear(), dt1.getMonthOfYear(), 1);
 		DateTime end = strToDateTime(ds2);
 		do{
 			months.add(dateToStrOfDefaulfFormat(start.toDate()).substring(0,7));

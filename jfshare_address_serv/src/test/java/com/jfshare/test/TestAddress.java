@@ -25,6 +25,7 @@ public class TestAddress {
 	static private AddressServ.Client client;
 
 	private static final String IP = "127.0.0.1";// "120.24.153.155";
+//	private static final String IP = "101.201.38.182";// "120.24.153.155";
 
 	private static final Integer PORT = 1985;
 	
@@ -65,7 +66,7 @@ public class TestAddress {
 			int index = (int)(Math.random()*1);
 			int userId = userIds[index];
 			
-			AddressInfoListResult addressInfoListResult = client.queryAddress(userId);
+			AddressInfoListResult addressInfoListResult = client.queryAddress(17);
 			
 			System.out.println(addressInfoListResult.toString());
 		}
