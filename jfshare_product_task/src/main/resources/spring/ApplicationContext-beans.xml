@@ -18,5 +18,18 @@
         <!--<constructor-arg name="serverList" value="127.0.0.1:2181"/>-->
     </bean>
 
+    <!--brain服务端启动-->
+    <bean id="brainServCfg" class="com.jfshare.brain.finagle.server.FinagleServerCfg">
+        <property name="sid" value="productTask"/>
+        <property name="ref" value="handler"/>
+        <property name="api" value=""/>
+        <property name="port" value=""/>
+        <property name="threads" value="300"/>
+        <property name="stimeout" value="20000"/>
+        <property name="version" value="1.0"/>
+    </bean>
+    <bean id="brainServ" class="com.jfshare.brain.finagle.server.FinagleServer">
+        <constructor-arg name="cfg" ref="brainServCfg"/>
+    </bean>
 
 </beans>
