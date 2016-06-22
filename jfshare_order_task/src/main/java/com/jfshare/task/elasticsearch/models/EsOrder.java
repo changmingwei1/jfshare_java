@@ -27,7 +27,7 @@ public class EsOrder {
         this.sellerId = order.getSellerId();
         this.orderCreateTime = DateTimeUtil.strToDateTime(order.getCreateTime()).toDate();
         this.orderState = order.getOrderState();
-        this.orderJson = JSON.toJSONString(order);
+        this.orderJson = getJsonStr(order);
     }
 
     public String getOrderId() {
@@ -92,7 +92,7 @@ public class EsOrder {
                 '}';
     }
 
-    public String toJSONStr(){
+    public String getJsonStr(Order order){
         PropertyFilter filter = new PropertyFilter() {
             //过滤不需要的字段
             public boolean apply(Object source, String name, Object value) {
@@ -104,6 +104,10 @@ public class EsOrder {
             }
         };
 
-        return JSON.toJSONString(this, filter);
+        return JSON.toJSONString(order, filter);
+    }
+
+    public String toJsonStr() {
+        return JSON.toJSONString(this);
     }
 }
