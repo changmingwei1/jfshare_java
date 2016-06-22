@@ -254,6 +254,7 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
                 BeanUtil.fillBeanData(skuItem, stringObjectMap);
                 skuItem.setCurPrice(PriceUtils.intToStr(item.getCurPrice()));
                 skuItem.setOrgPrice(PriceUtils.intToStr(item.getOrgPrice()));
+                skuItem.setRefPrice(PriceUtils.intToStr(item.getRefPrice()));
 
 //                productSkuMap.put(item.getSkuNum(), skuItem);
                 productSkuItems.add(skuItem);
@@ -307,6 +308,9 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
 
         ProductSkuItem productSkuItem = new ProductSkuItem();
         BeanUtil.fillBeanData(productSkuItem, stringObjectMap);
+        productSkuItem.setCurPrice(PriceUtils.intToStr(tbProductSku.getCurPrice()));
+        productSkuItem.setOrgPrice(PriceUtils.intToStr(tbProductSku.getOrgPrice()));
+        productSkuItem.setRefPrice(PriceUtils.intToStr(tbProductSku.getRefPrice()));
         productSku.addToSkuItems(productSkuItem);
 
         //load cache
@@ -561,6 +565,7 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         BeanUtil.fillBeanData(productSkuItem, stringObjectMap);
         productSkuItem.setCurPrice(PriceUtils.intToStr(tbProductSku.getCurPrice()));
         productSkuItem.setOrgPrice(PriceUtils.intToStr(tbProductSku.getOrgPrice()));
+        productSkuItem.setRefPrice(PriceUtils.intToStr(tbProductSku.getRefPrice()));
         productSku.addToSkuItems(productSkuItem);
 
         //load cache

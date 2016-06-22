@@ -20,5 +20,5 @@
     <!-- import other cfg -->
     <import resource="classpath:/spring/ApplicationContext-*.xml"/>
 
-    <bean id="waitTask" class="com.jfshare.productTask.task.WaitTask" init-method="start"/>
+    <!--<bean id="waitTask" class="com.jfshare.productTask.task.WaitTask" init-method="start"/>-->
 </beans>

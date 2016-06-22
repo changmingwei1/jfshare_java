@@ -5,7 +5,6 @@ import com.jfshare.task.elasticsearch.IEsOrderHandler;
 import com.jfshare.task.elasticsearch.models.EsOrder;
 import com.jfshare.task.util.Constant;
 import com.jfshare.task.util.DateTimeUtil;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class EsOrderHandlerTransport implements IEsOrderHandler {
             String _index = getIndex(esOrder.getOrderCreateTime());
             String _type = Constant.ES_ORDER_TYPE;
             String _id = esOrder.getOrderId().trim();
-            String _content = esOrder.toJSONStr();
+            String _content = esOrder.toJsonStr();
             this.esClient.addOrUpdateByCustomId(_index, _type, _id, _content);
             logger.info("ES==< add $$同步ESBulker异步插入订单数据至ES");
         } catch (Exception e) {
