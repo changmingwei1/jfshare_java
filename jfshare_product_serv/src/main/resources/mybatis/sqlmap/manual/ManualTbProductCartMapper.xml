@@ -146,10 +146,10 @@
     <select id="getProductCardCount" parameterType="map" resultType="int">
         select
         <if test="state == 2">
-            sum(s.sold_num)
+            COALESCE(sum(s.sold_num),0)
         </if>
         <if test="state == 3">
-            sum(s.checked_num)
+            COALESCE(sum(s.checked_num),0)
         </if>
 
         from tb_product p, tb_product_card_statistics s
