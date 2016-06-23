@@ -527,16 +527,16 @@ public class ServHandle implements CommonServ.Iface {
         }
 
         try {
-            boolean sendRet = signinMsgSender.send(msg.getContent(), msg.getMobile());
-            if(!sendRet) {
+            FailDesc sendRet = signinMsgSender.send(msg.getContent(), msg.getMobile());
+            if(sendRet != null) {
                 result.setCode(1);
-                result.addToFailDescList(FailCode.SEND_MSG_FAILURE);
+                result.addToFailDescList(sendRet);
                 return result;
             }
         } catch (Exception e) {
             result.setCode(1);
             result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
-            logger.error("sendMsgCaptcha ==> Exception", e);
+            logger.error("sendMsg ==> Exception", e);
         }
         return result;
     }
@@ -576,11 +576,11 @@ public class ServHandle implements CommonServ.Iface {
                 result.addToFailDescList(createFailDesc);
                 return result;
             }
-
-            boolean sendRet = signinMsgSender.send(captchaWithKey.getCaptcha()+"(动态验证码)， 请在3分钟内填写", captcha.getMobile());
-            if(!sendRet) {
+            String msgContent = "验证码:" + captchaWithKey.getCaptcha() + "(3分钟内有效)，请及时输入验证，感谢您使用聚分享！";
+            FailDesc sendRet = signinMsgSender.send(msgContent, captcha.getMobile());
+            if(sendRet != null) {
                 result.setCode(1);
-                result.addToFailDescList(FailCode.SEND_MSG_FAILURE);
+                result.addToFailDescList(sendRet);
                 return result;
             }
         } catch (Exception e) {

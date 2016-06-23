@@ -121,6 +121,55 @@ public class
             return timeFormat.format(date);
     }
 
-    
+    public static enum MsgFailCode{
+        param_err("-1", "传递参数错误"),
+        user_id_or_pwd_err("-2", "用户id或密码错误"),
+        channel_id_err("-3", "通道id错误"),
+        tele_no_err("-4", "手机号码错误"),
+        content_err("-5", "短信内容错误"),
+        balance_not_enough("-6", "余额不足错误"),
+        ip_err("-7", "绑定ip错误"),
+        not_exist_sign_err("-8", "未带签名"),
+        sign_check_fail("-9", "签名字数不对"),
+        channel_pause("-10", "通道暂停"),
+        send_time_limit("-11", "该时间禁止发送"),
+        date_err("-12", "时间戳错误"),
+        code_err("-13", "编码异常"),
+        send_num_out_of_limit("-14", "发送被限制"),
+        content_err1("-15", "短信内容不正确")
+        ;
+
+        private String code;
+        private String desc;
+
+        MsgFailCode(String code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        @Override
+        public String toString() {
+            return "MsgFailCode{" +
+                    "code='" + code + '\'' +
+                    ", desc='" + desc + '\'' +
+                    '}';
+        }
+    }
 
 }
