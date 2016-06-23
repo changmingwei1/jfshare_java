@@ -15,7 +15,7 @@
         <result column="id" property="productId" jdbcType="VARCHAR"/>
         <result column="name" property="productName" jdbcType="VARCHAR"/>
         <result column="sold_num" property="aldSold" jdbcType="INTEGER"/>
-        <result column="check_num" property="aldCaptcha" jdbcType="INTEGER"/>
+        <result column="checked_num" property="aldCaptcha" jdbcType="INTEGER"/>
     </resultMap>
 
     <select id="selectAvailableCard" parameterType="map" resultMap="com.jfshare.product.model.mapper.TbProductCardMapper.BaseResultMap">
@@ -145,11 +145,11 @@
 
     <select id="getProductCardCount" parameterType="map" resultType="int">
         select
-        <if test="state = 2">
-            sum(s.sold_num)
+        <if test="state == 2">
+            COALESCE(sum(s.sold_num),0)
         </if>
-        <if test="state = 3">
-            sum(s.check_num)
+        <if test="state == 3">
+            COALESCE(sum(s.checked_num),0)
         </if>
 
         from tb_product p, tb_product_card_statistics s

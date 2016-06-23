@@ -247,18 +247,29 @@ public class PayUtil {
             logger.info("解析天翼支付通知----xml转map完成, {}", xmlMap);
 
             String AppID = xmlMap.get("AppID");
+            logger.debug("=====>AppID: " + AppID);
             String SPID = xmlMap.get("SPID");
+            logger.debug("=====>SPID: " + SPID);
             String ResponseDate = xmlMap.get("ResponseDate");
+            logger.debug("=====>ResponseDate: " + ResponseDate);
             String RequestNo = xmlMap.get("RequestNo");
-            String SpOrderID = xmlMap.get("SpOrderID");
+            logger.debug("=====>RequestNo: " + RequestNo);
             String ResponseNo = xmlMap.get("ResponseNo");
+            logger.debug("=====>ResponseNo: " + ResponseNo);
             String PayTotal = xmlMap.get("PayTotal");
+            logger.debug("=====>PayTotal: " + PayTotal);
             String PayMoney = xmlMap.get("PayMoney");
+            logger.debug("=====>PayMoney: " + PayMoney);
             String PayIntegral = xmlMap.get("PayIntegral");
+            logger.debug("=====>PayIntegral: " + PayIntegral);
             String PayVoucher = xmlMap.get("PayVoucher");
+            logger.debug("=====>PayVoucher: " + PayVoucher);
             String DeviceNo = xmlMap.get("DeviceNo");
+            logger.debug("=====>DeviceNo: " + DeviceNo);
             String MsgCode = xmlMap.get("MsgCode");
+            logger.debug("=====>MsgCode: " + MsgCode);
             String MsgContent = xmlMap.get("MsgContent");
+            logger.debug("=====>MsgContent: " + MsgContent);
             String Sign = xmlMap.get("Sign");
             if(!"0000".equals(MsgCode)) {
                 logger.warn("解析天翼支付通知----支付结果失败, MsgCode={}， MsgContent={}", MsgCode, MsgContent);
@@ -268,15 +279,13 @@ public class PayUtil {
             //TODO Sign验证
             String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
             String signStr = AppID + SPID + ResponseDate + RequestNo + ResponseNo + PayTotal + PayMoney + PayIntegral + PayVoucher + DeviceNo + MsgCode + MsgContent + Token;
+            logger.info("解析天翼支付通知----生成签名, waitSignStr={}", signStr);
             String signMake = DigestUtils.md5Hex(signStr);
             if(!signMake.equalsIgnoreCase(Sign)) {
                 logger.warn("解析天翼支付通知----签名验证失败, 通知中sign={}， 生成sign={}", Sign, signMake);
 //                return tbPayRecord;
             }
 
-            Map<String, String> extInfo = new HashMap<String, String>();
-            extInfo.put("PayIntegral".toLowerCase(), PayIntegral);
-            extInfo.put("PayVoucher".toLowerCase(), PayVoucher);
             tbPayRecord = new TbPayRecordWithBLOBs();
             tbPayRecord.setPayId(RequestNo);
             tbPayRecord.setThirdRet(payRes.getResUrl());
