@@ -145,10 +145,10 @@
 
     <select id="getProductCardCount" parameterType="map" resultType="int">
         select
-        <if test="state = 2">
+        <if test="state == 2">
             sum(s.sold_num)
         </if>
-        <if test="state = 3">
+        <if test="state == 3">
             sum(s.checked_num)
         </if>
 
