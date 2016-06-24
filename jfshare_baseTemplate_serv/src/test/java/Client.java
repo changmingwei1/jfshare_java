@@ -83,8 +83,8 @@ public class Client extends TestCase{
 
     public void testQueryStorehouse() throws Exception {
         StorehouseQueryParam param = new StorehouseQueryParam();
-        param.setSellerId(1);
-        param.setId(4);
+        param.setSellerId(14);
+//        param.setId(4);
         System.out.println(client.queryStorehouse(param).toString());
     }
 
