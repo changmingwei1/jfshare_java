@@ -133,7 +133,7 @@ public class ProductPostageBasic implements TBase<ProductPostageBasic, ProductPo
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.WEIGHT, new FieldMetaData("weight", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.DOUBLE)));
-    tmpMap.put(_Fields.AMOUNT, new FieldMetaData("amount", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.AMOUNT, new FieldMetaData("amount", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductPostageBasic.class, metaDataMap);
@@ -147,8 +147,7 @@ public class ProductPostageBasic implements TBase<ProductPostageBasic, ProductPo
     String productId,
     int templateId,
     int number,
-    double weight,
-    String amount)
+    double weight)
   {
     this();
     this.productId = productId;
@@ -158,7 +157,6 @@ public class ProductPostageBasic implements TBase<ProductPostageBasic, ProductPo
     setNumberIsSet(true);
     this.weight = weight;
     setWeightIsSet(true);
-    this.amount = amount;
   }
 
   /**
@@ -619,9 +617,11 @@ public class ProductPostageBasic implements TBase<ProductPostageBasic, ProductPo
     oprot.writeDouble(this.weight);
     oprot.writeFieldEnd();
     if (this.amount != null) {
-      oprot.writeFieldBegin(AMOUNT_FIELD_DESC);
-      oprot.writeString(this.amount);
-      oprot.writeFieldEnd();
+      if (isSetAmount()) {
+        oprot.writeFieldBegin(AMOUNT_FIELD_DESC);
+        oprot.writeString(this.amount);
+        oprot.writeFieldEnd();
+      }
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -650,14 +650,16 @@ public class ProductPostageBasic implements TBase<ProductPostageBasic, ProductPo
     sb.append("weight:");
     sb.append(this.weight);
     first = false;
-    if (!first) sb.append(", ");
-    sb.append("amount:");
-    if (this.amount == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.amount);
-    }
-    first = false;
+    if (isSetAmount()) {
+      if (!first) sb.append(", ");
+      sb.append("amount:");
+      if (this.amount == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.amount);
+      }
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

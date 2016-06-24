@@ -35,6 +35,7 @@ public class ConvertUtil {
         postageTemplateMap.put("postageInfo", tbPostageTemplate.getPostageInfo());
         postageTemplateMap.put("templateGroup", tbPostageTemplate.getTemplateGroup() + "");
         postageTemplateMap.put("templateDesc", tbPostageTemplate.getTemplateDesc());
+        postageTemplateMap.put("isUsed", tbPostageTemplate.getIsUsed() + "");
         return postageTemplateMap;
     }
 
@@ -52,6 +53,7 @@ public class ConvertUtil {
         tbPostageTemplate.setPostageInfo(postageTemplateMap.get("postageInfo"));
         tbPostageTemplate.setTemplateGroup(Integer.parseInt(postageTemplateMap.get("templateGroup")));
         tbPostageTemplate.setTemplateDesc(postageTemplateMap.get("templateDesc"));
+        tbPostageTemplate.setIsUsed(Integer.parseInt(postageTemplateMap.get("isUsed")));
         return tbPostageTemplate;
     }
 
@@ -73,6 +75,7 @@ public class ConvertUtil {
         }
         postageTemplate.setTemplateGroup(tbPostageTemplate.getTemplateGroup());
         postageTemplate.setTemplateDesc(tbPostageTemplate.getTemplateDesc());
+        postageTemplate.setIsUsed(tbPostageTemplate.getIsUsed());
         return postageTemplate;
     }
 
@@ -102,6 +105,7 @@ public class ConvertUtil {
         }
         tbPostageTemplate.setTemplateGroup(postageTemplate.getTemplateGroup() == 0 ? null : postageTemplate.getTemplateGroup());
         tbPostageTemplate.setTemplateDesc(postageTemplate.getTemplateDesc());
+        tbPostageTemplate.setIsUsed(postageTemplate.getIsUsed() == 0 ? null : postageTemplate.getIsUsed());
         return tbPostageTemplate;
     }
 
@@ -112,12 +116,12 @@ public class ConvertUtil {
      */
     public static Map<String, String> tbStorehouse2Redis(TbStorehouse tbStorehouse) {
 
-        Map<String, String> postageTemplateMap = new HashMap<>();
-        postageTemplateMap.put("id", tbStorehouse.getId() + "");
-        postageTemplateMap.put("sellerId", tbStorehouse.getSellerId() + "");
-        postageTemplateMap.put("name", tbStorehouse.getName());
-        postageTemplateMap.put("supportProvince", tbStorehouse.getSupportProvince());
-        return postageTemplateMap;
+        Map<String, String> storehouseMap = new HashMap<>();
+        storehouseMap.put("id", tbStorehouse.getId() + "");
+        storehouseMap.put("sellerId", tbStorehouse.getSellerId() + "");
+        storehouseMap.put("name", tbStorehouse.getName());
+        storehouseMap.put("supportProvince", tbStorehouse.getSupportProvince());
+        return storehouseMap;
     }
 
     /**
