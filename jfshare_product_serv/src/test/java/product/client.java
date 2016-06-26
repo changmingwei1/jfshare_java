@@ -42,9 +42,9 @@ public class client {
 
     private ProductServ.Client client;
 
-    private static final String IP = "127.0.0.1";
+//    private static final String IP = "127.0.0.1";
 //    private static final String IP = "120.24.153.155";
-//    private static final String IP = "101.201.38.182";
+    private static final String IP = "101.201.38.182";
 
     private static final Integer PORT = 1980;
 
@@ -268,7 +268,13 @@ public class client {
 
     @Test
     public void testQueryCaptchaList() throws Exception {
-        System.out.println(this.client.queryCaptchaList(new CaptchaQueryParam()));
+        CaptchaQueryParam param = new CaptchaQueryParam();
+        param.setSellerId(13);
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+        param.setPagination(pagination);
+        System.out.println(this.client.queryCaptchaList(param));
     }
 
     @Test

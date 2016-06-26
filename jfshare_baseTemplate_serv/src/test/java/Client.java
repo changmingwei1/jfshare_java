@@ -158,7 +158,7 @@ public class Client extends TestCase{
     public void testQueryPostageTemplate() throws Exception {
         PostageTemplateQueryParam param = new PostageTemplateQueryParam();
         param.setSellerId(13);
-        param.setId(17);
+//        param.setId(15);
         System.out.println(client.queryPostageTemplate(param).toString());
     }
 
