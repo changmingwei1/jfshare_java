@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
+
+import javax.annotation.Resource;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,8 +31,13 @@ import java.util.List;
 @Repository
 public class OrderJedisImpl implements IOrderJedis {
     private Logger logger = LoggerFactory.getLogger(OrderJedisImpl.class);
-    @Autowired
-    private JedisPool jedisPool;
+
+    /*@Autowired
+    private JedisPool jedisPool;*/
+
+    @Resource(name = "redisSentinel")
+    private JedisSentinelPool jedisPool;
+
     @Override
     public int addPayState(String payId, int retCode, DateTime cancelTime) {
         Jedis jedis = null;

@@ -268,7 +268,9 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
             } else {
                 int minPostage = getMin(sellerProductTotal, sellerTotal);
                 totalPostage += minPostage;
-                calculatePostageResult.addToSellerPostageReturnList(new SellerPostageReturn(sellerPostageModel.getSellerId(), PriceUtils.intToStr(minPostage)));
+                SellerPostageReturn sellerPostageReturn = new SellerPostageReturn(sellerPostageModel.getSellerId(), PriceUtils.intToStr(minPostage));
+                sellerPostageReturn.setPostageTemplate(CollectionUtils.isEmpty(templates) ? "" : templates.get(0).getTemplateDesc());
+                calculatePostageResult.addToSellerPostageReturnList(sellerPostageReturn);
             }
 
         }

@@ -12,9 +12,9 @@ public class ListRedisManager extends BaseRedisManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListRedisManager.class);
 
-	public ListRedisManager(JedisPool jedisPool) {
+	/*public ListRedisManager(JedisPool jedisPool) {
 		super(jedisPool);
-	}
+	}*/
 
 	/**
 	 * Function: 功能说明：插入元素 使用说明：从链表的尾部插入

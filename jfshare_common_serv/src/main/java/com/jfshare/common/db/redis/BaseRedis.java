@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.Pipeline;
 
 import javax.annotation.Resource;
@@ -21,11 +22,17 @@ import java.util.Set;
 public class BaseRedis {
     private Logger logger = LoggerFactory.getLogger(BaseRedis.class);
 
-    @Resource(name="jedisPoolRead")
+    /*@Resource(name="jedisPoolRead")
     private JedisPool jedisPoolRead;
 
     @Resource(name="jedisPoolWrite")
-    private JedisPool jedisPoolWrite;
+    private JedisPool jedisPoolWrite;*/
+
+    @Resource(name = "redisSentinel")
+    private JedisSentinelPool jedisPoolRead;
+
+    @Resource(name = "redisSentinel")
+    private JedisSentinelPool jedisPoolWrite;
 
     public Jedis getJedis() {
         return jedisPoolWrite.getResource();

@@ -20,13 +20,16 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import com.jfshare.finagle.thrift.address.AddressInfo;
+import redis.clients.jedis.JedisSentinelPool;
+
+import javax.annotation.Resource;
 
 @Repository
 public class AddressJedisImpl extends SqlSessionDaoSupport implements IAddressJedis {
 
 	private Logger logger = LoggerFactory.getLogger(AddressJedisImpl.class);
 
-	@Autowired
+	/*@Autowired
 	@Qualifier("jedisPool")
 	private JedisPool jedisPool;
 
@@ -37,7 +40,10 @@ public class AddressJedisImpl extends SqlSessionDaoSupport implements IAddressJe
 	@Autowired
 	public void setJedisPool(JedisPool jedisPool) {
 		this.jedisPool = jedisPool;
-	}
+	}*/
+
+	@Resource(name = "redisSentinel")
+	private JedisSentinelPool jedisPool;
 
 	@Override
 	public boolean setExpire(String key, int seconds) {

@@ -34,15 +34,18 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
 
   private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)1);
   private static final TField PRODUCT_POSTAGE_BASIC_LIST_FIELD_DESC = new TField("productPostageBasicList", TType.LIST, (short)2);
+  private static final TField ORDER_AMOUNT_FIELD_DESC = new TField("orderAmount", TType.STRING, (short)5);
 
 
   public int sellerId;
   public List<ProductPostageBasic> productPostageBasicList;
+  public String orderAmount;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SELLER_ID((short)1, "sellerId"),
-    PRODUCT_POSTAGE_BASIC_LIST((short)2, "productPostageBasicList");
+    PRODUCT_POSTAGE_BASIC_LIST((short)2, "productPostageBasicList"),
+    ORDER_AMOUNT((short)5, "orderAmount");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -61,6 +64,8 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
   	return SELLER_ID;
         case 2: // PRODUCT_POSTAGE_BASIC_LIST
   	return PRODUCT_POSTAGE_BASIC_LIST;
+        case 5: // ORDER_AMOUNT
+  	return ORDER_AMOUNT;
         default:
   	return null;
       }
@@ -113,6 +118,8 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
     tmpMap.put(_Fields.PRODUCT_POSTAGE_BASIC_LIST, new FieldMetaData("productPostageBasicList", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
                 new StructMetaData(TType.STRUCT, ProductPostageBasic.class))));
+    tmpMap.put(_Fields.ORDER_AMOUNT, new FieldMetaData("orderAmount", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(SellerPostageBasic.class, metaDataMap);
   }
@@ -145,6 +152,9 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
       }
       this.productPostageBasicList = __this__productPostageBasicList;
     }
+    if (other.isSetOrderAmount()) {
+      this.orderAmount = other.orderAmount;
+    }
   }
 
   public SellerPostageBasic deepCopy() {
@@ -156,6 +166,7 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
     setSellerIdIsSet(false);
     this.sellerId = 0;
     this.productPostageBasicList = null;
+    this.orderAmount = null;
   }
 
   public int getSellerId() {
@@ -222,6 +233,31 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
     }
   }
 
+  public String getOrderAmount() {
+    return this.orderAmount;
+  }
+
+  public SellerPostageBasic setOrderAmount(String orderAmount) {
+    this.orderAmount = orderAmount;
+    
+    return this;
+  }
+
+  public void unsetOrderAmount() {
+    this.orderAmount = null;
+  }
+
+  /** Returns true if field orderAmount is set (has been asigned a value) and false otherwise */
+  public boolean isSetOrderAmount() {
+    return this.orderAmount != null;
+  }
+
+  public void setOrderAmountIsSet(boolean value) {
+    if (!value) {
+      this.orderAmount = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_ID:
@@ -238,6 +274,13 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
         setProductPostageBasicList((List<ProductPostageBasic>)value);
       }
       break;
+    case ORDER_AMOUNT:
+      if (value == null) {
+        unsetOrderAmount();
+      } else {
+        setOrderAmount((String)value);
+      }
+      break;
     }
   }
 
@@ -247,6 +290,8 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
       return new Integer(getSellerId());
     case PRODUCT_POSTAGE_BASIC_LIST:
       return getProductPostageBasicList();
+    case ORDER_AMOUNT:
+      return getOrderAmount();
     }
     throw new IllegalStateException();
   }
@@ -262,6 +307,8 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
       return isSetSellerId();
     case PRODUCT_POSTAGE_BASIC_LIST:
       return isSetProductPostageBasicList();
+    case ORDER_AMOUNT:
+      return isSetOrderAmount();
     }
     throw new IllegalStateException();
   }
@@ -294,6 +341,14 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
       if (!this.productPostageBasicList.equals(that.productPostageBasicList))
         return false;
     }
+    boolean this_present_orderAmount = true && this.isSetOrderAmount();
+    boolean that_present_orderAmount = true && that.isSetOrderAmount();
+    if (this_present_orderAmount || that_present_orderAmount) {
+      if (!(this_present_orderAmount && that_present_orderAmount))
+        return false;
+      if (!this.orderAmount.equals(that.orderAmount))
+        return false;
+    }
 
     return true;
   }
@@ -309,6 +364,10 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
     builder.append(present_productPostageBasicList);
     if (present_productPostageBasicList)
       builder.append(productPostageBasicList);
+    boolean present_orderAmount = true && (isSetOrderAmount());
+    builder.append(present_orderAmount);
+    if (present_orderAmount)
+      builder.append(orderAmount);
     return builder.toHashCode();
   }
 
@@ -336,6 +395,16 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
     }
     if (isSetProductPostageBasicList()) {
       lastComparison = TBaseHelper.compareTo(this.productPostageBasicList, typedOther.productPostageBasicList);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetOrderAmount()).compareTo(typedOther.isSetOrderAmount());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOrderAmount()) {
+      lastComparison = TBaseHelper.compareTo(this.orderAmount, typedOther.orderAmount);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -384,6 +453,13 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 5: // ORDER_AMOUNT
+          if (field.type == TType.STRING) {
+            this.orderAmount = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -414,6 +490,13 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
       }
       oprot.writeFieldEnd();
     }
+    if (this.orderAmount != null) {
+      if (isSetOrderAmount()) {
+        oprot.writeFieldBegin(ORDER_AMOUNT_FIELD_DESC);
+        oprot.writeString(this.orderAmount);
+        oprot.writeFieldEnd();
+      }
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -433,6 +516,16 @@ public class SellerPostageBasic implements TBase<SellerPostageBasic, SellerPosta
       sb.append(this.productPostageBasicList);
     }
     first = false;
+    if (isSetOrderAmount()) {
+      if (!first) sb.append(", ");
+      sb.append("orderAmount:");
+      if (this.orderAmount == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.orderAmount);
+      }
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

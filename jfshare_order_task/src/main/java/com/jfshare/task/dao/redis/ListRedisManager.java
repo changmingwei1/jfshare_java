@@ -5,14 +5,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 
 import javax.annotation.Resource;
 
 @Service
 public class ListRedisManager {
 
-	@Resource(name = "jedisPool")
-	private JedisPool jedisPool;
+	/*@Resource(name = "jedisPool")
+	private JedisPool jedisPool;*/
+
+	@Resource(name = "redisSentinel")
+	private JedisSentinelPool jedisPool;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListRedisManager.class);
 

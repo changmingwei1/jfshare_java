@@ -34,15 +34,18 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
 
   private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)1);
   private static final TField POSTAGE_FIELD_DESC = new TField("postage", TType.STRING, (short)2);
+  private static final TField POSTAGE_TEMPLATE_FIELD_DESC = new TField("postageTemplate", TType.STRING, (short)3);
 
 
   public int sellerId;
   public String postage;
+  public String postageTemplate;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SELLER_ID((short)1, "sellerId"),
-    POSTAGE((short)2, "postage");
+    POSTAGE((short)2, "postage"),
+    POSTAGE_TEMPLATE((short)3, "postageTemplate");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -61,6 +64,8 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
   	return SELLER_ID;
         case 2: // POSTAGE
   	return POSTAGE;
+        case 3: // POSTAGE_TEMPLATE
+  	return POSTAGE_TEMPLATE;
         default:
   	return null;
       }
@@ -112,6 +117,8 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.POSTAGE, new FieldMetaData("postage", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.POSTAGE_TEMPLATE, new FieldMetaData("postageTemplate", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(SellerPostageReturn.class, metaDataMap);
   }
@@ -140,6 +147,9 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
     if (other.isSetPostage()) {
       this.postage = other.postage;
     }
+    if (other.isSetPostageTemplate()) {
+      this.postageTemplate = other.postageTemplate;
+    }
   }
 
   public SellerPostageReturn deepCopy() {
@@ -151,6 +161,7 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
     setSellerIdIsSet(false);
     this.sellerId = 0;
     this.postage = null;
+    this.postageTemplate = null;
   }
 
   public int getSellerId() {
@@ -202,6 +213,31 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
     }
   }
 
+  public String getPostageTemplate() {
+    return this.postageTemplate;
+  }
+
+  public SellerPostageReturn setPostageTemplate(String postageTemplate) {
+    this.postageTemplate = postageTemplate;
+    
+    return this;
+  }
+
+  public void unsetPostageTemplate() {
+    this.postageTemplate = null;
+  }
+
+  /** Returns true if field postageTemplate is set (has been asigned a value) and false otherwise */
+  public boolean isSetPostageTemplate() {
+    return this.postageTemplate != null;
+  }
+
+  public void setPostageTemplateIsSet(boolean value) {
+    if (!value) {
+      this.postageTemplate = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_ID:
@@ -218,6 +254,13 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
         setPostage((String)value);
       }
       break;
+    case POSTAGE_TEMPLATE:
+      if (value == null) {
+        unsetPostageTemplate();
+      } else {
+        setPostageTemplate((String)value);
+      }
+      break;
     }
   }
 
@@ -227,6 +270,8 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
       return new Integer(getSellerId());
     case POSTAGE:
       return getPostage();
+    case POSTAGE_TEMPLATE:
+      return getPostageTemplate();
     }
     throw new IllegalStateException();
   }
@@ -242,6 +287,8 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
       return isSetSellerId();
     case POSTAGE:
       return isSetPostage();
+    case POSTAGE_TEMPLATE:
+      return isSetPostageTemplate();
     }
     throw new IllegalStateException();
   }
@@ -274,6 +321,14 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
       if (!this.postage.equals(that.postage))
         return false;
     }
+    boolean this_present_postageTemplate = true && this.isSetPostageTemplate();
+    boolean that_present_postageTemplate = true && that.isSetPostageTemplate();
+    if (this_present_postageTemplate || that_present_postageTemplate) {
+      if (!(this_present_postageTemplate && that_present_postageTemplate))
+        return false;
+      if (!this.postageTemplate.equals(that.postageTemplate))
+        return false;
+    }
 
     return true;
   }
@@ -289,6 +344,10 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
     builder.append(present_postage);
     if (present_postage)
       builder.append(postage);
+    boolean present_postageTemplate = true && (isSetPostageTemplate());
+    builder.append(present_postageTemplate);
+    if (present_postageTemplate)
+      builder.append(postageTemplate);
     return builder.toHashCode();
   }
 
@@ -316,6 +375,16 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
     }
     if (isSetPostage()) {
       lastComparison = TBaseHelper.compareTo(this.postage, typedOther.postage);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPostageTemplate()).compareTo(typedOther.isSetPostageTemplate());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPostageTemplate()) {
+      lastComparison = TBaseHelper.compareTo(this.postageTemplate, typedOther.postageTemplate);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -353,6 +422,13 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 3: // POSTAGE_TEMPLATE
+          if (field.type == TType.STRING) {
+            this.postageTemplate = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -376,6 +452,13 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
       oprot.writeString(this.postage);
       oprot.writeFieldEnd();
     }
+    if (this.postageTemplate != null) {
+      if (isSetPostageTemplate()) {
+        oprot.writeFieldBegin(POSTAGE_TEMPLATE_FIELD_DESC);
+        oprot.writeString(this.postageTemplate);
+        oprot.writeFieldEnd();
+      }
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -395,6 +478,16 @@ public class SellerPostageReturn implements TBase<SellerPostageReturn, SellerPos
       sb.append(this.postage);
     }
     first = false;
+    if (isSetPostageTemplate()) {
+      if (!first) sb.append(", ");
+      sb.append("postageTemplate:");
+      if (this.postageTemplate == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.postageTemplate);
+      }
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

@@ -5,12 +5,15 @@ import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
+
+import javax.annotation.Resource;
 
 public class BaseRedisManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseRedisManager.class);
 
-	private JedisPool jedisPool;
+	/*private JedisPool jedisPool;
 
 	public JedisPool getJedisPool() {
 		return this.jedisPool;
@@ -18,6 +21,13 @@ public class BaseRedisManager {
 
 	public BaseRedisManager(JedisPool jedisPool) {
 		this.jedisPool = jedisPool;
+	}*/
+
+	@Resource(name = "redisSentinel")
+	private JedisSentinelPool jedisPool;
+
+	public JedisSentinelPool getJedisPool() {
+		return this.jedisPool;
 	}
 
 	/**

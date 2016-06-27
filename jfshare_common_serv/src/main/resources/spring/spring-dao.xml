@@ -121,4 +121,22 @@
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').pwd}</value>
         </constructor-arg>
     </bean>
+
+    <!-- redis 哨兵配置 -->
+    <bean id="redisSentinel" class="redis.clients.jedis.JedisSentinelPool">
+        <constructor-arg index="0">
+            <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_master')}</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <set>
+                <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_ip1')}</value>
+                <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_ip2')}</value>
+                <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_ip3')}</value>
+            </set>
+        </constructor-arg>
+        <constructor-arg index="2" ref="jedisPoolConfig"/>
+        <constructor-arg index="3">
+            <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_password')}</value>
+        </constructor-arg>
+    </bean>
 </beans>

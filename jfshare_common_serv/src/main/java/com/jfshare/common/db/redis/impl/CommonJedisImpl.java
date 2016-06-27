@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.Transaction;
 
 import javax.annotation.Resource;
@@ -22,7 +23,7 @@ public class CommonJedisImpl extends SqlSessionDaoSupport implements ICommonJedi
 
 	private Logger logger = LoggerFactory.getLogger(CommonJedisImpl.class);
 
-	@Resource(name = "jedisPoolWrite")
+	/*@Resource(name = "jedisPoolWrite")
 	private JedisPool jedisPoolWrite;
 
 	public JedisPool getJedisPool() {
@@ -31,7 +32,10 @@ public class CommonJedisImpl extends SqlSessionDaoSupport implements ICommonJedi
 
 	public void setJedisPool(JedisPool jedisPool) {
 		this.jedisPoolWrite = jedisPool;
-	}
+	}*/
+
+	@Resource(name = "redisSentinel")
+	private JedisSentinelPool jedisPoolWrite;
 
 	@Override
 	public boolean setExpire(String key, int seconds) {
