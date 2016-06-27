@@ -1,6 +1,7 @@
 import com.jfshare.finagle.thrift.pay.PayReq;
 import com.jfshare.finagle.thrift.pay.PayRes;
 import com.jfshare.finagle.thrift.pay.PayServ;
+import com.jfshare.finagle.thrift.pay.payRetQueryParams;
 import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.utils.CryptoUtil;
 import org.apache.thrift.TException;
@@ -105,6 +106,20 @@ public class TestThrift {
                 StringResult stringResult = client.payNotify(payRes);
                 System.out.println(stringResult);
             }
+            System.out.println("end:" + System.currentTimeMillis());
+        }catch(Exception e){System.out.println(e);}
+    }
+
+    @org.junit.Test
+    public void queryPayResult() throws TException {
+        try{
+            if (DO_IT == 0)
+                return;
+            System.out.println("start:" + System.currentTimeMillis());
+                payRetQueryParams param = new payRetQueryParams();
+                param.setPayId("2016062714443821852905");
+                StringResult stringResult = client.queryPayResult(param);
+                System.out.println(stringResult);
             System.out.println("end:" + System.currentTimeMillis());
         }catch(Exception e){System.out.println(e);}
     }
