@@ -14,9 +14,9 @@ public class MapRedisManager extends BaseRedisManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MapRedisManager.class);
 
-	public MapRedisManager(JedisPool jedisPool) {
+	/*public MapRedisManager(JedisPool jedisPool) {
 		super(jedisPool);
-	}
+	}*/
 	
 	public int getMapSize(String key) {
 		if (StringUtil.empty(key))

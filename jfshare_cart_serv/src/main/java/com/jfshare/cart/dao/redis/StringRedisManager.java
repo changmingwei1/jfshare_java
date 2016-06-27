@@ -10,9 +10,9 @@ public class StringRedisManager extends BaseRedisManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StringRedisManager.class);
 
-	public StringRedisManager(JedisPool jedisPool) {
+	/*public StringRedisManager(JedisPool jedisPool) {
 		super(jedisPool);
-	}
+	}*/
 
 	/**
 	 * Function: 功能说明：设置

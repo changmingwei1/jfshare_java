@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.Transaction;
 
 import javax.annotation.Resource;
@@ -23,8 +24,12 @@ public class ExpressJedisImpl implements IExpressJedis {
     private final String expressInfo = "express:info";
     private final String expressSimpleInfo = "express:simpleinfo";
     
-    @Resource
-    private JedisPool jedisPool;
+    /*@Resource
+    private JedisPool jedisPool;*/
+
+	@Resource(name = "redisSentinel")
+	private JedisSentinelPool jedisPool;
+
 	/**
 	 * 存储结构用 sortedSet  zsetName=prefix_xx key=expressId,score=取到的物流序号
 	 *1. 每个物流找到：名称、Id，        索引列为：全名、全拼、缩写 （前缀为 express_prefix:）

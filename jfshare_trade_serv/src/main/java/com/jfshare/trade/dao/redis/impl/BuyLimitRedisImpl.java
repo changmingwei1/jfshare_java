@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 
 import javax.annotation.Resource;
 
@@ -16,8 +17,12 @@ import javax.annotation.Resource;
 @Repository
 public class BuyLimitRedisImpl implements IBuyLimitRedis {
     private Logger logger = LoggerFactory.getLogger(BuyLimitRedisImpl.class);
+    /*
     @Resource
-    private JedisPool jedisRedoPool;
+    private JedisPool jedisRedoPool;*/
+
+    @Resource(name = "redisSentinel")
+    private JedisSentinelPool jedisRedoPool;
 
     @Override
     public int getBuyHistoryCount(int userId, String productId) {

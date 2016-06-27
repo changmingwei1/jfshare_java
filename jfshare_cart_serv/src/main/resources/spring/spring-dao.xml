@@ -157,23 +157,42 @@
         </constructor-arg>
     </bean>
 
-    <!-- stringRedisManagerRdb -->
-    <bean id="stringRedisManagerRdb" class="com.jfshare.cart.dao.redis.StringRedisManager">
-        <constructor-arg index="0" ref="jedisRdbPoolpro"/>
+    <!-- redis 哨兵配置 -->
+    <bean id="redisSentinel" class="redis.clients.jedis.JedisSentinelPool">
+        <constructor-arg index="0">
+            <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_master')}</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <set>
+                <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_ip1')}</value>
+                <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_ip2')}</value>
+                <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_ip3')}</value>
+            </set>
+        </constructor-arg>
+        <constructor-arg index="2" ref="jedisPoolConfig"/>
+        <constructor-arg index="3">
+            <value>#{configManager.getConfigValue('jfx_redis_sentinel','redis_sentinel_password')}</value>
+        </constructor-arg>
     </bean>
+
+
+    <!-- stringRedisManagerRdb -->
+    <!--<bean id="stringRedisManagerRdb" class="com.jfshare.cart.dao.redis.StringRedisManager">
+        <constructor-arg index="0" ref="jedisRdbPoolpro"/>
+    </bean>-->
 
     <!-- mapRedisManagerRdb -->
-    <bean id="mapRedisManagerRdb" class="com.jfshare.cart.dao.redis.MapRedisManager">
+    <!--<bean id="mapRedisManagerRdb" class="com.jfshare.cart.dao.redis.MapRedisManager">
         <constructor-arg index="0" ref="jedisRdbPool"/>
-    </bean>
+    </bean>-->
 
     <!-- readCartRedisManager -->
-    <bean id="readCartRedisManager" class="com.jfshare.cart.dao.redis.MapRedisManager">
+    <!--<bean id="readCartRedisManager" class="com.jfshare.cart.dao.redis.MapRedisManager">
         <constructor-arg index="0" ref="jedisReadCartPool"/>
-    </bean>
+    </bean>-->
 
     <!-- writeCartRedisManager -->
-    <bean id="writeCartRedisManager" class="com.jfshare.cart.dao.redis.MapRedisManager">
+    <!--<bean id="writeCartRedisManager" class="com.jfshare.cart.dao.redis.MapRedisManager">
         <constructor-arg index="0" ref="jedisWriteCartPool"/>
-    </bean>
+    </bean>-->
 </beans>
