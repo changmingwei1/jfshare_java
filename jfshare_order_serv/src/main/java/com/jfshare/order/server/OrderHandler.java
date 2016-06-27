@@ -1,29 +1,45 @@
 package com.jfshare.order.server;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
+import com.jfshare.elasticsearch.drive.ESClient;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayReq;
 import com.jfshare.finagle.thrift.pay.PayRet;
+import com.jfshare.finagle.thrift.product.ProductCard;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
-import com.jfshare.order.common.OrderConstant;
+import com.jfshare.finagle.thrift.trade.BuyInfo;
+import com.jfshare.order.dao.IOrderEs;
 import com.jfshare.order.dao.IOrderJedis;
+import com.jfshare.order.dao.impl.elasticsearch.OrderEsImpl;
+import com.jfshare.order.dao.impl.jedis.BasicRedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
+import com.jfshare.order.model.EsOrder;
 import com.jfshare.order.model.OrderModel;
-import com.jfshare.order.server.depend.ExpressClient;
-import com.jfshare.order.server.depend.PayClient;
+import com.jfshare.order.model.TbOrderInfoRecord;
+import com.jfshare.order.server.depend.*;
 import com.jfshare.order.service.DeliverService;
+import com.jfshare.order.service.ExportService;
 import com.jfshare.order.service.OrderService;
 import com.jfshare.order.util.*;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.thrift.TException;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +66,28 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     private ExpressClient expressClient;
 
     @Autowired
+    private ProductClient productClient;
+
+    @Autowired
+    private CommonClient commonClient;
+
+    @Autowired
+    private TradeClient tradeClient;
+
+    @Autowired
     private IOrderJedis orderJedis;
 
     @Autowired
     private FileOpUtil fileOpUtil;
+
+    @Autowired
+    private IOrderEs orderEs;
+
+    @Autowired
+    private ExportService exportService;
+
+    @Autowired
+    private BasicRedis basicRedis;
 
     @Override
     public Result createOrder(List<Order> orderList) throws TException {
@@ -74,6 +108,8 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
         return result;
     }
+
+
 
     @Override
     public Result updateDeliverInfo(int userType, int userId, DeliverInfo deliverInfo) throws TException {
@@ -155,16 +191,43 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return result;
             }
 
-            if(orderModel.getTradeCode().equalsIgnoreCase(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAMI.getEnumVal()) == false) {
-                logger.warn(MessageFormat.format("deliverVir非卡密虚拟商品！sellerId[{0}],orderId[{1}],tradeCode[{2}]", param.getSellerId(), param.getOrderId()), orderModel.getTradeCode());
-                FailCode.addFails(result, FailCode.DELIVER_INVALIDATE_TRADECODE);
-                return result;
+            //获取卡密
+            List<ProductCard> productCards = productClient.getProductCard(orderModel);
+            //修改订单状态
+            deliverService.updateDeliverInfoVir(orderModel);
+
+            //发送短信
+            StringBuilder msgContent = new StringBuilder();
+            TbOrderInfoRecord orderInfo = orderModel.getTbOrderInfoList().get(0);
+            if(orderModel.getTradeCode().equals(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAMI.getEnumVal())) {
+                //您已成功购买*****（商品名称+规格）消费券*（数量）张，券码*********，密码*********，券码*********，密码*********，请前往商家验证消费。
+                msgContent.append("您已成功购买")
+                        .append(orderInfo.getProductName()).append(" ")
+                        .append(orderInfo.getSkuDesc()).append(" ")
+                        .append("消费券").append(orderInfo.getCount()).append("张");
+                for(ProductCard card : productCards) {
+                    msgContent.append("券码:").append(card.getCardNumber()).append(", ");
+                    if(StringUtils.isNotEmpty(card.getPassword())) {
+                        msgContent.append("密码:").append(card.getPassword()).append("，");
+                    }
+                }
+                msgContent.append("请前往商家验证消费。");
+            } else if(orderModel.getTradeCode().equals(ConstantUtil.TRADE_CODE.ORDER_CODE_VIR_KAONLY.getEnumVal())) {
+                //您已成功购买*****（商品名称+规格）消费券*（数量）张，券码*********，*********，*********，请前往商家验证消费。
+                msgContent.append("您已成功购买")
+                        .append(orderInfo.getProductName()).append(" ")
+                        .append(orderInfo.getSkuDesc()).append(" ")
+                        .append("消费券").append(orderInfo.getCount()).append("张，券码：");
+                for(ProductCard card : productCards) {
+                    msgContent.append(card.getCardNumber()).append("，");
+                }
+                msgContent.append("请前往商家验证消费。");
             }
 
-            deliverService.updateDeliverInfo(orderModel);
+            commonClient.sendMsg(orderModel.getReceiverMobile(), msgContent.toString());
 
-            //TODO 调用商品服务获取卡密
-            //TODO 发送短信
+            this.confirmReceipt(BizUtil.USER_TYPE.BUYER.getEnumVal(), orderModel.getUserId(), param.getOrderId());
+
         } catch (BaseException be) {
             List<FailDesc> failDescs = be.getFailDescs();
             logger.error("发货失败!");
@@ -253,7 +316,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
                 return result;
             }
-            OrderModel orderModel = orderService.buyerQueryProfile(userId, orderId);
+            OrderModel orderModel = orderService.buyerQueryDetail(userId, orderId);
             if (orderModel == null) {
                 logger.warn(MessageFormat.format("cancelOrder订单不存在！userType[{0}],userId[{1}],orderId[{2}],reason[{3}]", userType, userId, orderId, reason));
                 FailCode.addFails(result, FailCode.ORDER_NO_EXIST);
@@ -272,11 +335,6 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return result;
-    }
-
-    @Override
-    public ExportOrderResult queryExportOrderInfo(int sellerId, OrderQueryConditions conditions) throws TException {
-        return null;
     }
 
     @Override
@@ -410,17 +468,47 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         try {
             if (StringUtil.isNullOrEmpty(param) || param.getUserId() <= 0 || StringUtil.isNullOrEmpty(param.getOrderIdList()) || param.getOrderIdList().isEmpty() ||
                     StringUtil.isNullOrEmpty(param.getPayChannel()) || param.getPayChannel().getPayChannel() < 0) {
-                logger.warn(MessageFormat.format("申请支付----payApply参数验证失败！param[{0}]", param));
+                logger.warn("申请支付----payApply参数验证失败！param[{}]", param);
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
                 return stringResult;
             }
 
-            List<OrderModel> orderModels = orderService.buyerQueryList(param.getUserId(), param.getOrderIdList());
+            List<OrderModel> orderModels = orderService.buyerQueryListFull(param.getUserId(), param.getOrderIdList());
             if (orderModels == null || orderModels.size() != param.getOrderIdList().size()) {
-                logger.warn(MessageFormat.format("申请支付----payApply获取订单信息有误！param[{0}]", param));
+                logger.warn("申请支付----payApply获取订单信息有误！param[{0}]", param);
                 FailCode.addFails(result, FailCode.ORDER_INFO_ERROR);
                 return stringResult;
             }
+
+            int useScore = param.getExchangeScore();
+            int lockScore = 0;
+            for(OrderModel order : orderModels) {
+                lockScore += order.getExchangeScore();
+            }
+            //检查之前是否锁定了积分
+            logger.info("申请支付----积分参数校验, lockScore={}, useScore={}", lockScore, useScore);
+            if(lockScore > 0 && lockScore != useScore){
+                logger.warn("申请支付----积分校验失败, 之前锁定积分:{}, 当前是使用积分:{}", lockScore, useScore);
+                FailCode.addFails(result, FailCode.PAY_SCORE_CHECK_FAIL);
+                return stringResult;
+            }
+
+            //拆分积分
+            if(lockScore == 0 && useScore > 0){
+                //验证积分抵现
+                BuyInfo buyInfo = new BuyInfo();
+                buyInfo.setAmount(PriceUtils.intToStr(OrderUtil.gettotalAmount(orderModels)));
+                buyInfo.setExchangeScore(useScore);
+                buyInfo.setExchangeCash(param.getExchangeCash());
+                buyInfo.setUserId(param.getUserId());
+                List<FailDesc> score2CashFailList = tradeClient.score2cash(orderModels, buyInfo);
+                if(CollectionUtils.isNotEmpty(score2CashFailList)) {
+                    logger.error("申请支付----扣减积分失败！fails=" + score2CashFailList);
+                    FailCode.addFails(result, FailCode.PAY_SCORE_CHECK_FAIL);
+                    return stringResult;
+                }
+            }
+            logger.info("申请支付----积分抵现校验通过");
 
             //检测并修复订单状态
             for (OrderModel order : orderModels) {
@@ -455,8 +543,34 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
             OrderUtil.setPayLimit(orderModels, param.getPayChannel().getPayChannel());
             int thirdScores = OrderUtil.setThirdScore(orderModels, param.getPayChannel().getPayChannel());
+            int thirdScore2Cash = OrderUtil.getThirdScore2Cash(orderModels, param.getPayChannel().getPayChannel());
+            logger.info("申请支付----请求url, thirdScores={}, thirdScore2Cash={}", thirdScores, thirdScore2Cash);
             String tradePayId = IdCreator.getTradePayId(param.getUserId(), param.getOrderIdList());
             orderService.updateOrderPaying(orderModels, tradePayId);
+
+            //全积分支付
+            if(OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash())) {
+                stringResult.setValue("全积分支付成功");
+                stringResult.getResult().setCode(2);
+                //TODO 全积分支付
+                int ret = orderService.payOnlyScore(orderModels);
+                if(ret > 0) {
+                    logger.error("申请支付----成功，全积分支付！");
+                    //虚拟商品需要自动发货
+                    for(OrderModel orderModel : orderModels) {
+                        if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
+                            DeliverVirParam deliverVirParam = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
+                            Result delverVirResult = deliverVir(deliverVirParam);
+                            if(delverVirResult != null && delverVirResult.getCode() == 0) {
+                                logger.info("申请支付----全积分支付----虚拟商品自动发货成功");
+                            } else {
+                                logger.error("申请支付----全积分支付----虚拟商品自动发货失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
+                            }
+                        }
+                    }
+                }
+                return stringResult;
+            }
 
             //申请支付链接
             PayReq payReq = new PayReq();
@@ -464,8 +578,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             payReq.setOrderNo(tradePayId);
             payReq.setExtraParam(param.getUserId() + "_" + StringUtils.join(param.getOrderIdList().toArray(),",")); //userId_orderId1,orderId2 ...
             payReq.setTitle(OrderUtil.getPayTitle(orderModels));
-            payReq.setPrice(OrderUtil.getPayPrice(orderModels));
             payReq.setScore(thirdScores);
+            payReq.setScore2cashAmount(thirdScore2Cash);
+            payReq.setPrice(OrderUtil.getPayPrice(orderModels));
             payReq.setPayChannel(param.getPayChannel().getPayChannel());
             payReq.setPayIp(param.getPayChannel().getPayIp());
             payReq.setReturnUrl(param.getPayChannel().getReturnUrl());
@@ -539,7 +654,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             String[] orderIds = extra[1].split(",");
             List<String> orderIdList =  Arrays.asList(orderIds);
 
-            List<OrderModel> orderModels = orderService.buyerQueryList(userId, orderIdList);
+            List<OrderModel> orderModels = orderService.buyerQueryListFull(userId, orderIdList);
             if (orderModels == null || orderModels.size() != orderIdList.size()) {
                 logger.warn(MessageFormat.format("支付通知----接收支付平台通知获取订单信息有误！payRes[{0}]", payRes));
                 FailCode.addFails(result, FailCode.ORDER_INFO_ERROR);
@@ -563,6 +678,19 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             }
             logger.info("7.支付通知----payUrl订单状态更新成功");
             orderJedis.addPayState(payRet.getPayId(), payRet.getRetCode(), orderModels.get(0).getCancelTime());
+
+            //虚拟商品需要自动发货
+            for(OrderModel orderModel : orderModels) {
+                if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
+                    DeliverVirParam param = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
+                    Result delverVirResult = deliverVir(param);
+                    if(delverVirResult != null && delverVirResult.getCode() == 0) {
+                        logger.info("8.支付通知----虚拟商品自动发货成功");
+                    } else {
+                        logger.error("8.支付通知----虚拟商品自动发货失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
+                    }
+                }
+            }
 
             stringResult.setValue("1");
         } catch (Exception e) {
@@ -621,15 +749,20 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             conditions.setSellerId(sellerId);
             //查询订单列表
             orderModels = orderService.queryBatch(conditions);
-            List<Order> orderDetails = null;
-            for (OrderModel orderModel : orderModels) {
-                orderDetails.add(OrderUtil.rConvertOrderModel(orderModel));
-            }
-            byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
-            if (xlsBytes != null) {
-                String fileName =  FileOpUtil.getFileName(sellerId,null);
-                String fileKey = FileOpUtil.toFastDFS(xlsBytes, fileName);
-                stringResult.setValue(fileKey);
+            if (orderModels.size() > 0) {
+                List<Order> orderDetails = Lists.newArrayList();
+                for (OrderModel orderModel : orderModels) {
+                    orderDetails.add(OrderUtil.rConvertOrderModel(orderModel));
+                }
+                byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
+                if (xlsBytes != null) {
+                    String fileName = fileOpUtil.getFileName(sellerId, null);
+                    String fileKey = fileOpUtil.toFastDFS(xlsBytes, fileName);
+                    stringResult.setValue(fileKey);
+                    result.setCode(0);
+                }
+            } else {
+                stringResult.setValue("");
                 result.setCode(0);
             }
 
@@ -637,6 +770,48 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             logger.error("批量导出订单失败，系统异常！", e);
             FailCode.addFails(result, FailCode.SYS_ERROR);
         }
+
+        return stringResult;
+    }
+
+    @Override
+    public StringResult batchExportOrderFull(OrderQueryConditions conditions) throws TException {
+        StringResult stringResult = new StringResult();
+        Result result = new Result();
+        result.setCode(0);
+        stringResult.setResult(result);
+        stringResult.setValue("");
+        try {
+            if (StringUtil.isNullOrEmpty(conditions) || StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) {
+                logger.warn("batchExportOrder参数验证失败！, OrderQueryConditions:{}", conditions);
+                FailCode.addFails(result, FailCode.PARAM_ERROR);
+                return stringResult;
+            }
+
+            String queryKey = DigestUtils.md5Hex(DateTimeUtil.getCurrentDateYMDHMS());
+            exportService.asyncExport(conditions, queryKey);
+            stringResult.setValue(queryKey);
+
+
+        } catch (Exception e) {
+            logger.error("批量导出订单失败，系统异常！", e);
+            FailCode.addFails(result, FailCode.SYS_ERROR);
+        }
+
+        return stringResult;
+    }
+
+    @Override
+    public StringResult getExportOrderResult(String queryKey) throws TException {
+        StringResult stringResult = new StringResult(new Result(1));
+        if(StringUtils.isBlank(queryKey)) {
+            stringResult.getResult().addToFailDescList(FailCode.PARAM_ERROR);
+            return stringResult;
+        }
+
+        String exportRet =  exportService.getExportResult(queryKey);
+        stringResult.setValue(exportRet);
+        stringResult.getResult().setCode(0);
 
         return stringResult;
     }
@@ -764,7 +939,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             List<String> existOrderIds = new ArrayList<String>();
             for (OrderModel orderProfile : existOrderList) {
                 existOrderIds.add(orderProfile.getOrderId());
-                if (orderProfile.getOrderState() != OrderConstant.ORDER_STATE_WAIT_DELIVER) {
+                if (orderProfile.getOrderState() != ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal()) {
                     logger.info("存在订单状态错误的订单:"+orderProfile.getOrderId() + ",订单状态为：" + orderProfile.getOrderState());
                     logger.warn("batchDeliverEx 存在订单状态错误的订单: {}   订单状态为： {}", orderProfile.getOrderId(), orderProfile.getOrderState());
                     BatchDeliverFailInfo failInfo = new BatchDeliverFailInfo();
@@ -823,5 +998,100 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return batchDeliverResult;
+    }
+
+    @Override
+    public OrderProfileResult orderProfileQueryFull(OrderQueryConditions conditions) throws TException {
+        OrderProfileResult orderProfileResult = new OrderProfileResult();
+        orderProfileResult.setResult(new Result(0));
+        orderProfileResult.setOrderProfilePage(new OrderProfilePage());
+        if((StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime()))
+                && StringUtils.isBlank(conditions.getOrderId())
+                && CollectionUtils.isEmpty(conditions.getOrderIds())) {
+            return ResultBuilder.createFailOrderProfileResult(FailCode.PARAM_ERROR);
+        }
+
+        SearchHits searchHits = orderEs.search(conditions);
+        int total = (int)searchHits.getTotalHits();
+
+        if(total > 0) {
+            orderProfileResult.getOrderProfilePage().setTotal(total);
+            for(SearchHit searchHit : searchHits.getHits()) {
+                EsOrder esOrder = JSON.parseObject(searchHit.getSourceAsString(), EsOrder.class);
+                orderProfileResult.getOrderProfilePage().addToOrderProfileList(JSON.parseObject(esOrder.getOrderJson(), Order.class));
+            }
+            orderProfileResult.getOrderProfilePage().setCount(searchHits.getHits().length);
+            orderProfileResult.getOrderProfilePage().setCurPage(conditions.getCurPage());
+            if(conditions.getCount() > 0) {
+                int pageCount = total % conditions.getCount() == 0 ? total / conditions.getCount() : total / conditions.getCount() + 1;
+                orderProfileResult.getOrderProfilePage().setPageCount(pageCount);
+            }
+        }
+
+        return orderProfileResult;
+    }
+
+    @Override
+    public OrderDetailResult queryOrderDetailOffline(int userType, int userId, String orderId) throws TException {
+        Order orderDetail = null;
+        try {
+            OrderModel orderModel = null;
+
+            if(userType == BizUtil.USER_TYPE.BUYER.getEnumVal()) {
+                orderModel = orderService.buyerQueryDetailOffline(userId, orderId);
+            } else if(userType == BizUtil.USER_TYPE.SELLER.getEnumVal()) {
+                orderModel = orderService.sellerQueryDetailOffline(userId, orderId);
+            } else {
+                return ResultBuilder.createFailOrderDetailResult(FailCode.PARAM_ERROR);
+            }
+
+            orderDetail = OrderUtil.rConvertOrderModel(orderModel);
+
+        } catch (Exception e) {
+            logger.error("查询失败！", e);
+            return ResultBuilder.createFailOrderDetailResult(FailCode.SYS_ERROR);
+        }
+
+        return ResultBuilder.createOrderDetailResult(orderDetail);
+    }
+
+    @Override
+    public OrderProfileResult orderProfileQueryOffline(int userType, int userId, OrderQueryConditions conditions) throws TException {
+        List<Order> orderDetails = null;
+
+        int total = 0;
+        List<FailDesc> failDescs = ParamCheck.UserIdCheck(userId);
+        if(CollectionUtils.isNotEmpty(failDescs)) {
+            return ResultBuilder.createFailOrderProfileResult(failDescs);
+        }
+        try {
+            List<OrderModel> orderModels = null;
+            conditions = super.verifyConditions(conditions);
+
+            if(userType == BizUtil.USER_TYPE.BUYER.getEnumVal()) {
+                conditions.setUserId(userId);
+                total = orderService.buyerQueryOrderStatOffline(conditions);
+                if (total > 0) {
+                    orderModels = orderService.buyerQueryListOffline(conditions);
+                }
+            } else if(userType == BizUtil.USER_TYPE.SELLER.getEnumVal()) {
+                conditions.setSellerId(userId);
+                //查询订单数量
+                total = orderService.sellerQueryOrderStatOffline(conditions);
+                if (total > 0) {
+                    //查询订单列表
+                    orderModels = orderService.sellerQueryListOffline(conditions);
+                }
+            } else {
+                return ResultBuilder.createFailOrderProfileResult(FailCode.PARAM_ERROR);
+            }
+            orderDetails = OrderUtil.rConvertOrderModels(orderModels);
+
+        } catch (DataVerifyException e) {
+            logger.error("发生DataVerifyException", e);
+            return ResultBuilder.createFailOrderProfileResult(e.getFailDescs());
+        }
+
+        return ResultBuilder.createOrderProfileResult(conditions, orderDetails, total);
     }
 }

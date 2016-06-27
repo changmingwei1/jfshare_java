@@ -70,7 +70,7 @@ public class ServHandle implements TradeServ.Iface {
 				FailCode.addFails(result, FailCode.RECEIVER_ADDRESS_NULL_ERROR);
 				return createOrderResult;
 			}
-			logger.info("确认订单----获取收货地址成功");
+			logger.info("确认订单----验证收货地址成功/虚拟商品手机号");
 			//endregion 收货地址
 
 			//获取商品sku
@@ -110,26 +110,13 @@ public class ServHandle implements TradeServ.Iface {
 
 			//验证邮费
 			List<FailDesc> postageFailList = checkUtil.orderConfirmPostage(buyInfo, orderList);
+
 			if(CollectionUtils.isNotEmpty(postageFailList)) {
 				logger.error("$$$$确定订单----获取订单运费错误！fails=" + postageFailList);
 				FailCode.addFails(result, postageFailList);
 				return createOrderResult;
 			}
 			logger.info("获取订单----运费获取通过");
-
-			//验证积分抵现
-			List<FailDesc> score2CashFailList = checkUtil.orderConfirmScore2Cash(buyInfo, orderList);
-			if(CollectionUtils.isNotEmpty(score2CashFailList)) {
-				logger.error("$$$$确定订单----检测订单使用积分抵现错误！fails=" + score2CashFailList);
-				FailCode.addFails(result, score2CashFailList);
-				return createOrderResult;
-			}
-			if(buyInfo.getExchangeScore() > 0) {
-				//使用了积分抵现, 记录操作, 后续操作失败回滚积分
-				resourseOpts.push(ResourseOpt.score2cash);
-			}
-			logger.info("确认订单----积分抵现校验通过");
-
 
 			//验证价格
 			List<FailDesc> priceFailList = checkUtil.orderConfirmPrice(buyInfo, orderList);
@@ -181,6 +168,54 @@ public class ServHandle implements TradeServ.Iface {
 					}
 				}
 			}
+		}
+
+		return createOrderResult;
+	}
+
+	@Override
+	public OrderConfirmResult orderConfirmOffline(BuyInfo buyInfo) throws TException {
+		OrderConfirmResult createOrderResult = new OrderConfirmResult();
+		Result result = new Result();
+		result.setCode(0);
+		createOrderResult.setResult(result);
+		try {
+			logger.info("确定线下订单----参数,buyInfo" + buyInfo);
+			Map<Integer, String> sellerOrderIdsMap = new HashMap<Integer, String>();
+			//region 基本参数校验
+			List<FailDesc> paramFailList = checkUtil.orderConfirmParamOffline(buyInfo);
+			if (paramFailList.size() > 0) {
+				logger.error("$$$$确定线下订单----参数校验错误！fails=" + paramFailList);
+				FailCode.addFails(result, paramFailList);
+				return createOrderResult;
+			}
+
+			//生成订单号
+			sellerOrderIdsMap = checkUtil.orderConfirmGerOrderId(buyInfo);
+			logger.info("确认线下订单----生成订单号成功");
+
+			//订单参数
+			List<Order> orderList = TradeUtil.convertToOrderOffline(buyInfo, sellerOrderIdsMap);
+			logger.info("确认线下订单----准备入库参数成功");
+			logger.info("确认线下订单----验证参数成功");
+			//endregion 基本参数校验
+
+			//订单入库
+			List<FailDesc> orderFailList = checkUtil.orderConfirmOrder(orderList);
+			if (orderFailList.size() > 0) {
+				logger.error("$$$$确定线下订单----订单入库错误！fails=" + orderFailList);
+				FailCode.addFails(result, orderFailList);
+				return createOrderResult;
+			}
+			logger.info("确认线下订单----入库成功");
+
+			//返回参数
+			checkUtil.orderConfirmSetRet(buyInfo, orderList, createOrderResult);
+			logger.info("确认线下订单----返回结果成功");
+		} catch (Exception e) {
+			logger.error("$$$$确定线下订单----程序异常错误！buyInfo=" + buyInfo, e);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+			throw new RuntimeException("$$$$$$$$确认线下订单发生异常");
 		}
 
 		return createOrderResult;
@@ -255,5 +290,11 @@ public class ServHandle implements TradeServ.Iface {
 
 		logger.info(param.getUserId() + ",score2cash接口调用时间：" + (System.currentTimeMillis() - doneTime) + " ms!!");
 		return result;
+	}
+
+	@Override
+	public OrderConfirmResult payOrderCreate(PayOrderInfo payOrderInfo) throws TException {
+
+		return null;
 	}
 }

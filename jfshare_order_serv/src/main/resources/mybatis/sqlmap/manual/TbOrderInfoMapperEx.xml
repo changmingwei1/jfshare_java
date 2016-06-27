@@ -123,6 +123,9 @@
       <if test="record.thirdexchangerate != null">
         thirdExchangeRate,
       </if>
+      <if test="record.postageext != null">
+        postageExt,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="record.id != null">
@@ -214,6 +217,9 @@
       </if>
       <if test="record.thirdexchangerate != null">
         #{record.thirdexchangerate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postageext != null">
+        #{record.postageExt,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

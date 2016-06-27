@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class TestThrift {
     // 0的时候不执行测试用例，其他值的时候执行
-    private  final Integer DO_IT = 0;
+    private  final Integer DO_IT = 1;
 
     private TTransport transport;
 
@@ -28,7 +28,7 @@ public class TestThrift {
 
     private PayServ.Client client;
 
-    private  final String IP = "127.0.0.1";//"120.24.153.155";
+    private  final String IP = "101.201.38.182";//"120.24.153.155";
 
     private  final Integer PORT = 1993;
 
@@ -69,13 +69,16 @@ public class TestThrift {
 //                params[[PayReq(tokenId:fvBLEJEHNOw=, orderNo:fa44514e9acb568385da064067e00feb, extraParam:24_4660024, title:聚分享订单, price:10, score:100, payChannel:1, payIp:null, returnUrl:, remark:null, custId:100017286150)]
                 PayReq payReq = new PayReq();
                 payReq.setTokenId("fvBLEJEHNOw=");
-                payReq.setExtraParam("24_4660024");
-                payReq.setCustId("100017286150");
-                payReq.setCustType("7");
                 payReq.setPayChannel(1);
-                payReq.setOrderNo("fa44514e9acb568385da064067e00feb");
+                payReq.setOrderNo("9f7724514ddd94cf5a60352a2a01aa733");
+
                 payReq.setPrice(1000);
-                payReq.setScore(1);
+                payReq.setScore(100);
+                payReq.setPayChannel(1);
+                payReq.setCustId("18979177165");
+                payReq.setScore2cashAmount(100);
+                payReq.setCustType("7");
+                payReq.setProcustID("15");
                 payReq.setTitle("jfx订单");
                 StringResult stringResult = client.payUrl(payReq);
                 System.out.println(stringResult);
@@ -91,9 +94,14 @@ public class TestThrift {
                 return;
             System.out.println("start:" + System.currentTimeMillis());
             for(int i=0; i<DO_IT; i++){
+//                PayRes payRes = new PayRes();
+//                payRes.setPayChannel(2);
+//                payRes.setResUrl("{\"discount\":\"0.00\",\"payment_type\":\"1\",\"subject\":\"聚分享订单\",\"trade_no\":\"2016052221001004190216261526\",\"buyer_email\":\"huazhehuo110@163.com\",\"gmt_create\":\"2016-05-22 19:30:06\",\"notify_type\":\"trade_status_sync\",\"quantity\":\"1\",\"out_trade_no\":\"0c34b1140a80ab2c5d024213221d159b\",\"seller_id\":\"2088701691132875\",\"notify_time\":\"2016-05-22 19:44:51\",\"body\":\"订单支付\",\"trade_status\":\"TRADE_SUCCESS\",\"is_total_fee_adjust\":\"N\",\"total_fee\":\"0.01\",\"gmt_payment\":\"2016-05-22 19:30:07\",\"seller_email\":\"windy@jfshare.com\",\"price\":\"0.01\",\"buyer_id\":\"2088012954102192\",\"notify_id\":\"0e32c605099e9a23c7ad2886cf62b52hgu\",\"use_coupon\":\"N\",\"sign_type\":\"RSA\",\"sign\":\"aNrgIFblGOtum6pN6MyuRE8L3b9QlzICJzBkKt8xwU4iv4JJ3M+poW7mq66WdV3LWaBf2SwclGYugUBtKkfmxe5sVZ7XSCbsCrISUIZ1kuP3qCPr9qaOgAr4MkJr/elC47aGKMw5BUNRkAj32XdEYIKZGDfcVXXII8VSOd0xczI=\"}");
+
                 PayRes payRes = new PayRes();
-                payRes.setPayChannel(1);
-                payRes.setResUrl("xxxxxx");
+                payRes.setPayChannel(3);
+                payRes.setResUrl("{\"<xml><appid><![CDATA[wx4ee9e61ac3632537]]></appid>\\n<bank_type><![CDATA[CFT]]></bank_type>\\n<cash_fee><![CDATA[1]]></cash_fee>\\n<device_info><![CDATA[WEB]]></device_info>\\n<fee_type><![CDATA[CNY]]></fee_type>\\n<is_subscribe><![CDATA[N]]></is_subscribe>\\n<mch_id><![CDATA[1330572901]]></mch_id>\\n<nonce_str><![CDATA[bU8sqApM9JDynkvtU0H1]]></nonce_str>\\n<openid><![CDATA[oAAbTv2QLBiL1AnaFGm-4Dk72iHw]]></openid>\\n<out_trade_no><![CDATA[1667113c02c07570c2c4be14e0012344]]></out_trade_no>\\n<result_code><![CDATA[SUCCESS]]></result_code>\\n<return_code><![CDATA[SUCCESS]]></return_code>\\n<sign><![CDATA[D012B39EE94F7512095FFFA6C4255583]]></sign>\\n<time_end><![CDATA[20160530170239]]></time_end>\\n<total_fee>1</total_fee>\\n<trade_type><![CDATA[APP]]></trade_type>\\n<transaction_id><![CDATA[4002052001201605306518792370]]></transaction_id>\\n</xml>\":\"\"}");
+
                 StringResult stringResult = client.payNotify(payRes);
                 System.out.println(stringResult);
             }

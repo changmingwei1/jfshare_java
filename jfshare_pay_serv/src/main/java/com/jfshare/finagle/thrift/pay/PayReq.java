@@ -45,6 +45,7 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
   private static final TField CUST_ID_FIELD_DESC = new TField("custId", TType.STRING, (short)11);
   private static final TField CUST_TYPE_FIELD_DESC = new TField("custType", TType.STRING, (short)12);
   private static final TField PROCUST_ID_FIELD_DESC = new TField("procustID", TType.STRING, (short)13);
+  private static final TField SCORE2CASH_AMOUNT_FIELD_DESC = new TField("score2cashAmount", TType.I32, (short)14);
 
 
   public String tokenId;
@@ -60,6 +61,7 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
   public String custId;
   public String custType;
   public String procustID;
+  public int score2cashAmount;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -75,7 +77,8 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
     REMARK((short)10, "remark"),
     CUST_ID((short)11, "custId"),
     CUST_TYPE((short)12, "custType"),
-    PROCUST_ID((short)13, "procustID");
+    PROCUST_ID((short)13, "procustID"),
+    SCORE2CASH_AMOUNT((short)14, "score2cashAmount");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -116,6 +119,8 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
   	return CUST_TYPE;
         case 13: // PROCUST_ID
   	return PROCUST_ID;
+        case 14: // SCORE2CASH_AMOUNT
+  	return SCORE2CASH_AMOUNT;
         default:
   	return null;
       }
@@ -160,7 +165,8 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
   private static final int __PRICE_ISSET_ID = 0;
   private static final int __SCORE_ISSET_ID = 1;
   private static final int __PAYCHANNEL_ISSET_ID = 2;
-  private BitSet __isset_bit_vector = new BitSet(3);
+  private static final int __SCORE2CASHAMOUNT_ISSET_ID = 3;
+  private BitSet __isset_bit_vector = new BitSet(4);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -191,6 +197,8 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.PROCUST_ID, new FieldMetaData("procustID", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.SCORE2CASH_AMOUNT, new FieldMetaData("score2cashAmount", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(PayReq.class, metaDataMap);
   }
@@ -270,6 +278,7 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
     if (other.isSetProcustID()) {
       this.procustID = other.procustID;
     }
+    this.score2cashAmount = other.score2cashAmount;
   }
 
   public PayReq deepCopy() {
@@ -294,6 +303,8 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
     this.custId = null;
     this.custType = null;
     this.procustID = null;
+    setScore2cashAmountIsSet(false);
+    this.score2cashAmount = 0;
   }
 
   public String getTokenId() {
@@ -618,6 +629,30 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
     }
   }
 
+  public int getScore2cashAmount() {
+    return this.score2cashAmount;
+  }
+
+  public PayReq setScore2cashAmount(int score2cashAmount) {
+    this.score2cashAmount = score2cashAmount;
+    setScore2cashAmountIsSet(true);
+
+    return this;
+  }
+
+  public void unsetScore2cashAmount() {
+  __isset_bit_vector.clear(__SCORE2CASHAMOUNT_ISSET_ID);
+  }
+
+  /** Returns true if field score2cashAmount is set (has been asigned a value) and false otherwise */
+  public boolean isSetScore2cashAmount() {
+    return __isset_bit_vector.get(__SCORE2CASHAMOUNT_ISSET_ID);
+  }
+
+  public void setScore2cashAmountIsSet(boolean value) {
+    __isset_bit_vector.set(__SCORE2CASHAMOUNT_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case TOKEN_ID:
@@ -711,6 +746,13 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
         setProcustID((String)value);
       }
       break;
+    case SCORE2CASH_AMOUNT:
+      if (value == null) {
+        unsetScore2cashAmount();
+      } else {
+        setScore2cashAmount((Integer)value);
+      }
+      break;
     }
   }
 
@@ -742,6 +784,8 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
       return getCustType();
     case PROCUST_ID:
       return getProcustID();
+    case SCORE2CASH_AMOUNT:
+      return new Integer(getScore2cashAmount());
     }
     throw new IllegalStateException();
   }
@@ -779,6 +823,8 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
       return isSetCustType();
     case PROCUST_ID:
       return isSetProcustID();
+    case SCORE2CASH_AMOUNT:
+      return isSetScore2cashAmount();
     }
     throw new IllegalStateException();
   }
@@ -899,6 +945,14 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
       if (!this.procustID.equals(that.procustID))
         return false;
     }
+    boolean this_present_score2cashAmount = true && this.isSetScore2cashAmount();
+    boolean that_present_score2cashAmount = true && that.isSetScore2cashAmount();
+    if (this_present_score2cashAmount || that_present_score2cashAmount) {
+      if (!(this_present_score2cashAmount && that_present_score2cashAmount))
+        return false;
+      if (this.score2cashAmount != that.score2cashAmount)
+        return false;
+    }
 
     return true;
   }
@@ -958,6 +1012,10 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
     builder.append(present_procustID);
     if (present_procustID)
       builder.append(procustID);
+    boolean present_score2cashAmount = true && (isSetScore2cashAmount());
+    builder.append(present_score2cashAmount);
+    if (present_score2cashAmount)
+      builder.append(score2cashAmount);
     return builder.toHashCode();
   }
 
@@ -1099,6 +1157,16 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetScore2cashAmount()).compareTo(typedOther.isSetScore2cashAmount());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetScore2cashAmount()) {
+      lastComparison = TBaseHelper.compareTo(this.score2cashAmount, typedOther.score2cashAmount);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1211,6 +1279,14 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 14: // SCORE2CASH_AMOUNT
+          if (field.type == TType.I32) {
+            this.score2cashAmount = iprot.readI32();
+            setScore2cashAmountIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -1286,6 +1362,11 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
         oprot.writeString(this.procustID);
         oprot.writeFieldEnd();
       }
+    }
+    if (isSetScore2cashAmount()) {
+      oprot.writeFieldBegin(SCORE2CASH_AMOUNT_FIELD_DESC);
+      oprot.writeI32(this.score2cashAmount);
+      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -1386,6 +1467,12 @@ public class PayReq implements TBase<PayReq, PayReq._Fields>, java.io.Serializab
       } else {
         sb.append(this.procustID);
       }
+      first = false;
+      }
+    if (isSetScore2cashAmount()) {
+      if (!first) sb.append(", ");
+      sb.append("score2cashAmount:");
+      sb.append(this.score2cashAmount);
       first = false;
       }
     sb.append(")");

@@ -1,5 +1,6 @@
 package com.jfshare.order.util;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
@@ -209,7 +210,7 @@ public class DateTimeUtil {
 	public static void main(String[] args) {
 
 		System.out.println("::::" + dateToStr(new Date(), FORMAT_DEFAULT_YMD_NS));
-		System.out.println("::::" + strToDate("2011-11-17 08:53:28", FORMAT_DEFAULT));
+		System.out.println("::::" + strToDateTime("2016-05-26 12:00:00", FORMAT_DEFAULT).getMillis());
 
 		System.out.println("::::" + dateToStr(addDay(current(), -7), FORMAT_DEFAULT));
 
@@ -219,6 +220,8 @@ public class DateTimeUtil {
 		System.out.println(getDayOfWeek(new Date()));
 		System.out.println(getWeekOfMonth(d1));
 		System.out.println(getDateStr(new Date(), "M", -2, FORMAT_DEFAULT_YMD));
+		System.out.println(getBetweenMonth("2014-02-01 00:11:22", "2016-05-26 22:51:11"));
+
 		// System.out.println(getDayOfWeek(d1));
 		// System.out.println(thisWeekMonday(d1).toLocaleString());
 	}
@@ -326,6 +329,26 @@ public class DateTimeUtil {
 	
 	public static String getDateStr(Date date, String type, int n, String format) {
 		return dateToStr(getDate(date, type, n), format);
+	}
+
+	/**
+	 * 返回2个日期区间内的全部月份, 格式yyyy-MM
+	 * @param ds1
+	 * @param ds2
+     * @return
+     */
+	public static String[] getBetweenMonth(String ds1, String ds2) {
+		List<String> months = new ArrayList<>();
+		DateTime dt1 = DateTimeUtil.strToDateTime(ds1);
+		DateTime start = new DateTime().withDate(dt1.getYear(), dt1.getMonthOfYear(), 1);
+		DateTime end = strToDateTime(ds2);
+		do{
+			months.add(dateToStrOfDefaulfFormat(start.toDate()).substring(0,7));
+			start = start.plusMonths(1);
+		} while (start.isBefore(end));
+		String[] monthArr = new String[months.size()];
+		months.toArray(monthArr);
+		return monthArr;
 	}
 
 }

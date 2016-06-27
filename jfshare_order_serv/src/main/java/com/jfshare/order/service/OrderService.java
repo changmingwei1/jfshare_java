@@ -1,16 +1,24 @@
 package com.jfshare.order.service;
 
+import com.alibaba.fastjson.JSON;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
 import com.jfshare.finagle.thrift.pay.PayRet;
 import com.jfshare.order.dao.IOrderDao;
+import com.jfshare.order.dao.IOrderJedis;
 import com.jfshare.order.model.OrderModel;
+import com.jfshare.order.model.OrderOpt;
+import com.jfshare.order.model.TbOrderInfoRecord;
 import com.jfshare.order.model.TbOrderRecordExample;
+import com.jfshare.order.server.depend.ExpressClient;
+import com.jfshare.order.server.depend.SellerClient;
+import com.jfshare.order.server.depend.StockClient;
 import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.OrderUtil;
 import com.jfshare.utils.BizUtil;
 import com.jfshare.utils.DateUtils;
+import com.twitter.concurrent.Spool;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +54,18 @@ public class OrderService {
 
     @Autowired
     private IOrderDao orderDao;
+
+    @Autowired
+    private StockClient stockClient;
+
+    @Autowired
+    private ExpressClient expressClient;
+
+    @Autowired
+    private IOrderJedis orderJedis;
+
+    @Autowired
+    private SellerClient sellerClient;
 
     public OrderModel sellerQueryDetail(int sellerId, String orderId) {
         return orderDao.getOrderBySeller(orderId, sellerId);
@@ -83,6 +103,14 @@ public class OrderService {
             }
         }
 
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        for(Order item : orderList) {
+            orderOptPush.addToOrderOptList(item.getOrderId(), "order_create", item.getUserId(), item.getSellerId());
+        }
+        orderJedis.pushOrderNotification(orderOptPush);
+
         return ret;
     }
 
@@ -99,16 +127,16 @@ public class OrderService {
         OrderModel order = new OrderModel();
         order.setUserId(orderModel.getUserId());
         order.setSellerId(orderModel.getSellerId());
-        order.setOrderState(ConstantUtil.ORDER_STATE.FINISH_COMMENT.getEnumVal());
+        order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
         DateTime successTime = new DateTime();
         order.setSuccessTime(successTime);
 
-        orderModel.setOrderState(ConstantUtil.ORDER_STATE.FINISH_COMMENT.getEnumVal());
+        orderModel.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
         orderModel.setSuccessTime(successTime);
 
         TbOrderRecordExample example = new TbOrderRecordExample();
         TbOrderRecordExample.Criteria criteria = example.createCriteria();
-//        criteria.andOrderStateEqualTo(ConstantUtil.ORDER_STATE.FINISH_DELIVER.getEnumVal());
+        criteria.andOrderStateEqualTo(ConstantUtil.ORDER_STATE.FINISH_DELIVER.getEnumVal());
         criteria.andOrderIdEqualTo(orderModel.getOrderId());
         criteria.andSellerIdEqualTo(orderModel.getSellerId());
         criteria.andUserIdEqualTo(orderModel.getUserId());
@@ -122,6 +150,12 @@ public class OrderService {
         if (ret <= 0) {
             throw new RuntimeException("confirmReceipt，更新卖家表失败, 更新返回："+ ret);
         }
+
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_confirm", orderModel.getUserId(), orderModel.getSellerId());
+        orderJedis.pushOrderNotification(orderOptPush);
 
         return ret;
     }
@@ -156,11 +190,17 @@ public class OrderService {
             throw new RuntimeException("cancelOrder，更新卖家表失败, 更新返回："+ ret);
         }
 
+        stockClient.releaseStock(orderModel.getOrderId(), orderModel.getTbOrderInfoList());
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_close", orderModel.getUserId(), orderModel.getSellerId());
+        orderJedis.pushOrderNotification(orderOptPush);
         return ret;
     }
 
-    public List<OrderModel> buyerQueryList(int userId, List<String> orderIdList) {
-        return orderDao.getOrderListByUser(userId, orderIdList);
+    public List<OrderModel> buyerQueryListFull(int userId, List<String> orderIdList) {
+        return orderDao.getOrderListByUserFull(userId, orderIdList);
     }
 
     @Transactional
@@ -186,6 +226,11 @@ public class OrderService {
             throw new RuntimeException("updateOrderPaying，更新卖家表失败, 更新返回："+ ret);
         }
 
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_paying", orderModel.getUserId(), orderModel.getSellerId());
+        orderJedis.pushOrderNotification(orderOptPush);
+
         return ret;
     }
 
@@ -200,6 +245,8 @@ public class OrderService {
             order.setPayChannel(orderModel.getPayChannel());
             order.setTradePayId(tradePayId);
             order.setThirdScore(orderModel.getThirdScore());
+            order.setExchangeCash(orderModel.getExchangeCash());
+            order.setExchangeScore(orderModel.getExchangeScore());
 
             TbOrderRecordExample example = new TbOrderRecordExample();
             TbOrderRecordExample.Criteria criteria = example.createCriteria();
@@ -218,7 +265,61 @@ public class OrderService {
             }
         }
 
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        for(OrderModel item : orderModels) {
+            orderOptPush.addToOrderOptList(item.getOrderId(), "order_paying", item.getUserId(), item.getSellerId());
+        }
+        orderJedis.pushOrderNotification(orderOptPush);
+
         return orderModels.size();
+    }
+
+    /**
+     * 全积分支付
+     * @param orderModels
+     * @return
+     */
+    public int payOnlyScore(List<OrderModel> orderModels) {
+        for(OrderModel orderModel : orderModels) {
+            logger.info("payOnlyScore----全积分支付, orderId={}", orderModel.getOrderId());
+            OrderModel order = new OrderModel();
+            order.setUserId(orderModel.getUserId());
+            order.setSellerId(orderModel.getSellerId());
+            order.setPayChannel(0);
+
+            order.setPayState(1);
+            order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal());
+
+            TbOrderRecordExample example = new TbOrderRecordExample();
+            TbOrderRecordExample.Criteria criteria = example.createCriteria();
+            criteria.andOrderIdEqualTo(orderModel.getOrderId());
+            criteria.andSellerIdEqualTo(orderModel.getSellerId());
+            criteria.andUserIdEqualTo(orderModel.getUserId());
+            int ret = orderDao.updateOrderWithCriteria(order, BizUtil.USER_TYPE.BUYER.getEnumVal(),example);
+            if (ret <= 0) {
+                throw new RuntimeException("updatePayRet，更新买家表失败, 更新返回："+ ret);
+            }
+
+            ret = orderDao.updateOrderWithCriteria(order, BizUtil.USER_TYPE.SELLER.getEnumVal(),example);
+
+            if (ret <= 0) {
+                throw new RuntimeException("updatePayRet，更新卖家表失败, 更新返回："+ ret);
+            }
+
+            //释放库存锁定量
+            stockClient.releaseLockCount(order.getOrderId(), orderModel.getTbOrderInfoList());
+            //TODO 超卖
+
+            //推送订单操作通知
+            OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+            orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay", orderModel.getUserId(), orderModel.getSellerId());
+            orderJedis.pushOrderNotification(orderOptPush);
+        }
+
+
+        return 1;
     }
 
     public int payRet(OrderModel orderModel, PayRet payRet) {
@@ -239,6 +340,14 @@ public class OrderService {
         if (payRet.getRetCode() == 2) {
             order.setPayState(1);
             order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal());
+            //线下订单直接交易成功
+            if (orderModel.getOrderType() == 1) {
+                order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
+                //将买家设置为卖家的会员
+                boolean b = sellerClient.insertUserSellerReal(orderModel.getUserId(), orderModel.getSellerId());
+                logger.info("线下支付订单将买家:" + orderModel.getUserId() + " 设置为卖家:" + orderModel.getSellerId() +
+                     "的会员结果为:" + b);
+            }
         } else {
             order.setPayState(-1);
         }
@@ -265,7 +374,15 @@ public class OrderService {
             throw new RuntimeException("updatePayRet，更新卖家表失败, 更新返回："+ ret);
         }
 
+        //释放库存锁定量
+        stockClient.releaseLockCount(order.getOrderId(), orderModel.getTbOrderInfoList());
         //TODO 超卖
+
+        //推送订单操作通知
+        OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+        orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_pay", orderModel.getUserId(), orderModel.getSellerId());
+        orderJedis.pushOrderNotification(orderOptPush);
+
 
         return ret;
     }
@@ -289,8 +406,48 @@ public class OrderService {
     }
 
     public int batchDeliverOp(int sellerId, List<Order> deliverOrderList, List<ExpressInfo> expressList, int deliverType) {
-        return orderDao.batchDeliverOp(sellerId, deliverOrderList);
+        int ret = orderDao.batchDeliverOp(sellerId, deliverOrderList);
         //TODO 通知物流抓取
+        if(ret > 0) {
+            for(Order order : deliverOrderList) {
+                expressClient.subscribeExpressPost(order.getDeliverInfo());
+            }
+
+            //推送订单操作通知
+            OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
+            for(Order item : deliverOrderList) {
+                orderOptPush.addToOrderOptList(item.getOrderId(), "order_deliver_batch", item.getUserId(), item.getSellerId());
+            }
+            orderJedis.pushOrderNotification(orderOptPush);
+        }
+
+
+        return ret;
+    }
+
+    public OrderModel buyerQueryDetailOffline(int userId, String orderId) {
+        return orderDao.getOrderByUserOffline(orderId, userId);
+    }
+
+    public OrderModel sellerQueryDetailOffline(int sellerId, String orderId) {
+        return orderDao.getOrderBySellerOffline(orderId, sellerId);
+    }
+
+    public int buyerQueryOrderStatOffline(OrderQueryConditions conditions) {
+        return orderDao.getOrderStatByUserOffline(conditions.getUserId(), conditions);
+    }
+
+    public List<OrderModel> buyerQueryListOffline(OrderQueryConditions conditions) {
+        return orderDao.getOrderListByUserOffline(conditions.getUserId(), conditions);
+    }
+
+    public int sellerQueryOrderStatOffline(OrderQueryConditions conditions) {
+        logger.info("卖家：" + conditions.getSellerId() + "：：：：：：：：：：：：查询订单，统计各种订单状态数量");
+        return orderDao.getOrderStatBySellerOffline(conditions.getSellerId(), conditions);
+    }
+
+    public List<OrderModel> sellerQueryListOffline(OrderQueryConditions conditions) {
+        return orderDao.getOrderListBySellerOffline(conditions.getSellerId(), conditions);
     }
 }
  

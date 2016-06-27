@@ -59,7 +59,7 @@ public class ProductClient {
         param.setBaseTag(1);
         param.setAttributeTag(0);
         param.setSkuTemplateTag(0);
-        param.setSkuTag(0);
+        param.setSkuTag(1);
         try {
             CountDownLatch latch = new CountDownLatch(productInfos.size());
             for (OrderInfo productInfo : productInfos) {

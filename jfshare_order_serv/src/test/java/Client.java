@@ -1,6 +1,7 @@
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayChannel;
 import junit.framework.TestCase;
+import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -9,6 +10,7 @@ import org.apache.thrift.transport.TTransport;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Client extends TestCase{
@@ -19,7 +21,8 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-        transport = new TFramedTransport(new TSocket("localhost", 1986));
+        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+//        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
@@ -95,6 +98,30 @@ public class Client extends TestCase{
         }
     }
 
+    public void testOrderProfileQueryFull() throws Exception {
+
+        String orderId = "1";
+        try {
+            ////////////////////////////////////////////////////
+            OrderQueryConditions conditions = new OrderQueryConditions();
+//            conditions.setCurPage(2);
+//            conditions.setCount(3);
+            conditions.setStartTime("2016-05-01 00:00:00");
+            conditions.setEndTime("2016-06-20 00:00:00");
+//            conditions.setOrderState(5);
+//            conditions.setOrderId("59090131");
+            conditions.addToOrderIds("59700017");
+            System.err.println(client.orderProfileQueryFull(conditions));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
+
 
     public void testDeliver() throws Exception {
         //商品id
@@ -105,6 +132,25 @@ public class Client extends TestCase{
             deliverInfo.setOrderId("1911111");
             deliverInfo.setUserId(1111);
             System.err.println(client.deliver(1000, deliverInfo));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
+
+    public void testDeliverVir() throws Exception {
+        //商品id
+        String orderId = "1";
+        try {
+            ////////////////////////////////////////////////////
+            DeliverVirParam param = new DeliverVirParam();
+            param.setOrderId("21330017");
+            param.setSellerId(1);
+            System.err.println(client.deliverVir(param));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -134,9 +180,9 @@ public class Client extends TestCase{
 
     public void testCancelOrder() throws Exception {
         //商品id
-        String orderId = "3450002";
+        String orderId = "21330017";
         try {
-            System.err.println(client.cancelOrder(1, 2, orderId, 9));
+            System.err.println(client.cancelOrder(1, 17, orderId, 9));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -175,12 +221,12 @@ public class Client extends TestCase{
     public void testPayApply() throws Exception {
         try {
             PayParam payParam = new PayParam();
-            List<String> orderIds = new ArrayList<String>();
-            orderIds.add("11240067");
-            payParam.setUserId(67);
-            payParam.setOrderIdList(orderIds);
+            payParam.setUserId(17);
+            payParam.addToOrderIdList("24920017");
             PayChannel payChannel = new PayChannel();
-            payChannel.setPayChannel(1);
+            payChannel.setPayChannel(9);
+            payParam.setExchangeCash("0.10");
+            payParam.setExchangeScore(10);
             payParam.setPayChannel(payChannel);
             System.err.println(client.payApply(payParam));
         } catch (Exception e) {
@@ -206,5 +252,39 @@ public class Client extends TestCase{
                 transport.close();
             }
         }
+    }
+
+    public void testBatchExport() throws Exception {
+        try {
+            OrderQueryConditions queryConditions = new OrderQueryConditions();
+            System.err.println(client.batchExportOrder(13, queryConditions));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
+
+    public void testBatchExportFull() throws Exception {
+        try {
+            OrderQueryConditions queryConditions = new OrderQueryConditions();
+//            queryConditions.setUserId(99);
+            queryConditions.setStartTime("2016-05-01 00:00:00");
+            queryConditions.setEndTime("2016-05-31 00:00:00");
+//                queryConditions.setOrderId("58870112");
+            System.err.println(client.batchExportOrderFull(queryConditions));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(transport!=null){
+                transport.close();
+            }
+        }
+    }
+
+    public void testQueryExportFileKey() throws TException {
+        System.err.println(client.getExportOrderResult("0bc72301bd5fb99e0b1c8db9dcf3bdf3"));
     }
 }

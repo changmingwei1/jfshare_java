@@ -14,6 +14,7 @@ import com.jfshare.cart.util.StringUtil;
 import com.jfshare.finagle.thrift.cart.*;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,17 @@ public class CartHandler implements CartServ.Iface {
 
 		String key = StringUtil.join(Constant.CART_KEY_PREFIX, userKey, Constant.SEPARATOR);
 
-		Integer count = readCartRedisManager.getMapSize(key);
+		Integer count = 0;
+
+		CartResult cartResult = this.listItem(userKey, source);
+		if(cartResult != null && cartResult.getResult() != null && cartResult.getResult().getCode() == 0 && CollectionUtils.isNotEmpty(cartResult.getItemList())) {
+			for(sellerItemDetail sellerItemDetail : cartResult.getItemList()) {
+				for(ItemDetail itemDetail : sellerItemDetail.getItemDetailList()) {
+					count += itemDetail.getProduct().getCount();
+				}
+			}
+		}
+
 
 		/**** 重置失效时间,未登录数据设置过期时间 ****/
 		if (!StringUtil.isNumber(userKey))

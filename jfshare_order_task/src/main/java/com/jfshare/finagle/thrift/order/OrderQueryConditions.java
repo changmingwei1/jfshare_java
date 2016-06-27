@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.*;
 import org.apache.thrift.meta_data.FieldMetaData;
 import org.apache.thrift.meta_data.FieldValueMetaData;
+import org.apache.thrift.meta_data.ListMetaData;
 import org.apache.thrift.protocol.*;
 
 import java.util.*;
@@ -51,6 +52,7 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
   private static final TField IS_HAVE_BUYER_COMMENT_FIELD_DESC = new TField("isHaveBuyerComment", TType.I32, (short)31);
   private static final TField IS_HAVE_SELLER_COMMENT_FIELD_DESC = new TField("isHaveSellerComment", TType.I32, (short)32);
   private static final TField DOWN_TYPE_FIELD_DESC = new TField("downType", TType.I32, (short)33);
+  private static final TField ORDER_IDS_FIELD_DESC = new TField("orderIds", TType.LIST, (short)34);
 
 
   public int sellerId;
@@ -86,6 +88,7 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
   public int isHaveBuyerComment;
   public int isHaveSellerComment;
   public int downType;
+  public List<String> orderIds;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -121,7 +124,8 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
     DELIVER_LIMIT_TIME_STATE((short)30, "deliverLimitTimeState"),
     IS_HAVE_BUYER_COMMENT((short)31, "isHaveBuyerComment"),
     IS_HAVE_SELLER_COMMENT((short)32, "isHaveSellerComment"),
-    DOWN_TYPE((short)33, "downType");
+    DOWN_TYPE((short)33, "downType"),
+    ORDER_IDS((short)34, "orderIds");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -202,6 +206,8 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
   	return IS_HAVE_SELLER_COMMENT;
         case 33: // DOWN_TYPE
   	return DOWN_TYPE;
+        case 34: // ORDER_IDS
+  	return ORDER_IDS;
         default:
   	return null;
       }
@@ -330,6 +336,9 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.DOWN_TYPE, new FieldMetaData("downType", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.ORDER_IDS, new FieldMetaData("orderIds", TFieldRequirementType.OPTIONAL,
+      new ListMetaData(TType.LIST,
+                new FieldValueMetaData(TType.STRING))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(OrderQueryConditions.class, metaDataMap);
   }
@@ -457,6 +466,13 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
     this.isHaveBuyerComment = other.isHaveBuyerComment;
     this.isHaveSellerComment = other.isHaveSellerComment;
     this.downType = other.downType;
+    if (other.isSetOrderIds()) {
+      List<String> __this__orderIds = new ArrayList<String>();
+      for (String other_element : other.orderIds) {
+        __this__orderIds.add(other_element);
+      }
+      this.orderIds = __this__orderIds;
+    }
   }
 
   public OrderQueryConditions deepCopy() {
@@ -514,6 +530,7 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
     this.isHaveSellerComment = 0;
     setDownTypeIsSet(false);
     this.downType = 0;
+    this.orderIds = null;
   }
 
   public int getSellerId() {
@@ -1325,6 +1342,46 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
     __isset_bit_vector.set(__DOWNTYPE_ISSET_ID, value);
   }
 
+  public int getOrderIdsSize() {
+    return (this.orderIds == null) ? 0 : this.orderIds.size();
+  }
+
+  public java.util.Iterator<String> getOrderIdsIterator() {
+    return (this.orderIds == null) ? null : this.orderIds.iterator();
+  }
+
+  public void addToOrderIds(String elem) {
+    if (this.orderIds == null) {
+      this.orderIds = new ArrayList<String>();
+    }
+    this.orderIds.add(elem);
+  }
+
+  public List<String> getOrderIds() {
+    return this.orderIds;
+  }
+
+  public OrderQueryConditions setOrderIds(List<String> orderIds) {
+    this.orderIds = orderIds;
+    
+    return this;
+  }
+
+  public void unsetOrderIds() {
+    this.orderIds = null;
+  }
+
+  /** Returns true if field orderIds is set (has been asigned a value) and false otherwise */
+  public boolean isSetOrderIds() {
+    return this.orderIds != null;
+  }
+
+  public void setOrderIdsIsSet(boolean value) {
+    if (!value) {
+      this.orderIds = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_ID:
@@ -1558,6 +1615,13 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
         setDownType((Integer)value);
       }
       break;
+    case ORDER_IDS:
+      if (value == null) {
+        unsetOrderIds();
+      } else {
+        setOrderIds((List<String>)value);
+      }
+      break;
     }
   }
 
@@ -1629,6 +1693,8 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
       return new Integer(getIsHaveSellerComment());
     case DOWN_TYPE:
       return new Integer(getDownType());
+    case ORDER_IDS:
+      return getOrderIds();
     }
     throw new IllegalStateException();
   }
@@ -1706,6 +1772,8 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
       return isSetIsHaveSellerComment();
     case DOWN_TYPE:
       return isSetDownType();
+    case ORDER_IDS:
+      return isSetOrderIds();
     }
     throw new IllegalStateException();
   }
@@ -1986,6 +2054,14 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
       if (this.downType != that.downType)
         return false;
     }
+    boolean this_present_orderIds = true && this.isSetOrderIds();
+    boolean that_present_orderIds = true && that.isSetOrderIds();
+    if (this_present_orderIds || that_present_orderIds) {
+      if (!(this_present_orderIds && that_present_orderIds))
+        return false;
+      if (!this.orderIds.equals(that.orderIds))
+        return false;
+    }
 
     return true;
   }
@@ -2125,6 +2201,10 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
     builder.append(present_downType);
     if (present_downType)
       builder.append(downType);
+    boolean present_orderIds = true && (isSetOrderIds());
+    builder.append(present_orderIds);
+    if (present_orderIds)
+      builder.append(orderIds);
     return builder.toHashCode();
   }
 
@@ -2466,6 +2546,16 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetOrderIds()).compareTo(typedOther.isSetOrderIds());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOrderIds()) {
+      lastComparison = TBaseHelper.compareTo(this.orderIds, typedOther.orderIds);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -2731,6 +2821,23 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 34: // ORDER_IDS
+          if (field.type == TType.LIST) {
+            {
+            TList _list4 = iprot.readListBegin();
+            this.orderIds = new ArrayList<String>(_list4.size);
+            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
+            {
+              String _elem6;
+              _elem6 = iprot.readString();
+              this.orderIds.add(_elem6);
+            }
+            iprot.readListEnd();
+            }
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -2912,6 +3019,20 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
       oprot.writeFieldBegin(DOWN_TYPE_FIELD_DESC);
       oprot.writeI32(this.downType);
       oprot.writeFieldEnd();
+    }
+    if (this.orderIds != null) {
+      if (isSetOrderIds()) {
+        oprot.writeFieldBegin(ORDER_IDS_FIELD_DESC);
+        {
+          oprot.writeListBegin(new TList(TType.STRING, this.orderIds.size()));
+          for (String _iter7 : this.orderIds)
+          {
+            oprot.writeString(_iter7);
+          }
+          oprot.writeListEnd();
+        }
+        oprot.writeFieldEnd();
+      }
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -3152,6 +3273,16 @@ public class OrderQueryConditions implements TBase<OrderQueryConditions, OrderQu
       if (!first) sb.append(", ");
       sb.append("downType:");
       sb.append(this.downType);
+      first = false;
+      }
+    if (isSetOrderIds()) {
+      if (!first) sb.append(", ");
+      sb.append("orderIds:");
+      if (this.orderIds == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.orderIds);
+      }
       first = false;
       }
     sb.append(")");

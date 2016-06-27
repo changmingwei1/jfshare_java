@@ -26,14 +26,9 @@ public class ScoreToCashService {
 	private ScoreClient scoreClient;
 	
 	public ExchangeResult getExchangeScore(ExchangeParam param) {
-		/** 用户为空 OR 金额为空 OR 金额小于0 OR 总金额不等于各商品金额之和-积分抵现部分金额*/
-		double sumPrice = -NumberUtil.parseDouble(param.getAmount());
-		for(ExchangeProduct exchangeProduct : param.getProductList())
-			sumPrice += NumberUtil.parseDouble(exchangeProduct.getPrice());
 
 		if (param == null || param.getUserId() <= 0 || StringUtil.empty(param.getAmount())
-				|| NumberUtil.parseDouble(param.getAmount()) <= 0
-				|| sumPrice != 0) {
+				|| NumberUtil.parseDouble(param.getAmount()) <= 0) {
 			logger.info(param.getUserId() + "积分兑换失败：" + ResultGenerator.PARAM_ERROR);
 			return ResultGenerator.createErrorExchangeResult(ResultGenerator.PARAM_ERROR);
 		}
@@ -65,7 +60,7 @@ public class ScoreToCashService {
 		int exchangeAmount = parseInteger(PriceUtils.strToInt(param.getAmount()) * Globals.SCORE_TO_CASH_RULE);
 		/** 判断积分数量是否大于实际金额可兑换数量 */
 		if (NumberUtil.parseInteger(param.getScore()) > changeS(exchangeAmount)) {
-			logger.info(param.getUserId() + "积分兑换失败：" + ResultGenerator.SCORE_QUANTITY_PARAM_ERROR);
+			logger.info(param.getUserId() + "积分兑换失败：积分数量大于实际金额可兑换积分数量,  param.getScore={}, exchangeScore={}, 失败代码：{}", param.getScore(),  changeS(exchangeAmount), ResultGenerator.SCORE_QUANTITY_PARAM_ERROR);
 			return ResultGenerator.createErrorExchangeResult(ResultGenerator.SCORE_QUANTITY_PARAM_ERROR);
 		}
 
@@ -110,6 +105,13 @@ public class ScoreToCashService {
 	private List<ExchangeDetail> setProductScore(List<ExchangeProduct> productList, int amount, int exchangeScore, int exchangeAmount, ExchangeRule rule) {
 		if (productList == null || productList.size() <= 0)
 			return null;
+		int sumPrice = 0;
+		for(ExchangeProduct exchangeProduct : productList)
+			sumPrice += PriceUtils.strToInt(exchangeProduct.getPrice());
+
+		//拆分积分依据的订单总金额不含运费
+		amount = sumPrice;
+
 		List<ExchangeDetail> eList = new ArrayList<ExchangeDetail>();
 		int s = 0; // 累计积分
 		int a = 0; // 累计金额
@@ -164,7 +166,7 @@ public class ScoreToCashService {
 	 * @param num
 	 * @return
 	 */
-	private int parseInteger(double num) {
+	public static int parseInteger(double num) {
 		BigDecimal b = new BigDecimal(num);
 		return b.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
 	}

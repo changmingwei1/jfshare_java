@@ -517,6 +517,31 @@ public class ServHandle implements CommonServ.Iface {
     }
 
     @Override
+    public Result sendMsg(ShortMsg msg) throws TException {
+        Result result = new Result(0);
+
+        if(msg == null || StringUtils.isBlank(msg.getMobile()) || StringUtils.isBlank(msg.getContent())){
+            result.setCode(1);
+            result.addToFailDescList(FailCode.PARAM_EXCEPTION);
+            return result;
+        }
+
+        try {
+            FailDesc sendRet = signinMsgSender.send(msg.getContent(), msg.getMobile());
+            if(sendRet != null) {
+                result.setCode(1);
+                result.addToFailDescList(sendRet);
+                return result;
+            }
+        } catch (Exception e) {
+            result.setCode(1);
+            result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+            logger.error("sendMsg ==> Exception", e);
+        }
+        return result;
+    }
+
+    @Override
     public Result validateCaptcha(Captcha captcha) throws TException {
         boolean vRes = false;
         Result r = new Result(0);
@@ -551,11 +576,11 @@ public class ServHandle implements CommonServ.Iface {
                 result.addToFailDescList(createFailDesc);
                 return result;
             }
-
-            boolean sendRet = signinMsgSender.send(captchaWithKey.getCaptcha()+"(动态验证码)， 请在3分钟内填写", captcha.getMobile());
-            if(!sendRet) {
+            String msgContent = "验证码:" + captchaWithKey.getCaptcha() + "(3分钟内有效)，请及时输入验证，感谢您使用聚分享！";
+            FailDesc sendRet = signinMsgSender.send(msgContent, captcha.getMobile());
+            if(sendRet != null) {
                 result.setCode(1);
-                result.addToFailDescList(FailCode.SEND_MSG_FAILURE);
+                result.addToFailDescList(sendRet);
                 return result;
             }
         } catch (Exception e) {

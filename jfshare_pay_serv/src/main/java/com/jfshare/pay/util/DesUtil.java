@@ -7,8 +7,12 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.security.Key;
 import java.security.SecureRandom;
 
 /**
@@ -30,8 +34,42 @@ public class DesUtil {
             return null;
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] buf = decoder.decodeBuffer(data);
-        byte[] bt = decryptCBC(buf, key.getBytes(), iv.getBytes());
+//        byte[] bt = decryptCBC(buf, key.getBytes(), iv.getBytes());
+        byte[] bt = des3DecodeCBC(key.getBytes(), iv.getBytes(), buf);
         return new String(bt, "UTF-8");
+    }
+
+    public static byte[] des3EncodeCBC(byte[] key, byte[] keyiv, byte[] data) throws Exception {
+        Key deskey = null;
+        DESedeKeySpec spec = new DESedeKeySpec(key);
+        SecretKeyFactory keyfactory = SecretKeyFactory.getInstance("desede");
+        deskey = keyfactory.generateSecret(spec);
+        Cipher cipher = Cipher.getInstance("desede" + "/CBC/PKCS5Padding");
+        IvParameterSpec ips = new IvParameterSpec(keyiv);
+        cipher.init(Cipher.ENCRYPT_MODE, deskey, ips);
+        byte[] bOut = cipher.doFinal(data);
+        return bOut;
+    }
+
+    /**
+     * CBC解密
+     *
+     * @param key 密钥
+     * @param keyiv IV
+     * @param data Base64编码的密文
+     * @return 明文
+     * @throws Exception
+     */
+    public static byte[] des3DecodeCBC(byte[] key, byte[] keyiv, byte[] data) throws Exception {
+        Key deskey = null;
+        DESedeKeySpec spec = new DESedeKeySpec(key);
+        SecretKeyFactory keyfactory = SecretKeyFactory.getInstance("desede");
+        deskey = keyfactory.generateSecret(spec);
+        Cipher cipher = Cipher.getInstance("desede" + "/CBC/PKCS5Padding");
+        IvParameterSpec ips = new IvParameterSpec(keyiv);
+        cipher.init(Cipher.DECRYPT_MODE, deskey, ips);
+        byte[] bOut = cipher.doFinal(data);
+        return bOut;
     }
 
     public static String encrypt(String data, String key, String iv) throws Exception {
@@ -110,5 +148,52 @@ public class DesUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 字符串转换unicode
+     */
+    public static String string2Unicode(String string) {
+
+        StringBuffer unicode = new StringBuffer();
+
+        for (int i = 0; i < string.length(); i++) {
+
+            // 取出每一个字符
+            char c = string.charAt(i);
+
+            // 转换为unicode
+            unicode.append("\\u" + Integer.toHexString(c));
+        }
+
+        return unicode.toString();
+    }
+
+    /**
+     * unicode 转字符串
+     */
+    public static String unicode2String(String unicode) {
+
+        StringBuffer string = new StringBuffer();
+
+        String[] hex = unicode.split("\\\\u");
+
+        for (int i = 1; i < hex.length; i++) {
+
+            // 转换出每一个代码点
+            int data = Integer.parseInt(hex[i], 16);
+
+            // 追加成string
+            string.append((char) data);
+        }
+
+        return string.toString();
+    }
+
+    public static void main(String[] s) throws Exception {
+        String requestXML= "5XjbC6AJKswuM7pnCFzoM4Z24r6RvxS90HUNOPzACVGNE0FqNDGKrcokbkfJGdLC%2bw7WaQmBB99eRqyEQX1xitZnSjP89UvzmuXJ5VhD7bjDz9mbxxKFwAUh7EsdVGRtBlb%2bsBhkgAU1zrSEN5WmkkEEFM%2bEt%2fdS2s2X9xnBixVCXSgZxyOvn9RA4tK7";
+//        String urlDecrypt = URLDecoder.decode(requestXML, "gbk");
+        String data = decrypt(requestXML, "telefenpaytes@pay17$#3#$", "13386191");
+        System.err.println("data==>" + data);
     }
 }

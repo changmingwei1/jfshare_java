@@ -28,7 +28,7 @@ public class HttpUtils {
 	
 	private static final Log logger = LogFactory.getLog(HttpUtils.class);
 
-	//http榛樿杩炴帴瓒呮椂浠ュ強璇昏秴鏃舵椂闂�
+	//http�??�??�??以�?读�??��???
 	public static final int DEFAULT_CONNECTION_TIMEOUT = 1000*10;
 	public static final int DEFAULT_READ_TIMEOUT = 1000*10;
 	public static final int MAX_TOTAL_CONNECTIONS = 500;
@@ -49,7 +49,7 @@ public class HttpUtils {
 		client.getHttpConnectionManager().getParams().setSoTimeout(DEFAULT_READ_TIMEOUT);
 		client.getHttpConnectionManager().getParams().setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
 		client.getHttpConnectionManager().getParams().setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONSPERHOST);
-		//妫�煡 绌洪棽杩炴帴绾跨▼
+		//�?? 空�?�??线�?
 		IdleConnectionTimeoutThread idleThread = new IdleConnectionTimeoutThread(); 
 		idleThread.setTimeoutInterval(IDLETHREAD_TIMEOUT_INTERVAL); 
 		idleThread.setConnectionTimeout(IDLETHREAD_CONNECTION_TIMEOUT); 
@@ -72,13 +72,13 @@ public class HttpUtils {
 		return httpPostUTF8( url,  params,false);
 	}
 	/**
-	 * 浠TTP post鏂瑰紡璁块棶鎸囧畾URL
+	 * �?TTP post?��?访�????URL
 	 * 
 	 * @param url
-	 *            璁块棶URL
+	 *            访�?URL
 	 * @param params
-	 *            璇锋眰鍙傛暟
-	 * @return 鏈嶅姟鍣ㄥ搷搴斿唴瀹�
+	 *            请�????
+	 * @return ????��?�??�?
 	 * @throws Exception
 	 */
 	public static String httpPost(String url, Map<String, String> params,boolean keepLive)
@@ -100,7 +100,7 @@ public class HttpUtils {
 			}
 			return post.getResponseBodyAsString();
 		} catch (Exception ex) {
-			logger.error("==璁块棶[" + url + "]鍑虹幇寮傚父锛� "+ ex.getMessage());
+			logger.error("==访�?[" + url + "]?��?�?���? "+ ex.getMessage());
 			throw new Exception("", ex);
 		} finally {
 			post.releaseConnection();
@@ -126,7 +126,7 @@ public class HttpUtils {
 			}
 			return post.getResponseBodyAsString();
 		} catch (Exception ex) {
-			logger.error("==璁块棶[" + url + "]鍑虹幇寮傚父锛� "+ ex.getMessage());
+			logger.error("==访�?[" + url + "]?��?�?���? "+ ex.getMessage());
 			throw new Exception("", ex);
 		} finally {
 			post.releaseConnection();
@@ -173,7 +173,7 @@ public class HttpUtils {
 		return httpPost(url, null);
 	}
 
-	// 杈呭姪鏂规硶锛屾牴鎹粰瀹氶敭鍊煎锛屾瀯閫犺姹傚弬鏁版暟缁�
+	// �???��?�?????�???��?�?????�???��?�?
 	private static NameValuePair[] buildNameValuePairs(Map<String, String> params) {
 		NameValuePair[] data = null;
 		if (params != null && params.size() > 0) {
@@ -188,29 +188,30 @@ public class HttpUtils {
 		}
 		return data;
 	}
-	// POST璇锋眰
+	// POST请�?
 	public static String xmlHttpPost(String xmlRequest, String url) throws Exception{
 		String resXml = "";
-		// 鍒涘缓HttpClient瀹炰緥
+		// ??��HttpClient�??
 		//HttpClient client = new HttpClient(connectionManager);
-		// 鍒涘缓PostMethod鏂规硶瀹炰緥
+		// ??��PostMethod?��?�??
 		PostMethod method = new PostMethod(url);
 		try {
 			//method.setHttp11(true);
-			// 鎸囧畾璇锋眰鍐呭鐨勭被鍨�
+			// ???请�??????��??
 			method.setRequestHeader("Content-type", "text/xml; charset=utf-8");
-			// 娣诲姞璇锋眰鍙傛暟
+			// 添�?请�????
 			method.setRequestEntity(new StringRequestEntity(xmlRequest, "text/xml", "utf-8"));
-			// 浣跨敤绯荤粺鎻愪緵鐨勯粯璁ょ殑鎭㈠绛栫暐
+			// 使�?系�???????认�??��?�??
 			method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
 
 			int status = client.executeMethod(method);
-			// 鍒ゆ柇鏄惁杩斿洖鎴愬姛
+			// ?��????�?????
 			if (status == HttpStatus.SC_OK) {
 				try {
-					resXml = method.getResponseBodyAsString();
+					byte[] responseBody = method.getResponseBody();
+					resXml = new String(responseBody,"UTF-8");
 				} catch (Exception e) {
-					logger.error("==璁块棶[" + url + "]鍑虹幇寮傚父!" + e.getMessage());
+					logger.error("==访�?[" + url + "]?��?�?��!" + e.getMessage());
 					throw e;
 				}
 			}
@@ -218,25 +219,25 @@ public class HttpUtils {
 			throw e;
 		} finally {
 			method.releaseConnection();
-			//鍏抽棴杩炴帴銆�
+			//?��?�????
 			//((SimpleHttpConnectionManager)client.getHttpConnectionManager()).shutdown();  
 
 		}
 		return resXml;
 	}
-	
-	
-	
+
+
+
 	
 	/**
-	 * 娣诲姞http post璇锋眰
-	 * @param map 璇锋眰瀵硅薄key value
-	 * @param url 璇锋眰鐨剈rl
+	 * 添�?http post请�?
+	 * @param map 请�?对象key value
+	 * @param url 请�???rl
 	 * */
 	public static String postHttpInfo(Map<String,String> map,String url){
 		String rslVal = "";
 		HttpClient client = new HttpClient();
-		client.getParams().setSoTimeout(10000);// 璁剧疆瓒呮椂鏃堕棿
+		client.getParams().setSoTimeout(10000);// 设置�???��?
 		client.getParams().setContentCharset("UTF-8");
 		client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler());

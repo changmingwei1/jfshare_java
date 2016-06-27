@@ -683,14 +683,14 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
         case 5: // ORDER_PROFILE_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list4 = iprot.readListBegin();
-            this.orderProfileList = new ArrayList<Order>(_list4.size);
-            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
+            TList _list8 = iprot.readListBegin();
+            this.orderProfileList = new ArrayList<Order>(_list8.size);
+            for (int _i9 = 0; _i9 < _list8.size; ++_i9)
             {
-              Order _elem6;
-              _elem6 = new Order();
-              _elem6.read(iprot);
-              this.orderProfileList.add(_elem6);
+              Order _elem10;
+              _elem10 = new Order();
+              _elem10.read(iprot);
+              this.orderProfileList.add(_elem10);
             }
             iprot.readListEnd();
             }
@@ -701,14 +701,14 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
         case 6: // ORDER_COUNT_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list7 = iprot.readListBegin();
-            this.orderCountList = new ArrayList<OrderCount>(_list7.size);
-            for (int _i8 = 0; _i8 < _list7.size; ++_i8)
+            TList _list11 = iprot.readListBegin();
+            this.orderCountList = new ArrayList<OrderCount>(_list11.size);
+            for (int _i12 = 0; _i12 < _list11.size; ++_i12)
             {
-              OrderCount _elem9;
-              _elem9 = new OrderCount();
-              _elem9.read(iprot);
-              this.orderCountList.add(_elem9);
+              OrderCount _elem13;
+              _elem13 = new OrderCount();
+              _elem13.read(iprot);
+              this.orderCountList.add(_elem13);
             }
             iprot.readListEnd();
             }
@@ -748,9 +748,9 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
         oprot.writeFieldBegin(ORDER_PROFILE_LIST_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.orderProfileList.size()));
-          for (Order _iter10 : this.orderProfileList)
+          for (Order _iter14 : this.orderProfileList)
           {
-            _iter10.write(oprot);
+            _iter14.write(oprot);
           }
           oprot.writeListEnd();
         }
@@ -761,9 +761,9 @@ public class OrderProfilePage implements TBase<OrderProfilePage, OrderProfilePag
       oprot.writeFieldBegin(ORDER_COUNT_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.orderCountList.size()));
-        for (OrderCount _iter11 : this.orderCountList)
+        for (OrderCount _iter15 : this.orderCountList)
         {
-          _iter11.write(oprot);
+          _iter15.write(oprot);
         }
         oprot.writeListEnd();
       }

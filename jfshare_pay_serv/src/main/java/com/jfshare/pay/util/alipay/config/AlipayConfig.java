@@ -22,7 +22,7 @@ package com.jfshare.pay.util.alipay.config;
  */
 
 public class AlipayConfig {
-	
+
 	//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 	// 合作身份者ID，以2088开头由16位纯数字组成的字符串
 	public static String partner = "2088701691132875";
@@ -65,6 +65,8 @@ public class AlipayConfig {
 			"uV0UYVm0kt8JzdCGPK4xfWtq4S3ErSeVHtHzM7A0P4yH0cuurZUBAkBuN2qOcmGF" +
 			"A/1+GJuCsDo86qFO0Dq3j1JWwq9Q1dUvDNjmn5DmHibq3+EncQ71NyuHmofWx3nB" +
 			"l+VYAAU1NpYI";
+
+	public static final String ALIPAY_RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDVZoK/Z6esoAhKlaCYkQSsakJDstIocJTrXCnNoFE5mFWGymEOWvwj4iy7dQCawHEzucNYqkyqUCmSmwaGEa5Cv/+FQJDYMIfCm3k/Mz6n5Jl1MfCOyEJJjqkQ88Kwwv8+Okyb1PaFtJeRweSiagYqG9bNpWF6r2BGTXFfWwzoqQIDAQAB";
 
 	/**
 	 * 以下为商户配置参数

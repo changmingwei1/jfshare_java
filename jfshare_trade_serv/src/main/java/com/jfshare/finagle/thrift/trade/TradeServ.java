@@ -38,26 +38,32 @@ import com.twitter.finagle.thrift.ThriftClientRequest;
 public class TradeServ {
   public interface Iface {
     public OrderConfirmResult orderConfirm(BuyInfo buyInfo) throws TException;
+    public OrderConfirmResult orderConfirmOffline(BuyInfo buyInfo) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult buyCount(int userId, String productId) throws TException;
     public ExchangeRuleResult getExchangeRule() throws TException;
     public ExchangeResult getExchangeScore(ExchangeParam param) throws TException;
     public ExchangeResult score2cash(ExchangeParam param) throws TException;
+    public OrderConfirmResult payOrderCreate(PayOrderInfo payOrderInfo) throws TException;
   }
 
   public interface AsyncIface {
     public void orderConfirm(BuyInfo buyInfo, AsyncMethodCallback<AsyncClient.orderConfirm_call> resultHandler) throws TException;
+    public void orderConfirmOffline(BuyInfo buyInfo, AsyncMethodCallback<AsyncClient.orderConfirmOffline_call> resultHandler) throws TException;
     public void buyCount(int userId, String productId, AsyncMethodCallback<AsyncClient.buyCount_call> resultHandler) throws TException;
     public void getExchangeRule(AsyncMethodCallback<AsyncClient.getExchangeRule_call> resultHandler) throws TException;
     public void getExchangeScore(ExchangeParam param, AsyncMethodCallback<AsyncClient.getExchangeScore_call> resultHandler) throws TException;
     public void score2cash(ExchangeParam param, AsyncMethodCallback<AsyncClient.score2cash_call> resultHandler) throws TException;
+    public void payOrderCreate(PayOrderInfo payOrderInfo, AsyncMethodCallback<AsyncClient.payOrderCreate_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
     public Future<OrderConfirmResult> orderConfirm(BuyInfo buyInfo);
+    public Future<OrderConfirmResult> orderConfirmOffline(BuyInfo buyInfo);
     public Future<com.jfshare.finagle.thrift.result.StringResult> buyCount(int userId, String productId);
     public Future<ExchangeRuleResult> getExchangeRule();
     public Future<ExchangeResult> getExchangeScore(ExchangeParam param);
     public Future<ExchangeResult> score2cash(ExchangeParam param);
+    public Future<OrderConfirmResult> payOrderCreate(PayOrderInfo payOrderInfo);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -131,6 +137,41 @@ public class TradeServ {
         return result.success;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "orderConfirm failed: unknown result");
+    }
+    public OrderConfirmResult orderConfirmOffline(BuyInfo buyInfo) throws TException
+    {
+      send_orderConfirmOffline(buyInfo);
+      return recv_orderConfirmOffline();
+    }
+
+    public void send_orderConfirmOffline(BuyInfo buyInfo) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("orderConfirmOffline", TMessageType.CALL, ++seqid_));
+      orderConfirmOffline_args args = new orderConfirmOffline_args();
+      args.setBuyInfo(buyInfo);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public OrderConfirmResult recv_orderConfirmOffline() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "orderConfirmOffline failed: out of sequence response");
+      }
+      orderConfirmOffline_result result = new orderConfirmOffline_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "orderConfirmOffline failed: unknown result");
     }
     public com.jfshare.finagle.thrift.result.StringResult buyCount(int userId, String productId) throws TException
     {
@@ -272,6 +313,41 @@ public class TradeServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "score2cash failed: unknown result");
     }
+    public OrderConfirmResult payOrderCreate(PayOrderInfo payOrderInfo) throws TException
+    {
+      send_payOrderCreate(payOrderInfo);
+      return recv_payOrderCreate();
+    }
+
+    public void send_payOrderCreate(PayOrderInfo payOrderInfo) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("payOrderCreate", TMessageType.CALL, ++seqid_));
+      payOrderCreate_args args = new payOrderCreate_args();
+      args.setPayOrderInfo(payOrderInfo);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public OrderConfirmResult recv_payOrderCreate() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "payOrderCreate failed: out of sequence response");
+      }
+      payOrderCreate_result result = new payOrderCreate_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "payOrderCreate failed: unknown result");
+    }
   }
 
   public static class AsyncClient extends TAsyncClient implements AsyncIface {
@@ -320,6 +396,37 @@ public class TradeServ {
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         return (new Client(prot)).recv_orderConfirm();
+      }
+     }
+    public void orderConfirmOffline(BuyInfo buyInfo, AsyncMethodCallback<orderConfirmOffline_call> resultHandler) throws TException {
+      checkReady();
+      orderConfirmOffline_call method_call = new orderConfirmOffline_call(buyInfo, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class orderConfirmOffline_call extends TAsyncMethodCall {
+      private BuyInfo buyInfo;
+
+      public orderConfirmOffline_call(BuyInfo buyInfo, AsyncMethodCallback<orderConfirmOffline_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.buyInfo = buyInfo;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("orderConfirmOffline", TMessageType.CALL, 0));
+        orderConfirmOffline_args args = new orderConfirmOffline_args();
+        args.setBuyInfo(buyInfo);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public OrderConfirmResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_orderConfirmOffline();
       }
      }
     public void buyCount(int userId, String productId, AsyncMethodCallback<buyCount_call> resultHandler) throws TException {
@@ -446,6 +553,37 @@ public class TradeServ {
         return (new Client(prot)).recv_score2cash();
       }
      }
+    public void payOrderCreate(PayOrderInfo payOrderInfo, AsyncMethodCallback<payOrderCreate_call> resultHandler) throws TException {
+      checkReady();
+      payOrderCreate_call method_call = new payOrderCreate_call(payOrderInfo, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class payOrderCreate_call extends TAsyncMethodCall {
+      private PayOrderInfo payOrderInfo;
+
+      public payOrderCreate_call(PayOrderInfo payOrderInfo, AsyncMethodCallback<payOrderCreate_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.payOrderInfo = payOrderInfo;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("payOrderCreate", TMessageType.CALL, 0));
+        payOrderCreate_args args = new payOrderCreate_args();
+        args.setPayOrderInfo(payOrderInfo);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public OrderConfirmResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_payOrderCreate();
+      }
+     }
    }
 
 
@@ -479,6 +617,36 @@ public class TradeServ {
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
               return Future.value((new Client(__prot__)).recv_orderConfirm());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<OrderConfirmResult> orderConfirmOffline(BuyInfo buyInfo) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("orderConfirmOffline", TMessageType.CALL, 0));
+        orderConfirmOffline_args __args__ = new orderConfirmOffline_args();
+        __args__.setBuyInfo(buyInfo);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<OrderConfirmResult>>() {
+          public Future<OrderConfirmResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_orderConfirmOffline());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -608,6 +776,36 @@ public class TradeServ {
         return Future.exception(e);
       }
     }
+    public Future<OrderConfirmResult> payOrderCreate(PayOrderInfo payOrderInfo) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("payOrderCreate", TMessageType.CALL, 0));
+        payOrderCreate_args __args__ = new payOrderCreate_args();
+        __args__.setPayOrderInfo(payOrderInfo);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<OrderConfirmResult>>() {
+          public Future<OrderConfirmResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_payOrderCreate());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
   }
 
   public static class Processor implements TProcessor {
@@ -616,10 +814,12 @@ public class TradeServ {
     {
       iface_ = iface;
       processMap_.put("orderConfirm", new orderConfirm());
+      processMap_.put("orderConfirmOffline", new orderConfirmOffline());
       processMap_.put("buyCount", new buyCount());
       processMap_.put("getExchangeRule", new getExchangeRule());
       processMap_.put("getExchangeScore", new getExchangeScore());
       processMap_.put("score2cash", new score2cash());
+      processMap_.put("payOrderCreate", new payOrderCreate());
     }
 
     protected static interface ProcessFunction {
@@ -667,6 +867,31 @@ public class TradeServ {
         result.success = iface_.orderConfirm(args.buyInfo);
         
         oprot.writeMessageBegin(new TMessage("orderConfirm", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class orderConfirmOffline implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        orderConfirmOffline_args args = new orderConfirmOffline_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("orderConfirmOffline", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        orderConfirmOffline_result result = new orderConfirmOffline_result();
+        result.success = iface_.orderConfirmOffline(args.buyInfo);
+        
+        oprot.writeMessageBegin(new TMessage("orderConfirmOffline", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -772,6 +997,31 @@ public class TradeServ {
         oprot.getTransport().flush();
       }
     }
+    private class payOrderCreate implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        payOrderCreate_args args = new payOrderCreate_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("payOrderCreate", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        payOrderCreate_result result = new payOrderCreate_result();
+        result.success = iface_.payOrderCreate(args.payOrderInfo);
+        
+        oprot.writeMessageBegin(new TMessage("payOrderCreate", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
   }
 
   public static class Service extends com.twitter.finagle.Service<byte[], byte[]> {
@@ -830,6 +1080,73 @@ public class TradeServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("orderConfirm", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("orderConfirmOffline", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          orderConfirmOffline_args args = new orderConfirmOffline_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("orderConfirmOffline", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<OrderConfirmResult> future;
+          try {
+            future = iface.orderConfirmOffline(args.buyInfo);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<OrderConfirmResult, Future<byte[]>>() {
+              public Future<byte[]> apply(OrderConfirmResult value) {
+                orderConfirmOffline_result result = new orderConfirmOffline_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("orderConfirmOffline", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -1098,6 +1415,73 @@ public class TradeServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("score2cash", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("payOrderCreate", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          payOrderCreate_args args = new payOrderCreate_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("payOrderCreate", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<OrderConfirmResult> future;
+          try {
+            future = iface.payOrderCreate(args.payOrderInfo);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<OrderConfirmResult, Future<byte[]>>() {
+              public Future<byte[]> apply(OrderConfirmResult value) {
+                payOrderCreate_result result = new payOrderCreate_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("payOrderCreate", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -1706,6 +2090,579 @@ public class TradeServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("orderConfirm_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class orderConfirmOffline_args implements TBase<orderConfirmOffline_args, orderConfirmOffline_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("orderConfirmOffline_args");
+
+  private static final TField BUY_INFO_FIELD_DESC = new TField("buyInfo", TType.STRUCT, (short)1);
+
+
+  public BuyInfo buyInfo;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    BUY_INFO((short)1, "buyInfo");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // BUY_INFO
+  	return BUY_INFO;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.BUY_INFO, new FieldMetaData("buyInfo", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyInfo.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(orderConfirmOffline_args.class, metaDataMap);
+  }
+
+
+  public orderConfirmOffline_args() {
+  }
+
+  public orderConfirmOffline_args(
+    BuyInfo buyInfo)
+  {
+    this();
+    this.buyInfo = buyInfo;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public orderConfirmOffline_args(orderConfirmOffline_args other) {
+    if (other.isSetBuyInfo()) {
+      this.buyInfo = new BuyInfo(other.buyInfo);
+    }
+  }
+
+  public orderConfirmOffline_args deepCopy() {
+    return new orderConfirmOffline_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.buyInfo = null;
+  }
+
+  public BuyInfo getBuyInfo() {
+    return this.buyInfo;
+  }
+
+  public orderConfirmOffline_args setBuyInfo(BuyInfo buyInfo) {
+    this.buyInfo = buyInfo;
+    
+    return this;
+  }
+
+  public void unsetBuyInfo() {
+    this.buyInfo = null;
+  }
+
+  /** Returns true if field buyInfo is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyInfo() {
+    return this.buyInfo != null;
+  }
+
+  public void setBuyInfoIsSet(boolean value) {
+    if (!value) {
+      this.buyInfo = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case BUY_INFO:
+      if (value == null) {
+        unsetBuyInfo();
+      } else {
+        setBuyInfo((BuyInfo)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case BUY_INFO:
+      return getBuyInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case BUY_INFO:
+      return isSetBuyInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof orderConfirmOffline_args)
+      return this.equals((orderConfirmOffline_args)that);
+    return false;
+  }
+
+  public boolean equals(orderConfirmOffline_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_buyInfo = true && this.isSetBuyInfo();
+    boolean that_present_buyInfo = true && that.isSetBuyInfo();
+    if (this_present_buyInfo || that_present_buyInfo) {
+      if (!(this_present_buyInfo && that_present_buyInfo))
+        return false;
+      if (!this.buyInfo.equals(that.buyInfo))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_buyInfo = true && (isSetBuyInfo());
+    builder.append(present_buyInfo);
+    if (present_buyInfo)
+      builder.append(buyInfo);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(orderConfirmOffline_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    orderConfirmOffline_args typedOther = (orderConfirmOffline_args)other;
+
+    lastComparison = Boolean.valueOf(isSetBuyInfo()).compareTo(typedOther.isSetBuyInfo());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBuyInfo()) {
+      lastComparison = TBaseHelper.compareTo(this.buyInfo, typedOther.buyInfo);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // BUY_INFO
+          if (field.type == TType.STRUCT) {
+            this.buyInfo = new BuyInfo();
+            this.buyInfo.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.buyInfo != null) {
+      oprot.writeFieldBegin(BUY_INFO_FIELD_DESC);
+      this.buyInfo.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("orderConfirmOffline_args(");
+    boolean first = true;
+    sb.append("buyInfo:");
+    if (this.buyInfo == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.buyInfo);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class orderConfirmOffline_result implements TBase<orderConfirmOffline_result, orderConfirmOffline_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("orderConfirmOffline_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public OrderConfirmResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, OrderConfirmResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(orderConfirmOffline_result.class, metaDataMap);
+  }
+
+
+  public orderConfirmOffline_result() {
+  }
+
+  public orderConfirmOffline_result(
+    OrderConfirmResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public orderConfirmOffline_result(orderConfirmOffline_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new OrderConfirmResult(other.success);
+    }
+  }
+
+  public orderConfirmOffline_result deepCopy() {
+    return new orderConfirmOffline_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public OrderConfirmResult getSuccess() {
+    return this.success;
+  }
+
+  public orderConfirmOffline_result setSuccess(OrderConfirmResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((OrderConfirmResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof orderConfirmOffline_result)
+      return this.equals((orderConfirmOffline_result)that);
+    return false;
+  }
+
+  public boolean equals(orderConfirmOffline_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(orderConfirmOffline_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    orderConfirmOffline_result typedOther = (orderConfirmOffline_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new OrderConfirmResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("orderConfirmOffline_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -3992,6 +4949,579 @@ public class TradeServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("score2cash_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class payOrderCreate_args implements TBase<payOrderCreate_args, payOrderCreate_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("payOrderCreate_args");
+
+  private static final TField PAY_ORDER_INFO_FIELD_DESC = new TField("payOrderInfo", TType.STRUCT, (short)1);
+
+
+  public PayOrderInfo payOrderInfo;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PAY_ORDER_INFO((short)1, "payOrderInfo");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PAY_ORDER_INFO
+  	return PAY_ORDER_INFO;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PAY_ORDER_INFO, new FieldMetaData("payOrderInfo", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, PayOrderInfo.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(payOrderCreate_args.class, metaDataMap);
+  }
+
+
+  public payOrderCreate_args() {
+  }
+
+  public payOrderCreate_args(
+    PayOrderInfo payOrderInfo)
+  {
+    this();
+    this.payOrderInfo = payOrderInfo;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public payOrderCreate_args(payOrderCreate_args other) {
+    if (other.isSetPayOrderInfo()) {
+      this.payOrderInfo = new PayOrderInfo(other.payOrderInfo);
+    }
+  }
+
+  public payOrderCreate_args deepCopy() {
+    return new payOrderCreate_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.payOrderInfo = null;
+  }
+
+  public PayOrderInfo getPayOrderInfo() {
+    return this.payOrderInfo;
+  }
+
+  public payOrderCreate_args setPayOrderInfo(PayOrderInfo payOrderInfo) {
+    this.payOrderInfo = payOrderInfo;
+    
+    return this;
+  }
+
+  public void unsetPayOrderInfo() {
+    this.payOrderInfo = null;
+  }
+
+  /** Returns true if field payOrderInfo is set (has been asigned a value) and false otherwise */
+  public boolean isSetPayOrderInfo() {
+    return this.payOrderInfo != null;
+  }
+
+  public void setPayOrderInfoIsSet(boolean value) {
+    if (!value) {
+      this.payOrderInfo = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PAY_ORDER_INFO:
+      if (value == null) {
+        unsetPayOrderInfo();
+      } else {
+        setPayOrderInfo((PayOrderInfo)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PAY_ORDER_INFO:
+      return getPayOrderInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PAY_ORDER_INFO:
+      return isSetPayOrderInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof payOrderCreate_args)
+      return this.equals((payOrderCreate_args)that);
+    return false;
+  }
+
+  public boolean equals(payOrderCreate_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_payOrderInfo = true && this.isSetPayOrderInfo();
+    boolean that_present_payOrderInfo = true && that.isSetPayOrderInfo();
+    if (this_present_payOrderInfo || that_present_payOrderInfo) {
+      if (!(this_present_payOrderInfo && that_present_payOrderInfo))
+        return false;
+      if (!this.payOrderInfo.equals(that.payOrderInfo))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_payOrderInfo = true && (isSetPayOrderInfo());
+    builder.append(present_payOrderInfo);
+    if (present_payOrderInfo)
+      builder.append(payOrderInfo);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(payOrderCreate_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    payOrderCreate_args typedOther = (payOrderCreate_args)other;
+
+    lastComparison = Boolean.valueOf(isSetPayOrderInfo()).compareTo(typedOther.isSetPayOrderInfo());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPayOrderInfo()) {
+      lastComparison = TBaseHelper.compareTo(this.payOrderInfo, typedOther.payOrderInfo);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PAY_ORDER_INFO
+          if (field.type == TType.STRUCT) {
+            this.payOrderInfo = new PayOrderInfo();
+            this.payOrderInfo.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.payOrderInfo != null) {
+      oprot.writeFieldBegin(PAY_ORDER_INFO_FIELD_DESC);
+      this.payOrderInfo.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("payOrderCreate_args(");
+    boolean first = true;
+    sb.append("payOrderInfo:");
+    if (this.payOrderInfo == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.payOrderInfo);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class payOrderCreate_result implements TBase<payOrderCreate_result, payOrderCreate_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("payOrderCreate_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public OrderConfirmResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, OrderConfirmResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(payOrderCreate_result.class, metaDataMap);
+  }
+
+
+  public payOrderCreate_result() {
+  }
+
+  public payOrderCreate_result(
+    OrderConfirmResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public payOrderCreate_result(payOrderCreate_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new OrderConfirmResult(other.success);
+    }
+  }
+
+  public payOrderCreate_result deepCopy() {
+    return new payOrderCreate_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public OrderConfirmResult getSuccess() {
+    return this.success;
+  }
+
+  public payOrderCreate_result setSuccess(OrderConfirmResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((OrderConfirmResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof payOrderCreate_result)
+      return this.equals((payOrderCreate_result)that);
+    return false;
+  }
+
+  public boolean equals(payOrderCreate_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(payOrderCreate_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    payOrderCreate_result typedOther = (payOrderCreate_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new OrderConfirmResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("payOrderCreate_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

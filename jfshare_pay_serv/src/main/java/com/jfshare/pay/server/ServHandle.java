@@ -13,6 +13,7 @@ import com.jfshare.pay.service.IPaySvc;
 import com.jfshare.pay.util.FailCode;
 import com.jfshare.pay.util.PayUtil;
 import com.jfshare.pay.util.alipay.util.AlipayNotify;
+import com.jfshare.pay.util.hebaopay.HebaoSubmit;
 import com.jfshare.pay.util.weixinpay.WeixinSubmit;
 import com.jfshare.utils.CryptoUtil;
 import com.jfshare.utils.StringUtil;
@@ -85,6 +86,7 @@ public class ServHandle implements PayServ.Iface {
             }
 
             if (payId == null || payUrl == null) {
+                logger.error("生成payId或payUrl失败! payId:" + payId + ", payUrl:" + payUrl);
                 FailCode.addFails(result, FailCode.PARAM_NOT_VALID);
                 return stringResult;
             }
@@ -142,31 +144,43 @@ public class ServHandle implements PayServ.Iface {
             //天翼
             if (payRes.getPayChannel() == 1) {
                 payResRecord = PayUtil.getResTianYi(payRes);
-            } else if (payRes.getPayChannel() == 2) {
+            } else if (payRes.getPayChannel() == 2 || payRes.getPayChannel() == 5 ||
+                    payRes.getPayChannel() == 7) {
                 Map<String, String> params = (Map)JSON.parseObject(payRes.getResUrl());
                 boolean verify = AlipayNotify.verify(params);
                 if (!verify) {
-                    logger.error(MessageFormat.format("$$$$支付通知----alipay支付参数非法! payRes[{0}]", payRes));
+                    logger.error(MessageFormat.format("$$$$支付通知----alipay支付参数非法,验证签名失败! payRes[{0}]", payRes));
                     FailCode.addFails(result, FailCode.PARAM_ERROR);
                     return stringResult;
                 }
 
                 payResRecord = PayUtil.getResAliPay(payRes, params);
-            } else if (payRes.getPayChannel() == 3) {
+            } else if (payRes.getPayChannel() == 3 || payRes.getPayChannel() == 4 ||
+                    payRes.getPayChannel() == 9) {
                 Map<String, String> params = (Map)JSON.parseObject(payRes.getResUrl());
                 String resUrlXml = null;
                 for (String key : params.keySet()) { //取json的key是xml内容
                     resUrlXml = key;
                 }
                 Map<String, String> resMap = WeixinSubmit.xmlStr2Map(resUrlXml);
-                Map<String, String> signParams = WeixinSubmit.buildRequestPara(resMap);
-                boolean verify = WeixinSubmit.verify(resMap, signParams);
+                Map<String, String> signParams = WeixinSubmit.buildRequestPara(resMap, payRes.getPayChannel());
+                boolean verify = WeixinSubmit.verify(resMap, signParams, payRes.getPayChannel());
                 if (!verify) {
-                    logger.error(MessageFormat.format("$$$$支付通知----weinxin支付参数非法! payRes[{0}]", payRes));
+                    logger.error(MessageFormat.format("$$$$支付通知----weinxin支付参数非法,验证签名失败! payRes[{0}]", payRes));
                     FailCode.addFails(result, FailCode.PARAM_ERROR);
                     return stringResult;
                 }
                 payResRecord = PayUtil.getResWeixinPay(payRes, resMap);
+            } else if (payRes.getPayChannel() == 8 || payRes.getPayChannel() == 6) {
+                Map<String, String> params = (Map)JSON.parseObject(payRes.getResUrl());
+                boolean verify = HebaoSubmit.verify(params);
+                if (!verify) {
+                    logger.error(MessageFormat.format("$$$$支付通知----hebaopay支付参数非法,验证签名失败! payRes[{0}]", payRes));
+                    FailCode.addFails(result, FailCode.PARAM_ERROR);
+                    return stringResult;
+                }
+
+                payResRecord = PayUtil.getResHebaoPay(payRes, params);
             }
 
             if (payResRecord == null || StringUtil.isNullOrEmpty(payResRecord.getPayId())) {
@@ -174,6 +188,7 @@ public class ServHandle implements PayServ.Iface {
                 return stringResult;
             }
 
+            logger.info("$$$$支付通知----获取支付申请pay_id={}", payResRecord.getPayId());
             TbPayRecordWithBLOBs dbRecord = paySvcImpl.queryByPayId(payResRecord.getPayId());
             if (dbRecord == null) {
                 logger.error(MessageFormat.format("$$$$支付通知----支付申请数据不存在，payRes{0}, payResRecord{1}", payRes, payResRecord));

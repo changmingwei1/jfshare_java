@@ -4,13 +4,13 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="/Users/bq/work/maven-res/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar" />
+    <classPathEntry location="/Users/stepyee/Documents/maven-res/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar" />
     
     <context id="jfshare_ad" targetRuntime="MyBatis3" introspectedColumnImpl="com.jfshare.mybatis.generator.api.IntrospectedColumn">
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://120.24.153.155:3306/jfshare?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8"
-                        userId="root"
-                        password="jfsharedb">
+                        connectionURL="jdbc:mysql://101.201.76.191:6001/jfshare?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8"
+                        userId="jfsuser"
+                        password="JFshare@2016">
         </jdbcConnection>
 
         <javaTypeResolver type="com.jfshare.mybatis.generator.types.JavaTypeResolverImpl">
@@ -35,7 +35,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
+          <!--<table tableName="tb_order_record" schema="trade"/>-->
           <table tableName="tb_order_record" schema="trade"/>
-          <table tableName="tb_order_info_record" schema="trade"/>
     </context>
 </generatorConfiguration>

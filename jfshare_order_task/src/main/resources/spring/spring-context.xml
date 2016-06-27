@@ -20,5 +20,7 @@
     <!-- import other cfg -->
     <import resource="spring-beans.xml"/>
     <import resource="spring-rdao.xml"/>
+    <import resource="spring-redis.xml"/>
+    <import resource="spring-task.xml"/>
     <bean class="com.jfshare.task.server.ServHandle" init-method="start"/>
 </beans>

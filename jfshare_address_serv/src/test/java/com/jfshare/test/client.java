@@ -16,26 +16,26 @@ public class client {
         try {
             System.out.println("thrift client connext server at 12308 port ");
 //            transport = new TFramedTransport(new TSocket("172.16.2.66", 12308));
-//            transport = new TFramedTransport(new TSocket("192.168.10.57", 12308));
-            transport = new TFramedTransport(new TSocket("localhost", 12308));
+            transport = new TFramedTransport(new TSocket("101.201.38.182", 1985));
+//            transport = new TFramedTransport(new TSocket("localhost", 1985));
             TProtocol protocol = new TBinaryProtocol(transport);
             AddressServ.Client client = new AddressServ.Client(protocol);
             transport.open();
 
             AddressInfo addressInfo1 = new AddressInfo();
-            addressInfo1.setUserId(111);
+            addressInfo1.setUserId(17);
 //            addressInfo1.setId(224150701);
             addressInfo1.setReceiverName("名字");
             addressInfo1.setMobile("13810008888");
             addressInfo1.setTel("88888888");
             addressInfo1.setTelCode("010");
-            addressInfo1.setProvinceId(1);
+            addressInfo1.setProvinceId(110000);
             addressInfo1.setProvinceName("北京市");
-            addressInfo1.setCityId(1);
+            addressInfo1.setCityId(110100);
             addressInfo1.setCityName("北京市");
-            addressInfo1.setCountyId(99);
+            addressInfo1.setCountyId(110102);
             addressInfo1.setCountyName("朝阳");
-            addressInfo1.setAddress("朝阳公园");
+            addressInfo1.setAddress("朝阳公园111");
             addressInfo1.setPostCode("100000");
             addressInfo1.setIsDefault(1);
 
@@ -56,21 +56,22 @@ public class client {
             addressInfo2.setIsDefault(0);
 
             AddressInfo addressInfo3 = new AddressInfo();
-            addressInfo3.setUserId(368469);
+            addressInfo3.setUserId(17);
 //            addressInfo2.setId(12309);
             addressInfo3.setReceiverName("thrift");
             addressInfo3.setMobile("15810228592");
             addressInfo3.setTel("6843329");
             addressInfo3.setTelCode("010");
-            addressInfo3.setProvinceId(2);
-            addressInfo3.setCityId(20);
-            addressInfo3.setCountyId(200);
+            addressInfo3.setProvinceId(110000);
+
+            addressInfo3.setCityId(110000);
+            addressInfo3.setCountyId(110000);
             addressInfo3.setAddress("甘井子大街5号");
             addressInfo3.setPostCode("116033");
             addressInfo3.setEmail("");
 //            addressInfo3.setIsDefault(0);
 
-            System.out.println(client.addAddress(addressInfo3));
+            System.out.println(client.addAddress(addressInfo1));
 //            System.out.println(client.updateAddress(addressInfo2));
 //            System.out.println(client.delAddress(12333, 1402201002));
 //            System.out.println(client.queryAddress(368469));

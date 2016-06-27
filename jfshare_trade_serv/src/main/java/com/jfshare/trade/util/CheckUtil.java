@@ -73,10 +73,8 @@ public class CheckUtil {
         }
 
         if (isVirOrder(buyInfo.getTradeCode())) {
-            if (buyInfo.getTradeCode().equals(ConstantUtil.TRADE_CODE.ORDER_CODE_TEL_FARE.getEnumVal())) {
-                if(StringUtil.isNullOrEmpty(buyInfo.getDeliverInfo().getReceiverMobile())) {
-                    fails.add(FailCode.RECEIVER_ADDRESS_NULL_ERROR);
-                }
+            if(StringUtil.isNullOrEmpty(buyInfo.getDeliverInfo().getReceiverMobile())) {
+                fails.add(FailCode.RECEIVER_ADDRESS_NULL_ERROR);
             }
         } else {
             if (buyInfo.getDeliverInfo() == null || buyInfo.getDeliverInfo().getAddressId() <= 0) {
@@ -167,6 +165,7 @@ public class CheckUtil {
     public List<FailDesc> orderConfirmProduct(BuyInfo buyInfo, List<ProductResult> productRets) {
         List<FailDesc> fails = new ArrayList<FailDesc>();
         if (productRets == null || productRets.size() <= 0) {
+            logger.info("orderConfirmProduct-----查询商品信息为空");
             fails.add(FailCode.PRODUCT_GET_ERROR);
             return fails;
         }
@@ -179,11 +178,13 @@ public class CheckUtil {
                     || productRet.getProduct().getProductSku() == null
                     || CollectionUtils.isEmpty(productRet.getProduct().getProductSku().getSkuItems())) {
                 fails.add(FailCode.PRODUCT_GET_ERROR);
+                logger.info("orderConfirmProduct-----查询商品信息数据不合法：{}", productRet);
                 return fails;
             }
             Product product = productRet.getProduct();
             if (!this.productOnSale(product.getActiveState())) {
                 fails.add(FailCode.PRODUCT_GET_ERROR);
+                logger.info("orderConfirmProduct-----查询商品非销售状态：", productRet);
                 return fails;
             }
         }
@@ -359,21 +360,23 @@ public class CheckUtil {
         if (createOrderResult.getResult().getCode() == 0) {
             if (orderList.size() > 0) {
                 int thirdScore = 0;
-                int thirdScore2cashAmount = 0;
+                int thirdScoreExchangeCash = 0;
                 List<String> orderIds = new ArrayList<String>();
                 for (Order item : orderList) {
                     orderIds.add(item.getOrderId());
                     for(OrderInfo info : item.getProductList()) {
-                        if (PriceUtils.strToInt(info.getCurPrice()) >= 100) {
+                        if (NumberUtils.toInt(info.getThirdExchangeRate()) > 0) {
                             thirdScore += 100 * info.getCount();
-                            thirdScore2cashAmount += thirdScore * NumberUtils.toInt(info.getThirdExchangeRate(), 1);
+                            thirdScoreExchangeCash += NumberUtils.toInt(info.getThirdExchangeRate()) * info.getCount();
+                        } else {
+                            thirdScore += PriceUtils.strToInt(info.getCurPrice()) * info.getCount();
                         }
                     }
                 }
                 PaymentInfo paymentInfo = new PaymentInfo();
                 paymentInfo.setCreateTime(orderList.get(0).getCreateTime());
                 paymentInfo.setCancelTime(orderList.get(0).getCancelTime());
-                paymentInfo.setPrice(PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScore2cashAmount));
+                paymentInfo.setPrice(thirdScoreExchangeCash > 0 ? PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScoreExchangeCash) : PriceUtils.intToStr(PriceUtils.strToInt(buyInfo.getAmount()) - thirdScore));
                 paymentInfo.setThirdScore(String.valueOf(thirdScore)); //若使用第三方积分的总数
 
                 createOrderResult.setOrderIdList(orderIds);
@@ -453,6 +456,10 @@ public class CheckUtil {
     }
 
     public List<FailDesc> orderConfirmPostage(BuyInfo buyInfo, List<Order> orderList) {
+        if (isVirOrder(buyInfo.getTradeCode())) {
+            return null;
+        }
+
         List<FailDesc> failDescList = new ArrayList<FailDesc>();
         CalculatePostageResult calculatePostageResult = baseTemplateClient.calcPostage(buyInfo, orderList);
         if(calculatePostageResult == null || calculatePostageResult.getResult().getCode() == 1) {
@@ -464,13 +471,71 @@ public class CheckUtil {
             for(SellerPostageReturn  s : calculatePostageResult.getSellerPostageReturnList()) {
                 if(order.getSellerId() == s.getSellerId()) {
                     order.setPostage(s.getPostage());
+                    int postage = PriceUtils.strToInt(s.getPostage());
+                    int closingPrice = PriceUtils.strToInt(order.getClosingPrice());
+                    order.setClosingPrice(PriceUtils.intToStr(closingPrice + postage));
+                    order.setPostageExt(s.getPostageTemplate());
+                    splitPostateWithProduct(order);
                 }
             }
         }
         return failDescList;
     }
 
+    private void splitPostateWithProduct(Order order) {
+        int s = PriceUtils.strToInt(order.getPostage());    //订单邮费
+        int amount = PriceUtils.strToInt(order.getClosingPrice()) - s;  //订单商品金额（不含邮费）
+        int a = 0; // 累计邮费
+        String splitPostageLog = "orderId="+order.getOrderId()+", postage="+s+", 拆分结果:";
+        /** 按商品拆分积分和金额 */
+        List<OrderInfo> orderInfos = order.getProductList();
+        for (int i = 0; i < orderInfos.size(); i++) {
+            OrderInfo e = orderInfos.get(i);
+
+            /** 每个商品可分配的邮费(单位分) */
+            int pPostage = 0;
+
+            if (i == orderInfos.size() - 1) { // 最后一次用总数量减去已经分配的钱和积分(避免四舍五入不相等的情况)
+                pPostage = s - a;
+            } else {
+                double pPrice = PriceUtils.strToInt(e.getCurPrice());
+                pPostage = NumberUtil.parseInteger((pPrice / amount) * s);
+
+                a += pPostage;
+            }
+
+            e.setPostage(PriceUtils.intToStr(pPostage));
+            splitPostageLog += pPostage + "|";
+        }
+
+        logger.info("订单邮费拆分----" + splitPostageLog);
+    }
+
     public void releaseScore2Cash(BuyInfo buyInfo, String transId) {
         scoreClient.incomeScore(buyInfo.getUserId(), transId, buyInfo.getExchangeScore());
+    }
+
+    public List<FailDesc> orderConfirmParamOffline(BuyInfo buyInfo) {
+        List<FailDesc> fails = new ArrayList<FailDesc>();
+        if (buyInfo == null) {
+            fails.add(FailCode.PARAM_ERROR);
+            return fails;
+        }
+        if (buyInfo.getUserId() <= 0) {
+            fails.add(FailCode.USER_ID_ERROR);
+        }
+
+        if(CollectionUtils.isEmpty(buyInfo.getSellerDetailList()) ||
+              buyInfo.getSellerDetailList().size() != 1 || buyInfo.getSellerDetailList().get(0).getSellerId() <= 0) {
+            fails.add(FailCode.PRODUCT_UNSELECT_ERROR);
+            return fails;
+        }
+
+        if(PriceUtils.strToInt(buyInfo.getAmount()) <= 0) {
+            fails.add(FailCode.PAY_PRICE_ERROR);
+            return fails;
+        }
+
+        return fails;
     }
 }

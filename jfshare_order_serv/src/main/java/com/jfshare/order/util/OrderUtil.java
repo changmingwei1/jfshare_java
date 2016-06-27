@@ -1,6 +1,7 @@
 package com.jfshare.order.util;
 
 import com.jfshare.finagle.thrift.order.*;
+import com.jfshare.finagle.thrift.trade.BuyInfo;
 import com.jfshare.order.common.Commons;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderInfoRecord;
@@ -60,6 +61,8 @@ public class OrderUtil {
         orderDetail.setOrderBatch(orderModel.getOrderBatch());
         orderDetail.setThirdScore(orderModel.getThirdScore());
         orderDetail.setPostage(PriceUtils.intToStr(orderModel.getPostage()));
+        orderDetail.setPostageExt(orderModel.getPostageext());
+        orderDetail.setOrderType(orderModel.getOrderType());
 
         DeliverInfo deliverInfo = new DeliverInfo();
         deliverInfo.setReceiverTele(orderModel.getReceiverTele());
@@ -127,6 +130,9 @@ public class OrderUtil {
                 productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
             if(tbOrderInfoRecord.getThirdexchangerate() != null)
                 productInfo.setThirdExchangeRate(tbOrderInfoRecord.getThirdexchangerate());
+            if(tbOrderInfoRecord.getPostageext() != null) {
+                productInfo.setPostageExt(tbOrderInfoRecord.getPostageext());
+            }
             productInfos.add(productInfo);
         }
         orderDetail.setProductList(productInfos);
@@ -176,6 +182,8 @@ public class OrderUtil {
         orderDetail.setOrderBatch(orderModel.getOrderBatch());
         orderDetail.setThirdScore(orderModel.getThirdScore());
         orderDetail.setPostage(PriceUtils.strToInt(orderModel.getPostage()));
+        orderDetail.setPostageext(orderModel.getPostageExt());
+        orderDetail.setOrderType(orderModel.getOrderType());
 
         DeliverInfo deliverInfo = orderModel.getDeliverInfo();
         if (deliverInfo != null) {
@@ -208,34 +216,36 @@ public class OrderUtil {
         }
 
         List<TbOrderInfoRecord> productInfos = new ArrayList<TbOrderInfoRecord>();
-        for(OrderInfo tbOrderInfoRecord : orderModel.getProductList()) {
+        for(OrderInfo orderInfo : orderModel.getProductList()) {
             TbOrderInfoRecord productInfo = new TbOrderInfoRecord();
             productInfo.setOrderId(orderModel.getOrderId());
-            productInfo.setProductId(tbOrderInfoRecord.getProductId());
-            productInfo.setProductName(tbOrderInfoRecord.getProductName());
-            productInfo.setViceName(tbOrderInfoRecord.getViceName());
-            productInfo.setSubjectId(ConvertUtil.getInt(tbOrderInfoRecord.getSubjectId(), 0));
-            productInfo.setBrandId((ConvertUtil.getInt(tbOrderInfoRecord.getBrandId(), 0)));
-            productInfo.setProductSnapshootId(tbOrderInfoRecord.getProductSnapshootId());
-            productInfo.setSkuNum(tbOrderInfoRecord.getSkuNum());
-            productInfo.setSkuDesc(tbOrderInfoRecord.getSkuDesc());
-            productInfo.setCurPrice(PriceUtils.strToInt(tbOrderInfoRecord.getCurPrice()));
-            productInfo.setOrgPrice(PriceUtils.strToInt(tbOrderInfoRecord.getOrgPrice()));
-            productInfo.setImagesUrl(tbOrderInfoRecord.getImagesUrl());
-            productInfo.setShelf(tbOrderInfoRecord.getShelf());
-            productInfo.setSellerClassNum(tbOrderInfoRecord.getSellerClassNum());
-            productInfo.setCount(tbOrderInfoRecord.getCount());
-            productInfo.setLastUpdateTime(DateTimeUtil.strToDateTime(tbOrderInfoRecord.getLastUpdateTime()));
-            productInfo.setLastUpdateUserId(tbOrderInfoRecord.getLastUpdateUserId());
-            productInfo.setCreateTime(DateTimeUtil.strToDateTime(tbOrderInfoRecord.getCreateTime()));
-            productInfo.setCreateUserId(tbOrderInfoRecord.getCreateUserId());
-            productInfo.setType(ConvertUtil.getInt(tbOrderInfoRecord.getType(), 0));
-            productInfo.setWi(tbOrderInfoRecord.getWi());
-            productInfo.setExchangeScore(tbOrderInfoRecord.getExchangeScore());
-            productInfo.setExchangeCash(PriceUtils.strToInt(tbOrderInfoRecord.getExchangeCash()));
-            productInfo.setStorehouseId(tbOrderInfoRecord.getStorehouseId());
-            productInfo.setPostageTemplateId(tbOrderInfoRecord.getPostageTemplateId());
-            productInfo.setThirdexchangerate(tbOrderInfoRecord.getThirdExchangeRate());
+            productInfo.setProductId(orderInfo.getProductId());
+            productInfo.setProductName(orderInfo.getProductName());
+            productInfo.setViceName(orderInfo.getViceName());
+            productInfo.setSubjectId(ConvertUtil.getInt(orderInfo.getSubjectId(), 0));
+            productInfo.setBrandId((ConvertUtil.getInt(orderInfo.getBrandId(), 0)));
+            productInfo.setProductSnapshootId(orderInfo.getProductSnapshootId());
+            productInfo.setSkuNum(orderInfo.getSkuNum());
+            productInfo.setSkuDesc(orderInfo.getSkuDesc());
+            productInfo.setCurPrice(PriceUtils.strToInt(orderInfo.getCurPrice()));
+            productInfo.setOrgPrice(PriceUtils.strToInt(orderInfo.getOrgPrice()));
+            productInfo.setImagesUrl(orderInfo.getImagesUrl());
+            productInfo.setShelf(orderInfo.getShelf());
+            productInfo.setSellerClassNum(orderInfo.getSellerClassNum());
+            productInfo.setCount(orderInfo.getCount());
+            productInfo.setLastUpdateTime(DateTimeUtil.strToDateTime(orderInfo.getLastUpdateTime()));
+            productInfo.setLastUpdateUserId(orderInfo.getLastUpdateUserId());
+            productInfo.setCreateTime(DateTimeUtil.strToDateTime(orderInfo.getCreateTime()));
+            productInfo.setCreateUserId(orderInfo.getCreateUserId());
+            productInfo.setType(ConvertUtil.getInt(orderInfo.getType(), 0));
+            productInfo.setWi(orderInfo.getWi());
+            productInfo.setExchangeScore(orderInfo.getExchangeScore());
+            productInfo.setExchangeCash(PriceUtils.strToInt(orderInfo.getExchangeCash()));
+            productInfo.setStorehouseId(orderInfo.getStorehouseId());
+            productInfo.setPostage(PriceUtils.strToInt(orderInfo.getPostage()));
+            productInfo.setPostageTemplateId(orderInfo.getPostageTemplateId());
+            productInfo.setThirdexchangerate(orderInfo.getThirdExchangeRate());
+            productInfo.setPostageext(orderInfo.getPostageExt());
             productInfos. add(productInfo);
         }
         orderDetail.setTbOrderInfoList(productInfos);
@@ -336,11 +346,7 @@ public class OrderUtil {
      * @return
      */
     public static int getPayPrice(OrderModel order) {
-        int orderPayPrice = order.getClosingPrice();
-        if (order.getPayChannel() == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
-            orderPayPrice -= order.getThirdScore() * ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"));
-        }
-
+        int orderPayPrice = order.getClosingPrice() - order.getExchangeCash();
         return orderPayPrice;
     }
 
@@ -357,10 +363,8 @@ public class OrderUtil {
             for (TbOrderInfoRecord orderInfo : order.getTbOrderInfoList()) {
                 orderInfo.setThirdScore(0);
                 if (payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
-                    int scorePer = ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_per")); //天翼支付时单件商品需要使用的天翼积分
-                    int scoreRate = ConvertUtil.getInt(PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_score_rate"));
-                    if (orderInfo.getCurPrice() >= scorePer * scoreRate) {
-                        orderInfo.setThirdScore(orderInfo.getCount() * scorePer);
+                    if(NumberUtils.toInt(orderInfo.getThirdexchangerate()) > 0) {
+                        orderInfo.setThirdScore(orderInfo.getCount() * 100);
                     }
                 }
                 orderThirdScore += orderInfo.getThirdScore();
@@ -370,6 +374,28 @@ public class OrderUtil {
         }
 
         return thirdScores;
+    }
+
+    /**
+     * 获取第三方积分抵扣金额合计
+     * @param orderModels
+     * @param payChannel
+     * @return
+     */
+    public static int getThirdScore2Cash(List<OrderModel> orderModels, int payChannel) {
+        int thirdScore2CashAmount = 0;
+        if (payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
+            for (OrderModel order : orderModels) {
+                for (TbOrderInfoRecord orderInfo : order.getTbOrderInfoList()) {
+                    if(NumberUtils.toInt(orderInfo.getThirdexchangerate()) > 0) {
+                        thirdScore2CashAmount += NumberUtils.toInt(orderInfo.getThirdexchangerate()) * orderInfo.getCount();
+                    } else {
+                        thirdScore2CashAmount += orderInfo.getCurPrice() * orderInfo.getCount();
+                    }
+                }
+            }
+        }
+        return thirdScore2CashAmount;
     }
 
     public static List<OrderCount> countOrdersByState(List<OrderModel> orderModels) {
@@ -395,5 +421,29 @@ public class OrderUtil {
         }
 
         return orderCounts;
+    }
+
+    /**
+     * 获取买家支付非邮费部分金额
+     * @param orderList
+     * @return
+     */
+    public static int getPostageAmount(List<OrderModel> orderList) {
+        int totalPostage = 0;
+        for(OrderModel order : orderList)
+            totalPostage += order.getClosingPrice() - order.getPostage();
+        return totalPostage;
+    }
+
+    /**
+     * 支付总金额
+     * @param orderList
+     * @return
+     */
+    public static int gettotalAmount(List<OrderModel> orderList) {
+        int totalPostage = 0;
+        for(OrderModel order : orderList)
+            totalPostage += order.getClosingPrice();
+        return totalPostage;
     }
 }

@@ -33,8 +33,12 @@ public class FailCode {
 	public static final FailDesc THIRD_PRICE＿FAIL =  new FailDesc("thirdPrice", "3022", "支付通知金额不符");
 	public static final FailDesc THIRD_SCORE＿FAIL =  new FailDesc("thirdScore", "3023", "支付通知积分不符");
 	public static final FailDesc PAY_STATE_GET_FAIL = new FailDesc("paystate", "3024", "支付状态获取失败");
+	public static final FailDesc PAY_SCORE_CHECK_FAIL = new FailDesc("payscore", "3025", "积分校验失败");
+	public static final FailDesc PAY_SCORE_REDUCE_FAIL = new FailDesc("payscore", "3026", "扣减积分失败");
 
-	public static final FailDesc DELIVER_INVALIDATE_TRADECODE = new FailDesc("DELIVER", "4000", "发货接口不支持该订单类型");
+	public static final FailDesc PAY_EXCHANGE_AMOUNT_UNEQUAL = new FailDesc("payscore", "3027", "抵现积分与金额不等");
+	public static final FailDesc DELIVER_GET_PRODUCTCARD_FAIL = new FailDesc("DELIVER", "4001", "获取虚拟商品卡密/卡券失败");
+	public static final FailDesc EXPORT_KEY_EXPIERD = new FailDesc("Export", "5001", "订单导出查询Key已过期");
 
 	/**
 	 * 结果集中添加错误码

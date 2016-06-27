@@ -23,17 +23,23 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
   private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.I32, (short)1);
   private static final TField ORDER_ID_LIST_FIELD_DESC = new TField("orderIdList", TType.LIST, (short)2);
   private static final TField PAY_CHANNEL_FIELD_DESC = new TField("payChannel", TType.STRUCT, (short)3);
+  private static final TField EXCHANGE_SCORE_FIELD_DESC = new TField("exchangeScore", TType.I32, (short)4);
+  private static final TField EXCHANGE_CASH_FIELD_DESC = new TField("exchangeCash", TType.STRING, (short)5);
 
 
   public int userId;
   public List<String> orderIdList;
   public com.jfshare.finagle.thrift.pay.PayChannel payChannel;
+  public int exchangeScore;
+  public String exchangeCash;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     USER_ID((short)1, "userId"),
     ORDER_ID_LIST((short)2, "orderIdList"),
-    PAY_CHANNEL((short)3, "payChannel");
+    PAY_CHANNEL((short)3, "payChannel"),
+    EXCHANGE_SCORE((short)4, "exchangeScore"),
+    EXCHANGE_CASH((short)5, "exchangeCash");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -54,6 +60,10 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
   	return ORDER_ID_LIST;
         case 3: // PAY_CHANNEL
   	return PAY_CHANNEL;
+        case 4: // EXCHANGE_SCORE
+  	return EXCHANGE_SCORE;
+        case 5: // EXCHANGE_CASH
+  	return EXCHANGE_CASH;
         default:
   	return null;
       }
@@ -96,7 +106,8 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
 
   // isset id assignments
   private static final int __USERID_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
+  private static final int __EXCHANGESCORE_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -108,6 +119,10 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
                 new FieldValueMetaData(TType.STRING))));
     tmpMap.put(_Fields.PAY_CHANNEL, new FieldMetaData("payChannel", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pay.PayChannel.class)));
+    tmpMap.put(_Fields.EXCHANGE_SCORE, new FieldMetaData("exchangeScore", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.EXCHANGE_CASH, new FieldMetaData("exchangeCash", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(PayParam.class, metaDataMap);
   }
@@ -145,6 +160,10 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
     if (other.isSetPayChannel()) {
       this.payChannel = new com.jfshare.finagle.thrift.pay.PayChannel(other.payChannel);
     }
+    this.exchangeScore = other.exchangeScore;
+    if (other.isSetExchangeCash()) {
+      this.exchangeCash = other.exchangeCash;
+    }
   }
 
   public PayParam deepCopy() {
@@ -157,6 +176,9 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
     this.userId = 0;
     this.orderIdList = null;
     this.payChannel = null;
+    setExchangeScoreIsSet(false);
+    this.exchangeScore = 0;
+    this.exchangeCash = null;
   }
 
   public int getUserId() {
@@ -248,6 +270,55 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
     }
   }
 
+  public int getExchangeScore() {
+    return this.exchangeScore;
+  }
+
+  public PayParam setExchangeScore(int exchangeScore) {
+    this.exchangeScore = exchangeScore;
+    setExchangeScoreIsSet(true);
+
+    return this;
+  }
+
+  public void unsetExchangeScore() {
+  __isset_bit_vector.clear(__EXCHANGESCORE_ISSET_ID);
+  }
+
+  /** Returns true if field exchangeScore is set (has been asigned a value) and false otherwise */
+  public boolean isSetExchangeScore() {
+    return __isset_bit_vector.get(__EXCHANGESCORE_ISSET_ID);
+  }
+
+  public void setExchangeScoreIsSet(boolean value) {
+    __isset_bit_vector.set(__EXCHANGESCORE_ISSET_ID, value);
+  }
+
+  public String getExchangeCash() {
+    return this.exchangeCash;
+  }
+
+  public PayParam setExchangeCash(String exchangeCash) {
+    this.exchangeCash = exchangeCash;
+    
+    return this;
+  }
+
+  public void unsetExchangeCash() {
+    this.exchangeCash = null;
+  }
+
+  /** Returns true if field exchangeCash is set (has been asigned a value) and false otherwise */
+  public boolean isSetExchangeCash() {
+    return this.exchangeCash != null;
+  }
+
+  public void setExchangeCashIsSet(boolean value) {
+    if (!value) {
+      this.exchangeCash = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case USER_ID:
@@ -271,6 +342,20 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
         setPayChannel((com.jfshare.finagle.thrift.pay.PayChannel)value);
       }
       break;
+    case EXCHANGE_SCORE:
+      if (value == null) {
+        unsetExchangeScore();
+      } else {
+        setExchangeScore((Integer)value);
+      }
+      break;
+    case EXCHANGE_CASH:
+      if (value == null) {
+        unsetExchangeCash();
+      } else {
+        setExchangeCash((String)value);
+      }
+      break;
     }
   }
 
@@ -282,6 +367,10 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
       return getOrderIdList();
     case PAY_CHANNEL:
       return getPayChannel();
+    case EXCHANGE_SCORE:
+      return new Integer(getExchangeScore());
+    case EXCHANGE_CASH:
+      return getExchangeCash();
     }
     throw new IllegalStateException();
   }
@@ -299,6 +388,10 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
       return isSetOrderIdList();
     case PAY_CHANNEL:
       return isSetPayChannel();
+    case EXCHANGE_SCORE:
+      return isSetExchangeScore();
+    case EXCHANGE_CASH:
+      return isSetExchangeCash();
     }
     throw new IllegalStateException();
   }
@@ -339,6 +432,22 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
       if (!this.payChannel.equals(that.payChannel))
         return false;
     }
+    boolean this_present_exchangeScore = true && this.isSetExchangeScore();
+    boolean that_present_exchangeScore = true && that.isSetExchangeScore();
+    if (this_present_exchangeScore || that_present_exchangeScore) {
+      if (!(this_present_exchangeScore && that_present_exchangeScore))
+        return false;
+      if (this.exchangeScore != that.exchangeScore)
+        return false;
+    }
+    boolean this_present_exchangeCash = true && this.isSetExchangeCash();
+    boolean that_present_exchangeCash = true && that.isSetExchangeCash();
+    if (this_present_exchangeCash || that_present_exchangeCash) {
+      if (!(this_present_exchangeCash && that_present_exchangeCash))
+        return false;
+      if (!this.exchangeCash.equals(that.exchangeCash))
+        return false;
+    }
 
     return true;
   }
@@ -358,6 +467,14 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
     builder.append(present_payChannel);
     if (present_payChannel)
       builder.append(payChannel);
+    boolean present_exchangeScore = true && (isSetExchangeScore());
+    builder.append(present_exchangeScore);
+    if (present_exchangeScore)
+      builder.append(exchangeScore);
+    boolean present_exchangeCash = true && (isSetExchangeCash());
+    builder.append(present_exchangeCash);
+    if (present_exchangeCash)
+      builder.append(exchangeCash);
     return builder.toHashCode();
   }
 
@@ -399,6 +516,26 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetExchangeScore()).compareTo(typedOther.isSetExchangeScore());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetExchangeScore()) {
+      lastComparison = TBaseHelper.compareTo(this.exchangeScore, typedOther.exchangeScore);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetExchangeCash()).compareTo(typedOther.isSetExchangeCash());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetExchangeCash()) {
+      lastComparison = TBaseHelper.compareTo(this.exchangeCash, typedOther.exchangeCash);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -428,13 +565,13 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
         case 2: // ORDER_ID_LIST
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.orderIdList = new ArrayList<String>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list20 = iprot.readListBegin();
+            this.orderIdList = new ArrayList<String>(_list20.size);
+            for (int _i21 = 0; _i21 < _list20.size; ++_i21)
             {
-              String _elem18;
-              _elem18 = iprot.readString();
-              this.orderIdList.add(_elem18);
+              String _elem22;
+              _elem22 = iprot.readString();
+              this.orderIdList.add(_elem22);
             }
             iprot.readListEnd();
             }
@@ -446,6 +583,21 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
           if (field.type == TType.STRUCT) {
             this.payChannel = new com.jfshare.finagle.thrift.pay.PayChannel();
             this.payChannel.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 4: // EXCHANGE_SCORE
+          if (field.type == TType.I32) {
+            this.exchangeScore = iprot.readI32();
+            setExchangeScoreIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 5: // EXCHANGE_CASH
+          if (field.type == TType.STRING) {
+            this.exchangeCash = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -472,9 +624,9 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
       oprot.writeFieldBegin(ORDER_ID_LIST_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.orderIdList.size()));
-        for (String _iter19 : this.orderIdList)
+        for (String _iter23 : this.orderIdList)
         {
-          oprot.writeString(_iter19);
+          oprot.writeString(_iter23);
         }
         oprot.writeListEnd();
       }
@@ -484,6 +636,18 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
       oprot.writeFieldBegin(PAY_CHANNEL_FIELD_DESC);
       this.payChannel.write(oprot);
       oprot.writeFieldEnd();
+    }
+    if (isSetExchangeScore()) {
+      oprot.writeFieldBegin(EXCHANGE_SCORE_FIELD_DESC);
+      oprot.writeI32(this.exchangeScore);
+      oprot.writeFieldEnd();
+    }
+    if (this.exchangeCash != null) {
+      if (isSetExchangeCash()) {
+        oprot.writeFieldBegin(EXCHANGE_CASH_FIELD_DESC);
+        oprot.writeString(this.exchangeCash);
+        oprot.writeFieldEnd();
+      }
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -512,6 +676,22 @@ public class PayParam implements TBase<PayParam, PayParam._Fields>, java.io.Seri
       sb.append(this.payChannel);
     }
     first = false;
+    if (isSetExchangeScore()) {
+      if (!first) sb.append(", ");
+      sb.append("exchangeScore:");
+      sb.append(this.exchangeScore);
+      first = false;
+      }
+    if (isSetExchangeCash()) {
+      if (!first) sb.append(", ");
+      sb.append("exchangeCash:");
+      if (this.exchangeCash == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.exchangeCash);
+      }
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }
