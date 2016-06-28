@@ -47,6 +47,7 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
         DateTime now = new DateTime();
         tbPostageTemplate.setCreateTime(now);
         tbPostageTemplate.setLastUpdateTime(now);
+        tbPostageTemplate.setIsUsed(tbPostageTemplate.getTemplateGroup() == 1 ? 1 : 2);
         return this.postageTemplateDao.add(tbPostageTemplate);
     }
 

@@ -395,11 +395,11 @@ public class ServHandle implements BaseTemplateServ.Iface {
 				result.addToFailDescList(FailCode.PARAM_ERROR);
 				return result;
 			}
-			TbPostageTemplate tbPostageTemplate = ConvertUtil.thrift2TbPostageTemplate(postageTemplate);
+//			TbPostageTemplate tbPostageTemplate = ConvertUtil.thrift2TbPostageTemplate(postageTemplate);
 
-			this.postageTemplateSvc.setDefaultPostageTemplate(tbPostageTemplate);
+			this.postageTemplateSvc.setDefaultPostageTemplate(dbPostageTemplate);
 		} catch (Exception e) {
-			logger.error("<<<<<<<< setDefaultPostageTemplate error !! postageTemplate");
+			logger.error("<<<<<<<< setDefaultPostageTemplate error !! postageTemplate : " + postageTemplate.toString(), e);
 			result.setCode(1);
 			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
 		}
