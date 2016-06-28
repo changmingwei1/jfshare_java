@@ -90,7 +90,7 @@
     </bean>
 
     <!-- 读购物车jedis pool配置 -->
-    <bean id="jedisReadCartPool" class="redis.clients.jedis.JedisPool">
+    <!--<bean id="jedisReadCartPool" class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="jedisPoolConfig"/>
         <constructor-arg index="1">
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').ip}</value>
@@ -104,10 +104,10 @@
         <constructor-arg index="4">
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').pwd}</value>
         </constructor-arg>
-    </bean>
+    </bean>-->
 
     <!-- 写购物车jedis pool配置 -->
-    <bean id="jedisWriteCartPool" class="redis.clients.jedis.JedisPool">
+    <!--<bean id="jedisWriteCartPool" class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="jedisPoolConfig"/>
         <constructor-arg index="1">
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').ip}</value>
@@ -121,10 +121,10 @@
         <constructor-arg index="4">
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').pwd}</value>
         </constructor-arg>
-    </bean>
+    </bean>-->
 
     <!-- 获取商品信息 -->
-    <bean id="jedisRdbPool" class="redis.clients.jedis.JedisPool">
+    <!--<bean id="jedisRdbPool" class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="jedisPoolConfig"/>
         <constructor-arg index="1">
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').ip}</value>
@@ -138,10 +138,10 @@
         <constructor-arg index="4">
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').pwd}</value>
         </constructor-arg>
-    </bean>
+    </bean>-->
 
     <!-- 获取活动时间范围 -->
-    <bean id="jedisRdbPoolpro" class="redis.clients.jedis.JedisPool">
+    <!--<bean id="jedisRdbPoolpro" class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="jedisPoolConfig"/>
         <constructor-arg index="1">
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').ip}</value>
@@ -155,7 +155,7 @@
         <constructor-arg index="4">
             <value>#{configManager.getRedisConfig('jfx_public_redis','alone').pwd}</value>
         </constructor-arg>
-    </bean>
+    </bean>-->
 
     <!-- redis 哨兵配置 -->
     <bean id="redisSentinel" class="redis.clients.jedis.JedisSentinelPool">
