@@ -289,12 +289,14 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
     public boolean setDefaultPostageTemplate(TbPostageTemplate tbPostageTemplate) {
 
         List<TbPostageTemplate> tbPostageTemplateList = this.getPostageTemplateBySellerId(tbPostageTemplate.getSellerId(), tbPostageTemplate.getTemplateGroup(), 1);
-        if (CollectionUtils.isEmpty(tbPostageTemplateList)) {
+        if (CollectionUtils.isNotEmpty(tbPostageTemplateList)) {
             // 将原来使用的模板修改成不使用
-            TbPostageTemplate oldUsed = new TbPostageTemplate();
-            oldUsed.setId(tbPostageTemplateList.get(0).getId());
-            oldUsed.setIsUsed(2);
-            this.updatePostageTemplate(oldUsed);
+            for (TbPostageTemplate postageTemplate : tbPostageTemplateList) {
+                TbPostageTemplate oldUsed = new TbPostageTemplate();
+                oldUsed.setId(postageTemplate.getId());
+                oldUsed.setIsUsed(2);
+                this.updatePostageTemplate(oldUsed);
+            }
         }
         TbPostageTemplate newUsed = new TbPostageTemplate();
         newUsed.setId(tbPostageTemplate.getId());
