@@ -3,12 +3,14 @@ package com.jfshare.cart.dao.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisSentinelPool;
 
 import javax.annotation.Resource;
 
+@Service
 public class BaseRedisManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseRedisManager.class);
@@ -24,10 +26,10 @@ public class BaseRedisManager {
 	}*/
 
 	@Resource(name = "redisSentinel")
-	private JedisSentinelPool jedisPool;
+	private JedisSentinelPool jedisSentinelPool;
 
 	public JedisSentinelPool getJedisPool() {
-		return this.jedisPool;
+		return this.jedisSentinelPool;
 	}
 
 	/**
@@ -43,12 +45,12 @@ public class BaseRedisManager {
 		Long result = 0L;
 		Jedis jedis = null;
 		try {
-			jedis = jedisPool.getResource();
+			jedis = jedisSentinelPool.getResource();
 			result = jedis.expire(key, seconds);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 		} finally {
-			jedisPool.returnResource(jedis);
+			jedisSentinelPool.returnResource(jedis);
 		}
 		return result;
 	}

@@ -150,11 +150,11 @@ public class CartTest {
 			for (int i = 0; i < 1; i++) {
 				// 45923658 压测用户； 淘老大361125
 				// 47763855 线上用户：淘学小二
-				CartResult result = client.listItem("60", 1);
-				System.out.println(result.getResult().getCode() + "---" + result.getItemList().size() + "---"
-						+ result.getInvalidItemList().size());
-				System.out.println(result.toString());
-				System.out.println(result.getItemList().get(0).getItemDetailList().get(0).getProduct().getProduct().getProductSku().getSkuItems().get(0));
+				CartResult result = client.listItem("112", 1);
+				/*System.out.println(result.getResult().getCode() + "---" + result.getItemList().size() + "---"
+						+ result.getInvalidItemList().size());*/
+				System.out.println(result);
+//				System.out.println(result.getItemList().get(0).getItemDetailList().get(0).getProduct().getProduct().getProductSku().getSkuItems().get(0));
 			}
 
 		} catch (Exception e) {
