@@ -40,11 +40,11 @@ public class Client extends TestCase{
 
     public void testQueryOrderDetail() throws Exception {
         //商品id
-        String orderId = "1571111";
+        String orderId = "71350022";
         try {
             ////////////////////////////////////////////////////
 
-            System.err.println(client.queryOrderDetail(1, 81, orderId));
+            System.err.println(client.queryOrderDetail(1, 22, orderId));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

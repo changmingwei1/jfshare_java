@@ -335,6 +335,7 @@ public class OrderService {
         //天翼支付，一个订单， 更新使用积分
         if (payRet.getPayChannel() == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
             order.setThirdScore(payRet.getThirdScore());
+            order.setThirdPrice(payRet.getThirdPrice());
         }
 
         if (payRet.getRetCode() == 2) {
