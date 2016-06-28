@@ -389,15 +389,27 @@ public class ServHandle implements BaseTemplateServ.Iface {
 		logger.info(">>>> setDefaultPostageTemplate ---- postageTemplate : {}", postageTemplate.toString());
 		Result result = new Result(0);
 		try {
-			TbPostageTemplate dbPostageTemplate = this.postageTemplateSvc.getById(postageTemplate.getId());
-			if (dbPostageTemplate.getTemplateGroup() == 1) {
-				result.setCode(1);
-				result.addToFailDescList(FailCode.PARAM_ERROR);
-				return result;
-			}
-//			TbPostageTemplate tbPostageTemplate = ConvertUtil.thrift2TbPostageTemplate(postageTemplate);
+			List<Integer> ids = new ArrayList<>();
+			// 不设置默认模板
+			if (postageTemplate.getId() == 0) {
+				TbPostageTemplate tbPostageTemplate = new TbPostageTemplate();
+				tbPostageTemplate.setSellerId(postageTemplate.getSellerId());
+				tbPostageTemplate.setTemplateGroup(2);
+				ids = this.postageTemplateSvc.setDefaultPostageTemplate(tbPostageTemplate, false);
+			} else {
+				TbPostageTemplate dbPostageTemplate = this.postageTemplateSvc.getById(postageTemplate.getId());
+				if (dbPostageTemplate.getTemplateGroup() == 1) {
+					result.setCode(1);
+					result.addToFailDescList(FailCode.PARAM_ERROR);
+					return result;
+				}
+//				TbPostageTemplate tbPostageTemplate = ConvertUtil.thrift2TbPostageTemplate(postageTemplate);
 
-			this.postageTemplateSvc.setDefaultPostageTemplate(dbPostageTemplate);
+				ids = this.postageTemplateSvc.setDefaultPostageTemplate(dbPostageTemplate, true);
+			}
+			for (Integer id : ids) {
+				this.postageTemplateSvc.removeCache(id);
+			}
 		} catch (Exception e) {
 			logger.error("<<<<<<<< setDefaultPostageTemplate error !! postageTemplate : " + postageTemplate.toString(), e);
 			result.setCode(1);
