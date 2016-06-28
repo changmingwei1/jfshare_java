@@ -286,8 +286,9 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean setDefaultPostageTemplate(TbPostageTemplate tbPostageTemplate) {
+    public List<Integer> setDefaultPostageTemplate(TbPostageTemplate tbPostageTemplate, boolean setDefault) {
 
+        List<Integer> ids = new ArrayList<>();
         List<TbPostageTemplate> tbPostageTemplateList = this.getPostageTemplateBySellerId(tbPostageTemplate.getSellerId(), tbPostageTemplate.getTemplateGroup(), 1);
         if (CollectionUtils.isNotEmpty(tbPostageTemplateList)) {
             // 将原来使用的模板修改成不使用
@@ -296,13 +297,18 @@ public class PostageTemplateSvcImpl implements IPostageTemplateSvc {
                 oldUsed.setId(postageTemplate.getId());
                 oldUsed.setIsUsed(2);
                 this.updatePostageTemplate(oldUsed);
+                ids.add(postageTemplate.getId());
             }
         }
-        TbPostageTemplate newUsed = new TbPostageTemplate();
-        newUsed.setId(tbPostageTemplate.getId());
-        newUsed.setIsUsed(1);
-        this.updatePostageTemplate(newUsed);
-        return true;
+        // 不设置默认模板
+        if(setDefault) {
+            TbPostageTemplate newUsed = new TbPostageTemplate();
+            newUsed.setId(tbPostageTemplate.getId());
+            newUsed.setIsUsed(1);
+            this.updatePostageTemplate(newUsed);
+            ids.add(tbPostageTemplate.getId());
+        }
+        return ids;
     }
 
     /**

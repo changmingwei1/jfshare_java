@@ -171,7 +171,7 @@ public class Client extends TestCase{
     public void testSetDefaultPostageTemplate() throws Exception {
 
         PostageTemplate postageTemplate = new PostageTemplate();
-        postageTemplate.setId(207);
+        postageTemplate.setId(211);
         System.out.println(this.client.setDefaultPostageTemplate(postageTemplate));
     }
 
