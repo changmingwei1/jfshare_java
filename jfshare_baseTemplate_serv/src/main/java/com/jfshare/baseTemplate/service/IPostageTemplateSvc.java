@@ -61,6 +61,6 @@ public interface IPostageTemplateSvc {
 
     CalculatePostageResult calculatePostage(List<SellerPostageModel> productPostageModels, String sendTopProvince);
 
-    boolean setDefaultPostageTemplate(TbPostageTemplate tbPostageTemplate);
+    List<Integer> setDefaultPostageTemplate(TbPostageTemplate tbPostageTemplate, boolean setDefault);
 
 }

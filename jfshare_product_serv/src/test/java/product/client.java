@@ -225,7 +225,7 @@ public class client {
     public void testQueryHotSKU() throws Exception {
         ProductRetParam param = new ProductRetParam();
         param.setSkuTag(1);
-        System.out.println(this.client.queryHotSKU("ze160526111619000994", "", param));
+        System.out.println(this.client.queryHotSKU("ze160623115143000885", "1-1:100-101", param));
         ProductSkuParam skuParam = new ProductSkuParam();
         skuParam.setProductId("ze160526111619000994");
         skuParam.setSkuNum("");

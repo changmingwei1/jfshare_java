@@ -152,8 +152,8 @@ public class ProductService {
 				productSku.setVPicture(pHotSku.getProductSku().getVPicture());
 			}
 			productSku.setSkuName(pHotSku.getProductSku().getSkuName());*/
-//			productSku.setSkuItems(pHotSku.getProductSku().getSkuItems());
-			product.setProductSku(pHotSku.getProductSku());
+			productSku.setSkuItems(pHotSku.getProductSku().getSkuItems());
+//			product.setProductSku(pHotSku.getProductSku());
 			itemPlus.setSkuCount(stockForSku.getTotal()); //当前sku库存数
 			itemPlus.setLockCount(stockForSku.getLockTotal()); //当前sku锁定库存数
 			itemPlus.setProduct(product);

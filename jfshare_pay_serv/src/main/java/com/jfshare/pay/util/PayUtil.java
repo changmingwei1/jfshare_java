@@ -254,6 +254,8 @@ public class PayUtil {
             logger.debug("=====>ResponseDate: " + ResponseDate);
             String RequestNo = xmlMap.get("RequestNo");
             logger.debug("=====>RequestNo: " + RequestNo);
+            String SpOrderID = xmlMap.get("SpOrderID");
+            logger.debug("=====>SpOrderID: " + SpOrderID);
             String ResponseNo = xmlMap.get("ResponseNo");
             logger.debug("=====>ResponseNo: " + ResponseNo);
             String PayTotal = xmlMap.get("PayTotal");
@@ -278,7 +280,7 @@ public class PayUtil {
 
             //TODO Sign验证
             String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
-            String signStr = AppID + SPID + ResponseDate + RequestNo + ResponseNo + PayTotal + PayMoney + PayIntegral + PayVoucher + DeviceNo + MsgCode + MsgContent + Token;
+            String signStr = AppID + SPID + ResponseDate + RequestNo + SpOrderID + ResponseNo + PayTotal + PayMoney + PayIntegral + PayVoucher + DeviceNo + MsgCode + MsgContent + Token;
             logger.info("解析天翼支付通知----生成签名, waitSignStr={}", signStr);
             String signMake = DigestUtils.md5Hex(signStr);
             if(!signMake.equalsIgnoreCase(Sign)) {

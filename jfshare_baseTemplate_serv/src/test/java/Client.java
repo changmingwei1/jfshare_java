@@ -168,6 +168,13 @@ public class Client extends TestCase{
         System.out.println(client.getPostageTemplate(templateIds));
     }
 
+    public void testSetDefaultPostageTemplate() throws Exception {
+
+        PostageTemplate postageTemplate = new PostageTemplate();
+        postageTemplate.setId(211);
+        System.out.println(this.client.setDefaultPostageTemplate(postageTemplate));
+    }
+
     public void testCalculatePostage() throws Exception {
         CalculatePostageParam postageParam = new CalculatePostageParam();
 //        postageParam.setSendToProvince("11111");
