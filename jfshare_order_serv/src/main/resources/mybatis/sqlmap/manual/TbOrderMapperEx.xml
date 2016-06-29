@@ -272,6 +272,9 @@
             <if test="record.orderType != null">
                 order_type = #{record.orderType,jdbcType=INTEGER},
             </if>
+            <if test="record.thirdPrice != null">
+                third_Price = #{record.thirdPrice,jdbcType=INTEGER},
+            </if>
         </set>
     </sql>
 

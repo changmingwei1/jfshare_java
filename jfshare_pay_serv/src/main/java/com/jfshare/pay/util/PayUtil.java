@@ -280,13 +280,15 @@ public class PayUtil {
 
             //TODO Sign验证
             String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
-            String signStr = AppID + SPID + ResponseDate + RequestNo + SpOrderID + ResponseNo + PayTotal + PayMoney + PayIntegral + PayVoucher + DeviceNo + MsgCode + MsgContent + Token;
+            String signStr = AppID + SPID + ResponseDate + RequestNo + SpOrderID + ResponseNo + PayTotal + PayMoney + PayIntegral + PayVoucher + DeviceNo + Token;
             logger.info("解析天翼支付通知----生成签名, waitSignStr={}", signStr);
             String signMake = DigestUtils.md5Hex(signStr);
             if(!signMake.equalsIgnoreCase(Sign)) {
                 logger.warn("解析天翼支付通知----签名验证失败, 通知中sign={}， 生成sign={}", Sign, signMake);
-//                return tbPayRecord;
+                return tbPayRecord;
             }
+
+            logger.info("解析天翼支付通知----签名验证通过, sign={}", Sign);
 
             tbPayRecord = new TbPayRecordWithBLOBs();
             tbPayRecord.setPayId(RequestNo);
