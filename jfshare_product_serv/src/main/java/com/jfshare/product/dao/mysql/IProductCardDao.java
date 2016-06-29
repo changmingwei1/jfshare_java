@@ -1,6 +1,7 @@
 package com.jfshare.product.dao.mysql;
 
 import com.jfshare.finagle.thrift.product.AldCaptchaItem;
+import com.jfshare.finagle.thrift.product.DayAldCaptchaCount;
 import com.jfshare.finagle.thrift.product.DayAldCaptchaItem;
 import com.jfshare.product.dao.BaseDAO;
 import com.jfshare.product.model.TbProductCard;
@@ -68,7 +69,7 @@ public interface IProductCardDao extends BaseDAO<TbProductCard, Integer>{
      * @param productCard
      * @return
      */
-    int useProductCard(TbProductCard productCard);
+    TbProductCard useProductCard(TbProductCard productCard);
 
     /**
      * 卖家app验证码统计总数
@@ -83,6 +84,20 @@ public interface IProductCardDao extends BaseDAO<TbProductCard, Integer>{
      * @return
      */
     List<AldCaptchaItem> sellerProductCardList(Map queryMap);
+
+    /**
+     * 卖家app按月查询每天总量总数
+     * @param queryMap
+     * @return
+     */
+    int sellerProductCardDayAllCount(Map queryMap);
+
+    /**
+     * 卖家app按月查询每天总量列表
+     * @param queryMap
+     * @return
+     */
+    List<DayAldCaptchaCount> sellerProductCardDayAllList(Map queryMap);
 
     /**
      * 卖家app验证码按天列表详情总数

@@ -568,18 +568,27 @@ public class ServHandle implements ProductServ.Iface {
 	}
 
 	@Override
-	public Result useProductCard(ProductCard productCard) throws TException {
+	public ProductCardResult useProductCard(ProductCard productCard) throws TException {
 
 		logger.info(">>>> useProductCard --- productCard : {}", productCard.toString());
+		ProductCardResult productCardResult = new ProductCardResult();
 		Result result = new Result();
-		TbProductCard tbProductCard = ConvertUtil.thrift2TbProductCard(productCard);
-		int num = this.productCartSvc.useProductCard(tbProductCard);
-		if (num == 0) {
+		productCardResult.setResult(result);
+		try {
+			TbProductCard tbProductCard = ConvertUtil.thrift2TbProductCard(productCard);
+			TbProductCard dbProductCard = this.productCartSvc.useProductCard(tbProductCard);
+			if (dbProductCard == null) {
+                result.setCode(1);
+                result.addToFailDescList(FailCode.PRODUCT_CARD_USE_FAIL);
+                logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString());
+            }
+			productCardResult.addToCardList(ConvertUtil.tbProductCard2Thrift(dbProductCard));
+		} catch (Exception e) {
 			result.setCode(1);
-			result.addToFailDescList(FailCode.PRODUCT_CARD_USE_FAIL);
-			logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString());
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+			logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString(), e);
 		}
-		return result;
+		return productCardResult;
 	}
 
 	@Override
@@ -623,7 +632,7 @@ public class ServHandle implements ProductServ.Iface {
 
 			queryMap.remove("day");
 			// 本月验证
-			queryMap.put("month", DateUtils.getNowMonth(DateUtils.date2Str(DateUtils.getNow())));
+			queryMap.put("month", DateUtils.date2Str(DateUtils.getNow()).substring(0, 7));
 			captchaListResult.setMonNum(this.productCartSvc.getProductCardCount(queryMap));
 
 			captchaListResult.setPagination(ConvertUtil.page2Pagination(page));
@@ -644,15 +653,6 @@ public class ServHandle implements ProductServ.Iface {
 		Result result = new Result();
 		dayCaptchaListResult.setResult(result);
 
-		dayCaptchaListResult.setSoldNum(12312);
-		dayCaptchaListResult.setCheckedNum(333);
-		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "植物大战僵尸", 12, 34, "2016-05-30"));
-		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "植物大战僵尸", 56, 78, "2016-05-29"));
-		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "植物大战僵尸", 88, 99, "2016-05-28"));
-		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "黑客帝国", 11, 22, "2016-05-30"));
-		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "黑客帝国", 33, 44, "2016-05-29"));
-		dayCaptchaListResult.addToItemList(new DayAldCaptchaItem("123132", "黑客帝国", 55, 66, "2016-05-28"));
-
 		dayCaptchaListResult.setPagination(param.getPagination());
 
 		Page page = new Page(param.getPagination().getCurrentPage(), param.getPagination().getNumPerPage());
@@ -663,25 +663,61 @@ public class ServHandle implements ProductServ.Iface {
 //		queryMap.put("productId", param.getProductId());
 		queryMap.put("start", page.getStart());
 		queryMap.put("count", page.getCount());
+		try {
+			// 查询总数
+			int total = this.productCartSvc.sellerProductCardDayAllCount(queryMap);
+			page.setTotal(total);
 
-		// 查询总数
-		int total = this.productCartSvc.sellerProductCardDayCount(queryMap);
-		page.setTotal(total);
+			List<DayAldCaptchaCount> dayAldCaptchaCounts = this.productCartSvc.sellerProductCardDayAllList(queryMap);
+			dayCaptchaListResult.setDayAldCaptchaCountList(dayAldCaptchaCounts);
 
-		List<DayAldCaptchaItem> dayAldCaptchaItems = this.productCartSvc.sellerProductCardDayList(queryMap);
-		dayCaptchaListResult.setItemList(dayAldCaptchaItems);
+			// 当月销售
+			queryMap.put("state", 2);
+			dayCaptchaListResult.setSoldNum(this.productCartSvc.getProductCardCount(queryMap));
 
-		// 当月销售
-		queryMap.put("state", 2);
-		dayCaptchaListResult.setSoldNum(this.productCartSvc.getProductCardCount(queryMap));
+			// 当月验证
+			queryMap.put("state", 3);
+			dayCaptchaListResult.setCheckedNum(this.productCartSvc.getProductCardCount(queryMap));
 
-		// 当月验证
-		queryMap.put("state", 3);
-		dayCaptchaListResult.setCheckedNum(this.productCartSvc.getProductCardCount(queryMap));
-
-
-		dayCaptchaListResult.setPagination(ConvertUtil.page2Pagination(page));
+			dayCaptchaListResult.setPagination(ConvertUtil.page2Pagination(page));
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryCaptchaTotalList error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
 		return dayCaptchaListResult;
+	}
+
+	@Override
+	public DayCaptchaProductResult queryCaptchaDayTotalList(CaptchaDayQueryParam param) throws TException {
+
+		DayCaptchaProductResult dayCaptchaProductResult = new DayCaptchaProductResult();
+		Result result = new Result();
+		dayCaptchaProductResult.setResult(result);
+
+		dayCaptchaProductResult.setPagination(param.getPagination());
+		Page page = new Page(param.getPagination().getCurrentPage(), param.getPagination().getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("sellerId", param.getSellerId());
+		queryMap.put("day", param.getDate());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+		try {
+			// 查询总数
+			int total = this.productCartSvc.sellerProductCardDayCount(queryMap);
+			page.setTotal(total);
+
+			List<DayAldCaptchaItem> dayAldCaptchaItems = this.productCartSvc.sellerProductCardDayList(queryMap);
+			dayCaptchaProductResult.setItemList(dayAldCaptchaItems);
+			dayCaptchaProductResult.setPagination(ConvertUtil.page2Pagination(page));
+
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryCaptchaDayTotalList error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
+		return dayCaptchaProductResult;
 	}
 
 	@Override
@@ -690,17 +726,6 @@ public class ServHandle implements ProductServ.Iface {
 		CaptchaDetailResult captchaDetailResult = new CaptchaDetailResult();
 		Result result = new Result();
 		captchaDetailResult.setResult(result);
-
-		/*captchaDetailResult.setProductName("星球大战");
-		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(123).setCheckTime("2016-05-30"));
-		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(2222).setCheckTime("2016-05-30"));
-		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(333).setCheckTime("2016-05-30"));
-		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(44444).setCheckTime("2016-05-29"));
-		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(55555).setCheckTime("2016-05-29"));
-		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(666666).setCheckTime("2016-05-28"));
-		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(6676).setCheckTime("2016-05-28"));
-		captchaDetailResult.addToProductCards(new ProductCard(13, "fsdfs", "111111", "", "").setBuyerId(7777).setCheckTime("2016-05-28"));
-*/
 
 		Page page = new Page(param.getPagination().getCurrentPage(), param.getPagination().getNumPerPage());
 

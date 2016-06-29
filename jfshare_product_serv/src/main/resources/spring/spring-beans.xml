@@ -15,8 +15,7 @@
 	
 	<!-- zk use -->
 	<bean id="configManager" class="com.jfshare.ridge.ConfigManager">
-        <!--<constructor-arg name="serverList" value="120.24.153.155:2181"/>-->
-        <!--<constructor-arg name="serverList" value="101.201.39.38:2181"/>-->
+        <constructor-arg name="serverList" value="120.24.153.155:2181"/>
     </bean>
 
     <!--brain服务端启动-->

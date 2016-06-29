@@ -1,6 +1,7 @@
 package com.jfshare.product.service.impl;
 
 import com.jfshare.finagle.thrift.product.AldCaptchaItem;
+import com.jfshare.finagle.thrift.product.DayAldCaptchaCount;
 import com.jfshare.finagle.thrift.product.DayAldCaptchaItem;
 import com.jfshare.product.commons.ProductCommons;
 import com.jfshare.product.dao.mysql.IProductCardDao;
@@ -138,7 +139,7 @@ public class ProductCardSvcImpl implements IProductCartSvc {
     }
 
     @Override
-    public int useProductCard(TbProductCard productCard) {
+    public TbProductCard useProductCard(TbProductCard productCard) {
         return this.productCardDao.useProductCard(productCard);
     }
 
@@ -150,6 +151,16 @@ public class ProductCardSvcImpl implements IProductCartSvc {
     @Override
     public List<AldCaptchaItem> sellerProductCardList(Map queryMap) {
         return this.productCardDao.sellerProductCardList(queryMap);
+    }
+
+    @Override
+    public int sellerProductCardDayAllCount(Map queryMap) {
+        return this.productCardDao.sellerProductCardDayAllCount(queryMap);
+    }
+
+    @Override
+    public List<DayAldCaptchaCount> sellerProductCardDayAllList(Map queryMap) {
+        return this.productCardDao.sellerProductCardDayAllList(queryMap);
     }
 
     @Override
