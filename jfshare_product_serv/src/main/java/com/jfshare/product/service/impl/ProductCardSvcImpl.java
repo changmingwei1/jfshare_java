@@ -139,7 +139,7 @@ public class ProductCardSvcImpl implements IProductCartSvc {
     }
 
     @Override
-    public int useProductCard(TbProductCard productCard) {
+    public TbProductCard useProductCard(TbProductCard productCard) {
         return this.productCardDao.useProductCard(productCard);
     }
 

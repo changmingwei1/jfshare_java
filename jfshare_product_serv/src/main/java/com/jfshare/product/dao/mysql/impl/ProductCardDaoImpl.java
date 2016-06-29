@@ -10,6 +10,7 @@ import com.jfshare.product.model.TbProductCardExample;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.model.mapper.TbProductCardMapper;
 import com.jfshare.product.model.mapper.manual.ManualTbProductCardMapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
@@ -67,7 +68,7 @@ public class ProductCardDaoImpl implements IProductCardDao {
     }
 
     @Override
-    public int useProductCard(TbProductCard productCard) {
+    public TbProductCard useProductCard(TbProductCard productCard) {
         TbProductCardExample example = new TbProductCardExample();
         TbProductCardExample.Criteria criteria = example.createCriteria();
         criteria.andSellerIdEqualTo(productCard.getSellerId());
@@ -75,15 +76,19 @@ public class ProductCardDaoImpl implements IProductCardDao {
         // 只有已发放的才能够使用
         criteria.andStateEqualTo(2);
 
-        TbProductCard tbproductCard = new TbProductCard();
+        List<TbProductCard> tbProductCards = this.cardMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(tbProductCards)) {
+            return null;
+        }
+
+        TbProductCard tbproductCard = tbProductCards.get(0);
         tbproductCard.setState(3);
         Date now = new Date();
         tbproductCard.setLastUpdateTime(now);
         tbproductCard.setCheckedTime(now);
 
-        int num = this.cardMapper.updateByExampleSelective(tbproductCard, example);
-
-        return num;
+        int num = this.cardMapper.updateByPrimaryKey(tbproductCard);
+        return tbproductCard;
     }
 
     @Override

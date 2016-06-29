@@ -310,5 +310,13 @@ public class client {
         System.out.println(this.client.queryCaptchaDayTotalList(param));
     }
 
+    @Test
+    public void testUseProductCard() throws Exception {
+        ProductCard productCard = new ProductCard();
+        productCard.setSellerId(13);
+        productCard.setCardNumber("6000001");
+        System.out.println(this.client.useProductCard(productCard));
+    }
+
 
 }

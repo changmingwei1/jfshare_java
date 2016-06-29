@@ -57,7 +57,7 @@ public class ProductServ {
     public ProductCardResult queryProductCard(ProductCardParam param) throws TException;
     public ProductCardStatisticsResult statisticsProductCard(ProductCardStatisticsParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException;
     public ProductCardViewListResult queryProductCardViewList(ProductCardViewParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException;
-    public com.jfshare.finagle.thrift.result.Result useProductCard(ProductCard productCard) throws TException;
+    public ProductCardResult useProductCard(ProductCard productCard) throws TException;
     public CaptchaListResult queryCaptchaList(CaptchaQueryParam param) throws TException;
     public DayCaptchaListResult queryCaptchaTotalList(CaptchaQueryParam param) throws TException;
     public DayCaptchaProductResult queryCaptchaDayTotalList(CaptchaDayQueryParam param) throws TException;
@@ -113,7 +113,7 @@ public class ProductServ {
     public Future<ProductCardResult> queryProductCard(ProductCardParam param);
     public Future<ProductCardStatisticsResult> statisticsProductCard(ProductCardStatisticsParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination);
     public Future<ProductCardViewListResult> queryProductCardViewList(ProductCardViewParam param, com.jfshare.finagle.thrift.pagination.Pagination pagination);
-    public Future<com.jfshare.finagle.thrift.result.Result> useProductCard(ProductCard productCard);
+    public Future<ProductCardResult> useProductCard(ProductCard productCard);
     public Future<CaptchaListResult> queryCaptchaList(CaptchaQueryParam param);
     public Future<DayCaptchaListResult> queryCaptchaTotalList(CaptchaQueryParam param);
     public Future<DayCaptchaProductResult> queryCaptchaDayTotalList(CaptchaDayQueryParam param);
@@ -865,7 +865,7 @@ public class ProductServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryProductCardViewList failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result useProductCard(ProductCard productCard) throws TException
+    public ProductCardResult useProductCard(ProductCard productCard) throws TException
     {
       send_useProductCard(productCard);
       return recv_useProductCard();
@@ -881,7 +881,7 @@ public class ProductServ {
       oprot_.getTransport().flush();
     }
 
-    public com.jfshare.finagle.thrift.result.Result recv_useProductCard() throws TException
+    public ProductCardResult recv_useProductCard() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -1725,7 +1725,7 @@ public class ProductServ {
         prot.writeMessageEnd();
       }
 
-      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+      public ProductCardResult getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -2478,7 +2478,7 @@ public class ProductServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> useProductCard(ProductCard productCard) {
+    public Future<ProductCardResult> useProductCard(ProductCard productCard) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
@@ -2493,8 +2493,8 @@ public class ProductServ {
         byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
         ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
         Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
-          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+        return __done__.flatMap(new Function<byte[], Future<ProductCardResult>>() {
+          public Future<ProductCardResult> apply(byte[] __buffer__) {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
@@ -4691,7 +4691,7 @@ public class ProductServ {
           } catch (Exception e) {
             return Future.exception(e);
           }
-          Future<com.jfshare.finagle.thrift.result.Result> future;
+          Future<ProductCardResult> future;
           try {
             future = iface.useProductCard(args.productCard);
           } catch (Exception e) {
@@ -4699,8 +4699,8 @@ public class ProductServ {
           }
 
           try {
-            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
-              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+            return future.flatMap(new Function<ProductCardResult, Future<byte[]>>() {
+              public Future<byte[]> apply(ProductCardResult value) {
                 useProductCard_result result = new useProductCard_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
@@ -17512,7 +17512,7 @@ public class ProductServ {
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
 
-  public com.jfshare.finagle.thrift.result.Result success;
+  public ProductCardResult success;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -17579,7 +17579,7 @@ public class ProductServ {
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+      new StructMetaData(TType.STRUCT, ProductCardResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(useProductCard_result.class, metaDataMap);
   }
@@ -17589,7 +17589,7 @@ public class ProductServ {
   }
 
   public useProductCard_result(
-    com.jfshare.finagle.thrift.result.Result success)
+    ProductCardResult success)
   {
     this();
     this.success = success;
@@ -17600,7 +17600,7 @@ public class ProductServ {
    */
   public useProductCard_result(useProductCard_result other) {
     if (other.isSetSuccess()) {
-      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+      this.success = new ProductCardResult(other.success);
     }
   }
 
@@ -17613,11 +17613,11 @@ public class ProductServ {
     this.success = null;
   }
 
-  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+  public ProductCardResult getSuccess() {
     return this.success;
   }
 
-  public useProductCard_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+  public useProductCard_result setSuccess(ProductCardResult success) {
     this.success = success;
     
     return this;
@@ -17644,7 +17644,7 @@ public class ProductServ {
       if (value == null) {
         unsetSuccess();
       } else {
-        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+        setSuccess((ProductCardResult)value);
       }
       break;
     }
@@ -17743,7 +17743,7 @@ public class ProductServ {
       switch (field.id) {
         case 0: // SUCCESS
           if (field.type == TType.STRUCT) {
-            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success = new ProductCardResult();
             this.success.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);

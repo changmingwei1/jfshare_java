@@ -64,7 +64,7 @@ public interface IProductCartSvc {
      * @param productCard
      * @return
      */
-    int useProductCard(TbProductCard productCard);
+    TbProductCard useProductCard(TbProductCard productCard);
 
     /**
      * 卖家app验证码统计总数

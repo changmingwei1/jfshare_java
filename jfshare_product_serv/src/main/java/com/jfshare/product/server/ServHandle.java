@@ -568,18 +568,27 @@ public class ServHandle implements ProductServ.Iface {
 	}
 
 	@Override
-	public Result useProductCard(ProductCard productCard) throws TException {
+	public ProductCardResult useProductCard(ProductCard productCard) throws TException {
 
 		logger.info(">>>> useProductCard --- productCard : {}", productCard.toString());
+		ProductCardResult productCardResult = new ProductCardResult();
 		Result result = new Result();
-		TbProductCard tbProductCard = ConvertUtil.thrift2TbProductCard(productCard);
-		int num = this.productCartSvc.useProductCard(tbProductCard);
-		if (num == 0) {
+		productCardResult.setResult(result);
+		try {
+			TbProductCard tbProductCard = ConvertUtil.thrift2TbProductCard(productCard);
+			TbProductCard dbProductCard = this.productCartSvc.useProductCard(tbProductCard);
+			if (dbProductCard == null) {
+                result.setCode(1);
+                result.addToFailDescList(FailCode.PRODUCT_CARD_USE_FAIL);
+                logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString());
+            }
+			productCardResult.addToCardList(ConvertUtil.tbProductCard2Thrift(dbProductCard));
+		} catch (Exception e) {
 			result.setCode(1);
-			result.addToFailDescList(FailCode.PRODUCT_CARD_USE_FAIL);
-			logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString());
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+			logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString(), e);
 		}
-		return result;
+		return productCardResult;
 	}
 
 	@Override
