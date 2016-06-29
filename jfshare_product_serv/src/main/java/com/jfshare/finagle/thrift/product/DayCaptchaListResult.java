@@ -36,14 +36,14 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
   private static final TField SOLD_NUM_FIELD_DESC = new TField("soldNum", TType.I32, (short)2);
   private static final TField CHECKED_NUM_FIELD_DESC = new TField("checkedNum", TType.I32, (short)3);
   private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)4);
-  private static final TField ITEM_LIST_FIELD_DESC = new TField("itemList", TType.LIST, (short)5);
+  private static final TField DAY_ALD_CAPTCHA_COUNT_LIST_FIELD_DESC = new TField("dayAldCaptchaCountList", TType.LIST, (short)5);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
   public int soldNum;
   public int checkedNum;
   public com.jfshare.finagle.thrift.pagination.Pagination pagination;
-  public List<DayAldCaptchaItem> itemList;
+  public List<DayAldCaptchaCount> dayAldCaptchaCountList;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -51,7 +51,7 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
     SOLD_NUM((short)2, "soldNum"),
     CHECKED_NUM((short)3, "checkedNum"),
     PAGINATION((short)4, "pagination"),
-    ITEM_LIST((short)5, "itemList");
+    DAY_ALD_CAPTCHA_COUNT_LIST((short)5, "dayAldCaptchaCountList");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -74,8 +74,8 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
   	return CHECKED_NUM;
         case 4: // PAGINATION
   	return PAGINATION;
-        case 5: // ITEM_LIST
-  	return ITEM_LIST;
+        case 5: // DAY_ALD_CAPTCHA_COUNT_LIST
+  	return DAY_ALD_CAPTCHA_COUNT_LIST;
         default:
   	return null;
       }
@@ -132,9 +132,9 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
-    tmpMap.put(_Fields.ITEM_LIST, new FieldMetaData("itemList", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.DAY_ALD_CAPTCHA_COUNT_LIST, new FieldMetaData("dayAldCaptchaCountList", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, DayAldCaptchaItem.class))));
+                new StructMetaData(TType.STRUCT, DayAldCaptchaCount.class))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(DayCaptchaListResult.class, metaDataMap);
   }
@@ -148,7 +148,7 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
     int soldNum,
     int checkedNum,
     com.jfshare.finagle.thrift.pagination.Pagination pagination,
-    List<DayAldCaptchaItem> itemList)
+    List<DayAldCaptchaCount> dayAldCaptchaCountList)
   {
     this();
     this.result = result;
@@ -157,7 +157,7 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
     this.checkedNum = checkedNum;
     setCheckedNumIsSet(true);
     this.pagination = pagination;
-    this.itemList = itemList;
+    this.dayAldCaptchaCountList = dayAldCaptchaCountList;
   }
 
   /**
@@ -174,12 +174,12 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
     if (other.isSetPagination()) {
       this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
     }
-    if (other.isSetItemList()) {
-      List<DayAldCaptchaItem> __this__itemList = new ArrayList<DayAldCaptchaItem>();
-      for (DayAldCaptchaItem other_element : other.itemList) {
-        __this__itemList.add(new DayAldCaptchaItem(other_element));
+    if (other.isSetDayAldCaptchaCountList()) {
+      List<DayAldCaptchaCount> __this__dayAldCaptchaCountList = new ArrayList<DayAldCaptchaCount>();
+      for (DayAldCaptchaCount other_element : other.dayAldCaptchaCountList) {
+        __this__dayAldCaptchaCountList.add(new DayAldCaptchaCount(other_element));
       }
-      this.itemList = __this__itemList;
+      this.dayAldCaptchaCountList = __this__dayAldCaptchaCountList;
     }
   }
 
@@ -195,7 +195,7 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
     setCheckedNumIsSet(false);
     this.checkedNum = 0;
     this.pagination = null;
-    this.itemList = null;
+    this.dayAldCaptchaCountList = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
@@ -296,43 +296,43 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
     }
   }
 
-  public int getItemListSize() {
-    return (this.itemList == null) ? 0 : this.itemList.size();
+  public int getDayAldCaptchaCountListSize() {
+    return (this.dayAldCaptchaCountList == null) ? 0 : this.dayAldCaptchaCountList.size();
   }
 
-  public java.util.Iterator<DayAldCaptchaItem> getItemListIterator() {
-    return (this.itemList == null) ? null : this.itemList.iterator();
+  public java.util.Iterator<DayAldCaptchaCount> getDayAldCaptchaCountListIterator() {
+    return (this.dayAldCaptchaCountList == null) ? null : this.dayAldCaptchaCountList.iterator();
   }
 
-  public void addToItemList(DayAldCaptchaItem elem) {
-    if (this.itemList == null) {
-      this.itemList = new ArrayList<DayAldCaptchaItem>();
+  public void addToDayAldCaptchaCountList(DayAldCaptchaCount elem) {
+    if (this.dayAldCaptchaCountList == null) {
+      this.dayAldCaptchaCountList = new ArrayList<DayAldCaptchaCount>();
     }
-    this.itemList.add(elem);
+    this.dayAldCaptchaCountList.add(elem);
   }
 
-  public List<DayAldCaptchaItem> getItemList() {
-    return this.itemList;
+  public List<DayAldCaptchaCount> getDayAldCaptchaCountList() {
+    return this.dayAldCaptchaCountList;
   }
 
-  public DayCaptchaListResult setItemList(List<DayAldCaptchaItem> itemList) {
-    this.itemList = itemList;
+  public DayCaptchaListResult setDayAldCaptchaCountList(List<DayAldCaptchaCount> dayAldCaptchaCountList) {
+    this.dayAldCaptchaCountList = dayAldCaptchaCountList;
     
     return this;
   }
 
-  public void unsetItemList() {
-    this.itemList = null;
+  public void unsetDayAldCaptchaCountList() {
+    this.dayAldCaptchaCountList = null;
   }
 
-  /** Returns true if field itemList is set (has been asigned a value) and false otherwise */
-  public boolean isSetItemList() {
-    return this.itemList != null;
+  /** Returns true if field dayAldCaptchaCountList is set (has been asigned a value) and false otherwise */
+  public boolean isSetDayAldCaptchaCountList() {
+    return this.dayAldCaptchaCountList != null;
   }
 
-  public void setItemListIsSet(boolean value) {
+  public void setDayAldCaptchaCountListIsSet(boolean value) {
     if (!value) {
-      this.itemList = null;
+      this.dayAldCaptchaCountList = null;
     }
   }
 
@@ -366,11 +366,11 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
         setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
       }
       break;
-    case ITEM_LIST:
+    case DAY_ALD_CAPTCHA_COUNT_LIST:
       if (value == null) {
-        unsetItemList();
+        unsetDayAldCaptchaCountList();
       } else {
-        setItemList((List<DayAldCaptchaItem>)value);
+        setDayAldCaptchaCountList((List<DayAldCaptchaCount>)value);
       }
       break;
     }
@@ -386,8 +386,8 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
       return new Integer(getCheckedNum());
     case PAGINATION:
       return getPagination();
-    case ITEM_LIST:
-      return getItemList();
+    case DAY_ALD_CAPTCHA_COUNT_LIST:
+      return getDayAldCaptchaCountList();
     }
     throw new IllegalStateException();
   }
@@ -407,8 +407,8 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
       return isSetCheckedNum();
     case PAGINATION:
       return isSetPagination();
-    case ITEM_LIST:
-      return isSetItemList();
+    case DAY_ALD_CAPTCHA_COUNT_LIST:
+      return isSetDayAldCaptchaCountList();
     }
     throw new IllegalStateException();
   }
@@ -457,12 +457,12 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
       if (!this.pagination.equals(that.pagination))
         return false;
     }
-    boolean this_present_itemList = true && this.isSetItemList();
-    boolean that_present_itemList = true && that.isSetItemList();
-    if (this_present_itemList || that_present_itemList) {
-      if (!(this_present_itemList && that_present_itemList))
+    boolean this_present_dayAldCaptchaCountList = true && this.isSetDayAldCaptchaCountList();
+    boolean that_present_dayAldCaptchaCountList = true && that.isSetDayAldCaptchaCountList();
+    if (this_present_dayAldCaptchaCountList || that_present_dayAldCaptchaCountList) {
+      if (!(this_present_dayAldCaptchaCountList && that_present_dayAldCaptchaCountList))
         return false;
-      if (!this.itemList.equals(that.itemList))
+      if (!this.dayAldCaptchaCountList.equals(that.dayAldCaptchaCountList))
         return false;
     }
 
@@ -488,10 +488,10 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
     builder.append(present_pagination);
     if (present_pagination)
       builder.append(pagination);
-    boolean present_itemList = true && (isSetItemList());
-    builder.append(present_itemList);
-    if (present_itemList)
-      builder.append(itemList);
+    boolean present_dayAldCaptchaCountList = true && (isSetDayAldCaptchaCountList());
+    builder.append(present_dayAldCaptchaCountList);
+    if (present_dayAldCaptchaCountList)
+      builder.append(dayAldCaptchaCountList);
     return builder.toHashCode();
   }
 
@@ -543,12 +543,12 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetItemList()).compareTo(typedOther.isSetItemList());
+    lastComparison = Boolean.valueOf(isSetDayAldCaptchaCountList()).compareTo(typedOther.isSetDayAldCaptchaCountList());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetItemList()) {
-      lastComparison = TBaseHelper.compareTo(this.itemList, typedOther.itemList);
+    if (isSetDayAldCaptchaCountList()) {
+      lastComparison = TBaseHelper.compareTo(this.dayAldCaptchaCountList, typedOther.dayAldCaptchaCountList);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -603,17 +603,17 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 5: // ITEM_LIST
+        case 5: // DAY_ALD_CAPTCHA_COUNT_LIST
           if (field.type == TType.LIST) {
             {
             TList _list44 = iprot.readListBegin();
-            this.itemList = new ArrayList<DayAldCaptchaItem>(_list44.size);
+            this.dayAldCaptchaCountList = new ArrayList<DayAldCaptchaCount>(_list44.size);
             for (int _i45 = 0; _i45 < _list44.size; ++_i45)
             {
-              DayAldCaptchaItem _elem46;
-              _elem46 = new DayAldCaptchaItem();
+              DayAldCaptchaCount _elem46;
+              _elem46 = new DayAldCaptchaCount();
               _elem46.read(iprot);
-              this.itemList.add(_elem46);
+              this.dayAldCaptchaCountList.add(_elem46);
             }
             iprot.readListEnd();
             }
@@ -652,11 +652,11 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
       this.pagination.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.itemList != null) {
-      oprot.writeFieldBegin(ITEM_LIST_FIELD_DESC);
+    if (this.dayAldCaptchaCountList != null) {
+      oprot.writeFieldBegin(DAY_ALD_CAPTCHA_COUNT_LIST_FIELD_DESC);
       {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.itemList.size()));
-        for (DayAldCaptchaItem _iter47 : this.itemList)
+        oprot.writeListBegin(new TList(TType.STRUCT, this.dayAldCaptchaCountList.size()));
+        for (DayAldCaptchaCount _iter47 : this.dayAldCaptchaCountList)
         {
           _iter47.write(oprot);
         }
@@ -696,11 +696,11 @@ public class DayCaptchaListResult implements TBase<DayCaptchaListResult, DayCapt
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("itemList:");
-    if (this.itemList == null) {
+    sb.append("dayAldCaptchaCountList:");
+    if (this.dayAldCaptchaCountList == null) {
       sb.append("null");
     } else {
-      sb.append(this.itemList);
+      sb.append(this.dayAldCaptchaCountList);
     }
     first = false;
     sb.append(")");

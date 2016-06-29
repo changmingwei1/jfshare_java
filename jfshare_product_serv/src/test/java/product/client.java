@@ -42,9 +42,9 @@ public class client {
 
     private ProductServ.Client client;
 
-//    private static final String IP = "127.0.0.1";
+    private static final String IP = "127.0.0.1";
 //    private static final String IP = "120.24.153.155";
-    private static final String IP = "101.201.38.182";
+//    private static final String IP = "101.201.38.182";
 
     private static final Integer PORT = 1980;
 
@@ -123,7 +123,8 @@ public class client {
     public void testQueryProductDetail() throws Exception {
 
         ProductDetailParam param = new ProductDetailParam();
-        param.setProductId("ze160526111619000994");
+//        param.setProductId("ze160623105125000807");
+        param.setDetailKey("576bb2df0cf2e5ea210e52f9");
 
         System.out.println(this.client.queryProductDetail(param));
     }
@@ -263,7 +264,15 @@ public class client {
 
     @Test
     public void testQueryCaptchaDetails() throws Exception {
-        System.out.println(this.client.queryCaptchaDetails(new CaptchaQueryParam()));
+        CaptchaQueryParam param = new CaptchaQueryParam();
+        param.setSellerId(13);
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+        param.setPagination(pagination);
+        param.setProductId("ze160620163153000614");
+        param.setMonthQuery("2016-06");
+        System.out.println(this.client.queryCaptchaDetails(param));
     }
 
     @Test
@@ -279,8 +288,34 @@ public class client {
 
     @Test
     public void testQueryCaptchaTotalList() throws Exception {
+        CaptchaQueryParam param = new CaptchaQueryParam();
+        param.setSellerId(13);
+        param.setMonthQuery("2016-06");
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+        param.setPagination(pagination);
+        System.out.println(this.client.queryCaptchaTotalList(param));
+    }
 
-        System.out.println(this.client.queryCaptchaTotalList(new CaptchaQueryParam()));
+    @Test
+    public void testQueryCaptchaDayTotalList() throws Exception {
+        CaptchaDayQueryParam param = new CaptchaDayQueryParam();
+        param.setSellerId(13);
+        param.setDate("2016-06-27");
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+        param.setPagination(pagination);
+        System.out.println(this.client.queryCaptchaDayTotalList(param));
+    }
+
+    @Test
+    public void testUseProductCard() throws Exception {
+        ProductCard productCard = new ProductCard();
+        productCard.setSellerId(13);
+        productCard.setCardNumber("6000001");
+        System.out.println(this.client.useProductCard(productCard));
     }
 
 
