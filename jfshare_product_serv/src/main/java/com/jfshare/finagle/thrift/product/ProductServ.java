@@ -60,6 +60,7 @@ public class ProductServ {
     public com.jfshare.finagle.thrift.result.Result useProductCard(ProductCard productCard) throws TException;
     public CaptchaListResult queryCaptchaList(CaptchaQueryParam param) throws TException;
     public DayCaptchaListResult queryCaptchaTotalList(CaptchaQueryParam param) throws TException;
+    public DayCaptchaProductResult queryCaptchaDayTotalList(CaptchaDayQueryParam param) throws TException;
     public CaptchaDetailResult queryCaptchaDetails(CaptchaQueryParam param) throws TException;
   }
 
@@ -87,6 +88,7 @@ public class ProductServ {
     public void useProductCard(ProductCard productCard, AsyncMethodCallback<AsyncClient.useProductCard_call> resultHandler) throws TException;
     public void queryCaptchaList(CaptchaQueryParam param, AsyncMethodCallback<AsyncClient.queryCaptchaList_call> resultHandler) throws TException;
     public void queryCaptchaTotalList(CaptchaQueryParam param, AsyncMethodCallback<AsyncClient.queryCaptchaTotalList_call> resultHandler) throws TException;
+    public void queryCaptchaDayTotalList(CaptchaDayQueryParam param, AsyncMethodCallback<AsyncClient.queryCaptchaDayTotalList_call> resultHandler) throws TException;
     public void queryCaptchaDetails(CaptchaQueryParam param, AsyncMethodCallback<AsyncClient.queryCaptchaDetails_call> resultHandler) throws TException;
   }
 
@@ -114,6 +116,7 @@ public class ProductServ {
     public Future<com.jfshare.finagle.thrift.result.Result> useProductCard(ProductCard productCard);
     public Future<CaptchaListResult> queryCaptchaList(CaptchaQueryParam param);
     public Future<DayCaptchaListResult> queryCaptchaTotalList(CaptchaQueryParam param);
+    public Future<DayCaptchaProductResult> queryCaptchaDayTotalList(CaptchaDayQueryParam param);
     public Future<CaptchaDetailResult> queryCaptchaDetails(CaptchaQueryParam param);
   }
 
@@ -967,6 +970,41 @@ public class ProductServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryCaptchaTotalList failed: unknown result");
     }
+    public DayCaptchaProductResult queryCaptchaDayTotalList(CaptchaDayQueryParam param) throws TException
+    {
+      send_queryCaptchaDayTotalList(param);
+      return recv_queryCaptchaDayTotalList();
+    }
+
+    public void send_queryCaptchaDayTotalList(CaptchaDayQueryParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("queryCaptchaDayTotalList", TMessageType.CALL, ++seqid_));
+      queryCaptchaDayTotalList_args args = new queryCaptchaDayTotalList_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public DayCaptchaProductResult recv_queryCaptchaDayTotalList() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "queryCaptchaDayTotalList failed: out of sequence response");
+      }
+      queryCaptchaDayTotalList_result result = new queryCaptchaDayTotalList_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryCaptchaDayTotalList failed: unknown result");
+    }
     public CaptchaDetailResult queryCaptchaDetails(CaptchaQueryParam param) throws TException
     {
       send_queryCaptchaDetails(param);
@@ -1758,6 +1796,37 @@ public class ProductServ {
         return (new Client(prot)).recv_queryCaptchaTotalList();
       }
      }
+    public void queryCaptchaDayTotalList(CaptchaDayQueryParam param, AsyncMethodCallback<queryCaptchaDayTotalList_call> resultHandler) throws TException {
+      checkReady();
+      queryCaptchaDayTotalList_call method_call = new queryCaptchaDayTotalList_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class queryCaptchaDayTotalList_call extends TAsyncMethodCall {
+      private CaptchaDayQueryParam param;
+
+      public queryCaptchaDayTotalList_call(CaptchaDayQueryParam param, AsyncMethodCallback<queryCaptchaDayTotalList_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("queryCaptchaDayTotalList", TMessageType.CALL, 0));
+        queryCaptchaDayTotalList_args args = new queryCaptchaDayTotalList_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public DayCaptchaProductResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_queryCaptchaDayTotalList();
+      }
+     }
     public void queryCaptchaDetails(CaptchaQueryParam param, AsyncMethodCallback<queryCaptchaDetails_call> resultHandler) throws TException {
       checkReady();
       queryCaptchaDetails_call method_call = new queryCaptchaDetails_call(param, resultHandler, this, protocolFactory, transport);
@@ -2499,6 +2568,36 @@ public class ProductServ {
         return Future.exception(e);
       }
     }
+    public Future<DayCaptchaProductResult> queryCaptchaDayTotalList(CaptchaDayQueryParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("queryCaptchaDayTotalList", TMessageType.CALL, 0));
+        queryCaptchaDayTotalList_args __args__ = new queryCaptchaDayTotalList_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<DayCaptchaProductResult>>() {
+          public Future<DayCaptchaProductResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_queryCaptchaDayTotalList());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<CaptchaDetailResult> queryCaptchaDetails(CaptchaQueryParam param) {
       try {
         // TODO: size
@@ -2559,6 +2658,7 @@ public class ProductServ {
       processMap_.put("useProductCard", new useProductCard());
       processMap_.put("queryCaptchaList", new queryCaptchaList());
       processMap_.put("queryCaptchaTotalList", new queryCaptchaTotalList());
+      processMap_.put("queryCaptchaDayTotalList", new queryCaptchaDayTotalList());
       processMap_.put("queryCaptchaDetails", new queryCaptchaDetails());
     }
 
@@ -3157,6 +3257,31 @@ public class ProductServ {
         result.success = iface_.queryCaptchaTotalList(args.param);
         
         oprot.writeMessageBegin(new TMessage("queryCaptchaTotalList", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class queryCaptchaDayTotalList implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        queryCaptchaDayTotalList_args args = new queryCaptchaDayTotalList_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("queryCaptchaDayTotalList", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        queryCaptchaDayTotalList_result result = new queryCaptchaDayTotalList_result();
+        result.success = iface_.queryCaptchaDayTotalList(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("queryCaptchaDayTotalList", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -4719,6 +4844,73 @@ public class ProductServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("queryCaptchaTotalList", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("queryCaptchaDayTotalList", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          queryCaptchaDayTotalList_args args = new queryCaptchaDayTotalList_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("queryCaptchaDayTotalList", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<DayCaptchaProductResult> future;
+          try {
+            future = iface.queryCaptchaDayTotalList(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<DayCaptchaProductResult, Future<byte[]>>() {
+              public Future<byte[]> apply(DayCaptchaProductResult value) {
+                queryCaptchaDayTotalList_result result = new queryCaptchaDayTotalList_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("queryCaptchaDayTotalList", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -18728,6 +18920,579 @@ public class ProductServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("queryCaptchaTotalList_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class queryCaptchaDayTotalList_args implements TBase<queryCaptchaDayTotalList_args, queryCaptchaDayTotalList_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryCaptchaDayTotalList_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public CaptchaDayQueryParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, CaptchaDayQueryParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryCaptchaDayTotalList_args.class, metaDataMap);
+  }
+
+
+  public queryCaptchaDayTotalList_args() {
+  }
+
+  public queryCaptchaDayTotalList_args(
+    CaptchaDayQueryParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryCaptchaDayTotalList_args(queryCaptchaDayTotalList_args other) {
+    if (other.isSetParam()) {
+      this.param = new CaptchaDayQueryParam(other.param);
+    }
+  }
+
+  public queryCaptchaDayTotalList_args deepCopy() {
+    return new queryCaptchaDayTotalList_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public CaptchaDayQueryParam getParam() {
+    return this.param;
+  }
+
+  public queryCaptchaDayTotalList_args setParam(CaptchaDayQueryParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((CaptchaDayQueryParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryCaptchaDayTotalList_args)
+      return this.equals((queryCaptchaDayTotalList_args)that);
+    return false;
+  }
+
+  public boolean equals(queryCaptchaDayTotalList_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryCaptchaDayTotalList_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryCaptchaDayTotalList_args typedOther = (queryCaptchaDayTotalList_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new CaptchaDayQueryParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryCaptchaDayTotalList_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class queryCaptchaDayTotalList_result implements TBase<queryCaptchaDayTotalList_result, queryCaptchaDayTotalList_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryCaptchaDayTotalList_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public DayCaptchaProductResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, DayCaptchaProductResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryCaptchaDayTotalList_result.class, metaDataMap);
+  }
+
+
+  public queryCaptchaDayTotalList_result() {
+  }
+
+  public queryCaptchaDayTotalList_result(
+    DayCaptchaProductResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryCaptchaDayTotalList_result(queryCaptchaDayTotalList_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new DayCaptchaProductResult(other.success);
+    }
+  }
+
+  public queryCaptchaDayTotalList_result deepCopy() {
+    return new queryCaptchaDayTotalList_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public DayCaptchaProductResult getSuccess() {
+    return this.success;
+  }
+
+  public queryCaptchaDayTotalList_result setSuccess(DayCaptchaProductResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((DayCaptchaProductResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryCaptchaDayTotalList_result)
+      return this.equals((queryCaptchaDayTotalList_result)that);
+    return false;
+  }
+
+  public boolean equals(queryCaptchaDayTotalList_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryCaptchaDayTotalList_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryCaptchaDayTotalList_result typedOther = (queryCaptchaDayTotalList_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new DayCaptchaProductResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryCaptchaDayTotalList_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

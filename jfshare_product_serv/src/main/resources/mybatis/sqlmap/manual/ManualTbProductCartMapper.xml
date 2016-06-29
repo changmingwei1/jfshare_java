@@ -11,6 +11,20 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <resultMap id="dayAldCaptchaCountMap" type="com.jfshare.finagle.thrift.product.DayAldCaptchaCount">
+        <result column="statistics_date" property="date" jdbcType="VARCHAR"/>
+        <result column="checked_num" property="checkedTotalNum" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="dayAldCaptchaItemMap" type="com.jfshare.finagle.thrift.product.DayAldCaptchaItem">
+        <result column="id" property="productId" jdbcType="VARCHAR"/>
+        <result column="name" property="productName" jdbcType="VARCHAR"/>
+        <result column="sold_num" property="aldSold" jdbcType="INTEGER"/>
+        <result column="checked_num" property="aldCaptcha" jdbcType="INTEGER"/>
+        <result column="statistics_date" property="date" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
     <resultMap id="aldCaptchaItemMap" type="com.jfshare.finagle.thrift.product.AldCaptchaItem">
         <result column="id" property="productId" jdbcType="VARCHAR"/>
         <result column="name" property="productName" jdbcType="VARCHAR"/>
@@ -115,32 +129,81 @@
     <select id="sellerProductCardCount" parameterType="map" resultType="int">
         SELECT
         COUNT(*)
-        FROM
-        tb_product p, tb_product_card_statistics s
-        <where>
-            AND s.product_id = p.id AND s.seller_id = #{sellerId}
-        </where>
+        FROM (
+            SELECT
+            p.id, p.name, COALESCE(sum(s.sold_num),0) sold_num, COALESCE(sum(s.checked_num),0) checked_num
+            FROM
+            tb_product p, tb_product_card_statistics s
+            <where>
+                AND s.product_id = p.id AND s.seller_id = #{sellerId}
+            </where>
+            GROUP BY p.id
+        ) t
     </select>
     
     <select id="sellerProductCardList" parameterType="map" resultMap="aldCaptchaItemMap">
         SELECT
-        p.id, p.name, sum(s.sold_num) sold_num, sum(s.checked_num) checked_num
+        p.id, p.name, COALESCE(sum(s.sold_num),0) sold_num, COALESCE(sum(s.checked_num),0) checked_num
         FROM
         tb_product p, tb_product_card_statistics s
         <where>
             AND s.product_id = p.id AND s.seller_id = #{sellerId}
         </where>
-        GROUP BY p.name
+        GROUP BY p.id
         ORDER BY checked_num desc, sold_num asc
         LIMIT #{start}, #{count}
     </select>
-    
-    <select id="sellerProductCardDayCount" parameterType="map" resultType="int">
-      select * from tb_product_card_statistics
+
+    <select id="sellerProductCardDayAllCount" parameterType="map" resultType="int">
+        SELECT count(*) FROM (
+            SELECT
+              s.`statistics_date`,
+              COALESCE(SUM(s.checked_num), 0) checked_num
+            FROM
+              tb_product_card_statistics s
+            WHERE s.`seller_id` = #{sellerId}
+              AND LEFT(s.`statistics_date`, 7) = #{month}
+              GROUP BY s.`statistics_date`) t
     </select>
 
-    <select id="sellerProductCardDayList" parameterType="map" resultMap="aldCaptchaItemMap">
-      select * from tb_product_card_statistics
+    <select id="sellerProductCardDayAllList" parameterType="map" resultMap="dayAldCaptchaCountMap">
+        SELECT
+          s.`statistics_date`,
+          COALESCE(SUM(s.checked_num), 0) checked_num
+        FROM
+          tb_product_card_statistics s
+        WHERE s.`seller_id` = #{sellerId}
+          AND LEFT(s.`statistics_date`, 7) = #{month}
+          GROUP BY s.`statistics_date`
+          ORDER BY s.`statistics_date` DESC
+          LIMIT #{start}, #{count}
+    </select>
+
+    <select id="sellerProductCardDayCount" parameterType="map" resultType="int">
+      SELECT
+          COUNT(*)
+        FROM
+          tb_product p,
+          tb_product_card_statistics s
+        WHERE p.`id` = s.`product_id`
+          AND s.`seller_id` = #{sellerId}
+          AND s.`statistics_date` = #{day}
+    </select>
+
+    <select id="sellerProductCardDayList" parameterType="map" resultMap="dayAldCaptchaItemMap">
+      SELECT
+          p.`id`,
+          p.`name`,
+          s.`sold_num`,
+          s.`checked_num`,
+          s.`statistics_date`
+        FROM
+          tb_product p,
+          tb_product_card_statistics s
+        WHERE p.`id` = s.`product_id`
+          AND s.`seller_id` = #{sellerId}
+          AND s.`statistics_date` = #{day}
+          LIMIT #{start}, #{count}
     </select>
 
     <select id="getProductCardCount" parameterType="map" resultType="int">

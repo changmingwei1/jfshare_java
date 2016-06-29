@@ -1,6 +1,7 @@
 package com.jfshare.product.dao.mysql.impl;
 
 import com.jfshare.finagle.thrift.product.AldCaptchaItem;
+import com.jfshare.finagle.thrift.product.DayAldCaptchaCount;
 import com.jfshare.finagle.thrift.product.DayAldCaptchaItem;
 import com.jfshare.product.dao.mysql.IProductCardDao;
 import com.jfshare.product.model.TbProduct;
@@ -93,6 +94,16 @@ public class ProductCardDaoImpl implements IProductCardDao {
     @Override
     public List<AldCaptchaItem> sellerProductCardList(Map queryMap) {
         return this.manualCardMapper.sellerProductCardList(queryMap);
+    }
+
+    @Override
+    public int sellerProductCardDayAllCount(Map queryMap) {
+        return this.manualCardMapper.sellerProductCardDayAllCount(queryMap);
+    }
+
+    @Override
+    public List<DayAldCaptchaCount> sellerProductCardDayAllList(Map queryMap) {
+        return this.manualCardMapper.sellerProductCardDayAllList(queryMap);
     }
 
     @Override
