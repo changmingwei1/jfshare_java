@@ -256,7 +256,7 @@
         tb_product p, tb_product_card c
         <where>
             AND c.product_id = p.id AND c.seller_id = #{sellerId} and c.product_id = #{productId} and c.state = 3
-            and DATE_FORMAT(c.`check_time`,'%Y-%m') = #{month}
+            and DATE_FORMAT(c.`checked_time`,'%Y-%m') = #{month}
         </where>
     </select>
 
