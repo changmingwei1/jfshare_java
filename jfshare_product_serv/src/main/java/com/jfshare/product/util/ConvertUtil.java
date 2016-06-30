@@ -169,7 +169,7 @@ public class ConvertUtil {
         statistics.setTotal(model.getTotal());
         statistics.setUsedNum(model.getTotal() - model.getUnusedNum());
         statistics.setUnusedNum(model.getUnusedNum());
-        statistics.setCreateTime(DateTimeUtil.DateTimeToStr(model.getCreateTime()));
+        statistics.setCreateTime(model.getCreateTime() == null ? "" : DateTimeUtil.DateTimeToStr(model.getCreateTime()));
         return statistics;
     }
     
