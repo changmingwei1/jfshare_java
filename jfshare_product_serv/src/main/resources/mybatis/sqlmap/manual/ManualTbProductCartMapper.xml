@@ -3,7 +3,7 @@
 <mapper namespace="com.jfshare.product.model.mapper.manual.ManualTbProductCardMapper">
 
     <resultMap id="statisticsResultMap" type="com.jfshare.product.model.manual.ProductCardStatisticsModel">
-        <result column="product_id" property="productId" jdbcType="VARCHAR"/>
+        <result column="id" property="productId" jdbcType="VARCHAR"/>
         <result column="name" property="productName" jdbcType="VARCHAR"/>
         <result column="sku_num" property="skuNum" jdbcType="VARCHAR"/>
         <result column="total" property="total" jdbcType="INTEGER"/>
