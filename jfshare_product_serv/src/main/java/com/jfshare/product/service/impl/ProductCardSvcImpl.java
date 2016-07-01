@@ -68,9 +68,9 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 TbProductCard productCard = new TbProductCard();
                 productCard.setSellerId(sellerId);
                 productCard.setProductId(row.getCell(0).getStringCellValue());
-                productCard.setSkuNum(row.getCell(1).getStringCellValue());
+                productCard.setSkuNum(row.getCell(1) == null ? "" : row.getCell(1).getStringCellValue());
                 productCard.setCardNumber(row.getCell(2).getStringCellValue());
-                productCard.setPassword(row.getCell(3).getStringCellValue());
+                productCard.setPassword(row.getCell(3) == null ? "" : row.getCell(3).getStringCellValue());
                 productCard.setCreateTime(now);
                 // 添加卡密信息
                 this.productCardDao.add(productCard);
