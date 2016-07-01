@@ -92,7 +92,7 @@
           p.id,
           t.sku_num,
           p.name,
-          t.create_time,
+          MAX(t.create_time) create_time
           COUNT(t.`id`) total,
           SUM(
             CASE
@@ -268,8 +268,8 @@
         <where>
             AND c.product_id = p.id AND c.seller_id = #{sellerId} and c.product_id = #{productId} and c.state = 3
             and DATE_FORMAT(c.checked_time,'%Y-%m') = #{month}
-            order by c.checked_time DESC
-            LIMIT #{start}, #{count}
         </where>
+        order by c.checked_time DESC
+        LIMIT #{start}, #{count}
     </select>
 </mapper>
