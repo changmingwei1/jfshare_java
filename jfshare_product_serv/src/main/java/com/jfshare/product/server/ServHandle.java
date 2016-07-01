@@ -746,7 +746,7 @@ public class ServHandle implements ProductServ.Iface {
 			for (TbProductCard tbProductCard : productCardList) {
                 captchaDetailResult.addToProductCards(ConvertUtil.tbProductCard2Thrift(tbProductCard));
             }
-			Product product = this.productSvcImpl.queryProduct(param.getProductId(), new ProductRetParam());
+			Product product = this.productSvcImpl.queryProduct(param.getProductId(), new ProductRetParam(1,0,0,0));
 			captchaDetailResult.setProductName(product == null ? "" : product.getProductName());
 			captchaDetailResult.setPagination(ConvertUtil.page2Pagination(page));
 		} catch (Exception e) {
