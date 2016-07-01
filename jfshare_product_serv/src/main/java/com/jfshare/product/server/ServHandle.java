@@ -581,8 +581,9 @@ public class ServHandle implements ProductServ.Iface {
                 result.setCode(1);
                 result.addToFailDescList(FailCode.PRODUCT_CARD_USE_FAIL);
                 logger.error("<<<<<<<< useProductCard ---- error !! productCard : " + productCard.toString());
-            }
-			productCardResult.addToCardList(ConvertUtil.tbProductCard2Thrift(dbProductCard));
+            } else {
+				productCardResult.addToCardList(ConvertUtil.tbProductCard2Thrift(dbProductCard));
+			}
 		} catch (Exception e) {
 			result.setCode(1);
 			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
@@ -745,7 +746,8 @@ public class ServHandle implements ProductServ.Iface {
 			for (TbProductCard tbProductCard : productCardList) {
                 captchaDetailResult.addToProductCards(ConvertUtil.tbProductCard2Thrift(tbProductCard));
             }
-
+			Product product = this.productSvcImpl.queryProduct(param.getProductId(), new ProductRetParam());
+			captchaDetailResult.setProductName(product == null ? "" : product.getProductName());
 			captchaDetailResult.setPagination(ConvertUtil.page2Pagination(page));
 		} catch (Exception e) {
 			logger.error("<<<<<<<< queryCaptchaDetails error !! param : " + param.toString(), e);
