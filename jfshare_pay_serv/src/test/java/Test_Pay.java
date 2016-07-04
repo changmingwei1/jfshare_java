@@ -1,5 +1,6 @@
 import com.jfshare.pay.util.DesUtil;
 import com.jfshare.utils.CryptoUtil;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,8 @@ public class Test_Pay {
     private final static String PAY_URL_PREFIX = "http://jf.189.cn/preview/CommonPage/PayPWD.aspx?strParm=";
 
     public static void main(String[] args) throws Exception {
-        logger.info(getPayUrl());
+//        logger.info(getPayUrl());
+        logger.info(DigestUtils.md5Hex("BFZX17144520160629175159201606291746516487264627022737100113922811052fWMLsuqg30rgyq9rfte23eJSsKer"));
         logger.info("登录请求=" + "http://jf.189.cn/preview/CommonPage/PTLGCK.aspx?Partner=" + SPID + "&Sign=" + CryptoUtil.md5Encode(SPID + COMMON_KEY));
     }
 

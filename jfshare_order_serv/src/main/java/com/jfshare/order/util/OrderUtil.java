@@ -63,6 +63,7 @@ public class OrderUtil {
         orderDetail.setPostage(PriceUtils.intToStr(orderModel.getPostage()));
         orderDetail.setPostageExt(orderModel.getPostageext());
         orderDetail.setOrderType(orderModel.getOrderType());
+        orderDetail.setThirdPrice(PriceUtils.intToStr(orderModel.getThirdPrice()));
 
         DeliverInfo deliverInfo = new DeliverInfo();
         deliverInfo.setReceiverTele(orderModel.getReceiverTele());

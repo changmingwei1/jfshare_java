@@ -158,7 +158,7 @@ public class Client extends TestCase{
     public void testQueryPostageTemplate() throws Exception {
         PostageTemplateQueryParam param = new PostageTemplateQueryParam();
         param.setSellerId(13);
-        param.setId(17);
+//        param.setId(15);
         System.out.println(client.queryPostageTemplate(param).toString());
     }
 
@@ -166,6 +166,13 @@ public class Client extends TestCase{
         List<Integer> templateIds = new ArrayList<>();
         templateIds.add(11);
         System.out.println(client.getPostageTemplate(templateIds));
+    }
+
+    public void testSetDefaultPostageTemplate() throws Exception {
+
+        PostageTemplate postageTemplate = new PostageTemplate();
+        postageTemplate.setId(211);
+        System.out.println(this.client.setDefaultPostageTemplate(postageTemplate));
     }
 
     public void testCalculatePostage() throws Exception {

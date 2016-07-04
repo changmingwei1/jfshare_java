@@ -3,16 +3,18 @@ package com.jfshare.cart.dao.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+@Service
 public class StringRedisManager extends BaseRedisManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StringRedisManager.class);
 
-	public StringRedisManager(JedisPool jedisPool) {
+	/*public StringRedisManager(JedisPool jedisPool) {
 		super(jedisPool);
-	}
+	}*/
 
 	/**
 	 * Function: 功能说明：设置

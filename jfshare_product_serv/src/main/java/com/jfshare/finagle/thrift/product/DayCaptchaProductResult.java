@@ -29,26 +29,23 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDetailResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("CaptchaDetailResult");
+public class DayCaptchaProductResult implements TBase<DayCaptchaProductResult, DayCaptchaProductResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("DayCaptchaProductResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField PRODUCT_NAME_FIELD_DESC = new TField("productName", TType.STRING, (short)2);
-  private static final TField PRODUCT_CARDS_FIELD_DESC = new TField("productCards", TType.LIST, (short)3);
-  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)4);
+  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)2);
+  private static final TField ITEM_LIST_FIELD_DESC = new TField("itemList", TType.LIST, (short)3);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public String productName;
-  public List<ProductCard> productCards;
   public com.jfshare.finagle.thrift.pagination.Pagination pagination;
+  public List<DayAldCaptchaItem> itemList;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    PRODUCT_NAME((short)2, "productName"),
-    PRODUCT_CARDS((short)3, "productCards"),
-    PAGINATION((short)4, "pagination");
+    PAGINATION((short)2, "pagination"),
+    ITEM_LIST((short)3, "itemList");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -65,12 +62,10 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // PRODUCT_NAME
-  	return PRODUCT_NAME;
-        case 3: // PRODUCT_CARDS
-  	return PRODUCT_CARDS;
-        case 4: // PAGINATION
+        case 2: // PAGINATION
   	return PAGINATION;
+        case 3: // ITEM_LIST
+  	return ITEM_LIST;
         default:
   	return null;
       }
@@ -118,73 +113,65 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.PRODUCT_NAME, new FieldMetaData("productName", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.PRODUCT_CARDS, new FieldMetaData("productCards", TFieldRequirementType.DEFAULT,
-      new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, ProductCard.class))));
     tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
+    tmpMap.put(_Fields.ITEM_LIST, new FieldMetaData("itemList", TFieldRequirementType.DEFAULT,
+      new ListMetaData(TType.LIST,
+                new StructMetaData(TType.STRUCT, DayAldCaptchaItem.class))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(CaptchaDetailResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(DayCaptchaProductResult.class, metaDataMap);
   }
 
 
-  public CaptchaDetailResult() {
+  public DayCaptchaProductResult() {
   }
 
-  public CaptchaDetailResult(
+  public DayCaptchaProductResult(
     com.jfshare.finagle.thrift.result.Result result,
-    String productName,
-    List<ProductCard> productCards,
-    com.jfshare.finagle.thrift.pagination.Pagination pagination)
+    com.jfshare.finagle.thrift.pagination.Pagination pagination,
+    List<DayAldCaptchaItem> itemList)
   {
     this();
     this.result = result;
-    this.productName = productName;
-    this.productCards = productCards;
     this.pagination = pagination;
+    this.itemList = itemList;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public CaptchaDetailResult(CaptchaDetailResult other) {
+  public DayCaptchaProductResult(DayCaptchaProductResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
-    }
-    if (other.isSetProductName()) {
-      this.productName = other.productName;
-    }
-    if (other.isSetProductCards()) {
-      List<ProductCard> __this__productCards = new ArrayList<ProductCard>();
-      for (ProductCard other_element : other.productCards) {
-        __this__productCards.add(new ProductCard(other_element));
-      }
-      this.productCards = __this__productCards;
     }
     if (other.isSetPagination()) {
       this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
     }
+    if (other.isSetItemList()) {
+      List<DayAldCaptchaItem> __this__itemList = new ArrayList<DayAldCaptchaItem>();
+      for (DayAldCaptchaItem other_element : other.itemList) {
+        __this__itemList.add(new DayAldCaptchaItem(other_element));
+      }
+      this.itemList = __this__itemList;
+    }
   }
 
-  public CaptchaDetailResult deepCopy() {
-    return new CaptchaDetailResult(this);
+  public DayCaptchaProductResult deepCopy() {
+    return new DayCaptchaProductResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.productName = null;
-    this.productCards = null;
     this.pagination = null;
+    this.itemList = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public CaptchaDetailResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public DayCaptchaProductResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -205,76 +192,11 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     }
   }
 
-  public String getProductName() {
-    return this.productName;
-  }
-
-  public CaptchaDetailResult setProductName(String productName) {
-    this.productName = productName;
-    
-    return this;
-  }
-
-  public void unsetProductName() {
-    this.productName = null;
-  }
-
-  /** Returns true if field productName is set (has been asigned a value) and false otherwise */
-  public boolean isSetProductName() {
-    return this.productName != null;
-  }
-
-  public void setProductNameIsSet(boolean value) {
-    if (!value) {
-      this.productName = null;
-    }
-  }
-
-  public int getProductCardsSize() {
-    return (this.productCards == null) ? 0 : this.productCards.size();
-  }
-
-  public java.util.Iterator<ProductCard> getProductCardsIterator() {
-    return (this.productCards == null) ? null : this.productCards.iterator();
-  }
-
-  public void addToProductCards(ProductCard elem) {
-    if (this.productCards == null) {
-      this.productCards = new ArrayList<ProductCard>();
-    }
-    this.productCards.add(elem);
-  }
-
-  public List<ProductCard> getProductCards() {
-    return this.productCards;
-  }
-
-  public CaptchaDetailResult setProductCards(List<ProductCard> productCards) {
-    this.productCards = productCards;
-    
-    return this;
-  }
-
-  public void unsetProductCards() {
-    this.productCards = null;
-  }
-
-  /** Returns true if field productCards is set (has been asigned a value) and false otherwise */
-  public boolean isSetProductCards() {
-    return this.productCards != null;
-  }
-
-  public void setProductCardsIsSet(boolean value) {
-    if (!value) {
-      this.productCards = null;
-    }
-  }
-
   public com.jfshare.finagle.thrift.pagination.Pagination getPagination() {
     return this.pagination;
   }
 
-  public CaptchaDetailResult setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
+  public DayCaptchaProductResult setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
     this.pagination = pagination;
     
     return this;
@@ -295,6 +217,46 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     }
   }
 
+  public int getItemListSize() {
+    return (this.itemList == null) ? 0 : this.itemList.size();
+  }
+
+  public java.util.Iterator<DayAldCaptchaItem> getItemListIterator() {
+    return (this.itemList == null) ? null : this.itemList.iterator();
+  }
+
+  public void addToItemList(DayAldCaptchaItem elem) {
+    if (this.itemList == null) {
+      this.itemList = new ArrayList<DayAldCaptchaItem>();
+    }
+    this.itemList.add(elem);
+  }
+
+  public List<DayAldCaptchaItem> getItemList() {
+    return this.itemList;
+  }
+
+  public DayCaptchaProductResult setItemList(List<DayAldCaptchaItem> itemList) {
+    this.itemList = itemList;
+    
+    return this;
+  }
+
+  public void unsetItemList() {
+    this.itemList = null;
+  }
+
+  /** Returns true if field itemList is set (has been asigned a value) and false otherwise */
+  public boolean isSetItemList() {
+    return this.itemList != null;
+  }
+
+  public void setItemListIsSet(boolean value) {
+    if (!value) {
+      this.itemList = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case RESULT:
@@ -304,25 +266,18 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case PRODUCT_NAME:
-      if (value == null) {
-        unsetProductName();
-      } else {
-        setProductName((String)value);
-      }
-      break;
-    case PRODUCT_CARDS:
-      if (value == null) {
-        unsetProductCards();
-      } else {
-        setProductCards((List<ProductCard>)value);
-      }
-      break;
     case PAGINATION:
       if (value == null) {
         unsetPagination();
       } else {
         setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
+      }
+      break;
+    case ITEM_LIST:
+      if (value == null) {
+        unsetItemList();
+      } else {
+        setItemList((List<DayAldCaptchaItem>)value);
       }
       break;
     }
@@ -332,12 +287,10 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     switch (field) {
     case RESULT:
       return getResult();
-    case PRODUCT_NAME:
-      return getProductName();
-    case PRODUCT_CARDS:
-      return getProductCards();
     case PAGINATION:
       return getPagination();
+    case ITEM_LIST:
+      return getItemList();
     }
     throw new IllegalStateException();
   }
@@ -351,12 +304,10 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     switch (field) {
     case RESULT:
       return isSetResult();
-    case PRODUCT_NAME:
-      return isSetProductName();
-    case PRODUCT_CARDS:
-      return isSetProductCards();
     case PAGINATION:
       return isSetPagination();
+    case ITEM_LIST:
+      return isSetItemList();
     }
     throw new IllegalStateException();
   }
@@ -365,12 +316,12 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof CaptchaDetailResult)
-      return this.equals((CaptchaDetailResult)that);
+    if (that instanceof DayCaptchaProductResult)
+      return this.equals((DayCaptchaProductResult)that);
     return false;
   }
 
-  public boolean equals(CaptchaDetailResult that) {
+  public boolean equals(DayCaptchaProductResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -381,28 +332,20 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_productName = true && this.isSetProductName();
-    boolean that_present_productName = true && that.isSetProductName();
-    if (this_present_productName || that_present_productName) {
-      if (!(this_present_productName && that_present_productName))
-        return false;
-      if (!this.productName.equals(that.productName))
-        return false;
-    }
-    boolean this_present_productCards = true && this.isSetProductCards();
-    boolean that_present_productCards = true && that.isSetProductCards();
-    if (this_present_productCards || that_present_productCards) {
-      if (!(this_present_productCards && that_present_productCards))
-        return false;
-      if (!this.productCards.equals(that.productCards))
-        return false;
-    }
     boolean this_present_pagination = true && this.isSetPagination();
     boolean that_present_pagination = true && that.isSetPagination();
     if (this_present_pagination || that_present_pagination) {
       if (!(this_present_pagination && that_present_pagination))
         return false;
       if (!this.pagination.equals(that.pagination))
+        return false;
+    }
+    boolean this_present_itemList = true && this.isSetItemList();
+    boolean that_present_itemList = true && that.isSetItemList();
+    if (this_present_itemList || that_present_itemList) {
+      if (!(this_present_itemList && that_present_itemList))
+        return false;
+      if (!this.itemList.equals(that.itemList))
         return false;
     }
 
@@ -416,28 +359,24 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_productName = true && (isSetProductName());
-    builder.append(present_productName);
-    if (present_productName)
-      builder.append(productName);
-    boolean present_productCards = true && (isSetProductCards());
-    builder.append(present_productCards);
-    if (present_productCards)
-      builder.append(productCards);
     boolean present_pagination = true && (isSetPagination());
     builder.append(present_pagination);
     if (present_pagination)
       builder.append(pagination);
+    boolean present_itemList = true && (isSetItemList());
+    builder.append(present_itemList);
+    if (present_itemList)
+      builder.append(itemList);
     return builder.toHashCode();
   }
 
-  public int compareTo(CaptchaDetailResult other) {
+  public int compareTo(DayCaptchaProductResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    CaptchaDetailResult typedOther = (CaptchaDetailResult)other;
+    DayCaptchaProductResult typedOther = (DayCaptchaProductResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -449,32 +388,22 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetProductName()).compareTo(typedOther.isSetProductName());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetProductName()) {
-      lastComparison = TBaseHelper.compareTo(this.productName, typedOther.productName);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetProductCards()).compareTo(typedOther.isSetProductCards());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetProductCards()) {
-      lastComparison = TBaseHelper.compareTo(this.productCards, typedOther.productCards);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     lastComparison = Boolean.valueOf(isSetPagination()).compareTo(typedOther.isSetPagination());
     if (lastComparison != 0) {
       return lastComparison;
     }
     if (isSetPagination()) {
       lastComparison = TBaseHelper.compareTo(this.pagination, typedOther.pagination);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetItemList()).compareTo(typedOther.isSetItemList());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetItemList()) {
+      lastComparison = TBaseHelper.compareTo(this.itemList, typedOther.itemList);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -505,35 +434,28 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // PRODUCT_NAME
-          if (field.type == TType.STRING) {
-            this.productName = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 3: // PRODUCT_CARDS
-          if (field.type == TType.LIST) {
-            {
-            TList _list52 = iprot.readListBegin();
-            this.productCards = new ArrayList<ProductCard>(_list52.size);
-            for (int _i53 = 0; _i53 < _list52.size; ++_i53)
-            {
-              ProductCard _elem54;
-              _elem54 = new ProductCard();
-              _elem54.read(iprot);
-              this.productCards.add(_elem54);
-            }
-            iprot.readListEnd();
-            }
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 4: // PAGINATION
+        case 2: // PAGINATION
           if (field.type == TType.STRUCT) {
             this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination();
             this.pagination.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // ITEM_LIST
+          if (field.type == TType.LIST) {
+            {
+            TList _list48 = iprot.readListBegin();
+            this.itemList = new ArrayList<DayAldCaptchaItem>(_list48.size);
+            for (int _i49 = 0; _i49 < _list48.size; ++_i49)
+            {
+              DayAldCaptchaItem _elem50;
+              _elem50 = new DayAldCaptchaItem();
+              _elem50.read(iprot);
+              this.itemList.add(_elem50);
+            }
+            iprot.readListEnd();
+            }
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -558,26 +480,21 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.productName != null) {
-      oprot.writeFieldBegin(PRODUCT_NAME_FIELD_DESC);
-      oprot.writeString(this.productName);
-      oprot.writeFieldEnd();
-    }
-    if (this.productCards != null) {
-      oprot.writeFieldBegin(PRODUCT_CARDS_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.productCards.size()));
-        for (ProductCard _iter55 : this.productCards)
-        {
-          _iter55.write(oprot);
-        }
-        oprot.writeListEnd();
-      }
-      oprot.writeFieldEnd();
-    }
     if (this.pagination != null) {
       oprot.writeFieldBegin(PAGINATION_FIELD_DESC);
       this.pagination.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.itemList != null) {
+      oprot.writeFieldBegin(ITEM_LIST_FIELD_DESC);
+      {
+        oprot.writeListBegin(new TList(TType.STRUCT, this.itemList.size()));
+        for (DayAldCaptchaItem _iter51 : this.itemList)
+        {
+          _iter51.write(oprot);
+        }
+        oprot.writeListEnd();
+      }
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -586,7 +503,7 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("CaptchaDetailResult(");
+    StringBuilder sb = new StringBuilder("DayCaptchaProductResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -596,27 +513,19 @@ public class CaptchaDetailResult implements TBase<CaptchaDetailResult, CaptchaDe
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("productName:");
-    if (this.productName == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.productName);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("productCards:");
-    if (this.productCards == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.productCards);
-    }
-    first = false;
-    if (!first) sb.append(", ");
     sb.append("pagination:");
     if (this.pagination == null) {
       sb.append("null");
     } else {
       sb.append(this.pagination);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("itemList:");
+    if (this.itemList == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.itemList);
     }
     first = false;
     sb.append(")");

@@ -149,7 +149,7 @@ public class ParamCheck {
             thirdPrices += OrderUtil.getPayPrice(order);
             thirdScores += order.getThirdScore();
             for(TbOrderInfoRecord orderInfo : order.getTbOrderInfoList()) {
-                thirdScore2Cach += NumberUtils.toInt(orderInfo.getThirdexchangerate());
+                thirdScore2Cach += NumberUtils.toInt(orderInfo.getThirdexchangerate())*orderInfo.getCount();
             }
         }
 
