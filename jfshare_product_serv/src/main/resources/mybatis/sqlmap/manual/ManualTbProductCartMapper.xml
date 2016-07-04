@@ -92,7 +92,7 @@
           p.id,
           t.sku_num,
           p.name,
-          MAX(t.create_time) create_time
+          MAX(t.create_time) create_time,
           COUNT(t.`id`) total,
           SUM(
             CASE
