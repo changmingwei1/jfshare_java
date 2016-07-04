@@ -57,14 +57,14 @@ public class OrderOptHandleTask {
                 continue;
             }
 
-            Constant.OptType optType = null;
-            try {
-                optType = Constant.OptType.valueOf(optTypeStr);
-            } catch (IllegalArgumentException e) {
-                //Do nothing
-            }
-
-            orderAfterDeal(optType, order);
+//            Constant.OptType optType = null;
+//            try {
+//                optType = Constant.OptType.valueOf(optTypeStr);
+//            } catch (IllegalArgumentException e) {
+//                //Do nothing
+//            }
+//
+//            orderAfterDeal(optType, order);
 
 
             EsOrder esOrder = new EsOrder(order);

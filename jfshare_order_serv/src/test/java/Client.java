@@ -22,6 +22,8 @@ public class Client extends TestCase{
     public void setUp() throws Exception {
 
         transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.37.237", 1986));
+//        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
 //        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
@@ -62,9 +64,10 @@ public class Client extends TestCase{
         try {
             ////////////////////////////////////////////////////
             OrderQueryConditions conditions = new OrderQueryConditions();
-            conditions.setSellerId(2);
-            conditions.setOrderState(61);
-            conditions.addToOrderIds("18120090");
+            conditions.setSellerId(13);
+            conditions.setCurPage(172);
+//            conditions.setOrderState(61);
+//            conditions.addToOrderIds("18120090");
             System.err.println(client.orderProfileQuery(2, 1, conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block

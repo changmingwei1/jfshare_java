@@ -344,7 +344,7 @@
 
     <!-- 卖家根据条件查询订单数量 -->
     <select id="select_order_stat_count_by_seller" parameterType="java.util.HashMap" resultType="java.lang.Integer">
-        select count(*)
+        select count(DISTINCT a.order_id)
 
         FROM ${orderTable} a, ${orderInfoTable} b
 

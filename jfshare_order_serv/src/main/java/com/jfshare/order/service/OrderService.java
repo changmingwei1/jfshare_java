@@ -67,6 +67,9 @@ public class OrderService {
     @Autowired
     private SellerClient sellerClient;
 
+    @Autowired
+    private ScoreService scoreService;
+
     public OrderModel sellerQueryDetail(int sellerId, String orderId) {
         return orderDao.getOrderBySeller(orderId, sellerId);
     }
@@ -196,6 +199,9 @@ public class OrderService {
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
         orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_close", orderModel.getUserId(), orderModel.getSellerId());
         orderJedis.pushOrderNotification(orderOptPush);
+
+        //积分处理， 返回积分， 扣减增送积分
+        scoreService.afterOrderClose(orderModel);
         return ret;
     }
 
