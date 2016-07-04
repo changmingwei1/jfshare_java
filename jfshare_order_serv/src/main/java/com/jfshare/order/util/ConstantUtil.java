@@ -63,4 +63,22 @@ public class ConstantUtil {
     public static enum ExportState {
         query, export, exception, expired
     }
+
+    /** 交易类型
+     *  1:电积分兑换聚分享积分         2:聚分享积分兑换电信积分
+     *  3:线下消费抵扣                4:线上消费抵扣(支付扣减积分)
+     *  5:聚分享商城购物累积积分       6:聚分享商城活动赠送积分
+     *  7:支付后取消订单返还扣减积分    8:支付后取消订单扣减增送积分
+     *
+     */
+    public static enum SCORE_TYPE {
+        cost_online(4), order_rebate(5), rollback_cost_online(7), rollback_order_rebate(8);
+        private int enumVal=0;
+        private SCORE_TYPE(int enumVal){
+            this.enumVal = enumVal;
+        }
+        public int getEnumVal(){
+            return this.enumVal;
+        }
+    };
 }

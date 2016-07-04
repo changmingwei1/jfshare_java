@@ -436,14 +436,14 @@ public class OrderUtil {
     }
 
     /**
-     * 支付总金额
+     * 购物车订单总金额
      * @param orderList
      * @return
      */
     public static int gettotalAmount(List<OrderModel> orderList) {
-        int totalPostage = 0;
+        int totalClosingPrice = 0;
         for(OrderModel order : orderList)
-            totalPostage += order.getClosingPrice();
-        return totalPostage;
+            totalClosingPrice += order.getClosingPrice();
+        return totalClosingPrice;
     }
 }

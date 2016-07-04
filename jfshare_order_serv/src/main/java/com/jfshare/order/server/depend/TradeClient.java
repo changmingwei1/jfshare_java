@@ -4,6 +4,7 @@ import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.trade.*;
 import com.jfshare.order.model.OrderModel;
 import com.jfshare.order.model.TbOrderInfoRecord;
+import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.FailCode;
 import com.jfshare.ridge.ConfigManager;
 import com.jfshare.utils.PriceUtils;
@@ -133,7 +134,7 @@ public class TradeClient {
         logger.info("4.orderList==>" + orderList);
 
         //扣减用户积分
-        List<FailDesc> reduceScoreFailDescList = scoreClient.reduceScore(buyInfo.getUserId(), buyInfo.getExchangeScore(), orderList.get(0).getOrderBatch());
+        List<FailDesc> reduceScoreFailDescList = scoreClient.reduceScore(buyInfo.getUserId(), buyInfo.getExchangeScore(), orderList.get(0).getOrderBatch(), ConstantUtil.SCORE_TYPE.cost_online);
         if(CollectionUtils.isNotEmpty(reduceScoreFailDescList)) {
             failDescs.addAll(reduceScoreFailDescList);
             return failDescs;

@@ -2,7 +2,6 @@ package com.jfshare.order.server;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.jfshare.elasticsearch.drive.ESClient;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayReq;
@@ -14,7 +13,6 @@ import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.finagle.thrift.trade.BuyInfo;
 import com.jfshare.order.dao.IOrderEs;
 import com.jfshare.order.dao.IOrderJedis;
-import com.jfshare.order.dao.impl.elasticsearch.OrderEsImpl;
 import com.jfshare.order.dao.impl.jedis.BasicRedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
@@ -25,6 +23,7 @@ import com.jfshare.order.server.depend.*;
 import com.jfshare.order.service.DeliverService;
 import com.jfshare.order.service.ExportService;
 import com.jfshare.order.service.OrderService;
+import com.jfshare.order.service.ScoreService;
 import com.jfshare.order.util.*;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.*;
@@ -33,13 +32,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.thrift.TException;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +82,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     @Autowired
     private BasicRedis basicRedis;
+
+    @Autowired
+    private ScoreService scoreService;
 
     @Override
     public Result createOrder(List<Order> orderList) throws TException {
@@ -676,6 +673,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                     return stringResult;
                 }
             }
+
             logger.info("7.支付通知----payUrl订单状态更新成功");
             orderJedis.addPayState(payRet.getPayId(), payRet.getRetCode(), orderModels.get(0).getCancelTime());
 
@@ -691,6 +689,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                     }
                 }
             }
+
+            scoreService.finishOrderPay(orderModels);
+            logger.info("9.支付通知----赠送购物积分成功, userId={}, score={}");
 
             stringResult.setValue("1");
         } catch (Exception e) {
