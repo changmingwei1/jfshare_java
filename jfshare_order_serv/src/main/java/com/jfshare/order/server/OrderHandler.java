@@ -546,26 +546,22 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             orderService.updateOrderPaying(orderModels, tradePayId);
 
             //全积分支付
-            if(OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash())) {
+            boolean isOnlyScore = OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash());
+            if(isOnlyScore) {
                 stringResult.setValue("全积分支付成功");
                 stringResult.getResult().setCode(2);
-                //TODO 全积分支付
                 int ret = orderService.payOnlyScore(orderModels);
                 if(ret > 0) {
-                    logger.error("申请支付----成功，全积分支付！");
-                    //虚拟商品需要自动发货
-                    for(OrderModel orderModel : orderModels) {
-                        if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
-                            DeliverVirParam deliverVirParam = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
-                            Result delverVirResult = deliverVir(deliverVirParam);
-                            if(delverVirResult != null && delverVirResult.getCode() == 0) {
-                                logger.info("申请支付----全积分支付----虚拟商品自动发货成功");
-                            } else {
-                                logger.error("申请支付----全积分支付----虚拟商品自动发货失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
-                            }
-                        }
-                    }
+                    logger.error("申请支付----全积分支付成功！");
                 }
+
+                //虚拟商品需要自动发货
+                autoDeliver4VirtualOrder(orderModels);
+                logger.info("申请支付----虚拟商品自动发货成功");
+
+                scoreService.finishOrderPay(orderModels);
+                logger.info("申请支付----赠送购物积分成功");
+
                 return stringResult;
             }
 
@@ -678,17 +674,8 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             orderJedis.addPayState(payRet.getPayId(), payRet.getRetCode(), orderModels.get(0).getCancelTime());
 
             //虚拟商品需要自动发货
-            for(OrderModel orderModel : orderModels) {
-                if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
-                    DeliverVirParam param = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
-                    Result delverVirResult = deliverVir(param);
-                    if(delverVirResult != null && delverVirResult.getCode() == 0) {
-                        logger.info("8.支付通知----虚拟商品自动发货成功");
-                    } else {
-                        logger.error("8.支付通知----虚拟商品自动发货失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
-                    }
-                }
-            }
+            autoDeliver4VirtualOrder(orderModels);
+            logger.info("8.支付通知----虚拟商品自动发货成功");
 
             scoreService.finishOrderPay(orderModels);
             logger.info("9.支付通知----赠送购物积分成功, userId={}, score={}");
@@ -700,6 +687,18 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return stringResult;
+    }
+
+    private void autoDeliver4VirtualOrder(List<OrderModel> orderModels) throws TException {
+        for(OrderModel orderModel : orderModels) {
+            if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
+                DeliverVirParam param = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
+                Result delverVirResult = deliverVir(param);
+                if(delverVirResult == null || delverVirResult.getCode() != 0) {
+                    logger.error("虚拟商品自动发货----失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
+                }
+            }
+        }
     }
 
     @Override
