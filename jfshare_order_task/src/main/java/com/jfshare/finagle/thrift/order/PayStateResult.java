@@ -6,12 +6,26 @@
 package com.jfshare.finagle.thrift.order;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.thrift.*;
-import org.apache.thrift.meta_data.FieldMetaData;
-import org.apache.thrift.meta_data.StructMetaData;
-import org.apache.thrift.protocol.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.EnumSet;
+import java.util.Collections;
+import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import org.apache.thrift.*;
+import org.apache.thrift.async.*;
+import org.apache.thrift.meta_data.*;
+import org.apache.thrift.transport.*;
+import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 

@@ -4,8 +4,6 @@ import com.jfshare.finagle.thrift.order.DeliverInfo;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderInfo;
 import com.jfshare.finagle.thrift.order.PayInfo;
-import com.jfshare.order.common.OrderConstant;
-import com.jfshare.order.model.OrderModel;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.PriceUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -173,38 +171,38 @@ public class FileOpUtil {
                     HSSFCell cell8 = row.createCell(8, Cell.CELL_TYPE_NUMERIC);
                     cell8.setCellValue(getAmount2(productInfo.getCurPrice()).doubleValue());
 
-                    HSSFCell cell9 = row.createCell(9, Cell.CELL_TYPE_NUMERIC);
-                    cell9.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getPostage()))).doubleValue());
+                    HSSFCell cell9 = row.createCell(9, Cell.CELL_TYPE_NUMERIC);  //邮费
+                    cell9.setCellValue(getAmount2(order.getPostage()).doubleValue());
 
-                    HSSFCell cell10 = row.createCell(10, Cell.CELL_TYPE_NUMERIC);
-                    cell10.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getClosingPrice()))).doubleValue());
+                    HSSFCell cell10 = row.createCell(10, Cell.CELL_TYPE_STRING); //实付金额、积分及支付方式
+                    cell10.setCellValue(OrderUtil.getPayPrice(order));
 
-//                    HSSFCell cell2 = row.createCell(2, Cell.CELL_TYPE_STRING);
-//                    cell2.setCellValue(convertStr(order.getSellerName()));
-
-                    HSSFCell cell11 = row.createCell(11, Cell.CELL_TYPE_STRING);
-                    cell11.setCellValue(convertStr(deliverInfo.getReceiverName()));
+                    HSSFCell cell11 = row.createCell(11, Cell.CELL_TYPE_NUMERIC);
+                    cell11.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getClosingPrice()))).doubleValue());
 
                     HSSFCell cell12 = row.createCell(12, Cell.CELL_TYPE_STRING);
-                    cell12.setCellValue(convertStr(getTelFormat(deliverInfo.getReceiverMobile(), deliverInfo.getReceiverTele())));
+                    cell12.setCellValue(convertStr(deliverInfo.getReceiverName()));
 
                     HSSFCell cell13 = row.createCell(13, Cell.CELL_TYPE_STRING);
-                    cell13.setCellValue(convertStr(deliverInfo.getProvinceName()));
+                    cell13.setCellValue(convertStr(getTelFormat(deliverInfo.getReceiverMobile(), deliverInfo.getReceiverTele())));
 
                     HSSFCell cell14 = row.createCell(14, Cell.CELL_TYPE_STRING);
-                    cell14.setCellValue(convertStr(deliverInfo.getCityName()));
+                    cell14.setCellValue(convertStr(deliverInfo.getProvinceName()));
 
                     HSSFCell cell15 = row.createCell(15, Cell.CELL_TYPE_STRING);
-                    cell15.setCellValue(convertStr(deliverInfo.getCountyName()));
+                    cell15.setCellValue(convertStr(deliverInfo.getCityName()));
 
                     HSSFCell cell16 = row.createCell(16, Cell.CELL_TYPE_STRING);
-                    cell16.setCellValue(convertStr(deliverInfo.getReceiverAddress()));
+                    cell16.setCellValue(convertStr(deliverInfo.getCountyName()));
 
                     HSSFCell cell17 = row.createCell(17, Cell.CELL_TYPE_STRING);
-                    cell17.setCellValue(convertStr(deliverInfo.getPostCode()));
+                    cell17.setCellValue(convertStr(deliverInfo.getReceiverAddress()));
 
                     HSSFCell cell18 = row.createCell(18, Cell.CELL_TYPE_STRING);
-                    cell18.setCellValue(convertStr(order.getBuyerComment()));
+                    cell18.setCellValue(convertStr(deliverInfo.getPostCode()));
+
+                    HSSFCell cell19 = row.createCell(19, Cell.CELL_TYPE_STRING);
+                    cell19.setCellValue(convertStr(order.getBuyerComment()));
                     //-----------------------------------10-19----------------------------------//
 //                    HSSFCell cell10 = row.createCell(10, Cell.CELL_TYPE_STRING);
 //                    cell10.setCellValue(convertStr(order.getUserName()));
@@ -212,25 +210,25 @@ public class FileOpUtil {
 //                    HSSFCell cell13 = row.createCell(13, Cell.CELL_TYPE_STRING);
 //                    cell13.setCellValue(convertStr(productInfo.getSkuNum()));
 
-                    HSSFCell cell19 = row.createCell(19, Cell.CELL_TYPE_STRING);
-                    cell19.setCellValue(convertStr(order.getDeliverTime()));
-
                     HSSFCell cell20 = row.createCell(20, Cell.CELL_TYPE_STRING);
-                    cell20.setCellValue(convertStr(order.getSuccessTime()));
+                    cell20.setCellValue(convertStr(order.getDeliverTime()));
 
                     HSSFCell cell21 = row.createCell(21, Cell.CELL_TYPE_STRING);
-                    cell21.setCellValue(convertStr(deliverInfo.getExpressName()));
+                    cell21.setCellValue(convertStr(order.getSuccessTime()));
 
                     HSSFCell cell22 = row.createCell(22, Cell.CELL_TYPE_STRING);
-                    cell22.setCellValue(convertStr(deliverInfo.getExpressNo()));
+                    cell22.setCellValue(convertStr(deliverInfo.getExpressName()));
+
+                    HSSFCell cell23 = row.createCell(23, Cell.CELL_TYPE_STRING);
+                    cell23.setCellValue(convertStr(deliverInfo.getExpressNo()));
 
 
 //                    HSSFCell cell25 = row.createCell(25, Cell.CELL_TYPE_STRING);
 //                    cell25.setCellValue(convertStr(payState.get(payInfo.getPayState())));
 
                     String state1 =  stateType.get(order.getActiveState());
-                    HSSFCell cell23 = row.createCell(23, Cell.CELL_TYPE_STRING);
-                    cell23.setCellValue(convertStr(state1));
+                    HSSFCell cell24 = row.createCell(23, Cell.CELL_TYPE_STRING);
+                    cell24.setCellValue(convertStr(state1));
                 }
             }
         } catch (Exception e) {
@@ -268,7 +266,7 @@ public class FileOpUtil {
     @Deprecated
     private static String[] getExportColNames() {
         return new String[]{"订单号", "商家编号", "成交时间", "付款时间", "订单状态",  "商品名称", "商品规格", "物品数量",
-                "单价（元）", "买家支付的邮费", "订单金额",
+                "单价（元）", "买家支付的邮费", "买家实付金额及方式", "订单金额",
                 "联系人", "联系电话", "省", "市", "区",
                 "邮寄地址", "邮编",  "买家留言", "发货时间", "确认收货时间", "快递公司",
                 "快递号码", "关闭原因"};
@@ -403,7 +401,6 @@ class FastDFSUtils {
      *
      * @param fileBuff
      * @param uploadFileName
-     * @param fileLength
      * @return
      * @throws Exception
      */

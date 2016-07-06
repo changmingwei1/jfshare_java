@@ -10,6 +10,7 @@ import com.jfshare.utils.BizUtil;
 import com.jfshare.utils.ConvertUtil;
 import com.jfshare.utils.PriceUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.joda.time.DateTime;
 
@@ -349,6 +350,48 @@ public class OrderUtil {
     public static int getPayPrice(OrderModel order) {
         int orderPayPrice = order.getClosingPrice() - order.getExchangeCash();
         return orderPayPrice;
+    }
+
+    /**
+     * 获取用户实际支付金额,、积分、支付方式
+     * @param order 订单
+     * @return
+     */
+    public static String getPayPrice(Order order) {
+        String retStr = "";
+        if(order.getPayInfo().getPayState() != ConstantUtil.PAY_STATE.SUCCESS.getEnumVal()) {
+            return "未支付";
+        }
+
+        if(String.valueOf(BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()).equals(order.getPayInfo().getPayChannel())) {
+            int thirdPrice = PriceUtils.strToInt(order.getThirdPrice());
+            int thirdScore = order.getThirdScore();
+
+            if(thirdPrice > 0) {
+                retStr += PriceUtils.intToStr(thirdPrice) + "元";
+            }
+
+            if(thirdScore > 0) {
+                retStr += retStr.length() > 0 ? " + ": "";
+                retStr += thirdScore + "天翼积分";
+            }
+            retStr += "(天翼支付)";
+        } else {
+            int closingPrice = PriceUtils.strToInt(order.getClosingPrice());
+            int exchangeCash = PriceUtils.strToInt(order.getExchangeCash());
+            int orderPayPrice = closingPrice - exchangeCash;
+            int score = order.getExchangeScore();
+            if(orderPayPrice > 0) {
+                retStr += PriceUtils.intToStr(orderPayPrice) + "元";
+            }
+            if(score > 0) {
+                retStr += retStr.length() > 0 ? " + ": "";
+                retStr += score + "聚分享积分";
+            }
+            retStr +=  "(" + BizUtil.PAY_CHANNEL.getEnumByValue(Integer.parseInt(order.getPayInfo().getPayChannel())).getDesc() + ")";
+        }
+
+        return retStr;
     }
 
     /**
