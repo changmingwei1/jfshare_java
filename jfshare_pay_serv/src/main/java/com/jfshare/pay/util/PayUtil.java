@@ -145,6 +145,9 @@ public class PayUtil {
             String AppID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_appcode");
             String SPID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid");
             String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
+            String UrlFront = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_front_url");
+            String UrlBack = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_back_url");
+
             String SpOrderID = payReq.getOrderNo();
             String RequestNo = payId;
             String PayContent = ConvertUtil.getString(payReq.getRemark(), "尊享订单");
@@ -190,6 +193,8 @@ public class PayUtil {
             xmlMap.put("RequestTime", RequestTime);
             xmlMap.put("AccessChannel", AccessChannel);
             xmlMap.put("Sign", Sign);
+            xmlMap.put("UrlFront", UrlFront);
+            xmlMap.put("UrlBack", UrlBack);
             String toXml = TianYiSubmit.map2XmlStr(xmlMap);
             logger.error("toXml==> {}", toXml);
 //            toXml = "<AcceptRequest><AppID>BFZX</AppID><SPID>171445</SPID><RequestNo>2016061118472027175035</RequestNo><SpOrderID>20160611184720</SpOrderID><PayContent>尊享订单</PayContent><BankID></BankID><ProvinceID>15</ProvinceID><DeviceNo>18979177165</DeviceNo><DeviceType>7</DeviceType><OrderPrice>1000</OrderPrice><PayPoint>100</PayPoint><PayMoney>500</PayMoney><RequestTime>20160611184720</RequestTime><AccessChannel>WEB</AccessChannel><Sign>830c9d5043812de61cdbf7372bf88cc4</Sign></AcceptRequest>";
