@@ -21,7 +21,8 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+        transport = new TFramedTransport(new TSocket("101.201.39.12", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
 //        transport = new TFramedTransport(new TSocket("101.201.37.237", 1986));
 //        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
 //        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
@@ -260,6 +261,7 @@ public class Client extends TestCase{
     public void testBatchExport() throws Exception {
         try {
             OrderQueryConditions queryConditions = new OrderQueryConditions();
+            queryConditions.setOrderState(1000);
             System.err.println(client.batchExportOrder(13, queryConditions));
         } catch (Exception e) {
             e.printStackTrace();
@@ -276,6 +278,7 @@ public class Client extends TestCase{
 //            queryConditions.setUserId(99);
             queryConditions.setStartTime("2016-07-01 00:00:00");
             queryConditions.setEndTime("2016-07-31 00:00:00");
+            queryConditions.setOrderState(1000);
 //                queryConditions.setOrderId("58870112");
             System.err.println(client.batchExportOrderFull(queryConditions));
         } catch (Exception e) {
@@ -288,6 +291,6 @@ public class Client extends TestCase{
     }
 
     public void testQueryExportFileKey() throws TException {
-        System.err.println(client.getExportOrderResult("ac79a5e257ad669c9d9eb02312fcaa8c"));
+        System.err.println(client.getExportOrderResult("dc1ae681b1affaa7e4fa934261d3cb8d"));
     }
 }

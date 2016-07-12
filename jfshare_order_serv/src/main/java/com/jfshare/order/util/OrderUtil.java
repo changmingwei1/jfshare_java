@@ -1,5 +1,7 @@
 package com.jfshare.order.util;
 
+import com.jfshare.finagle.thrift.aftersale.AfterSaleOrder;
+import com.jfshare.finagle.thrift.aftersale.AfterSaleOrderParam;
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.trade.BuyInfo;
 import com.jfshare.order.common.Commons;
@@ -489,5 +491,27 @@ public class OrderUtil {
         for(OrderModel order : orderList)
             totalClosingPrice += order.getClosingPrice();
         return totalClosingPrice;
+    }
+
+    public static AfterSaleOrderParam orderQueryConditions2AfterSaleOrderParam(OrderQueryConditions orderQueryConditions){
+        AfterSaleOrderParam afterSaleOrderParam = new AfterSaleOrderParam();
+        if(orderQueryConditions.getSellerId() > 0) {
+            afterSaleOrderParam.setSellerId(orderQueryConditions.getSellerId());
+        }
+        if(StringUtils.isNotBlank(orderQueryConditions.getStartTime())) {
+            afterSaleOrderParam.setStartTime(orderQueryConditions.getStartTime());
+        }
+        if(StringUtils.isNotBlank(orderQueryConditions.getEndTime())) {
+            afterSaleOrderParam.setEndTime(orderQueryConditions.getEndTime());
+        }
+        return afterSaleOrderParam;
+    }
+
+    public static List<String> afterSaleOrders2ListOrderId(List<AfterSaleOrder> afterSaleOrders) {
+        List<String> orderIds = new ArrayList<String>();
+        for(AfterSaleOrder afterSaleOrder : afterSaleOrders) {
+            orderIds.add(afterSaleOrder.getOrderId());
+        }
+        return orderIds;
     }
 }

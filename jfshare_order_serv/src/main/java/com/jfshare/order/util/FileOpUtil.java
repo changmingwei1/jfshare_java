@@ -153,81 +153,81 @@ public class FileOpUtil {
                     cell2.setCellValue(convertStr(order.getSellerName()));
 
                     HSSFCell cell3 = row.createCell(3, Cell.CELL_TYPE_STRING);
-                    cell2.setCellValue(convertStr(order.getCreateTime()));
+                    cell3.setCellValue(convertStr(order.getCreateTime()));
 
                     HSSFCell cell4 = row.createCell(4, Cell.CELL_TYPE_STRING);
                     String payTimeDisplay = payInfo.getPayState() == payStateSuccess ? payInfo.getPayTime() : "";
-                    cell3.setCellValue(convertStr(payTimeDisplay));
+                    cell4.setCellValue(convertStr(payTimeDisplay));
 
                     HSSFCell cell5 = row.createCell(5, Cell.CELL_TYPE_STRING);
-                    cell4.setCellValue(convertStr(orderState.get(order.getOrderState())));
+                    cell5.setCellValue(convertStr(orderState.get(order.getOrderState())));
 
                     HSSFCell cell6 = row.createCell(6, Cell.CELL_TYPE_STRING);
-                    cell5.setCellValue(convertStr(productInfo.getProductId()));
+                    cell6.setCellValue(convertStr(productInfo.getProductId()));
 
                     HSSFCell cell7 = row.createCell(7, Cell.CELL_TYPE_STRING);
-                    cell5.setCellValue(convertStr(productInfo.getProductName()));
+                    cell7.setCellValue(convertStr(productInfo.getProductName()));
 
                     HSSFCell cell8 = row.createCell(8, Cell.CELL_TYPE_STRING);
-                    cell6.setCellValue(convertStr(productInfo.getSkuNum()).replaceAll(":", ", "));
+                    cell8.setCellValue(convertStr(productInfo.getSkuNum()).replaceAll(":", ", "));
 
                     HSSFCell cell9 = row.createCell(9, Cell.CELL_TYPE_STRING);
-                    cell6.setCellValue(convertStr(productInfo.getSkuDesc()).replaceAll(":", ", "));
+                    cell9.setCellValue(convertStr(productInfo.getSkuDesc()).replaceAll(":", ", "));
 
                     HSSFCell cell10 = row.createCell(10, Cell.CELL_TYPE_NUMERIC);
-                    cell7.setCellValue(getInt(productInfo.getCount(), 0));
+                    cell10.setCellValue(getInt(productInfo.getCount(), 0));
 
                     HSSFCell cell11 = row.createCell(11, Cell.CELL_TYPE_NUMERIC);
-                    cell8.setCellValue(getAmount2(productInfo.getCurPrice()).doubleValue());
+                    cell11.setCellValue(getAmount2(productInfo.getCurPrice()).doubleValue());
 
                     HSSFCell cell12 = row.createCell(12, Cell.CELL_TYPE_NUMERIC);  //邮费
-                    cell9.setCellValue(getAmount2(order.getPostage()).doubleValue());
+                    cell12.setCellValue(getAmount2(order.getPostage()).doubleValue());
 
                     HSSFCell cell13 = row.createCell(13, Cell.CELL_TYPE_STRING); //实付金额、积分及支付方式
-                    cell10.setCellValue(OrderUtil.getPayPrice(order));
+                    cell13.setCellValue(OrderUtil.getPayPrice(order));
 
                     HSSFCell cell14 = row.createCell(14, Cell.CELL_TYPE_NUMERIC);
-                    cell11.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getClosingPrice()))).doubleValue());
+                    cell14.setCellValue(getAmount2(PriceUtils.intToStr(PriceUtils.strToInt(order.getClosingPrice()))).doubleValue());
 
                     HSSFCell cell15 = row.createCell(15, Cell.CELL_TYPE_STRING);
-                    cell12.setCellValue(convertStr(deliverInfo.getReceiverName()));
+                    cell15.setCellValue(convertStr(deliverInfo.getReceiverName()));
 
                     HSSFCell cell16 = row.createCell(16, Cell.CELL_TYPE_STRING);
-                    cell13.setCellValue(convertStr(getTelFormat(deliverInfo.getReceiverMobile(), deliverInfo.getReceiverTele())));
+                    cell16.setCellValue(convertStr(getTelFormat(deliverInfo.getReceiverMobile(), deliverInfo.getReceiverTele())));
 
                     HSSFCell cell17 = row.createCell(17, Cell.CELL_TYPE_STRING);
-                    cell14.setCellValue(convertStr(deliverInfo.getProvinceName()));
+                    cell17.setCellValue(convertStr(deliverInfo.getProvinceName()));
 
                     HSSFCell cell18 = row.createCell(18, Cell.CELL_TYPE_STRING);
-                    cell15.setCellValue(convertStr(deliverInfo.getCityName()));
+                    cell18.setCellValue(convertStr(deliverInfo.getCityName()));
 
                     HSSFCell cell19 = row.createCell(19, Cell.CELL_TYPE_STRING);
-                    cell16.setCellValue(convertStr(deliverInfo.getCountyName()));
+                    cell19.setCellValue(convertStr(deliverInfo.getCountyName()));
 
                     HSSFCell cell20 = row.createCell(20, Cell.CELL_TYPE_STRING);
-                    cell17.setCellValue(convertStr(deliverInfo.getReceiverAddress()));
+                    cell20.setCellValue(convertStr(deliverInfo.getReceiverAddress()));
 
                     HSSFCell cell21 = row.createCell(21, Cell.CELL_TYPE_STRING);
-                    cell18.setCellValue(convertStr(deliverInfo.getPostCode()));
+                    cell21.setCellValue(convertStr(deliverInfo.getPostCode()));
 
                     HSSFCell cell22 = row.createCell(22, Cell.CELL_TYPE_STRING);
-                    cell19.setCellValue(convertStr(order.getBuyerComment()));
+                    cell22.setCellValue(convertStr(order.getBuyerComment()));
 
                     HSSFCell cell23 = row.createCell(23, Cell.CELL_TYPE_STRING);
-                    cell20.setCellValue(convertStr(order.getDeliverTime()));
+                    cell23.setCellValue(convertStr(order.getDeliverTime()));
 
                     HSSFCell cell24 = row.createCell(24, Cell.CELL_TYPE_STRING);
-                    cell21.setCellValue(convertStr(order.getSuccessTime()));
+                    cell24.setCellValue(convertStr(order.getSuccessTime()));
 
                     HSSFCell cell25 = row.createCell(25, Cell.CELL_TYPE_STRING);
-                    cell22.setCellValue(convertStr(deliverInfo.getExpressName()));
+                    cell25.setCellValue(convertStr(deliverInfo.getExpressName()));
 
                     HSSFCell cell26 = row.createCell(26, Cell.CELL_TYPE_STRING);
-                    cell23.setCellValue(convertStr(deliverInfo.getExpressNo()));
+                    cell26.setCellValue(convertStr(deliverInfo.getExpressNo()));
 
                     String state1 =  stateType.get(order.getActiveState());
                     HSSFCell cell27 = row.createCell(27, Cell.CELL_TYPE_STRING);
-                    cell24.setCellValue(convertStr(state1));
+                    cell27.setCellValue(convertStr(state1));
                 }
             }
         } catch (Exception e) {
