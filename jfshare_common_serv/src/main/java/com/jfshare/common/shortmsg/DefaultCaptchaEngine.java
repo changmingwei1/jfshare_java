@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by Lenovo on 2016/3/25.
  */
@@ -29,10 +31,10 @@ public class DefaultCaptchaEngine implements ICaptchaFactory {
     private final static int CREATE_LIMIT_SECONDS = 60;
 
     @Override
-    public CaptchaWithKey create(String key, FailDesc failDesc) {
+    public CaptchaWithKey create(String key, List<FailDesc> failDescs) {
         long ttl = captchaJedis.ttl(key);
         if(ttl > 0 && EXPIRED_SEC - ttl < CREATE_LIMIT_SECONDS) {      //再次申请验证码时间间隔校验
-            failDesc = FailCode.CAPTCHA_CREATE_TIME_LIMIT;
+            failDescs.add(FailCode.CAPTCHA_CREATE_TIME_LIMIT);
             return null;
         }
 

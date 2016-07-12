@@ -743,6 +743,11 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return stringResult;
             }
 
+            //查询售后订单
+            if(conditions.getOrderState() == 1000) {
+
+            }
+
 
             List<OrderModel> orderModels = null;
             conditions = super.verifyConditions(conditions);

@@ -61,7 +61,7 @@ public class Sender {
             String ret = HttpRequest.postData("http://admin.sms9.net/houtai/sms.php", p, "gbk");
             logger.info(ret);
             if(StringUtils.isNotBlank(ret) && !ret.startsWith("success:")) {
-                if(Common.MsgFailCode.send_num_out_of_limit.getCode().equals(ret)) {
+                if(Common.MsgFailCode.send_num_out_of_limit.getCode().equals(ret.split(":")[1])) {
                     return FailCode.SEND_MSG_COUNT_OUT_OF_LIMIT;
                 } else{
                     return FailCode.SEND_MSG_FAILURE;

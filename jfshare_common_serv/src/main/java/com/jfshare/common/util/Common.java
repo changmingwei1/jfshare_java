@@ -135,7 +135,7 @@ public class
         send_time_limit("-11", "该时间禁止发送"),
         date_err("-12", "时间戳错误"),
         code_err("-13", "编码异常"),
-        send_num_out_of_limit("-14", "发送被限制"),
+        send_num_out_of_limit("-14.2", "发送被限制"),
         content_err1("-15", "短信内容不正确")
         ;
 

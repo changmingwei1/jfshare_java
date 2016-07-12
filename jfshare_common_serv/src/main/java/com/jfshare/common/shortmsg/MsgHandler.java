@@ -6,6 +6,8 @@ import com.jfshare.finagle.thrift.result.FailDesc;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * Created by Lenovo on 2016/2/23.
@@ -13,11 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class MsgHandler{
 
-    public CaptchaWithKey getMsgCaptcha(MsgCaptcha captcha, FailDesc createFailDesc) throws  Exception{
+    public CaptchaWithKey getMsgCaptcha(MsgCaptcha captcha, List<FailDesc> createFailDescs) throws  Exception{
         MsgType msgType = MsgType.valueOf(captcha.getType());
         String key = captcha.getType() + ":" +  captcha.getMobile() ;
         Object handler = SpringContextHolder.getApplicationContext().getBean(msgType.getEngine());
-        return (CaptchaWithKey) MethodUtils.invokeMethod(handler, "create", key, createFailDesc);
+        return (CaptchaWithKey) MethodUtils.invokeMethod(handler, "create", key, createFailDescs);
     }
 
     public FailDesc validateMsgCaptcha(MsgCaptcha captcha) throws Exception{
