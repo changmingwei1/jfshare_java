@@ -117,11 +117,12 @@ public class ConvertUtil {
         }
         ProductCard productCard = new ProductCard();
         productCard.setProductId(tbProductCard.getProductId());
+        productCard.setSellerId(tbProductCard.getSellerId());
         productCard.setCardNumber(tbProductCard.getCardNumber());
         productCard.setPassword(tbProductCard.getPassword());
         productCard.setSkuNum(tbProductCard.getSkuNum());
         productCard.setBuyerId(tbProductCard.getBuyerId());
-        productCard.setCheckTime(DateUtil.date2Str(tbProductCard.getCheckedTime()));
+        productCard.setCheckTime(DateUtil.toDateTimeStr(tbProductCard.getCheckedTime()));
         return productCard;
     }
 

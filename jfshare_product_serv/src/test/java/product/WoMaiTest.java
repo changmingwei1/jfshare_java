@@ -77,10 +77,11 @@ public class WoMaiTest{
         woMaiIds.add("65951");
         woMaiIds.add("65950");
         woMaiIds.add("65948");
+        woMaiIds.add("1");
         String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuids", ids);
-        param.put("warehouseid", "0");
+        param.put("warehouseid", "10");
 //        param.put("area", "100");
 
         Map<String, String> httpParam = this.initPostParams("womai.inventory.get", param);

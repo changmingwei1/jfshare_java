@@ -513,6 +513,11 @@ public class ServHandle implements ProductServ.Iface {
 	}
 
 	@Override
+	public ProductCardStatisticsResult statisticsSkuProductCard(ProductCardSkuStatisticsParam param, Pagination pagination) throws TException {
+		return null;
+	}
+
+	@Override
 	public ProductCardViewListResult queryProductCardViewList(ProductCardViewParam param, Pagination pagination) throws TException {
 		ProductCardViewListResult productCardViewListResult = new ProductCardViewListResult();
 		Result result = new Result();
@@ -647,8 +652,6 @@ public class ServHandle implements ProductServ.Iface {
 
 	@Override
 	public DayCaptchaListResult queryCaptchaTotalList(CaptchaQueryParam param) throws TException {
-
-		// TODO: 2016/5/30 造数据，后期实现
 
 		DayCaptchaListResult dayCaptchaListResult = new DayCaptchaListResult();
 		Result result = new Result();

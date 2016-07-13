@@ -147,7 +147,7 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         if(productSet == null || productSet.size() == 0){
             // 查询类目的叶子节点
             if(param.getSubjectId() != 0) {
-                List<SubjectNode> subjectNodes = this.subjectClient.getSubTree(param.getSubjectId());
+                List<SubjectNode> subjectNodes = this.subjectClient.getLeavesById(param.getSubjectId());
                 for (SubjectNode subjectNode : subjectNodes) {
                     param.addToSubjectIdList(subjectNode.getId());
                     param.setSubjectId(0);
