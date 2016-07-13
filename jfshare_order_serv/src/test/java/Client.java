@@ -114,7 +114,8 @@ public class Client extends TestCase{
             conditions.setEndTime("2016-07-20 00:00:00");
 //            conditions.setOrderState(5);
 //            conditions.setOrderId("59090131");
-            conditions.addToOrderIds("85260022");
+            conditions.addToOrderIds("91060215");
+            conditions.addToOrderIds("89790229");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -291,6 +292,6 @@ public class Client extends TestCase{
     }
 
     public void testQueryExportFileKey() throws TException {
-        System.err.println(client.getExportOrderResult("dc1ae681b1affaa7e4fa934261d3cb8d"));
+        System.err.println(client.getExportOrderResult("b8550774fa3b88b0d57c61e8a59fe6ff"));
     }
 }

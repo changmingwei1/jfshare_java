@@ -13,6 +13,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class OrderEsImpl implements IOrderEs{
             startTime = "2016-05-01 00:00:00";
         }
         String endTime = StringUtils.isBlank(conditions.getEndTime()) ? DateTimeUtil.getCurrentDate(DateTimeUtil.FORMAT_DEFAULT) : conditions.getEndTime();
+        if(DateTimeUtil.strToDateTime(endTime).isAfter(DateTime.now())) {
+            endTime = DateTimeUtil.getCurrentDate(DateTimeUtil.FORMAT_DEFAULT);
+        }
         logger.info("esSearch----params:startTime={}, endTime={}, orderId={}, orderIds={}", startTime, endTime, conditions.getOrderId(), conditions.getOrderIds());
         int orderState = conditions.getOrderState();
         String[] monthArr = DateTimeUtil.getBetweenMonth(startTime, endTime);

@@ -801,7 +801,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         stringResult.setResult(result);
         stringResult.setValue("");
         try {
-            if (StringUtil.isNullOrEmpty(conditions) || StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) {
+            if (StringUtil.isNullOrEmpty(conditions)) {
                 logger.warn("batchExportOrderFull参数验证失败！, OrderQueryConditions:{}", conditions);
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
                 return stringResult;
