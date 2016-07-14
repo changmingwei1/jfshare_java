@@ -53,7 +53,7 @@ public class ScoreService {
             return;
         }
 
-        int score = order.getClosingPrice() / 100 + (order.getClosingPrice() % 100 == 0 ? 0 : 1);
+        int score = order.getClosingPrice() / 100;
 
         if(score > 0)
             scoreClient.reduceScore(order.getUserId(), score, order.getOrderId(), ConstantUtil.SCORE_TYPE.rollback_order_rebate);
