@@ -43,7 +43,7 @@ public class ProductCardSvcImpl implements IProductCartSvc {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean importProductCard(int sellerId, String path) throws Exception {
+    public boolean importProductCard(int sellerId, String productId, String path) throws Exception {
 
         // TODO: 2016/5/22  dsdfsdf sd 
         // 读取文件中的数据
@@ -68,6 +68,10 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 TbProductCard productCard = new TbProductCard();
                 productCard.setSellerId(sellerId);
                 productCard.setProductId(row.getCell(0).getStringCellValue());
+                // 如果商品ID不是传参，不处理
+                if (!productCard.getProductId().equals(productId)) {
+                    continue;
+                }
                 productCard.setSkuNum(row.getCell(1) == null ? "" : row.getCell(1).getStringCellValue());
                 productCard.setCardNumber(row.getCell(2).getStringCellValue());
                 productCard.setPassword(row.getCell(3) == null ? "" : row.getCell(3).getStringCellValue());
@@ -117,15 +121,23 @@ public class ProductCardSvcImpl implements IProductCartSvc {
 
     @Override
     public int statisticsProductCardCount(Map queryMap) {
-
         return this.productCardDao.statisticsProductCardCount(queryMap);
     }
 
     @Override
     public List<ProductCardStatisticsModel> statisticsProductCard(Map queryMap) {
-
         return this.productCardDao.statisticsProductCard(queryMap);
 
+    }
+
+    @Override
+    public List<ProductCardStatisticsModel> statisticsSkuProductCard(Map queryMap) {
+        return this.productCardDao.statisticsSkuProductCard(queryMap);
+    }
+
+    @Override
+    public int statisticsSkuProductCardCount(Map queryMap) {
+        return this.productCardDao.statisticsSkuProductCardCount(queryMap);
     }
 
     @Override

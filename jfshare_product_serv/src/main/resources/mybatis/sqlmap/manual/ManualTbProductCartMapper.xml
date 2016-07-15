@@ -90,7 +90,6 @@
     <select id="statisticsProductCard" parameterType="map" resultMap="statisticsResultMap">
 		SELECT
           p.id,
-          t.sku_num,
           p.name,
           MAX(t.create_time) create_time,
           COUNT(t.`id`) total,
@@ -109,7 +108,7 @@
                   AND p.name like concat('%',#{productName} ,'%')
               </if>
           </where>
-        GROUP BY p.id, t.sku_num
+        GROUP BY p.id
         ORDER BY p.id asc, create_time asc
         LIMIT #{start}, #{count}
 	</select>
@@ -120,7 +119,6 @@
         FROM (
             SELECT
             p.id,
-            t.sku_num,
             p.name,
             t.create_time,
             COUNT(t.`id`) total,
@@ -140,8 +138,56 @@
                     AND p.name like concat('%',#{productName} ,'%')
                 </if>
             </where>
-            GROUP BY p.id, t.sku_num
+            GROUP BY p.id
         ) bak
+    </select>
+    
+    <select id="statisticsSkuProductCardCount" parameterType="map" resultType="int">
+      SELECT
+        COUNT(*)
+        FROM (
+            SELECT
+            p.product_id,
+            p.sku_num,
+            MAX(t.create_time) create_time,
+            COUNT(t.id) total,
+            SUM(
+            CASE
+            WHEN t.state = 1
+            THEN 1
+            ELSE 0
+            END) AS unused
+            FROM
+            tb_product_sku p
+            LEFT JOIN tb_product_card t ON t.product_id = p.product_id AND t.`sku_num` = p.`sku_num`
+            <where>
+                AND p.product_id = #{productId} and p.storehouse_id != 0
+            </where>
+            GROUP BY p.product_id, p.sku_num
+        ) bak
+    </select>
+
+    <select id="statisticsSkuProductCard" parameterType="map" resultMap="statisticsResultMap">
+        SELECT
+        p.product_id id,
+        p.sku_num,
+        MAX(t.create_time) create_time,
+        COUNT(t.id) total,
+        SUM(
+        CASE
+        WHEN t.state = 1
+        THEN 1
+        ELSE 0
+        END) AS unused
+        FROM
+        tb_product_sku p
+        LEFT JOIN tb_product_card t ON t.product_id = p.product_id AND t.`sku_num` = p.`sku_num`
+        <where>
+            AND p.product_id = #{productId} and p.storehouse_id != 0
+        </where>
+        GROUP BY p.product_id, p.sku_num
+        ORDER BY create_time asc
+        LIMIT #{start}, #{count}
     </select>
 
     <select id="sellerProductCardCount" parameterType="map" resultType="int">
@@ -168,7 +214,7 @@
             AND s.product_id = p.id AND s.seller_id = #{sellerId}
         </where>
         GROUP BY p.id
-        ORDER BY checked_num desc, sold_num asc
+        ORDER BY checked_num desc, sold_num desc
         LIMIT #{start}, #{count}
     </select>
 

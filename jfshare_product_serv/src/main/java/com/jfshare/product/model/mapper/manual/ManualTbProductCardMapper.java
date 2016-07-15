@@ -25,6 +25,10 @@ public interface ManualTbProductCardMapper {
 
     int statisticsProductCardCount(Map queryMap);
 
+    List<ProductCardStatisticsModel> statisticsSkuProductCard(Map queryMap);
+
+    int statisticsSkuProductCardCount(Map queryMap);
+
     /**
      * 卖家app验证码统计总数
      * @param queryMap

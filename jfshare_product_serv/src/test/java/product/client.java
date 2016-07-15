@@ -44,8 +44,8 @@ public class client {
 
     private ProductServ.Client client;
 
-//    private static final String IP = "127.0.0.1";
-    private static final String IP = "101.201.39.38";
+    private static final String IP = "127.0.0.1";
+//    private static final String IP = "101.201.39.38";
 //    private static final String IP = "120.24.153.155";
 //    private static final String IP = "101.201.38.182";
 
@@ -219,6 +219,18 @@ public class client {
     }
 
     @Test
+    public void testStatisticsSkuProductCard() throws Exception {
+        ProductCardSkuStatisticsParam param = new ProductCardSkuStatisticsParam();
+        param.setSellerId(13);
+        param.setProductId("ze160615095640000815");
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+
+        System.out.println(this.client.statisticsSkuProductCard(param, pagination));
+    }
+
+    @Test
     public void testProductSurveyQuery() throws Exception {
 
         ProductSurveyQueryParam param = new ProductSurveyQueryParam();
@@ -228,6 +240,7 @@ public class client {
         param.setSort("click_rate DESC");
 //        param.setSort("create_time DESC");
         param.setActiveState(300);
+        param.setSubjectId(1001);
 
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
@@ -235,7 +248,7 @@ public class client {
 
         param.setPagination(pagination);
         int num = 0;
-        for (int i = 1; i <= 10000; i++) {
+        for (int i = 1; i <= 1; i++) {
             ProductSurveyResult result = this.client.productSurveyQuery(param);
             if (result.getResult().getCode() == 1) {
                 num ++;
@@ -244,6 +257,7 @@ public class client {
             if (i % 100 == 0) {
                 System.out.println(DateUtil.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss") + " >>>> run le : " + i + "次");
             }
+            System.out.println(result);
         }
         System.err.print(">>>>> fail times : " + num);
     }
@@ -289,19 +303,21 @@ public class client {
     }
 
     @Test
+    //卖家虚拟商品验证列表明细
     public void testQueryCaptchaDetails() throws Exception {
         CaptchaQueryParam param = new CaptchaQueryParam();
-        param.setSellerId(2);
+        param.setSellerId(13);
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
         pagination.setNumPerPage(10);
         param.setPagination(pagination);
-        param.setProductId("ze160706183957000952");
-        param.setMonthQuery("2016-07");
+        param.setProductId("ze160523164905000443");
+        param.setMonthQuery("2016-06");
         System.out.println(this.client.queryCaptchaDetails(param));
     }
 
     @Test
+    //查询卖家虚拟商品验证列表
     public void testQueryCaptchaList() throws Exception {
         CaptchaQueryParam param = new CaptchaQueryParam();
         param.setSellerId(2);
@@ -313,6 +329,7 @@ public class client {
     }
 
     @Test
+    //查询卖家虚拟商品验证列表—按月统计每天的验证总数( 查询条件：按月)
     public void testQueryCaptchaTotalList() throws Exception {
         CaptchaQueryParam param = new CaptchaQueryParam();
         param.setSellerId(2);
@@ -325,6 +342,7 @@ public class client {
     }
 
     @Test
+    // 根据日期查询商品每天验证码数据
     public void testQueryCaptchaDayTotalList() throws Exception {
         CaptchaDayQueryParam param = new CaptchaDayQueryParam();
         param.setSellerId(2);

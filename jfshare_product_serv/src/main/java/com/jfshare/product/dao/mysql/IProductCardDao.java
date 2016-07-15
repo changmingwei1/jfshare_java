@@ -50,6 +50,10 @@ public interface IProductCardDao extends BaseDAO<TbProductCard, Integer>{
      */
     int statisticsProductCardCount(Map queryMap);
 
+    List<ProductCardStatisticsModel> statisticsSkuProductCard(Map queryMap);
+
+    int statisticsSkuProductCardCount(Map queryMap);
+
     /**
      * 查询单个虚拟商品卡密列表，管理专用
      * @param queryMap

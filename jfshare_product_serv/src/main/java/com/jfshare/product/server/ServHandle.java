@@ -514,7 +514,41 @@ public class ServHandle implements ProductServ.Iface {
 
 	@Override
 	public ProductCardStatisticsResult statisticsSkuProductCard(ProductCardSkuStatisticsParam param, Pagination pagination) throws TException {
-		return null;
+		ProductCardStatisticsResult productCardStatisticsResult = new ProductCardStatisticsResult();
+		Result result = new Result();
+		productCardStatisticsResult.setResult(result);
+		List<ProductCardStatistics> productCardStatisticsList = new ArrayList<ProductCardStatistics>();
+
+		if (param.getSellerId() == 0) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.PARAM_ERROR);
+			return productCardStatisticsResult;
+		}
+
+		Page page = new Page(pagination.getCurrentPage(), pagination.getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("sellerId", param.getSellerId());
+		queryMap.put("productId", param.getProductId());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		// 查询总数
+		int total = this.productCartSvc.statisticsSkuProductCardCount(queryMap);
+		page.setTotal(total);
+
+		// 获取数据
+		List<ProductCardStatisticsModel> statisticsModels = this.productCartSvc.statisticsSkuProductCard(queryMap);
+		Product product = this.productSvcImpl.queryProduct(param.getProductId(), new ProductRetParam(1,0,0,0));
+		for (ProductCardStatisticsModel statisticsModel : statisticsModels) {
+			ProductCardStatistics productCardStatistics = ConvertUtil.productCardStatisticsModel2Thrift(statisticsModel);
+			productCardStatistics.setProductName(product == null ? "" : product.getProductName());
+			productCardStatisticsList.add(productCardStatistics);
+		}
+
+		productCardStatisticsResult.setCardtatisticsList(productCardStatisticsList);
+		productCardStatisticsResult.setPagination(ConvertUtil.page2Pagination(page));
+		return productCardStatisticsResult;
 	}
 
 	@Override
@@ -558,7 +592,7 @@ public class ServHandle implements ProductServ.Iface {
 	public Result importProductCard(ProductCardImportParam param) throws TException {
 		Result result = new Result(0);
 		try {
-			boolean flag = this.productCartSvc.importProductCard(param.getSellerId(), param.getPath());
+			boolean flag = this.productCartSvc.importProductCard(param.getSellerId(), param.getProductId(), param.getPath());
 			if (!flag) {
 				result.setCode(1);
 				result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_FAIL);

@@ -34,15 +34,18 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
 
   private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)1);
   private static final TField PATH_FIELD_DESC = new TField("path", TType.STRING, (short)2);
+  private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)3);
 
 
   public int sellerId;
   public String path;
+  public String productId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SELLER_ID((short)1, "sellerId"),
-    PATH((short)2, "path");
+    PATH((short)2, "path"),
+    PRODUCT_ID((short)3, "productId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -61,6 +64,8 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
   	return SELLER_ID;
         case 2: // PATH
   	return PATH;
+        case 3: // PRODUCT_ID
+  	return PRODUCT_ID;
         default:
   	return null;
       }
@@ -112,6 +117,8 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.PATH, new FieldMetaData("path", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.PRODUCT_ID, new FieldMetaData("productId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(ProductCardImportParam.class, metaDataMap);
   }
@@ -122,12 +129,14 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
 
   public ProductCardImportParam(
     int sellerId,
-    String path)
+    String path,
+    String productId)
   {
     this();
     this.sellerId = sellerId;
     setSellerIdIsSet(true);
     this.path = path;
+    this.productId = productId;
   }
 
   /**
@@ -140,6 +149,9 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     if (other.isSetPath()) {
       this.path = other.path;
     }
+    if (other.isSetProductId()) {
+      this.productId = other.productId;
+    }
   }
 
   public ProductCardImportParam deepCopy() {
@@ -151,6 +163,7 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     setSellerIdIsSet(false);
     this.sellerId = 0;
     this.path = null;
+    this.productId = null;
   }
 
   public int getSellerId() {
@@ -202,6 +215,31 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     }
   }
 
+  public String getProductId() {
+    return this.productId;
+  }
+
+  public ProductCardImportParam setProductId(String productId) {
+    this.productId = productId;
+    
+    return this;
+  }
+
+  public void unsetProductId() {
+    this.productId = null;
+  }
+
+  /** Returns true if field productId is set (has been asigned a value) and false otherwise */
+  public boolean isSetProductId() {
+    return this.productId != null;
+  }
+
+  public void setProductIdIsSet(boolean value) {
+    if (!value) {
+      this.productId = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_ID:
@@ -218,6 +256,13 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
         setPath((String)value);
       }
       break;
+    case PRODUCT_ID:
+      if (value == null) {
+        unsetProductId();
+      } else {
+        setProductId((String)value);
+      }
+      break;
     }
   }
 
@@ -227,6 +272,8 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
       return new Integer(getSellerId());
     case PATH:
       return getPath();
+    case PRODUCT_ID:
+      return getProductId();
     }
     throw new IllegalStateException();
   }
@@ -242,6 +289,8 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
       return isSetSellerId();
     case PATH:
       return isSetPath();
+    case PRODUCT_ID:
+      return isSetProductId();
     }
     throw new IllegalStateException();
   }
@@ -274,6 +323,14 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
       if (!this.path.equals(that.path))
         return false;
     }
+    boolean this_present_productId = true && this.isSetProductId();
+    boolean that_present_productId = true && that.isSetProductId();
+    if (this_present_productId || that_present_productId) {
+      if (!(this_present_productId && that_present_productId))
+        return false;
+      if (!this.productId.equals(that.productId))
+        return false;
+    }
 
     return true;
   }
@@ -289,6 +346,10 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     builder.append(present_path);
     if (present_path)
       builder.append(path);
+    boolean present_productId = true && (isSetProductId());
+    builder.append(present_productId);
+    if (present_productId)
+      builder.append(productId);
     return builder.toHashCode();
   }
 
@@ -316,6 +377,16 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     }
     if (isSetPath()) {
       lastComparison = TBaseHelper.compareTo(this.path, typedOther.path);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetProductId()).compareTo(typedOther.isSetProductId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetProductId()) {
+      lastComparison = TBaseHelper.compareTo(this.productId, typedOther.productId);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -353,6 +424,13 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 3: // PRODUCT_ID
+          if (field.type == TType.STRING) {
+            this.productId = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -376,6 +454,11 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
       oprot.writeString(this.path);
       oprot.writeFieldEnd();
     }
+    if (this.productId != null) {
+      oprot.writeFieldBegin(PRODUCT_ID_FIELD_DESC);
+      oprot.writeString(this.productId);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -393,6 +476,14 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
       sb.append("null");
     } else {
       sb.append(this.path);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("productId:");
+    if (this.productId == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.productId);
     }
     first = false;
     sb.append(")");

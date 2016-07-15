@@ -58,6 +58,16 @@ public class ProductCardDaoImpl implements IProductCardDao {
     }
 
     @Override
+    public List<ProductCardStatisticsModel> statisticsSkuProductCard(Map queryMap) {
+        return this.manualCardMapper.statisticsSkuProductCard(queryMap);
+    }
+
+    @Override
+    public int statisticsSkuProductCardCount(Map queryMap) {
+        return this.manualCardMapper.statisticsSkuProductCardCount(queryMap);
+    }
+
+    @Override
     public List<TbProductCard> queryProductCardViewList(Map queryMap) {
         return this.manualCardMapper.queryProductCardViewList(queryMap);
     }
@@ -138,6 +148,15 @@ public class ProductCardDaoImpl implements IProductCardDao {
 
     @Override
     public Integer add(TbProductCard obj) {
+        // 同一个卖家的卡号不能重复
+        TbProductCardExample example = new TbProductCardExample();
+        TbProductCardExample.Criteria criteria = example.createCriteria();
+        criteria.andSellerIdEqualTo(obj.getSellerId());
+        criteria.andCardNumberEqualTo(obj.getCardNumber());
+        List<TbProductCard> tbProductCards = this.cardMapper.selectByExample(example);
+        if (CollectionUtils.isNotEmpty(tbProductCards)) {
+            return 0;
+        }
         return this.cardMapper.insertSelective(obj);
     }
 
