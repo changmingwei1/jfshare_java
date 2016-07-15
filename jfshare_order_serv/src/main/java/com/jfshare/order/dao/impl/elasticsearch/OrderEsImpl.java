@@ -3,12 +3,15 @@ package com.jfshare.order.dao.impl.elasticsearch;
 import com.jfshare.elasticsearch.drive.ESClient;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
 import com.jfshare.order.dao.IOrderEs;
+import com.jfshare.order.model.EsScore;
+import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.DateTimeUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -42,7 +45,7 @@ public class OrderEsImpl implements IOrderEs{
         if(DateTimeUtil.strToDateTime(endTime).isAfter(DateTime.now())) {
             endTime = DateTimeUtil.getCurrentDate(DateTimeUtil.FORMAT_DEFAULT);
         }
-        logger.info("esSearch----params:startTime={}, endTime={}, orderId={}, orderIds={}", startTime, endTime, conditions.getOrderId(), conditions.getOrderIds());
+        logger.debug("esSearch----params:startTime={}, endTime={}, orderId={}, orderIds={}", startTime, endTime, conditions.getOrderId(), conditions.getOrderIds());
         int orderState = conditions.getOrderState();
         String[] monthArr = DateTimeUtil.getBetweenMonth(startTime, endTime);
         String[] indexArr = new String[monthArr.length];
@@ -108,4 +111,44 @@ public class OrderEsImpl implements IOrderEs{
         return searchResponse.getHits();
 
     }
+
+    /**
+     * 查询积分操作记录
+     * @param orderBatch 订单批次号
+     * @param scoreType 积分类型
+     * @return
+     */
+    public SearchHits searchScoreRecord(String orderBatch, ConstantUtil.SCORE_TYPE scoreType) {
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("orderBatch", orderBatch));
+        if(scoreType != null) {
+            queryBuilder.must(QueryBuilders.matchQuery("type", scoreType.getEnumVal()));
+        }
+
+        SearchRequestBuilder searchRequestBuilder = this.esClient.getTransportClient().prepareSearch(ES_SCORE_INDEX)
+                .setTypes(ES_SCORE_TYPE)
+                .setQuery(queryBuilder)
+                .setFrom(0).setSize(200)
+                .setExplain(false);
+
+        SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
+        return searchResponse.getHits();
+    }
+
+    /**
+     * 插入积分操作记录
+     * @param esScore
+     */
+    public void addScoreRecord(EsScore esScore) {
+        logger.info("ES==> addScoreRecord {}", esScore);
+        try {
+            esClient.add(ES_SCORE_INDEX, ES_SCORE_TYPE, esScore.toJSONString());
+        } catch (Exception e) {
+            logger.error("ES==ERROR addScoreRecord {}", esScore.toJSONString());
+            logger.error("ES==>| addScoreRecord 发生异常", e);
+        }
+    }
+
+
+    private final static String ES_SCORE_INDEX = "jfshare_order_score";
+    private final static String ES_SCORE_TYPE = "esOrderScore";
 }
