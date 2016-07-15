@@ -29,23 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class ProductCardImportParam implements TBase<ProductCardImportParam, ProductCardImportParam._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("ProductCardImportParam");
+public class ProductCardSkuStatisticsParam implements TBase<ProductCardSkuStatisticsParam, ProductCardSkuStatisticsParam._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("ProductCardSkuStatisticsParam");
 
   private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)1);
-  private static final TField PATH_FIELD_DESC = new TField("path", TType.STRING, (short)2);
-  private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)3);
+  private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)2);
 
 
   public int sellerId;
-  public String path;
   public String productId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SELLER_ID((short)1, "sellerId"),
-    PATH((short)2, "path"),
-    PRODUCT_ID((short)3, "productId");
+    PRODUCT_ID((short)2, "productId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -62,9 +59,7 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
       switch(fieldId) {
         case 1: // SELLER_ID
   	return SELLER_ID;
-        case 2: // PATH
-  	return PATH;
-        case 3: // PRODUCT_ID
+        case 2: // PRODUCT_ID
   	return PRODUCT_ID;
         default:
   	return null;
@@ -115,54 +110,46 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.PATH, new FieldMetaData("path", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.PRODUCT_ID, new FieldMetaData("productId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(ProductCardImportParam.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(ProductCardSkuStatisticsParam.class, metaDataMap);
   }
 
 
-  public ProductCardImportParam() {
+  public ProductCardSkuStatisticsParam() {
   }
 
-  public ProductCardImportParam(
+  public ProductCardSkuStatisticsParam(
     int sellerId,
-    String path,
     String productId)
   {
     this();
     this.sellerId = sellerId;
     setSellerIdIsSet(true);
-    this.path = path;
     this.productId = productId;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public ProductCardImportParam(ProductCardImportParam other) {
+  public ProductCardSkuStatisticsParam(ProductCardSkuStatisticsParam other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
     this.sellerId = other.sellerId;
-    if (other.isSetPath()) {
-      this.path = other.path;
-    }
     if (other.isSetProductId()) {
       this.productId = other.productId;
     }
   }
 
-  public ProductCardImportParam deepCopy() {
-    return new ProductCardImportParam(this);
+  public ProductCardSkuStatisticsParam deepCopy() {
+    return new ProductCardSkuStatisticsParam(this);
   }
 
   @Override
   public void clear() {
     setSellerIdIsSet(false);
     this.sellerId = 0;
-    this.path = null;
     this.productId = null;
   }
 
@@ -170,7 +157,7 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     return this.sellerId;
   }
 
-  public ProductCardImportParam setSellerId(int sellerId) {
+  public ProductCardSkuStatisticsParam setSellerId(int sellerId) {
     this.sellerId = sellerId;
     setSellerIdIsSet(true);
 
@@ -190,36 +177,11 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     __isset_bit_vector.set(__SELLERID_ISSET_ID, value);
   }
 
-  public String getPath() {
-    return this.path;
-  }
-
-  public ProductCardImportParam setPath(String path) {
-    this.path = path;
-    
-    return this;
-  }
-
-  public void unsetPath() {
-    this.path = null;
-  }
-
-  /** Returns true if field path is set (has been asigned a value) and false otherwise */
-  public boolean isSetPath() {
-    return this.path != null;
-  }
-
-  public void setPathIsSet(boolean value) {
-    if (!value) {
-      this.path = null;
-    }
-  }
-
   public String getProductId() {
     return this.productId;
   }
 
-  public ProductCardImportParam setProductId(String productId) {
+  public ProductCardSkuStatisticsParam setProductId(String productId) {
     this.productId = productId;
     
     return this;
@@ -249,13 +211,6 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
         setSellerId((Integer)value);
       }
       break;
-    case PATH:
-      if (value == null) {
-        unsetPath();
-      } else {
-        setPath((String)value);
-      }
-      break;
     case PRODUCT_ID:
       if (value == null) {
         unsetProductId();
@@ -270,8 +225,6 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     switch (field) {
     case SELLER_ID:
       return new Integer(getSellerId());
-    case PATH:
-      return getPath();
     case PRODUCT_ID:
       return getProductId();
     }
@@ -287,8 +240,6 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     switch (field) {
     case SELLER_ID:
       return isSetSellerId();
-    case PATH:
-      return isSetPath();
     case PRODUCT_ID:
       return isSetProductId();
     }
@@ -299,12 +250,12 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof ProductCardImportParam)
-      return this.equals((ProductCardImportParam)that);
+    if (that instanceof ProductCardSkuStatisticsParam)
+      return this.equals((ProductCardSkuStatisticsParam)that);
     return false;
   }
 
-  public boolean equals(ProductCardImportParam that) {
+  public boolean equals(ProductCardSkuStatisticsParam that) {
     if (that == null)
       return false;
     boolean this_present_sellerId = true;
@@ -313,14 +264,6 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
       if (!(this_present_sellerId && that_present_sellerId))
         return false;
       if (this.sellerId != that.sellerId)
-        return false;
-    }
-    boolean this_present_path = true && this.isSetPath();
-    boolean that_present_path = true && that.isSetPath();
-    if (this_present_path || that_present_path) {
-      if (!(this_present_path && that_present_path))
-        return false;
-      if (!this.path.equals(that.path))
         return false;
     }
     boolean this_present_productId = true && this.isSetProductId();
@@ -342,10 +285,6 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     builder.append(present_sellerId);
     if (present_sellerId)
       builder.append(sellerId);
-    boolean present_path = true && (isSetPath());
-    builder.append(present_path);
-    if (present_path)
-      builder.append(path);
     boolean present_productId = true && (isSetProductId());
     builder.append(present_productId);
     if (present_productId)
@@ -353,13 +292,13 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     return builder.toHashCode();
   }
 
-  public int compareTo(ProductCardImportParam other) {
+  public int compareTo(ProductCardSkuStatisticsParam other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    ProductCardImportParam typedOther = (ProductCardImportParam)other;
+    ProductCardSkuStatisticsParam typedOther = (ProductCardSkuStatisticsParam)other;
 
     lastComparison = Boolean.valueOf(isSetSellerId()).compareTo(typedOther.isSetSellerId());
     if (lastComparison != 0) {
@@ -367,16 +306,6 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     }
     if (isSetSellerId()) {
       lastComparison = TBaseHelper.compareTo(this.sellerId, typedOther.sellerId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetPath()).compareTo(typedOther.isSetPath());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetPath()) {
-      lastComparison = TBaseHelper.compareTo(this.path, typedOther.path);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -417,14 +346,7 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // PATH
-          if (field.type == TType.STRING) {
-            this.path = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 3: // PRODUCT_ID
+        case 2: // PRODUCT_ID
           if (field.type == TType.STRING) {
             this.productId = iprot.readString();
           } else {
@@ -449,11 +371,6 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
     oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
     oprot.writeI32(this.sellerId);
     oprot.writeFieldEnd();
-    if (this.path != null) {
-      oprot.writeFieldBegin(PATH_FIELD_DESC);
-      oprot.writeString(this.path);
-      oprot.writeFieldEnd();
-    }
     if (this.productId != null) {
       oprot.writeFieldBegin(PRODUCT_ID_FIELD_DESC);
       oprot.writeString(this.productId);
@@ -465,18 +382,10 @@ public class ProductCardImportParam implements TBase<ProductCardImportParam, Pro
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("ProductCardImportParam(");
+    StringBuilder sb = new StringBuilder("ProductCardSkuStatisticsParam(");
     boolean first = true;
     sb.append("sellerId:");
     sb.append(this.sellerId);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("path:");
-    if (this.path == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.path);
-    }
     first = false;
     if (!first) sb.append(", ");
     sb.append("productId:");

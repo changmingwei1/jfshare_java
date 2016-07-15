@@ -15,7 +15,7 @@ import java.util.Map;
 public interface IProductCartSvc {
 
 
-    boolean importProductCard(int sellerId, String path) throws Exception;
+    boolean importProductCard(int sellerId, String productId, String path) throws Exception;
 
     /**
      * 获取卡密信息，需要商品ID，交易唯一标识（transactionId）, 获取个数
@@ -44,6 +44,10 @@ public interface IProductCartSvc {
      * @return
      */
     int statisticsProductCardCount(Map queryMap);
+
+    List<ProductCardStatisticsModel> statisticsSkuProductCard(Map queryMap);
+
+    int statisticsSkuProductCardCount(Map queryMap);
 
     /**
      * 查询单个虚拟商品卡密列表，管理专用

@@ -513,6 +513,45 @@ public class ServHandle implements ProductServ.Iface {
 	}
 
 	@Override
+	public ProductCardStatisticsResult statisticsSkuProductCard(ProductCardSkuStatisticsParam param, Pagination pagination) throws TException {
+		ProductCardStatisticsResult productCardStatisticsResult = new ProductCardStatisticsResult();
+		Result result = new Result();
+		productCardStatisticsResult.setResult(result);
+		List<ProductCardStatistics> productCardStatisticsList = new ArrayList<ProductCardStatistics>();
+
+		if (param.getSellerId() == 0) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.PARAM_ERROR);
+			return productCardStatisticsResult;
+		}
+
+		Page page = new Page(pagination.getCurrentPage(), pagination.getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("sellerId", param.getSellerId());
+		queryMap.put("productId", param.getProductId());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		// 查询总数
+		int total = this.productCartSvc.statisticsSkuProductCardCount(queryMap);
+		page.setTotal(total);
+
+		// 获取数据
+		List<ProductCardStatisticsModel> statisticsModels = this.productCartSvc.statisticsSkuProductCard(queryMap);
+		Product product = this.productSvcImpl.queryProduct(param.getProductId(), new ProductRetParam(1,0,0,0));
+		for (ProductCardStatisticsModel statisticsModel : statisticsModels) {
+			ProductCardStatistics productCardStatistics = ConvertUtil.productCardStatisticsModel2Thrift(statisticsModel);
+			productCardStatistics.setProductName(product == null ? "" : product.getProductName());
+			productCardStatisticsList.add(productCardStatistics);
+		}
+
+		productCardStatisticsResult.setCardtatisticsList(productCardStatisticsList);
+		productCardStatisticsResult.setPagination(ConvertUtil.page2Pagination(page));
+		return productCardStatisticsResult;
+	}
+
+	@Override
 	public ProductCardViewListResult queryProductCardViewList(ProductCardViewParam param, Pagination pagination) throws TException {
 		ProductCardViewListResult productCardViewListResult = new ProductCardViewListResult();
 		Result result = new Result();
@@ -553,7 +592,7 @@ public class ServHandle implements ProductServ.Iface {
 	public Result importProductCard(ProductCardImportParam param) throws TException {
 		Result result = new Result(0);
 		try {
-			boolean flag = this.productCartSvc.importProductCard(param.getSellerId(), param.getPath());
+			boolean flag = this.productCartSvc.importProductCard(param.getSellerId(), param.getProductId(), param.getPath());
 			if (!flag) {
 				result.setCode(1);
 				result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_FAIL);
@@ -647,8 +686,6 @@ public class ServHandle implements ProductServ.Iface {
 
 	@Override
 	public DayCaptchaListResult queryCaptchaTotalList(CaptchaQueryParam param) throws TException {
-
-		// TODO: 2016/5/30 造数据，后期实现
 
 		DayCaptchaListResult dayCaptchaListResult = new DayCaptchaListResult();
 		Result result = new Result();

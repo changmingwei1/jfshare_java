@@ -85,6 +85,39 @@ public class SubjectClient {
 		return subjectNodes;
 	}
 
+	public List<SubjectNode> getLeavesById(Integer subjectId){
+		List<SubjectNode> subjectNodes = new ArrayList<SubjectNode>();
+
+		TTransport transport = null;
+		try {
+			String ipClient = PropertiesUtil.getProperty("jfx_public_client","subject_serv_ips");
+			int port = Integer.parseInt(PropertiesUtil.getProperty("jfx_public_client","subject_port"));
+			transport = new TFramedTransport(new TSocket(ipClient, port, socketTimeout));
+			TProtocol protocol = new TBinaryProtocol(transport);
+			SubjectServ.Client client = new SubjectServ.Client(protocol);
+			transport.open();
+
+			SubjectTreeResult result = client.getLeavesById(subjectId);
+			if (result.getResult().getCode() == 1 || CollectionUtils.isEmpty(result.getSubjectNodes())) {
+				return subjectNodes;
+			}
+			return result.getSubjectNodes();
+
+		} catch (Exception e) {
+			//throw new Exception("调用 subject-serv 发生异常!");
+			logger.warn("调用 subject-serv 发生异常!");
+		} finally {
+			try {
+				if(transport != null)
+					transport.close();
+			} catch (Exception e) {
+				logger.info(e.getMessage());
+			}
+		}
+
+		return subjectNodes;
+	}
+
 
 
 }
