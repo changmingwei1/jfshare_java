@@ -338,10 +338,12 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
 
         //清空缓存
         productRedis.removeProductCacheAll(productOpt.getProductId());
-        
-        // 重新加载商品排序缓存数据
-        this.reloadProductListCache(productOpt.getProductId());
-        
+
+        if((productOpt.getActiveState() > 200 && tbProduct.getActiveState() < 200) || (productOpt.getActiveState() < 200 && tbProduct.getActiveState() > 200)) {
+            // 重新加载商品排序缓存数据
+            this.reloadProductListCache(productOpt.getProductId());
+        }
+
         //放入异步队列
         com.jfshare.finagle.thrift.manager.ProductOpt logProductOpt = ConvertUtil.productOpt2LogProductOpt(productOpt);
         LogCommon.asyncProductOptLogsQueue.put(logProductOpt);
@@ -581,9 +583,9 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
         productSurveyQueryParam.setProductId(productId);
         ProductSurvey productSurvey = productDaoImpl.productSurveyQueryById(productSurveyQueryParam);
 
-        Integer activeState = productSurvey.getActiveState();
+//        Integer activeState = productSurvey.getActiveState();
 
-        if(activeState == ProductCommons.PRODUCT_STATE_ONSELL){
+        //if(activeState == ProductCommons.PRODUCT_STATE_ONSELL){
             SubjectTreeResult subjectTreeResult = subjectClient.getSuperTree(productSurvey.getSubjectId());
             List<String> keyList = ProductUtil.buildProductListRK(subjectTreeResult, productSurvey.getBrandId());
             for(String key : keyList){
@@ -604,9 +606,9 @@ public class ProductSvcImpl implements com.jfshare.product.service.IProductSvc {
     		eSProductInfo.setProductId(productSurvey.getProductId());
     		eSProductInfo.setName(productSurvey.getProductName() + " " + productSurvey.getViceName());
     		eSProductInfoDao.insert(eSProductInfo);*/
-        } else {
+        //} else {
             //es 中删除
         	/*eSProductInfoDao.delete(productSurvey.getProductId());*/
-        }
+        //}
     }
 }
