@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.order;
+package com.jfshare.finagle.thrift.aftersale;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,26 +29,23 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDeliverFailInfo._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("BatchDeliverFailInfo");
+public class AfterSaleOrder implements TBase<AfterSaleOrder, AfterSaleOrder._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("AfterSaleOrder");
 
-  private static final TField INDEX_FIELD_DESC = new TField("index", TType.I32, (short)1);
+  private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.I32, (short)1);
   private static final TField ORDER_ID_FIELD_DESC = new TField("orderId", TType.STRING, (short)2);
-  private static final TField DESC_FIELD_DESC = new TField("desc", TType.STRING, (short)3);
-  private static final TField ORDER_FIELD_DESC = new TField("order", TType.STRUCT, (short)4);
+  private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)3);
 
 
-  public int index;
+  public int userId;
   public String orderId;
-  public String desc;
-  public Order order;
+  public int sellerId;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    INDEX((short)1, "index"),
+    USER_ID((short)1, "userId"),
     ORDER_ID((short)2, "orderId"),
-    DESC((short)3, "desc"),
-    ORDER((short)4, "order");
+    SELLER_ID((short)3, "sellerId");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -63,14 +60,12 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // INDEX
-  	return INDEX;
+        case 1: // USER_ID
+  	return USER_ID;
         case 2: // ORDER_ID
   	return ORDER_ID;
-        case 3: // DESC
-  	return DESC;
-        case 4: // ORDER
-  	return ORDER;
+        case 3: // SELLER_ID
+  	return SELLER_ID;
         default:
   	return null;
       }
@@ -112,102 +107,95 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
 
 
   // isset id assignments
-  private static final int __INDEX_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
+  private static final int __USERID_ISSET_ID = 0;
+  private static final int __SELLERID_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.INDEX, new FieldMetaData("index", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.USER_ID, new FieldMetaData("userId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.ORDER_ID, new FieldMetaData("orderId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.DESC, new FieldMetaData("desc", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.ORDER, new FieldMetaData("order", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, Order.class)));
+    tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(BatchDeliverFailInfo.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(AfterSaleOrder.class, metaDataMap);
   }
 
 
-  public BatchDeliverFailInfo() {
+  public AfterSaleOrder() {
   }
 
-  public BatchDeliverFailInfo(
-    int index,
+  public AfterSaleOrder(
+    int userId,
     String orderId,
-    String desc,
-    Order order)
+    int sellerId)
   {
     this();
-    this.index = index;
-    setIndexIsSet(true);
+    this.userId = userId;
+    setUserIdIsSet(true);
     this.orderId = orderId;
-    this.desc = desc;
-    this.order = order;
+    this.sellerId = sellerId;
+    setSellerIdIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public BatchDeliverFailInfo(BatchDeliverFailInfo other) {
+  public AfterSaleOrder(AfterSaleOrder other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
-    this.index = other.index;
+    this.userId = other.userId;
     if (other.isSetOrderId()) {
       this.orderId = other.orderId;
     }
-    if (other.isSetDesc()) {
-      this.desc = other.desc;
-    }
-    if (other.isSetOrder()) {
-      this.order = new Order(other.order);
-    }
+    this.sellerId = other.sellerId;
   }
 
-  public BatchDeliverFailInfo deepCopy() {
-    return new BatchDeliverFailInfo(this);
+  public AfterSaleOrder deepCopy() {
+    return new AfterSaleOrder(this);
   }
 
   @Override
   public void clear() {
-    setIndexIsSet(false);
-    this.index = 0;
+    setUserIdIsSet(false);
+    this.userId = 0;
     this.orderId = null;
-    this.desc = null;
-    this.order = null;
+    setSellerIdIsSet(false);
+    this.sellerId = 0;
   }
 
-  public int getIndex() {
-    return this.index;
+  public int getUserId() {
+    return this.userId;
   }
 
-  public BatchDeliverFailInfo setIndex(int index) {
-    this.index = index;
-    setIndexIsSet(true);
+  public AfterSaleOrder setUserId(int userId) {
+    this.userId = userId;
+    setUserIdIsSet(true);
 
     return this;
   }
 
-  public void unsetIndex() {
-  __isset_bit_vector.clear(__INDEX_ISSET_ID);
+  public void unsetUserId() {
+  __isset_bit_vector.clear(__USERID_ISSET_ID);
   }
 
-  /** Returns true if field index is set (has been asigned a value) and false otherwise */
-  public boolean isSetIndex() {
-    return __isset_bit_vector.get(__INDEX_ISSET_ID);
+  /** Returns true if field userId is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserId() {
+    return __isset_bit_vector.get(__USERID_ISSET_ID);
   }
 
-  public void setIndexIsSet(boolean value) {
-    __isset_bit_vector.set(__INDEX_ISSET_ID, value);
+  public void setUserIdIsSet(boolean value) {
+    __isset_bit_vector.set(__USERID_ISSET_ID, value);
   }
 
   public String getOrderId() {
     return this.orderId;
   }
 
-  public BatchDeliverFailInfo setOrderId(String orderId) {
+  public AfterSaleOrder setOrderId(String orderId) {
     this.orderId = orderId;
     
     return this;
@@ -228,63 +216,37 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
     }
   }
 
-  public String getDesc() {
-    return this.desc;
+  public int getSellerId() {
+    return this.sellerId;
   }
 
-  public BatchDeliverFailInfo setDesc(String desc) {
-    this.desc = desc;
-    
+  public AfterSaleOrder setSellerId(int sellerId) {
+    this.sellerId = sellerId;
+    setSellerIdIsSet(true);
+
     return this;
   }
 
-  public void unsetDesc() {
-    this.desc = null;
+  public void unsetSellerId() {
+  __isset_bit_vector.clear(__SELLERID_ISSET_ID);
   }
 
-  /** Returns true if field desc is set (has been asigned a value) and false otherwise */
-  public boolean isSetDesc() {
-    return this.desc != null;
+  /** Returns true if field sellerId is set (has been asigned a value) and false otherwise */
+  public boolean isSetSellerId() {
+    return __isset_bit_vector.get(__SELLERID_ISSET_ID);
   }
 
-  public void setDescIsSet(boolean value) {
-    if (!value) {
-      this.desc = null;
-    }
-  }
-
-  public Order getOrder() {
-    return this.order;
-  }
-
-  public BatchDeliverFailInfo setOrder(Order order) {
-    this.order = order;
-    
-    return this;
-  }
-
-  public void unsetOrder() {
-    this.order = null;
-  }
-
-  /** Returns true if field order is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrder() {
-    return this.order != null;
-  }
-
-  public void setOrderIsSet(boolean value) {
-    if (!value) {
-      this.order = null;
-    }
+  public void setSellerIdIsSet(boolean value) {
+    __isset_bit_vector.set(__SELLERID_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case INDEX:
+    case USER_ID:
       if (value == null) {
-        unsetIndex();
+        unsetUserId();
       } else {
-        setIndex((Integer)value);
+        setUserId((Integer)value);
       }
       break;
     case ORDER_ID:
@@ -294,18 +256,11 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
         setOrderId((String)value);
       }
       break;
-    case DESC:
+    case SELLER_ID:
       if (value == null) {
-        unsetDesc();
+        unsetSellerId();
       } else {
-        setDesc((String)value);
-      }
-      break;
-    case ORDER:
-      if (value == null) {
-        unsetOrder();
-      } else {
-        setOrder((Order)value);
+        setSellerId((Integer)value);
       }
       break;
     }
@@ -313,14 +268,12 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case INDEX:
-      return new Integer(getIndex());
+    case USER_ID:
+      return new Integer(getUserId());
     case ORDER_ID:
       return getOrderId();
-    case DESC:
-      return getDesc();
-    case ORDER:
-      return getOrder();
+    case SELLER_ID:
+      return new Integer(getSellerId());
     }
     throw new IllegalStateException();
   }
@@ -332,14 +285,12 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
     }
 
     switch (field) {
-    case INDEX:
-      return isSetIndex();
+    case USER_ID:
+      return isSetUserId();
     case ORDER_ID:
       return isSetOrderId();
-    case DESC:
-      return isSetDesc();
-    case ORDER:
-      return isSetOrder();
+    case SELLER_ID:
+      return isSetSellerId();
     }
     throw new IllegalStateException();
   }
@@ -348,20 +299,20 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof BatchDeliverFailInfo)
-      return this.equals((BatchDeliverFailInfo)that);
+    if (that instanceof AfterSaleOrder)
+      return this.equals((AfterSaleOrder)that);
     return false;
   }
 
-  public boolean equals(BatchDeliverFailInfo that) {
+  public boolean equals(AfterSaleOrder that) {
     if (that == null)
       return false;
-    boolean this_present_index = true;
-    boolean that_present_index = true;
-    if (this_present_index || that_present_index) {
-      if (!(this_present_index && that_present_index))
+    boolean this_present_userId = true;
+    boolean that_present_userId = true;
+    if (this_present_userId || that_present_userId) {
+      if (!(this_present_userId && that_present_userId))
         return false;
-      if (this.index != that.index)
+      if (this.userId != that.userId)
         return false;
     }
     boolean this_present_orderId = true && this.isSetOrderId();
@@ -372,20 +323,12 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
       if (!this.orderId.equals(that.orderId))
         return false;
     }
-    boolean this_present_desc = true && this.isSetDesc();
-    boolean that_present_desc = true && that.isSetDesc();
-    if (this_present_desc || that_present_desc) {
-      if (!(this_present_desc && that_present_desc))
+    boolean this_present_sellerId = true;
+    boolean that_present_sellerId = true;
+    if (this_present_sellerId || that_present_sellerId) {
+      if (!(this_present_sellerId && that_present_sellerId))
         return false;
-      if (!this.desc.equals(that.desc))
-        return false;
-    }
-    boolean this_present_order = true && this.isSetOrder();
-    boolean that_present_order = true && that.isSetOrder();
-    if (this_present_order || that_present_order) {
-      if (!(this_present_order && that_present_order))
-        return false;
-      if (!this.order.equals(that.order))
+      if (this.sellerId != that.sellerId)
         return false;
     }
 
@@ -395,39 +338,35 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_index = true;
-    builder.append(present_index);
-    if (present_index)
-      builder.append(index);
+    boolean present_userId = true;
+    builder.append(present_userId);
+    if (present_userId)
+      builder.append(userId);
     boolean present_orderId = true && (isSetOrderId());
     builder.append(present_orderId);
     if (present_orderId)
       builder.append(orderId);
-    boolean present_desc = true && (isSetDesc());
-    builder.append(present_desc);
-    if (present_desc)
-      builder.append(desc);
-    boolean present_order = true && (isSetOrder());
-    builder.append(present_order);
-    if (present_order)
-      builder.append(order);
+    boolean present_sellerId = true;
+    builder.append(present_sellerId);
+    if (present_sellerId)
+      builder.append(sellerId);
     return builder.toHashCode();
   }
 
-  public int compareTo(BatchDeliverFailInfo other) {
+  public int compareTo(AfterSaleOrder other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    BatchDeliverFailInfo typedOther = (BatchDeliverFailInfo)other;
+    AfterSaleOrder typedOther = (AfterSaleOrder)other;
 
-    lastComparison = Boolean.valueOf(isSetIndex()).compareTo(typedOther.isSetIndex());
+    lastComparison = Boolean.valueOf(isSetUserId()).compareTo(typedOther.isSetUserId());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetIndex()) {
-      lastComparison = TBaseHelper.compareTo(this.index, typedOther.index);
+    if (isSetUserId()) {
+      lastComparison = TBaseHelper.compareTo(this.userId, typedOther.userId);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -442,22 +381,12 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetDesc()).compareTo(typedOther.isSetDesc());
+    lastComparison = Boolean.valueOf(isSetSellerId()).compareTo(typedOther.isSetSellerId());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetDesc()) {
-      lastComparison = TBaseHelper.compareTo(this.desc, typedOther.desc);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetOrder()).compareTo(typedOther.isSetOrder());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetOrder()) {
-      lastComparison = TBaseHelper.compareTo(this.order, typedOther.order);
+    if (isSetSellerId()) {
+      lastComparison = TBaseHelper.compareTo(this.sellerId, typedOther.sellerId);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -480,10 +409,10 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
         break;
       }
       switch (field.id) {
-        case 1: // INDEX
+        case 1: // USER_ID
           if (field.type == TType.I32) {
-            this.index = iprot.readI32();
-            setIndexIsSet(true);
+            this.userId = iprot.readI32();
+            setUserIdIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -495,17 +424,10 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // DESC
-          if (field.type == TType.STRING) {
-            this.desc = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 4: // ORDER
-          if (field.type == TType.STRUCT) {
-            this.order = new Order();
-            this.order.read(iprot);
+        case 3: // SELLER_ID
+          if (field.type == TType.I32) {
+            this.sellerId = iprot.readI32();
+            setSellerIdIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -525,34 +447,27 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    oprot.writeFieldBegin(INDEX_FIELD_DESC);
-    oprot.writeI32(this.index);
+    oprot.writeFieldBegin(USER_ID_FIELD_DESC);
+    oprot.writeI32(this.userId);
     oprot.writeFieldEnd();
     if (this.orderId != null) {
       oprot.writeFieldBegin(ORDER_ID_FIELD_DESC);
       oprot.writeString(this.orderId);
       oprot.writeFieldEnd();
     }
-    if (this.desc != null) {
-      oprot.writeFieldBegin(DESC_FIELD_DESC);
-      oprot.writeString(this.desc);
-      oprot.writeFieldEnd();
-    }
-    if (this.order != null) {
-      oprot.writeFieldBegin(ORDER_FIELD_DESC);
-      this.order.write(oprot);
-      oprot.writeFieldEnd();
-    }
+    oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
+    oprot.writeI32(this.sellerId);
+    oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("BatchDeliverFailInfo(");
+    StringBuilder sb = new StringBuilder("AfterSaleOrder(");
     boolean first = true;
-    sb.append("index:");
-    sb.append(this.index);
+    sb.append("userId:");
+    sb.append(this.userId);
     first = false;
     if (!first) sb.append(", ");
     sb.append("orderId:");
@@ -563,20 +478,8 @@ public class BatchDeliverFailInfo implements TBase<BatchDeliverFailInfo, BatchDe
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("desc:");
-    if (this.desc == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.desc);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("order:");
-    if (this.order == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.order);
-    }
+    sb.append("sellerId:");
+    sb.append(this.sellerId);
     first = false;
     sb.append(")");
     return sb.toString();

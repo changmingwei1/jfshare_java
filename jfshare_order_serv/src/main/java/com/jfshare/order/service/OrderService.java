@@ -67,6 +67,9 @@ public class OrderService {
     @Autowired
     private SellerClient sellerClient;
 
+    @Autowired
+    private ScoreService scoreService;
+
     public OrderModel sellerQueryDetail(int sellerId, String orderId) {
         return orderDao.getOrderBySeller(orderId, sellerId);
     }
@@ -196,6 +199,9 @@ public class OrderService {
         OrderOpt.OrderOptPush orderOptPush = new OrderOpt.OrderOptPush();
         orderOptPush.addToOrderOptList(orderModel.getOrderId(), "order_close", orderModel.getUserId(), orderModel.getSellerId());
         orderJedis.pushOrderNotification(orderOptPush);
+
+        //积分处理， 返回积分， 扣减增送积分
+        scoreService.afterOrderClose(orderModel);
         return ret;
     }
 
@@ -335,6 +341,7 @@ public class OrderService {
         //天翼支付，一个订单， 更新使用积分
         if (payRet.getPayChannel() == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
             order.setThirdScore(payRet.getThirdScore());
+            order.setThirdPrice(payRet.getThirdPrice());
         }
 
         if (payRet.getRetCode() == 2) {

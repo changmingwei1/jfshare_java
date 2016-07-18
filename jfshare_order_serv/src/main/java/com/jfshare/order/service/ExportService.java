@@ -87,7 +87,7 @@ public class ExportService {
 
                     logger.info("----查询到订单数:{} 条", total);
                     if(total > 0) {
-                        conditions.setCount(total + 100);
+                        conditions.setCount(total);
                         SearchHits hits = orderEs.search(conditions);
                         List<Order> orderDetails = Lists.newArrayList();
                         for (SearchHit searchHit : hits.getHits()) {

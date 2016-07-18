@@ -5,6 +5,9 @@ import com.alibaba.fastjson.serializer.SerializeWriter;
 import com.jfshare.finagle.thrift.order.Order;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by bq on 16/6/16.
  */
@@ -57,7 +60,13 @@ public class Test_JSON {
         order.setOrderState(10);
         String s = JSON.toJSONString(order, filter);
         Order order1 = JSON.parseObject(s, Order.class);
-        System.err.println("s=>"+ s);
-        System.err.println("s1=>" + order1);
+        List<String> l = new ArrayList<String>(1);
+        System.err.println("s=>"+ l);
+        a(l);
+        System.err.println("s1=>" + l);
+    }
+
+    public static void a(List<String> list) {
+        list.add("1111");
     }
 }

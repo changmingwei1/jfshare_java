@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.order;
+package com.jfshare.finagle.thrift.aftersale;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,20 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("PayStateResult");
+public class AfterSaleCountResult implements TBase<AfterSaleCountResult, AfterSaleCountResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("AfterSaleCountResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField PAY_STATE_FIELD_DESC = new TField("payState", TType.STRUCT, (short)2);
+  private static final TField COUNT_FIELD_DESC = new TField("count", TType.I32, (short)2);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public PayState payState;
+  public int count;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    PAY_STATE((short)2, "payState");
+    COUNT((short)2, "count");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -59,8 +59,8 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // PAY_STATE
-  	return PAY_STATE;
+        case 2: // COUNT
+  	return COUNT;
         default:
   	return null;
       }
@@ -102,56 +102,62 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
 
 
   // isset id assignments
+  private static final int __COUNT_ISSET_ID = 0;
+  private BitSet __isset_bit_vector = new BitSet(1);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.PAY_STATE, new FieldMetaData("payState", TFieldRequirementType.OPTIONAL,
-      new StructMetaData(TType.STRUCT, PayState.class)));
+    tmpMap.put(_Fields.COUNT, new FieldMetaData("count", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(PayStateResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(AfterSaleCountResult.class, metaDataMap);
   }
 
 
-  public PayStateResult() {
+  public AfterSaleCountResult() {
   }
 
-  public PayStateResult(
-    com.jfshare.finagle.thrift.result.Result result)
+  public AfterSaleCountResult(
+    com.jfshare.finagle.thrift.result.Result result,
+    int count)
   {
     this();
     this.result = result;
+    this.count = count;
+    setCountIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public PayStateResult(PayStateResult other) {
+  public AfterSaleCountResult(AfterSaleCountResult other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetPayState()) {
-      this.payState = new PayState(other.payState);
-    }
+    this.count = other.count;
   }
 
-  public PayStateResult deepCopy() {
-    return new PayStateResult(this);
+  public AfterSaleCountResult deepCopy() {
+    return new AfterSaleCountResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.payState = null;
+    setCountIsSet(false);
+    this.count = 0;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public PayStateResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public AfterSaleCountResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -172,29 +178,28 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     }
   }
 
-  public PayState getPayState() {
-    return this.payState;
+  public int getCount() {
+    return this.count;
   }
 
-  public PayStateResult setPayState(PayState payState) {
-    this.payState = payState;
-    
+  public AfterSaleCountResult setCount(int count) {
+    this.count = count;
+    setCountIsSet(true);
+
     return this;
   }
 
-  public void unsetPayState() {
-    this.payState = null;
+  public void unsetCount() {
+  __isset_bit_vector.clear(__COUNT_ISSET_ID);
   }
 
-  /** Returns true if field payState is set (has been asigned a value) and false otherwise */
-  public boolean isSetPayState() {
-    return this.payState != null;
+  /** Returns true if field count is set (has been asigned a value) and false otherwise */
+  public boolean isSetCount() {
+    return __isset_bit_vector.get(__COUNT_ISSET_ID);
   }
 
-  public void setPayStateIsSet(boolean value) {
-    if (!value) {
-      this.payState = null;
-    }
+  public void setCountIsSet(boolean value) {
+    __isset_bit_vector.set(__COUNT_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -206,11 +211,11 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case PAY_STATE:
+    case COUNT:
       if (value == null) {
-        unsetPayState();
+        unsetCount();
       } else {
-        setPayState((PayState)value);
+        setCount((Integer)value);
       }
       break;
     }
@@ -220,8 +225,8 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     switch (field) {
     case RESULT:
       return getResult();
-    case PAY_STATE:
-      return getPayState();
+    case COUNT:
+      return new Integer(getCount());
     }
     throw new IllegalStateException();
   }
@@ -235,8 +240,8 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     switch (field) {
     case RESULT:
       return isSetResult();
-    case PAY_STATE:
-      return isSetPayState();
+    case COUNT:
+      return isSetCount();
     }
     throw new IllegalStateException();
   }
@@ -245,12 +250,12 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof PayStateResult)
-      return this.equals((PayStateResult)that);
+    if (that instanceof AfterSaleCountResult)
+      return this.equals((AfterSaleCountResult)that);
     return false;
   }
 
-  public boolean equals(PayStateResult that) {
+  public boolean equals(AfterSaleCountResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -261,12 +266,12 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_payState = true && this.isSetPayState();
-    boolean that_present_payState = true && that.isSetPayState();
-    if (this_present_payState || that_present_payState) {
-      if (!(this_present_payState && that_present_payState))
+    boolean this_present_count = true;
+    boolean that_present_count = true;
+    if (this_present_count || that_present_count) {
+      if (!(this_present_count && that_present_count))
         return false;
-      if (!this.payState.equals(that.payState))
+      if (this.count != that.count)
         return false;
     }
 
@@ -280,20 +285,20 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_payState = true && (isSetPayState());
-    builder.append(present_payState);
-    if (present_payState)
-      builder.append(payState);
+    boolean present_count = true;
+    builder.append(present_count);
+    if (present_count)
+      builder.append(count);
     return builder.toHashCode();
   }
 
-  public int compareTo(PayStateResult other) {
+  public int compareTo(AfterSaleCountResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    PayStateResult typedOther = (PayStateResult)other;
+    AfterSaleCountResult typedOther = (AfterSaleCountResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -305,12 +310,12 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetPayState()).compareTo(typedOther.isSetPayState());
+    lastComparison = Boolean.valueOf(isSetCount()).compareTo(typedOther.isSetCount());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetPayState()) {
-      lastComparison = TBaseHelper.compareTo(this.payState, typedOther.payState);
+    if (isSetCount()) {
+      lastComparison = TBaseHelper.compareTo(this.count, typedOther.count);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -341,10 +346,10 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // PAY_STATE
-          if (field.type == TType.STRUCT) {
-            this.payState = new PayState();
-            this.payState.read(iprot);
+        case 2: // COUNT
+          if (field.type == TType.I32) {
+            this.count = iprot.readI32();
+            setCountIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -369,20 +374,16 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.payState != null) {
-      if (isSetPayState()) {
-        oprot.writeFieldBegin(PAY_STATE_FIELD_DESC);
-        this.payState.write(oprot);
-        oprot.writeFieldEnd();
-      }
-    }
+    oprot.writeFieldBegin(COUNT_FIELD_DESC);
+    oprot.writeI32(this.count);
+    oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("PayStateResult(");
+    StringBuilder sb = new StringBuilder("AfterSaleCountResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -391,16 +392,10 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
       sb.append(this.result);
     }
     first = false;
-    if (isSetPayState()) {
-      if (!first) sb.append(", ");
-      sb.append("payState:");
-      if (this.payState == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.payState);
-      }
-      first = false;
-      }
+    if (!first) sb.append(", ");
+    sb.append("count:");
+    sb.append(this.count);
+    first = false;
     sb.append(")");
     return sb.toString();
   }

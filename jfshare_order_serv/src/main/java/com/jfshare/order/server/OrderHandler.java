@@ -2,7 +2,8 @@ package com.jfshare.order.server;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.jfshare.elasticsearch.drive.ESClient;
+import com.jfshare.finagle.thrift.aftersale.AfterSaleOrder;
+import com.jfshare.finagle.thrift.aftersale.AfterSaleOrderParam;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayReq;
@@ -14,7 +15,6 @@ import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.finagle.thrift.trade.BuyInfo;
 import com.jfshare.order.dao.IOrderEs;
 import com.jfshare.order.dao.IOrderJedis;
-import com.jfshare.order.dao.impl.elasticsearch.OrderEsImpl;
 import com.jfshare.order.dao.impl.jedis.BasicRedis;
 import com.jfshare.order.exceptions.BaseException;
 import com.jfshare.order.exceptions.DataVerifyException;
@@ -25,6 +25,7 @@ import com.jfshare.order.server.depend.*;
 import com.jfshare.order.service.DeliverService;
 import com.jfshare.order.service.ExportService;
 import com.jfshare.order.service.OrderService;
+import com.jfshare.order.service.ScoreService;
 import com.jfshare.order.util.*;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.*;
@@ -33,13 +34,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.thrift.TException;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +84,12 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     @Autowired
     private BasicRedis basicRedis;
+
+    @Autowired
+    private ScoreService scoreService;
+
+    @Autowired
+    private AfterSaleClient afterSaleClient;
 
     @Override
     public Result createOrder(List<Order> orderList) throws TException {
@@ -549,26 +551,22 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             orderService.updateOrderPaying(orderModels, tradePayId);
 
             //全积分支付
-            if(OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash())) {
+            boolean isOnlyScore = OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash());
+            if(isOnlyScore) {
                 stringResult.setValue("全积分支付成功");
                 stringResult.getResult().setCode(2);
-                //TODO 全积分支付
                 int ret = orderService.payOnlyScore(orderModels);
                 if(ret > 0) {
-                    logger.error("申请支付----成功，全积分支付！");
-                    //虚拟商品需要自动发货
-                    for(OrderModel orderModel : orderModels) {
-                        if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
-                            DeliverVirParam deliverVirParam = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
-                            Result delverVirResult = deliverVir(deliverVirParam);
-                            if(delverVirResult != null && delverVirResult.getCode() == 0) {
-                                logger.info("申请支付----全积分支付----虚拟商品自动发货成功");
-                            } else {
-                                logger.error("申请支付----全积分支付----虚拟商品自动发货失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
-                            }
-                        }
-                    }
+                    logger.error("申请支付----全积分支付成功！");
                 }
+
+                //虚拟商品需要自动发货
+                autoDeliver4VirtualOrder(orderModels);
+                logger.info("申请支付----虚拟商品自动发货成功");
+
+                scoreService.finishOrderPay(orderModels);
+                logger.info("申请支付----赠送购物积分成功");
+
                 return stringResult;
             }
 
@@ -676,21 +674,16 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                     return stringResult;
                 }
             }
+
             logger.info("7.支付通知----payUrl订单状态更新成功");
             orderJedis.addPayState(payRet.getPayId(), payRet.getRetCode(), orderModels.get(0).getCancelTime());
 
             //虚拟商品需要自动发货
-            for(OrderModel orderModel : orderModels) {
-                if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
-                    DeliverVirParam param = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
-                    Result delverVirResult = deliverVir(param);
-                    if(delverVirResult != null && delverVirResult.getCode() == 0) {
-                        logger.info("8.支付通知----虚拟商品自动发货成功");
-                    } else {
-                        logger.error("8.支付通知----虚拟商品自动发货失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
-                    }
-                }
-            }
+            autoDeliver4VirtualOrder(orderModels);
+            logger.info("8.支付通知----虚拟商品自动发货成功");
+
+            scoreService.finishOrderPay(orderModels);
+            logger.info("9.支付通知----赠送购物积分成功, userId={}, score={}");
 
             stringResult.setValue("1");
         } catch (Exception e) {
@@ -699,6 +692,18 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return stringResult;
+    }
+
+    private void autoDeliver4VirtualOrder(List<OrderModel> orderModels) throws TException {
+        for(OrderModel orderModel : orderModels) {
+            if(ConstantUtil.TRADE_CODE.isVirOrder(orderModel.getTradeCode())) {
+                DeliverVirParam param = new DeliverVirParam(orderModel.getSellerId(), orderModel.getOrderId());
+                Result delverVirResult = deliverVir(param);
+                if(delverVirResult == null || delverVirResult.getCode() != 0) {
+                    logger.error("虚拟商品自动发货----失败，需要手工发货， 失败原因:{}", delverVirResult.getFailDescList());
+                }
+            }
+        }
     }
 
     @Override
@@ -743,6 +748,20 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return stringResult;
             }
 
+            //查询售后订单
+            if(conditions.getOrderState() == 1000) {
+                AfterSaleOrderParam afterSaleOrderParam = OrderUtil.orderQueryConditions2AfterSaleOrderParam(conditions);
+                List<AfterSaleOrder> afterSaleOrders = afterSaleClient.queryAfterSaleOrder(afterSaleOrderParam);
+                if(CollectionUtils.isEmpty(afterSaleOrders)) {
+                    logger.info(MessageFormat.format("batchExportOrder！sellerId[{0}], OrderQueryConditions[{1}]]", sellerId, conditions));
+                    FailCode.addFails(result, FailCode.NO_AFTERSALE_ORDER_RECORD);
+                    return stringResult;
+                }
+                List<String> orderIds = OrderUtil.afterSaleOrders2ListOrderId(afterSaleOrders);
+                conditions = new OrderQueryConditions();
+                conditions.setOrderIds(orderIds);
+            }
+
 
             List<OrderModel> orderModels = null;
             conditions = super.verifyConditions(conditions);
@@ -782,10 +801,24 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         stringResult.setResult(result);
         stringResult.setValue("");
         try {
-            if (StringUtil.isNullOrEmpty(conditions) || StringUtils.isBlank(conditions.getStartTime()) || StringUtils.isBlank(conditions.getEndTime())) {
-                logger.warn("batchExportOrder参数验证失败！, OrderQueryConditions:{}", conditions);
+            if (StringUtil.isNullOrEmpty(conditions)) {
+                logger.warn("batchExportOrderFull参数验证失败！, OrderQueryConditions:{}", conditions);
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
                 return stringResult;
+            }
+
+            //查询售后订单
+            if(conditions.getOrderState() == 1000) {
+                AfterSaleOrderParam afterSaleOrderParam = OrderUtil.orderQueryConditions2AfterSaleOrderParam(conditions);
+                List<AfterSaleOrder> afterSaleOrders = afterSaleClient.queryAfterSaleOrder(afterSaleOrderParam);
+                if(CollectionUtils.isEmpty(afterSaleOrders)) {
+                    logger.info("batchExportOrderFull！无要导出的售后订单数据");
+                    FailCode.addFails(result, FailCode.NO_AFTERSALE_ORDER_RECORD);
+                    return stringResult;
+                }
+                List<String> orderIds = OrderUtil.afterSaleOrders2ListOrderId(afterSaleOrders);
+                conditions = new OrderQueryConditions();
+                conditions.setOrderIds(orderIds);
             }
 
             String queryKey = DigestUtils.md5Hex(DateTimeUtil.getCurrentDateYMDHMS());

@@ -21,7 +21,10 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+        transport = new TFramedTransport(new TSocket("101.201.39.12", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.37.237", 1986));
+//        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
 //        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
@@ -40,11 +43,11 @@ public class Client extends TestCase{
 
     public void testQueryOrderDetail() throws Exception {
         //商品id
-        String orderId = "1571111";
+        String orderId = "71350022";
         try {
             ////////////////////////////////////////////////////
 
-            System.err.println(client.queryOrderDetail(1, 81, orderId));
+            System.err.println(client.queryOrderDetail(1, 22, orderId));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -62,9 +65,10 @@ public class Client extends TestCase{
         try {
             ////////////////////////////////////////////////////
             OrderQueryConditions conditions = new OrderQueryConditions();
-            conditions.setSellerId(2);
-            conditions.setOrderState(61);
-            conditions.addToOrderIds("18120090");
+            conditions.setSellerId(13);
+            conditions.setCurPage(172);
+//            conditions.setOrderState(61);
+//            conditions.addToOrderIds("18120090");
             System.err.println(client.orderProfileQuery(2, 1, conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -106,11 +110,12 @@ public class Client extends TestCase{
             OrderQueryConditions conditions = new OrderQueryConditions();
 //            conditions.setCurPage(2);
 //            conditions.setCount(3);
-            conditions.setStartTime("2016-05-01 00:00:00");
-            conditions.setEndTime("2016-06-20 00:00:00");
+            conditions.setStartTime("2016-07-01 00:00:00");
+            conditions.setEndTime("2016-07-20 00:00:00");
 //            conditions.setOrderState(5);
 //            conditions.setOrderId("59090131");
-            conditions.addToOrderIds("59700017");
+            conditions.addToOrderIds("91060215");
+            conditions.addToOrderIds("89790229");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -257,6 +262,7 @@ public class Client extends TestCase{
     public void testBatchExport() throws Exception {
         try {
             OrderQueryConditions queryConditions = new OrderQueryConditions();
+            queryConditions.setOrderState(1000);
             System.err.println(client.batchExportOrder(13, queryConditions));
         } catch (Exception e) {
             e.printStackTrace();
@@ -271,8 +277,9 @@ public class Client extends TestCase{
         try {
             OrderQueryConditions queryConditions = new OrderQueryConditions();
 //            queryConditions.setUserId(99);
-            queryConditions.setStartTime("2016-05-01 00:00:00");
-            queryConditions.setEndTime("2016-05-31 00:00:00");
+            queryConditions.setStartTime("2016-07-01 00:00:00");
+            queryConditions.setEndTime("2016-07-31 00:00:00");
+            queryConditions.setOrderState(1000);
 //                queryConditions.setOrderId("58870112");
             System.err.println(client.batchExportOrderFull(queryConditions));
         } catch (Exception e) {
@@ -285,6 +292,6 @@ public class Client extends TestCase{
     }
 
     public void testQueryExportFileKey() throws TException {
-        System.err.println(client.getExportOrderResult("0bc72301bd5fb99e0b1c8db9dcf3bdf3"));
+        System.err.println(client.getExportOrderResult("b8550774fa3b88b0d57c61e8a59fe6ff"));
     }
 }

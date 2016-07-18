@@ -6,6 +6,8 @@
 package com.jfshare.finagle.thrift.order;
 
 
+import java.util.Map;
+import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
 public enum OrderCancelReason implements TEnum {

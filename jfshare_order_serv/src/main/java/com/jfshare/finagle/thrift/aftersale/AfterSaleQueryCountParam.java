@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.order;
+package com.jfshare.finagle.thrift.aftersale;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,20 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("OrderCount");
+public class AfterSaleQueryCountParam implements TBase<AfterSaleQueryCountParam, AfterSaleQueryCountParam._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("AfterSaleQueryCountParam");
 
-  private static final TField ORDER_STATE_FIELD_DESC = new TField("orderState", TType.I32, (short)1);
-  private static final TField COUNT_FIELD_DESC = new TField("count", TType.I32, (short)2);
+  private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)1);
+  private static final TField STATE_FIELD_DESC = new TField("state", TType.I32, (short)2);
 
 
-  public int orderState;
-  public int count;
+  public int sellerId;
+  public int state;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    ORDER_STATE((short)1, "orderState"),
-    COUNT((short)2, "count");
+    SELLER_ID((short)1, "sellerId"),
+    STATE((short)2, "state");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -57,10 +57,10 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // ORDER_STATE
-  	return ORDER_STATE;
-        case 2: // COUNT
-  	return COUNT;
+        case 1: // SELLER_ID
+  	return SELLER_ID;
+        case 2: // STATE
+  	return STATE;
         default:
   	return null;
       }
@@ -102,120 +102,120 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
 
 
   // isset id assignments
-  private static final int __ORDERSTATE_ISSET_ID = 0;
-  private static final int __COUNT_ISSET_ID = 1;
+  private static final int __SELLERID_ISSET_ID = 0;
+  private static final int __STATE_ISSET_ID = 1;
   private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.ORDER_STATE, new FieldMetaData("orderState", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.COUNT, new FieldMetaData("count", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.STATE, new FieldMetaData("state", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(OrderCount.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(AfterSaleQueryCountParam.class, metaDataMap);
   }
 
 
-  public OrderCount() {
+  public AfterSaleQueryCountParam() {
   }
 
-  public OrderCount(
-    int orderState,
-    int count)
+  public AfterSaleQueryCountParam(
+    int sellerId,
+    int state)
   {
     this();
-    this.orderState = orderState;
-    setOrderStateIsSet(true);
-    this.count = count;
-    setCountIsSet(true);
+    this.sellerId = sellerId;
+    setSellerIdIsSet(true);
+    this.state = state;
+    setStateIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public OrderCount(OrderCount other) {
+  public AfterSaleQueryCountParam(AfterSaleQueryCountParam other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
-    this.orderState = other.orderState;
-    this.count = other.count;
+    this.sellerId = other.sellerId;
+    this.state = other.state;
   }
 
-  public OrderCount deepCopy() {
-    return new OrderCount(this);
+  public AfterSaleQueryCountParam deepCopy() {
+    return new AfterSaleQueryCountParam(this);
   }
 
   @Override
   public void clear() {
-    setOrderStateIsSet(false);
-    this.orderState = 0;
-    setCountIsSet(false);
-    this.count = 0;
+    setSellerIdIsSet(false);
+    this.sellerId = 0;
+    setStateIsSet(false);
+    this.state = 0;
   }
 
-  public int getOrderState() {
-    return this.orderState;
+  public int getSellerId() {
+    return this.sellerId;
   }
 
-  public OrderCount setOrderState(int orderState) {
-    this.orderState = orderState;
-    setOrderStateIsSet(true);
+  public AfterSaleQueryCountParam setSellerId(int sellerId) {
+    this.sellerId = sellerId;
+    setSellerIdIsSet(true);
 
     return this;
   }
 
-  public void unsetOrderState() {
-  __isset_bit_vector.clear(__ORDERSTATE_ISSET_ID);
+  public void unsetSellerId() {
+  __isset_bit_vector.clear(__SELLERID_ISSET_ID);
   }
 
-  /** Returns true if field orderState is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrderState() {
-    return __isset_bit_vector.get(__ORDERSTATE_ISSET_ID);
+  /** Returns true if field sellerId is set (has been asigned a value) and false otherwise */
+  public boolean isSetSellerId() {
+    return __isset_bit_vector.get(__SELLERID_ISSET_ID);
   }
 
-  public void setOrderStateIsSet(boolean value) {
-    __isset_bit_vector.set(__ORDERSTATE_ISSET_ID, value);
+  public void setSellerIdIsSet(boolean value) {
+    __isset_bit_vector.set(__SELLERID_ISSET_ID, value);
   }
 
-  public int getCount() {
-    return this.count;
+  public int getState() {
+    return this.state;
   }
 
-  public OrderCount setCount(int count) {
-    this.count = count;
-    setCountIsSet(true);
+  public AfterSaleQueryCountParam setState(int state) {
+    this.state = state;
+    setStateIsSet(true);
 
     return this;
   }
 
-  public void unsetCount() {
-  __isset_bit_vector.clear(__COUNT_ISSET_ID);
+  public void unsetState() {
+  __isset_bit_vector.clear(__STATE_ISSET_ID);
   }
 
-  /** Returns true if field count is set (has been asigned a value) and false otherwise */
-  public boolean isSetCount() {
-    return __isset_bit_vector.get(__COUNT_ISSET_ID);
+  /** Returns true if field state is set (has been asigned a value) and false otherwise */
+  public boolean isSetState() {
+    return __isset_bit_vector.get(__STATE_ISSET_ID);
   }
 
-  public void setCountIsSet(boolean value) {
-    __isset_bit_vector.set(__COUNT_ISSET_ID, value);
+  public void setStateIsSet(boolean value) {
+    __isset_bit_vector.set(__STATE_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case ORDER_STATE:
+    case SELLER_ID:
       if (value == null) {
-        unsetOrderState();
+        unsetSellerId();
       } else {
-        setOrderState((Integer)value);
+        setSellerId((Integer)value);
       }
       break;
-    case COUNT:
+    case STATE:
       if (value == null) {
-        unsetCount();
+        unsetState();
       } else {
-        setCount((Integer)value);
+        setState((Integer)value);
       }
       break;
     }
@@ -223,10 +223,10 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case ORDER_STATE:
-      return new Integer(getOrderState());
-    case COUNT:
-      return new Integer(getCount());
+    case SELLER_ID:
+      return new Integer(getSellerId());
+    case STATE:
+      return new Integer(getState());
     }
     throw new IllegalStateException();
   }
@@ -238,10 +238,10 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
     }
 
     switch (field) {
-    case ORDER_STATE:
-      return isSetOrderState();
-    case COUNT:
-      return isSetCount();
+    case SELLER_ID:
+      return isSetSellerId();
+    case STATE:
+      return isSetState();
     }
     throw new IllegalStateException();
   }
@@ -250,28 +250,28 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof OrderCount)
-      return this.equals((OrderCount)that);
+    if (that instanceof AfterSaleQueryCountParam)
+      return this.equals((AfterSaleQueryCountParam)that);
     return false;
   }
 
-  public boolean equals(OrderCount that) {
+  public boolean equals(AfterSaleQueryCountParam that) {
     if (that == null)
       return false;
-    boolean this_present_orderState = true;
-    boolean that_present_orderState = true;
-    if (this_present_orderState || that_present_orderState) {
-      if (!(this_present_orderState && that_present_orderState))
+    boolean this_present_sellerId = true;
+    boolean that_present_sellerId = true;
+    if (this_present_sellerId || that_present_sellerId) {
+      if (!(this_present_sellerId && that_present_sellerId))
         return false;
-      if (this.orderState != that.orderState)
+      if (this.sellerId != that.sellerId)
         return false;
     }
-    boolean this_present_count = true;
-    boolean that_present_count = true;
-    if (this_present_count || that_present_count) {
-      if (!(this_present_count && that_present_count))
+    boolean this_present_state = true;
+    boolean that_present_state = true;
+    if (this_present_state || that_present_state) {
+      if (!(this_present_state && that_present_state))
         return false;
-      if (this.count != that.count)
+      if (this.state != that.state)
         return false;
     }
 
@@ -281,41 +281,41 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_orderState = true;
-    builder.append(present_orderState);
-    if (present_orderState)
-      builder.append(orderState);
-    boolean present_count = true;
-    builder.append(present_count);
-    if (present_count)
-      builder.append(count);
+    boolean present_sellerId = true;
+    builder.append(present_sellerId);
+    if (present_sellerId)
+      builder.append(sellerId);
+    boolean present_state = true;
+    builder.append(present_state);
+    if (present_state)
+      builder.append(state);
     return builder.toHashCode();
   }
 
-  public int compareTo(OrderCount other) {
+  public int compareTo(AfterSaleQueryCountParam other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    OrderCount typedOther = (OrderCount)other;
+    AfterSaleQueryCountParam typedOther = (AfterSaleQueryCountParam)other;
 
-    lastComparison = Boolean.valueOf(isSetOrderState()).compareTo(typedOther.isSetOrderState());
+    lastComparison = Boolean.valueOf(isSetSellerId()).compareTo(typedOther.isSetSellerId());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetOrderState()) {
-      lastComparison = TBaseHelper.compareTo(this.orderState, typedOther.orderState);
+    if (isSetSellerId()) {
+      lastComparison = TBaseHelper.compareTo(this.sellerId, typedOther.sellerId);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetCount()).compareTo(typedOther.isSetCount());
+    lastComparison = Boolean.valueOf(isSetState()).compareTo(typedOther.isSetState());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetCount()) {
-      lastComparison = TBaseHelper.compareTo(this.count, typedOther.count);
+    if (isSetState()) {
+      lastComparison = TBaseHelper.compareTo(this.state, typedOther.state);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -338,18 +338,18 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
         break;
       }
       switch (field.id) {
-        case 1: // ORDER_STATE
+        case 1: // SELLER_ID
           if (field.type == TType.I32) {
-            this.orderState = iprot.readI32();
-            setOrderStateIsSet(true);
+            this.sellerId = iprot.readI32();
+            setSellerIdIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // COUNT
+        case 2: // STATE
           if (field.type == TType.I32) {
-            this.count = iprot.readI32();
-            setCountIsSet(true);
+            this.state = iprot.readI32();
+            setStateIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -369,11 +369,11 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    oprot.writeFieldBegin(ORDER_STATE_FIELD_DESC);
-    oprot.writeI32(this.orderState);
+    oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
+    oprot.writeI32(this.sellerId);
     oprot.writeFieldEnd();
-    oprot.writeFieldBegin(COUNT_FIELD_DESC);
-    oprot.writeI32(this.count);
+    oprot.writeFieldBegin(STATE_FIELD_DESC);
+    oprot.writeI32(this.state);
     oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -381,14 +381,14 @@ public class OrderCount implements TBase<OrderCount, OrderCount._Fields>, java.i
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("OrderCount(");
+    StringBuilder sb = new StringBuilder("AfterSaleQueryCountParam(");
     boolean first = true;
-    sb.append("orderState:");
-    sb.append(this.orderState);
+    sb.append("sellerId:");
+    sb.append(this.sellerId);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("count:");
-    sb.append(this.count);
+    sb.append("state:");
+    sb.append(this.state);
     first = false;
     sb.append(")");
     return sb.toString();

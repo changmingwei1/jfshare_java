@@ -1,10 +1,7 @@
 package com.jfshare.pay.server;
 
 import com.alibaba.fastjson.JSON;
-import com.jfshare.finagle.thrift.pay.PayReq;
-import com.jfshare.finagle.thrift.pay.PayRes;
-import com.jfshare.finagle.thrift.pay.PayRet;
-import com.jfshare.finagle.thrift.pay.PayServ;
+import com.jfshare.finagle.thrift.pay.*;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.pay.model.TbPayRecordWithBLOBs;
@@ -17,6 +14,7 @@ import com.jfshare.pay.util.hebaopay.HebaoSubmit;
 import com.jfshare.pay.util.weixinpay.WeixinSubmit;
 import com.jfshare.utils.CryptoUtil;
 import com.jfshare.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,6 +211,30 @@ public class ServHandle implements PayServ.Iface {
         } catch (Exception e) {
             logger.error("$$$$支付通知----处理失败，系统异常！", e);
             FailCode.addFails(result, FailCode.SYS_ERROR);
+        }
+
+        return stringResult;
+    }
+
+    @Override
+    public StringResult queryPayResult(payRetQueryParams params) throws TException {
+        StringResult stringResult = new StringResult();
+        stringResult.setResult(new Result(0));
+        if(params == null || StringUtils.isBlank(params.getPayId())) {
+            logger.warn("支付结果查询----payRetQueryParams参数验证失败！params:[{}]", params);
+            FailCode.addFails(stringResult.getResult(), FailCode.PARAM_ERROR);
+            return stringResult;
+        }
+
+        try {
+            TbPayRecordWithBLOBs payRecord = paySvcImpl.queryByPayId(params.getPayId());
+            PayRet payRet = new PayRet();
+            payRet.setThirdPrice(payRecord.getThirdPrice());
+            payRet.setThirdScore(payRecord.getThirdScore());
+            stringResult.setValue(JSON.toJSONString(payRet));
+        } catch (Exception e) {
+            logger.error("支付结果查询----处理失败，系统异常！", e);
+            FailCode.addFails(stringResult.getResult(), FailCode.SYS_ERROR);
         }
 
         return stringResult;

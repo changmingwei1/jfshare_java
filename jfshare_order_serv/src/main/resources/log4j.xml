@@ -17,7 +17,7 @@
 
 	<!-- 自定义配置 -->
 	<appender name="server-appender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/var/log/java/tradeuser/stock-serv/serv-logs/serv.log" />
+		<param name="File" value="/var/log/java/jfshare/order-serv/serv.log" />
 		<param name="Append" value="true" />
 		<param name="Encoding" value="UTF-8" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />

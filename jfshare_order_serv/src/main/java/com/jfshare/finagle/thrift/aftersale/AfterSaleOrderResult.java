@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.order;
+package com.jfshare.finagle.thrift.aftersale;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,20 +29,23 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class OrderStateResult implements TBase<OrderStateResult, OrderStateResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("OrderStateResult");
+public class AfterSaleOrderResult implements TBase<AfterSaleOrderResult, AfterSaleOrderResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("AfterSaleOrderResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField ORDER_COUNT_LIST_FIELD_DESC = new TField("orderCountList", TType.LIST, (short)2);
+  private static final TField AFTER_SALE_ORDERS_FIELD_DESC = new TField("afterSaleOrders", TType.LIST, (short)2);
+  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)3);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public List<OrderCount> orderCountList;
+  public List<AfterSaleOrder> afterSaleOrders;
+  public com.jfshare.finagle.thrift.pagination.Pagination pagination;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    ORDER_COUNT_LIST((short)2, "orderCountList");
+    AFTER_SALE_ORDERS((short)2, "afterSaleOrders"),
+    PAGINATION((short)3, "pagination");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -59,8 +62,10 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // ORDER_COUNT_LIST
-  	return ORDER_COUNT_LIST;
+        case 2: // AFTER_SALE_ORDERS
+  	return AFTER_SALE_ORDERS;
+        case 3: // PAGINATION
+  	return PAGINATION;
         default:
   	return null;
       }
@@ -108,57 +113,65 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.ORDER_COUNT_LIST, new FieldMetaData("orderCountList", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.AFTER_SALE_ORDERS, new FieldMetaData("afterSaleOrders", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, OrderCount.class))));
+                new StructMetaData(TType.STRUCT, AfterSaleOrder.class))));
+    tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(OrderStateResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(AfterSaleOrderResult.class, metaDataMap);
   }
 
 
-  public OrderStateResult() {
+  public AfterSaleOrderResult() {
   }
 
-  public OrderStateResult(
+  public AfterSaleOrderResult(
     com.jfshare.finagle.thrift.result.Result result,
-    List<OrderCount> orderCountList)
+    List<AfterSaleOrder> afterSaleOrders,
+    com.jfshare.finagle.thrift.pagination.Pagination pagination)
   {
     this();
     this.result = result;
-    this.orderCountList = orderCountList;
+    this.afterSaleOrders = afterSaleOrders;
+    this.pagination = pagination;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public OrderStateResult(OrderStateResult other) {
+  public AfterSaleOrderResult(AfterSaleOrderResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetOrderCountList()) {
-      List<OrderCount> __this__orderCountList = new ArrayList<OrderCount>();
-      for (OrderCount other_element : other.orderCountList) {
-        __this__orderCountList.add(new OrderCount(other_element));
+    if (other.isSetAfterSaleOrders()) {
+      List<AfterSaleOrder> __this__afterSaleOrders = new ArrayList<AfterSaleOrder>();
+      for (AfterSaleOrder other_element : other.afterSaleOrders) {
+        __this__afterSaleOrders.add(new AfterSaleOrder(other_element));
       }
-      this.orderCountList = __this__orderCountList;
+      this.afterSaleOrders = __this__afterSaleOrders;
+    }
+    if (other.isSetPagination()) {
+      this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
     }
   }
 
-  public OrderStateResult deepCopy() {
-    return new OrderStateResult(this);
+  public AfterSaleOrderResult deepCopy() {
+    return new AfterSaleOrderResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.orderCountList = null;
+    this.afterSaleOrders = null;
+    this.pagination = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public OrderStateResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public AfterSaleOrderResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -179,43 +192,68 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     }
   }
 
-  public int getOrderCountListSize() {
-    return (this.orderCountList == null) ? 0 : this.orderCountList.size();
+  public int getAfterSaleOrdersSize() {
+    return (this.afterSaleOrders == null) ? 0 : this.afterSaleOrders.size();
   }
 
-  public java.util.Iterator<OrderCount> getOrderCountListIterator() {
-    return (this.orderCountList == null) ? null : this.orderCountList.iterator();
+  public java.util.Iterator<AfterSaleOrder> getAfterSaleOrdersIterator() {
+    return (this.afterSaleOrders == null) ? null : this.afterSaleOrders.iterator();
   }
 
-  public void addToOrderCountList(OrderCount elem) {
-    if (this.orderCountList == null) {
-      this.orderCountList = new ArrayList<OrderCount>();
+  public void addToAfterSaleOrders(AfterSaleOrder elem) {
+    if (this.afterSaleOrders == null) {
+      this.afterSaleOrders = new ArrayList<AfterSaleOrder>();
     }
-    this.orderCountList.add(elem);
+    this.afterSaleOrders.add(elem);
   }
 
-  public List<OrderCount> getOrderCountList() {
-    return this.orderCountList;
+  public List<AfterSaleOrder> getAfterSaleOrders() {
+    return this.afterSaleOrders;
   }
 
-  public OrderStateResult setOrderCountList(List<OrderCount> orderCountList) {
-    this.orderCountList = orderCountList;
+  public AfterSaleOrderResult setAfterSaleOrders(List<AfterSaleOrder> afterSaleOrders) {
+    this.afterSaleOrders = afterSaleOrders;
     
     return this;
   }
 
-  public void unsetOrderCountList() {
-    this.orderCountList = null;
+  public void unsetAfterSaleOrders() {
+    this.afterSaleOrders = null;
   }
 
-  /** Returns true if field orderCountList is set (has been asigned a value) and false otherwise */
-  public boolean isSetOrderCountList() {
-    return this.orderCountList != null;
+  /** Returns true if field afterSaleOrders is set (has been asigned a value) and false otherwise */
+  public boolean isSetAfterSaleOrders() {
+    return this.afterSaleOrders != null;
   }
 
-  public void setOrderCountListIsSet(boolean value) {
+  public void setAfterSaleOrdersIsSet(boolean value) {
     if (!value) {
-      this.orderCountList = null;
+      this.afterSaleOrders = null;
+    }
+  }
+
+  public com.jfshare.finagle.thrift.pagination.Pagination getPagination() {
+    return this.pagination;
+  }
+
+  public AfterSaleOrderResult setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
+    this.pagination = pagination;
+    
+    return this;
+  }
+
+  public void unsetPagination() {
+    this.pagination = null;
+  }
+
+  /** Returns true if field pagination is set (has been asigned a value) and false otherwise */
+  public boolean isSetPagination() {
+    return this.pagination != null;
+  }
+
+  public void setPaginationIsSet(boolean value) {
+    if (!value) {
+      this.pagination = null;
     }
   }
 
@@ -228,11 +266,18 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case ORDER_COUNT_LIST:
+    case AFTER_SALE_ORDERS:
       if (value == null) {
-        unsetOrderCountList();
+        unsetAfterSaleOrders();
       } else {
-        setOrderCountList((List<OrderCount>)value);
+        setAfterSaleOrders((List<AfterSaleOrder>)value);
+      }
+      break;
+    case PAGINATION:
+      if (value == null) {
+        unsetPagination();
+      } else {
+        setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
       }
       break;
     }
@@ -242,8 +287,10 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     switch (field) {
     case RESULT:
       return getResult();
-    case ORDER_COUNT_LIST:
-      return getOrderCountList();
+    case AFTER_SALE_ORDERS:
+      return getAfterSaleOrders();
+    case PAGINATION:
+      return getPagination();
     }
     throw new IllegalStateException();
   }
@@ -257,8 +304,10 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     switch (field) {
     case RESULT:
       return isSetResult();
-    case ORDER_COUNT_LIST:
-      return isSetOrderCountList();
+    case AFTER_SALE_ORDERS:
+      return isSetAfterSaleOrders();
+    case PAGINATION:
+      return isSetPagination();
     }
     throw new IllegalStateException();
   }
@@ -267,12 +316,12 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof OrderStateResult)
-      return this.equals((OrderStateResult)that);
+    if (that instanceof AfterSaleOrderResult)
+      return this.equals((AfterSaleOrderResult)that);
     return false;
   }
 
-  public boolean equals(OrderStateResult that) {
+  public boolean equals(AfterSaleOrderResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -283,12 +332,20 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_orderCountList = true && this.isSetOrderCountList();
-    boolean that_present_orderCountList = true && that.isSetOrderCountList();
-    if (this_present_orderCountList || that_present_orderCountList) {
-      if (!(this_present_orderCountList && that_present_orderCountList))
+    boolean this_present_afterSaleOrders = true && this.isSetAfterSaleOrders();
+    boolean that_present_afterSaleOrders = true && that.isSetAfterSaleOrders();
+    if (this_present_afterSaleOrders || that_present_afterSaleOrders) {
+      if (!(this_present_afterSaleOrders && that_present_afterSaleOrders))
         return false;
-      if (!this.orderCountList.equals(that.orderCountList))
+      if (!this.afterSaleOrders.equals(that.afterSaleOrders))
+        return false;
+    }
+    boolean this_present_pagination = true && this.isSetPagination();
+    boolean that_present_pagination = true && that.isSetPagination();
+    if (this_present_pagination || that_present_pagination) {
+      if (!(this_present_pagination && that_present_pagination))
+        return false;
+      if (!this.pagination.equals(that.pagination))
         return false;
     }
 
@@ -302,20 +359,24 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_orderCountList = true && (isSetOrderCountList());
-    builder.append(present_orderCountList);
-    if (present_orderCountList)
-      builder.append(orderCountList);
+    boolean present_afterSaleOrders = true && (isSetAfterSaleOrders());
+    builder.append(present_afterSaleOrders);
+    if (present_afterSaleOrders)
+      builder.append(afterSaleOrders);
+    boolean present_pagination = true && (isSetPagination());
+    builder.append(present_pagination);
+    if (present_pagination)
+      builder.append(pagination);
     return builder.toHashCode();
   }
 
-  public int compareTo(OrderStateResult other) {
+  public int compareTo(AfterSaleOrderResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    OrderStateResult typedOther = (OrderStateResult)other;
+    AfterSaleOrderResult typedOther = (AfterSaleOrderResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -327,12 +388,22 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetOrderCountList()).compareTo(typedOther.isSetOrderCountList());
+    lastComparison = Boolean.valueOf(isSetAfterSaleOrders()).compareTo(typedOther.isSetAfterSaleOrders());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetOrderCountList()) {
-      lastComparison = TBaseHelper.compareTo(this.orderCountList, typedOther.orderCountList);
+    if (isSetAfterSaleOrders()) {
+      lastComparison = TBaseHelper.compareTo(this.afterSaleOrders, typedOther.afterSaleOrders);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPagination()).compareTo(typedOther.isSetPagination());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPagination()) {
+      lastComparison = TBaseHelper.compareTo(this.pagination, typedOther.pagination);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -363,20 +434,28 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // ORDER_COUNT_LIST
+        case 2: // AFTER_SALE_ORDERS
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.orderCountList = new ArrayList<OrderCount>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list8 = iprot.readListBegin();
+            this.afterSaleOrders = new ArrayList<AfterSaleOrder>(_list8.size);
+            for (int _i9 = 0; _i9 < _list8.size; ++_i9)
             {
-              OrderCount _elem18;
-              _elem18 = new OrderCount();
-              _elem18.read(iprot);
-              this.orderCountList.add(_elem18);
+              AfterSaleOrder _elem10;
+              _elem10 = new AfterSaleOrder();
+              _elem10.read(iprot);
+              this.afterSaleOrders.add(_elem10);
             }
             iprot.readListEnd();
             }
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // PAGINATION
+          if (field.type == TType.STRUCT) {
+            this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination();
+            this.pagination.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -401,16 +480,21 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.orderCountList != null) {
-      oprot.writeFieldBegin(ORDER_COUNT_LIST_FIELD_DESC);
+    if (this.afterSaleOrders != null) {
+      oprot.writeFieldBegin(AFTER_SALE_ORDERS_FIELD_DESC);
       {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.orderCountList.size()));
-        for (OrderCount _iter19 : this.orderCountList)
+        oprot.writeListBegin(new TList(TType.STRUCT, this.afterSaleOrders.size()));
+        for (AfterSaleOrder _iter11 : this.afterSaleOrders)
         {
-          _iter19.write(oprot);
+          _iter11.write(oprot);
         }
         oprot.writeListEnd();
       }
+      oprot.writeFieldEnd();
+    }
+    if (this.pagination != null) {
+      oprot.writeFieldBegin(PAGINATION_FIELD_DESC);
+      this.pagination.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -419,7 +503,7 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("OrderStateResult(");
+    StringBuilder sb = new StringBuilder("AfterSaleOrderResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -429,11 +513,19 @@ public class OrderStateResult implements TBase<OrderStateResult, OrderStateResul
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("orderCountList:");
-    if (this.orderCountList == null) {
+    sb.append("afterSaleOrders:");
+    if (this.afterSaleOrders == null) {
       sb.append("null");
     } else {
-      sb.append(this.orderCountList);
+      sb.append(this.afterSaleOrders);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("pagination:");
+    if (this.pagination == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.pagination);
     }
     first = false;
     sb.append(")");

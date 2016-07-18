@@ -39,16 +39,19 @@ public class PayServ {
   public interface Iface {
     public com.jfshare.finagle.thrift.result.StringResult payUrl(PayReq payReq) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult payNotify(PayRes payRes) throws TException;
+    public com.jfshare.finagle.thrift.result.StringResult queryPayResult(payRetQueryParams params) throws TException;
   }
 
   public interface AsyncIface {
     public void payUrl(PayReq payReq, AsyncMethodCallback<AsyncClient.payUrl_call> resultHandler) throws TException;
     public void payNotify(PayRes payRes, AsyncMethodCallback<AsyncClient.payNotify_call> resultHandler) throws TException;
+    public void queryPayResult(payRetQueryParams params, AsyncMethodCallback<AsyncClient.queryPayResult_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
     public Future<com.jfshare.finagle.thrift.result.StringResult> payUrl(PayReq payReq);
     public Future<com.jfshare.finagle.thrift.result.StringResult> payNotify(PayRes payRes);
+    public Future<com.jfshare.finagle.thrift.result.StringResult> queryPayResult(payRetQueryParams params);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -158,6 +161,41 @@ public class PayServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "payNotify failed: unknown result");
     }
+    public com.jfshare.finagle.thrift.result.StringResult queryPayResult(payRetQueryParams params) throws TException
+    {
+      send_queryPayResult(params);
+      return recv_queryPayResult();
+    }
+
+    public void send_queryPayResult(payRetQueryParams params) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("queryPayResult", TMessageType.CALL, ++seqid_));
+      queryPayResult_args args = new queryPayResult_args();
+      args.setParams(params);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.StringResult recv_queryPayResult() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "queryPayResult failed: out of sequence response");
+      }
+      queryPayResult_result result = new queryPayResult_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryPayResult failed: unknown result");
+    }
   }
 
   public static class AsyncClient extends TAsyncClient implements AsyncIface {
@@ -239,6 +277,37 @@ public class PayServ {
         return (new Client(prot)).recv_payNotify();
       }
      }
+    public void queryPayResult(payRetQueryParams params, AsyncMethodCallback<queryPayResult_call> resultHandler) throws TException {
+      checkReady();
+      queryPayResult_call method_call = new queryPayResult_call(params, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class queryPayResult_call extends TAsyncMethodCall {
+      private payRetQueryParams params;
+
+      public queryPayResult_call(payRetQueryParams params, AsyncMethodCallback<queryPayResult_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.params = params;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("queryPayResult", TMessageType.CALL, 0));
+        queryPayResult_args args = new queryPayResult_args();
+        args.setParams(params);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.StringResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_queryPayResult();
+      }
+     }
    }
 
 
@@ -311,6 +380,36 @@ public class PayServ {
         return Future.exception(e);
       }
     }
+    public Future<com.jfshare.finagle.thrift.result.StringResult> queryPayResult(payRetQueryParams params) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("queryPayResult", TMessageType.CALL, 0));
+        queryPayResult_args __args__ = new queryPayResult_args();
+        __args__.setParams(params);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.StringResult>>() {
+          public Future<com.jfshare.finagle.thrift.result.StringResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_queryPayResult());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
   }
 
   public static class Processor implements TProcessor {
@@ -320,6 +419,7 @@ public class PayServ {
       iface_ = iface;
       processMap_.put("payUrl", new payUrl());
       processMap_.put("payNotify", new payNotify());
+      processMap_.put("queryPayResult", new queryPayResult());
     }
 
     protected static interface ProcessFunction {
@@ -392,6 +492,31 @@ public class PayServ {
         result.success = iface_.payNotify(args.payRes);
         
         oprot.writeMessageBegin(new TMessage("payNotify", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class queryPayResult implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        queryPayResult_args args = new queryPayResult_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("queryPayResult", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        queryPayResult_result result = new queryPayResult_result();
+        result.success = iface_.queryPayResult(args.params);
+        
+        oprot.writeMessageBegin(new TMessage("queryPayResult", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -522,6 +647,73 @@ public class PayServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("payNotify", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("queryPayResult", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          queryPayResult_args args = new queryPayResult_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("queryPayResult", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.StringResult> future;
+          try {
+            future = iface.queryPayResult(args.params);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.StringResult, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.StringResult value) {
+                queryPayResult_result result = new queryPayResult_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("queryPayResult", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -1703,6 +1895,579 @@ public class PayServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("payNotify_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class queryPayResult_args implements TBase<queryPayResult_args, queryPayResult_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryPayResult_args");
+
+  private static final TField PARAMS_FIELD_DESC = new TField("params", TType.STRUCT, (short)1);
+
+
+  public payRetQueryParams params;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAMS((short)1, "params");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAMS
+  	return PARAMS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAMS, new FieldMetaData("params", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, payRetQueryParams.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryPayResult_args.class, metaDataMap);
+  }
+
+
+  public queryPayResult_args() {
+  }
+
+  public queryPayResult_args(
+    payRetQueryParams params)
+  {
+    this();
+    this.params = params;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryPayResult_args(queryPayResult_args other) {
+    if (other.isSetParams()) {
+      this.params = new payRetQueryParams(other.params);
+    }
+  }
+
+  public queryPayResult_args deepCopy() {
+    return new queryPayResult_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.params = null;
+  }
+
+  public payRetQueryParams getParams() {
+    return this.params;
+  }
+
+  public queryPayResult_args setParams(payRetQueryParams params) {
+    this.params = params;
+    
+    return this;
+  }
+
+  public void unsetParams() {
+    this.params = null;
+  }
+
+  /** Returns true if field params is set (has been asigned a value) and false otherwise */
+  public boolean isSetParams() {
+    return this.params != null;
+  }
+
+  public void setParamsIsSet(boolean value) {
+    if (!value) {
+      this.params = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAMS:
+      if (value == null) {
+        unsetParams();
+      } else {
+        setParams((payRetQueryParams)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAMS:
+      return getParams();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAMS:
+      return isSetParams();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryPayResult_args)
+      return this.equals((queryPayResult_args)that);
+    return false;
+  }
+
+  public boolean equals(queryPayResult_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_params = true && this.isSetParams();
+    boolean that_present_params = true && that.isSetParams();
+    if (this_present_params || that_present_params) {
+      if (!(this_present_params && that_present_params))
+        return false;
+      if (!this.params.equals(that.params))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_params = true && (isSetParams());
+    builder.append(present_params);
+    if (present_params)
+      builder.append(params);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryPayResult_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryPayResult_args typedOther = (queryPayResult_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParams()).compareTo(typedOther.isSetParams());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParams()) {
+      lastComparison = TBaseHelper.compareTo(this.params, typedOther.params);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAMS
+          if (field.type == TType.STRUCT) {
+            this.params = new payRetQueryParams();
+            this.params.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.params != null) {
+      oprot.writeFieldBegin(PARAMS_FIELD_DESC);
+      this.params.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryPayResult_args(");
+    boolean first = true;
+    sb.append("params:");
+    if (this.params == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.params);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class queryPayResult_result implements TBase<queryPayResult_result, queryPayResult_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("queryPayResult_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.StringResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.StringResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(queryPayResult_result.class, metaDataMap);
+  }
+
+
+  public queryPayResult_result() {
+  }
+
+  public queryPayResult_result(
+    com.jfshare.finagle.thrift.result.StringResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public queryPayResult_result(queryPayResult_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.StringResult(other.success);
+    }
+  }
+
+  public queryPayResult_result deepCopy() {
+    return new queryPayResult_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.StringResult getSuccess() {
+    return this.success;
+  }
+
+  public queryPayResult_result setSuccess(com.jfshare.finagle.thrift.result.StringResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.StringResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof queryPayResult_result)
+      return this.equals((queryPayResult_result)that);
+    return false;
+  }
+
+  public boolean equals(queryPayResult_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(queryPayResult_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    queryPayResult_result typedOther = (queryPayResult_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.StringResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("queryPayResult_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

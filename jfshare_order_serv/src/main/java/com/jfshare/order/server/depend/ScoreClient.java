@@ -5,6 +5,9 @@ import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.finagle.thrift.score.ScoreResult;
 import com.jfshare.finagle.thrift.score.ScoreServ;
 import com.jfshare.finagle.thrift.score.ScoreTrade;
+import com.jfshare.order.dao.IOrderEs;
+import com.jfshare.order.model.EsScore;
+import com.jfshare.order.util.ConstantUtil;
 import com.jfshare.order.util.FailCode;
 import com.jfshare.ridge.ConfigManager;
 import com.twitter.finagle.builder.ClientBuilder;
@@ -30,6 +33,9 @@ public class ScoreClient {
 	private ScoreServ.ServiceIface service = null;
 	@Autowired
 	private ConfigManager configManager;
+
+	@Autowired
+	private IOrderEs orderEs;
 
 	@PostConstruct
 	public void init() {
@@ -74,7 +80,7 @@ public class ScoreClient {
 		return score;
 	}
 
-	public List<FailDesc> reduceScore(int buyerId, int score, String orderId) {
+	public List<FailDesc> reduceScore(int buyerId, int score, String orderBatch, ConstantUtil.SCORE_TYPE scoreType, String orderId) {
 		List<FailDesc> failDescs = new ArrayList<>();
 		long doneTime = System.currentTimeMillis();
 		if (buyerId <= 0) {
@@ -83,53 +89,59 @@ public class ScoreClient {
 		}
 
 		try {
-			ScoreTrade scoreTrade = new ScoreTrade();
-			scoreTrade.setTradeId("trade_" + orderId);
-			scoreTrade.setAmount(score);
-			scoreTrade.setInOrOut(2);
-			scoreTrade.setTrader(3);
-			scoreTrade.setType(4);
-			scoreTrade.setUserId(buyerId);
-			StringResult scoreResult = Await.result(this.service.expenditure(scoreTrade));
-			if(scoreResult != null && scoreResult.getResult().getCode() == 0) {
-				logger.info("{},扣减用户积分：{}", buyerId, score);
-			} else{
-				logger.warn("{},扣减用户积分失败:{}", buyerId, scoreResult);
-				failDescs.add(FailCode.PAY_SCORE_REDUCE_FAIL);
-				return failDescs;
+			if(score > 0) {
+				ScoreTrade scoreTrade = new ScoreTrade();
+				scoreTrade.setTradeId(orderBatch);
+				scoreTrade.setAmount(score);
+				scoreTrade.setInOrOut(2);
+				scoreTrade.setTrader(3);
+				scoreTrade.setType(scoreType.getEnumVal());
+				scoreTrade.setUserId(buyerId);
+				StringResult scoreResult = Await.result(this.service.expenditure(scoreTrade));
+				if(scoreResult != null && scoreResult.getResult().getCode() == 0) {
+					logger.info("userId={}, type={}, 扣减用户积分：{}", buyerId, scoreType, score);
+				} else{
+					logger.warn("userId={}, type={}, 扣减用户积分失败:{}", buyerId, scoreType, scoreResult);
+					failDescs.add(FailCode.PAY_SCORE_REDUCE_FAIL);
+					return failDescs;
+				}
 			}
+			orderEs.addScoreRecord(new EsScore(orderBatch, orderId, buyerId, score, scoreType));
 		} catch (Exception e) {
-			logger.error(buyerId + "积分服务异常!", e);
+			logger.error(buyerId + ", 积分服务异常!", e);
 			failDescs.add(FailCode.PAY_SCORE_REDUCE_FAIL);
 			return failDescs;
 		}
-		logger.info("{},积分服务expenditure接口调用时间：{} ms!!", buyerId, (System.currentTimeMillis() - doneTime));
+		logger.info("userId={}, 积分服务expenditure接口调用时间：{} ms!!", buyerId, (System.currentTimeMillis() - doneTime));
 		return null;
 	}
 
-	public void incomeScore(int buyerId, String orderId, int score) {
+	public void incomeScore(int buyerId, int score, String orderBatch, ConstantUtil.SCORE_TYPE scoreType, String orderId) {
 		long doneTime = System.currentTimeMillis();
 		if (buyerId <= 0)
 			return;
 		try {
-			ScoreTrade scoreTrade = new ScoreTrade();
-			scoreTrade.setTradeId("trade_" + orderId);
-			scoreTrade.setAmount(score);
-			scoreTrade.setInOrOut(1);
-			scoreTrade.setTrader(3);
-			scoreTrade.setType(1);
-			scoreTrade.setUserId(buyerId);
-			StringResult scoreResult = Await.result(this.service.income(scoreTrade));
-			if(scoreResult != null && scoreResult.getResult().getCode() == 0) {
-				logger.info("{},返还用户积分：{}", buyerId, score);
-			} else{
-				logger.warn("{},返还用户积分失败:{}", buyerId, scoreResult);
+			if(score > 0) {
+				ScoreTrade scoreTrade = new ScoreTrade();
+				scoreTrade.setTradeId(orderId);
+				scoreTrade.setAmount(score);
+				scoreTrade.setInOrOut(1);
+				scoreTrade.setTrader(3);
+				scoreTrade.setType(scoreType.getEnumVal());
+				scoreTrade.setUserId(buyerId);
+				StringResult scoreResult = Await.result(this.service.income(scoreTrade));
+				if(scoreResult != null && scoreResult.getResult().getCode() == 0) {
+					logger.info("userId={}, type={}, 返还用户积分：{}", buyerId, scoreType, score);
+				} else{
+					logger.warn("userId={}, type={}, 返还用户积分失败:{}", buyerId, scoreType, scoreResult);
+				}
 			}
+			orderEs.addScoreRecord(new EsScore(orderBatch, orderId, buyerId, score, scoreType));
 		} catch (Exception e) {
-			logger.error(buyerId + "积分服务异常!", e);
+			logger.error(buyerId + ", 积分服务异常!", e);
 			score = -1;
 		}
-		logger.info("{},积分服务expenditure接口调用时间：{} ms!!", buyerId, (System.currentTimeMillis() - doneTime));
+		logger.info("userId={}, 积分服务expenditure接口调用时间：{} ms!!", buyerId, (System.currentTimeMillis() - doneTime));
 	}
 
 }

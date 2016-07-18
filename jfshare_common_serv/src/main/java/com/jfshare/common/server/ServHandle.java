@@ -20,6 +20,7 @@ import com.octo.captcha.service.CaptchaServiceException;
 import com.octo.captcha.service.image.ImageCaptchaService;
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -569,11 +570,11 @@ public class ServHandle implements CommonServ.Iface {
         }
 
         try {
-            FailDesc createFailDesc = null;
-            CaptchaWithKey captchaWithKey = msgHandler.getMsgCaptcha(captcha, createFailDesc);
-            if(createFailDesc != null) {
+            List<FailDesc> createFailDescs = new ArrayList<>();
+            CaptchaWithKey captchaWithKey = msgHandler.getMsgCaptcha(captcha, createFailDescs);
+            if(CollectionUtils.isNotEmpty(createFailDescs)) {
                 result.setCode(1);
-                result.addToFailDescList(createFailDesc);
+                result.setFailDescList(createFailDescs);
                 return result;
             }
             String msgContent = "验证码:" + captchaWithKey.getCaptcha() + "(3分钟内有效)，请及时输入验证，感谢您使用聚分享！";

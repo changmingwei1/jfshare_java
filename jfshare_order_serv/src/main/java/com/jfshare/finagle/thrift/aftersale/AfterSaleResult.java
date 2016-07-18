@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.order;
+package com.jfshare.finagle.thrift.aftersale;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,20 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("PayStateResult");
+public class AfterSaleResult implements TBase<AfterSaleResult, AfterSaleResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("AfterSaleResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField PAY_STATE_FIELD_DESC = new TField("payState", TType.STRUCT, (short)2);
+  private static final TField AFTER_SALE_LIST_FIELD_DESC = new TField("afterSaleList", TType.LIST, (short)2);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public PayState payState;
+  public List<AfterSale> afterSaleList;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    PAY_STATE((short)2, "payState");
+    AFTER_SALE_LIST((short)2, "afterSaleList");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -59,8 +59,8 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // PAY_STATE
-  	return PAY_STATE;
+        case 2: // AFTER_SALE_LIST
+  	return AFTER_SALE_LIST;
         default:
   	return null;
       }
@@ -108,50 +108,57 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.PAY_STATE, new FieldMetaData("payState", TFieldRequirementType.OPTIONAL,
-      new StructMetaData(TType.STRUCT, PayState.class)));
+    tmpMap.put(_Fields.AFTER_SALE_LIST, new FieldMetaData("afterSaleList", TFieldRequirementType.DEFAULT,
+      new ListMetaData(TType.LIST,
+                new StructMetaData(TType.STRUCT, AfterSale.class))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(PayStateResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(AfterSaleResult.class, metaDataMap);
   }
 
 
-  public PayStateResult() {
+  public AfterSaleResult() {
   }
 
-  public PayStateResult(
-    com.jfshare.finagle.thrift.result.Result result)
+  public AfterSaleResult(
+    com.jfshare.finagle.thrift.result.Result result,
+    List<AfterSale> afterSaleList)
   {
     this();
     this.result = result;
+    this.afterSaleList = afterSaleList;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public PayStateResult(PayStateResult other) {
+  public AfterSaleResult(AfterSaleResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetPayState()) {
-      this.payState = new PayState(other.payState);
+    if (other.isSetAfterSaleList()) {
+      List<AfterSale> __this__afterSaleList = new ArrayList<AfterSale>();
+      for (AfterSale other_element : other.afterSaleList) {
+        __this__afterSaleList.add(new AfterSale(other_element));
+      }
+      this.afterSaleList = __this__afterSaleList;
     }
   }
 
-  public PayStateResult deepCopy() {
-    return new PayStateResult(this);
+  public AfterSaleResult deepCopy() {
+    return new AfterSaleResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.payState = null;
+    this.afterSaleList = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public PayStateResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public AfterSaleResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -172,28 +179,43 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     }
   }
 
-  public PayState getPayState() {
-    return this.payState;
+  public int getAfterSaleListSize() {
+    return (this.afterSaleList == null) ? 0 : this.afterSaleList.size();
   }
 
-  public PayStateResult setPayState(PayState payState) {
-    this.payState = payState;
+  public java.util.Iterator<AfterSale> getAfterSaleListIterator() {
+    return (this.afterSaleList == null) ? null : this.afterSaleList.iterator();
+  }
+
+  public void addToAfterSaleList(AfterSale elem) {
+    if (this.afterSaleList == null) {
+      this.afterSaleList = new ArrayList<AfterSale>();
+    }
+    this.afterSaleList.add(elem);
+  }
+
+  public List<AfterSale> getAfterSaleList() {
+    return this.afterSaleList;
+  }
+
+  public AfterSaleResult setAfterSaleList(List<AfterSale> afterSaleList) {
+    this.afterSaleList = afterSaleList;
     
     return this;
   }
 
-  public void unsetPayState() {
-    this.payState = null;
+  public void unsetAfterSaleList() {
+    this.afterSaleList = null;
   }
 
-  /** Returns true if field payState is set (has been asigned a value) and false otherwise */
-  public boolean isSetPayState() {
-    return this.payState != null;
+  /** Returns true if field afterSaleList is set (has been asigned a value) and false otherwise */
+  public boolean isSetAfterSaleList() {
+    return this.afterSaleList != null;
   }
 
-  public void setPayStateIsSet(boolean value) {
+  public void setAfterSaleListIsSet(boolean value) {
     if (!value) {
-      this.payState = null;
+      this.afterSaleList = null;
     }
   }
 
@@ -206,11 +228,11 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case PAY_STATE:
+    case AFTER_SALE_LIST:
       if (value == null) {
-        unsetPayState();
+        unsetAfterSaleList();
       } else {
-        setPayState((PayState)value);
+        setAfterSaleList((List<AfterSale>)value);
       }
       break;
     }
@@ -220,8 +242,8 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     switch (field) {
     case RESULT:
       return getResult();
-    case PAY_STATE:
-      return getPayState();
+    case AFTER_SALE_LIST:
+      return getAfterSaleList();
     }
     throw new IllegalStateException();
   }
@@ -235,8 +257,8 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     switch (field) {
     case RESULT:
       return isSetResult();
-    case PAY_STATE:
-      return isSetPayState();
+    case AFTER_SALE_LIST:
+      return isSetAfterSaleList();
     }
     throw new IllegalStateException();
   }
@@ -245,12 +267,12 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof PayStateResult)
-      return this.equals((PayStateResult)that);
+    if (that instanceof AfterSaleResult)
+      return this.equals((AfterSaleResult)that);
     return false;
   }
 
-  public boolean equals(PayStateResult that) {
+  public boolean equals(AfterSaleResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -261,12 +283,12 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_payState = true && this.isSetPayState();
-    boolean that_present_payState = true && that.isSetPayState();
-    if (this_present_payState || that_present_payState) {
-      if (!(this_present_payState && that_present_payState))
+    boolean this_present_afterSaleList = true && this.isSetAfterSaleList();
+    boolean that_present_afterSaleList = true && that.isSetAfterSaleList();
+    if (this_present_afterSaleList || that_present_afterSaleList) {
+      if (!(this_present_afterSaleList && that_present_afterSaleList))
         return false;
-      if (!this.payState.equals(that.payState))
+      if (!this.afterSaleList.equals(that.afterSaleList))
         return false;
     }
 
@@ -280,20 +302,20 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_payState = true && (isSetPayState());
-    builder.append(present_payState);
-    if (present_payState)
-      builder.append(payState);
+    boolean present_afterSaleList = true && (isSetAfterSaleList());
+    builder.append(present_afterSaleList);
+    if (present_afterSaleList)
+      builder.append(afterSaleList);
     return builder.toHashCode();
   }
 
-  public int compareTo(PayStateResult other) {
+  public int compareTo(AfterSaleResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    PayStateResult typedOther = (PayStateResult)other;
+    AfterSaleResult typedOther = (AfterSaleResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -305,12 +327,12 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetPayState()).compareTo(typedOther.isSetPayState());
+    lastComparison = Boolean.valueOf(isSetAfterSaleList()).compareTo(typedOther.isSetAfterSaleList());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetPayState()) {
-      lastComparison = TBaseHelper.compareTo(this.payState, typedOther.payState);
+    if (isSetAfterSaleList()) {
+      lastComparison = TBaseHelper.compareTo(this.afterSaleList, typedOther.afterSaleList);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -341,10 +363,20 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // PAY_STATE
-          if (field.type == TType.STRUCT) {
-            this.payState = new PayState();
-            this.payState.read(iprot);
+        case 2: // AFTER_SALE_LIST
+          if (field.type == TType.LIST) {
+            {
+            TList _list4 = iprot.readListBegin();
+            this.afterSaleList = new ArrayList<AfterSale>(_list4.size);
+            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
+            {
+              AfterSale _elem6;
+              _elem6 = new AfterSale();
+              _elem6.read(iprot);
+              this.afterSaleList.add(_elem6);
+            }
+            iprot.readListEnd();
+            }
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -369,12 +401,17 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.payState != null) {
-      if (isSetPayState()) {
-        oprot.writeFieldBegin(PAY_STATE_FIELD_DESC);
-        this.payState.write(oprot);
-        oprot.writeFieldEnd();
+    if (this.afterSaleList != null) {
+      oprot.writeFieldBegin(AFTER_SALE_LIST_FIELD_DESC);
+      {
+        oprot.writeListBegin(new TList(TType.STRUCT, this.afterSaleList.size()));
+        for (AfterSale _iter7 : this.afterSaleList)
+        {
+          _iter7.write(oprot);
+        }
+        oprot.writeListEnd();
       }
+      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -382,7 +419,7 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("PayStateResult(");
+    StringBuilder sb = new StringBuilder("AfterSaleResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -391,16 +428,14 @@ public class PayStateResult implements TBase<PayStateResult, PayStateResult._Fie
       sb.append(this.result);
     }
     first = false;
-    if (isSetPayState()) {
-      if (!first) sb.append(", ");
-      sb.append("payState:");
-      if (this.payState == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.payState);
-      }
-      first = false;
-      }
+    if (!first) sb.append(", ");
+    sb.append("afterSaleList:");
+    if (this.afterSaleList == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.afterSaleList);
+    }
+    first = false;
     sb.append(")");
     return sb.toString();
   }

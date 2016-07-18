@@ -31,18 +31,18 @@ public class Test_xxx {
 
     public static void main(String[] str) {
        OrderQueryConditions conditions = new OrderQueryConditions();
-        conditions.setStartTime("2016-05-20 00:00:00");
-        conditions.setEndTime("2016-06-21 00:00:00");
-//        conditions.setOrderState(6);
+        conditions.setStartTime("2016-06-01 00:00:00");
+        conditions.setEndTime("2016-06-26 00:00:00");
+        conditions.setOrderState(5);
 //        conditions.setOrderId("59090131");
 //        conditions.addToOrderIds("59090131");
 //        conditions.setSellerId(13);
 //        conditions.setCurPage(6);
-        conditions.setCount(30);
+        conditions.setCount(100);
 
         ESClient esClient = new ESClient("jfshare-app", "101.201.39.61:9300,101.201.39.62:9300");
         try {
-            for(int i=0; i < 10; i++) {
+            for(int i=0; i < 1; i++) {
                 long start = System.nanoTime();
                 SearchHits hits = search(conditions, esClient);
                 int hitsTotal = (int)hits.getTotalHits();
