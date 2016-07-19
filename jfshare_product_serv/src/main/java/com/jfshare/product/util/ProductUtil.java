@@ -55,15 +55,11 @@ public class ProductUtil {
         		String key2 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_" + brandId + "_cur_price DESC";
         		String key3 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_" + brandId + "_cur_price ASC";
         		String key4 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_" + brandId + "_click_rate DESC";
+
         		String key5 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_create_time DESC";
         		String key6 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_cur_price DESC";
         		String key7 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_cur_price ASC";
         		String key8 = ProductCommons.RK_PRODUCT_LIST + subjectId + "_0_click_rate DESC";
-
-				String key9 = ProductCommons.RK_PRODUCT_LIST + "0_0_create_time DESC";
-				String key10 = ProductCommons.RK_PRODUCT_LIST + "0_0_cur_price DESC";
-				String key11 = ProductCommons.RK_PRODUCT_LIST + "0_0_cur_price ASC";
-				String key12 = ProductCommons.RK_PRODUCT_LIST + "0_0_click_rate DESC";
 
         		keyList.add(key1);
         		keyList.add(key2);
@@ -73,12 +69,29 @@ public class ProductUtil {
         		keyList.add(key6);
         		keyList.add(key7);
         		keyList.add(key8);
-        		keyList.add(key9);
-        		keyList.add(key10);
-        		keyList.add(key11);
-        		keyList.add(key12);
+
         	}
     	}
+		String key9 = ProductCommons.RK_PRODUCT_LIST + "0_0_create_time DESC";
+		String key10 = ProductCommons.RK_PRODUCT_LIST + "0_0_cur_price DESC";
+		String key11 = ProductCommons.RK_PRODUCT_LIST + "0_0_cur_price ASC";
+		String key12 = ProductCommons.RK_PRODUCT_LIST + "0_0_click_rate DESC";
+
+		String key13 = ProductCommons.RK_PRODUCT_LIST + "0_" + brandId + "_create_time DESC";
+		String key14 = ProductCommons.RK_PRODUCT_LIST + "0_" + brandId + "_cur_price DESC";
+		String key15 = ProductCommons.RK_PRODUCT_LIST + "0_" + brandId + "_cur_price ASC";
+		String key16 = ProductCommons.RK_PRODUCT_LIST + "0_" + brandId + "_click_rate DESC";
+
+
+		keyList.add(key9);
+		keyList.add(key10);
+		keyList.add(key11);
+		keyList.add(key12);
+
+		keyList.add(key13);
+		keyList.add(key14);
+		keyList.add(key15);
+		keyList.add(key16);
     	return keyList;
     }
     
