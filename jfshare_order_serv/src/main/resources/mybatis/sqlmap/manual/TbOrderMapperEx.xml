@@ -757,13 +757,19 @@
             <if test="conditions.endTime != null">
                 <![CDATA[AND a.create_time <= #{conditions.endTime}]]>
             </if>
+            <if test="conditions.payTimeStart != null">
+                AND a.pay_time >= #{conditions.payTimeStart}
+            </if>
+            <if test="conditions.payTimeEnd != null">
+                <![CDATA[AND a.pay_time <= #{conditions.payTimeEnd}]]>
+            </if>
             <if test="conditions.orderIds != null">
                 AND a.order_id IN
                 <foreach collection="conditions.orderIds" index="index" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
-            and a.order_type = 1
+            and a.order_type = 1 and a.pay_state = 1
         </where>
         GROUP BY a.order_id
         <!-- 排序 -->

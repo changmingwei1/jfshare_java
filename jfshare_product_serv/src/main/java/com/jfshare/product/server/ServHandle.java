@@ -572,6 +572,7 @@ public class ServHandle implements ProductServ.Iface {
 		queryMap.put("productId", param.getProductId());
 		queryMap.put("cardNumber", param.getCardNumber());
 		queryMap.put("state", param.getState());
+		queryMap.put("skuNum", param.getSkuNum());
 		queryMap.put("start", page.getStart());
 		queryMap.put("count", page.getCount());
 
