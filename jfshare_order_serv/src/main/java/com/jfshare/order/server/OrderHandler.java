@@ -585,7 +585,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             payReq.setCustId(param.getPayChannel().getCustId());
             payReq.setCustType(param.getPayChannel().getCustType());
             payReq.setProcustID(param.getPayChannel().getProcustID());
-            payReq.setRemark("订单支付");
+            payReq.setRemark(OrderUtil.getRemark(orderModels));
 
             String payUrl = payClient.payUrl(payReq);
             if (payUrl == null) {

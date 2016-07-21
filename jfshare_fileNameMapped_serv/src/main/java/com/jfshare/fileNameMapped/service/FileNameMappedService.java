@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.jfshare.fileNameMapped.model.TbFileNameMapped;
 import com.jfshare.fileNameMapped.model.TbFileNameMappedExample;
 import com.jfshare.fileNameMapped.model.mapper.TbFileNameMappedMapper;
 import com.jfshare.utils.BeanUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * *************************************************************************
@@ -49,24 +51,28 @@ public class FileNameMappedService {
 	 *   
 	 *  @author  ljx 创建时间 2015年11月29日 下午11:44:35
 	 */
+	@Transactional
 	public String saveFileNameMappedInfo(FileNameMappedInfo fileNameMappedInfo){
 		String filename = fileNameMappedInfo.getFilename();
-		
+		String md5Str = DigestUtils.md5Hex(filename);
+
+		baseRedis.putKV("FileNameMapped:"+filename, fileNameMappedInfo.getFileid());
+		TbFileNameMappedExample example = new TbFileNameMappedExample();
+		TbFileNameMappedExample.Criteria criteria = example.createCriteria();
+		criteria.andFilenameMd5EqualTo(md5Str);
+		tbFileNameMappedMapper.deleteByExample(example);
+
 		//组织参数
 		TbFileNameMapped tbFileNameMapped = new TbFileNameMapped();
 		tbFileNameMapped.setFileid(fileNameMappedInfo.getFileid());
 		tbFileNameMapped.setFilename(filename);
 		tbFileNameMapped.setBackupState(1);
-		tbFileNameMapped.setFilenameMd5(DigestUtils.md5Hex(filename));
-		
+		tbFileNameMapped.setFilenameMd5(md5Str);
+
 		//insert => DB
-		try{
-			tbFileNameMappedMapper.insertSelective(tbFileNameMapped);
-			baseRedis.putKV("FileNameMapped:"+filename, fileNameMappedInfo.getFileid());
-		}catch(DuplicateKeyException e){
-			logger.warn("重复数据");
-		}
-		
+		int insertRet = tbFileNameMappedMapper.insertSelective(tbFileNameMapped);
+		logger.info("图片映射----插入数据库结果：{}", insertRet > 0 ? "成功" : "失败");
+
 		return filename;
 	}
 	

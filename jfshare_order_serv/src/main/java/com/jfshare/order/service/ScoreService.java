@@ -87,7 +87,7 @@ public class ScoreService {
          */
         if(orderBatchCount == 1) {
             score = orderRebateScore;
-        } else if(rollbackOrderRebateAll.size() == orderBatchCount - 1) {      
+        } else if(rollbackOrderRebateAll.size() == orderBatchCount - 1) {
             score = orderRebateScore - rollbackOrderRebateScore(rollbackOrderRebateAll);
         }
 

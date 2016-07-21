@@ -514,4 +514,23 @@ public class OrderUtil {
         }
         return orderIds;
     }
+
+    /**
+     * 获取订单支付申请备注
+     * @param orderModels
+     * @return
+     */
+    public static String getRemark(List<OrderModel> orderModels) {
+        String s = "订单支付";
+        OrderModel orderModel = orderModels.get(0);
+        if(orderModel.getPayChannel() == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
+            TbOrderInfoRecord tbOrderInfoRecord = orderModel.getTbOrderInfoList().get(0);
+            String productName = tbOrderInfoRecord.getProductName();
+            String productId = tbOrderInfoRecord.getProductId();
+            int count = tbOrderInfoRecord.getCount();
+            s = "百分尊享-" + productId + productName + "x" + count;
+        }
+
+        return s;
+    }
 }
