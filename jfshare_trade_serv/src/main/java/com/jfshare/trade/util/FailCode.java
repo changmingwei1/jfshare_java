@@ -27,6 +27,7 @@ public class FailCode {
 
 	public static FailDesc ORDER_PERSIS_CALL_ERROR;
 	public static FailDesc ORDER_PERSIS_RET_ERROR;
+	public static FailDesc ORDER_SELLER_ERROR;
 
 
 	static {
@@ -49,6 +50,7 @@ public class FailCode {
 
 		ORDER_PERSIS_CALL_ERROR = new FailDesc("order", "3012", "订单入库调用错误");
 		ORDER_PERSIS_RET_ERROR = new FailDesc("order", "3013", "订单入库结果错误");
+		ORDER_SELLER_ERROR = new FailDesc("seller", "3014", "订单商家信息错误");
     }
     
     /**

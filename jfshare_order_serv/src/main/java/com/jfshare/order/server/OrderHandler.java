@@ -773,7 +773,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 for (OrderModel orderModel : orderModels) {
                     orderDetails.add(OrderUtil.rConvertOrderModel(orderModel));
                 }
-                byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
+                byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails, null);
                 if (xlsBytes != null) {
                     String fileName = fileOpUtil.getFileName(sellerId, null);
                     String fileKey = fileOpUtil.toFastDFS(xlsBytes, fileName);
@@ -807,10 +807,11 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return stringResult;
             }
 
+            List<AfterSaleOrder> afterSaleOrders = null;
             //查询售后订单
             if(conditions.getOrderState() == 1000) {
                 AfterSaleOrderParam afterSaleOrderParam = OrderUtil.orderQueryConditions2AfterSaleOrderParam(conditions);
-                List<AfterSaleOrder> afterSaleOrders = afterSaleClient.queryAfterSaleOrder(afterSaleOrderParam);
+                afterSaleOrders = afterSaleClient.queryAfterSaleOrder(afterSaleOrderParam);
                 if(CollectionUtils.isEmpty(afterSaleOrders)) {
                     logger.info("batchExportOrderFull！无要导出的售后订单数据");
                     FailCode.addFails(result, FailCode.NO_AFTERSALE_ORDER_RECORD);
@@ -822,7 +823,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             }
 
             String queryKey = DigestUtils.md5Hex(DateTimeUtil.getCurrentDateYMDHMS());
-            exportService.asyncExport(conditions, queryKey);
+            exportService.asyncExport(conditions, queryKey, afterSaleOrders);
             stringResult.setValue(queryKey);
 
 

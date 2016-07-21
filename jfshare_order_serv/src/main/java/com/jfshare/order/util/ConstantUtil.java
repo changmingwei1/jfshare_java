@@ -60,6 +60,46 @@ public class ConstantUtil {
         }
     };
 
+    //售后状态1：新建（待审核）   2：审核通过  3：审核不通过  99：已完成
+    public static enum AFTERSALE_STATE {
+        WAIT_AUDIT(1, "新建（待审核)"), AUDIT_PASS(2,"审核通过"), AUDIT_UNPASS(3,"审核不通过"), FINISH(99, "已完成");
+        private int enumVal=0;
+        private String desc = "";
+        private AFTERSALE_STATE(int enumVal, String desc){
+            this.enumVal = enumVal;
+            this.desc = desc;
+        }
+        public int getEnumVal(){
+            return this.enumVal;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public static AFTERSALE_STATE getEnumByVal(int v) {
+            AFTERSALE_STATE e = null;
+            switch (v) {
+                case 1: {
+                    e = WAIT_AUDIT;
+                    break;
+                }
+                case 2: {
+                    e = AUDIT_PASS;
+                    break;
+                }
+                case 3: {
+                    e = AUDIT_UNPASS;
+                    break;
+                }
+                case 99: {
+                    e = FINISH;
+                }
+            }
+            return e;
+        }
+    };
+
     public static enum ExportState {
         query, export, exception, expired
     }

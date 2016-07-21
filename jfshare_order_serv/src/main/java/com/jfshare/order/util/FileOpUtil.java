@@ -1,11 +1,13 @@
 package com.jfshare.order.util;
 
+import com.jfshare.finagle.thrift.aftersale.AfterSaleOrder;
 import com.jfshare.finagle.thrift.order.DeliverInfo;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderInfo;
 import com.jfshare.finagle.thrift.order.PayInfo;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.PriceUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -81,9 +83,10 @@ public class FileOpUtil {
      * @return 失败返回null
      */
     @Deprecated
-    public byte[] gerExportExcel(List<Order> orders) {
+    public byte[] gerExportExcel(List<Order> orders, List<AfterSaleOrder> afterSaleOrders) {
         String exportTitle = "导出订单信息";
         String[] colNames = getExportColNames();
+        Map<String, Integer> afterSaleMap = getAfterSaleStateMap(afterSaleOrders);
 
         /*export excel xls*/
         HSSFWorkbook wb = new HSSFWorkbook();
@@ -228,6 +231,10 @@ public class FileOpUtil {
                     String state1 =  stateType.get(order.getActiveState());
                     HSSFCell cell27 = row.createCell(27, Cell.CELL_TYPE_STRING);
                     cell27.setCellValue(convertStr(state1));
+
+                    String afterStateDesc =  getAfterSaleStateDesc(afterSaleMap, productInfo.getProductId(), productInfo.getSkuNum());
+                    HSSFCell cell28 = row.createCell(28, Cell.CELL_TYPE_STRING);
+                    cell28.setCellValue(convertStr(afterStateDesc));
                 }
             }
         } catch (Exception e) {
@@ -259,6 +266,38 @@ public class FileOpUtil {
         return bytes;
     }
 
+    /**
+     * 构建售后状态Map
+     * key: productId_skuNum
+     * value: afterSaleState
+     * @param afterSaleOrders
+     * @return
+     */
+    private Map<String, Integer> getAfterSaleStateMap(List<AfterSaleOrder> afterSaleOrders) {
+        Map<String, Integer> map = new HashMap<>();
+        if(CollectionUtils.isEmpty(afterSaleOrders)) {
+            return map;
+        }
+        for(AfterSaleOrder afterSaleOrder : afterSaleOrders) {
+
+        }
+        return map;
+    }
+
+
+    /**
+     * 获取售后状态描述
+     * 1：新建（待审核）   2：审核通过  3：审核不通过  99：已完成
+     * @param afterSaleStateMap
+     * @param productId
+     * @param sku
+     * @return
+     */
+    private String getAfterSaleStateDesc(Map<String, Integer> afterSaleStateMap, String productId, String sku) {
+        Integer afterSaleState = afterSaleStateMap.get(productId+"_"+sku);
+        return afterSaleState == null ? "" : ConstantUtil.AFTERSALE_STATE.getEnumByVal(afterSaleState).getDesc();
+    }
+
     /*
 	 * 获取导出的列名称
 	 */
@@ -268,7 +307,7 @@ public class FileOpUtil {
                 "单价（元）", "运费", "买家实付金额及方式", "订单金额",
                 "联系人", "联系电话", "省", "市", "区",
                 "邮寄地址", "邮编",  "买家留言", "发货时间", "确认收货时间", "快递公司",
-                "快递号码", "关闭原因"};
+                "快递号码", "关闭原因", "售后状态"};
     }
 
     /*
