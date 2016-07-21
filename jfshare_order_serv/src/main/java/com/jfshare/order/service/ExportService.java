@@ -2,6 +2,7 @@ package com.jfshare.order.service;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.jfshare.finagle.thrift.aftersale.AfterSale;
 import com.jfshare.finagle.thrift.aftersale.AfterSaleOrder;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
@@ -9,6 +10,7 @@ import com.jfshare.order.common.Commons;
 import com.jfshare.order.dao.IOrderEs;
 import com.jfshare.order.dao.impl.jedis.BasicRedis;
 import com.jfshare.order.model.EsOrder;
+import com.jfshare.order.server.depend.AfterSaleClient;
 import com.jfshare.order.util.FileOpUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +43,9 @@ public class ExportService {
 
     @Autowired
     private BasicRedis basicRedis;
+
+    @Autowired
+    private AfterSaleClient afterSaleClient;
 
     abstract class Executor<T> {
 
@@ -78,7 +83,7 @@ public class ExportService {
         }
     }
 
-    public void asyncExport(final OrderQueryConditions conditions, final String queryKey, final List<AfterSaleOrder> afterSaleOrders){
+    public void asyncExport(final OrderQueryConditions conditions, final String queryKey, final List<AfterSale> afterSales){
         new Executor<Object>() {
             @Override
             Object function() {
@@ -98,7 +103,14 @@ public class ExportService {
 
                         basicRedis.putKV(queryKey, "export", Commons.exportKeyExpired);
 
-                        byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails, afterSaleOrders);
+                        List<AfterSale> afterSaleList = afterSales;
+
+                        // 分批查询订单售后信息
+                        if(conditions.getOrderState() != 1000) {
+                            afterSaleList = afterSaleClient.queryAfterSales(orderDetails);
+                        }
+
+                        byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails, afterSaleList);
                         if (xlsBytes != null) {
                             String fileName = fileOpUtil.getFileName("full", null);
                             String fileKey = fileOpUtil.toFastDFS(xlsBytes, fileName);

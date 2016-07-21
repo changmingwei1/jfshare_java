@@ -59,7 +59,7 @@ public class OrderEsImpl implements IOrderEs{
             queryBuilder.must(QueryBuilders.matchQuery("orderId", conditions.getOrderId()));
         }
 
-        if(orderState > 0) {
+        if(orderState > 0 && orderState != 1000) {
             if(orderState < 10) {
                 queryBuilder.must(QueryBuilders.rangeQuery("orderState")
                         .from(orderState * 10)

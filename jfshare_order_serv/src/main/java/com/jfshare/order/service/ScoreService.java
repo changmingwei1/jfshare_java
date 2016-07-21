@@ -46,11 +46,10 @@ public class ScoreService {
         int incomeScore = OrderUtil.gettotalAmount(orders) / 100;
         int userId = orders.get(0).getUserId();
         String transId = orders.get(0).getOrderBatch();
-        if(incomeScore > 0) {
-            SearchHits searchHits = orderEs.searchScoreRecord(transId, ConstantUtil.SCORE_TYPE.order_rebate);
-            if(searchHits.getTotalHits() == 0) {
-                scoreClient.incomeScore(userId, incomeScore, transId, ConstantUtil.SCORE_TYPE.order_rebate, "");
-            }
+        logger.info("finishOrderPay----支付完成增送积分----transId={}, userId={}, incomeScore={}", transId, userId, incomeScore);
+        SearchHits searchHits = orderEs.searchScoreRecord(transId, ConstantUtil.SCORE_TYPE.order_rebate);
+        if(searchHits.getTotalHits() == 0) {
+            scoreClient.incomeScore(userId, incomeScore, transId, ConstantUtil.SCORE_TYPE.order_rebate, "");
         }
     }
 

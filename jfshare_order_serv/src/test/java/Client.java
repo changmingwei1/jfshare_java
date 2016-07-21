@@ -110,12 +110,12 @@ public class Client extends TestCase{
             OrderQueryConditions conditions = new OrderQueryConditions();
 //            conditions.setCurPage(2);
 //            conditions.setCount(3);
-            conditions.setStartTime("2016-07-01 00:00:00");
-            conditions.setEndTime("2016-07-20 00:00:00");
+//            conditions.setStartTime("2016-07-01 00:00:00");
+//            conditions.setEndTime("2016-07-20 00:00:00");
 //            conditions.setOrderState(5);
 //            conditions.setOrderId("59090131");
-            conditions.addToOrderIds("91060215");
-            conditions.addToOrderIds("89790229");
+            conditions.addToOrderIds("95470215");
+//            conditions.addToOrderIds("95200327");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -278,9 +278,9 @@ public class Client extends TestCase{
             OrderQueryConditions queryConditions = new OrderQueryConditions();
 //            queryConditions.setUserId(99);
             queryConditions.setStartTime("2016-07-01 00:00:00");
-            queryConditions.setEndTime("2016-07-31 00:00:00");
+            queryConditions.setEndTime("2016-07-21 23:00:00");
             queryConditions.setOrderState(1000);
-//                queryConditions.setOrderId("58870112");
+                queryConditions.setOrderId("93890041");
             System.err.println(client.batchExportOrderFull(queryConditions));
         } catch (Exception e) {
             e.printStackTrace();
@@ -292,6 +292,6 @@ public class Client extends TestCase{
     }
 
     public void testQueryExportFileKey() throws TException {
-        System.err.println(client.getExportOrderResult("b8550774fa3b88b0d57c61e8a59fe6ff"));
+        System.err.println(client.getExportOrderResult("6ea7e10c58fa14f752d040cf6e5a14bd"));
     }
 }
