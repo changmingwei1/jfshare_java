@@ -5,39 +5,31 @@
  */
 package com.jfshare.finagle.thrift.seller;
 
+import com.twitter.finagle.thrift.ThriftClientRequest;
+import com.twitter.util.Function;
+import com.twitter.util.Function2;
+import com.twitter.util.Future;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.EnumMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.EnumSet;
-import java.util.Collections;
-import java.util.BitSet;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
+import org.apache.thrift.*;
+import org.apache.thrift.async.*;
+import org.apache.thrift.meta_data.FieldMetaData;
+import org.apache.thrift.meta_data.FieldValueMetaData;
+import org.apache.thrift.meta_data.ListMetaData;
+import org.apache.thrift.meta_data.StructMetaData;
+import org.apache.thrift.protocol.*;
+import org.apache.thrift.transport.TMemoryBuffer;
+import org.apache.thrift.transport.TMemoryInputTransport;
+import org.apache.thrift.transport.TNonblockingTransport;
+import org.apache.thrift.transport.TTransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.thrift.*;
-import org.apache.thrift.async.*;
-import org.apache.thrift.meta_data.*;
-import org.apache.thrift.transport.*;
-import org.apache.thrift.protocol.*;
-
-import com.twitter.util.Future;
-import com.twitter.util.Function;
-import com.twitter.util.Function2;
-import com.twitter.util.Try;
-import com.twitter.util.Return;
-import com.twitter.util.Throw;
-import com.twitter.finagle.thrift.ThriftClientRequest;
+import java.util.*;
 
 public class SellerServ {
   public interface Iface {
     public SellerResult querySeller(int sellerId, SellerRetParam param) throws TException;
+    public SellersResult querySellerBatch(List<Integer> sellerIds, SellerRetParam param) throws TException;
     public com.jfshare.finagle.thrift.result.BoolResult isLoginNameExist(String loginName) throws TException;
     public com.jfshare.finagle.thrift.result.Result signup(Seller seller) throws TException;
     public SellerResult signin(Seller seller, LoginLog loginLog) throws TException;
@@ -51,6 +43,7 @@ public class SellerServ {
 
   public interface AsyncIface {
     public void querySeller(int sellerId, SellerRetParam param, AsyncMethodCallback<AsyncClient.querySeller_call> resultHandler) throws TException;
+    public void querySellerBatch(List<Integer> sellerIds, SellerRetParam param, AsyncMethodCallback<AsyncClient.querySellerBatch_call> resultHandler) throws TException;
     public void isLoginNameExist(String loginName, AsyncMethodCallback<AsyncClient.isLoginNameExist_call> resultHandler) throws TException;
     public void signup(Seller seller, AsyncMethodCallback<AsyncClient.signup_call> resultHandler) throws TException;
     public void signin(Seller seller, LoginLog loginLog, AsyncMethodCallback<AsyncClient.signin_call> resultHandler) throws TException;
@@ -64,6 +57,7 @@ public class SellerServ {
 
   public interface ServiceIface {
     public Future<SellerResult> querySeller(int sellerId, SellerRetParam param);
+    public Future<SellersResult> querySellerBatch(List<Integer> sellerIds, SellerRetParam param);
     public Future<com.jfshare.finagle.thrift.result.BoolResult> isLoginNameExist(String loginName);
     public Future<com.jfshare.finagle.thrift.result.Result> signup(Seller seller);
     public Future<SellerResult> signin(Seller seller, LoginLog loginLog);
@@ -147,6 +141,42 @@ public class SellerServ {
         return result.success;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "querySeller failed: unknown result");
+    }
+    public SellersResult querySellerBatch(List<Integer> sellerIds, SellerRetParam param) throws TException
+    {
+      send_querySellerBatch(sellerIds, param);
+      return recv_querySellerBatch();
+    }
+
+    public void send_querySellerBatch(List<Integer> sellerIds, SellerRetParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.CALL, ++seqid_));
+      querySellerBatch_args args = new querySellerBatch_args();
+      args.setSellerIds(sellerIds);
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public SellersResult recv_querySellerBatch() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "querySellerBatch failed: out of sequence response");
+      }
+      querySellerBatch_result result = new querySellerBatch_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "querySellerBatch failed: unknown result");
     }
     public com.jfshare.finagle.thrift.result.BoolResult isLoginNameExist(String loginName) throws TException
     {
@@ -519,6 +549,40 @@ public class SellerServ {
         return (new Client(prot)).recv_querySeller();
       }
      }
+    public void querySellerBatch(List<Integer> sellerIds, SellerRetParam param, AsyncMethodCallback<querySellerBatch_call> resultHandler) throws TException {
+      checkReady();
+      querySellerBatch_call method_call = new querySellerBatch_call(sellerIds, param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class querySellerBatch_call extends TAsyncMethodCall {
+      private List<Integer> sellerIds;
+      private SellerRetParam param;
+
+      public querySellerBatch_call(List<Integer> sellerIds, SellerRetParam param, AsyncMethodCallback<querySellerBatch_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.sellerIds = sellerIds;
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.CALL, 0));
+        querySellerBatch_args args = new querySellerBatch_args();
+        args.setSellerIds(sellerIds);
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public SellersResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_querySellerBatch();
+      }
+     }
     public void isLoginNameExist(String loginName, AsyncMethodCallback<isLoginNameExist_call> resultHandler) throws TException {
       checkReady();
       isLoginNameExist_call method_call = new isLoginNameExist_call(loginName, resultHandler, this, protocolFactory, transport);
@@ -850,6 +914,37 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
+    public Future<SellersResult> querySellerBatch(List<Integer> sellerIds, SellerRetParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.CALL, 0));
+        querySellerBatch_args __args__ = new querySellerBatch_args();
+        __args__.setSellerIds(sellerIds);
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<SellersResult>>() {
+          public Future<SellersResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_querySellerBatch());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<com.jfshare.finagle.thrift.result.BoolResult> isLoginNameExist(String loginName) {
       try {
         // TODO: size
@@ -1131,6 +1226,7 @@ public class SellerServ {
     {
       iface_ = iface;
       processMap_.put("querySeller", new querySeller());
+      processMap_.put("querySellerBatch", new querySellerBatch());
       processMap_.put("isLoginNameExist", new isLoginNameExist());
       processMap_.put("signup", new signup());
       processMap_.put("signin", new signin());
@@ -1187,6 +1283,31 @@ public class SellerServ {
         result.success = iface_.querySeller(args.sellerId, args.param);
         
         oprot.writeMessageBegin(new TMessage("querySeller", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class querySellerBatch implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        querySellerBatch_args args = new querySellerBatch_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        querySellerBatch_result result = new querySellerBatch_result();
+        result.success = iface_.querySellerBatch(args.sellerIds, args.param);
+        
+        oprot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -1475,6 +1596,73 @@ public class SellerServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("querySeller", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("querySellerBatch", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          querySellerBatch_args args = new querySellerBatch_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<SellersResult> future;
+          try {
+            future = iface.querySellerBatch(args.sellerIds, args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<SellersResult, Future<byte[]>>() {
+              public Future<byte[]> apply(SellersResult value) {
+                querySellerBatch_result result = new querySellerBatch_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -2775,6 +2963,707 @@ public class SellerServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("querySeller_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class querySellerBatch_args implements TBase<querySellerBatch_args, querySellerBatch_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("querySellerBatch_args");
+
+  private static final TField SELLER_IDS_FIELD_DESC = new TField("sellerIds", TType.LIST, (short)1);
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)2);
+
+
+  public List<Integer> sellerIds;
+  public SellerRetParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SELLER_IDS((short)1, "sellerIds"),
+    PARAM((short)2, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // SELLER_IDS
+  	return SELLER_IDS;
+        case 2: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SELLER_IDS, new FieldMetaData("sellerIds", TFieldRequirementType.DEFAULT,
+      new ListMetaData(TType.LIST,
+                new FieldValueMetaData(TType.I32))));
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, SellerRetParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(querySellerBatch_args.class, metaDataMap);
+  }
+
+
+  public querySellerBatch_args() {
+  }
+
+  public querySellerBatch_args(
+    List<Integer> sellerIds,
+    SellerRetParam param)
+  {
+    this();
+    this.sellerIds = sellerIds;
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public querySellerBatch_args(querySellerBatch_args other) {
+    if (other.isSetSellerIds()) {
+      List<Integer> __this__sellerIds = new ArrayList<Integer>();
+      for (Integer other_element : other.sellerIds) {
+        __this__sellerIds.add(other_element);
+      }
+      this.sellerIds = __this__sellerIds;
+    }
+    if (other.isSetParam()) {
+      this.param = new SellerRetParam(other.param);
+    }
+  }
+
+  public querySellerBatch_args deepCopy() {
+    return new querySellerBatch_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.sellerIds = null;
+    this.param = null;
+  }
+
+  public int getSellerIdsSize() {
+    return (this.sellerIds == null) ? 0 : this.sellerIds.size();
+  }
+
+  public java.util.Iterator<Integer> getSellerIdsIterator() {
+    return (this.sellerIds == null) ? null : this.sellerIds.iterator();
+  }
+
+  public void addToSellerIds(int elem) {
+    if (this.sellerIds == null) {
+      this.sellerIds = new ArrayList<Integer>();
+    }
+    this.sellerIds.add(elem);
+  }
+
+  public List<Integer> getSellerIds() {
+    return this.sellerIds;
+  }
+
+  public querySellerBatch_args setSellerIds(List<Integer> sellerIds) {
+    this.sellerIds = sellerIds;
+    
+    return this;
+  }
+
+  public void unsetSellerIds() {
+    this.sellerIds = null;
+  }
+
+  /** Returns true if field sellerIds is set (has been asigned a value) and false otherwise */
+  public boolean isSetSellerIds() {
+    return this.sellerIds != null;
+  }
+
+  public void setSellerIdsIsSet(boolean value) {
+    if (!value) {
+      this.sellerIds = null;
+    }
+  }
+
+  public SellerRetParam getParam() {
+    return this.param;
+  }
+
+  public querySellerBatch_args setParam(SellerRetParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SELLER_IDS:
+      if (value == null) {
+        unsetSellerIds();
+      } else {
+        setSellerIds((List<Integer>)value);
+      }
+      break;
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((SellerRetParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SELLER_IDS:
+      return getSellerIds();
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SELLER_IDS:
+      return isSetSellerIds();
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof querySellerBatch_args)
+      return this.equals((querySellerBatch_args)that);
+    return false;
+  }
+
+  public boolean equals(querySellerBatch_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_sellerIds = true && this.isSetSellerIds();
+    boolean that_present_sellerIds = true && that.isSetSellerIds();
+    if (this_present_sellerIds || that_present_sellerIds) {
+      if (!(this_present_sellerIds && that_present_sellerIds))
+        return false;
+      if (!this.sellerIds.equals(that.sellerIds))
+        return false;
+    }
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_sellerIds = true && (isSetSellerIds());
+    builder.append(present_sellerIds);
+    if (present_sellerIds)
+      builder.append(sellerIds);
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(querySellerBatch_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    querySellerBatch_args typedOther = (querySellerBatch_args)other;
+
+    lastComparison = Boolean.valueOf(isSetSellerIds()).compareTo(typedOther.isSetSellerIds());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSellerIds()) {
+      lastComparison = TBaseHelper.compareTo(this.sellerIds, typedOther.sellerIds);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // SELLER_IDS
+          if (field.type == TType.LIST) {
+            {
+            TList _list5 = iprot.readListBegin();
+            this.sellerIds = new ArrayList<Integer>(_list5.size);
+            for (int _i6 = 0; _i6 < _list5.size; ++_i6)
+            {
+              int _elem7;
+              _elem7 = iprot.readI32();
+              this.sellerIds.add(_elem7);
+            }
+            iprot.readListEnd();
+            }
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new SellerRetParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.sellerIds != null) {
+      oprot.writeFieldBegin(SELLER_IDS_FIELD_DESC);
+      {
+        oprot.writeListBegin(new TList(TType.I32, this.sellerIds.size()));
+        for (int _iter8 : this.sellerIds)
+        {
+          oprot.writeI32(_iter8);
+        }
+        oprot.writeListEnd();
+      }
+      oprot.writeFieldEnd();
+    }
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("querySellerBatch_args(");
+    boolean first = true;
+    sb.append("sellerIds:");
+    if (this.sellerIds == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.sellerIds);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class querySellerBatch_result implements TBase<querySellerBatch_result, querySellerBatch_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("querySellerBatch_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public SellersResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, SellersResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(querySellerBatch_result.class, metaDataMap);
+  }
+
+
+  public querySellerBatch_result() {
+  }
+
+  public querySellerBatch_result(
+    SellersResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public querySellerBatch_result(querySellerBatch_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new SellersResult(other.success);
+    }
+  }
+
+  public querySellerBatch_result deepCopy() {
+    return new querySellerBatch_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public SellersResult getSuccess() {
+    return this.success;
+  }
+
+  public querySellerBatch_result setSuccess(SellersResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((SellersResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof querySellerBatch_result)
+      return this.equals((querySellerBatch_result)that);
+    return false;
+  }
+
+  public boolean equals(querySellerBatch_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(querySellerBatch_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    querySellerBatch_result typedOther = (querySellerBatch_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new SellersResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("querySellerBatch_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

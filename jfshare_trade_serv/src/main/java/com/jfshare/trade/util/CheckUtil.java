@@ -10,6 +10,7 @@ import com.jfshare.finagle.thrift.product.Product;
 import com.jfshare.finagle.thrift.product.ProductResult;
 import com.jfshare.finagle.thrift.result.FailDesc;
 import com.jfshare.finagle.thrift.result.Result;
+import com.jfshare.finagle.thrift.seller.SellerResult;
 import com.jfshare.finagle.thrift.stock.LockInfo;
 import com.jfshare.finagle.thrift.trade.*;
 import com.jfshare.score2cash.services.impl.ScoreToCashService;
@@ -20,6 +21,7 @@ import com.jfshare.trade.model.manual.PaymentInfo;
 import com.jfshare.trade.server.depend.*;
 import com.jfshare.utils.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +58,8 @@ public class CheckUtil {
     private ScoreToCashService scoreToCashService;
     @Autowired
     private BaseTemplateClient baseTemplateClient;
+    @Autowired
+    private SellerClient sellerClient;
 
     /**
      * 确认订单参数检测
@@ -534,6 +538,32 @@ public class CheckUtil {
         if(PriceUtils.strToInt(buyInfo.getAmount()) <= 0) {
             fails.add(FailCode.PAY_PRICE_ERROR);
             return fails;
+        }
+
+        return fails;
+    }
+
+    public List<FailDesc> querySellerInfo(BuyInfo buyInfo) {
+        List<FailDesc> fails = new ArrayList<FailDesc>();
+        List<Integer> sellerIds = new ArrayList<Integer>();
+        for (BuySellerDetail sellerDetail : buyInfo.getSellerDetailList()) {
+            sellerIds.add(sellerDetail.getSellerId());
+        }
+
+        Map<Integer, SellerResult> sellerResultMap = sellerClient.querySellerBatch(sellerIds);
+        if(MapUtils.isEmpty(sellerResultMap)) {
+            fails.add(FailCode.ORDER_SELLER_ERROR);
+            return fails;
+        }
+
+        for (BuySellerDetail sellerDetail : buyInfo.getSellerDetailList()) {
+            SellerResult sellerResult = sellerResultMap.get(sellerDetail.getSellerId());
+            if(sellerResult == null) {
+                fails.add(FailCode.ORDER_SELLER_ERROR);
+                return fails;
+            }
+
+            sellerDetail.setSellerName(sellerResult.getSeller().getSellerName());
         }
 
         return fails;

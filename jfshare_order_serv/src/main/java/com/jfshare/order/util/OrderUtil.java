@@ -46,6 +46,7 @@ public class OrderUtil {
         orderDetail.setExchangeScore(orderModel.getExchangeScore());
         orderDetail.setFromSource(orderModel.getFromSource());
         orderDetail.setSellerId(orderModel.getSellerId());
+        orderDetail.setSellerName(orderModel.getSellerName());
         orderDetail.setUserId(orderModel.getUserId());
         orderDetail.setOrderId(orderModel.getOrderId());
         orderDetail.setTradeCode(orderModel.getTradeCode());
@@ -166,6 +167,7 @@ public class OrderUtil {
         orderDetail.setExchangeScore(orderModel.getExchangeScore());
         orderDetail.setFromSource(orderModel.getFromSource());
         orderDetail.setSellerId(orderModel.getSellerId());
+        orderDetail.setSellerName(orderModel.getSellerName());
         orderDetail.setUserId(orderModel.getUserId());
         orderDetail.setOrderId(orderModel.getOrderId());
         orderDetail.setTradeCode(orderModel.getTradeCode());

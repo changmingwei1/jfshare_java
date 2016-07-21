@@ -7,7 +7,7 @@
        <param name="Encoding" value="UTF-8"/>
        <param name="Append" value="true" />
        <param name="DatePattern" value="'.'yyyy-MM-dd"></param>
-       <param name="File" value="/var/logs/jfshare/baseTemplate/baseTemplate.log" />
+       <param name="File" value="/var/logs/jfshare/productTask/productTask.log" />
        <layout class="org.apache.log4j.PatternLayout">
               <param name="ConversionPattern" value="[%d] [%t] %-5p [%l] %X{traceId} - %m%n" />
        </layout>

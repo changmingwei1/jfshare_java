@@ -86,6 +86,16 @@ public class ServHandle implements TradeServ.Iface {
 			}
 			logger.info("确认订单----验证商品sku信息成功");
 
+
+			//验证、补充seller信息
+			List<FailDesc> sellerFailList = checkUtil.querySellerInfo(buyInfo);
+			if(CollectionUtils.isNotEmpty(sellerFailList)) {
+				logger.error("$$$$确定订单----商家信息校验错误！fails=" + sellerFailList);
+				FailCode.addFails(result, sellerFailList);
+				return createOrderResult;
+			}
+			logger.info("确认订单----获取商家信息成功");
+
 			//生成订单号
 			sellerOrderIdsMap = checkUtil.orderConfirmGerOrderId(buyInfo);
 			logger.info("确认订单----生成订单号成功");
