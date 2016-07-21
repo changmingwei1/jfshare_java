@@ -2,6 +2,7 @@ package com.jfshare.order.service;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.jfshare.finagle.thrift.aftersale.AfterSaleOrder;
 import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
 import com.jfshare.order.common.Commons;
@@ -77,7 +78,7 @@ public class ExportService {
         }
     }
 
-    public void asyncExport(final OrderQueryConditions conditions, final String queryKey){
+    public void asyncExport(final OrderQueryConditions conditions, final String queryKey, final List<AfterSaleOrder> afterSaleOrders){
         new Executor<Object>() {
             @Override
             Object function() {
@@ -97,7 +98,7 @@ public class ExportService {
 
                         basicRedis.putKV(queryKey, "export", Commons.exportKeyExpired);
 
-                        byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails);
+                        byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails, afterSaleOrders);
                         if (xlsBytes != null) {
                             String fileName = fileOpUtil.getFileName("full", null);
                             String fileKey = fileOpUtil.toFastDFS(xlsBytes, fileName);
