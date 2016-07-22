@@ -119,7 +119,7 @@ public class OrderEsImpl implements IOrderEs{
      * @return
      */
     public SearchHits searchScoreRecord(String orderBatch, ConstantUtil.SCORE_TYPE scoreType) {
-        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("orderBatch", orderBatch));
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("orderBatch", EsScore.convertOrderBatch(orderBatch)));
         if(scoreType != null) {
             queryBuilder.must(QueryBuilders.matchQuery("type", scoreType.getEnumVal()));
         }
@@ -128,7 +128,7 @@ public class OrderEsImpl implements IOrderEs{
                 .setTypes(ES_SCORE_TYPE)
                 .setQuery(queryBuilder)
                 .setFrom(0).setSize(200)
-                .setExplain(false);
+                .setExplain(true);
 
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
         return searchResponse.getHits();

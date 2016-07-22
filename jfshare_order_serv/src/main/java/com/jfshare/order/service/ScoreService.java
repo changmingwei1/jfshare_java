@@ -48,9 +48,9 @@ public class ScoreService {
         String transId = orders.get(0).getOrderBatch();
         logger.info("finishOrderPay----支付完成增送积分----transId={}, userId={}, incomeScore={}", transId, userId, incomeScore);
         SearchHits searchHits = orderEs.searchScoreRecord(transId, ConstantUtil.SCORE_TYPE.order_rebate);
-        logger.info("finishOrderPay----支付完成赠送积分----重复赠送:{}", searchHits.getTotalHits()>0);
+        logger.info("finishOrderPay----支付完成赠送积分----重复赠送:{}, hitTotal={}, SearchHit={}", searchHits.getTotalHits()>0, searchHits.getTotalHits(), JSON.toJSONString(searchHits.getHits()));
         if(searchHits.getTotalHits() == 0) {
-            scoreClient.incomeScore(userId, incomeScore, transId, ConstantUtil.SCORE_TYPE.order_rebate, "");
+            scoreClient.incomeScore(userId, incomeScore, transId, ConstantUtil.SCORE_TYPE.order_rebate, transId);
         }
     }
 
@@ -61,16 +61,17 @@ public class ScoreService {
     public void afterOrderClose(OrderModel order) {
 
         SearchHits searchHits = orderEs.searchScoreRecord(order.getOrderBatch(), null);
+        logger.info("afterOrderClose----查询----重复赠送:{}, hitTotal={}, SearchHit={}", searchHits.getTotalHits()>0, searchHits.getTotalHits(), JSON.toJSONString(searchHits.getHits()));
         List<EsScore> esScores = toEsScoreList(searchHits);
         if(order.getExchangeScore() > 0) {
             logger.info("afterOrderClose----使用了积分抵现----exchangeScore={}", order.getExchangeScore());
             if(checkRepeatScore(esScores, ConstantUtil.SCORE_TYPE.rollback_cost_online, order.getOrderId()) == false) {
                 logger.info("afterOrderClose----返还支付抵现积成功", order.getExchangeScore());
-                scoreClient.incomeScore(order.getUserId(), order.getExchangeScore(), order.getOrderBatch(), ConstantUtil.SCORE_TYPE.rollback_cost_online, order.getOrderId());
+                scoreClient.incomeScore(order.getUserId(), order.getExchangeScore(), order.getOrderBatch(), ConstantUtil.SCORE_TYPE.rollback_cost_online, "");
             }
         }
 
-        if(order.getPayState() != 1) {  //未支付订单没增送过积分
+        if(order.getPayState() != 1 || checkRepeatScore(esScores, ConstantUtil.SCORE_TYPE.order_rebate, order.getOrderId()) == false) {  //未支付订单没增送过积分
             logger.info("afterOrderClose----未支付过没赠送过积分");
             return;
         }
@@ -83,6 +84,7 @@ public class ScoreService {
         int orderBatchCount = Integer.parseInt(order.getOrderBatch().split("-")[2]);    //一批订单的数量
         int score = order.getClosingPrice() / 100;
         int orderRebateScore = filterEsScore(esScores, ConstantUtil.SCORE_TYPE.order_rebate, null).get(0).getScore();
+        logger.info("afterOrderClose----orderBatch订单数量:{}, orderRebateScore={}", orderBatchCount, orderRebateScore);
         List<EsScore> rollbackOrderRebateAll = filterEsScore(esScores, ConstantUtil.SCORE_TYPE.rollback_order_rebate, null);
 
         /*

@@ -24,17 +24,18 @@ public class Test_ES {
     private static ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
     public static void main(String[] str) {
         try {
-            SearchHits searchHits = searchScoreRecord("1234", 1);
+            SearchHits searchHits = searchScoreRecord("12222_1", null);
             logger.info("total={}", searchHits.getTotalHits());
             for(SearchHit hit : searchHits.getHits()) {
                 logger.info(hit.getSourceAsString());
             }
+//            logger.info("total={}",  JSON.toJSONString(searchHits.getHits()));
 
 
-//            addScoreRecord(new EsScore("1234", "", 100, 10, 1));
-//            addScoreRecord(new EsScore("1234", "orderId1", 100, -1, 2));
-//            addScoreRecord(new EsScore("1234", "orderId2", 100, -2, 2));
-//            addScoreRecord(new EsScore("1234", "orderId2", 100, 2, 3));
+//            addScoreRecord(new EsScore("1-2222-1", "", 100, 10, 1));
+//            addScoreRecord(new EsScore("1-2222-1", "orderId1", 100, -1, 2));
+//            addScoreRecord(new EsScore("1-2222-1", "orderId2", 100, -2, 2));
+//            addScoreRecord(new EsScore("1-2222-1", "orderId2", 100, 2, 3));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,7 +56,7 @@ public class Test_ES {
                 .setTypes(ES_SCORE_TYPE)
                 .setQuery(queryBuilder)
                 .setFrom(0).setSize(200)
-                .setExplain(false);
+                .setExplain(true);
 
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
         return searchResponse.getHits();

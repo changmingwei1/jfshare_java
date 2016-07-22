@@ -27,7 +27,7 @@ public class EsScore {
     }
 
     public EsScore(String orderBatch, String orderId, int userId, int score, ConstantUtil.SCORE_TYPE type) {
-        this.orderBatch = orderBatch;
+        this.orderBatch = convertOrderBatch(orderBatch);
         this.orderId = orderId;
         this.userId = userId;
         this.score = score;
@@ -95,7 +95,16 @@ public class EsScore {
                 '}';
     }
 
+    public static String convertOrderBatch(String orderBatch) {
+        return orderBatch.replace("-", "_");
+    }
+
     public String toJSONString() {
         return JSON.toJSONString(this);
+    }
+
+    public static void main(String[] sss) {
+        EsScore esScore = new EsScore("1-111-2", "orderId", 1, 1, ConstantUtil.SCORE_TYPE.cost_online);
+        System.err.println("esScore :" + esScore);
     }
 }
