@@ -48,6 +48,7 @@ public class ScoreService {
         String transId = orders.get(0).getOrderBatch();
         logger.info("finishOrderPay----支付完成增送积分----transId={}, userId={}, incomeScore={}", transId, userId, incomeScore);
         SearchHits searchHits = orderEs.searchScoreRecord(transId, ConstantUtil.SCORE_TYPE.order_rebate);
+        logger.info("finishOrderPay----支付完成赠送积分----重复赠送:{}", searchHits.getTotalHits()>0);
         if(searchHits.getTotalHits() == 0) {
             scoreClient.incomeScore(userId, incomeScore, transId, ConstantUtil.SCORE_TYPE.order_rebate, "");
         }
@@ -62,15 +63,20 @@ public class ScoreService {
         SearchHits searchHits = orderEs.searchScoreRecord(order.getOrderBatch(), null);
         List<EsScore> esScores = toEsScoreList(searchHits);
         if(order.getExchangeScore() > 0) {
-            if(checkRepeatScore(esScores, ConstantUtil.SCORE_TYPE.rollback_cost_online, order.getOrderId()) == false)
+            logger.info("afterOrderClose----使用了积分抵现----exchangeScore={}", order.getExchangeScore());
+            if(checkRepeatScore(esScores, ConstantUtil.SCORE_TYPE.rollback_cost_online, order.getOrderId()) == false) {
+                logger.info("afterOrderClose----返还支付抵现积成功", order.getExchangeScore());
                 scoreClient.incomeScore(order.getUserId(), order.getExchangeScore(), order.getOrderBatch(), ConstantUtil.SCORE_TYPE.rollback_cost_online, order.getOrderId());
+            }
         }
 
         if(order.getPayState() != 1) {  //未支付订单没增送过积分
+            logger.info("afterOrderClose----未支付过没赠送过积分");
             return;
         }
 
         if(checkRepeatScore(esScores, ConstantUtil.SCORE_TYPE.rollback_order_rebate, order.getOrderId()) == true) {   //已经扣过增送积分
+            logger.info("afterOrderClose----之前已扣减过赠送积分, 不再重复扣减");
             return;
         }
 
@@ -89,6 +95,8 @@ public class ScoreService {
         } else if(rollbackOrderRebateAll.size() == orderBatchCount - 1) {
             score = orderRebateScore - rollbackOrderRebateScore(rollbackOrderRebateAll);
         }
+
+        logger.info("afterOrderClose----扣减赠送积分:{}", score);
 
         scoreClient.reduceScore(order.getUserId(), score, order.getOrderBatch(), ConstantUtil.SCORE_TYPE.rollback_order_rebate, order.getOrderId());
 
