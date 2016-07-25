@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.jfshare.finagle.thrift.aftersale.AfterSaleOrder;
 import com.jfshare.finagle.thrift.aftersale.AfterSaleOrderParam;
+import com.jfshare.finagle.thrift.aftersale.AfterSaleOrderResult;
 import com.jfshare.finagle.thrift.express.ExpressInfo;
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayReq;
@@ -585,7 +586,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             payReq.setCustId(param.getPayChannel().getCustId());
             payReq.setCustType(param.getPayChannel().getCustType());
             payReq.setProcustID(param.getPayChannel().getProcustID());
-            payReq.setRemark("订单支付");
+            payReq.setRemark(OrderUtil.getRemark(orderModels));
 
             String payUrl = payClient.payUrl(payReq);
             if (payUrl == null) {
@@ -683,7 +684,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             logger.info("8.支付通知----虚拟商品自动发货成功");
 
             scoreService.finishOrderPay(orderModels);
-            logger.info("9.支付通知----赠送购物积分成功, userId={}, score={}");
+            logger.info("9.支付通知----赠送购物积分成功");
 
             stringResult.setValue("1");
         } catch (Exception e) {
@@ -736,61 +737,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     }
 
     @Override
+    @Deprecated
     public StringResult batchExportOrder(int sellerId, OrderQueryConditions conditions) throws TException {
-        StringResult stringResult = new StringResult();
-        Result result = new Result();
-        result.setCode(1);
-        stringResult.setResult(result);
-        try {
-            if (sellerId <=0 || StringUtil.isNullOrEmpty(conditions)) {
-                logger.warn(MessageFormat.format("batchExportOrder参数验证失败！sellerId[{0}], OrderQueryConditions[{1}]]", sellerId, conditions));
-                FailCode.addFails(result, FailCode.PARAM_ERROR);
-                return stringResult;
-            }
-
-            //查询售后订单
-            if(conditions.getOrderState() == 1000) {
-                AfterSaleOrderParam afterSaleOrderParam = OrderUtil.orderQueryConditions2AfterSaleOrderParam(conditions);
-                List<AfterSaleOrder> afterSaleOrders = afterSaleClient.queryAfterSaleOrder(afterSaleOrderParam);
-                if(CollectionUtils.isEmpty(afterSaleOrders)) {
-                    logger.info(MessageFormat.format("batchExportOrder！sellerId[{0}], OrderQueryConditions[{1}]]", sellerId, conditions));
-                    FailCode.addFails(result, FailCode.NO_AFTERSALE_ORDER_RECORD);
-                    return stringResult;
-                }
-                List<String> orderIds = OrderUtil.afterSaleOrders2ListOrderId(afterSaleOrders);
-                conditions = new OrderQueryConditions();
-                conditions.setOrderIds(orderIds);
-            }
-
-
-            List<OrderModel> orderModels = null;
-            conditions = super.verifyConditions(conditions);
-            conditions.setSellerId(sellerId);
-            //查询订单列表
-            orderModels = orderService.queryBatch(conditions);
-            if (orderModels.size() > 0) {
-                List<Order> orderDetails = Lists.newArrayList();
-                for (OrderModel orderModel : orderModels) {
-                    orderDetails.add(OrderUtil.rConvertOrderModel(orderModel));
-                }
-                byte[] xlsBytes = fileOpUtil.gerExportExcel(orderDetails, null);
-                if (xlsBytes != null) {
-                    String fileName = fileOpUtil.getFileName(sellerId, null);
-                    String fileKey = fileOpUtil.toFastDFS(xlsBytes, fileName);
-                    stringResult.setValue(fileKey);
-                    result.setCode(0);
-                }
-            } else {
-                stringResult.setValue("");
-                result.setCode(0);
-            }
-
-        } catch (Exception e) {
-            logger.error("批量导出订单失败，系统异常！", e);
-            FailCode.addFails(result, FailCode.SYS_ERROR);
-        }
-
-        return stringResult;
+        return null;
     }
 
     @Override
@@ -807,23 +756,22 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 return stringResult;
             }
 
-            List<AfterSaleOrder> afterSaleOrders = null;
+            AfterSaleOrderResult afterSaleOrderResult = null;
             //查询售后订单
             if(conditions.getOrderState() == 1000) {
                 AfterSaleOrderParam afterSaleOrderParam = OrderUtil.orderQueryConditions2AfterSaleOrderParam(conditions);
-                afterSaleOrders = afterSaleClient.queryAfterSaleOrder(afterSaleOrderParam);
-                if(CollectionUtils.isEmpty(afterSaleOrders)) {
+                afterSaleOrderResult = afterSaleClient.queryAfterSaleOrder(afterSaleOrderParam);
+                if(afterSaleOrderResult == null || CollectionUtils.isEmpty(afterSaleOrderResult.getAfterSaleOrders())) {
                     logger.info("batchExportOrderFull！无要导出的售后订单数据");
                     FailCode.addFails(result, FailCode.NO_AFTERSALE_ORDER_RECORD);
                     return stringResult;
                 }
-                List<String> orderIds = OrderUtil.afterSaleOrders2ListOrderId(afterSaleOrders);
-                conditions = new OrderQueryConditions();
+                List<String> orderIds = OrderUtil.afterSaleOrders2ListOrderId(afterSaleOrderResult.getAfterSaleOrders());
                 conditions.setOrderIds(orderIds);
             }
 
             String queryKey = DigestUtils.md5Hex(DateTimeUtil.getCurrentDateYMDHMS());
-            exportService.asyncExport(conditions, queryKey, afterSaleOrders);
+            exportService.asyncExport(conditions, queryKey, afterSaleOrderResult == null ? null : afterSaleOrderResult.getAfterSaleList());
             stringResult.setValue(queryKey);
 
 

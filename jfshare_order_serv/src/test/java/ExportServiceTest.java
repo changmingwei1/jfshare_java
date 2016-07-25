@@ -19,6 +19,6 @@ public class ExportServiceTest {
     public void testExcute(){
         OrderQueryConditions conditions = new OrderQueryConditions();
         conditions.setOrderId("58870112");
-        exportService.asyncExport(conditions, "testKey");
+        exportService.asyncExport(conditions, "testKey", null);
     }
 }

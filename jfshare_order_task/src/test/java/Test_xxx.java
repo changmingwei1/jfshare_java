@@ -33,8 +33,8 @@ public class Test_xxx {
        OrderQueryConditions conditions = new OrderQueryConditions();
         conditions.setStartTime("2016-06-01 00:00:00");
         conditions.setEndTime("2016-06-26 00:00:00");
-        conditions.setOrderState(5);
-//        conditions.setOrderId("59090131");
+//        conditions.setOrderState(5);
+        conditions.setOrderId("96650041");
 //        conditions.addToOrderIds("59090131");
 //        conditions.setSellerId(13);
 //        conditions.setCurPage(6);

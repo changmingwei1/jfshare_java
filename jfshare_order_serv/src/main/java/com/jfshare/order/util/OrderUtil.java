@@ -11,6 +11,7 @@ import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.BizUtil;
 import com.jfshare.utils.ConvertUtil;
 import com.jfshare.utils.PriceUtils;
+import com.jfshare.utils.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -506,6 +507,9 @@ public class OrderUtil {
         if(StringUtils.isNotBlank(orderQueryConditions.getEndTime())) {
             afterSaleOrderParam.setEndTime(orderQueryConditions.getEndTime());
         }
+        if(StringUtils.isNotBlank(orderQueryConditions.getOrderId())) {
+            afterSaleOrderParam.setOrderId(orderQueryConditions.getOrderId());
+        }
         return afterSaleOrderParam;
     }
 
@@ -515,5 +519,24 @@ public class OrderUtil {
             orderIds.add(afterSaleOrder.getOrderId());
         }
         return orderIds;
+    }
+
+    /**
+     * 获取订单支付申请备注
+     * @param orderModels
+     * @return
+     */
+    public static String getRemark(List<OrderModel> orderModels) {
+        String s = "订单支付";
+        OrderModel orderModel = orderModels.get(0);
+        if(orderModel.getPayChannel() == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
+            TbOrderInfoRecord tbOrderInfoRecord = orderModel.getTbOrderInfoList().get(0);
+            String productName = tbOrderInfoRecord.getProductName();
+            String productId = tbOrderInfoRecord.getProductId();
+            int count = tbOrderInfoRecord.getCount();
+            s = "百分尊享-" + productId + productName + "x" + count;
+        }
+
+        return s;
     }
 }

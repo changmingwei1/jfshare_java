@@ -1,9 +1,8 @@
 package com.jfshare.order.server.depend;
 
-import com.jfshare.finagle.thrift.aftersale.AfterSaleOrder;
-import com.jfshare.finagle.thrift.aftersale.AfterSaleOrderParam;
-import com.jfshare.finagle.thrift.aftersale.AfterSaleOrderResult;
-import com.jfshare.finagle.thrift.aftersale.AfterSaleServ;
+import com.google.common.collect.Lists;
+import com.jfshare.finagle.thrift.aftersale.*;
+import com.jfshare.finagle.thrift.order.Order;
 import com.jfshare.finagle.thrift.pagination.Pagination;
 import com.jfshare.finagle.thrift.pay.PayReq;
 import com.jfshare.finagle.thrift.pay.PayServ;
@@ -15,12 +14,14 @@ import com.twitter.finagle.builder.ClientConfig;
 import com.twitter.finagle.thrift.ThriftClientFramedCodec;
 import com.twitter.finagle.thrift.ThriftClientRequest;
 import com.twitter.util.Await;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,7 +74,7 @@ public class AfterSaleClient {
         return 0;
     }
 
-    public List<AfterSaleOrder> queryAfterSaleOrder(AfterSaleOrderParam param) {
+    public AfterSaleOrderResult queryAfterSaleOrder(AfterSaleOrderParam param) {
         try {
             int count = this.queryAfterSaleOrderCount(param);
             if(count == 0) {
@@ -84,7 +85,7 @@ public class AfterSaleClient {
             pagination.setNumPerPage(count);
             AfterSaleOrderResult result = Await.result(service.queryAfterSaleOrder(param, pagination));
             if (result.getResult().getCode() == 0) {
-                return result.getAfterSaleOrders();
+                return result;
             } else {
                 logger.warn("调用AfterSaleServ.queryAfterSaleOrder----" + param + ",失败结果=" + result.getResult());
             }
@@ -93,5 +94,32 @@ public class AfterSaleClient {
         }
 
         return null;
+    }
+
+    /**
+     * 查询订单售后信息
+     * @param orderDetails
+     * @return
+     * @throws Exception
+     */
+    public List<AfterSale> queryAfterSales(List<Order> orderDetails) throws Exception {
+        int size = orderDetails.size();
+        int batchCount = 100;
+
+        AfterSaleQueryParam param = new AfterSaleQueryParam();
+        List<AfterSale> afterSales = new ArrayList<>();
+
+        for(int i = 0; i < size; i++) {
+            param.addToOrderIdList(orderDetails.get(i).getOrderId());
+            if(i % batchCount == 0) {
+                AfterSaleResult result = Await.result(service.queryAfterSale(param));
+                if(result.getResult().getCode() == 0 && CollectionUtils.isNotEmpty(result.getAfterSaleList())) {
+                    afterSales.addAll(result.getAfterSaleList());
+                }
+                param.getOrderIdList().clear();
+            }
+        }
+
+        return afterSales;
     }
 }

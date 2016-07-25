@@ -15,6 +15,7 @@ import com.twitter.finagle.builder.ClientConfig;
 import com.twitter.finagle.thrift.ThriftClientFramedCodec;
 import com.twitter.finagle.thrift.ThriftClientRequest;
 import com.twitter.util.Await;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,8 @@ public class ScoreClient {
 		try {
 			if(score > 0) {
 				ScoreTrade scoreTrade = new ScoreTrade();
-				scoreTrade.setTradeId(orderBatch);
+				String transId = StringUtils.isBlank(orderId) ? orderBatch : orderId;
+				scoreTrade.setTradeId(transId);
 				scoreTrade.setAmount(score);
 				scoreTrade.setInOrOut(2);
 				scoreTrade.setTrader(3);
@@ -123,7 +125,8 @@ public class ScoreClient {
 		try {
 			if(score > 0) {
 				ScoreTrade scoreTrade = new ScoreTrade();
-				scoreTrade.setTradeId(orderId);
+				String transId = StringUtils.isBlank(orderId) ? orderBatch : orderId;
+				scoreTrade.setTradeId(transId);
 				scoreTrade.setAmount(score);
 				scoreTrade.setInOrOut(1);
 				scoreTrade.setTrader(3);
@@ -134,6 +137,7 @@ public class ScoreClient {
 					logger.info("userId={}, type={}, 返还用户积分：{}", buyerId, scoreType, score);
 				} else{
 					logger.warn("userId={}, type={}, 返还用户积分失败:{}", buyerId, scoreType, scoreResult);
+					return;
 				}
 			}
 			orderEs.addScoreRecord(new EsScore(orderBatch, orderId, buyerId, score, scoreType));

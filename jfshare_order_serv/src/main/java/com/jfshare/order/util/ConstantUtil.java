@@ -46,6 +46,9 @@ public class ConstantUtil {
         public int getEnumVal(){
             return this.enumVal;
         }
+        public static boolean isOrderClosedCheck(int orderState) {
+            return orderState == TRADE_CLOSE.getEnumVal() || orderState == TRADE_CANCEL.getEnumVal();
+        }
     };
 
     //支付状态，-1，失败，0初始，1成功，2进行中
@@ -111,7 +114,7 @@ public class ConstantUtil {
      *  7:支付后取消订单返还扣减积分    8:支付后取消订单扣减增送积分
      *
      */
-    public static enum SCORE_TYPE {
+    public static enum  SCORE_TYPE {
         cost_online(4), order_rebate(5), rollback_cost_online(7), rollback_order_rebate(8);
         private int enumVal=0;
         private SCORE_TYPE(int enumVal){

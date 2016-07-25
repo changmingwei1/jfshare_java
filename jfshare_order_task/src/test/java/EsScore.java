@@ -1,8 +1,6 @@
-package com.jfshare.order.model;
 
 import com.alibaba.fastjson.JSON;
-import com.jfshare.order.util.ConstantUtil;
-import com.jfshare.order.util.DateTimeUtil;
+
 
 import java.util.Date;
 
@@ -26,13 +24,12 @@ public class EsScore {
     public EsScore() {
     }
 
-    public EsScore(String orderBatch, String orderId, int userId, int score, ConstantUtil.SCORE_TYPE type) {
-        this.orderBatch = convertOrderBatch(orderBatch);
+    public EsScore(String orderBatch, String orderId, int userId, int score, int type) {
+        this.orderBatch = orderBatch;
         this.orderId = orderId;
         this.userId = userId;
         this.score = score;
-        this.type = type.getEnumVal();
-        this.optTime = DateTimeUtil.current();
+        this.type = type;
     }
 
     public Date getOptTime() {
@@ -95,16 +92,7 @@ public class EsScore {
                 '}';
     }
 
-    public static String convertOrderBatch(String orderBatch) {
-        return orderBatch.replace("-", "_");
-    }
-
     public String toJSONString() {
         return JSON.toJSONString(this);
-    }
-
-    public static void main(String[] sss) {
-        EsScore esScore = new EsScore("1-111-2", "orderId", 1, 1, ConstantUtil.SCORE_TYPE.cost_online);
-        System.err.println("esScore :" + esScore);
     }
 }
