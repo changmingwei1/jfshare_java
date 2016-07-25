@@ -114,7 +114,7 @@ public class Client extends TestCase{
 //            conditions.setEndTime("2016-07-20 00:00:00");
 //            conditions.setOrderState(5);
 //            conditions.setOrderId("59090131");
-            conditions.addToOrderIds("95470215");
+            conditions.addToOrderIds("96650041");
 //            conditions.addToOrderIds("95200327");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {

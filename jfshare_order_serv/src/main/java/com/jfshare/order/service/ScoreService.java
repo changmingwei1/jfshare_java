@@ -71,7 +71,7 @@ public class ScoreService {
             }
         }
 
-        if(order.getPayState() != 1 || checkRepeatScore(esScores, ConstantUtil.SCORE_TYPE.order_rebate, order.getOrderId()) == false) {  //未支付订单没增送过积分
+        if(order.getPayState() != 1 || checkRepeatScore(esScores, ConstantUtil.SCORE_TYPE.order_rebate, null) == false) {  //未支付订单没增送过积分
             logger.info("afterOrderClose----未支付过没赠送过积分");
             return;
         }
