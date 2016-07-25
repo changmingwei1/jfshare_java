@@ -46,6 +46,9 @@ public class ConstantUtil {
         public int getEnumVal(){
             return this.enumVal;
         }
+        public static boolean isOrderClosedCheck(int orderState) {
+            return orderState == TRADE_CLOSE.getEnumVal() || orderState == TRADE_CANCEL.getEnumVal();
+        }
     };
 
     //支付状态，-1，失败，0初始，1成功，2进行中

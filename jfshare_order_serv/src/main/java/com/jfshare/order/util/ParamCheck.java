@@ -112,7 +112,7 @@ public class ParamCheck {
     }
 
     public static FailDesc checkOrderPayState(int orderState) {
-        if (orderState == ConstantUtil.ORDER_STATE.TRADE_CLOSE.getEnumVal()) {
+        if (ConstantUtil.ORDER_STATE.isOrderClosedCheck(orderState)) {
             return FailCode.PAY_ORDER_CLOSE;
         } else if (orderState != ConstantUtil.ORDER_STATE.WAIT_PAY.getEnumVal()) {
             return FailCode.PAY_ORDER_PAY_FINISH;

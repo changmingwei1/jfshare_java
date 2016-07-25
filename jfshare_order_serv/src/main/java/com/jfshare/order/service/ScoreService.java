@@ -67,7 +67,7 @@ public class ScoreService {
             logger.info("afterOrderClose----使用了积分抵现----exchangeScore={}", order.getExchangeScore());
             if(checkRepeatScore(esScores, ConstantUtil.SCORE_TYPE.rollback_cost_online, order.getOrderId()) == false) {
                 logger.info("afterOrderClose----返还支付抵现积成功", order.getExchangeScore());
-                scoreClient.incomeScore(order.getUserId(), order.getExchangeScore(), order.getOrderBatch(), ConstantUtil.SCORE_TYPE.rollback_cost_online, "");
+                scoreClient.incomeScore(order.getUserId(), order.getExchangeScore(), order.getOrderBatch(), ConstantUtil.SCORE_TYPE.rollback_cost_online, order.getOrderId());
             }
         }
 
