@@ -11,6 +11,7 @@ import com.jfshare.product.service.IProductCartSvc;
 import com.jfshare.product.util.FileUtil;
 import com.jfshare.ridge.PropertiesUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -69,6 +70,9 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 TbProductCard productCard = new TbProductCard();
                 productCard.setSellerId(sellerId);
                 productCard.setProductId(row.getCell(0).getStringCellValue());
+                if (StringUtils.isBlank(productCard.getProductId())) {
+                    break;
+                }
                 // 如果商品ID不是传参，返回失败
                 if (!productCard.getProductId().equals(productId)) {
                     return false;
