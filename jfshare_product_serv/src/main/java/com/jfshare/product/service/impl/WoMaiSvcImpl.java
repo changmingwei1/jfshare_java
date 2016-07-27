@@ -86,6 +86,32 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
     }
 
     @Override
+    public void syncWoMaiProduct() {
+        // 获取商品池pageNum
+        List<String> pageNums = this.getItemPageNum();
+        for (String pageNum : pageNums) {
+            // 获取每个商品池内的商品
+            List<String> productIds = this.getItemList(pageNum);
+            for (String productId : productIds) {
+
+                Product product = new Product();
+                // 获取商品sku
+//                this.getStock();
+
+                // 获取商品价格
+
+                // 获取商品详情
+
+                // 获取商品状态
+
+                // 获取商品图片，并上传
+
+                // 保存商品
+            }
+        }
+    }
+
+    @Override
     public String getWoMaiWarehouseId(String storehouseId) {
         return null;
     }
@@ -122,6 +148,51 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
             postParams.put("param", JSON.toJSONString(param));
         }
         return postParams;
+    }
+
+    /**
+     * 获取我买在对接平台发布的所有商品池编号
+     * @return
+     */
+    private List<String> getItemPageNum() {
+        List<String> pageNumList = new ArrayList<String>();
+        String url = this.getWoMaiUrl();
+        Map<String, String> httpParam = this.getHttpParams("womai.itempagenum.get", null);
+        try {
+            String detailJson = HttpUtils.httpPostUTF8(url, httpParam);
+            JSONObject itemPageNum = JSON.parseObject(detailJson);
+            JSONArray pageNums = itemPageNum.getJSONArray("itempagenum");
+            for (int i = 0; i < pageNums.size(); i++) {
+                JSONObject pageNum = pageNums.getJSONObject(i);
+                pageNumList.add(pageNum.getString("page_num"));
+            }
+        } catch (Exception e) {
+            logger.error("<<<<<<<< getItemPageNum --- error !", e);
+        }
+        return pageNumList;
+    }
+
+    private List<String> getItemList(String pageNum) {
+        List<String> ids = new ArrayList<String>();
+        Map<String, String> param = new HashMap();
+        param.put("pageNum", pageNum);
+        String url = this.getWoMaiUrl();
+        Map<String, String> httpParam = this.getHttpParams("womai.itemlist.get", param);
+        try {
+            String detailJson = HttpUtils.httpPostUTF8(url, httpParam);
+            JSONObject dataObject = JSON.parseObject(detailJson);
+            // TODO: 2016/7/26 判断是否返回错误信息
+
+            JSONArray itemList = dataObject.getJSONArray("itemlist");
+            for (int i = 0; i < itemList.size(); i++) {
+                JSONObject item = itemList.getJSONObject(i);
+                ids.add(item.getString("itemid"));
+            }
+        } catch (Exception e) {
+            logger.error("<<<<<<<< getItemList --- error, pageNum : " + pageNum, e);
+        }
+
+        return ids;
     }
 
     /**
@@ -164,9 +235,9 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
             // 商品描述
             product.setDetailContent(productObject.getString("prodescription"));
 
-            ProductSku productSku = new ProductSku();
-            ProductSkuItem skuItem = new ProductSkuItem();
-            skuItem.setSkuNum("");
+            for (ProductSkuItem productSkuItem : product.getProductSku().getSkuItems()) {
+                productSkuItem.setWeight(productObject.getInteger("weight") / 1000 + "");
+            }
 
 
             System.out.println(((Map)details.get(0)).get("goodsid"));
@@ -190,13 +261,11 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      *    ]
      *    }
      * 注：state1为上架，0为下架。
-     * @param woMaiIds
      * @return
      */
-    private void getItemstatus(List<String> woMaiIds, List<Product> products) {
-        String ids = StringUtils.join(woMaiIds, ",");
+    private void getItemstatus(String woMaiId, Product product) {
         Map param = new HashMap();
-        param.put("skuid", ids);
+        param.put("skuid", woMaiId);
         String url = this.getWoMaiUrl();
         Map<String, String> httpParam = this.getHttpParams("womai.itemstatus.get", param);
         try {
@@ -258,13 +327,11 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      *        }
      *    ]
      * }
-     * @param woMaiIds
      * @return
      */
-    private void getItemimage(List<String> woMaiIds, List<Product> products) {
-        String ids = StringUtils.join(woMaiIds, ",");
+    private void getItemimage(String woMaiId, Product product) {
         Map param = new HashMap();
-        param.put("skuid", ids);
+        param.put("skuid", woMaiId);
         String url = this.getWoMaiUrl();
         Map<String, String> httpParam = this.getHttpParams("womai.itemimage.get", param);
         try {
@@ -285,22 +352,33 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
      *  "warehouseid": "100",
      *  "skuids": "5178122,	3418933,	5367933,	510986"
      * }
-     * @param woMaiIds
      * @return
      */
-    private void getStock(List<String> woMaiIds, List<Product> products) {
-        String ids = StringUtils.join(woMaiIds, ",");
+    private void getStock(String woMaiId, Product product) {
         Map param = new HashMap();
-        param.put("skuids", ids);
+        param.put("skuids", woMaiId);
         String url = this.getWoMaiUrl();
+        // TODO: 2016/7/26 获取我买仓库信息
         List<String> warehouseIds = new ArrayList<String>();
         Map<String, String> httpParam = this.getHttpParams("womai.inventory.get", param);
         try {
-            String detailJson = HttpUtils.httpPostUTF8(url, httpParam);
-            JSONObject itemDetail = JSON.parseObject(detailJson);
+            // 循环获取每个仓库下的商品库存
+            for (String warehouseId : warehouseIds) {
+                param.put("warehouseid", warehouseId);
+                String detailJson = HttpUtils.httpPostUTF8(url, httpParam);
+                JSONObject dataObject = JSON.parseObject(detailJson);
+                JSONArray stockList = dataObject.getJSONArray("Inventory");
+                for (int i = 0; i < stockList.size(); i++) {
+                    JSONObject stock = stockList.getJSONObject(i);
 
+                    ProductSkuItem productSkuItem = new ProductSkuItem();
+                    productSkuItem.setStorehouseId(Integer.parseInt(this.getStorehouseId(warehouseId)));
+                    productSkuItem.setSkuNum("");
 
-
+                    ProductSku productSku = product.getProductSku();
+                    productSku.addToSkuItems(productSkuItem);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -308,18 +386,20 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
     }
 
 
-    private void getPrice(List<String> woMaiIds, List<Product> products) {
+    private void getPrice(String woMaiId, Product product) {
 
-        String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
-        param.put("skuids", ids);
+        param.put("skuids", woMaiId);
         String url = this.getWoMaiUrl();
         Map<String, String> httpParam = this.getHttpParams("womai.price.get", param);
         try {
-            String detailJson = HttpUtils.httpPostUTF8(url, httpParam);
-            JSONObject itemDetail = JSON.parseObject(detailJson);
-
-
+            String priceJson = HttpUtils.httpPostUTF8(url, httpParam);
+            JSONObject priceObject = JSON.parseObject(priceJson);
+            JSONArray priceList = priceObject.getJSONArray("price");
+            ProductSku productSku = product.getProductSku();
+            for (int i = 0; i < productSku.getSkuItems().size(); i++) {
+                product.getProductSku().getSkuItems().get(i).setCurPrice(priceList.getJSONObject(0).getString("price"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

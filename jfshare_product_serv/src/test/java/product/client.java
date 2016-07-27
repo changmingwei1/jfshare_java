@@ -44,10 +44,10 @@ public class client {
 
     private ProductServ.Client client;
 
-    private static final String IP = "127.0.0.1";
+//    private static final String IP = "127.0.0.1";
 //    private static final String IP = "101.201.39.38";
 //    private static final String IP = "120.24.153.155";
-//    private static final String IP = "101.201.38.182";
+    private static final String IP = "101.201.38.182";
 
     private static final Integer PORT = 1980;
 
@@ -209,7 +209,7 @@ public class client {
     @Test
     public void testStatisticsProductCard() throws Exception {
         ProductCardStatisticsParam param = new ProductCardStatisticsParam();
-        param.setSellerId(13);
+        param.setSellerId(1);
 //        param.setProductName("亿");
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
@@ -240,11 +240,11 @@ public class client {
         param.setSort("click_rate DESC");
 //        param.setSort("create_time DESC");
         param.setActiveState(300);
-        param.setSubjectId(1001);
+//        param.setSubjectId(1001);
 
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
-        pagination.setNumPerPage(30);
+        pagination.setNumPerPage(400);
 
         param.setPagination(pagination);
         int num = 0;
@@ -306,13 +306,13 @@ public class client {
     //卖家虚拟商品验证列表明细
     public void testQueryCaptchaDetails() throws Exception {
         CaptchaQueryParam param = new CaptchaQueryParam();
-        param.setSellerId(13);
+        param.setSellerId(4);
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
         pagination.setNumPerPage(10);
         param.setPagination(pagination);
-        param.setProductId("ze160523164905000443");
-        param.setMonthQuery("2016-06");
+        param.setProductId("ze160708153557000229");
+        param.setMonthQuery("2016-07");
         System.out.println(this.client.queryCaptchaDetails(param));
     }
 
@@ -320,7 +320,7 @@ public class client {
     //查询卖家虚拟商品验证列表
     public void testQueryCaptchaList() throws Exception {
         CaptchaQueryParam param = new CaptchaQueryParam();
-        param.setSellerId(2);
+        param.setSellerId(1);
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
         pagination.setNumPerPage(10);

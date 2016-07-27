@@ -21,11 +21,11 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-        transport = new TFramedTransport(new TSocket("101.201.39.12", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.39.12", 1986));
 //        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
 //        transport = new TFramedTransport(new TSocket("101.201.37.237", 1986));
 //        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
-//        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
+        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
@@ -293,5 +293,15 @@ public class Client extends TestCase{
 
     public void testQueryExportFileKey() throws TException {
         System.err.println(client.getExportOrderResult("6ea7e10c58fa14f752d040cf6e5a14bd"));
+    }
+
+    public void testOrderProfileQueryOffline() throws Exception {
+        OrderQueryConditions queryConditions = new OrderQueryConditions();
+        queryConditions.setSellerId(4);
+        queryConditions.setPayTimeStart("2016-7-22");
+        queryConditions.setPayTimeEnd("2016-7-23");
+        queryConditions.setCurPage(1);
+        queryConditions.setCount(5);
+        System.out.println(this.client.orderProfileQueryOffline(2, 4, queryConditions));
     }
 }

@@ -82,6 +82,9 @@
             <if test="state != 0">
                 and state = #{state}
             </if>
+            <if test="skuNum != null">
+                and sku_num = #{skuNum}
+            </if>
         </where>
         order by id
         limit #{start}, #{count}
