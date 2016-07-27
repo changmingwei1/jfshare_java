@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -62,23 +63,26 @@ public class ProductCardSvcImpl implements IProductCartSvc {
             InputStream is = new FileInputStream(localFile);
             hssfWorkbook = new HSSFWorkbook(is);
             HSSFSheet sheet = hssfWorkbook.getSheetAt(0);
-
+            List<TbProductCard> productCards = new ArrayList<TbProductCard>();
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 HSSFRow row = sheet.getRow(i);
                 TbProductCard productCard = new TbProductCard();
                 productCard.setSellerId(sellerId);
                 productCard.setProductId(row.getCell(0).getStringCellValue());
-                // 如果商品ID不是传参，不处理
+                // 如果商品ID不是传参，返回失败
                 if (!productCard.getProductId().equals(productId)) {
-                    continue;
+                    return false;
                 }
                 productCard.setSkuNum(row.getCell(1) == null ? "" : row.getCell(1).getStringCellValue());
                 productCard.setCardNumber(row.getCell(2).getStringCellValue());
                 productCard.setPassword(row.getCell(3) == null ? "" : row.getCell(3).getStringCellValue());
                 productCard.setCreateTime(now);
                 // 添加卡密信息
-                this.productCardDao.add(productCard);
+                productCards.add(productCard);
 
+            }
+            for (TbProductCard productCard : productCards) {
+                this.productCardDao.add(productCard);
             }
         } finally {
             // TODO: 2016/5/28 删除文件

@@ -43,7 +43,7 @@ public class Page implements Serializable {
     }
 
     public int getPageCount() {
-        return (int) Math.ceil(total / count) + 1;
+        return (total - 1) / count + 1;
     }
 
     public void setPageCount(int pageCount) {

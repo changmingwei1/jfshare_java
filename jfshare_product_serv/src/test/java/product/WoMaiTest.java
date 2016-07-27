@@ -1,6 +1,7 @@
 package product;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfshare.product.util.CodeUtil;
 import com.jfshare.product.util.HttpUtils;
@@ -49,6 +50,14 @@ public class WoMaiTest{
         String detailJson = HttpUtils.httpPostUTF8(domain, httpParam);
 
         System.out.println(detailJson);
+
+        JSONObject itemPageNum = JSON.parseObject(detailJson);
+        JSONArray pageNums = itemPageNum.getJSONArray("itempagenum");
+        for (int i = 0; i < pageNums.size(); i++) {
+            JSONObject pageNum = pageNums.getJSONObject(i);
+            System.out.println(pageNum.get("page_num"));
+
+        }
     }
 
     @Test
@@ -81,13 +90,31 @@ public class WoMaiTest{
         String ids = StringUtils.join(woMaiIds, ",");
         Map param = new HashMap();
         param.put("skuids", ids);
-        param.put("warehouseid", "10");
+        param.put("warehouseid", "100");
 //        param.put("area", "100");
 
         Map<String, String> httpParam = this.initPostParams("womai.inventory.get", param);
         String detailJson = HttpUtils.httpPostUTF8(domain, httpParam);
         System.out.println(detailJson);
         JSONObject itemDetail = JSON.parseObject(detailJson);
+
+    }
+
+    @Test
+    public void getPrice() throws Exception {
+        List<String> woMaiIds = new ArrayList<String>();
+        woMaiIds.add("954018");
+        woMaiIds.add("65951");
+        woMaiIds.add("65950");
+        woMaiIds.add("65948");
+        woMaiIds.add("1");
+        String ids = StringUtils.join(woMaiIds, ",");
+        Map param = new HashMap();
+        param.put("skuids", ids);
+        Map<String, String> httpParam = this.initPostParams("womai.price.get", param);
+        String priceJson = HttpUtils.httpPostUTF8(domain, httpParam);
+        System.out.println(priceJson);
+        JSONObject itemDetail = JSON.parseObject(priceJson);
 
     }
 
