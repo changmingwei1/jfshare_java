@@ -596,7 +596,7 @@ public class ServHandle implements ProductServ.Iface {
 			boolean flag = this.productCartSvc.importProductCard(param.getSellerId(), param.getProductId(), param.getPath());
 			if (!flag) {
 				result.setCode(1);
-				result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_FAIL);
+				result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_PRODUCT_ERROR);
 				return result;
 			}
 		} catch (Exception e) {
