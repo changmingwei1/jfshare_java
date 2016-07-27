@@ -57,14 +57,14 @@ public class OrderOptHandleTask {
                 continue;
             }
 
-//            Constant.OptType optType = null;
-//            try {
-//                optType = Constant.OptType.valueOf(optTypeStr);
-//            } catch (IllegalArgumentException e) {
-//                //Do nothing
-//            }
-//
-//            orderAfterDeal(optType, order);
+            Constant.OptType optType = null;
+            try {
+                optType = Constant.OptType.valueOf(optTypeStr);
+            } catch (IllegalArgumentException e) {
+                //Do nothing
+            }
+
+            orderAfterDeal(optType, order);
 
 
             EsOrder esOrder = new EsOrder(order);
@@ -75,12 +75,16 @@ public class OrderOptHandleTask {
 
     private void orderAfterDeal(Constant.OptType optType, Order order) {
         switch (optType) {
-            case order_pay:{
-                orderService.afterOrderPay(order);
+            case order_deliver: {
+                orderService.afterOrderDeliver(order);
                 break;
             }
-            case order_close:{
-                orderService.afterOrderClose(order);
+            case order_deliver_batch: {
+                orderService.afterOrderDeliver(order);
+                break;
+            }
+            case order_confirm:{
+                orderService.afterOrderConfirm(order);
                 break;
             }
             default:{

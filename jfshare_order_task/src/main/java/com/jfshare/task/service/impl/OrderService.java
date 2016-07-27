@@ -1,15 +1,20 @@
 package com.jfshare.task.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
 import com.jfshare.finagle.thrift.order.Order;
-import com.jfshare.finagle.thrift.order.OrderInfo;
-import com.jfshare.task.server.depend.ScoreClient;
-import com.jfshare.utils.BizUtil;
-import com.jfshare.utils.PriceUtils;
-import org.apache.commons.lang3.math.NumberUtils;
+import com.jfshare.task.server.depend.MessageClient;
+import com.jfshare.task.util.Constant;
+import com.jfshare.task.util.HandlerBarsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by bq on 16/5/29.
@@ -19,47 +24,31 @@ public class OrderService {
     private Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
-    private ScoreClient scoreClient;
+    private MessageClient messageClient;
 
     /**
-     * 订单支付成功赠送用户积分, 1元送一分, 不足一元部分不送
+     * 订单支付成功
      * @param order
      */
     public void afterOrderPay(Order order) {
 
-        int incomeScore = getScoreWithOrder(order);
-        if(incomeScore > 0)
-            scoreClient.incomeScore(order.getUserId(), incomeScore, "bonus_" + order.getOrderId());
     }
 
     /**
-     * 订单支付后关闭需要扣减支付时赠送的积分
+     * 订单确认收货
      * @param order
      */
-    public void afterOrderClose(Order order) {
-        if(order.getExchangeScore() > 0) {
-            scoreClient.incomeScore(order.getUserId(), order.getExchangeScore(), "trade_" + order.getOrderId());
-        }
-
-        if(order.getPayInfo().getPayState() != 1) {
-            return;
-        }
-
-        int score = getScoreWithOrder(order);
-        if(score > 0)
-            scoreClient.reduceScore(order.getUserId(), score, "bonus_" + order.getOrderId());
+    public void afterOrderConfirm(Order order) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("orderId", order.getOrderId());
+        String msg = HandlerBarsUtil.replace(Constant.MSG_TEMPLATE_ORDER_CONFIRM_RECEIPT, map);
+        this.messageClient.pushMessage(order.getUserId(), Constant.MSG_TITLE_ORDER_DELIVER, msg);
     }
 
-    private int getScoreWithOrder(Order order) {
-        int amount = PriceUtils.strToInt(order.getClosingPrice());
-        if(BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal() == NumberUtils.toInt(order.getPayInfo().getPayChannel(), -1)) {
-            for(OrderInfo orderInfo : order.getProductList()) {
-                int ThirdExchangAmount = NumberUtils.toInt(orderInfo.getThirdExchangeRate());
-                if(ThirdExchangAmount > 1) {
-                    amount -= (ThirdExchangAmount - 1) * 100;
-                }
-            }
-        }
-        return amount / 100;
+    public void afterOrderDeliver(Order order) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("orderId", order.getOrderId());
+        String msg = HandlerBarsUtil.replace(Constant.MSG_TEMPLATE_ORDER_DELIVER, map);
+        this.messageClient.pushMessage(order.getUserId(), Constant.MSG_TITLE_ORDER_DELIVER, msg);
     }
 }
