@@ -415,16 +415,16 @@ public class OrderDaoImpl implements IOrderDao {
         SqlSession sqlSession = null;
         try {
             sqlSession = sqlSessionFactory.openSession();
-            try {
-                count = (Integer) sqlSession.insert("insertSelectiveEx_Order", paraMap);
-//            logger.info("插入" + userTypeName + "主表[" + tableName + "]成功");
-            } catch (DuplicateKeyException e) {
-                logger.warn("插入" + userTypeName + "主表[" + tableName + "]主键重复！", e);
-                return 2;
-            } catch (Exception e) {
-                logger.error("插入" + userTypeName + "主表[" + tableName + "]失败！", e);
-                throw new RuntimeException("插入" + userTypeName + "主表[" + tableName + "]失败！");
-            }
+//            try {
+//                count = (Integer) sqlSession.insert("insertSelectiveEx_Order", paraMap);
+////            logger.info("插入" + userTypeName + "主表[" + tableName + "]成功");
+//            } catch (DuplicateKeyException e) {
+//                logger.warn("插入" + userTypeName + "主表[" + tableName + "]主键重复！", e);
+//                count = 2;
+//            } catch (Exception e) {
+//                logger.error("插入" + userTypeName + "主表[" + tableName + "]失败！", e);
+//                throw new RuntimeException("插入" + userTypeName + "主表[" + tableName + "]失败！");
+//            }
 
             for (TbOrderInfoRecord orderInfo : orderModel.getTbOrderInfoList()) {
                 Map<String, Object> paraMap1 = new HashMap<String, Object>();
@@ -438,8 +438,8 @@ public class OrderDaoImpl implements IOrderDao {
                     logger.warn("插入" + userTypeName + "细表[" + infoTableName + "]主键重复！", e);
                     count = 2;
                 } catch (Exception e) {
-                    logger.error("插入" + userTypeName + "细表[" + infoTableName + "]失败！", e);
-                    throw new RuntimeException("插入" + userTypeName + "细表[" + infoTableName + "]失败！");
+                    logger.error("插入" + userTypeName + "细表[" + infoTableName + "]失败！", e.getMessage());
+//                    throw new RuntimeException("插入" + userTypeName + "细表[" + infoTableName + "]失败！");
                 }
 
             }

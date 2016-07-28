@@ -297,6 +297,11 @@ public class OrderService {
 
             order.setPayState(1);
             order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_DELIVER.getEnumVal());
+            //线下订单直接交易成功
+            if (orderModel.getOrderType() == 1) {
+                order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
+                addNumber4Seller(order);
+            }
 
             TbOrderRecordExample example = new TbOrderRecordExample();
             TbOrderRecordExample.Criteria criteria = example.createCriteria();
@@ -350,10 +355,7 @@ public class OrderService {
             //线下订单直接交易成功
             if (orderModel.getOrderType() == 1) {
                 order.setOrderState(ConstantUtil.ORDER_STATE.WAIT_COMMENT.getEnumVal());
-                //将买家设置为卖家的会员
-                boolean b = sellerClient.insertUserSellerReal(orderModel.getUserId(), orderModel.getSellerId());
-                logger.info("线下支付订单将买家:" + orderModel.getUserId() + " 设置为卖家:" + orderModel.getSellerId() +
-                     "的会员结果为:" + b);
+                addNumber4Seller(order);
             }
         } else {
             order.setPayState(-1);
@@ -392,6 +394,13 @@ public class OrderService {
 
 
         return ret;
+    }
+
+    private void addNumber4Seller(OrderModel orderModel) {
+        //将买家设置为卖家的会员
+        boolean b = sellerClient.insertUserSellerReal(orderModel.getUserId(), orderModel.getSellerId());
+        logger.info("线下支付订单将买家:" + orderModel.getUserId() + " 设置为卖家:" + orderModel.getSellerId() +
+                "的会员结果为:" + b);
     }
 
     public List<OrderModel> buyerQueryStateList(OrderQueryConditions conditions) {
@@ -455,6 +464,12 @@ public class OrderService {
 
     public List<OrderModel> sellerQueryListOffline(OrderQueryConditions conditions) {
         return orderDao.getOrderListBySellerOffline(conditions.getSellerId(), conditions);
+    }
+
+    public int insertOrder(OrderModel orderModel) {
+        int ret = orderDao.insertOrder(orderModel, BizUtil.USER_TYPE.BUYER.getEnumVal());
+        ret = orderDao.insertOrder(orderModel, BizUtil.USER_TYPE.SELLER.getEnumVal());
+        return  ret;
     }
 }
  

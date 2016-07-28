@@ -22,10 +22,10 @@ public class Client extends TestCase{
     public void setUp() throws Exception {
 
 //        transport = new TFramedTransport(new TSocket("101.201.39.12", 1986));
-//        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
 //        transport = new TFramedTransport(new TSocket("101.201.37.237", 1986));
 //        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
-        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
+//        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new OrderServ.Client(protocol);
@@ -262,7 +262,7 @@ public class Client extends TestCase{
     public void testBatchExport() throws Exception {
         try {
             OrderQueryConditions queryConditions = new OrderQueryConditions();
-            queryConditions.setOrderState(1000);
+            queryConditions.setOrderId("53390083");
             System.err.println(client.batchExportOrder(13, queryConditions));
         } catch (Exception e) {
             e.printStackTrace();

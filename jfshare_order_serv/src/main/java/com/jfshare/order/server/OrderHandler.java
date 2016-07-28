@@ -737,9 +737,23 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     }
 
     @Override
-    @Deprecated
     public StringResult batchExportOrder(int sellerId, OrderQueryConditions conditions) throws TException {
-        return null;
+        //从ES恢复订单数据
+        StringResult stringResult = new StringResult(new Result(0));
+        if(org.apache.commons.lang3.StringUtils.isBlank(conditions.getOrderId())) {
+            return new StringResult(new Result(1));
+        }
+
+        OrderProfileResult orderProfileResult = this.orderProfileQueryFull(conditions);
+        try {
+            OrderModel orderModel = OrderUtil.rConvertOrderModel(orderProfileResult.getOrderProfilePage().getOrderProfileList().get(0));
+            int ret = orderService.insertOrder(orderModel);
+            stringResult.setValue(ret+"");
+        } catch (Exception e) {
+            logger.error("恢复数据异常，", e);
+            stringResult.setValue("异常， 恢复失败---------------" + conditions.getOrderId());
+        }
+        return stringResult;
     }
 
     @Override
