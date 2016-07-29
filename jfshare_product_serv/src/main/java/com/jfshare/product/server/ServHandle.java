@@ -621,7 +621,7 @@ public class ServHandle implements ProductServ.Iface {
                 result.setCode(1);
                 result.addToFailDescList(FailCode.PRODUCT_CARD_USE_FAIL);
                 logger.error("<<<<<<<< useProductCard not exit ---- error !! productCard : " + productCard.toString());
-			} else if (StringUtils.isBlank(tbProductCard.getCardNumber())) {
+			} else if (StringUtils.isBlank(dbProductCard.getCardNumber())) {
 				result.setCode(1);
 				result.addToFailDescList(FailCode.PRODUCT_CARD_IS_USED);
 				logger.error("<<<<<<<< useProductCard is used ---- error !! productCard : " + productCard.toString());
