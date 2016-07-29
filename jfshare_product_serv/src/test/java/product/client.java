@@ -48,6 +48,7 @@ public class client {
 //    private static final String IP = "101.201.39.38";
 //    private static final String IP = "120.24.153.155";
     private static final String IP = "101.201.38.182";
+//    private static final String IP = "101.201.39.12";
 
     private static final Integer PORT = 1980;
 
@@ -97,7 +98,7 @@ public class client {
         if (DO_IT == 0)
             return;
 
-        String productId = "ze160525212050000190";
+        String productId = "ze160415093016000123";
         ProductOpt productOpt = new ProductOpt();
         productOpt.setProductId(productId);
         productOpt.setActiveState(300);
@@ -237,14 +238,16 @@ public class client {
 //        param.setProductId("ze160515153359000306");
        /* param.setSubjectId(2077);
         param.setBrandId(591);*/
-        param.setSort("click_rate DESC");
+//        param.setSort("click_rate DESC");
+//        param.setSort("cur_price DESC");
+        param.setSort("cur_price ASC");
 //        param.setSort("create_time DESC");
         param.setActiveState(300);
 //        param.setSubjectId(1001);
 
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
-        pagination.setNumPerPage(400);
+        pagination.setNumPerPage(500);
 
         param.setPagination(pagination);
         int num = 0;
@@ -277,7 +280,9 @@ public class client {
     @Test
     public void testProductSurveyBackendQuery() throws Exception {
         ProductSurveyQueryParam param = new ProductSurveyQueryParam();
-        param.setSort("create_time DESC");
+        param.setSellerId(28);
+        param.setSort("click_rate DESC");
+        param.setActiveState(300);
         Pagination pagination = new Pagination();
         pagination.setCurrentPage(1);
         pagination.setNumPerPage(10);
@@ -295,9 +300,11 @@ public class client {
     @Test
     public void testImportProductCard() throws Exception {
 //        String path = "https://apia.wd2go.com/api/1.0/rest/device_redirect?device_user_id=21397091&device_uri=%2Fapi%2F1.0%2Frest%2Ffile_contents%2Fshare%2F%25E8%2599%259A%25E6%258B%259F%25E5%2595%2586%25E5%2593%2581%25E4%25B8%258A%25E4%25BC%25A0%25E6%25A8%25A1%25E6%259D%25BF.xls%3Fdevice_user_id%3D21397091%26request_auth_code%3D4ede3472d20367f0c0bf9c3797b187824e948be306b875920eb2f3f63a3ae5a0";
-        String path = "http://101.201.39.61:3000/system/v1/jfs_image/D7FB66843726D29D4B51A21D12F4642A.jpg";
+//        String path = "http://101.201.39.61:3000/system/v1/jfs_image/D7FB66843726D29D4B51A21D12F4642A.jpg";
+        String path = "http://proxy.jfshare.com/system/v1/jfs_image/5A224550B91CB947A1F9F46F70D1E8F8.xls";
         ProductCardImportParam productCardImportParam = new ProductCardImportParam();
         productCardImportParam.setSellerId(1);
+        productCardImportParam.setProductId("ze160721094227000142");
         productCardImportParam.setPath(path);
         System.out.println(client.importProductCard(productCardImportParam));
     }

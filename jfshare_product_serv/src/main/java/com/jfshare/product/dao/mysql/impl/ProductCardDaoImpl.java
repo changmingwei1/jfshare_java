@@ -83,19 +83,25 @@ public class ProductCardDaoImpl implements IProductCardDao {
         TbProductCardExample.Criteria criteria = example.createCriteria();
         criteria.andSellerIdEqualTo(productCard.getSellerId());
         criteria.andCardNumberEqualTo(productCard.getCardNumber());
-        // 只有已发放的才能够使用
-        criteria.andStateEqualTo(2);
 
         List<TbProductCard> tbProductCards = this.cardMapper.selectByExample(example);
+        // 验证码不存在
         if (CollectionUtils.isEmpty(tbProductCards)) {
             return null;
         }
 
         TbProductCard tbproductCard = tbProductCards.get(0);
-        tbproductCard.setState(3);
-        Date now = new Date();
-        tbproductCard.setLastUpdateTime(now);
-        tbproductCard.setCheckedTime(now);
+        // 验证码已经使用，返回空实体
+        if (tbproductCard.getState() == 3) {
+            return new TbProductCard();
+        } else {
+            // 使用验证码
+            tbproductCard.setState(3);
+            Date now = new Date();
+            tbproductCard.setLastUpdateTime(now);
+            tbproductCard.setCheckedTime(now);
+        }
+
 
         int num = this.cardMapper.updateByPrimaryKey(tbproductCard);
         return tbproductCard;
