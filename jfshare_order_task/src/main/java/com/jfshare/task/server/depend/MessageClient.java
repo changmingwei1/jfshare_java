@@ -48,7 +48,7 @@ public class MessageClient {
 		service = new MessageServ.ServiceToClient(client, new TBinaryProtocol.Factory());
 	}
 
-	public void pushMessage(int userId, String title, String msg) {
+	public void pushMessage(int userId, String title, String msg, String orderType) {
 		long doneTime = System.currentTimeMillis();
 		try {
 			PushMessage messageInfo = new PushMessage();
@@ -56,7 +56,7 @@ public class MessageClient {
 			messageInfo.setContent(msg);
 			messageInfo.setObjType(1);
 			messageInfo.setTitle(title);
-			Result result = Await.result(this.service.pushMessageInfo(String.valueOf(userId), messageInfo));
+			Result result = Await.result(this.service.pushMessageInfo(String.valueOf(userId), messageInfo, orderType));
 			if(result != null && result.getCode() == 0) {
 				logger.info("userId={}, pushMessage={}, 推送消息成功", userId, messageInfo);
 			} else{

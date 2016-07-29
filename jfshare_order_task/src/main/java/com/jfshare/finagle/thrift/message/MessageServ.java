@@ -46,7 +46,7 @@ public class MessageServ {
     public com.jfshare.finagle.thrift.result.Result addAppUpgradeInfo(AppUpgradeInfo info) throws TException;
     public com.jfshare.finagle.thrift.result.Result updateAppUpgradeInfo(AppUpgradeInfo info) throws TException;
     public AppUpgradeResultStr getAppUpgradeInfoStr(GetUpgradeParamStr param) throws TException;
-    public com.jfshare.finagle.thrift.result.Result pushMessageInfo(String userId, PushMessage message) throws TException;
+    public com.jfshare.finagle.thrift.result.Result pushMessageInfo(String userId, PushMessage message, String orderType) throws TException;
   }
 
   public interface AsyncIface {
@@ -59,7 +59,7 @@ public class MessageServ {
     public void addAppUpgradeInfo(AppUpgradeInfo info, AsyncMethodCallback<AsyncClient.addAppUpgradeInfo_call> resultHandler) throws TException;
     public void updateAppUpgradeInfo(AppUpgradeInfo info, AsyncMethodCallback<AsyncClient.updateAppUpgradeInfo_call> resultHandler) throws TException;
     public void getAppUpgradeInfoStr(GetUpgradeParamStr param, AsyncMethodCallback<AsyncClient.getAppUpgradeInfoStr_call> resultHandler) throws TException;
-    public void pushMessageInfo(String userId, PushMessage message, AsyncMethodCallback<AsyncClient.pushMessageInfo_call> resultHandler) throws TException;
+    public void pushMessageInfo(String userId, PushMessage message, String orderType, AsyncMethodCallback<AsyncClient.pushMessageInfo_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
@@ -72,7 +72,7 @@ public class MessageServ {
     public Future<com.jfshare.finagle.thrift.result.Result> addAppUpgradeInfo(AppUpgradeInfo info);
     public Future<com.jfshare.finagle.thrift.result.Result> updateAppUpgradeInfo(AppUpgradeInfo info);
     public Future<AppUpgradeResultStr> getAppUpgradeInfoStr(GetUpgradeParamStr param);
-    public Future<com.jfshare.finagle.thrift.result.Result> pushMessageInfo(String userId, PushMessage message);
+    public Future<com.jfshare.finagle.thrift.result.Result> pushMessageInfo(String userId, PushMessage message, String orderType);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -427,18 +427,19 @@ public class MessageServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getAppUpgradeInfoStr failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result pushMessageInfo(String userId, PushMessage message) throws TException
+    public com.jfshare.finagle.thrift.result.Result pushMessageInfo(String userId, PushMessage message, String orderType) throws TException
     {
-      send_pushMessageInfo(userId, message);
+      send_pushMessageInfo(userId, message, orderType);
       return recv_pushMessageInfo();
     }
 
-    public void send_pushMessageInfo(String userId, PushMessage message) throws TException
+    public void send_pushMessageInfo(String userId, PushMessage message, String orderType) throws TException
     {
       oprot_.writeMessageBegin(new TMessage("pushMessageInfo", TMessageType.CALL, ++seqid_));
       pushMessageInfo_args args = new pushMessageInfo_args();
       args.setUserId(userId);
       args.setMessage(message);
+      args.setOrderType(orderType);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
@@ -761,20 +762,22 @@ public class MessageServ {
         return (new Client(prot)).recv_getAppUpgradeInfoStr();
       }
      }
-    public void pushMessageInfo(String userId, PushMessage message, AsyncMethodCallback<pushMessageInfo_call> resultHandler) throws TException {
+    public void pushMessageInfo(String userId, PushMessage message, String orderType, AsyncMethodCallback<pushMessageInfo_call> resultHandler) throws TException {
       checkReady();
-      pushMessageInfo_call method_call = new pushMessageInfo_call(userId, message, resultHandler, this, protocolFactory, transport);
+      pushMessageInfo_call method_call = new pushMessageInfo_call(userId, message, orderType, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
     public static class pushMessageInfo_call extends TAsyncMethodCall {
       private String userId;
       private PushMessage message;
+      private String orderType;
 
-      public pushMessageInfo_call(String userId, PushMessage message, AsyncMethodCallback<pushMessageInfo_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public pushMessageInfo_call(String userId, PushMessage message, String orderType, AsyncMethodCallback<pushMessageInfo_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.userId = userId;
         this.message = message;
+        this.orderType = orderType;
       }
 
       public void write_args(TProtocol prot) throws TException {
@@ -782,6 +785,7 @@ public class MessageServ {
         pushMessageInfo_args args = new pushMessageInfo_args();
         args.setUserId(userId);
         args.setMessage(message);
+        args.setOrderType(orderType);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1077,7 +1081,7 @@ public class MessageServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> pushMessageInfo(String userId, PushMessage message) {
+    public Future<com.jfshare.finagle.thrift.result.Result> pushMessageInfo(String userId, PushMessage message, String orderType) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
@@ -1086,6 +1090,7 @@ public class MessageServ {
         pushMessageInfo_args __args__ = new pushMessageInfo_args();
         __args__.setUserId(userId);
         __args__.setMessage(message);
+        __args__.setOrderType(orderType);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -1394,7 +1399,7 @@ public class MessageServ {
         }
         iprot.readMessageEnd();
         pushMessageInfo_result result = new pushMessageInfo_result();
-        result.success = iface_.pushMessageInfo(args.userId, args.message);
+        result.success = iface_.pushMessageInfo(args.userId, args.message, args.orderType);
         
         oprot.writeMessageBegin(new TMessage("pushMessageInfo", TMessageType.REPLY, seqid));
         result.write(oprot);
@@ -2046,7 +2051,7 @@ public class MessageServ {
           }
           Future<com.jfshare.finagle.thrift.result.Result> future;
           try {
-            future = iface.pushMessageInfo(args.userId, args.message);
+            future = iface.pushMessageInfo(args.userId, args.message, args.orderType);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -7275,15 +7280,18 @@ public class MessageServ {
 
   private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.STRING, (short)1);
   private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRUCT, (short)2);
+  private static final TField ORDER_TYPE_FIELD_DESC = new TField("orderType", TType.STRING, (short)3);
 
 
   public String userId;
   public PushMessage message;
+  public String orderType;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     USER_ID((short)1, "userId"),
-    MESSAGE((short)2, "message");
+    MESSAGE((short)2, "message"),
+    ORDER_TYPE((short)3, "orderType");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -7302,6 +7310,8 @@ public class MessageServ {
   	return USER_ID;
         case 2: // MESSAGE
   	return MESSAGE;
+        case 3: // ORDER_TYPE
+  	return ORDER_TYPE;
         default:
   	return null;
       }
@@ -7351,6 +7361,8 @@ public class MessageServ {
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.MESSAGE, new FieldMetaData("message", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, PushMessage.class)));
+    tmpMap.put(_Fields.ORDER_TYPE, new FieldMetaData("orderType", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(pushMessageInfo_args.class, metaDataMap);
   }
@@ -7361,11 +7373,13 @@ public class MessageServ {
 
   public pushMessageInfo_args(
     String userId,
-    PushMessage message)
+    PushMessage message,
+    String orderType)
   {
     this();
     this.userId = userId;
     this.message = message;
+    this.orderType = orderType;
   }
 
   /**
@@ -7378,6 +7392,9 @@ public class MessageServ {
     if (other.isSetMessage()) {
       this.message = new PushMessage(other.message);
     }
+    if (other.isSetOrderType()) {
+      this.orderType = other.orderType;
+    }
   }
 
   public pushMessageInfo_args deepCopy() {
@@ -7388,6 +7405,7 @@ public class MessageServ {
   public void clear() {
     this.userId = null;
     this.message = null;
+    this.orderType = null;
   }
 
   public String getUserId() {
@@ -7440,6 +7458,31 @@ public class MessageServ {
     }
   }
 
+  public String getOrderType() {
+    return this.orderType;
+  }
+
+  public pushMessageInfo_args setOrderType(String orderType) {
+    this.orderType = orderType;
+    
+    return this;
+  }
+
+  public void unsetOrderType() {
+    this.orderType = null;
+  }
+
+  /** Returns true if field orderType is set (has been asigned a value) and false otherwise */
+  public boolean isSetOrderType() {
+    return this.orderType != null;
+  }
+
+  public void setOrderTypeIsSet(boolean value) {
+    if (!value) {
+      this.orderType = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case USER_ID:
@@ -7456,6 +7499,13 @@ public class MessageServ {
         setMessage((PushMessage)value);
       }
       break;
+    case ORDER_TYPE:
+      if (value == null) {
+        unsetOrderType();
+      } else {
+        setOrderType((String)value);
+      }
+      break;
     }
   }
 
@@ -7465,6 +7515,8 @@ public class MessageServ {
       return getUserId();
     case MESSAGE:
       return getMessage();
+    case ORDER_TYPE:
+      return getOrderType();
     }
     throw new IllegalStateException();
   }
@@ -7480,6 +7532,8 @@ public class MessageServ {
       return isSetUserId();
     case MESSAGE:
       return isSetMessage();
+    case ORDER_TYPE:
+      return isSetOrderType();
     }
     throw new IllegalStateException();
   }
@@ -7512,6 +7566,14 @@ public class MessageServ {
       if (!this.message.equals(that.message))
         return false;
     }
+    boolean this_present_orderType = true && this.isSetOrderType();
+    boolean that_present_orderType = true && that.isSetOrderType();
+    if (this_present_orderType || that_present_orderType) {
+      if (!(this_present_orderType && that_present_orderType))
+        return false;
+      if (!this.orderType.equals(that.orderType))
+        return false;
+    }
 
     return true;
   }
@@ -7527,6 +7589,10 @@ public class MessageServ {
     builder.append(present_message);
     if (present_message)
       builder.append(message);
+    boolean present_orderType = true && (isSetOrderType());
+    builder.append(present_orderType);
+    if (present_orderType)
+      builder.append(orderType);
     return builder.toHashCode();
   }
 
@@ -7554,6 +7620,16 @@ public class MessageServ {
     }
     if (isSetMessage()) {
       lastComparison = TBaseHelper.compareTo(this.message, typedOther.message);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetOrderType()).compareTo(typedOther.isSetOrderType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOrderType()) {
+      lastComparison = TBaseHelper.compareTo(this.orderType, typedOther.orderType);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -7591,6 +7667,13 @@ public class MessageServ {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 3: // ORDER_TYPE
+          if (field.type == TType.STRING) {
+            this.orderType = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -7616,6 +7699,11 @@ public class MessageServ {
       this.message.write(oprot);
       oprot.writeFieldEnd();
     }
+    if (this.orderType != null) {
+      oprot.writeFieldBegin(ORDER_TYPE_FIELD_DESC);
+      oprot.writeString(this.orderType);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -7637,6 +7725,14 @@ public class MessageServ {
       sb.append("null");
     } else {
       sb.append(this.message);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("orderType:");
+    if (this.orderType == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.orderType);
     }
     first = false;
     sb.append(")");

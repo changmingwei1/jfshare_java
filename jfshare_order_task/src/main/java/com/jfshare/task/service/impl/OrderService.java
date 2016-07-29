@@ -42,13 +42,13 @@ public class OrderService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("orderId", order.getOrderId());
         String msg = HandlerBarsUtil.replace(Constant.MSG_TEMPLATE_ORDER_CONFIRM_RECEIPT, map);
-        this.messageClient.pushMessage(order.getUserId(), Constant.MSG_TITLE_ORDER_DELIVER, msg);
+        this.messageClient.pushMessage(order.getUserId(), Constant.MSG_TITLE_ORDER_DELIVER, msg, "50");
     }
 
     public void afterOrderDeliver(Order order) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("orderId", order.getOrderId());
         String msg = HandlerBarsUtil.replace(Constant.MSG_TEMPLATE_ORDER_DELIVER, map);
-        this.messageClient.pushMessage(order.getUserId(), Constant.MSG_TITLE_ORDER_DELIVER, msg);
+        this.messageClient.pushMessage(order.getUserId(), Constant.MSG_TITLE_ORDER_DELIVER, msg, "40");
     }
 }
