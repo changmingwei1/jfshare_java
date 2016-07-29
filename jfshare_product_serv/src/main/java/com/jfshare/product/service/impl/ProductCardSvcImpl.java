@@ -47,7 +47,6 @@ public class ProductCardSvcImpl implements IProductCartSvc {
     @Override
     public boolean importProductCard(int sellerId, String productId, String path) throws Exception {
 
-        // TODO: 2016/5/22  dsdfsdf sd 
         // 读取文件中的数据
         HSSFWorkbook hssfWorkbook = null;
         File localFile = null;
