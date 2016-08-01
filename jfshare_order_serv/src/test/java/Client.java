@@ -22,8 +22,8 @@ public class Client extends TestCase{
     public void setUp() throws Exception {
 
 //        transport = new TFramedTransport(new TSocket("101.201.39.12", 1986));
-        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
-//        transport = new TFramedTransport(new TSocket("101.201.37.237", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+        transport = new TFramedTransport(new TSocket("101.201.37.237", 1986));
 //        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
 //        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
 
@@ -110,11 +110,11 @@ public class Client extends TestCase{
             OrderQueryConditions conditions = new OrderQueryConditions();
 //            conditions.setCurPage(2);
 //            conditions.setCount(3);
-//            conditions.setStartTime("2016-07-01 00:00:00");
-//            conditions.setEndTime("2016-07-20 00:00:00");
+            conditions.setStartTime("2016-07-01 00:00:00");
+            conditions.setEndTime("2016-07-20 00:00:00");
 //            conditions.setOrderState(5);
 //            conditions.setOrderId("59090131");
-            conditions.addToOrderIds("96650041");
+//            conditions.addToOrderIds("96650041");
 //            conditions.addToOrderIds("95200327");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
