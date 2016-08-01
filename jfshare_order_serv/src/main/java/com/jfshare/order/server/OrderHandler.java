@@ -477,8 +477,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             }
 
             List<OrderModel> orderModels = orderService.buyerQueryListFull(param.getUserId(), param.getOrderIdList());
+            logger.info("申请支付----payApply获取订单信息:{}", JSON.toJSONString(orderModels));
             if (orderModels == null || orderModels.size() != param.getOrderIdList().size()) {
-                logger.warn("申请支付----payApply获取订单信息有误！param[{0}]", param);
+                logger.warn("申请支付----payApply获取订单信息有误！param[{}]", param);
                 FailCode.addFails(result, FailCode.ORDER_INFO_ERROR);
                 return stringResult;
             }

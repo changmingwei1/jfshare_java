@@ -40,7 +40,8 @@ public class Test_xxx {
 //        conditions.setCurPage(6);
         conditions.setCount(100);
 
-        ESClient esClient = new ESClient("jfshare-app", "101.201.39.61:9300,101.201.39.62:9300");
+        ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
+//        ESClient esClient = new ESClient("jfshare-app", "101.201.39.61:9300,101.201.39.62:9300");
         try {
             for(int i=0; i < 1; i++) {
                 long start = System.nanoTime();

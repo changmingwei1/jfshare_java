@@ -42,12 +42,10 @@ public class Client extends TestCase{
      */
 
     public void testQueryOrderDetail() throws Exception {
-        //商品id
-        String orderId = "71350022";
         try {
             ////////////////////////////////////////////////////
 
-            System.err.println(client.queryOrderDetail(1, 22, orderId));
+            System.err.println(client.queryOrderDetail(1, 62, "100105438"));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -113,8 +111,8 @@ public class Client extends TestCase{
 //            conditions.setStartTime("2016-07-01 00:00:00");
 //            conditions.setEndTime("2016-07-20 00:00:00");
 //            conditions.setOrderState(5);
-//            conditions.setOrderId("59090131");
-            conditions.addToOrderIds("96650041");
+            conditions.setOrderId("100105438");
+//            conditions.addToOrderIds("100105438");
 //            conditions.addToOrderIds("95200327");
             System.err.println(client.orderProfileQueryFull(conditions));
         } catch (Exception e) {
@@ -226,12 +224,12 @@ public class Client extends TestCase{
     public void testPayApply() throws Exception {
         try {
             PayParam payParam = new PayParam();
-            payParam.setUserId(17);
-            payParam.addToOrderIdList("24920017");
+            payParam.setUserId(222);
+            payParam.addToOrderIdList("98600222");
             PayChannel payChannel = new PayChannel();
-            payChannel.setPayChannel(9);
-            payParam.setExchangeCash("0.10");
-            payParam.setExchangeScore(10);
+            payChannel.setPayChannel(0);
+            payParam.setExchangeCash("0.06");
+            payParam.setExchangeScore(6);
             payParam.setPayChannel(payChannel);
             System.err.println(client.payApply(payParam));
         } catch (Exception e) {

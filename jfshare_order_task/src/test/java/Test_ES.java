@@ -1,5 +1,7 @@
 import com.alibaba.fastjson.JSON;
 import com.jfshare.elasticsearch.drive.ESClient;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -21,18 +23,18 @@ public class Test_ES {
 
     private static Logger logger = LoggerFactory.getLogger(Test_ES.class);
 
-    private static ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
+    private static ESClient esClient = new ESClient("jfshare-app", "101.201.37.237:9300");
+//    private static ESClient esClient = new ESClient("jfshare-app", "120.24.153.155:9300");
+//    private static ESClient esClient = new ESClient("es_order", "192.168.10.163:9300");
     public static void main(String[] str) {
         try {
-            SearchHits searchHits = searchScoreRecord("12222_1", null);
-            logger.info("total={}", searchHits.getTotalHits());
-            for(SearchHit hit : searchHits.getHits()) {
-                logger.info(hit.getSourceAsString());
-            }
-//            logger.info("total={}",  JSON.toJSONString(searchHits.getHits()));
-
-
-//            addScoreRecord(new EsScore("1-2222-1", "", 100, 10, 1));
+//            SearchHits searchHits = searchScoreRecord("12222_1", null);
+//            logger.info("total={}", searchHits.getTotalHits());
+//            for(SearchHit hit : searchHits.getHits()) {
+//                logger.info(hit.getSourceAsString());
+//            }
+            addScoreRecord(new EsScore("1-2222-1", "", 100, 10, 1));
+//            addScoreRecord1(new EsScore("1-2222-1", "", 100, 10, 1));
 //            addScoreRecord(new EsScore("1-2222-1", "orderId1", 100, -1, 2));
 //            addScoreRecord(new EsScore("1-2222-1", "orderId2", 100, -2, 2));
 //            addScoreRecord(new EsScore("1-2222-1", "orderId2", 100, 2, 3));
@@ -67,6 +69,36 @@ public class Test_ES {
      * @param esScore
      */
     public static void addScoreRecord(EsScore esScore) {
+        logger.info("ES==> addScoreRecord {}", esScore);
+        try {
+            TransportClient transportClient = esClient.getTransportClient();
+            BulkRequestBuilder bulkRequest = transportClient.prepareBulk();
+            IndexRequestBuilder indexRequestBuilder = transportClient.prepareIndex(ES_SCORE_INDEX, ES_SCORE_TYPE);
+            indexRequestBuilder.setSource(JSON.toJSONString(esScore));
+            bulkRequest.add(indexRequestBuilder);
+            BulkResponse bulkResponse = bulkRequest . execute (). actionGet();
+
+            if ( bulkResponse . hasFailures ())
+            {
+                // process failures by iterating through each bulk response item
+                System.out.println("has failures:" + bulkResponse.buildFailureMessage());
+
+            }else {
+                System.out.println("add esScore by bluk success");
+            }
+
+//            esClient.add(ES_SCORE_INDEX, ES_SCORE_TYPE, esScore.toJSONString());
+        } catch (Exception e) {
+            logger.error("ES==ERROR addScoreRecord {}", esScore.toJSONString());
+            logger.error("ES==>| addScoreRecord 发生异常", e);
+        }
+    }
+
+    /**
+     * 插入积分操作记录
+     * @param esScore
+     */
+    public static void addScoreRecord1(EsScore esScore) {
         logger.info("ES==> addScoreRecord {}", esScore);
         try {
 //            esClient.add(ES_SCORE_INDEX, ES_SCORE_TYPE, esScore.toJSONString());
