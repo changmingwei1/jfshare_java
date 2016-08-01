@@ -45,9 +45,8 @@ public class OrderOptHandleTask {
             String orderId = jsonObject.getString("orderId");
             String optTypeStr = jsonObject.getString("optType");
             Order order = null;
-            if(userId > 0) {
-                order = orderClient.queryOrderDetail(BizUtil.USER_TYPE.BUYER, userId, orderId);
-            } else if(sellerId > 0) {
+
+            if(sellerId > 0) {
                 order = orderClient.queryOrderDetail(BizUtil.USER_TYPE.SELLER, userId, orderId);
             }
 
