@@ -68,7 +68,7 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 HSSFRow row = sheet.getRow(i);
                 TbProductCard productCard = new TbProductCard();
                 productCard.setSellerId(sellerId);
-                productCard.setProductId(row.getCell(0).getStringCellValue());
+                productCard.setProductId(row.getCell(0) == null ? "" : row.getCell(0).getStringCellValue());
                 if (StringUtils.isBlank(productCard.getProductId())) {
                     break;
                 }
