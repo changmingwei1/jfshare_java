@@ -1,11 +1,17 @@
 import com.alibaba.fastjson.JSON;
 import com.jfshare.elasticsearch.drive.ESClient;
+import org.elasticsearch.action.bulk.BulkProcessor;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.unit.ByteSizeUnit;
+import org.elasticsearch.common.unit.ByteSizeValue;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -33,8 +39,8 @@ public class Test_ES {
 //            for(SearchHit hit : searchHits.getHits()) {
 //                logger.info(hit.getSourceAsString());
 //            }
-            addScoreRecord(new EsScore("1-2222-1", "", 100, 10, 1));
-//            addScoreRecord1(new EsScore("1-2222-1", "", 100, 10, 1));
+//            addScoreRecord(new EsScore("1-2222-1", "", 100, 10, 1));
+            addScoreRecord1(new EsScore("1-2222-1", "", 100, 10, 1));
 //            addScoreRecord(new EsScore("1-2222-1", "orderId1", 100, -1, 2));
 //            addScoreRecord(new EsScore("1-2222-1", "orderId2", 100, -2, 2));
 //            addScoreRecord(new EsScore("1-2222-1", "orderId2", 100, 2, 3));
@@ -100,11 +106,33 @@ public class Test_ES {
      */
     public static void addScoreRecord1(EsScore esScore) {
         logger.info("ES==> addScoreRecord {}", esScore);
+        TransportClient client = esClient.getTransportClient();
         try {
-//            esClient.add(ES_SCORE_INDEX, ES_SCORE_TYPE, esScore.toJSONString());
-            TransportClient transportClient = esClient.getTransportClient();
-            IndexRequestBuilder indexRequestBuilder = transportClient.prepareIndex(ES_SCORE_INDEX, ES_SCORE_TYPE);
-            indexRequestBuilder.setSource(JSON.toJSONString(esScore)).get();
+            BulkProcessor bulkProcessor = BulkProcessor.builder(
+                    client,
+                    new BulkProcessor.Listener() {
+                        @Override
+                        public void beforeBulk(long executionId,
+                                               BulkRequest request) {
+                            System.err.println("1111");
+                        }
+
+                        @Override
+                        public void afterBulk(long executionId,
+                                              BulkRequest request,
+                                              BulkResponse response) { System.err.println("2222"); }
+
+                        @Override
+                        public void afterBulk(long executionId,
+                                              BulkRequest request,
+                                              Throwable failure) { System.err.println("3333"); }
+                    })
+                    .setBulkActions(10)
+                    .setBulkSize(new ByteSizeValue(1, ByteSizeUnit.KB))
+                    .setFlushInterval(TimeValue.timeValueSeconds(1))
+                    .build();
+
+            bulkProcessor.add(new IndexRequest(ES_SCORE_INDEX, ES_SCORE_TYPE,JSON.toJSONString(esScore)));
         } catch (Exception e) {
             logger.error("ES==ERROR addScoreRecord {}", esScore.toJSONString());
             logger.error("ES==>| addScoreRecord 发生异常", e);
