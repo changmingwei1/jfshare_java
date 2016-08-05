@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.product.model.mapper.manual.ManualTbThirdPartyProductSnapshotMapper" >
+
+  <select id="queryThirdPartyProductSnapshotList" parameterType="map" resultMap="com.jfshare.product.model.mapper.TbThirdPartyProductSnapshotMapper.ResultMapWithBLOBs">
+    select * from tb_third_party_product_snapshot t
+    <where>
+        AND t.third_party_product_id = #{thirdPartyProductId} AND t.third_party_identify = #{thirdPartyIdentify}
+    </where>
+    order by t.last_update_time desc
+    limit #{start}, #{count}
+  </select>
+
+  <select id="queryThirdPartyProductSnapshotCount" parameterType="map" resultType="int">
+    select count(*) from tb_third_party_product_snapshot t
+    <where>
+      AND t.third_party_product_id = #{thirdPartyProductId} AND t.third_party_identify = #{thirdPartyIdentify}
+    </where>
+  </select>
+</mapper>

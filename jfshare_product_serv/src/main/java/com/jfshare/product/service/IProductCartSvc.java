@@ -15,7 +15,15 @@ import java.util.Map;
 public interface IProductCartSvc {
 
 
-    boolean importProductCard(int sellerId, String productId, String path) throws Exception;
+    /**
+     * 导入卡密
+     * @param sellerId
+     * @param productId
+     * @param path
+     * @return 0：成功， 1：模板解析失败， 2：商品ID不一致， 3：部分重复
+     * @throws Exception
+     */
+    int importProductCard(int sellerId, String productId, String path) throws Exception;
 
     /**
      * 获取卡密信息，需要商品ID，交易唯一标识（transactionId）, 获取个数

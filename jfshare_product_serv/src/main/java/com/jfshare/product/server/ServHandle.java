@@ -8,10 +8,14 @@ import com.jfshare.finagle.thrift.result.StringResult;
 import com.jfshare.product.exceptions.BaseException;
 import com.jfshare.product.model.TbProduct;
 import com.jfshare.product.model.TbProductCard;
+import com.jfshare.product.model.TbThirdPartyProduct;
+import com.jfshare.product.model.TbThirdPartyProductSnapshotWithBLOBs;
+import com.jfshare.product.model.TbThirdPartyProductWithBLOBs;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.model.vo.Page;
 import com.jfshare.product.service.IProductCartSvc;
 import com.jfshare.product.service.IProductSvc;
+import com.jfshare.product.service.IWoMaiSvc;
 import com.jfshare.product.util.ConvertUtil;
 import com.jfshare.product.util.FailCode;
 import com.jfshare.product.util.ResultUtil;
@@ -45,6 +49,9 @@ public class ServHandle implements ProductServ.Iface {
 
 	@Resource
 	private IProductCartSvc productCartSvc;
+
+	@Resource
+	private IWoMaiSvc woMaiSvc;
 
 	@Override
 	public ProductResult queryProduct(String productId, ProductRetParam param) throws TException {
@@ -593,10 +600,20 @@ public class ServHandle implements ProductServ.Iface {
 	public Result importProductCard(ProductCardImportParam param) throws TException {
 		Result result = new Result(0);
 		try {
-			boolean flag = this.productCartSvc.importProductCard(param.getSellerId(), param.getProductId(), param.getPath());
-			if (!flag) {
+			int flag = this.productCartSvc.importProductCard(param.getSellerId(), param.getProductId(), param.getPath());
+			if (flag == 1) {
+				result.setCode(1);
+				result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_FILE_ERROR);
+				return result;
+			}
+			if (flag == 2) {
 				result.setCode(1);
 				result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_PRODUCT_ERROR);
+				return result;
+			}
+			if (flag == 3) {
+				result.setCode(1);
+				result.addToFailDescList(FailCode.PRODUCT_CARD_IMPORT_EXIST);
 				return result;
 			}
 		} catch (Exception e) {
@@ -797,5 +814,78 @@ public class ServHandle implements ProductServ.Iface {
 			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
 		}
 		return captchaDetailResult;
+	}
+
+	@Override
+	public ThirdPartyProductQueryResult queryThirdPartyProduct(ThirdPartyProductQueryParam param, Pagination pagination) throws TException {
+		ThirdPartyProductQueryResult thirdPartyProductQueryResult = new ThirdPartyProductQueryResult();
+		Result result = new Result();
+		thirdPartyProductQueryResult.setResult(result);
+
+		Page page = new Page(pagination.getCurrentPage(), pagination.getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("thirdPartyIdentify", param.getThirdPartyIdentify() == 0 ? null : param.getThirdPartyIdentify());
+		queryMap.put("productName", param.getProductName());
+		queryMap.put("activeState", param.getActiveState() == 0 ? null : param.getActiveState());
+		queryMap.put("stockState", param.getStockState() == 0 ? null : param.getStockState());
+		queryMap.put("priceState", param.getPriceState() == 0 ? null : param.getPriceState());
+		queryMap.put("offerState", param.getOfferState() == 0 ? null : param.getOfferState());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		try {
+			// 查询总数
+			int total = this.woMaiSvc.queryThirdPartyProductCount(queryMap);
+			page.setTotal(total);
+
+			List<TbThirdPartyProductWithBLOBs> thirdPartyProductList = this.woMaiSvc.queryThirdPartyProductList(queryMap);
+			for (TbThirdPartyProductWithBLOBs product : thirdPartyProductList) {
+				thirdPartyProductQueryResult.addToThirdPartyProductList(ConvertUtil.tbThirdPartyProductWithBLOBs2Thrift(product));
+			}
+			thirdPartyProductQueryResult.setPagination(ConvertUtil.page2Pagination(page));
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryThirdPartyProduct error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
+		return thirdPartyProductQueryResult;
+	}
+
+	@Override
+	public ThirdPartyProductLogResult getThirdPartyProductLog(ThirdPartyProductLogParam param, Pagination pagination) throws TException {
+		ThirdPartyProductLogResult ThirdPartyProductLogResult = new ThirdPartyProductLogResult();
+		Result result = new Result();
+		ThirdPartyProductLogResult.setResult(result);
+
+		Page page = new Page(pagination.getCurrentPage(), pagination.getNumPerPage());
+
+		Map queryMap = new HashMap();
+		queryMap.put("thirdPartyIdentify", param.getThirdPartyIdentify());
+		queryMap.put("thirdPartyProductId", param.getThirdPartyProductId());
+		queryMap.put("start", page.getStart());
+		queryMap.put("count", page.getCount());
+
+		try {
+			// 查询总数
+			int total = this.woMaiSvc.queryThirdPartyProductSnapshotCount(queryMap);
+			page.setTotal(total);
+
+			List<TbThirdPartyProductSnapshotWithBLOBs> thirdPartyProductSnapshotWithBLOBsList = this.woMaiSvc.queryThirdPartyProductSnapshotList(queryMap);
+			for (TbThirdPartyProductSnapshotWithBLOBs productSnapshotWithBLOBs : thirdPartyProductSnapshotWithBLOBsList) {
+				ThirdPartyProductLogResult.addToLogs(ConvertUtil.tbThirdPartyProductSnapshotWithBLOBs2Thrift(productSnapshotWithBLOBs));
+			}
+			ThirdPartyProductLogResult.setPagination(ConvertUtil.page2Pagination(page));
+		} catch (Exception e) {
+			logger.error("<<<<<<<< getThirdPartyProductLog error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
+		return ThirdPartyProductLogResult;
+	}
+
+	@Override
+	public StringResult offerThirdPartyProduct(ThirdPartyProduct thirdPartyProduct) throws TException {
+		return null;
 	}
 }

@@ -27,4 +27,6 @@ public class ProductCommons {
     
     public static final String RK_PRODUCTSURVEY_MAP = "jfshare:product:map:productId";
 
+    public static final int WOMAI_SELLER_ID = 63;
+
 }
