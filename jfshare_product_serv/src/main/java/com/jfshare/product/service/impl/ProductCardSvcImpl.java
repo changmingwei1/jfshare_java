@@ -45,7 +45,7 @@ public class ProductCardSvcImpl implements IProductCartSvc {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean importProductCard(int sellerId, String productId, String path) throws Exception {
+    public int importProductCard(int sellerId, String productId, String path) throws Exception {
 
         // 读取文件中的数据
         HSSFWorkbook hssfWorkbook = null;
@@ -56,7 +56,8 @@ public class ProductCardSvcImpl implements IProductCartSvc {
             String fileName = "" + System.currentTimeMillis() + ".xls";
             boolean flag = FileUtil.downloadFile(path, localFolder, fileName);
             if (!flag) {
-                return flag;
+                logger.error("<<<<<<<< importProductCard excel file error !! ---- productId : " + productId + ", path : " + path);
+                return 1;
             }
             localFile = new File(localFolder + fileName);
             Date now = new Date();
@@ -74,7 +75,8 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 }
                 // 如果商品ID不是传参，返回失败
                 if (!productCard.getProductId().equals(productId)) {
-                    return false;
+                    logger.error("<<<<<<<< importProductCard productId not same !! ---- productId : " + productId + ", path : " + path);
+                    return 2;
                 }
                 productCard.setSkuNum(row.getCell(1) == null ? "" : row.getCell(1).getStringCellValue());
                 productCard.setCardNumber(row.getCell(2).getStringCellValue());
@@ -84,17 +86,22 @@ public class ProductCardSvcImpl implements IProductCartSvc {
                 productCards.add(productCard);
 
             }
+            int success = 0;
             for (TbProductCard productCard : productCards) {
-                this.productCardDao.add(productCard);
+                success += this.productCardDao.add(productCard);
+            }
+            if (success != productCards.size()) {
+                logger.error("<<<<<<<< importProductCard have same card !! ---- productId : " + productId + ", path : " + path);
+                return 3;
             }
         } finally {
-            // TODO: 2016/5/28 删除文件
+            // 删除文件
             if (localFile != null) {
                 localFile.delete();
             }
         }
 
-        return true;
+        return 0;
     }
 
     @Override

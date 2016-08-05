@@ -2,7 +2,7 @@ package com.jfshare.product.model;
 
 import java.util.Date;
 
-public class TbThirdPartyProduct {
+public class TbThirdPartyProductSnapshot {
     private Integer id;
 
     private String productId;

@@ -34,6 +34,10 @@ public class FailCode {
 
     public static FailDesc PRODUCT_CARD_IS_USED = new FailDesc("productCard", "5504", "商品卡密使用失败，商品卡密已经使用");
 
+    public static FailDesc PRODUCT_CARD_IMPORT_FILE_ERROR = new FailDesc("productCard", "5505", "导入模板解析失败");
+    public static FailDesc PRODUCT_CARD_IMPORT_EXIST = new FailDesc("productCard", "5506", "导入成功，已过滤重复信息");
+
+
     /**
      * 结果集中添加错误码
      * @param result
