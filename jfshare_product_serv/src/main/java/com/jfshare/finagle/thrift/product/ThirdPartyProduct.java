@@ -35,18 +35,22 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
   private static final TField PRODUCT_ID_FIELD_DESC = new TField("productId", TType.STRING, (short)1);
   private static final TField THIRD_PARTY_PRODUCT_ID_FIELD_DESC = new TField("thirdPartyProductId", TType.STRING, (short)2);
   private static final TField THIRD_PARTY_IDENTIFY_FIELD_DESC = new TField("thirdPartyIdentify", TType.I32, (short)3);
-  private static final TField SELLER_CLASS_NUM_FIELD_DESC = new TField("sellerClassNum", TType.STRING, (short)4);
-  private static final TField CUR_PRICE_FIELD_DESC = new TField("curPrice", TType.STRING, (short)5);
-  private static final TField PRICE_STATE_FIELD_DESC = new TField("priceState", TType.I32, (short)6);
-  private static final TField STOCK_INFO_FIELD_DESC = new TField("stockInfo", TType.STRING, (short)7);
-  private static final TField ACTIVE_STATE_FIELD_DESC = new TField("activeState", TType.I32, (short)8);
-  private static final TField OFFER_STATE_FIELD_DESC = new TField("offerState", TType.I32, (short)9);
-  private static final TField UPDATE_TIME_FIELD_DESC = new TField("updateTime", TType.STRING, (short)10);
+  private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)4);
+  private static final TField IMG_KEY_FIELD_DESC = new TField("imgKey", TType.STRING, (short)5);
+  private static final TField SELLER_CLASS_NUM_FIELD_DESC = new TField("sellerClassNum", TType.STRING, (short)6);
+  private static final TField CUR_PRICE_FIELD_DESC = new TField("curPrice", TType.STRING, (short)7);
+  private static final TField PRICE_STATE_FIELD_DESC = new TField("priceState", TType.I32, (short)8);
+  private static final TField STOCK_INFO_FIELD_DESC = new TField("stockInfo", TType.STRING, (short)9);
+  private static final TField ACTIVE_STATE_FIELD_DESC = new TField("activeState", TType.I32, (short)10);
+  private static final TField OFFER_STATE_FIELD_DESC = new TField("offerState", TType.I32, (short)11);
+  private static final TField UPDATE_TIME_FIELD_DESC = new TField("updateTime", TType.STRING, (short)12);
 
 
   public String productId;
   public String thirdPartyProductId;
   public int thirdPartyIdentify;
+  public String name;
+  public String imgKey;
   public String sellerClassNum;
   public String curPrice;
   public int priceState;
@@ -60,13 +64,15 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
     PRODUCT_ID((short)1, "productId"),
     THIRD_PARTY_PRODUCT_ID((short)2, "thirdPartyProductId"),
     THIRD_PARTY_IDENTIFY((short)3, "thirdPartyIdentify"),
-    SELLER_CLASS_NUM((short)4, "sellerClassNum"),
-    CUR_PRICE((short)5, "curPrice"),
-    PRICE_STATE((short)6, "priceState"),
-    STOCK_INFO((short)7, "stockInfo"),
-    ACTIVE_STATE((short)8, "activeState"),
-    OFFER_STATE((short)9, "offerState"),
-    UPDATE_TIME((short)10, "updateTime");
+    NAME((short)4, "name"),
+    IMG_KEY((short)5, "imgKey"),
+    SELLER_CLASS_NUM((short)6, "sellerClassNum"),
+    CUR_PRICE((short)7, "curPrice"),
+    PRICE_STATE((short)8, "priceState"),
+    STOCK_INFO((short)9, "stockInfo"),
+    ACTIVE_STATE((short)10, "activeState"),
+    OFFER_STATE((short)11, "offerState"),
+    UPDATE_TIME((short)12, "updateTime");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -87,19 +93,23 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
   	return THIRD_PARTY_PRODUCT_ID;
         case 3: // THIRD_PARTY_IDENTIFY
   	return THIRD_PARTY_IDENTIFY;
-        case 4: // SELLER_CLASS_NUM
+        case 4: // NAME
+  	return NAME;
+        case 5: // IMG_KEY
+  	return IMG_KEY;
+        case 6: // SELLER_CLASS_NUM
   	return SELLER_CLASS_NUM;
-        case 5: // CUR_PRICE
+        case 7: // CUR_PRICE
   	return CUR_PRICE;
-        case 6: // PRICE_STATE
+        case 8: // PRICE_STATE
   	return PRICE_STATE;
-        case 7: // STOCK_INFO
+        case 9: // STOCK_INFO
   	return STOCK_INFO;
-        case 8: // ACTIVE_STATE
+        case 10: // ACTIVE_STATE
   	return ACTIVE_STATE;
-        case 9: // OFFER_STATE
+        case 11: // OFFER_STATE
   	return OFFER_STATE;
-        case 10: // UPDATE_TIME
+        case 12: // UPDATE_TIME
   	return UPDATE_TIME;
         default:
   	return null;
@@ -157,6 +167,10 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.THIRD_PARTY_IDENTIFY, new FieldMetaData("thirdPartyIdentify", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.IMG_KEY, new FieldMetaData("imgKey", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.SELLER_CLASS_NUM, new FieldMetaData("sellerClassNum", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.CUR_PRICE, new FieldMetaData("curPrice", TFieldRequirementType.DEFAULT,
@@ -183,6 +197,8 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
     String productId,
     String thirdPartyProductId,
     int thirdPartyIdentify,
+    String name,
+    String imgKey,
     String sellerClassNum,
     String curPrice,
     int priceState,
@@ -196,6 +212,8 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
     this.thirdPartyProductId = thirdPartyProductId;
     this.thirdPartyIdentify = thirdPartyIdentify;
     setThirdPartyIdentifyIsSet(true);
+    this.name = name;
+    this.imgKey = imgKey;
     this.sellerClassNum = sellerClassNum;
     this.curPrice = curPrice;
     this.priceState = priceState;
@@ -221,6 +239,12 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
       this.thirdPartyProductId = other.thirdPartyProductId;
     }
     this.thirdPartyIdentify = other.thirdPartyIdentify;
+    if (other.isSetName()) {
+      this.name = other.name;
+    }
+    if (other.isSetImgKey()) {
+      this.imgKey = other.imgKey;
+    }
     if (other.isSetSellerClassNum()) {
       this.sellerClassNum = other.sellerClassNum;
     }
@@ -248,6 +272,8 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
     this.thirdPartyProductId = null;
     setThirdPartyIdentifyIsSet(false);
     this.thirdPartyIdentify = 0;
+    this.name = null;
+    this.imgKey = null;
     this.sellerClassNum = null;
     this.curPrice = null;
     setPriceStateIsSet(false);
@@ -332,6 +358,56 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
 
   public void setThirdPartyIdentifyIsSet(boolean value) {
     __isset_bit_vector.set(__THIRDPARTYIDENTIFY_ISSET_ID, value);
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public ThirdPartyProduct setName(String name) {
+    this.name = name;
+    
+    return this;
+  }
+
+  public void unsetName() {
+    this.name = null;
+  }
+
+  /** Returns true if field name is set (has been asigned a value) and false otherwise */
+  public boolean isSetName() {
+    return this.name != null;
+  }
+
+  public void setNameIsSet(boolean value) {
+    if (!value) {
+      this.name = null;
+    }
+  }
+
+  public String getImgKey() {
+    return this.imgKey;
+  }
+
+  public ThirdPartyProduct setImgKey(String imgKey) {
+    this.imgKey = imgKey;
+    
+    return this;
+  }
+
+  public void unsetImgKey() {
+    this.imgKey = null;
+  }
+
+  /** Returns true if field imgKey is set (has been asigned a value) and false otherwise */
+  public boolean isSetImgKey() {
+    return this.imgKey != null;
+  }
+
+  public void setImgKeyIsSet(boolean value) {
+    if (!value) {
+      this.imgKey = null;
+    }
   }
 
   public String getSellerClassNum() {
@@ -529,6 +605,20 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
         setThirdPartyIdentify((Integer)value);
       }
       break;
+    case NAME:
+      if (value == null) {
+        unsetName();
+      } else {
+        setName((String)value);
+      }
+      break;
+    case IMG_KEY:
+      if (value == null) {
+        unsetImgKey();
+      } else {
+        setImgKey((String)value);
+      }
+      break;
     case SELLER_CLASS_NUM:
       if (value == null) {
         unsetSellerClassNum();
@@ -589,6 +679,10 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
       return getThirdPartyProductId();
     case THIRD_PARTY_IDENTIFY:
       return new Integer(getThirdPartyIdentify());
+    case NAME:
+      return getName();
+    case IMG_KEY:
+      return getImgKey();
     case SELLER_CLASS_NUM:
       return getSellerClassNum();
     case CUR_PRICE:
@@ -620,6 +714,10 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
       return isSetThirdPartyProductId();
     case THIRD_PARTY_IDENTIFY:
       return isSetThirdPartyIdentify();
+    case NAME:
+      return isSetName();
+    case IMG_KEY:
+      return isSetImgKey();
     case SELLER_CLASS_NUM:
       return isSetSellerClassNum();
     case CUR_PRICE:
@@ -672,6 +770,22 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
       if (!(this_present_thirdPartyIdentify && that_present_thirdPartyIdentify))
         return false;
       if (this.thirdPartyIdentify != that.thirdPartyIdentify)
+        return false;
+    }
+    boolean this_present_name = true && this.isSetName();
+    boolean that_present_name = true && that.isSetName();
+    if (this_present_name || that_present_name) {
+      if (!(this_present_name && that_present_name))
+        return false;
+      if (!this.name.equals(that.name))
+        return false;
+    }
+    boolean this_present_imgKey = true && this.isSetImgKey();
+    boolean that_present_imgKey = true && that.isSetImgKey();
+    if (this_present_imgKey || that_present_imgKey) {
+      if (!(this_present_imgKey && that_present_imgKey))
+        return false;
+      if (!this.imgKey.equals(that.imgKey))
         return false;
     }
     boolean this_present_sellerClassNum = true && this.isSetSellerClassNum();
@@ -749,6 +863,14 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
     builder.append(present_thirdPartyIdentify);
     if (present_thirdPartyIdentify)
       builder.append(thirdPartyIdentify);
+    boolean present_name = true && (isSetName());
+    builder.append(present_name);
+    if (present_name)
+      builder.append(name);
+    boolean present_imgKey = true && (isSetImgKey());
+    builder.append(present_imgKey);
+    if (present_imgKey)
+      builder.append(imgKey);
     boolean present_sellerClassNum = true && (isSetSellerClassNum());
     builder.append(present_sellerClassNum);
     if (present_sellerClassNum)
@@ -814,6 +936,26 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
     }
     if (isSetThirdPartyIdentify()) {
       lastComparison = TBaseHelper.compareTo(this.thirdPartyIdentify, typedOther.thirdPartyIdentify);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetName()).compareTo(typedOther.isSetName());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetName()) {
+      lastComparison = TBaseHelper.compareTo(this.name, typedOther.name);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetImgKey()).compareTo(typedOther.isSetImgKey());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetImgKey()) {
+      lastComparison = TBaseHelper.compareTo(this.imgKey, typedOther.imgKey);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -928,21 +1070,35 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 4: // SELLER_CLASS_NUM
+        case 4: // NAME
+          if (field.type == TType.STRING) {
+            this.name = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 5: // IMG_KEY
+          if (field.type == TType.STRING) {
+            this.imgKey = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 6: // SELLER_CLASS_NUM
           if (field.type == TType.STRING) {
             this.sellerClassNum = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 5: // CUR_PRICE
+        case 7: // CUR_PRICE
           if (field.type == TType.STRING) {
             this.curPrice = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 6: // PRICE_STATE
+        case 8: // PRICE_STATE
           if (field.type == TType.I32) {
             this.priceState = iprot.readI32();
             setPriceStateIsSet(true);
@@ -950,14 +1106,14 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 7: // STOCK_INFO
+        case 9: // STOCK_INFO
           if (field.type == TType.STRING) {
             this.stockInfo = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 8: // ACTIVE_STATE
+        case 10: // ACTIVE_STATE
           if (field.type == TType.I32) {
             this.activeState = iprot.readI32();
             setActiveStateIsSet(true);
@@ -965,7 +1121,7 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 9: // OFFER_STATE
+        case 11: // OFFER_STATE
           if (field.type == TType.I32) {
             this.offerState = iprot.readI32();
             setOfferStateIsSet(true);
@@ -973,7 +1129,7 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 10: // UPDATE_TIME
+        case 12: // UPDATE_TIME
           if (field.type == TType.STRING) {
             this.updateTime = iprot.readString();
           } else {
@@ -1008,6 +1164,16 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
     oprot.writeFieldBegin(THIRD_PARTY_IDENTIFY_FIELD_DESC);
     oprot.writeI32(this.thirdPartyIdentify);
     oprot.writeFieldEnd();
+    if (this.name != null) {
+      oprot.writeFieldBegin(NAME_FIELD_DESC);
+      oprot.writeString(this.name);
+      oprot.writeFieldEnd();
+    }
+    if (this.imgKey != null) {
+      oprot.writeFieldBegin(IMG_KEY_FIELD_DESC);
+      oprot.writeString(this.imgKey);
+      oprot.writeFieldEnd();
+    }
     if (this.sellerClassNum != null) {
       oprot.writeFieldBegin(SELLER_CLASS_NUM_FIELD_DESC);
       oprot.writeString(this.sellerClassNum);
@@ -1063,6 +1229,22 @@ public class ThirdPartyProduct implements TBase<ThirdPartyProduct, ThirdPartyPro
     if (!first) sb.append(", ");
     sb.append("thirdPartyIdentify:");
     sb.append(this.thirdPartyIdentify);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("name:");
+    if (this.name == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.name);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("imgKey:");
+    if (this.imgKey == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.imgKey);
+    }
     first = false;
     if (!first) sb.append(", ");
     sb.append("sellerClassNum:");

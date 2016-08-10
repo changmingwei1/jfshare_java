@@ -183,6 +183,8 @@ public class ConvertUtil {
         thirdPartyProduct.setThirdPartyIdentify(tbThirdPartyProductWithBLOBs.getThirdPartyIdentify());
         thirdPartyProduct.setThirdPartyProductId(tbThirdPartyProductWithBLOBs.getThirdPartyProductId());
         thirdPartyProduct.setProductId(tbThirdPartyProductWithBLOBs.getProductId());
+        thirdPartyProduct.setName(tbThirdPartyProductWithBLOBs.getName());
+        thirdPartyProduct.setImgKey(tbThirdPartyProductWithBLOBs.getImgKey());
         thirdPartyProduct.setSellerClassNum(tbThirdPartyProductWithBLOBs.getSellerclassnum());
         thirdPartyProduct.setCurPrice(PriceUtils.intToStr(tbThirdPartyProductWithBLOBs.getPrice()));
         thirdPartyProduct.setPriceState(tbThirdPartyProductWithBLOBs.getPriceState());
