@@ -45,7 +45,7 @@ public class OrderEsImpl implements IOrderEs{
         if(DateTimeUtil.strToDateTime(endTime).isAfter(DateTime.now())) {
             endTime = DateTimeUtil.getCurrentDate(DateTimeUtil.FORMAT_DEFAULT);
         }
-        logger.debug("esSearch----params:startTime={}, endTime={}, orderId={}, orderIds={}", startTime, endTime, conditions.getOrderId(), conditions.getOrderIds());
+        logger.info("esSearch----params:startTime={}, endTime={}, orderId={}, orderIds={}", startTime, endTime, conditions.getOrderId(), conditions.getOrderIds());
         int orderState = conditions.getOrderState();
         String[] monthArr = DateTimeUtil.getBetweenMonth(startTime, endTime);
         String[] indexArr = new String[monthArr.length];
@@ -107,7 +107,7 @@ public class OrderEsImpl implements IOrderEs{
 
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
 
-        logger.info("ES==| search {}$$查询结果", searchResponse.getHits().getHits());
+        logger.info("ES==| search {}$$查询结果{}", searchResponse.getHits().getHits());
         return searchResponse.getHits();
 
     }

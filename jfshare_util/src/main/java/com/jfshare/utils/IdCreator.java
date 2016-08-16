@@ -169,6 +169,11 @@ public class IdCreator {
         return  CryptoUtil.md5Encode(strMd5);
     }
 
+    public static String getTradePayIdTY(int userId)
+    {
+        return "17921" + getPayIdExZk(String.valueOf(userId));
+    }
+
     public static String getPayIdExZk(String strkey) {
         StringBuilder sBuilder = new StringBuilder();
         if(payIdGen == null) {

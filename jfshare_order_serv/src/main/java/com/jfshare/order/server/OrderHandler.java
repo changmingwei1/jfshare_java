@@ -550,6 +550,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             int thirdScore2Cash = OrderUtil.getThirdScore2Cash(orderModels, param.getPayChannel().getPayChannel());
             logger.info("申请支付----请求url, thirdScores={}, thirdScore2Cash={}", thirdScores, thirdScore2Cash);
             String tradePayId = IdCreator.getTradePayId(param.getUserId(), param.getOrderIdList());
+            if(param.payChannel.payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
+                tradePayId = IdCreator.getTradePayIdTY(param.getUserId());
+            }
             orderService.updateOrderPaying(orderModels, tradePayId);
 
             //全积分支付
