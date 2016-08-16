@@ -1,5 +1,7 @@
 import com.jfshare.finagle.thrift.order.*;
 import com.jfshare.finagle.thrift.pay.PayChannel;
+import com.jfshare.order.util.DateTimeUtil;
+import com.jfshare.order.util.OrderUtil;
 import junit.framework.TestCase;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -21,8 +23,8 @@ public class Client extends TestCase{
     @Override
     public void setUp() throws Exception {
 
-//        transport = new TFramedTransport(new TSocket("101.201.39.12", 1986));
-        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
+        transport = new TFramedTransport(new TSocket("101.201.39.12", 1986));
+//        transport = new TFramedTransport(new TSocket("101.201.38.182", 1986));
 //        transport = new TFramedTransport(new TSocket("101.201.37.237", 1986));
 //        transport = new TFramedTransport(new TSocket("120.24.153.155", 1986));
 //        transport = new TFramedTransport(new TSocket("127.0.0.1", 1986));
@@ -108,13 +110,15 @@ public class Client extends TestCase{
             OrderQueryConditions conditions = new OrderQueryConditions();
 //            conditions.setCurPage(2);
 //            conditions.setCount(3);
-//            conditions.setStartTime("2016-07-01 00:00:00");
-//            conditions.setEndTime("2016-07-20 00:00:00");
+//            conditions.setStartTime("2016-08-01 00:00:00");
+//            conditions.setEndTime("2016-08-20 00:00:00");
 //            conditions.setOrderState(5);
             conditions.setOrderId("100105438");
 //            conditions.addToOrderIds("100105438");
 //            conditions.addToOrderIds("95200327");
             System.err.println(client.orderProfileQueryFull(conditions));
+            System.err.println("----"+ DateTimeUtil.getBetweenMonth("2016-05-01 00:00:00","2016-08-02 22:41:13"));
+            System.err.println("===="+ DateTimeUtil.strToDateTime("2016-09-01 00:12:12", DateTimeUtil.FORMAT_DEFAULT_YMD));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

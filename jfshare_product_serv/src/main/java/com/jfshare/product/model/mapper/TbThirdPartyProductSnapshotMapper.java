@@ -1,8 +1,8 @@
 package com.jfshare.product.model.mapper;
 
-import com.jfshare.product.model.TbThirdPartyProduct;
-import com.jfshare.product.model.TbThirdPartyProductExample;
-import com.jfshare.product.model.TbThirdPartyProductWithBLOBs;
+import com.jfshare.product.model.TbThirdPartyProductSnapshot;
+import com.jfshare.product.model.TbThirdPartyProductSnapshotExample;
+import com.jfshare.product.model.TbThirdPartyProductSnapshotWithBLOBs;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -11,19 +11,19 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-public interface TbThirdPartyProductMapper {
-    int countByExample(TbThirdPartyProductExample example);
+public interface TbThirdPartyProductSnapshotMapper {
+    int countByExample(TbThirdPartyProductSnapshotExample example);
 
-    int deleteByExample(TbThirdPartyProductExample example);
+    int deleteByExample(TbThirdPartyProductSnapshotExample example);
 
     @Delete({
-        "delete from tb_third_party_product",
+        "delete from tb_third_party_product_snapshot",
         "where id = #{id,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(Integer id);
 
     @Insert({
-        "insert into tb_third_party_product (id, product_id, ",
+        "insert into tb_third_party_product_snapshot (id, product_id, ",
         "third_party_product_id, third_party_identify, ",
         "name, vice_name, ",
         "img_key, detail_key, ",
@@ -52,13 +52,13 @@ public interface TbThirdPartyProductMapper {
         "#{price,jdbcType=INTEGER}, #{skuTemplate,jdbcType=LONGVARCHAR}, ",
         "#{attribute,jdbcType=LONGVARCHAR})"
     })
-    int insert(TbThirdPartyProductWithBLOBs record);
+    int insert(TbThirdPartyProductSnapshotWithBLOBs record);
 
-    int insertSelective(TbThirdPartyProductWithBLOBs record);
+    int insertSelective(TbThirdPartyProductSnapshotWithBLOBs record);
 
-    List<TbThirdPartyProductWithBLOBs> selectByExampleWithBLOBs(TbThirdPartyProductExample example);
+    List<TbThirdPartyProductSnapshotWithBLOBs> selectByExampleWithBLOBs(TbThirdPartyProductSnapshotExample example);
 
-    List<TbThirdPartyProduct> selectByExample(TbThirdPartyProductExample example);
+    List<TbThirdPartyProductSnapshot> selectByExample(TbThirdPartyProductSnapshotExample example);
 
     @Select({
         "select",
@@ -67,22 +67,22 @@ public interface TbThirdPartyProductMapper {
         "create_user_id, last_update_time, last_update_id, state, tags, storehouse_ids, ",
         "postage_id, stock_state, price_state, offer_state, stock_info, sellerClassNum, ",
         "price, sku_template, attribute",
-        "from tb_third_party_product",
+        "from tb_third_party_product_snapshot",
         "where id = #{id,jdbcType=INTEGER}"
     })
     @ResultMap("ResultMapWithBLOBs")
-    TbThirdPartyProductWithBLOBs selectByPrimaryKey(Integer id);
+    TbThirdPartyProductSnapshotWithBLOBs selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") TbThirdPartyProductWithBLOBs record, @Param("example") TbThirdPartyProductExample example);
+    int updateByExampleSelective(@Param("record") TbThirdPartyProductSnapshotWithBLOBs record, @Param("example") TbThirdPartyProductSnapshotExample example);
 
-    int updateByExampleWithBLOBs(@Param("record") TbThirdPartyProductWithBLOBs record, @Param("example") TbThirdPartyProductExample example);
+    int updateByExampleWithBLOBs(@Param("record") TbThirdPartyProductSnapshotWithBLOBs record, @Param("example") TbThirdPartyProductSnapshotExample example);
 
-    int updateByExample(@Param("record") TbThirdPartyProduct record, @Param("example") TbThirdPartyProductExample example);
+    int updateByExample(@Param("record") TbThirdPartyProductSnapshot record, @Param("example") TbThirdPartyProductSnapshotExample example);
 
-    int updateByPrimaryKeySelective(TbThirdPartyProductWithBLOBs record);
+    int updateByPrimaryKeySelective(TbThirdPartyProductSnapshotWithBLOBs record);
 
     @Update({
-        "update tb_third_party_product",
+        "update tb_third_party_product_snapshot",
         "set product_id = #{productId,jdbcType=VARCHAR},",
           "third_party_product_id = #{thirdPartyProductId,jdbcType=VARCHAR},",
           "third_party_identify = #{thirdPartyIdentify,jdbcType=INTEGER},",
@@ -111,10 +111,10 @@ public interface TbThirdPartyProductMapper {
           "attribute = #{attribute,jdbcType=LONGVARCHAR}",
         "where id = #{id,jdbcType=INTEGER}"
     })
-    int updateByPrimaryKeyWithBLOBs(TbThirdPartyProductWithBLOBs record);
+    int updateByPrimaryKeyWithBLOBs(TbThirdPartyProductSnapshotWithBLOBs record);
 
     @Update({
-        "update tb_third_party_product",
+        "update tb_third_party_product_snapshot",
         "set product_id = #{productId,jdbcType=VARCHAR},",
           "third_party_product_id = #{thirdPartyProductId,jdbcType=VARCHAR},",
           "third_party_identify = #{thirdPartyIdentify,jdbcType=INTEGER},",
@@ -141,5 +141,5 @@ public interface TbThirdPartyProductMapper {
           "price = #{price,jdbcType=INTEGER}",
         "where id = #{id,jdbcType=INTEGER}"
     })
-    int updateByPrimaryKey(TbThirdPartyProduct record);
+    int updateByPrimaryKey(TbThirdPartyProductSnapshot record);
 }

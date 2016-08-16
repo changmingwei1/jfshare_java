@@ -49,7 +49,7 @@
       <!--<table tableName="tb_product_sku" schema="jfshare"/>-->
       <!--<table tableName="tb_product_history" schema="jfshare"/>-->
       <!--<table tableName="tb_product_card" schema="jfshare"/>-->
-      <!--<table tableName="tb_third_party_product" schema="jfshare"/>-->
+      <table tableName="tb_third_party_product" schema="jfshare"/>
       <table tableName="tb_third_party_product_snapshot" schema="jfshare"/>
     </context>
 </generatorConfiguration>

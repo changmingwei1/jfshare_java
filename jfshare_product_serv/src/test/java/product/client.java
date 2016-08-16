@@ -44,10 +44,10 @@ public class client {
 
     private ProductServ.Client client;
 
-//    private static final String IP = "127.0.0.1";
+    private static final String IP = "127.0.0.1";
 //    private static final String IP = "101.201.39.38";
 //    private static final String IP = "120.24.153.155";
-    private static final String IP = "101.201.38.182";
+//    private static final String IP = "101.201.38.182";
 //    private static final String IP = "101.201.39.12";
 
     private static final Integer PORT = 1980;
@@ -301,10 +301,10 @@ public class client {
     public void testImportProductCard() throws Exception {
 //        String path = "https://apia.wd2go.com/api/1.0/rest/device_redirect?device_user_id=21397091&device_uri=%2Fapi%2F1.0%2Frest%2Ffile_contents%2Fshare%2F%25E8%2599%259A%25E6%258B%259F%25E5%2595%2586%25E5%2593%2581%25E4%25B8%258A%25E4%25BC%25A0%25E6%25A8%25A1%25E6%259D%25BF.xls%3Fdevice_user_id%3D21397091%26request_auth_code%3D4ede3472d20367f0c0bf9c3797b187824e948be306b875920eb2f3f63a3ae5a0";
 //        String path = "http://101.201.39.61:3000/system/v1/jfs_image/D7FB66843726D29D4B51A21D12F4642A.jpg";
-        String path = "http://proxy.jfshare.com/system/v1/jfs_image/5A224550B91CB947A1F9F46F70D1E8F8.xls";
+        String path = "http://proxy.jfshare.com/system/v1/jfs_image/A72AD0A4C055B296B2A5ABE1A2646227.xls";
         ProductCardImportParam productCardImportParam = new ProductCardImportParam();
         productCardImportParam.setSellerId(1);
-        productCardImportParam.setProductId("ze160721094227000142");
+        productCardImportParam.setProductId("ze160729110622000450");
         productCardImportParam.setPath(path);
         System.out.println(client.importProductCard(productCardImportParam));
     }
@@ -367,6 +367,32 @@ public class client {
         productCard.setSellerId(13);
         productCard.setCardNumber("600002");
         System.out.println(this.client.useProductCard(productCard));
+    }
+
+    @Test
+    public void testQueryThirdPartyProduct() throws Exception {
+        ThirdPartyProductQueryParam param = new ThirdPartyProductQueryParam();
+        param.setThirdPartyIdentify(1);
+        param.setActiveState(300);
+
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+
+        System.out.println(this.client.queryThirdPartyProduct(param, pagination));
+    }
+
+    @Test
+    public void testGetThirdPartyProductLog() throws Exception {
+        ThirdPartyProductLogParam param = new ThirdPartyProductLogParam();
+        param.setThirdPartyIdentify(1);
+        param.setThirdPartyProductId("954018");
+
+        Pagination pagination = new Pagination();
+        pagination.setCurrentPage(1);
+        pagination.setNumPerPage(10);
+
+        System.out.println(this.client.getThirdPartyProductLog(param, pagination));
     }
 
 

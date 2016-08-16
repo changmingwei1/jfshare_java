@@ -788,7 +788,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
                 conditions.setOrderIds(orderIds);
             }
 
-            String queryKey = DigestUtils.md5Hex(DateTimeUtil.getCurrentDateYMDHMS());
+            String queryKey = "orderExport:"+DigestUtils.md5Hex(DateTimeUtil.getCurrentDateYMDHMS());
             exportService.asyncExport(conditions, queryKey, afterSaleOrderResult == null ? null : afterSaleOrderResult.getAfterSaleList());
             stringResult.setValue(queryKey);
 

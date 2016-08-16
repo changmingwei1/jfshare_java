@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jfshare.product.model.mapper.TbThirdPartyProductMapper" >
-  <resultMap id="BaseResultMap" type="com.jfshare.product.model.TbThirdPartyProduct" >
+<mapper namespace="com.jfshare.product.model.mapper.TbThirdPartyProductSnapshotMapper" >
+  <resultMap id="BaseResultMap" type="com.jfshare.product.model.TbThirdPartyProductSnapshot" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="VARCHAR" />
     <result column="third_party_product_id" property="thirdPartyProductId" jdbcType="VARCHAR" />
@@ -28,7 +28,7 @@
     <result column="sellerClassNum" property="sellerclassnum" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="INTEGER" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.jfshare.product.model.TbThirdPartyProductWithBLOBs" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.jfshare.product.model.TbThirdPartyProductSnapshotWithBLOBs" extends="BaseResultMap" >
     <result column="sku_template" property="skuTemplate" jdbcType="LONGVARCHAR" />
     <result column="attribute" property="attribute" jdbcType="LONGVARCHAR" />
   </resultMap>
@@ -99,7 +99,7 @@
   <sql id="Blob_Column_List" >
     sku_template, attribute
   </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.jfshare.product.model.TbThirdPartyProductExample" >
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.jfshare.product.model.TbThirdPartyProductSnapshotExample" >
     select
     <if test="distinct" >
       distinct
@@ -107,7 +107,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from tb_third_party_product
+    from tb_third_party_product_snapshot
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -115,13 +115,13 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jfshare.product.model.TbThirdPartyProductExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jfshare.product.model.TbThirdPartyProductSnapshotExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_third_party_product
+    from tb_third_party_product_snapshot
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -129,14 +129,14 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.jfshare.product.model.TbThirdPartyProductExample" >
-    delete from tb_third_party_product
+  <delete id="deleteByExample" parameterType="com.jfshare.product.model.TbThirdPartyProductSnapshotExample" >
+    delete from tb_third_party_product_snapshot
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insertSelective" parameterType="com.jfshare.product.model.TbThirdPartyProductWithBLOBs" >
-    insert into tb_third_party_product
+  <insert id="insertSelective" parameterType="com.jfshare.product.model.TbThirdPartyProductSnapshotWithBLOBs" >
+    insert into tb_third_party_product_snapshot
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -304,14 +304,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jfshare.product.model.TbThirdPartyProductExample" resultType="java.lang.Integer" >
-    select count(*) from tb_third_party_product
+  <select id="countByExample" parameterType="com.jfshare.product.model.TbThirdPartyProductSnapshotExample" resultType="java.lang.Integer" >
+    select count(*) from tb_third_party_product_snapshot
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update tb_third_party_product
+    update tb_third_party_product_snapshot
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
@@ -400,7 +400,7 @@
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update tb_third_party_product
+    update tb_third_party_product_snapshot
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=VARCHAR},
       third_party_product_id = #{record.thirdPartyProductId,jdbcType=VARCHAR},
@@ -433,7 +433,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update tb_third_party_product
+    update tb_third_party_product_snapshot
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=VARCHAR},
       third_party_product_id = #{record.thirdPartyProductId,jdbcType=VARCHAR},
@@ -463,8 +463,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jfshare.product.model.TbThirdPartyProductWithBLOBs" >
-    update tb_third_party_product
+  <update id="updateByPrimaryKeySelective" parameterType="com.jfshare.product.model.TbThirdPartyProductSnapshotWithBLOBs" >
+    update tb_third_party_product_snapshot
     <set >
       <if test="productId != null" >
         product_id = #{productId,jdbcType=VARCHAR},

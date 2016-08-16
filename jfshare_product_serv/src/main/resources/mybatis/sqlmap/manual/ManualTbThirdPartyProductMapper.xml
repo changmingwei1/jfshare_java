@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfshare.product.model.mapper.manual.ManualTbThirdPartyProductMapper" >
+
+  <select id="queryThirdPartyProductList" parameterType="map" resultMap="com.jfshare.product.model.mapper.TbThirdPartyProductMapper.ResultMapWithBLOBs">
+    select * from tb_third_party_product t
+    <where>
+      <if test="thirdPartyIdentify != null">
+        and t.third_party_identify = #{thirdPartyIdentify}
+      </if>
+      <if test="productName != null">
+        and t.name like CONCAT('%',#{productName},'%')
+      </if>
+      <if test="activeState != null">
+        and t.active_state = #{activeState}
+      </if>
+      <if test="stockState != null">
+        and t.stock_state = #{stockState}
+      </if>
+      <if test="priceState != null">
+        and t.price_state = #{priceState}
+      </if>
+      <if test="offerState != null">
+        and t.offer_state = #{offerState}
+      </if>
+    </where>
+    order by t.last_update_time desc
+    limit #{start}, #{count}
+  </select>
+
+  <select id="queryThirdPartyProductCount" parameterType="map" resultType="int">
+    select count(*) from tb_third_party_product t
+    <where>
+      <if test="thirdPartyIdentify != null">
+        and t.third_party_identify = #{thirdPartyIdentify}
+      </if>
+      <if test="productName != null">
+        and t.name like CONCAT('%',#{productName},'%')
+      </if>
+      <if test="activeState != null">
+        and t.active_state = #{activeState}
+      </if>
+      <if test="stockState != null">
+        and t.stock_state = #{stockState}
+      </if>
+      <if test="priceState != null">
+        and t.price_state = #{priceState}
+      </if>
+      <if test="offerState != null">
+        and t.offer_state = #{offerState}
+      </if>
+    </where>
+  </select>
+</mapper>

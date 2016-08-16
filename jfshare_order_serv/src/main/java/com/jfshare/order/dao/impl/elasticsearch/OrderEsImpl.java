@@ -1,5 +1,6 @@
 package com.jfshare.order.dao.impl.elasticsearch;
 
+import com.alibaba.fastjson.JSON;
 import com.jfshare.elasticsearch.drive.ESClient;
 import com.jfshare.finagle.thrift.order.OrderQueryConditions;
 import com.jfshare.order.dao.IOrderEs;
@@ -52,6 +53,7 @@ public class OrderEsImpl implements IOrderEs{
         for(int i = 0; i<  monthArr.length; i++) {
             indexArr[i] = "jfshare_order_" + monthArr[i];
         }
+        logger.info("esSearch----params:indexes={}", JSON.toJSONString(indexArr));
 
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 

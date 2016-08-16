@@ -8,10 +8,14 @@ import com.jfshare.finagle.thrift.product.ProductCardView;
 import com.jfshare.finagle.thrift.product.ProductOpt;
 import com.jfshare.finagle.thrift.product.ProductSku;
 import com.jfshare.finagle.thrift.product.ProductSkuItem;
+import com.jfshare.finagle.thrift.product.ThirdPartyProduct;
+import com.jfshare.finagle.thrift.product.ThirdPartyProductLog;
 import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.TbProductHistoryWithBLOBs;
 import com.jfshare.product.model.TbProductSku;
 import com.jfshare.product.model.TbProductWithBLOBs;
+import com.jfshare.product.model.TbThirdPartyProductSnapshotWithBLOBs;
+import com.jfshare.product.model.TbThirdPartyProductWithBLOBs;
 import com.jfshare.product.model.enums.ProductOptEnum;
 import com.jfshare.product.model.manual.ProductCardStatisticsModel;
 import com.jfshare.product.model.vo.Page;
@@ -172,6 +176,31 @@ public class ConvertUtil {
         statistics.setUnusedNum(model.getUnusedNum());
         statistics.setCreateTime(model.getCreateTime() == null ? "" : DateTimeUtil.DateTimeToStr(model.getCreateTime()));
         return statistics;
+    }
+
+    public static ThirdPartyProduct tbThirdPartyProductWithBLOBs2Thrift(TbThirdPartyProductWithBLOBs tbThirdPartyProductWithBLOBs) {
+        ThirdPartyProduct thirdPartyProduct = new ThirdPartyProduct();
+        thirdPartyProduct.setThirdPartyIdentify(tbThirdPartyProductWithBLOBs.getThirdPartyIdentify());
+        thirdPartyProduct.setThirdPartyProductId(tbThirdPartyProductWithBLOBs.getThirdPartyProductId());
+        thirdPartyProduct.setProductId(tbThirdPartyProductWithBLOBs.getProductId());
+        thirdPartyProduct.setName(tbThirdPartyProductWithBLOBs.getName());
+        thirdPartyProduct.setImgKey(tbThirdPartyProductWithBLOBs.getImgKey());
+        thirdPartyProduct.setSellerClassNum(tbThirdPartyProductWithBLOBs.getSellerclassnum());
+        thirdPartyProduct.setCurPrice(PriceUtils.intToStr(tbThirdPartyProductWithBLOBs.getPrice()));
+        thirdPartyProduct.setPriceState(tbThirdPartyProductWithBLOBs.getPriceState());
+        thirdPartyProduct.setStockInfo(tbThirdPartyProductWithBLOBs.getStockInfo());
+        thirdPartyProduct.setActiveState(tbThirdPartyProductWithBLOBs.getActiveState());
+        thirdPartyProduct.setOfferState(tbThirdPartyProductWithBLOBs.getOfferState());
+        thirdPartyProduct.setUpdateTime(DateUtil.date2Str(tbThirdPartyProductWithBLOBs.getLastUpdateTime(), DateUtil.PATTERN_YYYYMMDDHHMMSS));
+        return thirdPartyProduct;
+    }
+
+    public static ThirdPartyProductLog tbThirdPartyProductSnapshotWithBLOBs2Thrift(TbThirdPartyProductSnapshotWithBLOBs product) {
+        ThirdPartyProductLog log = new ThirdPartyProductLog();
+        log.setProductState(product.getActiveState());
+        log.setCurPrice(PriceUtils.intToStr(product.getPrice()));
+        log.setUpdateTime(DateUtil.date2Str(product.getLastUpdateTime(), DateUtil.PATTERN_YYYYMMDDHHMMSS));
+        return log;
     }
     
 }

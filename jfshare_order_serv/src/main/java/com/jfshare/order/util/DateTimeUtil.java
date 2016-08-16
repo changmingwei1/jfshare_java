@@ -22,6 +22,7 @@ public class DateTimeUtil {
 	public static String FORMAT_DEFAULT_CH = "yyyy年MM月dd日 HH时mm分ss秒";
 	public static String FORMAT_DEFAULT_YMD = "yyyy-MM-dd";
 	public static String FORMAT_DEFAULT_YMD_NS = "yyyyMMdd";
+	public static String FORMAT_DEFAULT_YM = "yyyyMM";
 
 	public static Date current() {
 		return new Date();
@@ -340,7 +341,7 @@ public class DateTimeUtil {
 	public static String[] getBetweenMonth(String ds1, String ds2) {
 		List<String> months = new ArrayList<>();
 		DateTime dt1 = DateTimeUtil.strToDateTime(ds1);
-		DateTime start = new DateTime().withDate(dt1.getYear(), dt1.getMonthOfYear(), 1);
+		DateTime start = strToDateTime(ds1.substring(0,7) + "-01 00:00:00");
 		DateTime end = strToDateTime(ds2);
 		do{
 			months.add(dateToStrOfDefaulfFormat(start.toDate()).substring(0,7));
