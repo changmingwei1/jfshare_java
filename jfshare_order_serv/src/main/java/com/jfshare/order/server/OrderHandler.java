@@ -551,7 +551,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             logger.info("申请支付----请求url, thirdScores={}, thirdScore2Cash={}", thirdScores, thirdScore2Cash);
             String tradePayId = IdCreator.getTradePayId(param.getUserId(), param.getOrderIdList());
             if(param.payChannel.payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
-                tradePayId = IdCreator.getTradePayIdTY(param.getUserId());
+                tradePayId = "17921" + orderModels.get(0).getOrderBatch().replaceAll("-","");
             }
             orderService.updateOrderPaying(orderModels, tradePayId);
 
