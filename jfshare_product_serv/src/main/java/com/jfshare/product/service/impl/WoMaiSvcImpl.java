@@ -6,7 +6,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfshare.finagle.thrift.product.Product;
 import com.jfshare.product.commons.ProductCommons;
 import com.jfshare.product.dao.mongo.IProductDetailMongo;
+import com.jfshare.product.dao.mysql.IProductDao;
+import com.jfshare.product.dao.mysql.IProductSkuDao;
 import com.jfshare.product.model.TbProductSku;
+import com.jfshare.product.model.TbProductWithBLOBs;
 import com.jfshare.product.model.TbThirdPartyProductExample;
 import com.jfshare.product.model.TbThirdPartyProductSnapshotWithBLOBs;
 import com.jfshare.product.model.TbThirdPartyProductWithBLOBs;
@@ -17,8 +20,10 @@ import com.jfshare.product.model.mapper.TbThirdPartyProductSnapshotMapper;
 import com.jfshare.product.model.mapper.manual.ManualTbThirdPartyProductMapper;
 import com.jfshare.product.model.mapper.manual.ManualTbThirdPartyProductSnapshotMapper;
 import com.jfshare.product.service.IWoMaiSvc;
+import com.jfshare.product.util.FileOpUtil;
 import com.jfshare.product.util.FileUtil;
 import com.jfshare.product.util.HttpUtils;
+import com.jfshare.product.util.IdCreator;
 import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.JsonMapper;
 import com.jfshare.utils.PriceUtils;
@@ -63,10 +68,19 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
     private TbThirdPartyProductSnapshotMapper tbThirdPartyProductSnapshotMapper;
 
     @Resource
+    private IProductDao productDao;
+
+    @Resource
+    private IProductSkuDao productSkuDao;
+
+    @Resource
     private ManualTbThirdPartyProductMapper manualTbThirdPartyProductMapper;
 
     @Resource
     private ManualTbThirdPartyProductSnapshotMapper manualTbThirdPartyProductSnapshotMapper;
+
+    @Resource
+    private FileOpUtil fileOpUtil;
 
     private String localPath = PropertiesUtil.getProperty(ProductCommons.APP_KEY, "womai_product_import_path");
 
@@ -209,11 +223,112 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
         return this.manualTbThirdPartyProductSnapshotMapper.queryThirdPartyProductSnapshotCount(queryMap);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public int offerThirdPartyProduct(TbThirdPartyProductWithBLOBs productWithBLOBs) {
+        // 获取我买网商品信息
+        TbThirdPartyProductExample example = new TbThirdPartyProductExample();
+        TbThirdPartyProductExample.Criteria criteria = example.createCriteria();
+        criteria.andThirdPartyIdentifyEqualTo(productWithBLOBs.getThirdPartyIdentify());
+        criteria.andThirdPartyProductIdEqualTo(productWithBLOBs.getThirdPartyProductId());
+        List<TbThirdPartyProductWithBLOBs> tbThirdPartyProductList = this.tbThirdPartyProductMapper.selectByExampleWithBLOBs(example);
+        if (CollectionUtils.isEmpty(tbThirdPartyProductList)) {
+            // 第三方商品不存在
+            return 1;
+        }
+
+        TbThirdPartyProductWithBLOBs tbThirdPartyProduct = tbThirdPartyProductList.get(0);
+
+        // 转换成聚分享商品
+        TbProductWithBLOBs product = new TbProductWithBLOBs();
+        String productId = "";
+        // 商品已经提报
+        if (StringUtils.isNotBlank(tbThirdPartyProduct.getProductId())) {
+            productId = tbThirdPartyProduct.getProductId();
+        } else {
+            // 生成商品ID
+            productId = IdCreator.getProductId();
+        }
+
+        product.setId(productId);
+        product.setName(tbThirdPartyProduct.getName());
+        product.setType(2);
+        product.setSubjectId(0);
+        product.setBrandId(0);
+
+        // TODO: 需要转换图片
+        product.setImgKey(tbThirdPartyProduct.getImgKey());
+        product.setDetailKey(tbThirdPartyProduct.getDetailKey());
+        product.setSellerId(ProductCommons.WOMAI_SELLER_ID);
+        product.setCreateUserId(ProductCommons.WOMAI_SELLER_ID);
+        product.setLastUpdateId(ProductCommons.WOMAI_SELLER_ID);
+        product.setAttribute(tbThirdPartyProduct.getAttribute());
+        Date now = new Date();
+        product.setCreateTime(now);
+        product.setLastUpdateTime(now);
+        // sku
+        List<TbProductSku> tbProductSkus = JsonMapper.toList(tbThirdPartyProduct.getSkuTemplate(), TbProductSku.class, ArrayList.class);
+        StringBuffer sb = new StringBuffer();
+        String conStr = "";
+        for (TbProductSku tbProductSku : tbProductSkus) {
+            tbProductSku.setProductId(productId);
+            if (tbProductSku.getStorehouseId() == null) {
+                continue;
+            }
+            sb.append(conStr).append(tbProductSku.getStorehouseId());
+            conStr = ",";
+        }
+        product.setStorehouseIds(sb.toString());
+        product.setSkuTemplate("{\"sku\":[]}");
+
+        // 商品已经提报，修改商品信息
+        if (StringUtils.isNotBlank(tbThirdPartyProduct.getProductId())) {
+            productSkuDao.delSkuByProductId(productId);
+            productSkuDao.addProductSku(tbProductSkus);
+            // 置空不修改字段
+            product.setSubjectId(null);
+            product.setBrandId(null);
+            productDao.updateProduct(product);
+        } else {
+            // 保存sku和商品信息
+            productSkuDao.addProductSku(tbProductSkus);
+            productDao.addProduct(product);
+
+            // 回写数据
+            productWithBLOBs.setProductId(productId);
+            productWithBLOBs.setOfferState(1);
+            this.tbThirdPartyProductMapper.updateByExampleSelective(productWithBLOBs, example);
+        }
+        return 0;
+
+    }
+
+    @Override
+    public String exportThirdPartyProduct(Map queryMap) {
+        String fileKey = null;
+        try {
+            // 查询数据
+            List<TbThirdPartyProductWithBLOBs> partyProductWithBLOBses = this.manualTbThirdPartyProductMapper.queryThirdPartyProductList(queryMap);
+            // 生成excel
+            byte[] datas = this.fileOpUtil.getExportExcel(partyProductWithBLOBses);
+            // 上传文件
+            if (datas != null) {
+                String fileName = fileOpUtil.getFileName(ProductCommons.WOMAI_SELLER_ID, null);
+                fileKey = fileOpUtil.toFastDFS(datas, fileName);
+            }
+            return fileKey;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private String getWoMaiUrl() {
         // TODO: 2016/5/17 通过配置获取
-        String domain = "http://sandbox.womaiapp.com/api/rest";
+        String woMaiDomain = "http://sandbox.womaiapp.com/api/rest";
 
-        return domain;
+        return woMaiDomain;
     }
 
     private Map<String, String> getHttpParams(String method, Map param) {
@@ -365,7 +480,6 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
             for (TbProductSku productSku : productSkus) {
                 productSku.setWeight(productObject.getInteger("weight") / 1000 + "");
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -645,6 +759,8 @@ public class WoMaiSvcImpl implements IWoMaiSvc {
             if (CollectionUtils.isEmpty(dbProductWithBLOBsList)) {
                 productWithBLOBs.setCreateTime(now);
                 productWithBLOBs.setLastUpdateTime(now);
+                // 设置成未提报
+                productWithBLOBs.setOfferState(2);
                 this.tbThirdPartyProductMapper.insertSelective(productWithBLOBs);
             } else {
                 // 商品存在，更新商品

@@ -14,6 +14,7 @@ import com.jfshare.product.model.TbProductCard;
 import com.jfshare.product.model.TbProductHistoryWithBLOBs;
 import com.jfshare.product.model.TbProductSku;
 import com.jfshare.product.model.TbProductWithBLOBs;
+import com.jfshare.product.model.TbThirdPartyProduct;
 import com.jfshare.product.model.TbThirdPartyProductSnapshotWithBLOBs;
 import com.jfshare.product.model.TbThirdPartyProductWithBLOBs;
 import com.jfshare.product.model.enums.ProductOptEnum;
@@ -22,7 +23,6 @@ import com.jfshare.product.model.vo.Page;
 import com.jfshare.utils.DateUtil;
 import com.jfshare.utils.PriceUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,6 +193,22 @@ public class ConvertUtil {
         thirdPartyProduct.setOfferState(tbThirdPartyProductWithBLOBs.getOfferState());
         thirdPartyProduct.setUpdateTime(DateUtil.date2Str(tbThirdPartyProductWithBLOBs.getLastUpdateTime(), DateUtil.PATTERN_YYYYMMDDHHMMSS));
         return thirdPartyProduct;
+    }
+
+    public static TbThirdPartyProductWithBLOBs thrift2TbThirdPartyProductWithBLOBs(ThirdPartyProduct thirdPartyProduct) {
+        TbThirdPartyProductWithBLOBs productWithBLOBs = new TbThirdPartyProductWithBLOBs();
+        productWithBLOBs.setThirdPartyIdentify(thirdPartyProduct.getThirdPartyIdentify());
+        productWithBLOBs.setThirdPartyProductId(thirdPartyProduct.getThirdPartyProductId());
+        productWithBLOBs.setProductId(thirdPartyProduct.getProductId());
+        productWithBLOBs.setName(thirdPartyProduct.getName());
+        productWithBLOBs.setImgKey(thirdPartyProduct.getImgKey());
+        productWithBLOBs.setSellerclassnum(thirdPartyProduct.getSellerClassNum());
+        productWithBLOBs.setPrice(PriceUtils.strToInt(thirdPartyProduct.getCurPrice()));
+        productWithBLOBs.setPriceState(thirdPartyProduct.getPriceState());
+        productWithBLOBs.setStockInfo(thirdPartyProduct.getStockInfo());
+        productWithBLOBs.setActiveState(thirdPartyProduct.getActiveState());
+        productWithBLOBs.setOfferState(thirdPartyProduct.getOfferState());
+        return productWithBLOBs;
     }
 
     public static ThirdPartyProductLog tbThirdPartyProductSnapshotWithBLOBs2Thrift(TbThirdPartyProductSnapshotWithBLOBs product) {

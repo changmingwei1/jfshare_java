@@ -24,8 +24,10 @@
         and t.offer_state = #{offerState}
       </if>
     </where>
-    order by t.last_update_time desc
-    limit #{start}, #{count}
+    <if test="count != null">
+      order by t.last_update_time desc
+      limit #{start}, #{count}
+    </if>
   </select>
 
   <select id="queryThirdPartyProductCount" parameterType="map" resultType="int">

@@ -395,5 +395,22 @@ public class client {
         System.out.println(this.client.getThirdPartyProductLog(param, pagination));
     }
 
+    @Test
+    public void testOfferThirdPartyProduct() throws Exception {
+
+        ThirdPartyProduct thirdPartyProduct = new ThirdPartyProduct();
+        thirdPartyProduct.setThirdPartyIdentify(1);
+        thirdPartyProduct.setThirdPartyProductId("954018");
+
+        System.out.println(this.client.offerThirdPartyProduct(thirdPartyProduct));
+    }
+
+    @Test
+    public void testExportThirdPartyProduct() throws Exception {
+        ThirdPartyProductQueryParam param = new ThirdPartyProductQueryParam();
+        param.setThirdPartyIdentify(1);
+        param.setActiveState(300);
+        System.out.println(this.client.exportThirdPartyProduct(param));
+    }
 
 }
