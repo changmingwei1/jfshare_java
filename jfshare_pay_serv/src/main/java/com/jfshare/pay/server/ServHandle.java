@@ -60,7 +60,7 @@ public class ServHandle implements PayServ.Iface {
             //生成平台流水号
             String payId = PayUtil.getPayId(payReq);
             //生成支付链接
-            if (payReq.getPayChannel() == 1) {
+            if (payReq.getPayChannel() == 1	) {
                 if (StringUtil.isNullOrEmpty(payReq.getCustId()) || StringUtil.isNullOrEmpty(payReq.getCustType())) {
                     logger.warn("申请支付----payUrl参数custId|custType验证失败！");
                     FailCode.addFails(result, FailCode.PARAM_ERROR);
@@ -68,7 +68,16 @@ public class ServHandle implements PayServ.Iface {
                 }
                 payId = PayUtil.getTianYiPayId();//奇葩的payId
                 payUrl = PayUtil.getReqTY(payReq, payId);
-            } else if (payReq.getPayChannel() == 2) {
+            }else if(payReq.getPayChannel() == 10 ) {
+                if (StringUtil.isNullOrEmpty(payReq.getCustId()) || StringUtil.isNullOrEmpty(payReq.getCustType())) {
+                    logger.warn("申请支付----payUrl参数custId|custType验证失败！");
+                    FailCode.addFails(result, FailCode.PARAM_ERROR);
+                    return stringResult;
+                }
+                payId = PayUtil.getTianYiPayId();//奇葩的payId
+                payUrl = PayUtil.getReqTYWAP(payReq, payId);
+            }
+            else if (payReq.getPayChannel() == 2) {
                 payUrl = PayUtil.getReqAliPay(payReq, payId);
             } else if (payReq.getPayChannel() == 3 || payReq.getPayChannel() == 4 ||
                     payReq.getPayChannel() == 9) {
@@ -82,7 +91,7 @@ public class ServHandle implements PayServ.Iface {
             } else if (payReq.getPayChannel() == 8) {
                 payUrl = PayUtil.getHebaoPay(payReq, payId);
             }
-
+            
             if (payId == null || payUrl == null) {
                 logger.error("生成payId或payUrl失败! payId:" + payId + ", payUrl:" + payUrl);
                 FailCode.addFails(result, FailCode.PARAM_NOT_VALID);
@@ -139,8 +148,8 @@ public class ServHandle implements PayServ.Iface {
             }
 
             TbPayRecordWithBLOBs payResRecord = null;
-            //天翼
-            if (payRes.getPayChannel() == 1) {
+            //天翼或者天翼H5
+            if (payRes.getPayChannel() == 1 || payRes.getPayChannel() == 10) {
                 payResRecord = PayUtil.getResTianYi(payRes);
             } else if (payRes.getPayChannel() == 2 || payRes.getPayChannel() == 5 ||
                     payRes.getPayChannel() == 7) {

@@ -145,8 +145,8 @@ public class PayUtil {
             String AppID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_appcode");
             String SPID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid");
             String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
-            String UrlFront = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_front_url");
-            String UrlBack = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_back_url");
+            String UrlFront = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_front_url","0");
+            String UrlBack = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_back_url","0");
 
             String SpOrderID = payReq.getOrderNo();
             String RequestNo = payId;
@@ -158,7 +158,9 @@ public class PayUtil {
             String PayPoint = ConvertUtil.getString(payReq.getScore());
             String PayMoney = payReq.getScore() > 0 ? ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()) : "0";
             String RequestTime = curTime;
-            String AccessChannel = "WEB";
+            
+            String	AccessChannel = "WEB";//WEB端
+           
 //            String AppID = "BFZX";
 //            String SPID = "171445";
 //            String SpOrderID = "2016061117435196361771";
@@ -176,8 +178,8 @@ public class PayUtil {
 
             String waitStr= AppID + SPID + RequestNo + SpOrderID + PayContent + ProvinceID + DeviceNo + DeviceType + OrderPrice + PayPoint + PayMoney + RequestTime + AccessChannel + Token;
             String Sign = DigestUtils.md5Hex(waitStr);
-            logger.error("waitStr==> {}", waitStr);
-            logger.error("Sign==> {}", Sign);
+            logger.error("加密前拼接 waitStr==> {}", waitStr);
+            logger.error("加密后 Sign==> {}", Sign);
             Map<String, String> xmlMap = new LinkedHashMap<String, String>();
             xmlMap.put("AppID", AppID);
             xmlMap.put("SPID", SPID);
@@ -199,8 +201,8 @@ public class PayUtil {
             logger.error("toXml==> {}", toXml);
 //            toXml = "<AcceptRequest><AppID>BFZX</AppID><SPID>171445</SPID><RequestNo>2016061118472027175035</RequestNo><SpOrderID>20160611184720</SpOrderID><PayContent>尊享订单</PayContent><BankID></BankID><ProvinceID>15</ProvinceID><DeviceNo>18979177165</DeviceNo><DeviceType>7</DeviceType><OrderPrice>1000</OrderPrice><PayPoint>100</PayPoint><PayMoney>500</PayMoney><RequestTime>20160611184720</RequestTime><AccessChannel>WEB</AccessChannel><Sign>830c9d5043812de61cdbf7372bf88cc4</Sign></AcceptRequest>";
             String toUnicode = DesUtil.string2Unicode(toXml);
-
-
+            logger.error("toUnicode==> {}", toUnicode);
+            
             String encodeCBCKey = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_deskey");
             String encodeCBCVi = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_desvi");
 
@@ -220,7 +222,90 @@ public class PayUtil {
         return null;
 
     }
+    public static String getReqTYWAP(PayReq payReq, String payId){
+        DateTime now = new DateTime();
+        String curTime = DateUtils.date2Str(now.toDate(), DateUtils.PATTERN_YYYYMMDDHHMMSS2);//.date2Str()DateUtils.getCurrentStringDateYYMDHMSS();
+        try {
+            String AppID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_appcode");
+            String SPID = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_spid");
+            String Token = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_signkey");
+            String UrlFront = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_front_url","0");
+            String UrlBack = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_back_url","0");
 
+            String SpOrderID = payReq.getOrderNo();
+            String RequestNo = payId;
+            String PayContent = ConvertUtil.getString(payReq.getRemark(), "尊享订单");
+            String ProvinceID = payReq.getProcustID();
+            String DeviceNo = payReq.getCustId();
+            String DeviceType = payReq.getCustType();
+            String OrderPrice = ConvertUtil.getString(payReq.getPrice());
+            String PayPoint = ConvertUtil.getString(payReq.getScore());
+            String PayMoney = payReq.getScore() > 0 ? ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()) : "0";
+            String RequestTime = curTime;
+            
+            String	AccessChannel = "WEB";//WEB端
+           
+//            String AppID = "BFZX";
+//            String SPID = "171445";
+//            String SpOrderID = "2016061117435196361771";
+//            String RequestNo = "20160611174351";
+//            String PayContent = "尊享订单";
+//            String ProvinceID = "15";
+//            String DeviceNo = "18979177165";
+//            String DeviceType = "7";
+//            String OrderPrice = "1000";
+//            String PayPoint = "100";
+//            String PayMoney = "500";
+//            String RequestTime = "20160611174351";
+//            String AccessChannel = "WEB";
+//            String Token = "fWMLsuqg30rgyq9rfte23eJSsKer";
+
+            String waitStr= AppID + SPID + RequestNo + SpOrderID + PayContent + ProvinceID + DeviceNo + DeviceType + OrderPrice + PayPoint + PayMoney + RequestTime + AccessChannel + Token;
+            String Sign = DigestUtils.md5Hex(waitStr);
+            logger.error("加密前拼接 waitStr==> {}", waitStr);
+            logger.error("加密后 Sign==> {}", Sign);
+            Map<String, String> xmlMap = new LinkedHashMap<String, String>();
+            xmlMap.put("AppID", AppID);
+            xmlMap.put("SPID", SPID);
+            xmlMap.put("RequestNo", RequestNo);
+            xmlMap.put("SpOrderID", SpOrderID);
+            xmlMap.put("PayContent", PayContent);
+            xmlMap.put("ProvinceID", ProvinceID);
+            xmlMap.put("DeviceNo", DeviceNo);
+            xmlMap.put("DeviceType", DeviceType);
+            xmlMap.put("OrderPrice", OrderPrice);
+            xmlMap.put("PayPoint", PayPoint);
+            xmlMap.put("PayMoney", PayMoney);
+            xmlMap.put("RequestTime", RequestTime);
+            xmlMap.put("AccessChannel", AccessChannel);
+            xmlMap.put("Sign", Sign);
+            xmlMap.put("UrlFront", UrlFront);
+            xmlMap.put("UrlBack", UrlBack);
+            String toXml = TianYiSubmit.map2XmlStr(xmlMap);
+            logger.error("toXml==> {}", toXml);
+//            toXml = "<AcceptRequest><AppID>BFZX</AppID><SPID>171445</SPID><RequestNo>2016061118472027175035</RequestNo><SpOrderID>20160611184720</SpOrderID><PayContent>尊享订单</PayContent><BankID></BankID><ProvinceID>15</ProvinceID><DeviceNo>18979177165</DeviceNo><DeviceType>7</DeviceType><OrderPrice>1000</OrderPrice><PayPoint>100</PayPoint><PayMoney>500</PayMoney><RequestTime>20160611184720</RequestTime><AccessChannel>WEB</AccessChannel><Sign>830c9d5043812de61cdbf7372bf88cc4</Sign></AcceptRequest>";
+            String toUnicode = DesUtil.string2Unicode(toXml);
+            logger.error("toUnicode==> {}", toUnicode);
+            
+            String encodeCBCKey = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_deskey");
+            String encodeCBCVi = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_desvi");
+
+            String requestXml = Des3.des3EncodeCBC(encodeCBCKey, encodeCBCVi, toUnicode);
+//            logger.info(requestXml.replaceAll ("[\\t\\n\\r]", ""));
+
+
+            Map<String, String> payUrlMap = new HashMap<String, String>();
+            payUrlMap.put("action", PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_url"));
+            payUrlMap.put("requestXml", requestXml.replaceAll ("[\\t\\n\\r]", ""));
+
+            return JSON.toJSONString(payUrlMap);
+        } catch (Exception e) {
+            logger.error("支付申请Sign生成失败！", e);
+        }
+
+        return null;
+
+    }
     /**
      * 解析第三方支付通知
      * //	strReturnSecret=Server.UrlEncode(Server.UrlEncode(des.Encrypt(Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(strReturnSecret))
