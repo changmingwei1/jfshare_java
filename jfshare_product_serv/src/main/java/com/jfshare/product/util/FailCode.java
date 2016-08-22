@@ -37,6 +37,9 @@ public class FailCode {
     public static FailDesc PRODUCT_CARD_IMPORT_FILE_ERROR = new FailDesc("productCard", "5505", "导入模板解析失败");
     public static FailDesc PRODUCT_CARD_IMPORT_EXIST = new FailDesc("productCard", "5506", "导入成功，已过滤重复信息");
 
+    // 第三方商品提示信息
+    public static FailDesc THIRD_PARTY_PRODUCT_NOT_EXIST = new FailDesc("thridPartyProduct", "6000", "第三方商品不存在");
+
 
     /**
      * 结果集中添加错误码
