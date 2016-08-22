@@ -279,7 +279,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     }
 
     @Override
-    public Result confirmReceipt(int userType, int userId, String orderId) throws TException {
+        public Result confirmReceipt(int userType, int userId, String orderId) throws TException {
         Result result = new Result();
         result.setCode(0);
         try {

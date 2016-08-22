@@ -11,6 +11,7 @@ import com.jfshare.product.util.HttpUtils;
 import com.jfshare.utils.JsonMapper;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.language.Soundex;
+import org.apache.poi.ss.formula.functions.Now;
 import org.elasticsearch.common.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -249,6 +250,59 @@ public class WoMaiTest {
         TbThirdPartyProductWithBLOBs productWithBLOBs = this.woMaiSvc.getProduct("954018");
         System.out.println("<<<< productWithBLOBs : " + JsonMapper.toJson(productWithBLOBs));
         this.woMaiSvc.saveWoMaiProduct(productWithBLOBs);
+
+    }
+
+    // 添加订单
+    @Test
+    public void testTradeAdd() throws Exception {
+
+        Map trade = new HashMap();
+        trade.put("tid", "123456789");
+        trade.put("created", "2016-08-08 12:00:00");
+        trade.put("buyer_nick", "小小");
+        trade.put("payment", 5);
+        trade.put("discount_fee", 1);
+        trade.put("adjust_fee", 0);
+        trade.put("total_fee", 4);
+        trade.put("post_fee", 1);
+        trade.put("receiver_name", "test");
+        trade.put("receiver_state", "110000");
+        trade.put("receiver_city", "110001");
+        trade.put("receiver_district", "110121");
+        trade.put("receiver_address", "到家");
+        trade.put("receiver_mobile", "13222222222");
+
+        List<Map> orderList = new ArrayList<Map>();
+        Map order1 = new HashMap();
+        order1.put("tid", "123456789");
+        order1.put("oid", "1");
+        order1.put("total_fee", 123456789);
+        order1.put("iid", 123456789);
+        order1.put("num", 1);
+        order1.put("price", 123456789);
+        order1.put("outer_iid", 123456789);
+        order1.put("title", 123456789);
+        orderList.add(order1);
+
+        Map order = new HashMap();
+        order.put("order", orderList);
+        trade.put("orders", order);
+
+        Map trade_add_request = new HashMap();
+        trade_add_request.put("trade", trade);
+
+        Map tradeOut = new HashMap();
+        tradeOut.put("trade_add_request", trade_add_request);
+
+        Map param = new HashMap();
+        param.put("trade", tradeOut);
+
+        System.out.println(JSON.toJSONString(param));
+
+        Map<String, String> httpParam = this.initPostParams("womai.trade.add", param);
+        String dataJson = HttpUtils.httpPostUTF8(domain, httpParam);
+        System.out.println(dataJson);
 
     }
 
