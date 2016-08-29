@@ -555,8 +555,11 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             }
             orderService.updateOrderPaying(orderModels, tradePayId);
 
+
+
             //全积分支付
-            boolean isOnlyScore = OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash());
+//            boolean isOnlyScore = OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash());
+            boolean isOnlyScore = checkIsOnlyScorePay(orderModels);
             if(isOnlyScore) {
                 stringResult.setValue("全积分支付成功");
                 stringResult.getResult().setCode(2);
@@ -604,6 +607,15 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return stringResult;
+    }
+
+    private boolean checkIsOnlyScorePay(List<OrderModel> orderModels) {
+        for(OrderModel order : orderModels) {
+            if(order.getExchangeCash() != order.getClosingPrice()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
