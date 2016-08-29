@@ -28,7 +28,8 @@ public class BizUtil {
         HEBAOGZWAP(6, "和包H5"),
         ALIAPP(7, "支付宝app"),
         HEBAOPAY(8, "和包PC"),
-        WEIXINAPP(9, "微信app");
+        WEIXINAPP(9, "微信app"),
+        TIANYIWAP(10, "天翼H5");
         private int enumVal=0;
         private String desc="";
         private PAY_CHANNEL(int enumVal, String desc){
@@ -74,6 +75,9 @@ public class BizUtil {
                 }
                 case 9:{
                     return WEIXINAPP;
+                }
+                case 10:{
+                    return TIANYIWAP;
                 }
             }
             return null;
