@@ -243,7 +243,7 @@ public class PayUtil {
             String PayMoney = payReq.getScore() > 0 ? ConvertUtil.getString(payReq.getPrice() - payReq.getScore2cashAmount()) : "0";
             String RequestTime = curTime;
             
-            String	AccessChannel = "WEB";//WEB端
+            String	AccessChannel = "WAP";//WAP端
            
 //            String AppID = "BFZX";
 //            String SPID = "171445";
