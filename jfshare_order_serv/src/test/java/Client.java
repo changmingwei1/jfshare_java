@@ -243,6 +243,30 @@ public class Client extends TestCase{
                 transport.close();
             }
         }
+        
+//        try {
+//            PayParam payParam = new PayParam();
+//            payParam.setUserId(187);/*买家ID*/
+//            payParam.addToOrderIdList("69580187");//订单号
+//            payParam.setExchangeCash("4.00");/*兑换多少现金*/
+//            payParam.setExchangeScore(0);/*兑换现金的积分*/
+//            
+//            PayChannel payChannel = new PayChannel();
+//            payChannel.setPayChannel(7);/*支付方式*/
+//            payChannel.setCustId("18910573200");
+//            payChannel.setCustType("7");
+//            payChannel.setProcustID("01");
+//
+//            payParam.setPayChannel(payChannel);
+//            System.err.println(client.payApply(payParam));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (transport != null) {
+//                transport.close();
+//            }
+//        }
+        
     }
 
     public void testPayState() throws Exception {
