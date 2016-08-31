@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 
 /**
  * *************************************************************************
@@ -32,7 +33,9 @@ public class SlotImageJedis {
 	
 	private final static transient Logger logger = LoggerFactory.getLogger(SlotImageJedis.class);
 	
-	@Autowired private JedisPool jedisPool;
+	@Autowired 
+	//private JedisPool jedisPool;
+	private JedisSentinelPool jedisPool;
 	
 	/**
 	 * 	方法描述:  保存图片列表列表

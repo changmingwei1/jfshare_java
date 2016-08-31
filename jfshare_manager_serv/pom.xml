@@ -56,7 +56,7 @@
         </dependency>
         <dependency>
             <groupId>com.jfshare</groupId>
-            <artifactId>mybatis-base</artifactId>
+            <artifactId>jfshare-mybatis-base</artifactId>
             <version>1.0</version>
         </dependency>
 
