@@ -174,8 +174,7 @@ public abstract class BaseHandler implements IHandler {
         tbDisplaySubject.setId(displaySubjectInfo.getId());
         tbDisplaySubject.setName(displaySubjectInfo.getName());
         tbDisplaySubject.setPid(displaySubjectInfo.getPid());
-        tbDisplaySubject.setSubjectIds(displaySubjectInfo.getSubjectIds());
-        tbDisplaySubject.setImage(displaySubjectInfo.getImage());
+        tbDisplaySubject.setImage(displaySubjectInfo.getImg_key());
         tbDisplaySubject.setSorted(displaySubjectInfo.getSorted());
         tbDisplaySubject.setLevel(displaySubjectInfo.getLevel());
         tbDisplaySubject.setIsLeaf(displaySubjectInfo.getIsLeaf());
@@ -207,8 +206,7 @@ public abstract class BaseHandler implements IHandler {
         displaySubjectInfo.setId(tbDisplaySubject.getId());
         displaySubjectInfo.setName(tbDisplaySubject.getName());
         displaySubjectInfo.setPid(tbDisplaySubject.getPid());
-        displaySubjectInfo.setSubjectIds(tbDisplaySubject.getSubjectIds());
-        displaySubjectInfo.setImage(tbDisplaySubject.getImage());
+        displaySubjectInfo.setImg_key(tbDisplaySubject.getImage());
         displaySubjectInfo.setSorted(tbDisplaySubject.getSorted());
         displaySubjectInfo.setLevel(tbDisplaySubject.getLevel());
         displaySubjectInfo.setIsLeaf(tbDisplaySubject.getIsLeaf());
@@ -222,9 +220,6 @@ public abstract class BaseHandler implements IHandler {
         }
         displaySubjectInfo.setUpdater(tbDisplaySubject.getUpdater());
         displaySubjectInfo.setDeleted(tbDisplaySubject.getDeleted());
-        displaySubjectInfo.setDisplaySubjectNodes(
-                rConvertDisSubjectNode(this.displaySubjectService.getSuperTree(
-                        tbDisplaySubject.getId(), tbDisplaySubject.getType())));
         return displaySubjectInfo;
     }
 
@@ -300,12 +295,11 @@ public abstract class BaseHandler implements IHandler {
         for (DisplaySubjectTreeModel node : nodes) {
             DisplaySubjectNode tnode = new DisplaySubjectNode();
             tnode.id = node.getId();
-            tnode.image = node.getImage();
+            tnode.img_key = node.getImage();
             tnode.isLeaf = node.getIsLeaf();
             tnode.name = node.getName();
             tnode.pid = node.getPid();
             tnode.sorted = node.getSorted();
-            tnode.subjectIds = node.getSubjectIds();
             renodes.add(tnode);
         }
         return renodes;

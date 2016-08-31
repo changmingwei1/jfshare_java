@@ -29,23 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQueryResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("SubjectQueryResult");
+public class SubjectAttributeResult implements TBase<SubjectAttributeResult, SubjectAttributeResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("SubjectAttributeResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField SUBJECT_INFOS_FIELD_DESC = new TField("subjectInfos", TType.LIST, (short)2);
-  private static final TField PAGE_FIELD_DESC = new TField("page", TType.STRUCT, (short)3);
+  private static final TField SUBJECT_ATTRIBUTES_FIELD_DESC = new TField("subjectAttributes", TType.LIST, (short)3);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public List<SubjectInfo> subjectInfos;
-  public Page page;
+  public List<SubjectAttribute> subjectAttributes;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    SUBJECT_INFOS((short)2, "subjectInfos"),
-    PAGE((short)3, "page");
+    SUBJECT_ATTRIBUTES((short)3, "subjectAttributes");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -62,10 +59,8 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // SUBJECT_INFOS
-  	return SUBJECT_INFOS;
-        case 3: // PAGE
-  	return PAGE;
+        case 3: // SUBJECT_ATTRIBUTES
+  	return SUBJECT_ATTRIBUTES;
         default:
   	return null;
       }
@@ -113,65 +108,57 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.SUBJECT_INFOS, new FieldMetaData("subjectInfos", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.SUBJECT_ATTRIBUTES, new FieldMetaData("subjectAttributes", TFieldRequirementType.DEFAULT,
       new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, SubjectInfo.class))));
-    tmpMap.put(_Fields.PAGE, new FieldMetaData("page", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, Page.class)));
+                new StructMetaData(TType.STRUCT, SubjectAttribute.class))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(SubjectQueryResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(SubjectAttributeResult.class, metaDataMap);
   }
 
 
-  public SubjectQueryResult() {
+  public SubjectAttributeResult() {
   }
 
-  public SubjectQueryResult(
+  public SubjectAttributeResult(
     com.jfshare.finagle.thrift.result.Result result,
-    List<SubjectInfo> subjectInfos,
-    Page page)
+    List<SubjectAttribute> subjectAttributes)
   {
     this();
     this.result = result;
-    this.subjectInfos = subjectInfos;
-    this.page = page;
+    this.subjectAttributes = subjectAttributes;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public SubjectQueryResult(SubjectQueryResult other) {
+  public SubjectAttributeResult(SubjectAttributeResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    if (other.isSetSubjectInfos()) {
-      List<SubjectInfo> __this__subjectInfos = new ArrayList<SubjectInfo>();
-      for (SubjectInfo other_element : other.subjectInfos) {
-        __this__subjectInfos.add(new SubjectInfo(other_element));
+    if (other.isSetSubjectAttributes()) {
+      List<SubjectAttribute> __this__subjectAttributes = new ArrayList<SubjectAttribute>();
+      for (SubjectAttribute other_element : other.subjectAttributes) {
+        __this__subjectAttributes.add(new SubjectAttribute(other_element));
       }
-      this.subjectInfos = __this__subjectInfos;
-    }
-    if (other.isSetPage()) {
-      this.page = new Page(other.page);
+      this.subjectAttributes = __this__subjectAttributes;
     }
   }
 
-  public SubjectQueryResult deepCopy() {
-    return new SubjectQueryResult(this);
+  public SubjectAttributeResult deepCopy() {
+    return new SubjectAttributeResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.subjectInfos = null;
-    this.page = null;
+    this.subjectAttributes = null;
   }
 
   public com.jfshare.finagle.thrift.result.Result getResult() {
     return this.result;
   }
 
-  public SubjectQueryResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public SubjectAttributeResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -192,68 +179,43 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
     }
   }
 
-  public int getSubjectInfosSize() {
-    return (this.subjectInfos == null) ? 0 : this.subjectInfos.size();
+  public int getSubjectAttributesSize() {
+    return (this.subjectAttributes == null) ? 0 : this.subjectAttributes.size();
   }
 
-  public java.util.Iterator<SubjectInfo> getSubjectInfosIterator() {
-    return (this.subjectInfos == null) ? null : this.subjectInfos.iterator();
+  public java.util.Iterator<SubjectAttribute> getSubjectAttributesIterator() {
+    return (this.subjectAttributes == null) ? null : this.subjectAttributes.iterator();
   }
 
-  public void addToSubjectInfos(SubjectInfo elem) {
-    if (this.subjectInfos == null) {
-      this.subjectInfos = new ArrayList<SubjectInfo>();
+  public void addToSubjectAttributes(SubjectAttribute elem) {
+    if (this.subjectAttributes == null) {
+      this.subjectAttributes = new ArrayList<SubjectAttribute>();
     }
-    this.subjectInfos.add(elem);
+    this.subjectAttributes.add(elem);
   }
 
-  public List<SubjectInfo> getSubjectInfos() {
-    return this.subjectInfos;
+  public List<SubjectAttribute> getSubjectAttributes() {
+    return this.subjectAttributes;
   }
 
-  public SubjectQueryResult setSubjectInfos(List<SubjectInfo> subjectInfos) {
-    this.subjectInfos = subjectInfos;
+  public SubjectAttributeResult setSubjectAttributes(List<SubjectAttribute> subjectAttributes) {
+    this.subjectAttributes = subjectAttributes;
     
     return this;
   }
 
-  public void unsetSubjectInfos() {
-    this.subjectInfos = null;
+  public void unsetSubjectAttributes() {
+    this.subjectAttributes = null;
   }
 
-  /** Returns true if field subjectInfos is set (has been asigned a value) and false otherwise */
-  public boolean isSetSubjectInfos() {
-    return this.subjectInfos != null;
+  /** Returns true if field subjectAttributes is set (has been asigned a value) and false otherwise */
+  public boolean isSetSubjectAttributes() {
+    return this.subjectAttributes != null;
   }
 
-  public void setSubjectInfosIsSet(boolean value) {
+  public void setSubjectAttributesIsSet(boolean value) {
     if (!value) {
-      this.subjectInfos = null;
-    }
-  }
-
-  public Page getPage() {
-    return this.page;
-  }
-
-  public SubjectQueryResult setPage(Page page) {
-    this.page = page;
-    
-    return this;
-  }
-
-  public void unsetPage() {
-    this.page = null;
-  }
-
-  /** Returns true if field page is set (has been asigned a value) and false otherwise */
-  public boolean isSetPage() {
-    return this.page != null;
-  }
-
-  public void setPageIsSet(boolean value) {
-    if (!value) {
-      this.page = null;
+      this.subjectAttributes = null;
     }
   }
 
@@ -266,18 +228,11 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case SUBJECT_INFOS:
+    case SUBJECT_ATTRIBUTES:
       if (value == null) {
-        unsetSubjectInfos();
+        unsetSubjectAttributes();
       } else {
-        setSubjectInfos((List<SubjectInfo>)value);
-      }
-      break;
-    case PAGE:
-      if (value == null) {
-        unsetPage();
-      } else {
-        setPage((Page)value);
+        setSubjectAttributes((List<SubjectAttribute>)value);
       }
       break;
     }
@@ -287,10 +242,8 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
     switch (field) {
     case RESULT:
       return getResult();
-    case SUBJECT_INFOS:
-      return getSubjectInfos();
-    case PAGE:
-      return getPage();
+    case SUBJECT_ATTRIBUTES:
+      return getSubjectAttributes();
     }
     throw new IllegalStateException();
   }
@@ -304,10 +257,8 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
     switch (field) {
     case RESULT:
       return isSetResult();
-    case SUBJECT_INFOS:
-      return isSetSubjectInfos();
-    case PAGE:
-      return isSetPage();
+    case SUBJECT_ATTRIBUTES:
+      return isSetSubjectAttributes();
     }
     throw new IllegalStateException();
   }
@@ -316,12 +267,12 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof SubjectQueryResult)
-      return this.equals((SubjectQueryResult)that);
+    if (that instanceof SubjectAttributeResult)
+      return this.equals((SubjectAttributeResult)that);
     return false;
   }
 
-  public boolean equals(SubjectQueryResult that) {
+  public boolean equals(SubjectAttributeResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -332,20 +283,12 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_subjectInfos = true && this.isSetSubjectInfos();
-    boolean that_present_subjectInfos = true && that.isSetSubjectInfos();
-    if (this_present_subjectInfos || that_present_subjectInfos) {
-      if (!(this_present_subjectInfos && that_present_subjectInfos))
+    boolean this_present_subjectAttributes = true && this.isSetSubjectAttributes();
+    boolean that_present_subjectAttributes = true && that.isSetSubjectAttributes();
+    if (this_present_subjectAttributes || that_present_subjectAttributes) {
+      if (!(this_present_subjectAttributes && that_present_subjectAttributes))
         return false;
-      if (!this.subjectInfos.equals(that.subjectInfos))
-        return false;
-    }
-    boolean this_present_page = true && this.isSetPage();
-    boolean that_present_page = true && that.isSetPage();
-    if (this_present_page || that_present_page) {
-      if (!(this_present_page && that_present_page))
-        return false;
-      if (!this.page.equals(that.page))
+      if (!this.subjectAttributes.equals(that.subjectAttributes))
         return false;
     }
 
@@ -359,24 +302,20 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_subjectInfos = true && (isSetSubjectInfos());
-    builder.append(present_subjectInfos);
-    if (present_subjectInfos)
-      builder.append(subjectInfos);
-    boolean present_page = true && (isSetPage());
-    builder.append(present_page);
-    if (present_page)
-      builder.append(page);
+    boolean present_subjectAttributes = true && (isSetSubjectAttributes());
+    builder.append(present_subjectAttributes);
+    if (present_subjectAttributes)
+      builder.append(subjectAttributes);
     return builder.toHashCode();
   }
 
-  public int compareTo(SubjectQueryResult other) {
+  public int compareTo(SubjectAttributeResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    SubjectQueryResult typedOther = (SubjectQueryResult)other;
+    SubjectAttributeResult typedOther = (SubjectAttributeResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -388,22 +327,12 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSubjectInfos()).compareTo(typedOther.isSetSubjectInfos());
+    lastComparison = Boolean.valueOf(isSetSubjectAttributes()).compareTo(typedOther.isSetSubjectAttributes());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSubjectInfos()) {
-      lastComparison = TBaseHelper.compareTo(this.subjectInfos, typedOther.subjectInfos);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetPage()).compareTo(typedOther.isSetPage());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetPage()) {
-      lastComparison = TBaseHelper.compareTo(this.page, typedOther.page);
+    if (isSetSubjectAttributes()) {
+      lastComparison = TBaseHelper.compareTo(this.subjectAttributes, typedOther.subjectAttributes);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -434,28 +363,20 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // SUBJECT_INFOS
+        case 3: // SUBJECT_ATTRIBUTES
           if (field.type == TType.LIST) {
             {
-            TList _list16 = iprot.readListBegin();
-            this.subjectInfos = new ArrayList<SubjectInfo>(_list16.size);
-            for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+            TList _list36 = iprot.readListBegin();
+            this.subjectAttributes = new ArrayList<SubjectAttribute>(_list36.size);
+            for (int _i37 = 0; _i37 < _list36.size; ++_i37)
             {
-              SubjectInfo _elem18;
-              _elem18 = new SubjectInfo();
-              _elem18.read(iprot);
-              this.subjectInfos.add(_elem18);
+              SubjectAttribute _elem38;
+              _elem38 = new SubjectAttribute();
+              _elem38.read(iprot);
+              this.subjectAttributes.add(_elem38);
             }
             iprot.readListEnd();
             }
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 3: // PAGE
-          if (field.type == TType.STRUCT) {
-            this.page = new Page();
-            this.page.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -480,21 +401,16 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.subjectInfos != null) {
-      oprot.writeFieldBegin(SUBJECT_INFOS_FIELD_DESC);
+    if (this.subjectAttributes != null) {
+      oprot.writeFieldBegin(SUBJECT_ATTRIBUTES_FIELD_DESC);
       {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.subjectInfos.size()));
-        for (SubjectInfo _iter19 : this.subjectInfos)
+        oprot.writeListBegin(new TList(TType.STRUCT, this.subjectAttributes.size()));
+        for (SubjectAttribute _iter39 : this.subjectAttributes)
         {
-          _iter19.write(oprot);
+          _iter39.write(oprot);
         }
         oprot.writeListEnd();
       }
-      oprot.writeFieldEnd();
-    }
-    if (this.page != null) {
-      oprot.writeFieldBegin(PAGE_FIELD_DESC);
-      this.page.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -503,7 +419,7 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("SubjectQueryResult(");
+    StringBuilder sb = new StringBuilder("SubjectAttributeResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -513,19 +429,11 @@ public class SubjectQueryResult implements TBase<SubjectQueryResult, SubjectQuer
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("subjectInfos:");
-    if (this.subjectInfos == null) {
+    sb.append("subjectAttributes:");
+    if (this.subjectAttributes == null) {
       sb.append("null");
     } else {
-      sb.append(this.subjectInfos);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("page:");
-    if (this.page == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.page);
+      sb.append(this.subjectAttributes);
     }
     first = false;
     sb.append(")");

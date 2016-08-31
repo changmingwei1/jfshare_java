@@ -17,6 +17,7 @@ import com.jfshare.subject.util.Commons;
 import com.jfshare.subject.util.ResultGenerator;
 import com.jfshare.subject.util.ZookeeperUtil;
 import com.jfshare.utils.JsonMapper;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -834,4 +836,40 @@ public class Handler extends BaseHandler implements SubjectServ.Iface{
         result.setPage(page);
         return result;
     }
+
+	@Override
+	public Result addSubjectAttribute(SubjectAttribute atrribute)
+			throws TException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Result updateSubjectAttribute(SubjectAttribute atrribute)
+			throws TException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Result deleteSubjectAttribute(SubjectAttribute atrribute)
+			throws TException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Result deleteSubjectAttributeBatch(
+			List<SubjectAttribute> atrributeList) throws TException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SubjectAttributeResult querySubjectAttribute(
+			SubjectAttributeQueryParam param) throws TException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
 }

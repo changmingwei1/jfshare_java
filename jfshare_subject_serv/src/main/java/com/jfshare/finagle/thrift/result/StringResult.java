@@ -6,12 +6,20 @@
 package com.jfshare.finagle.thrift.result;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
+import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.thrift.*;
 import org.apache.thrift.async.*;
@@ -26,18 +34,15 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
   private static final TField VALUE_FIELD_DESC = new TField("value", TType.STRING, (short)2);
-  private static final TField EXTEND_FIELD_DESC = new TField("extend", TType.STRING, (short)3);
 
 
   public Result result;
   public String value;
-  public String extend;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    VALUE((short)2, "value"),
-    EXTEND((short)3, "extend");
+    VALUE((short)2, "value");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -56,8 +61,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
   	return RESULT;
         case 2: // VALUE
   	return VALUE;
-        case 3: // EXTEND
-  	return EXTEND;
         default:
   	return null;
       }
@@ -107,8 +110,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
       new StructMetaData(TType.STRUCT, Result.class)));
     tmpMap.put(_Fields.VALUE, new FieldMetaData("value", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.EXTEND, new FieldMetaData("extend", TFieldRequirementType.OPTIONAL,
-      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(StringResult.class, metaDataMap);
   }
@@ -134,9 +135,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
     if (other.isSetValue()) {
       this.value = other.value;
     }
-    if (other.isSetExtend()) {
-      this.extend = other.extend;
-    }
   }
 
   public StringResult deepCopy() {
@@ -147,7 +145,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
   public void clear() {
     this.result = null;
     this.value = null;
-    this.extend = null;
   }
 
   public Result getResult() {
@@ -200,31 +197,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
     }
   }
 
-  public String getExtend() {
-    return this.extend;
-  }
-
-  public StringResult setExtend(String extend) {
-    this.extend = extend;
-    
-    return this;
-  }
-
-  public void unsetExtend() {
-    this.extend = null;
-  }
-
-  /** Returns true if field extend is set (has been asigned a value) and false otherwise */
-  public boolean isSetExtend() {
-    return this.extend != null;
-  }
-
-  public void setExtendIsSet(boolean value) {
-    if (!value) {
-      this.extend = null;
-    }
-  }
-
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case RESULT:
@@ -241,13 +213,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
         setValue((String)value);
       }
       break;
-    case EXTEND:
-      if (value == null) {
-        unsetExtend();
-      } else {
-        setExtend((String)value);
-      }
-      break;
     }
   }
 
@@ -257,8 +222,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
       return getResult();
     case VALUE:
       return getValue();
-    case EXTEND:
-      return getExtend();
     }
     throw new IllegalStateException();
   }
@@ -274,8 +237,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
       return isSetResult();
     case VALUE:
       return isSetValue();
-    case EXTEND:
-      return isSetExtend();
     }
     throw new IllegalStateException();
   }
@@ -308,14 +269,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
       if (!this.value.equals(that.value))
         return false;
     }
-    boolean this_present_extend = true && this.isSetExtend();
-    boolean that_present_extend = true && that.isSetExtend();
-    if (this_present_extend || that_present_extend) {
-      if (!(this_present_extend && that_present_extend))
-        return false;
-      if (!this.extend.equals(that.extend))
-        return false;
-    }
 
     return true;
   }
@@ -331,10 +284,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
     builder.append(present_value);
     if (present_value)
       builder.append(value);
-    boolean present_extend = true && (isSetExtend());
-    builder.append(present_extend);
-    if (present_extend)
-      builder.append(extend);
     return builder.toHashCode();
   }
 
@@ -362,16 +311,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
     }
     if (isSetValue()) {
       lastComparison = TBaseHelper.compareTo(this.value, typedOther.value);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetExtend()).compareTo(typedOther.isSetExtend());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetExtend()) {
-      lastComparison = TBaseHelper.compareTo(this.extend, typedOther.extend);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -409,13 +348,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // EXTEND
-          if (field.type == TType.STRING) {
-            this.extend = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -443,13 +375,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
         oprot.writeFieldEnd();
       }
     }
-    if (this.extend != null) {
-      if (isSetExtend()) {
-        oprot.writeFieldBegin(EXTEND_FIELD_DESC);
-        oprot.writeString(this.extend);
-        oprot.writeFieldEnd();
-      }
-    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -472,16 +397,6 @@ public class StringResult implements TBase<StringResult, StringResult._Fields>, 
         sb.append("null");
       } else {
         sb.append(this.value);
-      }
-      first = false;
-      }
-    if (isSetExtend()) {
-      if (!first) sb.append(", ");
-      sb.append("extend:");
-      if (this.extend == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.extend);
       }
       first = false;
       }

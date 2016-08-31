@@ -11,9 +11,15 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
 import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.thrift.*;
 import org.apache.thrift.async.*;
@@ -28,23 +34,27 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
 
   private static final TField ID_FIELD_DESC = new TField("id", TType.I32, (short)1);
   private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)2);
-  private static final TField PID_FIELD_DESC = new TField("pid", TType.I32, (short)3);
-  private static final TField SORTED_FIELD_DESC = new TField("sorted", TType.I32, (short)4);
-  private static final TField LEVEL_FIELD_DESC = new TField("level", TType.I32, (short)5);
-  private static final TField IS_LEAF_FIELD_DESC = new TField("isLeaf", TType.I32, (short)6);
-  private static final TField DEMO_FIELD_DESC = new TField("demo", TType.STRING, (short)7);
-  private static final TField CREATE_TIME_FIELD_DESC = new TField("createTime", TType.STRING, (short)8);
-  private static final TField CREATOR_FIELD_DESC = new TField("creator", TType.I32, (short)9);
-  private static final TField UPDATE_TIME_FIELD_DESC = new TField("updateTime", TType.STRING, (short)10);
-  private static final TField UPDATER_FIELD_DESC = new TField("updater", TType.I32, (short)11);
-  private static final TField STATUS_FIELD_DESC = new TField("status", TType.I32, (short)12);
-  private static final TField PATH_FIELD_DESC = new TField("path", TType.STRING, (short)13);
-  private static final TField DISPLAY_IDS_FIELD_DESC = new TField("displayIds", TType.STRING, (short)14);
-  private static final TField SUBJECT_NODES_FIELD_DESC = new TField("subjectNodes", TType.LIST, (short)15);
+  private static final TField IMG_KEY_FIELD_DESC = new TField("img_key", TType.STRING, (short)3);
+  private static final TField PID_FIELD_DESC = new TField("pid", TType.I32, (short)4);
+  private static final TField SORTED_FIELD_DESC = new TField("sorted", TType.I32, (short)5);
+  private static final TField LEVEL_FIELD_DESC = new TField("level", TType.I32, (short)6);
+  private static final TField IS_LEAF_FIELD_DESC = new TField("isLeaf", TType.I32, (short)7);
+  private static final TField DEMO_FIELD_DESC = new TField("demo", TType.STRING, (short)8);
+  private static final TField CREATE_TIME_FIELD_DESC = new TField("createTime", TType.STRING, (short)9);
+  private static final TField CREATOR_FIELD_DESC = new TField("creator", TType.I32, (short)10);
+  private static final TField UPDATE_TIME_FIELD_DESC = new TField("updateTime", TType.STRING, (short)11);
+  private static final TField UPDATER_FIELD_DESC = new TField("updater", TType.I32, (short)12);
+  private static final TField STATUS_FIELD_DESC = new TField("status", TType.I32, (short)13);
+  private static final TField DELETED_FIELD_DESC = new TField("deleted", TType.I32, (short)14);
+  private static final TField PATH_FIELD_DESC = new TField("path", TType.STRING, (short)15);
+  private static final TField ATTRIBUTES_FIELD_DESC = new TField("attributes", TType.STRING, (short)16);
+  private static final TField DISPLAY_IDS_FIELD_DESC = new TField("displayIds", TType.STRING, (short)17);
+  private static final TField SUBJECT_NODES_FIELD_DESC = new TField("subjectNodes", TType.LIST, (short)18);
 
 
   public int id;
   public String name;
+  public String img_key;
   public int pid;
   public int sorted;
   public int level;
@@ -55,7 +65,9 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
   public String updateTime;
   public int updater;
   public int status;
+  public int deleted;
   public String path;
+  public String attributes;
   public String displayIds;
   public List<SubjectNode> subjectNodes;
 
@@ -63,19 +75,22 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
   public enum _Fields implements TFieldIdEnum {
     ID((short)1, "id"),
     NAME((short)2, "name"),
-    PID((short)3, "pid"),
-    SORTED((short)4, "sorted"),
-    LEVEL((short)5, "level"),
-    IS_LEAF((short)6, "isLeaf"),
-    DEMO((short)7, "demo"),
-    CREATE_TIME((short)8, "createTime"),
-    CREATOR((short)9, "creator"),
-    UPDATE_TIME((short)10, "updateTime"),
-    UPDATER((short)11, "updater"),
-    STATUS((short)12, "status"),
-    PATH((short)13, "path"),
-    DISPLAY_IDS((short)14, "displayIds"),
-    SUBJECT_NODES((short)15, "subjectNodes");
+    IMG_KEY((short)3, "img_key"),
+    PID((short)4, "pid"),
+    SORTED((short)5, "sorted"),
+    LEVEL((short)6, "level"),
+    IS_LEAF((short)7, "isLeaf"),
+    DEMO((short)8, "demo"),
+    CREATE_TIME((short)9, "createTime"),
+    CREATOR((short)10, "creator"),
+    UPDATE_TIME((short)11, "updateTime"),
+    UPDATER((short)12, "updater"),
+    STATUS((short)13, "status"),
+    DELETED((short)14, "deleted"),
+    PATH((short)15, "path"),
+    ATTRIBUTES((short)16, "attributes"),
+    DISPLAY_IDS((short)17, "displayIds"),
+    SUBJECT_NODES((short)18, "subjectNodes");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -94,31 +109,37 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
   	return ID;
         case 2: // NAME
   	return NAME;
-        case 3: // PID
+        case 3: // IMG_KEY
+  	return IMG_KEY;
+        case 4: // PID
   	return PID;
-        case 4: // SORTED
+        case 5: // SORTED
   	return SORTED;
-        case 5: // LEVEL
+        case 6: // LEVEL
   	return LEVEL;
-        case 6: // IS_LEAF
+        case 7: // IS_LEAF
   	return IS_LEAF;
-        case 7: // DEMO
+        case 8: // DEMO
   	return DEMO;
-        case 8: // CREATE_TIME
+        case 9: // CREATE_TIME
   	return CREATE_TIME;
-        case 9: // CREATOR
+        case 10: // CREATOR
   	return CREATOR;
-        case 10: // UPDATE_TIME
+        case 11: // UPDATE_TIME
   	return UPDATE_TIME;
-        case 11: // UPDATER
+        case 12: // UPDATER
   	return UPDATER;
-        case 12: // STATUS
+        case 13: // STATUS
   	return STATUS;
-        case 13: // PATH
+        case 14: // DELETED
+  	return DELETED;
+        case 15: // PATH
   	return PATH;
-        case 14: // DISPLAY_IDS
+        case 16: // ATTRIBUTES
+  	return ATTRIBUTES;
+        case 17: // DISPLAY_IDS
   	return DISPLAY_IDS;
-        case 15: // SUBJECT_NODES
+        case 18: // SUBJECT_NODES
   	return SUBJECT_NODES;
         default:
   	return null;
@@ -169,7 +190,8 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
   private static final int __CREATOR_ISSET_ID = 5;
   private static final int __UPDATER_ISSET_ID = 6;
   private static final int __STATUS_ISSET_ID = 7;
-  private BitSet __isset_bit_vector = new BitSet(8);
+  private static final int __DELETED_ISSET_ID = 8;
+  private BitSet __isset_bit_vector = new BitSet(9);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -177,6 +199,8 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     tmpMap.put(_Fields.ID, new FieldMetaData("id", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.IMG_KEY, new FieldMetaData("img_key", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.PID, new FieldMetaData("pid", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
@@ -198,7 +222,11 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.STATUS, new FieldMetaData("status", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.DELETED, new FieldMetaData("deleted", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.PATH, new FieldMetaData("path", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.ATTRIBUTES, new FieldMetaData("attributes", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.DISPLAY_IDS, new FieldMetaData("displayIds", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
@@ -216,6 +244,7 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
   public SubjectInfo(
     int id,
     String name,
+    String img_key,
     int pid,
     int sorted,
     int level,
@@ -225,12 +254,15 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     int creator,
     String updateTime,
     int updater,
-    int status)
+    int status,
+    int deleted,
+    String attributes)
   {
     this();
     this.id = id;
     setIdIsSet(true);
     this.name = name;
+    this.img_key = img_key;
     this.pid = pid;
     setPidIsSet(true);
     this.sorted = sorted;
@@ -248,6 +280,9 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     setUpdaterIsSet(true);
     this.status = status;
     setStatusIsSet(true);
+    this.deleted = deleted;
+    setDeletedIsSet(true);
+    this.attributes = attributes;
   }
 
   /**
@@ -259,6 +294,9 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     this.id = other.id;
     if (other.isSetName()) {
       this.name = other.name;
+    }
+    if (other.isSetImg_key()) {
+      this.img_key = other.img_key;
     }
     this.pid = other.pid;
     this.sorted = other.sorted;
@@ -276,8 +314,12 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     }
     this.updater = other.updater;
     this.status = other.status;
+    this.deleted = other.deleted;
     if (other.isSetPath()) {
       this.path = other.path;
+    }
+    if (other.isSetAttributes()) {
+      this.attributes = other.attributes;
     }
     if (other.isSetDisplayIds()) {
       this.displayIds = other.displayIds;
@@ -300,6 +342,7 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     setIdIsSet(false);
     this.id = 0;
     this.name = null;
+    this.img_key = null;
     setPidIsSet(false);
     this.pid = 0;
     setSortedIsSet(false);
@@ -317,7 +360,10 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     this.updater = 0;
     setStatusIsSet(false);
     this.status = 0;
+    setDeletedIsSet(false);
+    this.deleted = 0;
     this.path = null;
+    this.attributes = null;
     this.displayIds = null;
     this.subjectNodes = null;
   }
@@ -368,6 +414,31 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
   public void setNameIsSet(boolean value) {
     if (!value) {
       this.name = null;
+    }
+  }
+
+  public String getImg_key() {
+    return this.img_key;
+  }
+
+  public SubjectInfo setImg_key(String img_key) {
+    this.img_key = img_key;
+    
+    return this;
+  }
+
+  public void unsetImg_key() {
+    this.img_key = null;
+  }
+
+  /** Returns true if field img_key is set (has been asigned a value) and false otherwise */
+  public boolean isSetImg_key() {
+    return this.img_key != null;
+  }
+
+  public void setImg_keyIsSet(boolean value) {
+    if (!value) {
+      this.img_key = null;
     }
   }
 
@@ -614,6 +685,30 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     __isset_bit_vector.set(__STATUS_ISSET_ID, value);
   }
 
+  public int getDeleted() {
+    return this.deleted;
+  }
+
+  public SubjectInfo setDeleted(int deleted) {
+    this.deleted = deleted;
+    setDeletedIsSet(true);
+
+    return this;
+  }
+
+  public void unsetDeleted() {
+  __isset_bit_vector.clear(__DELETED_ISSET_ID);
+  }
+
+  /** Returns true if field deleted is set (has been asigned a value) and false otherwise */
+  public boolean isSetDeleted() {
+    return __isset_bit_vector.get(__DELETED_ISSET_ID);
+  }
+
+  public void setDeletedIsSet(boolean value) {
+    __isset_bit_vector.set(__DELETED_ISSET_ID, value);
+  }
+
   public String getPath() {
     return this.path;
   }
@@ -636,6 +731,31 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
   public void setPathIsSet(boolean value) {
     if (!value) {
       this.path = null;
+    }
+  }
+
+  public String getAttributes() {
+    return this.attributes;
+  }
+
+  public SubjectInfo setAttributes(String attributes) {
+    this.attributes = attributes;
+    
+    return this;
+  }
+
+  public void unsetAttributes() {
+    this.attributes = null;
+  }
+
+  /** Returns true if field attributes is set (has been asigned a value) and false otherwise */
+  public boolean isSetAttributes() {
+    return this.attributes != null;
+  }
+
+  public void setAttributesIsSet(boolean value) {
+    if (!value) {
+      this.attributes = null;
     }
   }
 
@@ -720,6 +840,13 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
         setName((String)value);
       }
       break;
+    case IMG_KEY:
+      if (value == null) {
+        unsetImg_key();
+      } else {
+        setImg_key((String)value);
+      }
+      break;
     case PID:
       if (value == null) {
         unsetPid();
@@ -790,11 +917,25 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
         setStatus((Integer)value);
       }
       break;
+    case DELETED:
+      if (value == null) {
+        unsetDeleted();
+      } else {
+        setDeleted((Integer)value);
+      }
+      break;
     case PATH:
       if (value == null) {
         unsetPath();
       } else {
         setPath((String)value);
+      }
+      break;
+    case ATTRIBUTES:
+      if (value == null) {
+        unsetAttributes();
+      } else {
+        setAttributes((String)value);
       }
       break;
     case DISPLAY_IDS:
@@ -820,6 +961,8 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       return new Integer(getId());
     case NAME:
       return getName();
+    case IMG_KEY:
+      return getImg_key();
     case PID:
       return new Integer(getPid());
     case SORTED:
@@ -840,8 +983,12 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       return new Integer(getUpdater());
     case STATUS:
       return new Integer(getStatus());
+    case DELETED:
+      return new Integer(getDeleted());
     case PATH:
       return getPath();
+    case ATTRIBUTES:
+      return getAttributes();
     case DISPLAY_IDS:
       return getDisplayIds();
     case SUBJECT_NODES:
@@ -861,6 +1008,8 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       return isSetId();
     case NAME:
       return isSetName();
+    case IMG_KEY:
+      return isSetImg_key();
     case PID:
       return isSetPid();
     case SORTED:
@@ -881,8 +1030,12 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       return isSetUpdater();
     case STATUS:
       return isSetStatus();
+    case DELETED:
+      return isSetDeleted();
     case PATH:
       return isSetPath();
+    case ATTRIBUTES:
+      return isSetAttributes();
     case DISPLAY_IDS:
       return isSetDisplayIds();
     case SUBJECT_NODES:
@@ -917,6 +1070,14 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       if (!(this_present_name && that_present_name))
         return false;
       if (!this.name.equals(that.name))
+        return false;
+    }
+    boolean this_present_img_key = true && this.isSetImg_key();
+    boolean that_present_img_key = true && that.isSetImg_key();
+    if (this_present_img_key || that_present_img_key) {
+      if (!(this_present_img_key && that_present_img_key))
+        return false;
+      if (!this.img_key.equals(that.img_key))
         return false;
     }
     boolean this_present_pid = true;
@@ -999,12 +1160,28 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       if (this.status != that.status)
         return false;
     }
+    boolean this_present_deleted = true;
+    boolean that_present_deleted = true;
+    if (this_present_deleted || that_present_deleted) {
+      if (!(this_present_deleted && that_present_deleted))
+        return false;
+      if (this.deleted != that.deleted)
+        return false;
+    }
     boolean this_present_path = true && this.isSetPath();
     boolean that_present_path = true && that.isSetPath();
     if (this_present_path || that_present_path) {
       if (!(this_present_path && that_present_path))
         return false;
       if (!this.path.equals(that.path))
+        return false;
+    }
+    boolean this_present_attributes = true && this.isSetAttributes();
+    boolean that_present_attributes = true && that.isSetAttributes();
+    if (this_present_attributes || that_present_attributes) {
+      if (!(this_present_attributes && that_present_attributes))
+        return false;
+      if (!this.attributes.equals(that.attributes))
         return false;
     }
     boolean this_present_displayIds = true && this.isSetDisplayIds();
@@ -1038,6 +1215,10 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     builder.append(present_name);
     if (present_name)
       builder.append(name);
+    boolean present_img_key = true && (isSetImg_key());
+    builder.append(present_img_key);
+    if (present_img_key)
+      builder.append(img_key);
     boolean present_pid = true;
     builder.append(present_pid);
     if (present_pid)
@@ -1078,10 +1259,18 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     builder.append(present_status);
     if (present_status)
       builder.append(status);
+    boolean present_deleted = true;
+    builder.append(present_deleted);
+    if (present_deleted)
+      builder.append(deleted);
     boolean present_path = true && (isSetPath());
     builder.append(present_path);
     if (present_path)
       builder.append(path);
+    boolean present_attributes = true && (isSetAttributes());
+    builder.append(present_attributes);
+    if (present_attributes)
+      builder.append(attributes);
     boolean present_displayIds = true && (isSetDisplayIds());
     builder.append(present_displayIds);
     if (present_displayIds)
@@ -1117,6 +1306,16 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     }
     if (isSetName()) {
       lastComparison = TBaseHelper.compareTo(this.name, typedOther.name);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetImg_key()).compareTo(typedOther.isSetImg_key());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetImg_key()) {
+      lastComparison = TBaseHelper.compareTo(this.img_key, typedOther.img_key);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1221,12 +1420,32 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetDeleted()).compareTo(typedOther.isSetDeleted());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetDeleted()) {
+      lastComparison = TBaseHelper.compareTo(this.deleted, typedOther.deleted);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     lastComparison = Boolean.valueOf(isSetPath()).compareTo(typedOther.isSetPath());
     if (lastComparison != 0) {
       return lastComparison;
     }
     if (isSetPath()) {
       lastComparison = TBaseHelper.compareTo(this.path, typedOther.path);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetAttributes()).compareTo(typedOther.isSetAttributes());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAttributes()) {
+      lastComparison = TBaseHelper.compareTo(this.attributes, typedOther.attributes);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1284,7 +1503,14 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // PID
+        case 3: // IMG_KEY
+          if (field.type == TType.STRING) {
+            this.img_key = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 4: // PID
           if (field.type == TType.I32) {
             this.pid = iprot.readI32();
             setPidIsSet(true);
@@ -1292,7 +1518,7 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 4: // SORTED
+        case 5: // SORTED
           if (field.type == TType.I32) {
             this.sorted = iprot.readI32();
             setSortedIsSet(true);
@@ -1300,7 +1526,7 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 5: // LEVEL
+        case 6: // LEVEL
           if (field.type == TType.I32) {
             this.level = iprot.readI32();
             setLevelIsSet(true);
@@ -1308,7 +1534,7 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 6: // IS_LEAF
+        case 7: // IS_LEAF
           if (field.type == TType.I32) {
             this.isLeaf = iprot.readI32();
             setIsLeafIsSet(true);
@@ -1316,21 +1542,21 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 7: // DEMO
+        case 8: // DEMO
           if (field.type == TType.STRING) {
             this.demo = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 8: // CREATE_TIME
+        case 9: // CREATE_TIME
           if (field.type == TType.STRING) {
             this.createTime = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 9: // CREATOR
+        case 10: // CREATOR
           if (field.type == TType.I32) {
             this.creator = iprot.readI32();
             setCreatorIsSet(true);
@@ -1338,14 +1564,14 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 10: // UPDATE_TIME
+        case 11: // UPDATE_TIME
           if (field.type == TType.STRING) {
             this.updateTime = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 11: // UPDATER
+        case 12: // UPDATER
           if (field.type == TType.I32) {
             this.updater = iprot.readI32();
             setUpdaterIsSet(true);
@@ -1353,7 +1579,7 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 12: // STATUS
+        case 13: // STATUS
           if (field.type == TType.I32) {
             this.status = iprot.readI32();
             setStatusIsSet(true);
@@ -1361,21 +1587,36 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 13: // PATH
+        case 14: // DELETED
+          if (field.type == TType.I32) {
+            this.deleted = iprot.readI32();
+            setDeletedIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 15: // PATH
           if (field.type == TType.STRING) {
             this.path = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 14: // DISPLAY_IDS
+        case 16: // ATTRIBUTES
+          if (field.type == TType.STRING) {
+            this.attributes = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 17: // DISPLAY_IDS
           if (field.type == TType.STRING) {
             this.displayIds = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 15: // SUBJECT_NODES
+        case 18: // SUBJECT_NODES
           if (field.type == TType.LIST) {
             {
             TList _list0 = iprot.readListBegin();
@@ -1416,6 +1657,11 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       oprot.writeString(this.name);
       oprot.writeFieldEnd();
     }
+    if (this.img_key != null) {
+      oprot.writeFieldBegin(IMG_KEY_FIELD_DESC);
+      oprot.writeString(this.img_key);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldBegin(PID_FIELD_DESC);
     oprot.writeI32(this.pid);
     oprot.writeFieldEnd();
@@ -1452,12 +1698,20 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     oprot.writeFieldBegin(STATUS_FIELD_DESC);
     oprot.writeI32(this.status);
     oprot.writeFieldEnd();
+    oprot.writeFieldBegin(DELETED_FIELD_DESC);
+    oprot.writeI32(this.deleted);
+    oprot.writeFieldEnd();
     if (this.path != null) {
       if (isSetPath()) {
         oprot.writeFieldBegin(PATH_FIELD_DESC);
         oprot.writeString(this.path);
         oprot.writeFieldEnd();
       }
+    }
+    if (this.attributes != null) {
+      oprot.writeFieldBegin(ATTRIBUTES_FIELD_DESC);
+      oprot.writeString(this.attributes);
+      oprot.writeFieldEnd();
     }
     if (this.displayIds != null) {
       if (isSetDisplayIds()) {
@@ -1497,6 +1751,14 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       sb.append("null");
     } else {
       sb.append(this.name);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("img_key:");
+    if (this.img_key == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.img_key);
     }
     first = false;
     if (!first) sb.append(", ");
@@ -1551,6 +1813,10 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
     sb.append("status:");
     sb.append(this.status);
     first = false;
+    if (!first) sb.append(", ");
+    sb.append("deleted:");
+    sb.append(this.deleted);
+    first = false;
     if (isSetPath()) {
       if (!first) sb.append(", ");
       sb.append("path:");
@@ -1561,6 +1827,14 @@ public class SubjectInfo implements TBase<SubjectInfo, SubjectInfo._Fields>, jav
       }
       first = false;
       }
+    if (!first) sb.append(", ");
+    sb.append("attributes:");
+    if (this.attributes == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.attributes);
+    }
+    first = false;
     if (isSetDisplayIds()) {
       if (!first) sb.append(", ");
       sb.append("displayIds:");

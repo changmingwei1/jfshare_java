@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.subject;
+package com.jfshare.finagle.thrift.result;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -29,20 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("SubjectTreeResult");
+public class BoolResult implements TBase<BoolResult, BoolResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("BoolResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField SUBJECT_NODES_FIELD_DESC = new TField("subjectNodes", TType.LIST, (short)2);
+  private static final TField VALUE_FIELD_DESC = new TField("value", TType.BOOL, (short)2);
 
 
-  public com.jfshare.finagle.thrift.result.Result result;
-  public List<SubjectNode> subjectNodes;
+  public Result result;
+  public boolean value;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    SUBJECT_NODES((short)2, "subjectNodes");
+    VALUE((short)2, "value");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -59,8 +59,8 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // SUBJECT_NODES
-  	return SUBJECT_NODES;
+        case 2: // VALUE
+  	return VALUE;
         default:
   	return null;
       }
@@ -102,63 +102,59 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
 
 
   // isset id assignments
+  private static final int __VALUE_ISSET_ID = 0;
+  private BitSet __isset_bit_vector = new BitSet(1);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.SUBJECT_NODES, new FieldMetaData("subjectNodes", TFieldRequirementType.DEFAULT,
-      new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, SubjectNode.class))));
+      new StructMetaData(TType.STRUCT, Result.class)));
+    tmpMap.put(_Fields.VALUE, new FieldMetaData("value", TFieldRequirementType.OPTIONAL,
+      new FieldValueMetaData(TType.BOOL)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(SubjectTreeResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(BoolResult.class, metaDataMap);
   }
 
 
-  public SubjectTreeResult() {
+  public BoolResult() {
   }
 
-  public SubjectTreeResult(
-    com.jfshare.finagle.thrift.result.Result result,
-    List<SubjectNode> subjectNodes)
+  public BoolResult(
+    Result result)
   {
     this();
     this.result = result;
-    this.subjectNodes = subjectNodes;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public SubjectTreeResult(SubjectTreeResult other) {
+  public BoolResult(BoolResult other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetResult()) {
-      this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
+      this.result = new Result(other.result);
     }
-    if (other.isSetSubjectNodes()) {
-      List<SubjectNode> __this__subjectNodes = new ArrayList<SubjectNode>();
-      for (SubjectNode other_element : other.subjectNodes) {
-        __this__subjectNodes.add(new SubjectNode(other_element));
-      }
-      this.subjectNodes = __this__subjectNodes;
-    }
+    this.value = other.value;
   }
 
-  public SubjectTreeResult deepCopy() {
-    return new SubjectTreeResult(this);
+  public BoolResult deepCopy() {
+    return new BoolResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    this.subjectNodes = null;
+    setValueIsSet(false);
+    this.value = false;
   }
 
-  public com.jfshare.finagle.thrift.result.Result getResult() {
+  public Result getResult() {
     return this.result;
   }
 
-  public SubjectTreeResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public BoolResult setResult(Result result) {
     this.result = result;
     
     return this;
@@ -179,44 +175,28 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
     }
   }
 
-  public int getSubjectNodesSize() {
-    return (this.subjectNodes == null) ? 0 : this.subjectNodes.size();
+  public boolean isValue() {
+    return this.value;
   }
 
-  public java.util.Iterator<SubjectNode> getSubjectNodesIterator() {
-    return (this.subjectNodes == null) ? null : this.subjectNodes.iterator();
-  }
+  public BoolResult setValue(boolean value) {
+    this.value = value;
+    setValueIsSet(true);
 
-  public void addToSubjectNodes(SubjectNode elem) {
-    if (this.subjectNodes == null) {
-      this.subjectNodes = new ArrayList<SubjectNode>();
-    }
-    this.subjectNodes.add(elem);
-  }
-
-  public List<SubjectNode> getSubjectNodes() {
-    return this.subjectNodes;
-  }
-
-  public SubjectTreeResult setSubjectNodes(List<SubjectNode> subjectNodes) {
-    this.subjectNodes = subjectNodes;
-    
     return this;
   }
 
-  public void unsetSubjectNodes() {
-    this.subjectNodes = null;
+  public void unsetValue() {
+  __isset_bit_vector.clear(__VALUE_ISSET_ID);
   }
 
-  /** Returns true if field subjectNodes is set (has been asigned a value) and false otherwise */
-  public boolean isSetSubjectNodes() {
-    return this.subjectNodes != null;
+  /** Returns true if field value is set (has been asigned a value) and false otherwise */
+  public boolean isSetValue() {
+    return __isset_bit_vector.get(__VALUE_ISSET_ID);
   }
 
-  public void setSubjectNodesIsSet(boolean value) {
-    if (!value) {
-      this.subjectNodes = null;
-    }
+  public void setValueIsSet(boolean value) {
+    __isset_bit_vector.set(__VALUE_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -225,14 +205,14 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
       if (value == null) {
         unsetResult();
       } else {
-        setResult((com.jfshare.finagle.thrift.result.Result)value);
+        setResult((Result)value);
       }
       break;
-    case SUBJECT_NODES:
+    case VALUE:
       if (value == null) {
-        unsetSubjectNodes();
+        unsetValue();
       } else {
-        setSubjectNodes((List<SubjectNode>)value);
+        setValue((Boolean)value);
       }
       break;
     }
@@ -242,8 +222,8 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
     switch (field) {
     case RESULT:
       return getResult();
-    case SUBJECT_NODES:
-      return getSubjectNodes();
+    case VALUE:
+      return new Boolean(isValue());
     }
     throw new IllegalStateException();
   }
@@ -257,8 +237,8 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
     switch (field) {
     case RESULT:
       return isSetResult();
-    case SUBJECT_NODES:
-      return isSetSubjectNodes();
+    case VALUE:
+      return isSetValue();
     }
     throw new IllegalStateException();
   }
@@ -267,12 +247,12 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof SubjectTreeResult)
-      return this.equals((SubjectTreeResult)that);
+    if (that instanceof BoolResult)
+      return this.equals((BoolResult)that);
     return false;
   }
 
-  public boolean equals(SubjectTreeResult that) {
+  public boolean equals(BoolResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -283,12 +263,12 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
       if (!this.result.equals(that.result))
         return false;
     }
-    boolean this_present_subjectNodes = true && this.isSetSubjectNodes();
-    boolean that_present_subjectNodes = true && that.isSetSubjectNodes();
-    if (this_present_subjectNodes || that_present_subjectNodes) {
-      if (!(this_present_subjectNodes && that_present_subjectNodes))
+    boolean this_present_value = true && this.isSetValue();
+    boolean that_present_value = true && that.isSetValue();
+    if (this_present_value || that_present_value) {
+      if (!(this_present_value && that_present_value))
         return false;
-      if (!this.subjectNodes.equals(that.subjectNodes))
+      if (this.value != that.value)
         return false;
     }
 
@@ -302,20 +282,20 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_subjectNodes = true && (isSetSubjectNodes());
-    builder.append(present_subjectNodes);
-    if (present_subjectNodes)
-      builder.append(subjectNodes);
+    boolean present_value = true && (isSetValue());
+    builder.append(present_value);
+    if (present_value)
+      builder.append(value);
     return builder.toHashCode();
   }
 
-  public int compareTo(SubjectTreeResult other) {
+  public int compareTo(BoolResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    SubjectTreeResult typedOther = (SubjectTreeResult)other;
+    BoolResult typedOther = (BoolResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -327,12 +307,12 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSubjectNodes()).compareTo(typedOther.isSetSubjectNodes());
+    lastComparison = Boolean.valueOf(isSetValue()).compareTo(typedOther.isSetValue());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSubjectNodes()) {
-      lastComparison = TBaseHelper.compareTo(this.subjectNodes, typedOther.subjectNodes);
+    if (isSetValue()) {
+      lastComparison = TBaseHelper.compareTo(this.value, typedOther.value);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -357,26 +337,16 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
       switch (field.id) {
         case 1: // RESULT
           if (field.type == TType.STRUCT) {
-            this.result = new com.jfshare.finagle.thrift.result.Result();
+            this.result = new Result();
             this.result.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // SUBJECT_NODES
-          if (field.type == TType.LIST) {
-            {
-            TList _list12 = iprot.readListBegin();
-            this.subjectNodes = new ArrayList<SubjectNode>(_list12.size);
-            for (int _i13 = 0; _i13 < _list12.size; ++_i13)
-            {
-              SubjectNode _elem14;
-              _elem14 = new SubjectNode();
-              _elem14.read(iprot);
-              this.subjectNodes.add(_elem14);
-            }
-            iprot.readListEnd();
-            }
+        case 2: // VALUE
+          if (field.type == TType.BOOL) {
+            this.value = iprot.readBool();
+            setValueIsSet(true);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -401,16 +371,9 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.subjectNodes != null) {
-      oprot.writeFieldBegin(SUBJECT_NODES_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.subjectNodes.size()));
-        for (SubjectNode _iter15 : this.subjectNodes)
-        {
-          _iter15.write(oprot);
-        }
-        oprot.writeListEnd();
-      }
+    if (isSetValue()) {
+      oprot.writeFieldBegin(VALUE_FIELD_DESC);
+      oprot.writeBool(this.value);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -419,7 +382,7 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("SubjectTreeResult(");
+    StringBuilder sb = new StringBuilder("BoolResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -428,14 +391,12 @@ public class SubjectTreeResult implements TBase<SubjectTreeResult, SubjectTreeRe
       sb.append(this.result);
     }
     first = false;
-    if (!first) sb.append(", ");
-    sb.append("subjectNodes:");
-    if (this.subjectNodes == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.subjectNodes);
-    }
-    first = false;
+    if (isSetValue()) {
+      if (!first) sb.append(", ");
+      sb.append("value:");
+      sb.append(this.value);
+      first = false;
+      }
     sb.append(")");
     return sb.toString();
   }

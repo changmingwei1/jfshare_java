@@ -29,17 +29,16 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class DisplaySubjectChannelQueryParam implements TBase<DisplaySubjectChannelQueryParam, DisplaySubjectChannelQueryParam._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("DisplaySubjectChannelQueryParam");
+public class SubjectAttributeQueryParam implements TBase<SubjectAttributeQueryParam, SubjectAttributeQueryParam._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("SubjectAttributeQueryParam");
 
-  private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)1);
+  
 
 
-  public String name;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    NAME((short)1, "name");
+    ;
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -54,8 +53,6 @@ public class DisplaySubjectChannelQueryParam implements TBase<DisplaySubjectChan
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // NAME
-  	return NAME;
         default:
   	return null;
       }
@@ -96,87 +93,40 @@ public class DisplaySubjectChannelQueryParam implements TBase<DisplaySubjectChan
   }
 
 
-  // isset id assignments
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(DisplaySubjectChannelQueryParam.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(SubjectAttributeQueryParam.class, metaDataMap);
   }
 
 
-  public DisplaySubjectChannelQueryParam() {
+  public SubjectAttributeQueryParam() {
   }
 
-  public DisplaySubjectChannelQueryParam(
-    String name)
-  {
-    this();
-    this.name = name;
-  }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public DisplaySubjectChannelQueryParam(DisplaySubjectChannelQueryParam other) {
-    if (other.isSetName()) {
-      this.name = other.name;
-    }
+  public SubjectAttributeQueryParam(SubjectAttributeQueryParam other) {
   }
 
-  public DisplaySubjectChannelQueryParam deepCopy() {
-    return new DisplaySubjectChannelQueryParam(this);
+  public SubjectAttributeQueryParam deepCopy() {
+    return new SubjectAttributeQueryParam(this);
   }
 
   @Override
   public void clear() {
-    this.name = null;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public DisplaySubjectChannelQueryParam setName(String name) {
-    this.name = name;
-    
-    return this;
-  }
-
-  public void unsetName() {
-    this.name = null;
-  }
-
-  /** Returns true if field name is set (has been asigned a value) and false otherwise */
-  public boolean isSetName() {
-    return this.name != null;
-  }
-
-  public void setNameIsSet(boolean value) {
-    if (!value) {
-      this.name = null;
-    }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case NAME:
-      if (value == null) {
-        unsetName();
-      } else {
-        setName((String)value);
-      }
-      break;
     }
   }
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case NAME:
-      return getName();
     }
     throw new IllegalStateException();
   }
@@ -188,8 +138,6 @@ public class DisplaySubjectChannelQueryParam implements TBase<DisplaySubjectChan
     }
 
     switch (field) {
-    case NAME:
-      return isSetName();
     }
     throw new IllegalStateException();
   }
@@ -198,22 +146,14 @@ public class DisplaySubjectChannelQueryParam implements TBase<DisplaySubjectChan
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof DisplaySubjectChannelQueryParam)
-      return this.equals((DisplaySubjectChannelQueryParam)that);
+    if (that instanceof SubjectAttributeQueryParam)
+      return this.equals((SubjectAttributeQueryParam)that);
     return false;
   }
 
-  public boolean equals(DisplaySubjectChannelQueryParam that) {
+  public boolean equals(SubjectAttributeQueryParam that) {
     if (that == null)
       return false;
-    boolean this_present_name = true && this.isSetName();
-    boolean that_present_name = true && that.isSetName();
-    if (this_present_name || that_present_name) {
-      if (!(this_present_name && that_present_name))
-        return false;
-      if (!this.name.equals(that.name))
-        return false;
-    }
 
     return true;
   }
@@ -221,31 +161,17 @@ public class DisplaySubjectChannelQueryParam implements TBase<DisplaySubjectChan
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_name = true && (isSetName());
-    builder.append(present_name);
-    if (present_name)
-      builder.append(name);
     return builder.toHashCode();
   }
 
-  public int compareTo(DisplaySubjectChannelQueryParam other) {
+  public int compareTo(SubjectAttributeQueryParam other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    DisplaySubjectChannelQueryParam typedOther = (DisplaySubjectChannelQueryParam)other;
+    SubjectAttributeQueryParam typedOther = (SubjectAttributeQueryParam)other;
 
-    lastComparison = Boolean.valueOf(isSetName()).compareTo(typedOther.isSetName());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetName()) {
-      lastComparison = TBaseHelper.compareTo(this.name, typedOther.name);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     return 0;
   }
 
@@ -264,13 +190,6 @@ public class DisplaySubjectChannelQueryParam implements TBase<DisplaySubjectChan
         break;
       }
       switch (field.id) {
-        case 1: // NAME
-          if (field.type == TType.STRING) {
-            this.name = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -286,26 +205,14 @@ public class DisplaySubjectChannelQueryParam implements TBase<DisplaySubjectChan
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.name != null) {
-      oprot.writeFieldBegin(NAME_FIELD_DESC);
-      oprot.writeString(this.name);
-      oprot.writeFieldEnd();
-    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("DisplaySubjectChannelQueryParam(");
+    StringBuilder sb = new StringBuilder("SubjectAttributeQueryParam(");
     boolean first = true;
-    sb.append("name:");
-    if (this.name == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.name);
-    }
-    first = false;
     sb.append(")");
     return sb.toString();
   }

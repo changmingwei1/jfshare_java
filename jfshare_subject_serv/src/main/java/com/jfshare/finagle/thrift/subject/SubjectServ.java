@@ -6,13 +6,17 @@
 package com.jfshare.finagle.thrift.subject;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
 import java.util.BitSet;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +65,11 @@ public class SubjectServ {
     public com.jfshare.finagle.thrift.result.Result addRelation(SubjectRefDisplayInfo relation) throws TException;
     public com.jfshare.finagle.thrift.result.Result deleteRelation(SubjectRefDisplayInfo relation) throws TException;
     public SubjectQueryResult querySubjectsRelation(int displayId, Page page) throws TException;
+    public com.jfshare.finagle.thrift.result.Result addSubjectAttribute(SubjectAttribute atrribute) throws TException;
+    public com.jfshare.finagle.thrift.result.Result updateSubjectAttribute(SubjectAttribute atrribute) throws TException;
+    public com.jfshare.finagle.thrift.result.Result deleteSubjectAttribute(SubjectAttribute atrribute) throws TException;
+    public com.jfshare.finagle.thrift.result.Result deleteSubjectAttributeBatch(List<SubjectAttribute> atrributeList) throws TException;
+    public SubjectAttributeResult querySubjectAttribute(SubjectAttributeQueryParam param) throws TException;
   }
 
   public interface AsyncIface {
@@ -92,6 +101,11 @@ public class SubjectServ {
     public void addRelation(SubjectRefDisplayInfo relation, AsyncMethodCallback<AsyncClient.addRelation_call> resultHandler) throws TException;
     public void deleteRelation(SubjectRefDisplayInfo relation, AsyncMethodCallback<AsyncClient.deleteRelation_call> resultHandler) throws TException;
     public void querySubjectsRelation(int displayId, Page page, AsyncMethodCallback<AsyncClient.querySubjectsRelation_call> resultHandler) throws TException;
+    public void addSubjectAttribute(SubjectAttribute atrribute, AsyncMethodCallback<AsyncClient.addSubjectAttribute_call> resultHandler) throws TException;
+    public void updateSubjectAttribute(SubjectAttribute atrribute, AsyncMethodCallback<AsyncClient.updateSubjectAttribute_call> resultHandler) throws TException;
+    public void deleteSubjectAttribute(SubjectAttribute atrribute, AsyncMethodCallback<AsyncClient.deleteSubjectAttribute_call> resultHandler) throws TException;
+    public void deleteSubjectAttributeBatch(List<SubjectAttribute> atrributeList, AsyncMethodCallback<AsyncClient.deleteSubjectAttributeBatch_call> resultHandler) throws TException;
+    public void querySubjectAttribute(SubjectAttributeQueryParam param, AsyncMethodCallback<AsyncClient.querySubjectAttribute_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
@@ -123,6 +137,11 @@ public class SubjectServ {
     public Future<com.jfshare.finagle.thrift.result.Result> addRelation(SubjectRefDisplayInfo relation);
     public Future<com.jfshare.finagle.thrift.result.Result> deleteRelation(SubjectRefDisplayInfo relation);
     public Future<SubjectQueryResult> querySubjectsRelation(int displayId, Page page);
+    public Future<com.jfshare.finagle.thrift.result.Result> addSubjectAttribute(SubjectAttribute atrribute);
+    public Future<com.jfshare.finagle.thrift.result.Result> updateSubjectAttribute(SubjectAttribute atrribute);
+    public Future<com.jfshare.finagle.thrift.result.Result> deleteSubjectAttribute(SubjectAttribute atrribute);
+    public Future<com.jfshare.finagle.thrift.result.Result> deleteSubjectAttributeBatch(List<SubjectAttribute> atrributeList);
+    public Future<SubjectAttributeResult> querySubjectAttribute(SubjectAttributeQueryParam param);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -1144,6 +1163,181 @@ public class SubjectServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "querySubjectsRelation failed: unknown result");
     }
+    public com.jfshare.finagle.thrift.result.Result addSubjectAttribute(SubjectAttribute atrribute) throws TException
+    {
+      send_addSubjectAttribute(atrribute);
+      return recv_addSubjectAttribute();
+    }
+
+    public void send_addSubjectAttribute(SubjectAttribute atrribute) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("addSubjectAttribute", TMessageType.CALL, ++seqid_));
+      addSubjectAttribute_args args = new addSubjectAttribute_args();
+      args.setAtrribute(atrribute);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_addSubjectAttribute() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "addSubjectAttribute failed: out of sequence response");
+      }
+      addSubjectAttribute_result result = new addSubjectAttribute_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "addSubjectAttribute failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result updateSubjectAttribute(SubjectAttribute atrribute) throws TException
+    {
+      send_updateSubjectAttribute(atrribute);
+      return recv_updateSubjectAttribute();
+    }
+
+    public void send_updateSubjectAttribute(SubjectAttribute atrribute) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("updateSubjectAttribute", TMessageType.CALL, ++seqid_));
+      updateSubjectAttribute_args args = new updateSubjectAttribute_args();
+      args.setAtrribute(atrribute);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_updateSubjectAttribute() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "updateSubjectAttribute failed: out of sequence response");
+      }
+      updateSubjectAttribute_result result = new updateSubjectAttribute_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "updateSubjectAttribute failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result deleteSubjectAttribute(SubjectAttribute atrribute) throws TException
+    {
+      send_deleteSubjectAttribute(atrribute);
+      return recv_deleteSubjectAttribute();
+    }
+
+    public void send_deleteSubjectAttribute(SubjectAttribute atrribute) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("deleteSubjectAttribute", TMessageType.CALL, ++seqid_));
+      deleteSubjectAttribute_args args = new deleteSubjectAttribute_args();
+      args.setAtrribute(atrribute);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_deleteSubjectAttribute() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "deleteSubjectAttribute failed: out of sequence response");
+      }
+      deleteSubjectAttribute_result result = new deleteSubjectAttribute_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "deleteSubjectAttribute failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result deleteSubjectAttributeBatch(List<SubjectAttribute> atrributeList) throws TException
+    {
+      send_deleteSubjectAttributeBatch(atrributeList);
+      return recv_deleteSubjectAttributeBatch();
+    }
+
+    public void send_deleteSubjectAttributeBatch(List<SubjectAttribute> atrributeList) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("deleteSubjectAttributeBatch", TMessageType.CALL, ++seqid_));
+      deleteSubjectAttributeBatch_args args = new deleteSubjectAttributeBatch_args();
+      args.setAtrributeList(atrributeList);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_deleteSubjectAttributeBatch() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "deleteSubjectAttributeBatch failed: out of sequence response");
+      }
+      deleteSubjectAttributeBatch_result result = new deleteSubjectAttributeBatch_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "deleteSubjectAttributeBatch failed: unknown result");
+    }
+    public SubjectAttributeResult querySubjectAttribute(SubjectAttributeQueryParam param) throws TException
+    {
+      send_querySubjectAttribute(param);
+      return recv_querySubjectAttribute();
+    }
+
+    public void send_querySubjectAttribute(SubjectAttributeQueryParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("querySubjectAttribute", TMessageType.CALL, ++seqid_));
+      querySubjectAttribute_args args = new querySubjectAttribute_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public SubjectAttributeResult recv_querySubjectAttribute() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "querySubjectAttribute failed: out of sequence response");
+      }
+      querySubjectAttribute_result result = new querySubjectAttribute_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "querySubjectAttribute failed: unknown result");
+    }
   }
 
   public static class AsyncClient extends TAsyncClient implements AsyncIface {
@@ -2037,6 +2231,161 @@ public class SubjectServ {
         return (new Client(prot)).recv_querySubjectsRelation();
       }
      }
+    public void addSubjectAttribute(SubjectAttribute atrribute, AsyncMethodCallback<addSubjectAttribute_call> resultHandler) throws TException {
+      checkReady();
+      addSubjectAttribute_call method_call = new addSubjectAttribute_call(atrribute, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class addSubjectAttribute_call extends TAsyncMethodCall {
+      private SubjectAttribute atrribute;
+
+      public addSubjectAttribute_call(SubjectAttribute atrribute, AsyncMethodCallback<addSubjectAttribute_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.atrribute = atrribute;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("addSubjectAttribute", TMessageType.CALL, 0));
+        addSubjectAttribute_args args = new addSubjectAttribute_args();
+        args.setAtrribute(atrribute);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_addSubjectAttribute();
+      }
+     }
+    public void updateSubjectAttribute(SubjectAttribute atrribute, AsyncMethodCallback<updateSubjectAttribute_call> resultHandler) throws TException {
+      checkReady();
+      updateSubjectAttribute_call method_call = new updateSubjectAttribute_call(atrribute, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class updateSubjectAttribute_call extends TAsyncMethodCall {
+      private SubjectAttribute atrribute;
+
+      public updateSubjectAttribute_call(SubjectAttribute atrribute, AsyncMethodCallback<updateSubjectAttribute_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.atrribute = atrribute;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("updateSubjectAttribute", TMessageType.CALL, 0));
+        updateSubjectAttribute_args args = new updateSubjectAttribute_args();
+        args.setAtrribute(atrribute);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_updateSubjectAttribute();
+      }
+     }
+    public void deleteSubjectAttribute(SubjectAttribute atrribute, AsyncMethodCallback<deleteSubjectAttribute_call> resultHandler) throws TException {
+      checkReady();
+      deleteSubjectAttribute_call method_call = new deleteSubjectAttribute_call(atrribute, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class deleteSubjectAttribute_call extends TAsyncMethodCall {
+      private SubjectAttribute atrribute;
+
+      public deleteSubjectAttribute_call(SubjectAttribute atrribute, AsyncMethodCallback<deleteSubjectAttribute_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.atrribute = atrribute;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("deleteSubjectAttribute", TMessageType.CALL, 0));
+        deleteSubjectAttribute_args args = new deleteSubjectAttribute_args();
+        args.setAtrribute(atrribute);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_deleteSubjectAttribute();
+      }
+     }
+    public void deleteSubjectAttributeBatch(List<SubjectAttribute> atrributeList, AsyncMethodCallback<deleteSubjectAttributeBatch_call> resultHandler) throws TException {
+      checkReady();
+      deleteSubjectAttributeBatch_call method_call = new deleteSubjectAttributeBatch_call(atrributeList, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class deleteSubjectAttributeBatch_call extends TAsyncMethodCall {
+      private List<SubjectAttribute> atrributeList;
+
+      public deleteSubjectAttributeBatch_call(List<SubjectAttribute> atrributeList, AsyncMethodCallback<deleteSubjectAttributeBatch_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.atrributeList = atrributeList;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("deleteSubjectAttributeBatch", TMessageType.CALL, 0));
+        deleteSubjectAttributeBatch_args args = new deleteSubjectAttributeBatch_args();
+        args.setAtrributeList(atrributeList);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_deleteSubjectAttributeBatch();
+      }
+     }
+    public void querySubjectAttribute(SubjectAttributeQueryParam param, AsyncMethodCallback<querySubjectAttribute_call> resultHandler) throws TException {
+      checkReady();
+      querySubjectAttribute_call method_call = new querySubjectAttribute_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class querySubjectAttribute_call extends TAsyncMethodCall {
+      private SubjectAttributeQueryParam param;
+
+      public querySubjectAttribute_call(SubjectAttributeQueryParam param, AsyncMethodCallback<querySubjectAttribute_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("querySubjectAttribute", TMessageType.CALL, 0));
+        querySubjectAttribute_args args = new querySubjectAttribute_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public SubjectAttributeResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_querySubjectAttribute();
+      }
+     }
    }
 
 
@@ -2891,6 +3240,156 @@ public class SubjectServ {
         return Future.exception(e);
       }
     }
+    public Future<com.jfshare.finagle.thrift.result.Result> addSubjectAttribute(SubjectAttribute atrribute) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("addSubjectAttribute", TMessageType.CALL, 0));
+        addSubjectAttribute_args __args__ = new addSubjectAttribute_args();
+        __args__.setAtrribute(atrribute);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_addSubjectAttribute());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> updateSubjectAttribute(SubjectAttribute atrribute) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("updateSubjectAttribute", TMessageType.CALL, 0));
+        updateSubjectAttribute_args __args__ = new updateSubjectAttribute_args();
+        __args__.setAtrribute(atrribute);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_updateSubjectAttribute());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> deleteSubjectAttribute(SubjectAttribute atrribute) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("deleteSubjectAttribute", TMessageType.CALL, 0));
+        deleteSubjectAttribute_args __args__ = new deleteSubjectAttribute_args();
+        __args__.setAtrribute(atrribute);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_deleteSubjectAttribute());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> deleteSubjectAttributeBatch(List<SubjectAttribute> atrributeList) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("deleteSubjectAttributeBatch", TMessageType.CALL, 0));
+        deleteSubjectAttributeBatch_args __args__ = new deleteSubjectAttributeBatch_args();
+        __args__.setAtrributeList(atrributeList);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_deleteSubjectAttributeBatch());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<SubjectAttributeResult> querySubjectAttribute(SubjectAttributeQueryParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("querySubjectAttribute", TMessageType.CALL, 0));
+        querySubjectAttribute_args __args__ = new querySubjectAttribute_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<SubjectAttributeResult>>() {
+          public Future<SubjectAttributeResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_querySubjectAttribute());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
   }
 
   public static class Processor implements TProcessor {
@@ -2926,6 +3425,11 @@ public class SubjectServ {
       processMap_.put("addRelation", new addRelation());
       processMap_.put("deleteRelation", new deleteRelation());
       processMap_.put("querySubjectsRelation", new querySubjectsRelation());
+      processMap_.put("addSubjectAttribute", new addSubjectAttribute());
+      processMap_.put("updateSubjectAttribute", new updateSubjectAttribute());
+      processMap_.put("deleteSubjectAttribute", new deleteSubjectAttribute());
+      processMap_.put("deleteSubjectAttributeBatch", new deleteSubjectAttributeBatch());
+      processMap_.put("querySubjectAttribute", new querySubjectAttribute());
     }
 
     protected static interface ProcessFunction {
@@ -3648,6 +4152,131 @@ public class SubjectServ {
         result.success = iface_.querySubjectsRelation(args.displayId, args.page);
         
         oprot.writeMessageBegin(new TMessage("querySubjectsRelation", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class addSubjectAttribute implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        addSubjectAttribute_args args = new addSubjectAttribute_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("addSubjectAttribute", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        addSubjectAttribute_result result = new addSubjectAttribute_result();
+        result.success = iface_.addSubjectAttribute(args.atrribute);
+        
+        oprot.writeMessageBegin(new TMessage("addSubjectAttribute", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class updateSubjectAttribute implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        updateSubjectAttribute_args args = new updateSubjectAttribute_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("updateSubjectAttribute", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        updateSubjectAttribute_result result = new updateSubjectAttribute_result();
+        result.success = iface_.updateSubjectAttribute(args.atrribute);
+        
+        oprot.writeMessageBegin(new TMessage("updateSubjectAttribute", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class deleteSubjectAttribute implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        deleteSubjectAttribute_args args = new deleteSubjectAttribute_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("deleteSubjectAttribute", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        deleteSubjectAttribute_result result = new deleteSubjectAttribute_result();
+        result.success = iface_.deleteSubjectAttribute(args.atrribute);
+        
+        oprot.writeMessageBegin(new TMessage("deleteSubjectAttribute", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class deleteSubjectAttributeBatch implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        deleteSubjectAttributeBatch_args args = new deleteSubjectAttributeBatch_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("deleteSubjectAttributeBatch", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        deleteSubjectAttributeBatch_result result = new deleteSubjectAttributeBatch_result();
+        result.success = iface_.deleteSubjectAttributeBatch(args.atrributeList);
+        
+        oprot.writeMessageBegin(new TMessage("deleteSubjectAttributeBatch", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class querySubjectAttribute implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        querySubjectAttribute_args args = new querySubjectAttribute_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("querySubjectAttribute", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        querySubjectAttribute_result result = new querySubjectAttribute_result();
+        result.success = iface_.querySubjectAttribute(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("querySubjectAttribute", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -5520,6 +6149,341 @@ public class SubjectServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("querySubjectsRelation", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("addSubjectAttribute", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          addSubjectAttribute_args args = new addSubjectAttribute_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("addSubjectAttribute", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.addSubjectAttribute(args.atrribute);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                addSubjectAttribute_result result = new addSubjectAttribute_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("addSubjectAttribute", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("updateSubjectAttribute", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          updateSubjectAttribute_args args = new updateSubjectAttribute_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("updateSubjectAttribute", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.updateSubjectAttribute(args.atrribute);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                updateSubjectAttribute_result result = new updateSubjectAttribute_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("updateSubjectAttribute", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("deleteSubjectAttribute", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          deleteSubjectAttribute_args args = new deleteSubjectAttribute_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("deleteSubjectAttribute", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.deleteSubjectAttribute(args.atrribute);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                deleteSubjectAttribute_result result = new deleteSubjectAttribute_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("deleteSubjectAttribute", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("deleteSubjectAttributeBatch", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          deleteSubjectAttributeBatch_args args = new deleteSubjectAttributeBatch_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("deleteSubjectAttributeBatch", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.deleteSubjectAttributeBatch(args.atrributeList);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                deleteSubjectAttributeBatch_result result = new deleteSubjectAttributeBatch_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("deleteSubjectAttributeBatch", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("querySubjectAttribute", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          querySubjectAttribute_args args = new querySubjectAttribute_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("querySubjectAttribute", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<SubjectAttributeResult> future;
+          try {
+            future = iface.querySubjectAttribute(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<SubjectAttributeResult, Future<byte[]>>() {
+              public Future<byte[]> apply(SubjectAttributeResult value) {
+                querySubjectAttribute_result result = new querySubjectAttribute_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("querySubjectAttribute", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -21748,6 +22712,2908 @@ public class SubjectServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("querySubjectsRelation_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class addSubjectAttribute_args implements TBase<addSubjectAttribute_args, addSubjectAttribute_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("addSubjectAttribute_args");
+
+  private static final TField ATRRIBUTE_FIELD_DESC = new TField("atrribute", TType.STRUCT, (short)1);
+
+
+  public SubjectAttribute atrribute;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    ATRRIBUTE((short)1, "atrribute");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // ATRRIBUTE
+  	return ATRRIBUTE;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.ATRRIBUTE, new FieldMetaData("atrribute", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, SubjectAttribute.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(addSubjectAttribute_args.class, metaDataMap);
+  }
+
+
+  public addSubjectAttribute_args() {
+  }
+
+  public addSubjectAttribute_args(
+    SubjectAttribute atrribute)
+  {
+    this();
+    this.atrribute = atrribute;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public addSubjectAttribute_args(addSubjectAttribute_args other) {
+    if (other.isSetAtrribute()) {
+      this.atrribute = new SubjectAttribute(other.atrribute);
+    }
+  }
+
+  public addSubjectAttribute_args deepCopy() {
+    return new addSubjectAttribute_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.atrribute = null;
+  }
+
+  public SubjectAttribute getAtrribute() {
+    return this.atrribute;
+  }
+
+  public addSubjectAttribute_args setAtrribute(SubjectAttribute atrribute) {
+    this.atrribute = atrribute;
+    
+    return this;
+  }
+
+  public void unsetAtrribute() {
+    this.atrribute = null;
+  }
+
+  /** Returns true if field atrribute is set (has been asigned a value) and false otherwise */
+  public boolean isSetAtrribute() {
+    return this.atrribute != null;
+  }
+
+  public void setAtrributeIsSet(boolean value) {
+    if (!value) {
+      this.atrribute = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case ATRRIBUTE:
+      if (value == null) {
+        unsetAtrribute();
+      } else {
+        setAtrribute((SubjectAttribute)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case ATRRIBUTE:
+      return getAtrribute();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case ATRRIBUTE:
+      return isSetAtrribute();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof addSubjectAttribute_args)
+      return this.equals((addSubjectAttribute_args)that);
+    return false;
+  }
+
+  public boolean equals(addSubjectAttribute_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_atrribute = true && this.isSetAtrribute();
+    boolean that_present_atrribute = true && that.isSetAtrribute();
+    if (this_present_atrribute || that_present_atrribute) {
+      if (!(this_present_atrribute && that_present_atrribute))
+        return false;
+      if (!this.atrribute.equals(that.atrribute))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_atrribute = true && (isSetAtrribute());
+    builder.append(present_atrribute);
+    if (present_atrribute)
+      builder.append(atrribute);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(addSubjectAttribute_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    addSubjectAttribute_args typedOther = (addSubjectAttribute_args)other;
+
+    lastComparison = Boolean.valueOf(isSetAtrribute()).compareTo(typedOther.isSetAtrribute());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAtrribute()) {
+      lastComparison = TBaseHelper.compareTo(this.atrribute, typedOther.atrribute);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // ATRRIBUTE
+          if (field.type == TType.STRUCT) {
+            this.atrribute = new SubjectAttribute();
+            this.atrribute.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.atrribute != null) {
+      oprot.writeFieldBegin(ATRRIBUTE_FIELD_DESC);
+      this.atrribute.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("addSubjectAttribute_args(");
+    boolean first = true;
+    sb.append("atrribute:");
+    if (this.atrribute == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.atrribute);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class addSubjectAttribute_result implements TBase<addSubjectAttribute_result, addSubjectAttribute_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("addSubjectAttribute_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(addSubjectAttribute_result.class, metaDataMap);
+  }
+
+
+  public addSubjectAttribute_result() {
+  }
+
+  public addSubjectAttribute_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public addSubjectAttribute_result(addSubjectAttribute_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public addSubjectAttribute_result deepCopy() {
+    return new addSubjectAttribute_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public addSubjectAttribute_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof addSubjectAttribute_result)
+      return this.equals((addSubjectAttribute_result)that);
+    return false;
+  }
+
+  public boolean equals(addSubjectAttribute_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(addSubjectAttribute_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    addSubjectAttribute_result typedOther = (addSubjectAttribute_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("addSubjectAttribute_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class updateSubjectAttribute_args implements TBase<updateSubjectAttribute_args, updateSubjectAttribute_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("updateSubjectAttribute_args");
+
+  private static final TField ATRRIBUTE_FIELD_DESC = new TField("atrribute", TType.STRUCT, (short)1);
+
+
+  public SubjectAttribute atrribute;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    ATRRIBUTE((short)1, "atrribute");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // ATRRIBUTE
+  	return ATRRIBUTE;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.ATRRIBUTE, new FieldMetaData("atrribute", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, SubjectAttribute.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(updateSubjectAttribute_args.class, metaDataMap);
+  }
+
+
+  public updateSubjectAttribute_args() {
+  }
+
+  public updateSubjectAttribute_args(
+    SubjectAttribute atrribute)
+  {
+    this();
+    this.atrribute = atrribute;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public updateSubjectAttribute_args(updateSubjectAttribute_args other) {
+    if (other.isSetAtrribute()) {
+      this.atrribute = new SubjectAttribute(other.atrribute);
+    }
+  }
+
+  public updateSubjectAttribute_args deepCopy() {
+    return new updateSubjectAttribute_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.atrribute = null;
+  }
+
+  public SubjectAttribute getAtrribute() {
+    return this.atrribute;
+  }
+
+  public updateSubjectAttribute_args setAtrribute(SubjectAttribute atrribute) {
+    this.atrribute = atrribute;
+    
+    return this;
+  }
+
+  public void unsetAtrribute() {
+    this.atrribute = null;
+  }
+
+  /** Returns true if field atrribute is set (has been asigned a value) and false otherwise */
+  public boolean isSetAtrribute() {
+    return this.atrribute != null;
+  }
+
+  public void setAtrributeIsSet(boolean value) {
+    if (!value) {
+      this.atrribute = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case ATRRIBUTE:
+      if (value == null) {
+        unsetAtrribute();
+      } else {
+        setAtrribute((SubjectAttribute)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case ATRRIBUTE:
+      return getAtrribute();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case ATRRIBUTE:
+      return isSetAtrribute();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof updateSubjectAttribute_args)
+      return this.equals((updateSubjectAttribute_args)that);
+    return false;
+  }
+
+  public boolean equals(updateSubjectAttribute_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_atrribute = true && this.isSetAtrribute();
+    boolean that_present_atrribute = true && that.isSetAtrribute();
+    if (this_present_atrribute || that_present_atrribute) {
+      if (!(this_present_atrribute && that_present_atrribute))
+        return false;
+      if (!this.atrribute.equals(that.atrribute))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_atrribute = true && (isSetAtrribute());
+    builder.append(present_atrribute);
+    if (present_atrribute)
+      builder.append(atrribute);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(updateSubjectAttribute_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    updateSubjectAttribute_args typedOther = (updateSubjectAttribute_args)other;
+
+    lastComparison = Boolean.valueOf(isSetAtrribute()).compareTo(typedOther.isSetAtrribute());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAtrribute()) {
+      lastComparison = TBaseHelper.compareTo(this.atrribute, typedOther.atrribute);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // ATRRIBUTE
+          if (field.type == TType.STRUCT) {
+            this.atrribute = new SubjectAttribute();
+            this.atrribute.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.atrribute != null) {
+      oprot.writeFieldBegin(ATRRIBUTE_FIELD_DESC);
+      this.atrribute.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("updateSubjectAttribute_args(");
+    boolean first = true;
+    sb.append("atrribute:");
+    if (this.atrribute == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.atrribute);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class updateSubjectAttribute_result implements TBase<updateSubjectAttribute_result, updateSubjectAttribute_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("updateSubjectAttribute_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(updateSubjectAttribute_result.class, metaDataMap);
+  }
+
+
+  public updateSubjectAttribute_result() {
+  }
+
+  public updateSubjectAttribute_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public updateSubjectAttribute_result(updateSubjectAttribute_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public updateSubjectAttribute_result deepCopy() {
+    return new updateSubjectAttribute_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public updateSubjectAttribute_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof updateSubjectAttribute_result)
+      return this.equals((updateSubjectAttribute_result)that);
+    return false;
+  }
+
+  public boolean equals(updateSubjectAttribute_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(updateSubjectAttribute_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    updateSubjectAttribute_result typedOther = (updateSubjectAttribute_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("updateSubjectAttribute_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class deleteSubjectAttribute_args implements TBase<deleteSubjectAttribute_args, deleteSubjectAttribute_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("deleteSubjectAttribute_args");
+
+  private static final TField ATRRIBUTE_FIELD_DESC = new TField("atrribute", TType.STRUCT, (short)1);
+
+
+  public SubjectAttribute atrribute;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    ATRRIBUTE((short)1, "atrribute");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // ATRRIBUTE
+  	return ATRRIBUTE;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.ATRRIBUTE, new FieldMetaData("atrribute", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, SubjectAttribute.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(deleteSubjectAttribute_args.class, metaDataMap);
+  }
+
+
+  public deleteSubjectAttribute_args() {
+  }
+
+  public deleteSubjectAttribute_args(
+    SubjectAttribute atrribute)
+  {
+    this();
+    this.atrribute = atrribute;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public deleteSubjectAttribute_args(deleteSubjectAttribute_args other) {
+    if (other.isSetAtrribute()) {
+      this.atrribute = new SubjectAttribute(other.atrribute);
+    }
+  }
+
+  public deleteSubjectAttribute_args deepCopy() {
+    return new deleteSubjectAttribute_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.atrribute = null;
+  }
+
+  public SubjectAttribute getAtrribute() {
+    return this.atrribute;
+  }
+
+  public deleteSubjectAttribute_args setAtrribute(SubjectAttribute atrribute) {
+    this.atrribute = atrribute;
+    
+    return this;
+  }
+
+  public void unsetAtrribute() {
+    this.atrribute = null;
+  }
+
+  /** Returns true if field atrribute is set (has been asigned a value) and false otherwise */
+  public boolean isSetAtrribute() {
+    return this.atrribute != null;
+  }
+
+  public void setAtrributeIsSet(boolean value) {
+    if (!value) {
+      this.atrribute = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case ATRRIBUTE:
+      if (value == null) {
+        unsetAtrribute();
+      } else {
+        setAtrribute((SubjectAttribute)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case ATRRIBUTE:
+      return getAtrribute();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case ATRRIBUTE:
+      return isSetAtrribute();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof deleteSubjectAttribute_args)
+      return this.equals((deleteSubjectAttribute_args)that);
+    return false;
+  }
+
+  public boolean equals(deleteSubjectAttribute_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_atrribute = true && this.isSetAtrribute();
+    boolean that_present_atrribute = true && that.isSetAtrribute();
+    if (this_present_atrribute || that_present_atrribute) {
+      if (!(this_present_atrribute && that_present_atrribute))
+        return false;
+      if (!this.atrribute.equals(that.atrribute))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_atrribute = true && (isSetAtrribute());
+    builder.append(present_atrribute);
+    if (present_atrribute)
+      builder.append(atrribute);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(deleteSubjectAttribute_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    deleteSubjectAttribute_args typedOther = (deleteSubjectAttribute_args)other;
+
+    lastComparison = Boolean.valueOf(isSetAtrribute()).compareTo(typedOther.isSetAtrribute());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAtrribute()) {
+      lastComparison = TBaseHelper.compareTo(this.atrribute, typedOther.atrribute);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // ATRRIBUTE
+          if (field.type == TType.STRUCT) {
+            this.atrribute = new SubjectAttribute();
+            this.atrribute.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.atrribute != null) {
+      oprot.writeFieldBegin(ATRRIBUTE_FIELD_DESC);
+      this.atrribute.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("deleteSubjectAttribute_args(");
+    boolean first = true;
+    sb.append("atrribute:");
+    if (this.atrribute == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.atrribute);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class deleteSubjectAttribute_result implements TBase<deleteSubjectAttribute_result, deleteSubjectAttribute_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("deleteSubjectAttribute_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(deleteSubjectAttribute_result.class, metaDataMap);
+  }
+
+
+  public deleteSubjectAttribute_result() {
+  }
+
+  public deleteSubjectAttribute_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public deleteSubjectAttribute_result(deleteSubjectAttribute_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public deleteSubjectAttribute_result deepCopy() {
+    return new deleteSubjectAttribute_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public deleteSubjectAttribute_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof deleteSubjectAttribute_result)
+      return this.equals((deleteSubjectAttribute_result)that);
+    return false;
+  }
+
+  public boolean equals(deleteSubjectAttribute_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(deleteSubjectAttribute_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    deleteSubjectAttribute_result typedOther = (deleteSubjectAttribute_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("deleteSubjectAttribute_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class deleteSubjectAttributeBatch_args implements TBase<deleteSubjectAttributeBatch_args, deleteSubjectAttributeBatch_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("deleteSubjectAttributeBatch_args");
+
+  private static final TField ATRRIBUTE_LIST_FIELD_DESC = new TField("atrributeList", TType.LIST, (short)1);
+
+
+  public List<SubjectAttribute> atrributeList;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    ATRRIBUTE_LIST((short)1, "atrributeList");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // ATRRIBUTE_LIST
+  	return ATRRIBUTE_LIST;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.ATRRIBUTE_LIST, new FieldMetaData("atrributeList", TFieldRequirementType.DEFAULT,
+      new ListMetaData(TType.LIST,
+                new StructMetaData(TType.STRUCT, SubjectAttribute.class))));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(deleteSubjectAttributeBatch_args.class, metaDataMap);
+  }
+
+
+  public deleteSubjectAttributeBatch_args() {
+  }
+
+  public deleteSubjectAttributeBatch_args(
+    List<SubjectAttribute> atrributeList)
+  {
+    this();
+    this.atrributeList = atrributeList;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public deleteSubjectAttributeBatch_args(deleteSubjectAttributeBatch_args other) {
+    if (other.isSetAtrributeList()) {
+      List<SubjectAttribute> __this__atrributeList = new ArrayList<SubjectAttribute>();
+      for (SubjectAttribute other_element : other.atrributeList) {
+        __this__atrributeList.add(new SubjectAttribute(other_element));
+      }
+      this.atrributeList = __this__atrributeList;
+    }
+  }
+
+  public deleteSubjectAttributeBatch_args deepCopy() {
+    return new deleteSubjectAttributeBatch_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.atrributeList = null;
+  }
+
+  public int getAtrributeListSize() {
+    return (this.atrributeList == null) ? 0 : this.atrributeList.size();
+  }
+
+  public java.util.Iterator<SubjectAttribute> getAtrributeListIterator() {
+    return (this.atrributeList == null) ? null : this.atrributeList.iterator();
+  }
+
+  public void addToAtrributeList(SubjectAttribute elem) {
+    if (this.atrributeList == null) {
+      this.atrributeList = new ArrayList<SubjectAttribute>();
+    }
+    this.atrributeList.add(elem);
+  }
+
+  public List<SubjectAttribute> getAtrributeList() {
+    return this.atrributeList;
+  }
+
+  public deleteSubjectAttributeBatch_args setAtrributeList(List<SubjectAttribute> atrributeList) {
+    this.atrributeList = atrributeList;
+    
+    return this;
+  }
+
+  public void unsetAtrributeList() {
+    this.atrributeList = null;
+  }
+
+  /** Returns true if field atrributeList is set (has been asigned a value) and false otherwise */
+  public boolean isSetAtrributeList() {
+    return this.atrributeList != null;
+  }
+
+  public void setAtrributeListIsSet(boolean value) {
+    if (!value) {
+      this.atrributeList = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case ATRRIBUTE_LIST:
+      if (value == null) {
+        unsetAtrributeList();
+      } else {
+        setAtrributeList((List<SubjectAttribute>)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case ATRRIBUTE_LIST:
+      return getAtrributeList();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case ATRRIBUTE_LIST:
+      return isSetAtrributeList();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof deleteSubjectAttributeBatch_args)
+      return this.equals((deleteSubjectAttributeBatch_args)that);
+    return false;
+  }
+
+  public boolean equals(deleteSubjectAttributeBatch_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_atrributeList = true && this.isSetAtrributeList();
+    boolean that_present_atrributeList = true && that.isSetAtrributeList();
+    if (this_present_atrributeList || that_present_atrributeList) {
+      if (!(this_present_atrributeList && that_present_atrributeList))
+        return false;
+      if (!this.atrributeList.equals(that.atrributeList))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_atrributeList = true && (isSetAtrributeList());
+    builder.append(present_atrributeList);
+    if (present_atrributeList)
+      builder.append(atrributeList);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(deleteSubjectAttributeBatch_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    deleteSubjectAttributeBatch_args typedOther = (deleteSubjectAttributeBatch_args)other;
+
+    lastComparison = Boolean.valueOf(isSetAtrributeList()).compareTo(typedOther.isSetAtrributeList());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAtrributeList()) {
+      lastComparison = TBaseHelper.compareTo(this.atrributeList, typedOther.atrributeList);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // ATRRIBUTE_LIST
+          if (field.type == TType.LIST) {
+            {
+            TList _list40 = iprot.readListBegin();
+            this.atrributeList = new ArrayList<SubjectAttribute>(_list40.size);
+            for (int _i41 = 0; _i41 < _list40.size; ++_i41)
+            {
+              SubjectAttribute _elem42;
+              _elem42 = new SubjectAttribute();
+              _elem42.read(iprot);
+              this.atrributeList.add(_elem42);
+            }
+            iprot.readListEnd();
+            }
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.atrributeList != null) {
+      oprot.writeFieldBegin(ATRRIBUTE_LIST_FIELD_DESC);
+      {
+        oprot.writeListBegin(new TList(TType.STRUCT, this.atrributeList.size()));
+        for (SubjectAttribute _iter43 : this.atrributeList)
+        {
+          _iter43.write(oprot);
+        }
+        oprot.writeListEnd();
+      }
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("deleteSubjectAttributeBatch_args(");
+    boolean first = true;
+    sb.append("atrributeList:");
+    if (this.atrributeList == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.atrributeList);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class deleteSubjectAttributeBatch_result implements TBase<deleteSubjectAttributeBatch_result, deleteSubjectAttributeBatch_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("deleteSubjectAttributeBatch_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(deleteSubjectAttributeBatch_result.class, metaDataMap);
+  }
+
+
+  public deleteSubjectAttributeBatch_result() {
+  }
+
+  public deleteSubjectAttributeBatch_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public deleteSubjectAttributeBatch_result(deleteSubjectAttributeBatch_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public deleteSubjectAttributeBatch_result deepCopy() {
+    return new deleteSubjectAttributeBatch_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public deleteSubjectAttributeBatch_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof deleteSubjectAttributeBatch_result)
+      return this.equals((deleteSubjectAttributeBatch_result)that);
+    return false;
+  }
+
+  public boolean equals(deleteSubjectAttributeBatch_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(deleteSubjectAttributeBatch_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    deleteSubjectAttributeBatch_result typedOther = (deleteSubjectAttributeBatch_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("deleteSubjectAttributeBatch_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class querySubjectAttribute_args implements TBase<querySubjectAttribute_args, querySubjectAttribute_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("querySubjectAttribute_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public SubjectAttributeQueryParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, SubjectAttributeQueryParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(querySubjectAttribute_args.class, metaDataMap);
+  }
+
+
+  public querySubjectAttribute_args() {
+  }
+
+  public querySubjectAttribute_args(
+    SubjectAttributeQueryParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public querySubjectAttribute_args(querySubjectAttribute_args other) {
+    if (other.isSetParam()) {
+      this.param = new SubjectAttributeQueryParam(other.param);
+    }
+  }
+
+  public querySubjectAttribute_args deepCopy() {
+    return new querySubjectAttribute_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public SubjectAttributeQueryParam getParam() {
+    return this.param;
+  }
+
+  public querySubjectAttribute_args setParam(SubjectAttributeQueryParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((SubjectAttributeQueryParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof querySubjectAttribute_args)
+      return this.equals((querySubjectAttribute_args)that);
+    return false;
+  }
+
+  public boolean equals(querySubjectAttribute_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(querySubjectAttribute_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    querySubjectAttribute_args typedOther = (querySubjectAttribute_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new SubjectAttributeQueryParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("querySubjectAttribute_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class querySubjectAttribute_result implements TBase<querySubjectAttribute_result, querySubjectAttribute_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("querySubjectAttribute_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public SubjectAttributeResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, SubjectAttributeResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(querySubjectAttribute_result.class, metaDataMap);
+  }
+
+
+  public querySubjectAttribute_result() {
+  }
+
+  public querySubjectAttribute_result(
+    SubjectAttributeResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public querySubjectAttribute_result(querySubjectAttribute_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new SubjectAttributeResult(other.success);
+    }
+  }
+
+  public querySubjectAttribute_result deepCopy() {
+    return new querySubjectAttribute_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public SubjectAttributeResult getSuccess() {
+    return this.success;
+  }
+
+  public querySubjectAttribute_result setSuccess(SubjectAttributeResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((SubjectAttributeResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof querySubjectAttribute_result)
+      return this.equals((querySubjectAttribute_result)that);
+    return false;
+  }
+
+  public boolean equals(querySubjectAttribute_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(querySubjectAttribute_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    querySubjectAttribute_result typedOther = (querySubjectAttribute_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new SubjectAttributeResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("querySubjectAttribute_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
