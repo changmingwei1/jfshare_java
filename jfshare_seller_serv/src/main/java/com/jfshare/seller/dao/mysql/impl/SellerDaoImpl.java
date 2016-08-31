@@ -4,8 +4,13 @@ import com.jfshare.finagle.thrift.seller.Seller;
 import com.jfshare.seller.dao.mysql.ISellerDao;
 import com.jfshare.seller.model.TbSeller;
 import com.jfshare.seller.model.TbSellerExample;
+import com.jfshare.seller.model.TbUserSellerRela;
+import com.jfshare.seller.model.TbUserSellerRelaExample;
 import com.jfshare.seller.model.mapper.TbSellerMapper;
+import com.jfshare.seller.model.mapper.TbUserSellerRelaMapper;
 import com.jfshare.utils.CryptoUtil;
+import com.jfshare.utils.StringUtil;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,9 @@ import java.util.Map;
 public class SellerDaoImpl implements ISellerDao {
     @Autowired
     private TbSellerMapper tbSellerMapper;
+    
+    @Autowired
+    private TbUserSellerRelaMapper userSellerRelaMapper;
 
     @Override
     public int sellerIsExist(String loginName) {
@@ -63,4 +71,38 @@ public class SellerDaoImpl implements ISellerDao {
         criteria.andSellerIdIn(sellerIds);
         return (List<TbSeller>)tbSellerMapper.selectByExample(example);
     }
+
+	@Override
+	public List<TbSeller> getSellerBySeller(Seller seller) {
+		TbSellerExample example = new TbSellerExample();
+		TbSellerExample.Criteria criteria = example.createCriteria();
+		if(seller.getSellerId() > 0)
+			criteria.andSellerIdEqualTo(seller.getSellerId());
+		if(seller.getSellerName() != null)
+			criteria.andSellerNameLike("%" + seller.getSellerName() + "%");
+		if(seller.getLoginName() != null) 
+			criteria.andLoginNameLike("%" + seller.getLoginName() + "%");
+		return tbSellerMapper.selectByExample(example);
+	}
+
+	@Override
+	public int insertUserSellerRela(TbUserSellerRela tbUserSellerRela) {
+		 return userSellerRelaMapper.insertSelective(tbUserSellerRela);
+	}
+
+	@Override
+	public int deleteByuserId(String userId) {
+		return userSellerRelaMapper.deleteByuserId(userId);
+	}
+
+	@Override
+	public List<TbUserSellerRela> selectUsrListBySellerId(String sellerId) {
+		TbUserSellerRelaExample example = new TbUserSellerRelaExample();
+		TbUserSellerRelaExample.Criteria criteria = example.createCriteria();
+		if(!StringUtil.isNullOrEmpty(sellerId))
+			criteria.andSellerIdEqualTo(sellerId);
+		example.setOrderByClause("createtime desc");
+		return userSellerRelaMapper.selectByExample(example);
+	}
+    
 }

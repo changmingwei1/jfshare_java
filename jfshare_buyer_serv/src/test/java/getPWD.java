@@ -16,7 +16,8 @@ public class getPWD {
 	        '5', 'V', 'C', '8', 'K', 'N', 'X', 'J', 'Q', 'F', '0', 'D', 'Z', 'Y', '3', 'E', 'H', '6', 'W', 'U' };
 	public static void main(String agrs[]){
 		try {
-			System.out.println(encryptDBPwd(spa512Encode("123456")));
+			System.out.println(encryptDBPwd(spa512Encode("liuyachao122525")));
+			System.err.println("sldkjfsld@slkdjf".contains("@"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -26,20 +26,36 @@
        <appender-ref ref="console" />
 </logger>
 <logger name="java.sql.Connection">
-       <level value="DEBUG"/>
+       <level value="ERROR"/>
        <appender-ref ref="console" />
 </logger>
 <logger name="java.sql.PreparedStatement">
-       <level value="DEBUG"/>
+       <level value="ERROR"/>
        <appender-ref ref="console" />
 </logger>
+
+	<!-- 业务日志 -->
+	<logger name="com.jfshare.score.server">
+		<level value="ERROR" />
+		<appender-ref ref="rollingFile" />
+	</logger>
+	
+	<logger name="com.jfshare.score.dao">
+		<level value="ERROR" />
+		<appender-ref ref="rollingFile" />
+	</logger>
+	
+	<logger name="com.jfshare.score.service">
+		<level value="ERROR" />
+		<appender-ref ref="rollingFile" />
+	</logger>
 
 <!--### set log levels - for more verbose logging change 'info' to 'debug'
 ### 级别：all<debug<info<warn<error<fatal<off ###-->
 <root>
        <level value="INFO"/>
-       <appender-ref ref="console"/>
        <appender-ref ref="rollingFile"/>
+        <appender-ref ref="console"/>     
 </root>
 
 </log4j:configuration>

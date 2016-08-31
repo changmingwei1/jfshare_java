@@ -57,6 +57,8 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
   private static final TField SERIAL_FIELD_DESC = new TField("serial", TType.I32, (short)23);
   private static final TField CREATE_TIME_FIELD_DESC = new TField("createTime", TType.STRING, (short)24);
   private static final TField LAST_UPDATE_TIME_FIELD_DESC = new TField("lastUpdateTime", TType.STRING, (short)25);
+  private static final TField STATE_FIELD_DESC = new TField("state", TType.I32, (short)26);
+  private static final TField CLIENT_TYPE_FIELD_DESC = new TField("clientType", TType.I32, (short)27);
 
 
   public int userId;
@@ -84,6 +86,8 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
   public int serial;
   public String createTime;
   public String lastUpdateTime;
+  public int state;
+  public int clientType;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -111,7 +115,9 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
     REMARK((short)22, "remark"),
     SERIAL((short)23, "serial"),
     CREATE_TIME((short)24, "createTime"),
-    LAST_UPDATE_TIME((short)25, "lastUpdateTime");
+    LAST_UPDATE_TIME((short)25, "lastUpdateTime"),
+    STATE((short)26, "state"),
+    CLIENT_TYPE((short)27, "clientType");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -176,6 +182,10 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
   	return CREATE_TIME;
         case 25: // LAST_UPDATE_TIME
   	return LAST_UPDATE_TIME;
+        case 26: // STATE
+  	return STATE;
+        case 27: // CLIENT_TYPE
+  	return CLIENT_TYPE;
         default:
   	return null;
       }
@@ -225,7 +235,9 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
   private static final int __DEGREE_ISSET_ID = 5;
   private static final int __SALARY_ISSET_ID = 6;
   private static final int __SERIAL_ISSET_ID = 7;
-  private BitSet __isset_bit_vector = new BitSet(8);
+  private static final int __STATE_ISSET_ID = 8;
+  private static final int __CLIENTTYPE_ISSET_ID = 9;
+  private BitSet __isset_bit_vector = new BitSet(10);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -280,6 +292,10 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.LAST_UPDATE_TIME, new FieldMetaData("lastUpdateTime", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.STATE, new FieldMetaData("state", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.CLIENT_TYPE, new FieldMetaData("clientType", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(Buyer.class, metaDataMap);
   }
@@ -313,7 +329,9 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
     String remark,
     int serial,
     String createTime,
-    String lastUpdateTime)
+    String lastUpdateTime,
+    int state,
+    int clientType)
   {
     this();
     this.userId = userId;
@@ -349,6 +367,10 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
     setSerialIsSet(true);
     this.createTime = createTime;
     this.lastUpdateTime = lastUpdateTime;
+    this.state = state;
+    setStateIsSet(true);
+    this.clientType = clientType;
+    setClientTypeIsSet(true);
   }
 
   /**
@@ -416,6 +438,8 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
     if (other.isSetLastUpdateTime()) {
       this.lastUpdateTime = other.lastUpdateTime;
     }
+    this.state = other.state;
+    this.clientType = other.clientType;
   }
 
   public Buyer deepCopy() {
@@ -457,6 +481,10 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
     this.serial = 0;
     this.createTime = null;
     this.lastUpdateTime = null;
+    setStateIsSet(false);
+    this.state = 0;
+    setClientTypeIsSet(false);
+    this.clientType = 0;
   }
 
   public int getUserId() {
@@ -1076,6 +1104,54 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
     }
   }
 
+  public int getState() {
+    return this.state;
+  }
+
+  public Buyer setState(int state) {
+    this.state = state;
+    setStateIsSet(true);
+
+    return this;
+  }
+
+  public void unsetState() {
+  __isset_bit_vector.clear(__STATE_ISSET_ID);
+  }
+
+  /** Returns true if field state is set (has been asigned a value) and false otherwise */
+  public boolean isSetState() {
+    return __isset_bit_vector.get(__STATE_ISSET_ID);
+  }
+
+  public void setStateIsSet(boolean value) {
+    __isset_bit_vector.set(__STATE_ISSET_ID, value);
+  }
+
+  public int getClientType() {
+    return this.clientType;
+  }
+
+  public Buyer setClientType(int clientType) {
+    this.clientType = clientType;
+    setClientTypeIsSet(true);
+
+    return this;
+  }
+
+  public void unsetClientType() {
+  __isset_bit_vector.clear(__CLIENTTYPE_ISSET_ID);
+  }
+
+  /** Returns true if field clientType is set (has been asigned a value) and false otherwise */
+  public boolean isSetClientType() {
+    return __isset_bit_vector.get(__CLIENTTYPE_ISSET_ID);
+  }
+
+  public void setClientTypeIsSet(boolean value) {
+    __isset_bit_vector.set(__CLIENTTYPE_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case USER_ID:
@@ -1253,6 +1329,20 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
         setLastUpdateTime((String)value);
       }
       break;
+    case STATE:
+      if (value == null) {
+        unsetState();
+      } else {
+        setState((Integer)value);
+      }
+      break;
+    case CLIENT_TYPE:
+      if (value == null) {
+        unsetClientType();
+      } else {
+        setClientType((Integer)value);
+      }
+      break;
     }
   }
 
@@ -1308,6 +1398,10 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
       return getCreateTime();
     case LAST_UPDATE_TIME:
       return getLastUpdateTime();
+    case STATE:
+      return new Integer(getState());
+    case CLIENT_TYPE:
+      return new Integer(getClientType());
     }
     throw new IllegalStateException();
   }
@@ -1369,6 +1463,10 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
       return isSetCreateTime();
     case LAST_UPDATE_TIME:
       return isSetLastUpdateTime();
+    case STATE:
+      return isSetState();
+    case CLIENT_TYPE:
+      return isSetClientType();
     }
     throw new IllegalStateException();
   }
@@ -1585,6 +1683,22 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
       if (!this.lastUpdateTime.equals(that.lastUpdateTime))
         return false;
     }
+    boolean this_present_state = true;
+    boolean that_present_state = true;
+    if (this_present_state || that_present_state) {
+      if (!(this_present_state && that_present_state))
+        return false;
+      if (this.state != that.state)
+        return false;
+    }
+    boolean this_present_clientType = true;
+    boolean that_present_clientType = true;
+    if (this_present_clientType || that_present_clientType) {
+      if (!(this_present_clientType && that_present_clientType))
+        return false;
+      if (this.clientType != that.clientType)
+        return false;
+    }
 
     return true;
   }
@@ -1692,6 +1806,14 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
     builder.append(present_lastUpdateTime);
     if (present_lastUpdateTime)
       builder.append(lastUpdateTime);
+    boolean present_state = true;
+    builder.append(present_state);
+    if (present_state)
+      builder.append(state);
+    boolean present_clientType = true;
+    builder.append(present_clientType);
+    if (present_clientType)
+      builder.append(clientType);
     return builder.toHashCode();
   }
 
@@ -1953,6 +2075,26 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetState()).compareTo(typedOther.isSetState());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetState()) {
+      lastComparison = TBaseHelper.compareTo(this.state, typedOther.state);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetClientType()).compareTo(typedOther.isSetClientType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetClientType()) {
+      lastComparison = TBaseHelper.compareTo(this.clientType, typedOther.clientType);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -2154,6 +2296,22 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 26: // STATE
+          if (field.type == TType.I32) {
+            this.state = iprot.readI32();
+            setStateIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 27: // CLIENT_TYPE
+          if (field.type == TType.I32) {
+            this.clientType = iprot.readI32();
+            setClientTypeIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -2278,6 +2436,12 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
       oprot.writeString(this.lastUpdateTime);
       oprot.writeFieldEnd();
     }
+    oprot.writeFieldBegin(STATE_FIELD_DESC);
+    oprot.writeI32(this.state);
+    oprot.writeFieldEnd();
+    oprot.writeFieldBegin(CLIENT_TYPE_FIELD_DESC);
+    oprot.writeI32(this.clientType);
+    oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -2452,6 +2616,14 @@ public class Buyer implements TBase<Buyer, Buyer._Fields>, java.io.Serializable,
     } else {
       sb.append(this.lastUpdateTime);
     }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("state:");
+    sb.append(this.state);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("clientType:");
+    sb.append(this.clientType);
     first = false;
     sb.append(")");
     return sb.toString();

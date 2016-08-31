@@ -6,7 +6,7 @@
 	
 	<!-- zk use -->
 	<bean id="configManager" class="com.jfshare.ridge.ConfigManager">
-        <!--<constructor-arg name="serverList" value="127.0.0.1:2181"/>-->
+        <!--<constructor-arg name="serverList" value="120.24.153.155:2181"/>-->
     </bean>
 
     <bean id="esClient" class="com.jfshare.elasticsearch.drive.ESClient">

@@ -6,13 +6,20 @@
 package com.jfshare.finagle.thrift.brand;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
 import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.thrift.*;
 import org.apache.thrift.async.*;
@@ -29,19 +36,22 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
   private static final TField CUR_PAGE_FIELD_DESC = new TField("curPage", TType.I32, (short)2);
   private static final TField ID_FIELD_DESC = new TField("id", TType.I32, (short)3);
   private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)4);
+  private static final TField HSUBJECT_ID_LIST_FIELD_DESC = new TField("hsubjectIdList", TType.LIST, (short)5);
 
 
   public int pageSize;
   public int curPage;
   public int id;
   public String name;
+  public List<Integer> hsubjectIdList;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     PAGE_SIZE((short)1, "pageSize"),
     CUR_PAGE((short)2, "curPage"),
     ID((short)3, "id"),
-    NAME((short)4, "name");
+    NAME((short)4, "name"),
+    HSUBJECT_ID_LIST((short)5, "hsubjectIdList");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -64,6 +74,8 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
   	return ID;
         case 4: // NAME
   	return NAME;
+        case 5: // HSUBJECT_ID_LIST
+  	return HSUBJECT_ID_LIST;
         default:
   	return null;
       }
@@ -121,6 +133,9 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.OPTIONAL,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.HSUBJECT_ID_LIST, new FieldMetaData("hsubjectIdList", TFieldRequirementType.OPTIONAL,
+      new ListMetaData(TType.LIST,
+                new FieldValueMetaData(TType.I32))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(QueryParam.class, metaDataMap);
   }
@@ -152,6 +167,13 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     if (other.isSetName()) {
       this.name = other.name;
     }
+    if (other.isSetHsubjectIdList()) {
+      List<Integer> __this__hsubjectIdList = new ArrayList<Integer>();
+      for (Integer other_element : other.hsubjectIdList) {
+        __this__hsubjectIdList.add(other_element);
+      }
+      this.hsubjectIdList = __this__hsubjectIdList;
+    }
   }
 
   public QueryParam deepCopy() {
@@ -167,6 +189,7 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     setIdIsSet(false);
     this.id = 0;
     this.name = null;
+    this.hsubjectIdList = null;
   }
 
   public int getPageSize() {
@@ -266,6 +289,46 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     }
   }
 
+  public int getHsubjectIdListSize() {
+    return (this.hsubjectIdList == null) ? 0 : this.hsubjectIdList.size();
+  }
+
+  public java.util.Iterator<Integer> getHsubjectIdListIterator() {
+    return (this.hsubjectIdList == null) ? null : this.hsubjectIdList.iterator();
+  }
+
+  public void addToHsubjectIdList(int elem) {
+    if (this.hsubjectIdList == null) {
+      this.hsubjectIdList = new ArrayList<Integer>();
+    }
+    this.hsubjectIdList.add(elem);
+  }
+
+  public List<Integer> getHsubjectIdList() {
+    return this.hsubjectIdList;
+  }
+
+  public QueryParam setHsubjectIdList(List<Integer> hsubjectIdList) {
+    this.hsubjectIdList = hsubjectIdList;
+    
+    return this;
+  }
+
+  public void unsetHsubjectIdList() {
+    this.hsubjectIdList = null;
+  }
+
+  /** Returns true if field hsubjectIdList is set (has been asigned a value) and false otherwise */
+  public boolean isSetHsubjectIdList() {
+    return this.hsubjectIdList != null;
+  }
+
+  public void setHsubjectIdListIsSet(boolean value) {
+    if (!value) {
+      this.hsubjectIdList = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PAGE_SIZE:
@@ -296,6 +359,13 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
         setName((String)value);
       }
       break;
+    case HSUBJECT_ID_LIST:
+      if (value == null) {
+        unsetHsubjectIdList();
+      } else {
+        setHsubjectIdList((List<Integer>)value);
+      }
+      break;
     }
   }
 
@@ -309,6 +379,8 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
       return new Integer(getId());
     case NAME:
       return getName();
+    case HSUBJECT_ID_LIST:
+      return getHsubjectIdList();
     }
     throw new IllegalStateException();
   }
@@ -328,6 +400,8 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
       return isSetId();
     case NAME:
       return isSetName();
+    case HSUBJECT_ID_LIST:
+      return isSetHsubjectIdList();
     }
     throw new IllegalStateException();
   }
@@ -376,6 +450,14 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
       if (!this.name.equals(that.name))
         return false;
     }
+    boolean this_present_hsubjectIdList = true && this.isSetHsubjectIdList();
+    boolean that_present_hsubjectIdList = true && that.isSetHsubjectIdList();
+    if (this_present_hsubjectIdList || that_present_hsubjectIdList) {
+      if (!(this_present_hsubjectIdList && that_present_hsubjectIdList))
+        return false;
+      if (!this.hsubjectIdList.equals(that.hsubjectIdList))
+        return false;
+    }
 
     return true;
   }
@@ -399,6 +481,10 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     builder.append(present_name);
     if (present_name)
       builder.append(name);
+    boolean present_hsubjectIdList = true && (isSetHsubjectIdList());
+    builder.append(present_hsubjectIdList);
+    if (present_hsubjectIdList)
+      builder.append(hsubjectIdList);
     return builder.toHashCode();
   }
 
@@ -446,6 +532,16 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
     }
     if (isSetName()) {
       lastComparison = TBaseHelper.compareTo(this.name, typedOther.name);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetHsubjectIdList()).compareTo(typedOther.isSetHsubjectIdList());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetHsubjectIdList()) {
+      lastComparison = TBaseHelper.compareTo(this.hsubjectIdList, typedOther.hsubjectIdList);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -499,6 +595,23 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 5: // HSUBJECT_ID_LIST
+          if (field.type == TType.LIST) {
+            {
+            TList _list0 = iprot.readListBegin();
+            this.hsubjectIdList = new ArrayList<Integer>(_list0.size);
+            for (int _i1 = 0; _i1 < _list0.size; ++_i1)
+            {
+              int _elem2;
+              _elem2 = iprot.readI32();
+              this.hsubjectIdList.add(_elem2);
+            }
+            iprot.readListEnd();
+            }
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -532,6 +645,20 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
         oprot.writeFieldEnd();
       }
     }
+    if (this.hsubjectIdList != null) {
+      if (isSetHsubjectIdList()) {
+        oprot.writeFieldBegin(HSUBJECT_ID_LIST_FIELD_DESC);
+        {
+          oprot.writeListBegin(new TList(TType.I32, this.hsubjectIdList.size()));
+          for (int _iter3 : this.hsubjectIdList)
+          {
+            oprot.writeI32(_iter3);
+          }
+          oprot.writeListEnd();
+        }
+        oprot.writeFieldEnd();
+      }
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -560,6 +687,16 @@ public class QueryParam implements TBase<QueryParam, QueryParam._Fields>, java.i
         sb.append("null");
       } else {
         sb.append(this.name);
+      }
+      first = false;
+      }
+    if (isSetHsubjectIdList()) {
+      if (!first) sb.append(", ");
+      sb.append("hsubjectIdList:");
+      if (this.hsubjectIdList == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.hsubjectIdList);
       }
       first = false;
       }

@@ -1,37 +1,56 @@
 package com.jfshare.buyer.server;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.thrift.TException;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jfshare.buyer.model.TbThirdUserinfo;
 import com.jfshare.buyer.model.TbUser;
 import com.jfshare.buyer.model.ThirdPartyType;
+import com.jfshare.buyer.server.depend.CommonClient;
 import com.jfshare.buyer.service.IBuyerSvc;
 import com.jfshare.buyer.util.AuthenticationUtil;
 import com.jfshare.buyer.util.BuyerUtil;
+import com.jfshare.buyer.util.ConstantUtil;
 import com.jfshare.buyer.util.FailCode;
+import com.jfshare.buyer.util.ThirdUserLoginUtil;
 import com.jfshare.finagle.thrift.buyer.AuthInfo;
 import com.jfshare.finagle.thrift.buyer.AuthInfoResult;
 import com.jfshare.finagle.thrift.buyer.Buyer;
+import com.jfshare.finagle.thrift.buyer.BuyerListResult;
 import com.jfshare.finagle.thrift.buyer.BuyerResult;
 import com.jfshare.finagle.thrift.buyer.BuyerServ;
+import com.jfshare.finagle.thrift.buyer.H5ThirdLoginParam;
+import com.jfshare.finagle.thrift.buyer.H5ThirdLoginResult;
 import com.jfshare.finagle.thrift.buyer.LoginLog;
 import com.jfshare.finagle.thrift.buyer.ThirdpartyUser;
+import com.jfshare.finagle.thrift.buyer.UserInfoThird;
+import com.jfshare.finagle.thrift.buyer.ValidateInfo;
+import com.jfshare.finagle.thrift.common.MsgCaptcha;
 import com.jfshare.finagle.thrift.result.BoolResult;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.result.StringResult;
+import com.jfshare.ridge.PropertiesUtil;
 import com.jfshare.utils.StringUtil;
 
 @Service(value="handler")
-public class ServHandle implements BuyerServ.Iface {
+public class ServHandle implements BuyerServ.Iface  {
 	private static final transient Logger logger = LoggerFactory.getLogger(ServHandle.class);
 	@Autowired
     private IBuyerSvc buyerSvcImpl;
+	
+//	@Autowired
+//    private MsgHandler msgHandler;
+	
+	@Autowired
+	private CommonClient commonClient;
 
 	@Override
 	public BoolResult buyerIsExist(String loginName) throws TException {
@@ -111,6 +130,8 @@ public class ServHandle implements BuyerServ.Iface {
 				TbUser user = BuyerUtil.buyer2TbUser(buyer);
 				//write online cache
 				buyerSvcImpl.addOnline(user, loginLog);
+				//添加在线用户token
+				buyerSvcImpl.addOnlineToken(user, loginLog);
 				buyerSvcImpl.clearTryFail(user);
 				//add to success mq
 
@@ -182,7 +203,7 @@ public class ServHandle implements BuyerServ.Iface {
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				return buyerResult;
 			}
-			Buyer buyer = buyerSvcImpl.getOnline(loginLog.getUserId(), loginLog.getTokenId());
+			Buyer buyer = buyerSvcImpl.getOnline(loginLog.getUserId(), loginLog.getTokenId(), loginLog);
 			buyerResult.setBuyer(buyer);
 		} catch (Exception e) {
 			logger.error("获取在线用户信息失败！loginLog=" + loginLog, e);
@@ -208,7 +229,12 @@ public class ServHandle implements BuyerServ.Iface {
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
                 return buyerResult;
             }
-            Buyer rBuyer = buyerSvcImpl.getBuyer(buyer.getUserId());
+            //Buyer rBuyer = buyerSvcImpl.getBuyerRedis(buyer.getUserId(),buyer.getClientType());
+            //获取用户信息从redis
+            Buyer rBuyer = buyerSvcImpl.getBuyerRedis(buyer.getUserId());
+            if(rBuyer == null){
+                 rBuyer = buyerSvcImpl.getBuyer(buyer.getUserId());
+            }
             if(StringUtil.isNullOrEmpty(rBuyer)){
             	FailCode.addFails(result, FailCode.loginNameNotExist);
             	buyerResult.setBuyer(rBuyer);
@@ -232,12 +258,19 @@ public class ServHandle implements BuyerServ.Iface {
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
                 return result;
             }
-
-
+           //mysql中更新用户个人信息
             boolean res = buyerSvcImpl.updateBuyer(buyer);
             if(!res) {
-                result.setCode(1);
+            	 FailCode.addFails(result, FailCode.ADDSYSTEM_ERROR);
+                 return result;
             }
+            //mysql中获取用户信息
+            TbUser tbuser = buyerSvcImpl.getTbuser(buyer.getUserId());
+            if(tbuser != null){
+            	//redis中更新用户个人信息
+            	buyerSvcImpl.updateOnline(tbuser);
+            }
+            
         } catch (Exception e) {
             logger.error("修改用户信息失败！loginLog=" + buyer, e);
             FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
@@ -304,27 +337,13 @@ public class ServHandle implements BuyerServ.Iface {
             Buyer buyer = buyerSvcImpl.checkThirdCustomId(thirdUser);
 
             if(buyer == null) {
-                buyer = buyerSvcImpl.getOnline(loginLog.getUserId(), loginLog.getTokenId());
-                if(buyer == null) {
-                    //默认注册流程
-                    buyer = buyerSvcImpl.createUserThird(thirdUser);
-                }
-                buyerSvcImpl.insertThirdPartyRel(thirdUser, buyer.getUserId());
-            } else {
-                if(buyer.getUserId() != loginLog.getUserId()) {
-                    logger.warn(MessageFormat.format("第三方账号绑定失败！第三方账号绑定的聚分享账号与当前已登录聚分享账号不一致thirdUser[{0}],loginLog[{1}]", thirdUser, loginLog));
-//                    FailCode.addFails(result, FailCode.THIRDPARTY_BIND_ERROR);
-//                    return buyerResult;
-                }
+				buyer = buyerSvcImpl.createUserThird(thirdUser);
             }
 
             loginLog.setUserId(buyer.getUserId());
 //            loginLog.setTokenId(UUID.randomUUID().toString());
             buyer.setPwdEnc(null);
             TbUser user = BuyerUtil.buyer2TbUser(buyer);
-            //write online cache
-            buyerSvcImpl.addOnline(user, loginLog);
-            buyerSvcImpl.clearTryFail(user);
             //add to success mq
             
 //          String token = AuthenticationUtil.getToken(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
@@ -335,6 +354,12 @@ public class ServHandle implements BuyerServ.Iface {
 //			authInfo.setToken(token);
 //			authInfo.setPpInfo(ppInfo);
 			loginLog.setTokenId(authInfo.getToken());
+
+			//write online cache
+			buyerSvcImpl.addOnline(user, loginLog);
+			//添加在线用户token
+			buyerSvcImpl.addOnlineToken(user, loginLog);
+			buyerSvcImpl.clearTryFail(user);
 			
 			buyerResult.setAuthInfo(authInfo);
             buyerResult.setBuyer(buyer);
@@ -380,22 +405,22 @@ public class ServHandle implements BuyerServ.Iface {
 
 	@Override
 	public Result newSignin(Buyer buyer) throws TException {
+		
 		Result result = new Result();
 		result.setCode(0);
 		try {
-			logger.warn("signin参数验证失败！buyer=" + buyer);
+			logger.warn("newSignin参数验证！buyer=" + buyer);
 			if (StringUtil.isNullOrEmpty(buyer) || StringUtil.isNullOrEmpty(buyer.getMobile())) {
 				logger.warn("signin参数验证失败！buyer=" + buyer);
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				return result;
 			}
-
-			String pwd = AuthenticationUtil.spa512Encode(buyer.getPwdEnc());
-			buyer.setPwdEnc(pwd);
-			if(StringUtil.isNullOrEmpty(buyer.getLoginName())) 
-				buyer.setLoginName(buyer.getMobile());
-			
+			buyerSvcImpl.validUser(result, buyer);	
 			if (result.getCode() == 0) {
+				String pwd = AuthenticationUtil.spa512Encode(buyer.getPwdEnc());
+				buyer.setPwdEnc(pwd);
+				if(StringUtil.isNullOrEmpty(buyer.getLoginName())) 
+					buyer.setLoginName(buyer.getMobile());
 				buyerSvcImpl.insert(buyer);
 			    logger.info(MessageFormat.format("注册成功，buyer[{0}]", buyer.getLoginName()));
 			}
@@ -414,24 +439,23 @@ public class ServHandle implements BuyerServ.Iface {
 		result.setCode(0);
 		buyerResult.setResult(result);
 		
-//		AuthInfo authInfo = new AuthInfo();
-//		buyerResult.setAuthInfo(authInfo);
 		try {
 			if (StringUtil.isNullOrEmpty(buyer) || StringUtil.isNullOrEmpty(buyer.getMobile()) || StringUtil.isNullOrEmpty(buyer.getPwdEnc()) || loginLog.getClientType()<=0) {
 				logger.warn(MessageFormat.format("login参数验证失败！buyer[{0}],loginLog[{1}]", buyer, loginLog));
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				return buyerResult;
 			}
-			
+			//加密密码
 			String pwd = AuthenticationUtil.spa512Encode(buyer.getPwdEnc());
 			buyer.setPwdEnc(pwd);
 			if(StringUtil.isNullOrEmpty(buyer.getLoginName())) 
 				buyer.setLoginName(buyer.getMobile());
 			
-			buyerSvcImpl.validLogin(result, buyer);//校验登陆密码
+			//校验登陆密码是否正确
+			buyerSvcImpl.validLogin(result, buyer);
 			if (result.getCode() == 1) {
 				logger.warn("登陆校验失败，" + "[user:" + buyer.getLoginName() + "]" + result.getFailDescList());
-				//user fail times cache，fail log queue
+				//记录登陆失败次数
 				int ret = buyerSvcImpl.addTryFail(buyer);
 				if (ret > 0) {
 					//add to fail mq
@@ -439,22 +463,19 @@ public class ServHandle implements BuyerServ.Iface {
 				return buyerResult;
 			} else {
 				loginLog.setUserId(buyer.getUserId());
-//				loginLog.setTokenId(UUID.randomUUID().toString()); //TODO 生成token策略
 				buyer.setPwdEnc(null);
 				TbUser user = BuyerUtil.buyer2TbUser(buyer);
-				
-				//add to success mq
-//				String token = AuthenticationUtil.getToken(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
-//				String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail());
 				logger.info("----------------------------登陆开始啦--------------------------");
+				//生成token 记录登陆时间
 				AuthInfo authInfo = buyerSvcImpl.createAuth(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
 				loginLog.setTokenId(authInfo.getToken());
-				//write online cache
-				buyerSvcImpl.addOnline(user, loginLog);
+				loginLog.setLogoutTime(PropertiesUtil.getProperty(ConstantUtil.IMAGE_KEY, "def_login_timeout", "0"));
+				//添加在线用户
+				buyerSvcImpl.addOnline(user, loginLog);	
+				//添加在线用户token
+				buyerSvcImpl.addOnlineToken(user, loginLog);
+				//清除失败登陆次数
 				buyerSvcImpl.clearTryFail(user);
-				
-//				authInfo.setToken(token);
-//				authInfo.setPpInfo(ppInfo);
 				buyerResult.setAuthInfo(authInfo);
 				buyerResult.setBuyer(buyer);
 				buyerResult.setLoginLog(loginLog);
@@ -506,8 +527,11 @@ public class ServHandle implements BuyerServ.Iface {
 //			String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), dbBuyer.getMobile(), dbBuyer.getEmail());
 			AuthInfo authInfo = buyerSvcImpl.createAuth(user.getUserId().toString(), dbBuyer.getMobile(), dbBuyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
 			loginLog.setTokenId(authInfo.getToken());
+			loginLog.setLogoutTime(PropertiesUtil.getProperty(ConstantUtil.IMAGE_KEY, "def_login_timeout", "0"));
 			//write online cache
 			buyerSvcImpl.addOnline(user, loginLog);
+			//添加在线用户token
+			buyerSvcImpl.addOnlineToken(user, loginLog);
 			buyerSvcImpl.clearTryFail(user);
 			
 //			authInfo.setToken(token);
@@ -562,21 +586,17 @@ public class ServHandle implements BuyerServ.Iface {
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				return authInfoResult;
 			}
-			
-//			AuthInfo authInfo = new AuthInfo();
-//			
-//			String token =AuthenticationUtil.getToken(String.valueOf(buyer.getUserId()), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
-//			String ppInfo = AuthenticationUtil.getPPInfo(String.valueOf(buyer.getUserId()), buyer.getMobile(), buyer.getEmail());
-//			authInfo.setToken(token);
-//			authInfo.setPpInfo(ppInfo);
+			//生成token 记录登陆时间
 			AuthInfo authInfo = buyerSvcImpl.createAuth(String.valueOf(buyer.getUserId()), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
 			authInfoResult.setAuthInfo(authInfo);
 			
-			Buyer buyerInRedis = buyerSvcImpl.getOnline(buyer.getUserId(), authInfo1.getToken());
+			//根据token和userId查看在线用户信息
+			Buyer buyerInRedis = buyerSvcImpl.getOnline(buyer.getUserId(), authInfo1.getToken(), loginLog);
 			TbUser user = BuyerUtil.buyer2TbUser(buyerInRedis);
 			buyerSvcImpl.removeOnline(new Result(), buyer.getUserId(), authInfo1.getToken());
 			loginLog.setTokenId(authInfo.getToken());
 			buyerSvcImpl.addOnline(user, loginLog);
+			buyerSvcImpl.addOnlineToken(user, loginLog);
 			
 		} catch(Exception ex) {
 			logger.error("获取鉴权失败！buyer=" + buyer, ex);
@@ -599,7 +619,8 @@ public class ServHandle implements BuyerServ.Iface {
 			}
 			
 //			boolean flg = AuthenticationUtil.tokenVerification(authInfo.getToken(), authInfo.ppInfo, loginLog.getBrowser());
-			boolean flg = buyerSvcImpl.verificationToken(String.valueOf(loginLog.getUserId()), authInfo, loginLog.getBrowser(),loginLog.getClientType());
+//			boolean flg = buyerSvcImpl.verificationToken(String.valueOf(loginLog.getUserId()), authInfo, loginLog.getBrowser(),loginLog.getClientType());
+			boolean flg = buyerSvcImpl.verificationTokenByonline(loginLog,authInfo);
 			if(!flg){
 				FailCode.addFails(result, FailCode.PARAM_ERROR);
 				
@@ -612,4 +633,268 @@ public class ServHandle implements BuyerServ.Iface {
 		return result;
 	}
 	
+	//=====================第三方登陆====================
+	//判断用户是否存在
+	@Override
+	public BuyerResult isExitsThirdUser(LoginLog loginLog, ValidateInfo validateInfo) throws TException {
+		BuyerResult buyerResult = new BuyerResult();
+		Result result = new Result();
+		result.setCode(0);
+		buyerResult.setResult(result);
+		
+//		AuthInfo authInfo = new AuthInfo();
+//		buyerResult.setAuthInfo(authInfo);
+		try {
+			if ( StringUtil.isNullOrEmpty(validateInfo) ||StringUtil.isNullOrEmpty(validateInfo.getThirdType()) ||
+					StringUtil.isNullOrEmpty(validateInfo.getCustId()) || StringUtil.isNullOrEmpty(validateInfo.getAccessToken())||
+					StringUtil.isNullOrEmpty(validateInfo.getOpenId())) {
+				logger.warn(MessageFormat.format("第三方login参数验证失败！thirdType[{0}],custId[{1}],accessToken[{2}],opendId[{3}]",
+						validateInfo.getThirdType(),validateInfo.getCustId(), validateInfo.getAccessToken(),validateInfo.getOpenId()));
+				FailCode.addFails(result, FailCode.PARAM_ERROR);
+				return buyerResult;
+			}
+			
+			logger.info("----------------------校验openId+access_token是否有效 --开始--------------------------");
+			//0.校验openId+access_token是否有效
+			if(!ThirdUserLoginUtil.isValidateWX(validateInfo.getOpenId(),validateInfo.getAccessToken())){
+				
+				FailCode.addFails(result, FailCode.TOKEN_NUM_ERROR);
+				return buyerResult;
+				
+			}
+			logger.info("----------------------校验openId+access_token是否有效--结束--------------------------");
+			
+			//1.判断第三方表中是否存在数据,如果不存在，返回不存在标志
+//			if(!buyerSvcImpl.userIsExistForThird(custId, thirdType)){
+//				FailCode.addFails(result, FailCode.loginNameNotExist);
+//				return buyerResult;
+//			}
+			
+			
+			logger.info("---------------------1.判断第三方表中是否存在数据,如果不存在，返回不存在标志 --开始--------------------------");
+			TbThirdUserinfo ttu=new TbThirdUserinfo();
+			ttu.setCustId(validateInfo.getCustId());
+			ttu.setThirdType(validateInfo.getThirdType());
+			
+			List<TbUser> tbus= buyerSvcImpl.selectByUserPK(ttu);
+			
+			if(tbus.size()==0){
+				FailCode.addFails(result, FailCode.loginNameNotExist);
+				return buyerResult;
+			}
+			logger.info("---------------------1.判断第三方表中是否存在数据,如果不存在，返回不存在标志 --结束--------------------------");
+			//2.如果存在，返回登录信息
+			
+			TbUser user = tbus.get(0);
+					
+			Buyer buyer=BuyerUtil.tbUser2Buyer(user);
+			
+			loginLog.setUserId(buyer.getUserId());
+//				loginLog.setTokenId(UUID.randomUUID().toString()); //TODO 生成token策略
+			buyer.setPwdEnc(null);
+			
+			//add to success mq
+//				String token = AuthenticationUtil.getToken(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
+//				String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail());
+			logger.info("----------------------------登陆开始--------------------------");
+			AuthInfo authInfo = buyerSvcImpl.createAuth(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
+			loginLog.setTokenId(authInfo.getToken());
+			loginLog.setLogoutTime(PropertiesUtil.getProperty(ConstantUtil.IMAGE_KEY, "def_login_timeout", "0"));
+			//write online cache
+			buyerSvcImpl.addOnline(user, loginLog);
+			//添加在线用户token
+			buyerSvcImpl.addOnlineToken(user, loginLog);
+			buyerSvcImpl.clearTryFail(user);
+			
+//				authInfo.setToken(token);
+//				authInfo.setPpInfo(ppInfo);
+			buyerResult.setAuthInfo(authInfo);
+			buyerResult.setBuyer(buyer);
+			buyerResult.setLoginLog(loginLog);
+			logger.info("----------------------------登陆结束--------------------------");
+		} catch (Exception e) {
+			logger.error("isExitsThirdUser 失败！", e);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+		}
+
+		return buyerResult;
+	}
+
+	//注册
+	@Override
+	public BuyerResult thirdUserSignin(LoginLog loginLog, UserInfoThird thirdUser, ValidateInfo valiInfo) throws TException {
+		BuyerResult buyerResult = new BuyerResult();
+		Result result = new Result();
+		result.setCode(0);
+		buyerResult.setResult(result);
+		
+		try {
+			//1.==============验证验证码==================
+			String mobile=thirdUser.getMobile();
+			String valiNum=valiInfo.getValiNum();//验证码
+			
+			MsgCaptcha ms=new MsgCaptcha();
+			logger.info("第三方登陆:验证码=="+valiNum+"  手机:"+mobile);
+			
+			ms.setMobile(mobile);
+			ms.setType(valiInfo.getValiNumType());
+			ms.setCaptchaDesc(valiNum);
+			
+			Result resp=commonClient.validateMsgCaptcha(ms);
+			
+			logger.info("第三方登陆:验证码 返回信息=="+resp);
+			
+			if(resp.getCode()!=0){
+				FailCode.addFails(result, FailCode.VALIDATE_NUM_ERROR);//--------------------
+				return buyerResult;
+			}
+			//============================================
+			//2.========验证openId+access_token是否合法========
+			if(!ThirdUserLoginUtil.isValidateWX(valiInfo.getOpenId(),valiInfo.getAccessToken())){
+				
+				FailCode.addFails(result, FailCode.TOKEN_NUM_ERROR);
+				return buyerResult;
+			}
+			//3.========数据存入数据库==========================
+			  //a.============通过手机号查询user表中的数据是否存在========
+			TbThirdUserinfo ttu=new TbThirdUserinfo();
+			ttu.setMobile(mobile);
+			ttu.setThirdType(thirdUser.getThirdType());
+			ttu.setCustId(thirdUser.getCustId());
+			ttu.setExtInfo(thirdUser.getExtInfo());
+			TbUser tbu=new TbUser();
+			tbu.setMobile(mobile);
+			tbu.setLoginName(mobile);
+			tbu.setBirthday(new DateTime());
+			
+			TbUser user=buyerSvcImpl.addUserAndThirdUser(ttu,tbu);
+			if(user==null){
+				FailCode.addFails(result, FailCode.ADDSYSTEM_ERROR);
+				return buyerResult;
+			}else if(user.getUserId()==-1){
+				FailCode.addFails(result, FailCode.EREADLYBIND_ERROR);
+				return buyerResult;
+			}
+			
+			//===============================================
+			
+			Buyer buyer=BuyerUtil.tbUser2Buyer(user);
+			
+			loginLog.setUserId(buyer.getUserId());
+//				loginLog.setTokenId(UUID.randomUUID().toString()); //TODO 生成token策略
+			buyer.setPwdEnc(null);
+			
+			//add to success mq
+//				String token = AuthenticationUtil.getToken(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser());
+//				String ppInfo = AuthenticationUtil.getPPInfo(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail());
+			logger.info("----------------------------登陆开始-------------------------");
+			AuthInfo authInfo = buyerSvcImpl.createAuth(user.getUserId().toString(), buyer.getMobile(), buyer.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
+			loginLog.setTokenId(authInfo.getToken());
+			loginLog.setLogoutTime(PropertiesUtil.getProperty(ConstantUtil.IMAGE_KEY, "def_login_timeout", "0"));
+			//write online cache
+			buyerSvcImpl.addOnline(user, loginLog);
+			//添加在线用户token
+			buyerSvcImpl.addOnlineToken(user, loginLog);
+			buyerSvcImpl.clearTryFail(user);
+			
+//				authInfo.setToken(token);
+//				authInfo.setPpInfo(ppInfo);
+			buyerResult.setAuthInfo(authInfo);
+			buyerResult.setBuyer(buyer);
+			buyerResult.setLoginLog(loginLog);
+			logger.info("----------------------------登陆结束-------------------------");
+			
+			
+		} catch (Exception e) {
+			logger.error("thirdUserSignin 失败！", e);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+		}
+		
+		return buyerResult;
+	}
+	
+	@Override
+	public BuyerResult requestHttps(String url, String extInfo) throws TException {
+		BuyerResult buyerResult = new BuyerResult();
+		Result result = new Result();
+		result.setCode(0);
+		buyerResult.setResult(result);
+		
+		try {
+			if ( StringUtil.isNullOrEmpty(url) ) {
+				logger.warn(MessageFormat.format("requestHttps请求参数验证失败！url[{0}],custId[{1}],accessToken[{2}],opendId[{3}]",url));
+				FailCode.addFails(result, FailCode.PARAM_ERROR);
+				return buyerResult;
+			}
+			
+			logger.info("----------------HTTPS请求--开始--------------------------");
+		
+			String res=ThirdUserLoginUtil.requestHttps(url,extInfo);
+			
+			Buyer buyer=new Buyer();
+			buyer.setRemark(res);
+			
+			buyerResult.setBuyer(buyer);
+			logger.info("----------------HTTPS请求--结束--------------------------");
+			
+
+		} catch (Exception e) {
+			logger.error("requestHttps 失败！", e);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+		}
+
+		return buyerResult;
+	}
+
+	@Override
+	public BuyerListResult getListBuyer(List<Integer> userIdList) throws TException {
+		BuyerListResult buyerListResult = new BuyerListResult();
+		Result result = new Result();
+		result.setCode(0);
+		buyerListResult.setResult(result);
+		try{
+			logger.info("批量查询买家请求：" + userIdList != null ? userIdList.toString(): null);
+			if(userIdList.isEmpty()){
+				FailCode.addFails(result, FailCode.PARAM_ERROR);
+				return buyerListResult;
+			}	
+			buyerSvcImpl.getListBuyer(buyerListResult, userIdList);
+		}catch(Exception ex){
+			logger.error("批量查询买家失败！", ex);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+		}
+				
+		return buyerListResult;
+	}
+	@Override
+	public H5ThirdLoginResult H5ThirdLogin(H5ThirdLoginParam param) throws TException {
+		H5ThirdLoginResult h5ThirdLoginResult = new H5ThirdLoginResult();
+		Result result = new Result();
+		result.setCode(0);
+		h5ThirdLoginResult.setResult(result);
+		try{
+			logger.info(String.format("$$$$H5第三方登录---请求参数：param:%s", param != null ? param.toString() : null));
+			if(StringUtil.isNullOrEmpty(param.getAppCode())){//应用编码
+				FailCode.addFails(result, FailCode.NOTNULL_ERROR);
+				return h5ThirdLoginResult;
+			}if(StringUtil.isNullOrEmpty(param.getRequestDate())){//请求时间
+				FailCode.addFails(result, FailCode.NOTNULL_ERROR);
+				return h5ThirdLoginResult;
+			}if(StringUtil.isNullOrEmpty(param.getSign())){//数字签名
+				FailCode.addFails(result, FailCode.NOTNULL_ERROR);
+				return h5ThirdLoginResult;
+			}if(StringUtil.isNullOrEmpty(param.getMobile())){//设备号
+				FailCode.addFails(result, FailCode.NOTNULL_ERROR);
+				return h5ThirdLoginResult;
+			}if(StringUtil.isNullOrEmpty(param.getWayType())){//用户渠道来源
+				FailCode.addFails(result, FailCode.NOTNULL_ERROR);
+				return h5ThirdLoginResult;
+			}
+			buyerSvcImpl.h5ThirdLogin(h5ThirdLoginResult,param);			
+		} catch (Exception ex) {
+			logger.error("$$$$H5第三方登录---请求失败，系统异常！", ex);
+			FailCode.addFails(result, FailCode.SYSTEM_EXCEPTION);
+		}
+		return h5ThirdLoginResult;
+	}
 }

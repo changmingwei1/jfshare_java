@@ -19,7 +19,37 @@
     id, name, img_key, url, serial, remark, create_time, create_id, last_update_time, 
     last_update_id, state
   </sql>
+  
+  <select id="queryCount" parameterType="map" resultType="java.lang.Integer" >
+    select count(*) from tb_brand
+    <where>
+    state != 1
+    <if test="name!= null" >
+     AND name like CONCAT('%',#{name},'%')
+    </if>
+    </where>
+  </select>
+  
   <select id="queryByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT distinct
+    <include refid="Base_Column_List" />
+    FROM tb_brand
+    <where>
+      state != 1
+      <if test="conditions.id != null and conditions.id > 0" >
+        AND id = #{conditions.id}
+      </if>
+      <if test="conditions.name != null" >
+        AND name like CONCAT('%',#{conditions.name},'%')
+      </if>
+    </where>
+    order by id
+    <if test="start != null and end != null">
+      limit  #{start} ,#{end}
+    </if>
+  </select>
+  
+  <!-- <select id="queryByPage" resultMap="BaseResultMap" parameterType="map" >
     SELECT distinct
     <include refid="Base_Column_List" />
     FROM tb_brand a, tb_subject_brand b
@@ -28,14 +58,17 @@
       <if test="conditions.id != null and conditions.id > 0" >
         AND a.id = #{conditions.id}
       </if>
-      <if test="conditions.name != null" >
+      <if test="name!= null" >
+        AND a.name like CONCAT('%',#{name},'%')
+      </if>
+       <if test="conditions.name != null" >
         AND a.name like CONCAT('%',#{conditions.name},'%')
       </if>
-      <!-- 
+      
       <if test="conditions.subjectId != null and conditions.subjectId > 0" >
         AND b.subjectId = #{conditions.subjectId}
       </if>
-       -->
+      
       <if test=" conditions.hsubjectIdList != null">
       		AND a.id = b.brand_id
 			AND b.subject_id IN   
@@ -44,10 +77,20 @@
 		     </foreach> 
 		</if>
     </where>
-    order by a.serial
+    order by a.id
     <if test="start != null and end != null">
       limit  #{start} ,#{end}
     </if>
+  </select>-->
+  
+  <select id="queryallsort" resultMap="BaseResultMap" parameterType="map" >
+    SELECT distinct
+    <include refid="Base_Column_List" />
+    FROM tb_brand
+    <where>
+      state != 1
+    </where>
+    order by id
   </select>
 
   <select id="queryByIds" resultMap="BaseResultMap" parameterType="map" >
@@ -67,4 +110,20 @@
       </if>
     </where>
   </select>
+  
+   <insert id="insertBrandForId" parameterType="com.jfshare.brand.model.TbBrand" >
+   	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
+        insert into tb_brand (id, name,
+        img_key, url, serial,
+        remark, create_time,
+        create_id, last_update_time,
+        last_update_id, state)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+        #{imgKey,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{serial,jdbcType=INTEGER},
+        #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{createId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP},
+        #{lastUpdateId,jdbcType=INTEGER}, #{state,jdbcType=INTEGER})
+  </insert>
 </mapper>

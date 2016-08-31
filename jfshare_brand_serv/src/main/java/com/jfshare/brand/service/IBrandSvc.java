@@ -3,6 +3,7 @@ package com.jfshare.brand.service;
 import java.util.List;
 
 import com.jfshare.finagle.thrift.brand.BrandInfo;
+import com.jfshare.finagle.thrift.brand.BrandInfoResult;
 import com.jfshare.finagle.thrift.brand.QueryParam;
 
 /**
@@ -17,7 +18,7 @@ public interface IBrandSvc {
 
     List<BrandInfo> queryByIds(List<Integer> validIdList);
     
-	public int addBrand(BrandInfo brand);
+	public int addBrand(BrandInfo brand,BrandInfoResult result);
 
 	public int deleteBrand(int id);
 

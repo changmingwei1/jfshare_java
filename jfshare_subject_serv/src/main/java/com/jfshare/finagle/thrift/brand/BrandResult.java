@@ -11,9 +11,15 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
 import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.thrift.*;
 import org.apache.thrift.async.*;
@@ -513,14 +519,14 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
         case 4: // BRAND_INFO
           if (field.type == TType.LIST) {
             {
-            TList _list0 = iprot.readListBegin();
-            this.brandInfo = new ArrayList<BrandInfo>(_list0.size);
-            for (int _i1 = 0; _i1 < _list0.size; ++_i1)
+            TList _list4 = iprot.readListBegin();
+            this.brandInfo = new ArrayList<BrandInfo>(_list4.size);
+            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
             {
-              BrandInfo _elem2;
-              _elem2 = new BrandInfo();
-              _elem2.read(iprot);
-              this.brandInfo.add(_elem2);
+              BrandInfo _elem6;
+              _elem6 = new BrandInfo();
+              _elem6.read(iprot);
+              this.brandInfo.add(_elem6);
             }
             iprot.readListEnd();
             }
@@ -563,9 +569,9 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
         oprot.writeFieldBegin(BRAND_INFO_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.brandInfo.size()));
-          for (BrandInfo _iter3 : this.brandInfo)
+          for (BrandInfo _iter7 : this.brandInfo)
           {
-            _iter3.write(oprot);
+            _iter7.write(oprot);
           }
           oprot.writeListEnd();
         }

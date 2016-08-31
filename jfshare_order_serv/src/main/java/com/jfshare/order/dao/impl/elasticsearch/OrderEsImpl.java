@@ -109,8 +109,7 @@ public class OrderEsImpl implements IOrderEs{
 
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
 
-        logger.info("ES==| search {}$$查询结果", searchResponse.getHits().getTotalHits());
-        logger.info("ES==| search {}$$suggest", searchResponse.getSuggest());
+        logger.info("ES==| search {}$$查询结果{}", searchResponse.getHits().getHits());
         return searchResponse.getHits();
 
     }

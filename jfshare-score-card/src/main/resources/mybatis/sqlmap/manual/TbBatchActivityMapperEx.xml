@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="exmapper">
+	<resultMap id="BaseResultMap"
+		type="com.jfshare.card.model.mapper.ex.TbBatchActivityEx">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="piece_value" property="pieceValue" jdbcType="INTEGER" />
+		<result column="total_count" property="totalCount" jdbcType="INTEGER" />
+		<result column="recharge_type" property="rechargeType"
+			jdbcType="CHAR" />
+		<result column="cur_status" property="curStatus" jdbcType="CHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"
+			typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+		<result column="start_time" property="startTime" jdbcType="TIMESTAMP"
+			typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP"
+			typeHandler="com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler" />
+		<result column="send" property="sendsCount" jdbcType="INTEGER" />
+		<result column="used" property="usedCount" jdbcType="INTEGER" />
+		<result column="multi_recharge_enable" property="multiRechargeEnable"
+			jdbcType="CHAR" />
+	</resultMap>
+	<select id="selectActivityListByPage" parameterType="map"
+		resultMap="BaseResultMap">
+		SELECT
+		act.id,act.name,act.piece_value,act.total_count,act.recharge_type,act.start_time,act.end_time,act.multi_recharge_enable,
+		act.create_time,act.cur_status,
+		SUM(
+		CASE
+		WHEN card.send_status = 1
+		THEN 1
+		ELSE 0
+		END) AS
+		send,
+		SUM(
+		CASE
+		WHEN card.recharge_status = 1
+		THEN 1
+		ELSE 0
+		END) AS used
+		FROM tb_batch_activity act LEFT JOIN
+		tb_batch_cards_record
+		card ON
+		act.id = card.activity_id where 1=1
+
+		<if test="name != null and name != ''">
+			 <![CDATA[and act.name like "%"#{name}"%"]]>
+		</if>
+
+		<if test="minPieceValue != null and minPieceValue!=''">
+			 <![CDATA[and act.piece_value>=#{minPieceValue}]]>
+		</if>
+		<if test="maxPieceValue != null and maxPieceValue!=''">
+			 <![CDATA[and act.piece_value<=#{maxPieceValue}]]>
+		</if>
+
+		<if test="minStartTime != null and minStartTime!=''"> 
+		    <![CDATA[and act.start_time>=#{minStartTime}" 00:00:00" 
+			]]>
+		</if>
+
+		<if test="maxStartTime != null and maxStartTime!=''"> 
+		    <![CDATA[and act.start_time<=#{maxStartTime}" 23:59:59"]]>
+		</if>
+		<if test="minEndTime != null and minEndTime!=''"> 
+		  <![CDATA[and act.end_time>=#{minEndTime}" 00:00:00"]]>
+		</if>
+		<if test="maxEndTime != null and maxEndTime!=''"> 
+		  <![CDATA[and act.end_time<=#{maxEndTime}" 23:59:59"]]>
+		</if>
+		<!-- 作废 -->
+		<if test="curStatus == 1">
+			AND act.cur_status = '1'
+		</if>
+		<!-- 可用 -->
+		<if test="curStatus == 2">
+			<![CDATA[AND act.end_time >=#{nowTime} AND act.cur_status != '1']]>
+		</if>
+		<!-- 过期 -->
+		<if test="curStatus == 3">
+			<![CDATA[AND act.end_time <=#{nowTime} AND act.cur_status != '1']]>
+		</if>
+		<if test="1==1">
+			GROUP BY act.id order by act.create_time desc,act.id desc
+		</if>
+	</select>
+</mapper>

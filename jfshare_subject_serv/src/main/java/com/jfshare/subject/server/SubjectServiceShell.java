@@ -12,12 +12,15 @@ import com.twitter.finagle.builder.ServerBuilder;
 import com.twitter.finagle.thrift.ThriftServerFramedCodec;
 import com.twitter.util.ExecutorServiceFuturePool;
 import com.twitter.util.Future;
+
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -205,4 +208,38 @@ public class SubjectServiceShell implements SubjectServ.ServiceIface {
     public Future<SubjectQueryResult> querySubjectsRelation(int displayId, Page page) {
         return null;
     }
+
+	@Override
+	public Future<Result> addSubjectAttribute(SubjectAttribute atrribute) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<Result> updateSubjectAttribute(SubjectAttribute atrribute) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<Result> deleteSubjectAttribute(SubjectAttribute atrribute) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<Result> deleteSubjectAttributeBatch(
+			List<SubjectAttribute> atrributeList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<SubjectAttributeResult> querySubjectAttribute(
+			SubjectAttributeQueryParam param) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
+    
 }

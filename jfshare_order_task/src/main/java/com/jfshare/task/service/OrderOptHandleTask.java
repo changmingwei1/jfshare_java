@@ -47,7 +47,7 @@ public class OrderOptHandleTask {
             Order order = null;
 
             if(sellerId > 0) {
-                order = orderClient.queryOrderDetail(BizUtil.USER_TYPE.SELLER, userId, orderId);
+                order = orderClient.queryOrderDetail(BizUtil.USER_TYPE.SELLER, sellerId, orderId);
             }
 
             if(order == null || StringUtils.isBlank(order.getOrderId())) {

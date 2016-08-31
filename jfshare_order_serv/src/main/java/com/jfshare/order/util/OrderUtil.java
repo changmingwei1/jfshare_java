@@ -539,4 +539,12 @@ public class OrderUtil {
 
         return s;
     }
+
+    public static int getTotalUseScore2Cash(List<OrderModel> orderModels) {
+        int total = 0;
+        for(OrderModel model : orderModels) {
+            total += model.getExchangeCash();
+        }
+        return total;
+    }
 }

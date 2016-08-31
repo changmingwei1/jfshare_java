@@ -3,6 +3,7 @@ package com.jfshare.seller.service;
 import com.jfshare.finagle.thrift.result.Result;
 import com.jfshare.finagle.thrift.seller.LoginLog;
 import com.jfshare.finagle.thrift.seller.Seller;
+import com.jfshare.finagle.thrift.seller.SellerVip;
 import com.jfshare.seller.model.TbSeller;
 
 import java.util.List;
@@ -40,4 +41,12 @@ public interface ISellerSvc {
     void removeOnline(Result result, int sellerId, String tokenId);
 
     List<Seller> getSellerList(List<Integer> sellerIds);
+    
+    List<Seller> getSellerBySeller(Seller seller);
+    //增加会员信息
+    int insertUserSellerRela(String userId, String sellerId);
+    //删除会员信息
+    int deleteUserSellerRealByuserId(String userId);
+    //查询会员信息列表
+    List<SellerVip> querySellerVipList(String sellerId);
 }

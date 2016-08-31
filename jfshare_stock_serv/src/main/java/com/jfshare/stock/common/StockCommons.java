@@ -53,8 +53,6 @@ public class StockCommons {
  	public static final int STOCK_RESULT_SUCC = 0;
  	public static final int STOCK_RESULT_FAIL = 1;
 
-    public static final int LOCK_STOCK_EXPIRED_SECOND = 24*60*60;
- 	
- 	
+    public static final int LOCK_STOCK_EXPIRED_SECOND = 10*24*60*60;
 }
   

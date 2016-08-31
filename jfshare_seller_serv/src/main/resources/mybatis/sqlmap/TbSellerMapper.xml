@@ -5,6 +5,12 @@
     <id column="seller_id" property="sellerId" jdbcType="INTEGER" />
     <result column="login_name" property="loginName" jdbcType="VARCHAR" />
     <result column="seller_name" property="sellerName" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
+    <result column="account_holder" property="accountHolder" jdbcType="VARCHAR" />
+    <result column="account_number" property="accountNumber" jdbcType="VARCHAR" />
     <result column="pwd_enc" property="pwdEnc" jdbcType="VARCHAR" />
     <result column="fav_img" property="favImg" jdbcType="VARCHAR" />
     <result column="state" property="state" jdbcType="TINYINT" />
@@ -200,7 +206,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    seller_id, login_name, seller_name, pwd_enc, fav_img, state, birthday, sex, id_card, 
+    seller_id, login_name, seller_name, shop_name, company_name, contact_name, open_bank, 
+    account_holder, account_number, pwd_enc, fav_img, state, birthday, sex, id_card, 
     mobile, tel, email, provinceId, provinceName, cityId, cityName, countyId, countyName, 
     address, postCode, remark, serial, create_time, last_update_time
   </sql>
@@ -235,6 +242,24 @@
       </if>
       <if test="sellerName != null" >
         seller_name,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="contactName != null" >
+        contact_name,
+      </if>
+      <if test="openBank != null" >
+        open_bank,
+      </if>
+      <if test="accountHolder != null" >
+        account_holder,
+      </if>
+      <if test="accountNumber != null" >
+        account_number,
       </if>
       <if test="pwdEnc != null" >
         pwd_enc,
@@ -309,6 +334,24 @@
       </if>
       <if test="sellerName != null" >
         #{sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="openBank != null" >
+        #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountHolder != null" >
+        #{accountHolder,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null" >
+        #{accountNumber,jdbcType=VARCHAR},
       </if>
       <if test="pwdEnc != null" >
         #{pwdEnc,jdbcType=VARCHAR},
@@ -393,6 +436,24 @@
       <if test="record.sellerName != null" >
         seller_name = #{record.sellerName,jdbcType=VARCHAR},
       </if>
+      <if test="record.shopName != null" >
+        shop_name = #{record.shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null" >
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactName != null" >
+        contact_name = #{record.contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openBank != null" >
+        open_bank = #{record.openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountHolder != null" >
+        account_holder = #{record.accountHolder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountNumber != null" >
+        account_number = #{record.accountNumber,jdbcType=VARCHAR},
+      </if>
       <if test="record.pwdEnc != null" >
         pwd_enc = #{record.pwdEnc,jdbcType=VARCHAR},
       </if>
@@ -466,6 +527,12 @@
     set seller_id = #{record.sellerId,jdbcType=INTEGER},
       login_name = #{record.loginName,jdbcType=VARCHAR},
       seller_name = #{record.sellerName,jdbcType=VARCHAR},
+      shop_name = #{record.shopName,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      contact_name = #{record.contactName,jdbcType=VARCHAR},
+      open_bank = #{record.openBank,jdbcType=VARCHAR},
+      account_holder = #{record.accountHolder,jdbcType=VARCHAR},
+      account_number = #{record.accountNumber,jdbcType=VARCHAR},
       pwd_enc = #{record.pwdEnc,jdbcType=VARCHAR},
       fav_img = #{record.favImg,jdbcType=VARCHAR},
       state = #{record.state,jdbcType=TINYINT},
@@ -499,6 +566,24 @@
       </if>
       <if test="sellerName != null" >
         seller_name = #{sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="openBank != null" >
+        open_bank = #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountHolder != null" >
+        account_holder = #{accountHolder,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null" >
+        account_number = #{accountNumber,jdbcType=VARCHAR},
       </if>
       <if test="pwdEnc != null" >
         pwd_enc = #{pwdEnc,jdbcType=VARCHAR},

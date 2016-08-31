@@ -9,6 +9,18 @@ public class TbSeller {
 
     private String sellerName;
 
+    private String shopName;
+
+    private String companyName;
+
+    private String contactName;
+
+    private String openBank;
+
+    private String accountHolder;
+
+    private String accountNumber;
+
     private String pwdEnc;
 
     private String favImg;
@@ -73,6 +85,54 @@ public class TbSeller {
 
     public void setSellerName(String sellerName) {
         this.sellerName = sellerName == null ? null : sellerName.trim();
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName == null ? null : shopName.trim();
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName == null ? null : contactName.trim();
+    }
+
+    public String getOpenBank() {
+        return openBank;
+    }
+
+    public void setOpenBank(String openBank) {
+        this.openBank = openBank == null ? null : openBank.trim();
+    }
+
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+
+    public void setAccountHolder(String accountHolder) {
+        this.accountHolder = accountHolder == null ? null : accountHolder.trim();
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber == null ? null : accountNumber.trim();
     }
 
     public String getPwdEnc() {

@@ -886,6 +886,50 @@ public class ServHandle implements ProductServ.Iface {
 
 	@Override
 	public StringResult offerThirdPartyProduct(ThirdPartyProduct thirdPartyProduct) throws TException {
-		return null;
+
+		logger.info(">>>> offerThirdPartyProduct --- thirdPartyProduct : {}", thirdPartyProduct.toString());
+		StringResult stringResult = new StringResult();
+		Result result = new Result();
+		stringResult.setResult(result);
+
+		int flag = 0;
+		try {
+			flag = this.woMaiSvc.offerThirdPartyProduct(ConvertUtil.thrift2TbThirdPartyProductWithBLOBs(thirdPartyProduct));
+		} catch (Exception e) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+			logger.error("<<<<<<<< offerThirdPartyProduct -- error !! thirdPartyProduct : " + thirdPartyProduct.toString(), e);
+		}
+
+		if (flag == 1) {
+			result.setCode(1);
+			result.addToFailDescList(FailCode.THIRD_PARTY_PRODUCT_NOT_EXIST);
+		}
+		logger.info("<<<< offerThirdPartyProduct --- thirdPartyProduct : {}", thirdPartyProduct.toString());
+		return stringResult;
+	}
+
+	@Override
+	public StringResult exportThirdPartyProduct(ThirdPartyProductQueryParam param) throws TException {
+		StringResult stringResult = new StringResult();
+		Result result = new Result();
+		stringResult.setResult(result);
+
+		Map queryMap = new HashMap();
+		queryMap.put("thirdPartyIdentify", param.getThirdPartyIdentify() == 0 ? null : param.getThirdPartyIdentify());
+		queryMap.put("productName", param.getProductName());
+		queryMap.put("activeState", param.getActiveState() == 0 ? null : param.getActiveState());
+		queryMap.put("stockState", param.getStockState() == 0 ? null : param.getStockState());
+		queryMap.put("priceState", param.getPriceState() == 0 ? null : param.getPriceState());
+		queryMap.put("offerState", param.getOfferState() == 0 ? null : param.getOfferState());
+
+		try {
+			stringResult.setValue(this.woMaiSvc.exportThirdPartyProduct(queryMap));
+		} catch (Exception e) {
+			logger.error("<<<<<<<< queryThirdPartyProduct error !! param : " + param.toString(), e);
+			result.setCode(1);
+			result.addToFailDescList(FailCode.SYSTEM_EXCEPTION);
+		}
+		return stringResult;
 	}
 }

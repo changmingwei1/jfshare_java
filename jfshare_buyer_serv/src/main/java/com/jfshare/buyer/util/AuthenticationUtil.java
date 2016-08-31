@@ -61,7 +61,7 @@ public class AuthenticationUtil {
 	 */
 	public static String getPPInfo(String userId, String mobile, String email) throws Exception {
 		String base64Str = Base64.encodeBase64String(String.format("%s%s%s", userId, mobile, email).getBytes());
-		//logger.info("加密ppInfo开始:String base64Str = Base64.encodeBase64String(String.format(%s%s%s, userId, mobile, email).getBytes())值为："+base64Str);
+		logger.info("加密ppInfo开始:String base64Str = Base64.encodeBase64String(String.format(%s%s%s, userId, mobile, email).getBytes())值为："+base64Str);
 		return disorder(base64Str);
 	}
 	

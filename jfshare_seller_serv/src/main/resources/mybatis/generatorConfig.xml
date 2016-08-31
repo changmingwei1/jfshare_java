@@ -5,7 +5,8 @@
 
 <generatorConfiguration>
     <!-- db driver -->
-    <classPathEntry location="D:\devTools\apache-maven-3.2.1\m2\repository\mysql\mysql-connector-java\5.1.17\mysql-connector-java-5.1.17.jar" />
+   <!--  <classPathEntry location="/Users/zhaoshenghai/.m2/repository/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar" /> -->
+     <classPathEntry location="E:/workMaven/maven/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar" />
     
     <!-- introspectedColumnImpl prop define special column reflect -->
     <context id="mysqlStepyee" targetRuntime="MyBatis3" introspectedColumnImpl="com.jfshare.mybatis.generator.api.IntrospectedColumn">
@@ -28,23 +29,23 @@
         </javaTypeResolver>
 
         <!-- generator javeBean、example Criteria -->
-        <javaModelGenerator targetPackage="com.jfshare.seller.model" targetProject="src\main\java">
+        <javaModelGenerator targetPackage="com.jfshare.seller.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!-- generator xml mapper -->
-        <sqlMapGenerator targetPackage="mybatis.sqlmap" targetProject="src\main\resources">
+        <sqlMapGenerator targetPackage="mybatis.sqlmap" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!-- generator java client annotation mapper -->
-        <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.jfshare.seller.model.mapper" targetProject="src\main\java">
+        <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.jfshare.seller.model.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
       <!--Run As  Maven build... goals mybatis-generator:generate -->
-        <table tableName="tb_seller" schema="jfshare">
+        <table tableName="tb_user_seller_rela" schema="jfshare">
         </table>
     </context>
 </generatorConfiguration>

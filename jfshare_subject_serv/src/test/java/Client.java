@@ -224,7 +224,7 @@ public class Client extends TestCase {
         //subjectInfo.setLevel(1);
         //subjectInfo.setIsLeaf(0);
         //subjectInfo.setSubjectIds("700,701,702");
-        subjectInfo.setImage("");
+        subjectInfo.setImg_key("");
         subjectInfo.setDemo("");
         subjectInfo.setCreator(0);
         subjectInfo.setUpdater(0);
@@ -256,7 +256,7 @@ public class Client extends TestCase {
             //subjectInfo.setLevel(1);
             subjectInfo.setIsLeaf(1);
             //subjectInfo.setSubjectIds("700,701,702");
-            subjectInfo.setImage("");
+            subjectInfo.setImg_key("");
             subjectInfo.setDemo("");
             subjectInfo.setCreator(0);
             subjectInfo.setUpdater(0);

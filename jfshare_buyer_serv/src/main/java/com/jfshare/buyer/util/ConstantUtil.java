@@ -15,11 +15,13 @@ public class ConstantUtil {
     /**
      * 客户端维度在线用户前缀
      */
-    public static final String REDIS_UID_PREFIX = "user:online:uid:";
+    //public static final String REDIS_UID_PREFIX = "user:online:uid:";
+    public static final String REDIS_UID_PREFIX = "user:token:onlinetoke:";
+    
     /**
      * 服务器端Session维度在线用户前缀
      */
-    public static final String REDIS_SID_PREFIX = "user:online:sid:";
+    public static final String REDIS_SID_PREFIX = "user:online:logininfo:";
 
     public static final String REDIS_FAIL_PREFIX = "user:fail:";
     public static final int REDIS_FAIL_TIMEOUT_S = 60*60*24;
@@ -34,4 +36,5 @@ public class ConstantUtil {
     //[end]
     
     public static final String REDIS_UID_TOKEN_TIMESTAMP = "user:token:timestamp:";
+    public static final String REDIS_UID_TOKEN = "user:token:onlinetoke:";
 }

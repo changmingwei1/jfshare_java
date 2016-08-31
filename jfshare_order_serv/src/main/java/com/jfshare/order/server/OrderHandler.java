@@ -279,7 +279,7 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
     }
 
     @Override
-    public Result confirmReceipt(int userType, int userId, String orderId) throws TException {
+        public Result confirmReceipt(int userType, int userId, String orderId) throws TException {
         Result result = new Result();
         result.setCode(0);
         try {
@@ -550,10 +550,16 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
             int thirdScore2Cash = OrderUtil.getThirdScore2Cash(orderModels, param.getPayChannel().getPayChannel());
             logger.info("申请支付----请求url, thirdScores={}, thirdScore2Cash={}", thirdScores, thirdScore2Cash);
             String tradePayId = IdCreator.getTradePayId(param.getUserId(), param.getOrderIdList());
+            if(param.payChannel.payChannel == BizUtil.PAY_CHANNEL.TIAN_YI.getEnumVal()) {
+                tradePayId = "17921" + orderModels.get(0).getOrderBatch().replaceAll("-","");
+            }
             orderService.updateOrderPaying(orderModels, tradePayId);
 
+
+
             //全积分支付
-            boolean isOnlyScore = OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash());
+//            boolean isOnlyScore = OrderUtil.gettotalAmount(orderModels) == PriceUtils.strToInt(param.getExchangeCash());
+            boolean isOnlyScore = checkIsOnlyScorePay(orderModels);
             if(isOnlyScore) {
                 stringResult.setValue("全积分支付成功");
                 stringResult.getResult().setCode(2);
@@ -601,6 +607,15 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         }
 
         return stringResult;
+    }
+
+    private boolean checkIsOnlyScorePay(List<OrderModel> orderModels) {
+        for(OrderModel order : orderModels) {
+            if(order.getExchangeCash() != order.getClosingPrice()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

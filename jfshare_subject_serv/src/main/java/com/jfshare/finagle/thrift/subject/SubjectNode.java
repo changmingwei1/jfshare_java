@@ -6,13 +6,20 @@
 package com.jfshare.finagle.thrift.subject;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
 import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.thrift.*;
 import org.apache.thrift.async.*;
@@ -27,15 +34,17 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
 
   private static final TField ID_FIELD_DESC = new TField("id", TType.I32, (short)1);
   private static final TField NAME_FIELD_DESC = new TField("name", TType.STRING, (short)2);
-  private static final TField PID_FIELD_DESC = new TField("pid", TType.I32, (short)3);
-  private static final TField SORTED_FIELD_DESC = new TField("sorted", TType.I32, (short)4);
-  private static final TField IS_LEAF_FIELD_DESC = new TField("isLeaf", TType.I32, (short)5);
-  private static final TField DISPLAY_IDS_FIELD_DESC = new TField("displayIds", TType.STRING, (short)6);
-  private static final TField STATUS_FIELD_DESC = new TField("status", TType.I32, (short)7);
+  private static final TField IMG_KEY_FIELD_DESC = new TField("img_key", TType.STRING, (short)3);
+  private static final TField PID_FIELD_DESC = new TField("pid", TType.I32, (short)4);
+  private static final TField SORTED_FIELD_DESC = new TField("sorted", TType.I32, (short)5);
+  private static final TField IS_LEAF_FIELD_DESC = new TField("isLeaf", TType.I32, (short)6);
+  private static final TField DISPLAY_IDS_FIELD_DESC = new TField("displayIds", TType.STRING, (short)7);
+  private static final TField STATUS_FIELD_DESC = new TField("status", TType.I32, (short)8);
 
 
   public int id;
   public String name;
+  public String img_key;
   public int pid;
   public int sorted;
   public int isLeaf;
@@ -46,11 +55,12 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
   public enum _Fields implements TFieldIdEnum {
     ID((short)1, "id"),
     NAME((short)2, "name"),
-    PID((short)3, "pid"),
-    SORTED((short)4, "sorted"),
-    IS_LEAF((short)5, "isLeaf"),
-    DISPLAY_IDS((short)6, "displayIds"),
-    STATUS((short)7, "status");
+    IMG_KEY((short)3, "img_key"),
+    PID((short)4, "pid"),
+    SORTED((short)5, "sorted"),
+    IS_LEAF((short)6, "isLeaf"),
+    DISPLAY_IDS((short)7, "displayIds"),
+    STATUS((short)8, "status");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -69,15 +79,17 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
   	return ID;
         case 2: // NAME
   	return NAME;
-        case 3: // PID
+        case 3: // IMG_KEY
+  	return IMG_KEY;
+        case 4: // PID
   	return PID;
-        case 4: // SORTED
+        case 5: // SORTED
   	return SORTED;
-        case 5: // IS_LEAF
+        case 6: // IS_LEAF
   	return IS_LEAF;
-        case 6: // DISPLAY_IDS
+        case 7: // DISPLAY_IDS
   	return DISPLAY_IDS;
-        case 7: // STATUS
+        case 8: // STATUS
   	return STATUS;
         default:
   	return null;
@@ -134,6 +146,8 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.NAME, new FieldMetaData("name", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.IMG_KEY, new FieldMetaData("img_key", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.PID, new FieldMetaData("pid", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.I32)));
     tmpMap.put(_Fields.SORTED, new FieldMetaData("sorted", TFieldRequirementType.DEFAULT,
@@ -155,6 +169,7 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
   public SubjectNode(
     int id,
     String name,
+    String img_key,
     int pid,
     int sorted,
     int isLeaf)
@@ -163,6 +178,7 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
     this.id = id;
     setIdIsSet(true);
     this.name = name;
+    this.img_key = img_key;
     this.pid = pid;
     setPidIsSet(true);
     this.sorted = sorted;
@@ -180,6 +196,9 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
     this.id = other.id;
     if (other.isSetName()) {
       this.name = other.name;
+    }
+    if (other.isSetImg_key()) {
+      this.img_key = other.img_key;
     }
     this.pid = other.pid;
     this.sorted = other.sorted;
@@ -199,6 +218,7 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
     setIdIsSet(false);
     this.id = 0;
     this.name = null;
+    this.img_key = null;
     setPidIsSet(false);
     this.pid = 0;
     setSortedIsSet(false);
@@ -256,6 +276,31 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
   public void setNameIsSet(boolean value) {
     if (!value) {
       this.name = null;
+    }
+  }
+
+  public String getImg_key() {
+    return this.img_key;
+  }
+
+  public SubjectNode setImg_key(String img_key) {
+    this.img_key = img_key;
+    
+    return this;
+  }
+
+  public void unsetImg_key() {
+    this.img_key = null;
+  }
+
+  /** Returns true if field img_key is set (has been asigned a value) and false otherwise */
+  public boolean isSetImg_key() {
+    return this.img_key != null;
+  }
+
+  public void setImg_keyIsSet(boolean value) {
+    if (!value) {
+      this.img_key = null;
     }
   }
 
@@ -396,6 +441,13 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
         setName((String)value);
       }
       break;
+    case IMG_KEY:
+      if (value == null) {
+        unsetImg_key();
+      } else {
+        setImg_key((String)value);
+      }
+      break;
     case PID:
       if (value == null) {
         unsetPid();
@@ -440,6 +492,8 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
       return new Integer(getId());
     case NAME:
       return getName();
+    case IMG_KEY:
+      return getImg_key();
     case PID:
       return new Integer(getPid());
     case SORTED:
@@ -465,6 +519,8 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
       return isSetId();
     case NAME:
       return isSetName();
+    case IMG_KEY:
+      return isSetImg_key();
     case PID:
       return isSetPid();
     case SORTED:
@@ -505,6 +561,14 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
       if (!(this_present_name && that_present_name))
         return false;
       if (!this.name.equals(that.name))
+        return false;
+    }
+    boolean this_present_img_key = true && this.isSetImg_key();
+    boolean that_present_img_key = true && that.isSetImg_key();
+    if (this_present_img_key || that_present_img_key) {
+      if (!(this_present_img_key && that_present_img_key))
+        return false;
+      if (!this.img_key.equals(that.img_key))
         return false;
     }
     boolean this_present_pid = true;
@@ -562,6 +626,10 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
     builder.append(present_name);
     if (present_name)
       builder.append(name);
+    boolean present_img_key = true && (isSetImg_key());
+    builder.append(present_img_key);
+    if (present_img_key)
+      builder.append(img_key);
     boolean present_pid = true;
     builder.append(present_pid);
     if (present_pid)
@@ -609,6 +677,16 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
     }
     if (isSetName()) {
       lastComparison = TBaseHelper.compareTo(this.name, typedOther.name);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetImg_key()).compareTo(typedOther.isSetImg_key());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetImg_key()) {
+      lastComparison = TBaseHelper.compareTo(this.img_key, typedOther.img_key);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -696,7 +774,14 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 3: // PID
+        case 3: // IMG_KEY
+          if (field.type == TType.STRING) {
+            this.img_key = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 4: // PID
           if (field.type == TType.I32) {
             this.pid = iprot.readI32();
             setPidIsSet(true);
@@ -704,7 +789,7 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 4: // SORTED
+        case 5: // SORTED
           if (field.type == TType.I32) {
             this.sorted = iprot.readI32();
             setSortedIsSet(true);
@@ -712,7 +797,7 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 5: // IS_LEAF
+        case 6: // IS_LEAF
           if (field.type == TType.I32) {
             this.isLeaf = iprot.readI32();
             setIsLeafIsSet(true);
@@ -720,14 +805,14 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 6: // DISPLAY_IDS
+        case 7: // DISPLAY_IDS
           if (field.type == TType.STRING) {
             this.displayIds = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 7: // STATUS
+        case 8: // STATUS
           if (field.type == TType.I32) {
             this.status = iprot.readI32();
             setStatusIsSet(true);
@@ -756,6 +841,11 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
     if (this.name != null) {
       oprot.writeFieldBegin(NAME_FIELD_DESC);
       oprot.writeString(this.name);
+      oprot.writeFieldEnd();
+    }
+    if (this.img_key != null) {
+      oprot.writeFieldBegin(IMG_KEY_FIELD_DESC);
+      oprot.writeString(this.img_key);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldBegin(PID_FIELD_DESC);
@@ -796,6 +886,14 @@ public class SubjectNode implements TBase<SubjectNode, SubjectNode._Fields>, jav
       sb.append("null");
     } else {
       sb.append(this.name);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("img_key:");
+    if (this.img_key == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.img_key);
     }
     first = false;
     if (!first) sb.append(", ");
