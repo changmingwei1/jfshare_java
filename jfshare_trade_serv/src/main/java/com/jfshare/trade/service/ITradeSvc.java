@@ -1,4 +1,4 @@
-package com.jfshare.trade.service.impl;
+package com.jfshare.trade.service;
 
 /**
  * Created by lenovo on 2015/9/28.

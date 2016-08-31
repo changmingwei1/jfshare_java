@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * Created by lenovo on 2015/9/28.
  */
 @Service
-public class TradeSvcImpl implements com.jfshare.trade.service.impl.ITradeSvc {
+public class TradeSvcImpl implements com.jfshare.trade.service.ITradeSvc {
     @Autowired
     private IBuyLimitRedis buyLimitRedis;
 
