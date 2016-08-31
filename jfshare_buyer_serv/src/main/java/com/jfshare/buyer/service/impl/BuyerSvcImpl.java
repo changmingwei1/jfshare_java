@@ -1,19 +1,20 @@
 package com.jfshare.buyer.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.jfshare.buyer.dao.mysql.IUserDao;
 import com.jfshare.buyer.dao.redis.IUserJedis;
+import com.jfshare.buyer.model.TbThirdUserinfo;
 import com.jfshare.buyer.model.TbUser;
 import com.jfshare.buyer.model.TbUserThirdparty;
 import com.jfshare.buyer.model.ThirdPartyType;
 import com.jfshare.buyer.server.ServHandle;
 import com.jfshare.buyer.service.IBuyerSvc;
-import com.jfshare.buyer.util.AuthenticationUtil;
-import com.jfshare.buyer.util.BuyerUtil;
-import com.jfshare.buyer.util.ConstantUtil;
-import com.jfshare.buyer.util.FailCode;
-import com.jfshare.buyer.util.RLoginName;
+import com.jfshare.buyer.util.*;
 import com.jfshare.finagle.thrift.buyer.AuthInfo;
 import com.jfshare.finagle.thrift.buyer.Buyer;
+import com.jfshare.finagle.thrift.buyer.BuyerListResult;
+import com.jfshare.finagle.thrift.buyer.H5ThirdLoginParam;
+import com.jfshare.finagle.thrift.buyer.H5ThirdLoginResult;
 import com.jfshare.finagle.thrift.buyer.LoginLog;
 import com.jfshare.finagle.thrift.buyer.ThirdpartyUser;
 import com.jfshare.finagle.thrift.result.Result;
@@ -26,6 +27,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +90,6 @@ public class BuyerSvcImpl implements IBuyerSvc {
 		user.setPwdEnc(CryptoUtil.encryptDBPwd(buyer.getPwdEnc().trim()));
 		user.setBirthday(DateUtils.strToDateTime(buyer.getBirthday(), DateUtils.Simple_DateTime_Format));
 		user.setCreateTime(new DateTime());
-
 		return userDaoImpl.insert(user);
 	}
 
@@ -110,6 +115,9 @@ public class BuyerSvcImpl implements IBuyerSvc {
 
 		Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(users.get(0));
 		BeanUtil.fillBeanData(buyer, stringObjectMap);
+		//DateTime类型的字符串截取
+		if(!StringUtil.isNullOrEmpty(buyer.getBirthday()))
+		buyer.setBirthday(buyer.getBirthday().substring(0, 10)+" "+buyer.getBirthday().substring(11, 19));
 	}
 
 	@Override
@@ -121,8 +129,10 @@ public class BuyerSvcImpl implements IBuyerSvc {
 
 	@Override
 	public void addOnline(TbUser user, LoginLog loginLog) {
+		logger.error("添加在线token开始-------------------！user=" + user.getUserId());
 		userJedisImpl.addOnline(user, loginLog.getTokenId());
 	}
+	
 
 	@Override
 	public int clearTryFail(TbUser user) {
@@ -141,7 +151,9 @@ public class BuyerSvcImpl implements IBuyerSvc {
 		if (signinModel == ConstantUtil.SIGNIN_MODEL_SINGLE) {
 			isOnline = userJedisImpl.isOnline(ConvertUtil.getString(userId), tokenId);
 		} else {
-			TbUser tbUser = userJedisImpl.getOnlineBySID(tokenId);
+			//TbUser tbUser = userJedisImpl.getOnlineBySID(tokenId);
+			//获取用户信息
+			TbUser tbUser = userJedisImpl.getOnlineByUID(ConvertUtil.getString(userId));
 			if (tbUser != null && tbUser.getUserId().intValue() == userId) {
 				isOnline = true;
 			}
@@ -150,11 +162,13 @@ public class BuyerSvcImpl implements IBuyerSvc {
 	}
 
 	@Override
-	public Buyer getOnline(int userId, String tokenId) {
-		TbUser tbUser = userJedisImpl.getOnlineBySID(tokenId);
-		if (tbUser == null) {
-			tbUser = userJedisImpl.getOnlineByUID(String.valueOf(userId));
-		}
+	public Buyer getOnline(int userId, String tokenId, LoginLog loginLog) {
+//		TbUser tbUser = userJedisImpl.getOnlineBySID(tokenId);
+//		if (tbUser == null) {
+//			tbUser = userJedisImpl.getOnlineByUID(String.valueOf(userId),loginLog );
+//		}
+		//获取用户个人信息
+		TbUser tbUser = userJedisImpl.getOnlineByUID(String.valueOf(userId));
 		if (!StringUtil.isNullOrEmpty(tbUser) && !StringUtil.isNullOrEmpty(tbUser.getUserId())) {
 			if (tbUser.getUserId() == userId) {
 				Buyer buyer = new Buyer();
@@ -209,7 +223,9 @@ public class BuyerSvcImpl implements IBuyerSvc {
 
 	@Override
 	public void removeOnline(Result result, int userId, String tokenId) {
-		int ret = userJedisImpl.removeOnline(ConvertUtil.getString(userId), tokenId);
+		//int ret = userJedisImpl.removeOnline(ConvertUtil.getString(userId), tokenId);
+		//删除redis用户个人信息和token根据userId
+		int ret = userJedisImpl.removeOnline(ConvertUtil.getString(userId));
 		if (ret == 0) {
 			FailCode.addFails(result, FailCode.noOnlineUser);
 		} else if (ret == -1) {
@@ -275,16 +291,28 @@ public class BuyerSvcImpl implements IBuyerSvc {
 	}
 
 	@Override
-	public Buyer createUserThird(ThirdpartyUser thirdUser) {
+	@Transactional
+	public Buyer createUserThird(ThirdpartyUser thirdUser) throws Exception {
 		Buyer buyer = new Buyer();
 		int thirdType = ThirdPartyType.valueOf(thirdUser.getThirdType()).getCode();
 		String loginName = RLoginName.getRLoginName(thirdType);
 		buyer.setUserName(thirdUser.getUserName());
 		buyer.setLoginName(loginName);
-		buyer.setPwdEnc("24rcLSmUWau+Vu7X8g+OMg==");
-		this.insert(buyer);
+		buyer.setState(1);	//天翼用户
+		buyer.setBirthday("1990-01-01 00:00:00");
+		buyer.setPwdEnc(JSON.toJSONString(thirdUser));
+		String deviceNo = JSON.parseObject(thirdUser.getExtInfo()).getString("deviceNo");
+		if(deviceNo.contains("@") || deviceNo.length() > 20) {
+			buyer.setEmail(deviceNo);
+		} else {
+			buyer.setMobile(deviceNo);
+		}
+		int userId = this.insert(buyer);
+		buyer.setUserId(userId);
+		Buyer newBuyer = this.getBuyerByLoginName(buyer.getLoginName());
+		this.insertThirdPartyRel(thirdUser, newBuyer.getUserId());
 
-		return this.getBuyerByLoginName(loginName);
+		return newBuyer;
 	}
 
 	@Override
@@ -303,11 +331,16 @@ public class BuyerSvcImpl implements IBuyerSvc {
 
 		authInfo.setToken(token);
 		authInfo.setPpInfo(ppInfo);
+		String clientFlag = null;
 		//保证android和ios只能登陆一个
 		if(clientType ==2 || clientType ==1 ){
-			clientType = 999;
+			 clientFlag = "Mobile";
+		}if(clientType ==3){
+			clientFlag = "H5";
+		}if(clientType ==4){
+			clientFlag = "Web";
 		}
-		userJedisImpl.setTokenTimestamp(userId, time,clientType);
+		userJedisImpl.setTokenTimestamp(userId, time,clientFlag);
 		logger.info("登陆加密后！token为:"+ token);
 		logger.info("登陆加密后！ppInfo为:"+ ppInfo);
 		return authInfo;
@@ -315,15 +348,239 @@ public class BuyerSvcImpl implements IBuyerSvc {
 	}
 	@Override
 	public boolean verificationToken(String uid, AuthInfo authInfo, String appId,int clientType) throws Exception {
+		String clientFlag = null;
 		//保证android和ios只能登陆一个
 		if(clientType ==2 || clientType ==1 ){
-			clientType = 999;
+			 clientFlag = "Mobile";
+		}if(clientType ==3){
+			clientFlag = "H5";
+		}if(clientType ==4){
+			clientFlag = "Web";
 		}
-		logger.info("校验开始准备，time的key为："+clientType);
-		String time = userJedisImpl.getTokenTimestamp(uid,clientType);
+		String time = userJedisImpl.getTokenTimestamp(uid,clientFlag);
 		boolean flg = AuthenticationUtil.tokenVerification(authInfo.getToken(), authInfo.ppInfo, appId, time);
 		
 		return flg;
 	}
+	@Override
+	public boolean verificationTokenByonline(LoginLog loginLog, AuthInfo authInfo) throws Exception {
+		boolean falg = userJedisImpl.isOnlineToken(String.valueOf(loginLog.getUserId()),authInfo.getToken(),loginLog.getClientType());		
+		return falg;
+	}
+	@Override
+	public boolean userIsExistForThird(String cust_id, int thirdType) {
+		int count = userDaoImpl.userIsExistForThird(cust_id,thirdType);
+
+		return count > 0 ? true : false;
+	}
+	@Override
+	public List<TbUser> selectByUserPK(TbThirdUserinfo ttu){
+		
+		return userDaoImpl.selectByUserPK(ttu);
+		
+	}
+	@Override
+	@Transactional
+	public TbUser addUserAndThirdUser(TbThirdUserinfo ttu,TbUser tu){
+		
+		String mobile=ttu.getMobile();
+		int thirdType=ttu.getThirdType();
+		
+		//判断手机号是否已经绑定
+		if(userDaoImpl.userIsExistForMobile(mobile, thirdType)>0){
+			TbUser tbu=new TbUser();
+			tbu.setUserId(-1);
+			return tbu;
+		}
+		
+		List<TbUser> tbUsers=userDaoImpl.userExistForMoblie(mobile);
+		if(tbUsers.size()==0){//user表中无数据
+			
+			int userId=userDaoImpl.insertUser(tu);//返回刚才插入的key
+			
+			ttu.setUserId(tu.getUserId());
+			
+			userDaoImpl.insertThirdUserInfo(ttu);
+			
+			tu.setUserId(tu.getUserId());
+			return tu;
+			
+		}else{//只插数据到第三方表
+			
+			ttu.setUserId(tbUsers.get(0).getUserId());
+			
+			userDaoImpl.insertThirdUserInfo(ttu);
+			
+			return tbUsers.get(0);
+		}
+		
+	}
+
+	@Override
+	public void getListBuyer(BuyerListResult buyerListResult,List<Integer> userIdList) {
+		List<TbUser> tbUsers = userDaoImpl.getListBuyer(userIdList);
+		List<Buyer> buyerList = new ArrayList<Buyer>();
+		if(!tbUsers.isEmpty()){
+			for(TbUser tbUser : tbUsers){
+				Buyer Buyer = BuyerUtil.tbUser2Buyer(tbUser);
+				buyerList.add(Buyer);
+			}
+			buyerListResult.setBuyerList(buyerList);
+		}
+	}
+
+	@Override
+	public void addOnlineToken(TbUser user, LoginLog loginLog) {
+		logger.error("添加在线token-------------------！userId=" + user.getUserId() +"tokenId=" +loginLog.getTokenId()+"type="+loginLog.getClientType());
+		userJedisImpl.addOnlineToken(user.getUserId(), loginLog.getTokenId(),loginLog.getClientType());	
+	}
+
+//	@Override
+//	public Buyer getBuyerRedis(int userId, int clientType) { 
+//		LoginLog loginLog = new LoginLog();
+//		loginLog.setClientType(clientType);
+//		//TbUser tbUser = userJedisImpl.getOnlineByUID(String.valueOf(userId),loginLog );
+//		TbUser tbUser = userJedisImpl.getOnlineByUID(String.valueOf(userId));
+//		if (!StringUtil.isNullOrEmpty(tbUser) && !StringUtil.isNullOrEmpty(tbUser.getUserId())) {
+//			if (tbUser.getUserId() == userId) {
+//				Buyer buyer = new Buyer();
+//				Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(tbUser);
+//				BeanUtil.fillBeanData(buyer, stringObjectMap);
+//				if (tbUser.getBirthday() != null) {
+//					buyer.setBirthday(DateUtils.dateToStrLong(tbUser.getBirthday().toDate()));
+//				}
+//				return buyer;
+//			}
+//		}
+//
+//		return null;
+//	}
+	@Override
+	public Buyer getBuyerRedis(int userId) {
+		//获取用户信息
+		TbUser tbUser = userJedisImpl.getOnlineByUID(String.valueOf(userId));
+		if (!StringUtil.isNullOrEmpty(tbUser) && !StringUtil.isNullOrEmpty(tbUser.getUserId())) {
+			if (tbUser.getUserId() == userId) {
+				Buyer buyer = new Buyer();
+				Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(tbUser);
+				BeanUtil.fillBeanData(buyer, stringObjectMap);
+				if (tbUser.getBirthday() != null) {
+					buyer.setBirthday(DateUtils.dateToStrLong(tbUser.getBirthday().toDate()));
+				}
+				return buyer;
+			}
+		}
+
+		return null;
+	}
+	@Override
+	public void updateOnline(TbUser tbuser) {
+		logger.error("更新在线token-------------------！user=" + tbuser.getUserId());
+		userJedisImpl.updateOnline(tbuser);
+	}
+
+	@Override
+	public TbUser getTbuser(int userId) {
+		TbUser tbUser = userDaoImpl.getBuyer(userId);
+		if (!StringUtil.isNullOrEmpty(tbUser) && !StringUtil.isNullOrEmpty(tbUser.getUserId())) {
+			Buyer buyer = new Buyer();
+			tbUser.setPwdEnc("******");
+			Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(tbUser);
+			BeanUtil.fillBeanData(buyer, stringObjectMap);
+			if (tbUser.getBirthday() != null) {
+				buyer.setBirthday(DateUtils.dateToStrLong(tbUser.getBirthday().toDate()));
+			}
+			return tbUser;
+		}
+
+		return null;
+	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, rollbackFor = Exception.class)
+	@Override
+	public void h5ThirdLogin(H5ThirdLoginResult h5ThirdLoginResult, H5ThirdLoginParam param) {
+		String singKey = PropertiesUtil.getProperty(ConstantUtil.IMAGE_KEY, "def_h5ThirdLogin_singkey", "0");
+		if("0".equals(singKey)){//无权限访问此接口
+			FailCode.addFails(h5ThirdLoginResult.getResult(), FailCode.repquestErrorNotSingkey);
+			return;
+        }
+		String appcode = PropertiesUtil.getProperty(ConstantUtil.IMAGE_KEY, "def_h5ThirdLogin_appcode", "0");
+		if("0".equals(appcode)){//无权限访问此接口
+			FailCode.addFails(h5ThirdLoginResult.getResult(), FailCode.repquestErrorNotSingkey);
+			return;
+        }
+		String waitSign = "AppCode=" + appcode + "&SingKey="+singKey + "&Date=" + param.getRequestDate()+"&Mobile=" + param.getMobile()+"&WayType=" + param.getWayType();
+		
+
+		String sign = null;//加密后字符串
+        try {
+			 sign = BuyerUtil.md5Encode(waitSign);	
+		} catch (Exception e) {
+			logger.info("数据签名加密异常"+e.getMessage());
+			e.printStackTrace();
+		}
+        
+        if(!sign.equals(param.getSign())){//数字签名验证是否正确
+			FailCode.addFails(h5ThirdLoginResult.getResult(), FailCode.repquestErrorSign);
+			return;
+        }
+		if(BuyerUtil.isMobile(param.getMobile()) == false){//手机号是否为正确手机号
+			FailCode.addFails(h5ThirdLoginResult.getResult(), FailCode.isNotMobile);
+			return;
+		}
+		TbUser tbUser = null;
+		//获取第三方绑定账户信息
+		TbUserThirdparty tbutp  = userDaoImpl.getThirdUser(param.getMobile());
+		if(tbutp != null){
+			//获取聚分享用户信息
+			tbUser = userDaoImpl.getBuyer(tbutp.getUserId());
+		}
+		
+		if(tbUser == null){
+				Buyer buyer = new Buyer();
+	     		buyer.setLoginName(param.getMobile());
+	     		buyer.setState(1);	//天翼用户
+	     		buyer.setBirthday("1990-01-01 00:00:00");
+	     		buyer.setPwdEnc("");
+	     		buyer.setMobile(param.getMobile());
+	     		//新增聚分享用户信息
+	     		int userId =userDaoImpl.insertBuyerH5(buyer);
+	     		if(userId > 0){
+	     			TbUserThirdparty tbUserThirdparty = new TbUserThirdparty(); 
+	     			tbUserThirdparty.setAccountNo(param.getMobile());
+	     			tbUserThirdparty.setUserId(userId);
+	     			tbUserThirdparty.setCustId(param.getMobile());
+	     			tbUserThirdparty.setThirdType(0);
+	     			tbUserThirdparty.setUserName(param.getMobile());
+	     			//新增第三方账号绑定关系
+	     			int rows = userDaoImpl.insertThirdParty(tbUserThirdparty);
+	     			if(rows > 0){
+	     				//获取聚分享用户信息
+			     		tbUser = userDaoImpl.getBuyer(userId);
+	     			}	
+	     		}else{
+	     			FailCode.addFails(h5ThirdLoginResult.getResult(), FailCode.SYSTEM_EXCEPTION);
+	    			return;
+	     		}	
+		}
+		
+		LoginLog loginLog = new LoginLog();
+        loginLog.setUserId(tbUser.getUserId());
+        loginLog.setClientType(3);//H5
+        tbUser.setPwdEnc(null);
+		AuthInfo authInfo = null;
+		try {
+			authInfo = createAuth(String.valueOf(tbUser.getUserId()), tbUser.getMobile(), tbUser.getEmail(), loginLog.getBrowser(),loginLog.getClientType());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		loginLog.setTokenId(authInfo.getToken());
+		//添加在线用户信息
+		addOnline(tbUser, loginLog);
+		//添加在线用户token
+		addOnlineToken(tbUser, loginLog);
+		clearTryFail(tbUser);
+		String url = PropertiesUtil.getProperty(ConstantUtil.IMAGE_KEY, "def_h5ThirdLogin_url", "0");
+		h5ThirdLoginResult.setUrl(url+"?userId="+tbUser.getUserId()+"&token="+authInfo.getToken()+"&ppinfo="+authInfo.getPpInfo());	
+	}
 }

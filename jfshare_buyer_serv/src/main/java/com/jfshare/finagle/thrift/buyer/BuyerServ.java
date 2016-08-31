@@ -48,6 +48,7 @@ public class BuyerServ {
     public BuyerResult getOnlineInfo(LoginLog loginLog) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult pwdFind(int findWay, String account) throws TException;
     public BuyerResult getBuyer(Buyer buyer) throws TException;
+    public BuyerListResult getListBuyer(List<Integer> userIdList) throws TException;
     public com.jfshare.finagle.thrift.result.Result updateBuyer(Buyer buyer) throws TException;
     public com.jfshare.finagle.thrift.result.Result resetBuyerPwd(String newPwd, Buyer buyer) throws TException;
     public com.jfshare.finagle.thrift.result.Result newResetBuyerPwd(String newPwd, Buyer buyer) throws TException;
@@ -55,6 +56,10 @@ public class BuyerServ {
     public BuyerResult isBindThirdParty(String thirdType, LoginLog loginLog) throws TException;
     public AuthInfoResult getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog) throws TException;
     public com.jfshare.finagle.thrift.result.Result validAuth(LoginLog loginLog, AuthInfo authInfo) throws TException;
+    public BuyerResult thirdUserSignin(LoginLog loginLog, UserInfoThird UserThird, ValidateInfo validateInfo) throws TException;
+    public BuyerResult isExitsThirdUser(LoginLog loginLog, ValidateInfo validateInfo) throws TException;
+    public BuyerResult requestHttps(String url, String extInfo) throws TException;
+    public H5ThirdLoginResult H5ThirdLogin(H5ThirdLoginParam param) throws TException;
   }
 
   public interface AsyncIface {
@@ -69,6 +74,7 @@ public class BuyerServ {
     public void getOnlineInfo(LoginLog loginLog, AsyncMethodCallback<AsyncClient.getOnlineInfo_call> resultHandler) throws TException;
     public void pwdFind(int findWay, String account, AsyncMethodCallback<AsyncClient.pwdFind_call> resultHandler) throws TException;
     public void getBuyer(Buyer buyer, AsyncMethodCallback<AsyncClient.getBuyer_call> resultHandler) throws TException;
+    public void getListBuyer(List<Integer> userIdList, AsyncMethodCallback<AsyncClient.getListBuyer_call> resultHandler) throws TException;
     public void updateBuyer(Buyer buyer, AsyncMethodCallback<AsyncClient.updateBuyer_call> resultHandler) throws TException;
     public void resetBuyerPwd(String newPwd, Buyer buyer, AsyncMethodCallback<AsyncClient.resetBuyerPwd_call> resultHandler) throws TException;
     public void newResetBuyerPwd(String newPwd, Buyer buyer, AsyncMethodCallback<AsyncClient.newResetBuyerPwd_call> resultHandler) throws TException;
@@ -76,6 +82,10 @@ public class BuyerServ {
     public void isBindThirdParty(String thirdType, LoginLog loginLog, AsyncMethodCallback<AsyncClient.isBindThirdParty_call> resultHandler) throws TException;
     public void getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog, AsyncMethodCallback<AsyncClient.getAuthInfo_call> resultHandler) throws TException;
     public void validAuth(LoginLog loginLog, AuthInfo authInfo, AsyncMethodCallback<AsyncClient.validAuth_call> resultHandler) throws TException;
+    public void thirdUserSignin(LoginLog loginLog, UserInfoThird UserThird, ValidateInfo validateInfo, AsyncMethodCallback<AsyncClient.thirdUserSignin_call> resultHandler) throws TException;
+    public void isExitsThirdUser(LoginLog loginLog, ValidateInfo validateInfo, AsyncMethodCallback<AsyncClient.isExitsThirdUser_call> resultHandler) throws TException;
+    public void requestHttps(String url, String extInfo, AsyncMethodCallback<AsyncClient.requestHttps_call> resultHandler) throws TException;
+    public void H5ThirdLogin(H5ThirdLoginParam param, AsyncMethodCallback<AsyncClient.H5ThirdLogin_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
@@ -90,6 +100,7 @@ public class BuyerServ {
     public Future<BuyerResult> getOnlineInfo(LoginLog loginLog);
     public Future<com.jfshare.finagle.thrift.result.StringResult> pwdFind(int findWay, String account);
     public Future<BuyerResult> getBuyer(Buyer buyer);
+    public Future<BuyerListResult> getListBuyer(List<Integer> userIdList);
     public Future<com.jfshare.finagle.thrift.result.Result> updateBuyer(Buyer buyer);
     public Future<com.jfshare.finagle.thrift.result.Result> resetBuyerPwd(String newPwd, Buyer buyer);
     public Future<com.jfshare.finagle.thrift.result.Result> newResetBuyerPwd(String newPwd, Buyer buyer);
@@ -97,6 +108,10 @@ public class BuyerServ {
     public Future<BuyerResult> isBindThirdParty(String thirdType, LoginLog loginLog);
     public Future<AuthInfoResult> getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog);
     public Future<com.jfshare.finagle.thrift.result.Result> validAuth(LoginLog loginLog, AuthInfo authInfo);
+    public Future<BuyerResult> thirdUserSignin(LoginLog loginLog, UserInfoThird UserThird, ValidateInfo validateInfo);
+    public Future<BuyerResult> isExitsThirdUser(LoginLog loginLog, ValidateInfo validateInfo);
+    public Future<BuyerResult> requestHttps(String url, String extInfo);
+    public Future<H5ThirdLoginResult> H5ThirdLogin(H5ThirdLoginParam param);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -525,6 +540,41 @@ public class BuyerServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getBuyer failed: unknown result");
     }
+    public BuyerListResult getListBuyer(List<Integer> userIdList) throws TException
+    {
+      send_getListBuyer(userIdList);
+      return recv_getListBuyer();
+    }
+
+    public void send_getListBuyer(List<Integer> userIdList) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("getListBuyer", TMessageType.CALL, ++seqid_));
+      getListBuyer_args args = new getListBuyer_args();
+      args.setUserIdList(userIdList);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public BuyerListResult recv_getListBuyer() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "getListBuyer failed: out of sequence response");
+      }
+      getListBuyer_result result = new getListBuyer_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "getListBuyer failed: unknown result");
+    }
     public com.jfshare.finagle.thrift.result.Result updateBuyer(Buyer buyer) throws TException
     {
       send_updateBuyer(buyer);
@@ -776,6 +826,150 @@ public class BuyerServ {
         return result.success;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "validAuth failed: unknown result");
+    }
+    public BuyerResult thirdUserSignin(LoginLog loginLog, UserInfoThird UserThird, ValidateInfo validateInfo) throws TException
+    {
+      send_thirdUserSignin(loginLog, UserThird, validateInfo);
+      return recv_thirdUserSignin();
+    }
+
+    public void send_thirdUserSignin(LoginLog loginLog, UserInfoThird UserThird, ValidateInfo validateInfo) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("thirdUserSignin", TMessageType.CALL, ++seqid_));
+      thirdUserSignin_args args = new thirdUserSignin_args();
+      args.setLoginLog(loginLog);
+      args.setUserThird(UserThird);
+      args.setValidateInfo(validateInfo);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public BuyerResult recv_thirdUserSignin() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "thirdUserSignin failed: out of sequence response");
+      }
+      thirdUserSignin_result result = new thirdUserSignin_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "thirdUserSignin failed: unknown result");
+    }
+    public BuyerResult isExitsThirdUser(LoginLog loginLog, ValidateInfo validateInfo) throws TException
+    {
+      send_isExitsThirdUser(loginLog, validateInfo);
+      return recv_isExitsThirdUser();
+    }
+
+    public void send_isExitsThirdUser(LoginLog loginLog, ValidateInfo validateInfo) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("isExitsThirdUser", TMessageType.CALL, ++seqid_));
+      isExitsThirdUser_args args = new isExitsThirdUser_args();
+      args.setLoginLog(loginLog);
+      args.setValidateInfo(validateInfo);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public BuyerResult recv_isExitsThirdUser() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "isExitsThirdUser failed: out of sequence response");
+      }
+      isExitsThirdUser_result result = new isExitsThirdUser_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "isExitsThirdUser failed: unknown result");
+    }
+    public BuyerResult requestHttps(String url, String extInfo) throws TException
+    {
+      send_requestHttps(url, extInfo);
+      return recv_requestHttps();
+    }
+
+    public void send_requestHttps(String url, String extInfo) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("requestHttps", TMessageType.CALL, ++seqid_));
+      requestHttps_args args = new requestHttps_args();
+      args.setUrl(url);
+      args.setExtInfo(extInfo);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public BuyerResult recv_requestHttps() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "requestHttps failed: out of sequence response");
+      }
+      requestHttps_result result = new requestHttps_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "requestHttps failed: unknown result");
+    }
+    public H5ThirdLoginResult H5ThirdLogin(H5ThirdLoginParam param) throws TException
+    {
+      send_H5ThirdLogin(param);
+      return recv_H5ThirdLogin();
+    }
+
+    public void send_H5ThirdLogin(H5ThirdLoginParam param) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("H5ThirdLogin", TMessageType.CALL, ++seqid_));
+      H5ThirdLogin_args args = new H5ThirdLogin_args();
+      args.setParam(param);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public H5ThirdLoginResult recv_H5ThirdLogin() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "H5ThirdLogin failed: out of sequence response");
+      }
+      H5ThirdLogin_result result = new H5ThirdLogin_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "H5ThirdLogin failed: unknown result");
     }
   }
 
@@ -1149,6 +1343,37 @@ public class BuyerServ {
         return (new Client(prot)).recv_getBuyer();
       }
      }
+    public void getListBuyer(List<Integer> userIdList, AsyncMethodCallback<getListBuyer_call> resultHandler) throws TException {
+      checkReady();
+      getListBuyer_call method_call = new getListBuyer_call(userIdList, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class getListBuyer_call extends TAsyncMethodCall {
+      private List<Integer> userIdList;
+
+      public getListBuyer_call(List<Integer> userIdList, AsyncMethodCallback<getListBuyer_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.userIdList = userIdList;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("getListBuyer", TMessageType.CALL, 0));
+        getListBuyer_args args = new getListBuyer_args();
+        args.setUserIdList(userIdList);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerListResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getListBuyer();
+      }
+     }
     public void updateBuyer(Buyer buyer, AsyncMethodCallback<updateBuyer_call> resultHandler) throws TException {
       checkReady();
       updateBuyer_call method_call = new updateBuyer_call(buyer, resultHandler, this, protocolFactory, transport);
@@ -1385,6 +1610,142 @@ public class BuyerServ {
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         return (new Client(prot)).recv_validAuth();
+      }
+     }
+    public void thirdUserSignin(LoginLog loginLog, UserInfoThird UserThird, ValidateInfo validateInfo, AsyncMethodCallback<thirdUserSignin_call> resultHandler) throws TException {
+      checkReady();
+      thirdUserSignin_call method_call = new thirdUserSignin_call(loginLog, UserThird, validateInfo, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class thirdUserSignin_call extends TAsyncMethodCall {
+      private LoginLog loginLog;
+      private UserInfoThird UserThird;
+      private ValidateInfo validateInfo;
+
+      public thirdUserSignin_call(LoginLog loginLog, UserInfoThird UserThird, ValidateInfo validateInfo, AsyncMethodCallback<thirdUserSignin_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.loginLog = loginLog;
+        this.UserThird = UserThird;
+        this.validateInfo = validateInfo;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("thirdUserSignin", TMessageType.CALL, 0));
+        thirdUserSignin_args args = new thirdUserSignin_args();
+        args.setLoginLog(loginLog);
+        args.setUserThird(UserThird);
+        args.setValidateInfo(validateInfo);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_thirdUserSignin();
+      }
+     }
+    public void isExitsThirdUser(LoginLog loginLog, ValidateInfo validateInfo, AsyncMethodCallback<isExitsThirdUser_call> resultHandler) throws TException {
+      checkReady();
+      isExitsThirdUser_call method_call = new isExitsThirdUser_call(loginLog, validateInfo, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class isExitsThirdUser_call extends TAsyncMethodCall {
+      private LoginLog loginLog;
+      private ValidateInfo validateInfo;
+
+      public isExitsThirdUser_call(LoginLog loginLog, ValidateInfo validateInfo, AsyncMethodCallback<isExitsThirdUser_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.loginLog = loginLog;
+        this.validateInfo = validateInfo;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("isExitsThirdUser", TMessageType.CALL, 0));
+        isExitsThirdUser_args args = new isExitsThirdUser_args();
+        args.setLoginLog(loginLog);
+        args.setValidateInfo(validateInfo);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_isExitsThirdUser();
+      }
+     }
+    public void requestHttps(String url, String extInfo, AsyncMethodCallback<requestHttps_call> resultHandler) throws TException {
+      checkReady();
+      requestHttps_call method_call = new requestHttps_call(url, extInfo, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class requestHttps_call extends TAsyncMethodCall {
+      private String url;
+      private String extInfo;
+
+      public requestHttps_call(String url, String extInfo, AsyncMethodCallback<requestHttps_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.url = url;
+        this.extInfo = extInfo;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("requestHttps", TMessageType.CALL, 0));
+        requestHttps_args args = new requestHttps_args();
+        args.setUrl(url);
+        args.setExtInfo(extInfo);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_requestHttps();
+      }
+     }
+    public void H5ThirdLogin(H5ThirdLoginParam param, AsyncMethodCallback<H5ThirdLogin_call> resultHandler) throws TException {
+      checkReady();
+      H5ThirdLogin_call method_call = new H5ThirdLogin_call(param, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class H5ThirdLogin_call extends TAsyncMethodCall {
+      private H5ThirdLoginParam param;
+
+      public H5ThirdLogin_call(H5ThirdLoginParam param, AsyncMethodCallback<H5ThirdLogin_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.param = param;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("H5ThirdLogin", TMessageType.CALL, 0));
+        H5ThirdLogin_args args = new H5ThirdLogin_args();
+        args.setParam(param);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public H5ThirdLoginResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_H5ThirdLogin();
       }
      }
    }
@@ -1733,6 +2094,36 @@ public class BuyerServ {
         return Future.exception(e);
       }
     }
+    public Future<BuyerListResult> getListBuyer(List<Integer> userIdList) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("getListBuyer", TMessageType.CALL, 0));
+        getListBuyer_args __args__ = new getListBuyer_args();
+        __args__.setUserIdList(userIdList);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerListResult>>() {
+          public Future<BuyerListResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_getListBuyer());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<com.jfshare.finagle.thrift.result.Result> updateBuyer(Buyer buyer) {
       try {
         // TODO: size
@@ -1950,6 +2341,130 @@ public class BuyerServ {
         return Future.exception(e);
       }
     }
+    public Future<BuyerResult> thirdUserSignin(LoginLog loginLog, UserInfoThird UserThird, ValidateInfo validateInfo) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("thirdUserSignin", TMessageType.CALL, 0));
+        thirdUserSignin_args __args__ = new thirdUserSignin_args();
+        __args__.setLoginLog(loginLog);
+        __args__.setUserThird(UserThird);
+        __args__.setValidateInfo(validateInfo);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_thirdUserSignin());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<BuyerResult> isExitsThirdUser(LoginLog loginLog, ValidateInfo validateInfo) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("isExitsThirdUser", TMessageType.CALL, 0));
+        isExitsThirdUser_args __args__ = new isExitsThirdUser_args();
+        __args__.setLoginLog(loginLog);
+        __args__.setValidateInfo(validateInfo);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_isExitsThirdUser());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<BuyerResult> requestHttps(String url, String extInfo) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("requestHttps", TMessageType.CALL, 0));
+        requestHttps_args __args__ = new requestHttps_args();
+        __args__.setUrl(url);
+        __args__.setExtInfo(extInfo);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_requestHttps());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<H5ThirdLoginResult> H5ThirdLogin(H5ThirdLoginParam param) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("H5ThirdLogin", TMessageType.CALL, 0));
+        H5ThirdLogin_args __args__ = new H5ThirdLogin_args();
+        __args__.setParam(param);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<H5ThirdLoginResult>>() {
+          public Future<H5ThirdLoginResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_H5ThirdLogin());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
   }
 
   public static class Processor implements TProcessor {
@@ -1968,6 +2483,7 @@ public class BuyerServ {
       processMap_.put("getOnlineInfo", new getOnlineInfo());
       processMap_.put("pwdFind", new pwdFind());
       processMap_.put("getBuyer", new getBuyer());
+      processMap_.put("getListBuyer", new getListBuyer());
       processMap_.put("updateBuyer", new updateBuyer());
       processMap_.put("resetBuyerPwd", new resetBuyerPwd());
       processMap_.put("newResetBuyerPwd", new newResetBuyerPwd());
@@ -1975,6 +2491,10 @@ public class BuyerServ {
       processMap_.put("isBindThirdParty", new isBindThirdParty());
       processMap_.put("getAuthInfo", new getAuthInfo());
       processMap_.put("validAuth", new validAuth());
+      processMap_.put("thirdUserSignin", new thirdUserSignin());
+      processMap_.put("isExitsThirdUser", new isExitsThirdUser());
+      processMap_.put("requestHttps", new requestHttps());
+      processMap_.put("H5ThirdLogin", new H5ThirdLogin());
     }
 
     protected static interface ProcessFunction {
@@ -2277,6 +2797,31 @@ public class BuyerServ {
         oprot.getTransport().flush();
       }
     }
+    private class getListBuyer implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        getListBuyer_args args = new getListBuyer_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("getListBuyer", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        getListBuyer_result result = new getListBuyer_result();
+        result.success = iface_.getListBuyer(args.userIdList);
+        
+        oprot.writeMessageBegin(new TMessage("getListBuyer", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
     private class updateBuyer implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
@@ -2447,6 +2992,106 @@ public class BuyerServ {
         result.success = iface_.validAuth(args.loginLog, args.authInfo);
         
         oprot.writeMessageBegin(new TMessage("validAuth", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class thirdUserSignin implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        thirdUserSignin_args args = new thirdUserSignin_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("thirdUserSignin", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        thirdUserSignin_result result = new thirdUserSignin_result();
+        result.success = iface_.thirdUserSignin(args.loginLog, args.UserThird, args.validateInfo);
+        
+        oprot.writeMessageBegin(new TMessage("thirdUserSignin", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class isExitsThirdUser implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        isExitsThirdUser_args args = new isExitsThirdUser_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("isExitsThirdUser", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        isExitsThirdUser_result result = new isExitsThirdUser_result();
+        result.success = iface_.isExitsThirdUser(args.loginLog, args.validateInfo);
+        
+        oprot.writeMessageBegin(new TMessage("isExitsThirdUser", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class requestHttps implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        requestHttps_args args = new requestHttps_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("requestHttps", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        requestHttps_result result = new requestHttps_result();
+        result.success = iface_.requestHttps(args.url, args.extInfo);
+        
+        oprot.writeMessageBegin(new TMessage("requestHttps", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class H5ThirdLogin implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        H5ThirdLogin_args args = new H5ThirdLogin_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("H5ThirdLogin", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        H5ThirdLogin_result result = new H5ThirdLogin_result();
+        result.success = iface_.H5ThirdLogin(args.param);
+        
+        oprot.writeMessageBegin(new TMessage("H5ThirdLogin", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -3198,6 +3843,73 @@ public class BuyerServ {
           }
         }
       });
+      functionMap.put("getListBuyer", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          getListBuyer_args args = new getListBuyer_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("getListBuyer", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerListResult> future;
+          try {
+            future = iface.getListBuyer(args.userIdList);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerListResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerListResult value) {
+                getListBuyer_result result = new getListBuyer_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("getListBuyer", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
       functionMap.put("updateBuyer", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
           updateBuyer_args args = new updateBuyer_args();
@@ -3649,6 +4361,274 @@ public class BuyerServ {
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
                   oprot.writeMessageBegin(new TMessage("validAuth", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("thirdUserSignin", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          thirdUserSignin_args args = new thirdUserSignin_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("thirdUserSignin", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.thirdUserSignin(args.loginLog, args.UserThird, args.validateInfo);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                thirdUserSignin_result result = new thirdUserSignin_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("thirdUserSignin", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("isExitsThirdUser", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          isExitsThirdUser_args args = new isExitsThirdUser_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("isExitsThirdUser", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.isExitsThirdUser(args.loginLog, args.validateInfo);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                isExitsThirdUser_result result = new isExitsThirdUser_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("isExitsThirdUser", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("requestHttps", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          requestHttps_args args = new requestHttps_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("requestHttps", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.requestHttps(args.url, args.extInfo);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                requestHttps_result result = new requestHttps_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("requestHttps", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("H5ThirdLogin", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          H5ThirdLogin_args args = new H5ThirdLogin_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("H5ThirdLogin", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<H5ThirdLoginResult> future;
+          try {
+            future = iface.H5ThirdLogin(args.param);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<H5ThirdLoginResult, Future<byte[]>>() {
+              public Future<byte[]> apply(H5ThirdLoginResult value) {
+                H5ThirdLogin_result result = new H5ThirdLogin_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("H5ThirdLogin", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -10368,6 +11348,615 @@ public class BuyerServ {
 }
 
 
+  public static class getListBuyer_args implements TBase<getListBuyer_args, getListBuyer_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getListBuyer_args");
+
+  private static final TField USER_ID_LIST_FIELD_DESC = new TField("userIdList", TType.LIST, (short)1);
+
+
+  public List<Integer> userIdList;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    USER_ID_LIST((short)1, "userIdList");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // USER_ID_LIST
+  	return USER_ID_LIST;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.USER_ID_LIST, new FieldMetaData("userIdList", TFieldRequirementType.DEFAULT,
+      new ListMetaData(TType.LIST,
+                new FieldValueMetaData(TType.I32))));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getListBuyer_args.class, metaDataMap);
+  }
+
+
+  public getListBuyer_args() {
+  }
+
+  public getListBuyer_args(
+    List<Integer> userIdList)
+  {
+    this();
+    this.userIdList = userIdList;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getListBuyer_args(getListBuyer_args other) {
+    if (other.isSetUserIdList()) {
+      List<Integer> __this__userIdList = new ArrayList<Integer>();
+      for (Integer other_element : other.userIdList) {
+        __this__userIdList.add(other_element);
+      }
+      this.userIdList = __this__userIdList;
+    }
+  }
+
+  public getListBuyer_args deepCopy() {
+    return new getListBuyer_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.userIdList = null;
+  }
+
+  public int getUserIdListSize() {
+    return (this.userIdList == null) ? 0 : this.userIdList.size();
+  }
+
+  public java.util.Iterator<Integer> getUserIdListIterator() {
+    return (this.userIdList == null) ? null : this.userIdList.iterator();
+  }
+
+  public void addToUserIdList(int elem) {
+    if (this.userIdList == null) {
+      this.userIdList = new ArrayList<Integer>();
+    }
+    this.userIdList.add(elem);
+  }
+
+  public List<Integer> getUserIdList() {
+    return this.userIdList;
+  }
+
+  public getListBuyer_args setUserIdList(List<Integer> userIdList) {
+    this.userIdList = userIdList;
+    
+    return this;
+  }
+
+  public void unsetUserIdList() {
+    this.userIdList = null;
+  }
+
+  /** Returns true if field userIdList is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserIdList() {
+    return this.userIdList != null;
+  }
+
+  public void setUserIdListIsSet(boolean value) {
+    if (!value) {
+      this.userIdList = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case USER_ID_LIST:
+      if (value == null) {
+        unsetUserIdList();
+      } else {
+        setUserIdList((List<Integer>)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case USER_ID_LIST:
+      return getUserIdList();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case USER_ID_LIST:
+      return isSetUserIdList();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getListBuyer_args)
+      return this.equals((getListBuyer_args)that);
+    return false;
+  }
+
+  public boolean equals(getListBuyer_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_userIdList = true && this.isSetUserIdList();
+    boolean that_present_userIdList = true && that.isSetUserIdList();
+    if (this_present_userIdList || that_present_userIdList) {
+      if (!(this_present_userIdList && that_present_userIdList))
+        return false;
+      if (!this.userIdList.equals(that.userIdList))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_userIdList = true && (isSetUserIdList());
+    builder.append(present_userIdList);
+    if (present_userIdList)
+      builder.append(userIdList);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getListBuyer_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getListBuyer_args typedOther = (getListBuyer_args)other;
+
+    lastComparison = Boolean.valueOf(isSetUserIdList()).compareTo(typedOther.isSetUserIdList());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUserIdList()) {
+      lastComparison = TBaseHelper.compareTo(this.userIdList, typedOther.userIdList);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // USER_ID_LIST
+          if (field.type == TType.LIST) {
+            {
+            TList _list4 = iprot.readListBegin();
+            this.userIdList = new ArrayList<Integer>(_list4.size);
+            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
+            {
+              int _elem6;
+              _elem6 = iprot.readI32();
+              this.userIdList.add(_elem6);
+            }
+            iprot.readListEnd();
+            }
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.userIdList != null) {
+      oprot.writeFieldBegin(USER_ID_LIST_FIELD_DESC);
+      {
+        oprot.writeListBegin(new TList(TType.I32, this.userIdList.size()));
+        for (int _iter7 : this.userIdList)
+        {
+          oprot.writeI32(_iter7);
+        }
+        oprot.writeListEnd();
+      }
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getListBuyer_args(");
+    boolean first = true;
+    sb.append("userIdList:");
+    if (this.userIdList == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.userIdList);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class getListBuyer_result implements TBase<getListBuyer_result, getListBuyer_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getListBuyer_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerListResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerListResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getListBuyer_result.class, metaDataMap);
+  }
+
+
+  public getListBuyer_result() {
+  }
+
+  public getListBuyer_result(
+    BuyerListResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getListBuyer_result(getListBuyer_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerListResult(other.success);
+    }
+  }
+
+  public getListBuyer_result deepCopy() {
+    return new getListBuyer_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerListResult getSuccess() {
+    return this.success;
+  }
+
+  public getListBuyer_result setSuccess(BuyerListResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerListResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getListBuyer_result)
+      return this.equals((getListBuyer_result)that);
+    return false;
+  }
+
+  public boolean equals(getListBuyer_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getListBuyer_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getListBuyer_result typedOther = (getListBuyer_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerListResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getListBuyer_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
   public static class updateBuyer_args implements TBase<updateBuyer_args, updateBuyer_args._Fields>, java.io.Serializable, Cloneable {
   private static final TStruct STRUCT_DESC = new TStruct("updateBuyer_args");
 
@@ -15002,6 +16591,2664 @@ public class BuyerServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("validAuth_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class thirdUserSignin_args implements TBase<thirdUserSignin_args, thirdUserSignin_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("thirdUserSignin_args");
+
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)1);
+  private static final TField USER_THIRD_FIELD_DESC = new TField("UserThird", TType.STRUCT, (short)2);
+  private static final TField VALIDATE_INFO_FIELD_DESC = new TField("validateInfo", TType.STRUCT, (short)3);
+
+
+  public LoginLog loginLog;
+  public UserInfoThird UserThird;
+  public ValidateInfo validateInfo;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    LOGIN_LOG((short)1, "loginLog"),
+    USER_THIRD((short)2, "UserThird"),
+    VALIDATE_INFO((short)3, "validateInfo");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // LOGIN_LOG
+  	return LOGIN_LOG;
+        case 2: // USER_THIRD
+  	return USER_THIRD;
+        case 3: // VALIDATE_INFO
+  	return VALIDATE_INFO;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    tmpMap.put(_Fields.USER_THIRD, new FieldMetaData("UserThird", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, UserInfoThird.class)));
+    tmpMap.put(_Fields.VALIDATE_INFO, new FieldMetaData("validateInfo", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ValidateInfo.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(thirdUserSignin_args.class, metaDataMap);
+  }
+
+
+  public thirdUserSignin_args() {
+  }
+
+  public thirdUserSignin_args(
+    LoginLog loginLog,
+    UserInfoThird UserThird,
+    ValidateInfo validateInfo)
+  {
+    this();
+    this.loginLog = loginLog;
+    this.UserThird = UserThird;
+    this.validateInfo = validateInfo;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public thirdUserSignin_args(thirdUserSignin_args other) {
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+    if (other.isSetUserThird()) {
+      this.UserThird = new UserInfoThird(other.UserThird);
+    }
+    if (other.isSetValidateInfo()) {
+      this.validateInfo = new ValidateInfo(other.validateInfo);
+    }
+  }
+
+  public thirdUserSignin_args deepCopy() {
+    return new thirdUserSignin_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.loginLog = null;
+    this.UserThird = null;
+    this.validateInfo = null;
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public thirdUserSignin_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public UserInfoThird getUserThird() {
+    return this.UserThird;
+  }
+
+  public thirdUserSignin_args setUserThird(UserInfoThird UserThird) {
+    this.UserThird = UserThird;
+    
+    return this;
+  }
+
+  public void unsetUserThird() {
+    this.UserThird = null;
+  }
+
+  /** Returns true if field UserThird is set (has been asigned a value) and false otherwise */
+  public boolean isSetUserThird() {
+    return this.UserThird != null;
+  }
+
+  public void setUserThirdIsSet(boolean value) {
+    if (!value) {
+      this.UserThird = null;
+    }
+  }
+
+  public ValidateInfo getValidateInfo() {
+    return this.validateInfo;
+  }
+
+  public thirdUserSignin_args setValidateInfo(ValidateInfo validateInfo) {
+    this.validateInfo = validateInfo;
+    
+    return this;
+  }
+
+  public void unsetValidateInfo() {
+    this.validateInfo = null;
+  }
+
+  /** Returns true if field validateInfo is set (has been asigned a value) and false otherwise */
+  public boolean isSetValidateInfo() {
+    return this.validateInfo != null;
+  }
+
+  public void setValidateInfoIsSet(boolean value) {
+    if (!value) {
+      this.validateInfo = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    case USER_THIRD:
+      if (value == null) {
+        unsetUserThird();
+      } else {
+        setUserThird((UserInfoThird)value);
+      }
+      break;
+    case VALIDATE_INFO:
+      if (value == null) {
+        unsetValidateInfo();
+      } else {
+        setValidateInfo((ValidateInfo)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case LOGIN_LOG:
+      return getLoginLog();
+    case USER_THIRD:
+      return getUserThird();
+    case VALIDATE_INFO:
+      return getValidateInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    case USER_THIRD:
+      return isSetUserThird();
+    case VALIDATE_INFO:
+      return isSetValidateInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof thirdUserSignin_args)
+      return this.equals((thirdUserSignin_args)that);
+    return false;
+  }
+
+  public boolean equals(thirdUserSignin_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+    boolean this_present_UserThird = true && this.isSetUserThird();
+    boolean that_present_UserThird = true && that.isSetUserThird();
+    if (this_present_UserThird || that_present_UserThird) {
+      if (!(this_present_UserThird && that_present_UserThird))
+        return false;
+      if (!this.UserThird.equals(that.UserThird))
+        return false;
+    }
+    boolean this_present_validateInfo = true && this.isSetValidateInfo();
+    boolean that_present_validateInfo = true && that.isSetValidateInfo();
+    if (this_present_validateInfo || that_present_validateInfo) {
+      if (!(this_present_validateInfo && that_present_validateInfo))
+        return false;
+      if (!this.validateInfo.equals(that.validateInfo))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    boolean present_UserThird = true && (isSetUserThird());
+    builder.append(present_UserThird);
+    if (present_UserThird)
+      builder.append(UserThird);
+    boolean present_validateInfo = true && (isSetValidateInfo());
+    builder.append(present_validateInfo);
+    if (present_validateInfo)
+      builder.append(validateInfo);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(thirdUserSignin_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    thirdUserSignin_args typedOther = (thirdUserSignin_args)other;
+
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetUserThird()).compareTo(typedOther.isSetUserThird());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUserThird()) {
+      lastComparison = TBaseHelper.compareTo(this.UserThird, typedOther.UserThird);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetValidateInfo()).compareTo(typedOther.isSetValidateInfo());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetValidateInfo()) {
+      lastComparison = TBaseHelper.compareTo(this.validateInfo, typedOther.validateInfo);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // USER_THIRD
+          if (field.type == TType.STRUCT) {
+            this.UserThird = new UserInfoThird();
+            this.UserThird.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // VALIDATE_INFO
+          if (field.type == TType.STRUCT) {
+            this.validateInfo = new ValidateInfo();
+            this.validateInfo.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.UserThird != null) {
+      oprot.writeFieldBegin(USER_THIRD_FIELD_DESC);
+      this.UserThird.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.validateInfo != null) {
+      oprot.writeFieldBegin(VALIDATE_INFO_FIELD_DESC);
+      this.validateInfo.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("thirdUserSignin_args(");
+    boolean first = true;
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("UserThird:");
+    if (this.UserThird == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.UserThird);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("validateInfo:");
+    if (this.validateInfo == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.validateInfo);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class thirdUserSignin_result implements TBase<thirdUserSignin_result, thirdUserSignin_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("thirdUserSignin_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(thirdUserSignin_result.class, metaDataMap);
+  }
+
+
+  public thirdUserSignin_result() {
+  }
+
+  public thirdUserSignin_result(
+    BuyerResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public thirdUserSignin_result(thirdUserSignin_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerResult(other.success);
+    }
+  }
+
+  public thirdUserSignin_result deepCopy() {
+    return new thirdUserSignin_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerResult getSuccess() {
+    return this.success;
+  }
+
+  public thirdUserSignin_result setSuccess(BuyerResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof thirdUserSignin_result)
+      return this.equals((thirdUserSignin_result)that);
+    return false;
+  }
+
+  public boolean equals(thirdUserSignin_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(thirdUserSignin_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    thirdUserSignin_result typedOther = (thirdUserSignin_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("thirdUserSignin_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class isExitsThirdUser_args implements TBase<isExitsThirdUser_args, isExitsThirdUser_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("isExitsThirdUser_args");
+
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)1);
+  private static final TField VALIDATE_INFO_FIELD_DESC = new TField("validateInfo", TType.STRUCT, (short)2);
+
+
+  public LoginLog loginLog;
+  public ValidateInfo validateInfo;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    LOGIN_LOG((short)1, "loginLog"),
+    VALIDATE_INFO((short)2, "validateInfo");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // LOGIN_LOG
+  	return LOGIN_LOG;
+        case 2: // VALIDATE_INFO
+  	return VALIDATE_INFO;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    tmpMap.put(_Fields.VALIDATE_INFO, new FieldMetaData("validateInfo", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ValidateInfo.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(isExitsThirdUser_args.class, metaDataMap);
+  }
+
+
+  public isExitsThirdUser_args() {
+  }
+
+  public isExitsThirdUser_args(
+    LoginLog loginLog,
+    ValidateInfo validateInfo)
+  {
+    this();
+    this.loginLog = loginLog;
+    this.validateInfo = validateInfo;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public isExitsThirdUser_args(isExitsThirdUser_args other) {
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+    if (other.isSetValidateInfo()) {
+      this.validateInfo = new ValidateInfo(other.validateInfo);
+    }
+  }
+
+  public isExitsThirdUser_args deepCopy() {
+    return new isExitsThirdUser_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.loginLog = null;
+    this.validateInfo = null;
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public isExitsThirdUser_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public ValidateInfo getValidateInfo() {
+    return this.validateInfo;
+  }
+
+  public isExitsThirdUser_args setValidateInfo(ValidateInfo validateInfo) {
+    this.validateInfo = validateInfo;
+    
+    return this;
+  }
+
+  public void unsetValidateInfo() {
+    this.validateInfo = null;
+  }
+
+  /** Returns true if field validateInfo is set (has been asigned a value) and false otherwise */
+  public boolean isSetValidateInfo() {
+    return this.validateInfo != null;
+  }
+
+  public void setValidateInfoIsSet(boolean value) {
+    if (!value) {
+      this.validateInfo = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    case VALIDATE_INFO:
+      if (value == null) {
+        unsetValidateInfo();
+      } else {
+        setValidateInfo((ValidateInfo)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case LOGIN_LOG:
+      return getLoginLog();
+    case VALIDATE_INFO:
+      return getValidateInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    case VALIDATE_INFO:
+      return isSetValidateInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof isExitsThirdUser_args)
+      return this.equals((isExitsThirdUser_args)that);
+    return false;
+  }
+
+  public boolean equals(isExitsThirdUser_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+    boolean this_present_validateInfo = true && this.isSetValidateInfo();
+    boolean that_present_validateInfo = true && that.isSetValidateInfo();
+    if (this_present_validateInfo || that_present_validateInfo) {
+      if (!(this_present_validateInfo && that_present_validateInfo))
+        return false;
+      if (!this.validateInfo.equals(that.validateInfo))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    boolean present_validateInfo = true && (isSetValidateInfo());
+    builder.append(present_validateInfo);
+    if (present_validateInfo)
+      builder.append(validateInfo);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(isExitsThirdUser_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    isExitsThirdUser_args typedOther = (isExitsThirdUser_args)other;
+
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetValidateInfo()).compareTo(typedOther.isSetValidateInfo());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetValidateInfo()) {
+      lastComparison = TBaseHelper.compareTo(this.validateInfo, typedOther.validateInfo);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // VALIDATE_INFO
+          if (field.type == TType.STRUCT) {
+            this.validateInfo = new ValidateInfo();
+            this.validateInfo.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.validateInfo != null) {
+      oprot.writeFieldBegin(VALIDATE_INFO_FIELD_DESC);
+      this.validateInfo.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("isExitsThirdUser_args(");
+    boolean first = true;
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("validateInfo:");
+    if (this.validateInfo == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.validateInfo);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class isExitsThirdUser_result implements TBase<isExitsThirdUser_result, isExitsThirdUser_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("isExitsThirdUser_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(isExitsThirdUser_result.class, metaDataMap);
+  }
+
+
+  public isExitsThirdUser_result() {
+  }
+
+  public isExitsThirdUser_result(
+    BuyerResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public isExitsThirdUser_result(isExitsThirdUser_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerResult(other.success);
+    }
+  }
+
+  public isExitsThirdUser_result deepCopy() {
+    return new isExitsThirdUser_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerResult getSuccess() {
+    return this.success;
+  }
+
+  public isExitsThirdUser_result setSuccess(BuyerResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof isExitsThirdUser_result)
+      return this.equals((isExitsThirdUser_result)that);
+    return false;
+  }
+
+  public boolean equals(isExitsThirdUser_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(isExitsThirdUser_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    isExitsThirdUser_result typedOther = (isExitsThirdUser_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("isExitsThirdUser_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class requestHttps_args implements TBase<requestHttps_args, requestHttps_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("requestHttps_args");
+
+  private static final TField URL_FIELD_DESC = new TField("url", TType.STRING, (short)1);
+  private static final TField EXT_INFO_FIELD_DESC = new TField("extInfo", TType.STRING, (short)2);
+
+
+  public String url;
+  public String extInfo;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    URL((short)1, "url"),
+    EXT_INFO((short)2, "extInfo");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // URL
+  	return URL;
+        case 2: // EXT_INFO
+  	return EXT_INFO;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.URL, new FieldMetaData("url", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.EXT_INFO, new FieldMetaData("extInfo", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(requestHttps_args.class, metaDataMap);
+  }
+
+
+  public requestHttps_args() {
+  }
+
+  public requestHttps_args(
+    String url,
+    String extInfo)
+  {
+    this();
+    this.url = url;
+    this.extInfo = extInfo;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public requestHttps_args(requestHttps_args other) {
+    if (other.isSetUrl()) {
+      this.url = other.url;
+    }
+    if (other.isSetExtInfo()) {
+      this.extInfo = other.extInfo;
+    }
+  }
+
+  public requestHttps_args deepCopy() {
+    return new requestHttps_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.url = null;
+    this.extInfo = null;
+  }
+
+  public String getUrl() {
+    return this.url;
+  }
+
+  public requestHttps_args setUrl(String url) {
+    this.url = url;
+    
+    return this;
+  }
+
+  public void unsetUrl() {
+    this.url = null;
+  }
+
+  /** Returns true if field url is set (has been asigned a value) and false otherwise */
+  public boolean isSetUrl() {
+    return this.url != null;
+  }
+
+  public void setUrlIsSet(boolean value) {
+    if (!value) {
+      this.url = null;
+    }
+  }
+
+  public String getExtInfo() {
+    return this.extInfo;
+  }
+
+  public requestHttps_args setExtInfo(String extInfo) {
+    this.extInfo = extInfo;
+    
+    return this;
+  }
+
+  public void unsetExtInfo() {
+    this.extInfo = null;
+  }
+
+  /** Returns true if field extInfo is set (has been asigned a value) and false otherwise */
+  public boolean isSetExtInfo() {
+    return this.extInfo != null;
+  }
+
+  public void setExtInfoIsSet(boolean value) {
+    if (!value) {
+      this.extInfo = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case URL:
+      if (value == null) {
+        unsetUrl();
+      } else {
+        setUrl((String)value);
+      }
+      break;
+    case EXT_INFO:
+      if (value == null) {
+        unsetExtInfo();
+      } else {
+        setExtInfo((String)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case URL:
+      return getUrl();
+    case EXT_INFO:
+      return getExtInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case URL:
+      return isSetUrl();
+    case EXT_INFO:
+      return isSetExtInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof requestHttps_args)
+      return this.equals((requestHttps_args)that);
+    return false;
+  }
+
+  public boolean equals(requestHttps_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_url = true && this.isSetUrl();
+    boolean that_present_url = true && that.isSetUrl();
+    if (this_present_url || that_present_url) {
+      if (!(this_present_url && that_present_url))
+        return false;
+      if (!this.url.equals(that.url))
+        return false;
+    }
+    boolean this_present_extInfo = true && this.isSetExtInfo();
+    boolean that_present_extInfo = true && that.isSetExtInfo();
+    if (this_present_extInfo || that_present_extInfo) {
+      if (!(this_present_extInfo && that_present_extInfo))
+        return false;
+      if (!this.extInfo.equals(that.extInfo))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_url = true && (isSetUrl());
+    builder.append(present_url);
+    if (present_url)
+      builder.append(url);
+    boolean present_extInfo = true && (isSetExtInfo());
+    builder.append(present_extInfo);
+    if (present_extInfo)
+      builder.append(extInfo);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(requestHttps_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    requestHttps_args typedOther = (requestHttps_args)other;
+
+    lastComparison = Boolean.valueOf(isSetUrl()).compareTo(typedOther.isSetUrl());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUrl()) {
+      lastComparison = TBaseHelper.compareTo(this.url, typedOther.url);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetExtInfo()).compareTo(typedOther.isSetExtInfo());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetExtInfo()) {
+      lastComparison = TBaseHelper.compareTo(this.extInfo, typedOther.extInfo);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // URL
+          if (field.type == TType.STRING) {
+            this.url = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // EXT_INFO
+          if (field.type == TType.STRING) {
+            this.extInfo = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.url != null) {
+      oprot.writeFieldBegin(URL_FIELD_DESC);
+      oprot.writeString(this.url);
+      oprot.writeFieldEnd();
+    }
+    if (this.extInfo != null) {
+      oprot.writeFieldBegin(EXT_INFO_FIELD_DESC);
+      oprot.writeString(this.extInfo);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("requestHttps_args(");
+    boolean first = true;
+    sb.append("url:");
+    if (this.url == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.url);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("extInfo:");
+    if (this.extInfo == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.extInfo);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class requestHttps_result implements TBase<requestHttps_result, requestHttps_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("requestHttps_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(requestHttps_result.class, metaDataMap);
+  }
+
+
+  public requestHttps_result() {
+  }
+
+  public requestHttps_result(
+    BuyerResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public requestHttps_result(requestHttps_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerResult(other.success);
+    }
+  }
+
+  public requestHttps_result deepCopy() {
+    return new requestHttps_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerResult getSuccess() {
+    return this.success;
+  }
+
+  public requestHttps_result setSuccess(BuyerResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof requestHttps_result)
+      return this.equals((requestHttps_result)that);
+    return false;
+  }
+
+  public boolean equals(requestHttps_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(requestHttps_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    requestHttps_result typedOther = (requestHttps_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("requestHttps_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class H5ThirdLogin_args implements TBase<H5ThirdLogin_args, H5ThirdLogin_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("H5ThirdLogin_args");
+
+  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)1);
+
+
+  public H5ThirdLoginParam param;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    PARAM((short)1, "param");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // PARAM
+  	return PARAM;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, H5ThirdLoginParam.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(H5ThirdLogin_args.class, metaDataMap);
+  }
+
+
+  public H5ThirdLogin_args() {
+  }
+
+  public H5ThirdLogin_args(
+    H5ThirdLoginParam param)
+  {
+    this();
+    this.param = param;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public H5ThirdLogin_args(H5ThirdLogin_args other) {
+    if (other.isSetParam()) {
+      this.param = new H5ThirdLoginParam(other.param);
+    }
+  }
+
+  public H5ThirdLogin_args deepCopy() {
+    return new H5ThirdLogin_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.param = null;
+  }
+
+  public H5ThirdLoginParam getParam() {
+    return this.param;
+  }
+
+  public H5ThirdLogin_args setParam(H5ThirdLoginParam param) {
+    this.param = param;
+    
+    return this;
+  }
+
+  public void unsetParam() {
+    this.param = null;
+  }
+
+  /** Returns true if field param is set (has been asigned a value) and false otherwise */
+  public boolean isSetParam() {
+    return this.param != null;
+  }
+
+  public void setParamIsSet(boolean value) {
+    if (!value) {
+      this.param = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case PARAM:
+      if (value == null) {
+        unsetParam();
+      } else {
+        setParam((H5ThirdLoginParam)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case PARAM:
+      return getParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case PARAM:
+      return isSetParam();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof H5ThirdLogin_args)
+      return this.equals((H5ThirdLogin_args)that);
+    return false;
+  }
+
+  public boolean equals(H5ThirdLogin_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_param = true && this.isSetParam();
+    boolean that_present_param = true && that.isSetParam();
+    if (this_present_param || that_present_param) {
+      if (!(this_present_param && that_present_param))
+        return false;
+      if (!this.param.equals(that.param))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_param = true && (isSetParam());
+    builder.append(present_param);
+    if (present_param)
+      builder.append(param);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(H5ThirdLogin_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    H5ThirdLogin_args typedOther = (H5ThirdLogin_args)other;
+
+    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetParam()) {
+      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // PARAM
+          if (field.type == TType.STRUCT) {
+            this.param = new H5ThirdLoginParam();
+            this.param.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.param != null) {
+      oprot.writeFieldBegin(PARAM_FIELD_DESC);
+      this.param.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("H5ThirdLogin_args(");
+    boolean first = true;
+    sb.append("param:");
+    if (this.param == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.param);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class H5ThirdLogin_result implements TBase<H5ThirdLogin_result, H5ThirdLogin_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("H5ThirdLogin_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public H5ThirdLoginResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, H5ThirdLoginResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(H5ThirdLogin_result.class, metaDataMap);
+  }
+
+
+  public H5ThirdLogin_result() {
+  }
+
+  public H5ThirdLogin_result(
+    H5ThirdLoginResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public H5ThirdLogin_result(H5ThirdLogin_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new H5ThirdLoginResult(other.success);
+    }
+  }
+
+  public H5ThirdLogin_result deepCopy() {
+    return new H5ThirdLogin_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public H5ThirdLoginResult getSuccess() {
+    return this.success;
+  }
+
+  public H5ThirdLogin_result setSuccess(H5ThirdLoginResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((H5ThirdLoginResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof H5ThirdLogin_result)
+      return this.equals((H5ThirdLogin_result)that);
+    return false;
+  }
+
+  public boolean equals(H5ThirdLogin_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(H5ThirdLogin_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    H5ThirdLogin_result typedOther = (H5ThirdLogin_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new H5ThirdLoginResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("H5ThirdLogin_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

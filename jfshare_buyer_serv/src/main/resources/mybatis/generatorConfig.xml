@@ -6,7 +6,7 @@
 <generatorConfiguration>
     <!-- db driver -->
     <!--<classPathEntry location="E:\workSpace\myMaven\mysql\mysql-connector-java\5.1.26\mysql-connector-java-5.1.26.jar" />-->
-    <classPathEntry location="D:\devTools\apache-maven-3.2.1\m2\repository\mysql\mysql-connector-java\5.1.17\mysql-connector-java-5.1.17.jar" />
+    <classPathEntry location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.6\mysql-connector-java-5.1.6.jar" />
     <!-- introspectedColumnImpl prop define special column reflect -->
     <context id="mysqlStepyee" targetRuntime="MyBatis3" introspectedColumnImpl="com.jfshare.mybatis.generator.api.IntrospectedColumn">
         <!-- generator or not comments (extend DefaultCommentGenerator to special)-->
@@ -44,8 +44,8 @@
         </javaClientGenerator>
 
       <!--Run As  Maven build... goals mybatis-generator:generate -->
-        <table tableName="tb_user" schema="jfshare"/>
-        <table tableName="tb_user_thirdparty" schema="jfshare"/>
+        <table tableName="tb_third_userinfo" schema="jfshare"/>
+      <!--   <table tableName="tb_user_thirdparty" schema="jfshare"/> -->
     </context>
 </generatorConfiguration>
 
