@@ -11,7 +11,7 @@ import com.jfshare.finagle.thrift.trade.*;
 import com.jfshare.score2cash.services.impl.ScoreToCashService;
 import com.jfshare.score2cash.utils.ResultGenerator;
 import com.jfshare.trade.commons.enums.ResourseOpt;
-import com.jfshare.trade.service.impl.ITradeSvc;
+import com.jfshare.trade.service.ITradeSvc;
 import com.jfshare.trade.util.CheckUtil;
 import com.jfshare.trade.util.FailCode;
 import com.jfshare.trade.util.TradeUtil;
