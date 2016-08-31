@@ -658,7 +658,7 @@ public class OrderDaoImpl implements IOrderDao {
         map.put("orderTable", TableNameUtil.getOrderNameBySeller(sellerId));
         map.put("orderInfoTable", TableNameUtil.getOrderInfoNameBySeller(sellerId));
         map.put("conditions", conditions);
-
+        
         try {
             sqlSession = sqlSessionFactoryRead.openSession();
             orderModels = sqlSession.selectList("select_order_list_by_seller_offline", map);

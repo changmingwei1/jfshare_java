@@ -140,7 +140,7 @@ public class ServHandle implements PayServ.Iface {
         result.setCode(0);
         stringResult.setResult(result);
         try {
-            //基本参数验证
+            //参数验证是否正确
             if (StringUtil.isNullOrEmpty(payRes) || StringUtil.isNullOrEmpty(payRes.getResUrl()) || payRes.getPayChannel() <= 0) {
                 logger.warn(MessageFormat.format("支付通知----payRes参数验证失败！payRes[{0}]", payRes));
                 FailCode.addFails(result, FailCode.PARAM_ERROR);
@@ -148,7 +148,7 @@ public class ServHandle implements PayServ.Iface {
             }
 
             TbPayRecordWithBLOBs payResRecord = null;
-            //天翼或者天翼H5
+            //天翼WEB或者天翼H5
             if (payRes.getPayChannel() == 1 || payRes.getPayChannel() == 10) {
                 payResRecord = PayUtil.getResTianYi(payRes);
             } else if (payRes.getPayChannel() == 2 || payRes.getPayChannel() == 5 ||

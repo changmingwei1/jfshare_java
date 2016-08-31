@@ -1072,14 +1072,16 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
         List<Order> orderDetails = null;
 
         int total = 0;
+        //验证用户ID是否正确
         List<FailDesc> failDescs = ParamCheck.UserIdCheck(userId);
         if(CollectionUtils.isNotEmpty(failDescs)) {
             return ResultBuilder.createFailOrderProfileResult(failDescs);
         }
         try {
+        	//初始化查询参数conditions
             List<OrderModel> orderModels = null;
             conditions = super.verifyConditions(conditions);
-
+            //用户类型，1买家，2卖家，3系统
             if(userType == BizUtil.USER_TYPE.BUYER.getEnumVal()) {
                 conditions.setUserId(userId);
                 total = orderService.buyerQueryOrderStatOffline(conditions);

@@ -320,8 +320,9 @@ public class PayUtil {
         }
 
         payResStr = payResStr.replaceAll(" ", "+");    //电信的奇葩加密方式， 把+替换成了空格
-
+        //DES加密密钥
         String encodeCBCKey = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_deskey");
+        //DES加密偏移量
         String encodeCBCVi = PropertiesUtil.getProperty("jfx_pay_serv", "pay_ty_desvi");
 //        String encodeCBCKey = "telefenpaytes@pay17$#3#$";
 //        String encodeCBCVi = "13386191";
