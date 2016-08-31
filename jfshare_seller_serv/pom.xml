@@ -64,11 +64,11 @@
         </dependency>
         <!-- redis client end -->
 
-        <dependency>
+         <dependency>
             <groupId>com.jfshare</groupId>
             <artifactId>jfshare-ridge</artifactId>
             <version>1.0.0</version>
-        </dependency>
+        </dependency> 
         <dependency>
             <groupId>com.jfshare</groupId>
             <artifactId>jfshare-brain</artifactId>
@@ -160,6 +160,45 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+				<groupId>com.twitter</groupId>
+				<artifactId>scrooge-maven-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<language>java</language>
+
+					<!-- 配置.thrift文件路径 -->
+					<thriftSourceRoot>src/main/resources/thrift</thriftSourceRoot>
+					<outputDirectory>
+						src/main/resources/thrift/result
+					</outputDirectory>
+					<thriftOpts>
+						<thriftOpt>--finagle</thriftOpt>
+					</thriftOpts>
+					<dependencyIncludes>
+						<include>event-logger-thrift</include>
+					</dependencyIncludes>
+
+				</configuration>
+				 <executions>
+					<execution>
+						<id>thrift-sources</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>thrift-test-sources</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
         </plugins>
     </build>
 

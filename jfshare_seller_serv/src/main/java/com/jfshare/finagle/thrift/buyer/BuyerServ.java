@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.jfshare.finagle.thrift.seller;
+package com.jfshare.finagle.thrift.buyer;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import java.util.List;
@@ -35,59 +35,68 @@ import com.twitter.util.Return;
 import com.twitter.util.Throw;
 import com.twitter.finagle.thrift.ThriftClientRequest;
 
-public class SellerServ {
+public class BuyerServ {
   public interface Iface {
-    public SellerResult querySeller(int sellerId, SellerRetParam param) throws TException;
-    public SellerListResult querySellerList(Seller seller, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException;
-    public SellersResult querySellerBatch(List<Integer> sellerIds, SellerRetParam param) throws TException;
-    public com.jfshare.finagle.thrift.result.BoolResult isLoginNameExist(String loginName) throws TException;
-    public com.jfshare.finagle.thrift.result.Result signup(Seller seller) throws TException;
-    public SellerResult signin(Seller seller, LoginLog loginLog) throws TException;
-    public com.jfshare.finagle.thrift.result.Result signout(LoginLog loginLog) throws TException;
-    public SellerResult isOnline(LoginLog loginLog) throws TException;
-    public SellerResult getOnlineInfo(LoginLog loginLog) throws TException;
+    public com.jfshare.finagle.thrift.result.BoolResult buyerIsExist(String loginName) throws TException;
+    public com.jfshare.finagle.thrift.result.Result signin(Buyer buyer) throws TException;
+    public com.jfshare.finagle.thrift.result.Result newSignin(Buyer buyer) throws TException;
+    public BuyerResult login(Buyer buyer, LoginLog loginLog) throws TException;
+    public BuyerResult newLogin(Buyer buyer, LoginLog loginLog) throws TException;
+    public BuyerResult smsLogin(Buyer buyer, LoginLog loginLog) throws TException;
+    public com.jfshare.finagle.thrift.result.Result logout(LoginLog loginLog) throws TException;
+    public BuyerResult isOnline(LoginLog loginLog) throws TException;
+    public BuyerResult getOnlineInfo(LoginLog loginLog) throws TException;
     public com.jfshare.finagle.thrift.result.StringResult pwdFind(int findWay, String account) throws TException;
-    public com.jfshare.finagle.thrift.result.Result updateSeller(Seller seller) throws TException;
-    public com.jfshare.finagle.thrift.result.Result resetSellerPwd(String newPwd, Seller seller) throws TException;
-    public com.jfshare.finagle.thrift.result.Result insertUserSellerReal(String userId, String sellerId) throws TException;
-    public com.jfshare.finagle.thrift.result.Result deleteUserSellerRealByuserId(String userId) throws TException;
-    public SellerVipResult querySellerVipList(String sellerId, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException;
+    public BuyerResult getBuyer(Buyer buyer) throws TException;
+    public com.jfshare.finagle.thrift.result.Result updateBuyer(Buyer buyer) throws TException;
+    public com.jfshare.finagle.thrift.result.Result resetBuyerPwd(String newPwd, Buyer buyer) throws TException;
+    public com.jfshare.finagle.thrift.result.Result newResetBuyerPwd(String newPwd, Buyer buyer) throws TException;
+    public BuyerResult signinThirdParty(LoginLog loginLog, ThirdpartyUser thirdUser) throws TException;
+    public BuyerResult isBindThirdParty(String thirdType, LoginLog loginLog) throws TException;
+    public AuthInfoResult getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog) throws TException;
+    public com.jfshare.finagle.thrift.result.Result validAuth(LoginLog loginLog, AuthInfo authInfo) throws TException;
   }
 
   public interface AsyncIface {
-    public void querySeller(int sellerId, SellerRetParam param, AsyncMethodCallback<AsyncClient.querySeller_call> resultHandler) throws TException;
-    public void querySellerList(Seller seller, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<AsyncClient.querySellerList_call> resultHandler) throws TException;
-    public void querySellerBatch(List<Integer> sellerIds, SellerRetParam param, AsyncMethodCallback<AsyncClient.querySellerBatch_call> resultHandler) throws TException;
-    public void isLoginNameExist(String loginName, AsyncMethodCallback<AsyncClient.isLoginNameExist_call> resultHandler) throws TException;
-    public void signup(Seller seller, AsyncMethodCallback<AsyncClient.signup_call> resultHandler) throws TException;
-    public void signin(Seller seller, LoginLog loginLog, AsyncMethodCallback<AsyncClient.signin_call> resultHandler) throws TException;
-    public void signout(LoginLog loginLog, AsyncMethodCallback<AsyncClient.signout_call> resultHandler) throws TException;
+    public void buyerIsExist(String loginName, AsyncMethodCallback<AsyncClient.buyerIsExist_call> resultHandler) throws TException;
+    public void signin(Buyer buyer, AsyncMethodCallback<AsyncClient.signin_call> resultHandler) throws TException;
+    public void newSignin(Buyer buyer, AsyncMethodCallback<AsyncClient.newSignin_call> resultHandler) throws TException;
+    public void login(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<AsyncClient.login_call> resultHandler) throws TException;
+    public void newLogin(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<AsyncClient.newLogin_call> resultHandler) throws TException;
+    public void smsLogin(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<AsyncClient.smsLogin_call> resultHandler) throws TException;
+    public void logout(LoginLog loginLog, AsyncMethodCallback<AsyncClient.logout_call> resultHandler) throws TException;
     public void isOnline(LoginLog loginLog, AsyncMethodCallback<AsyncClient.isOnline_call> resultHandler) throws TException;
     public void getOnlineInfo(LoginLog loginLog, AsyncMethodCallback<AsyncClient.getOnlineInfo_call> resultHandler) throws TException;
     public void pwdFind(int findWay, String account, AsyncMethodCallback<AsyncClient.pwdFind_call> resultHandler) throws TException;
-    public void updateSeller(Seller seller, AsyncMethodCallback<AsyncClient.updateSeller_call> resultHandler) throws TException;
-    public void resetSellerPwd(String newPwd, Seller seller, AsyncMethodCallback<AsyncClient.resetSellerPwd_call> resultHandler) throws TException;
-    public void insertUserSellerReal(String userId, String sellerId, AsyncMethodCallback<AsyncClient.insertUserSellerReal_call> resultHandler) throws TException;
-    public void deleteUserSellerRealByuserId(String userId, AsyncMethodCallback<AsyncClient.deleteUserSellerRealByuserId_call> resultHandler) throws TException;
-    public void querySellerVipList(String sellerId, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<AsyncClient.querySellerVipList_call> resultHandler) throws TException;
+    public void getBuyer(Buyer buyer, AsyncMethodCallback<AsyncClient.getBuyer_call> resultHandler) throws TException;
+    public void updateBuyer(Buyer buyer, AsyncMethodCallback<AsyncClient.updateBuyer_call> resultHandler) throws TException;
+    public void resetBuyerPwd(String newPwd, Buyer buyer, AsyncMethodCallback<AsyncClient.resetBuyerPwd_call> resultHandler) throws TException;
+    public void newResetBuyerPwd(String newPwd, Buyer buyer, AsyncMethodCallback<AsyncClient.newResetBuyerPwd_call> resultHandler) throws TException;
+    public void signinThirdParty(LoginLog loginLog, ThirdpartyUser thirdUser, AsyncMethodCallback<AsyncClient.signinThirdParty_call> resultHandler) throws TException;
+    public void isBindThirdParty(String thirdType, LoginLog loginLog, AsyncMethodCallback<AsyncClient.isBindThirdParty_call> resultHandler) throws TException;
+    public void getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog, AsyncMethodCallback<AsyncClient.getAuthInfo_call> resultHandler) throws TException;
+    public void validAuth(LoginLog loginLog, AuthInfo authInfo, AsyncMethodCallback<AsyncClient.validAuth_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
-    public Future<SellerResult> querySeller(int sellerId, SellerRetParam param);
-    public Future<SellerListResult> querySellerList(Seller seller, com.jfshare.finagle.thrift.pagination.Pagination pagination);
-    public Future<SellersResult> querySellerBatch(List<Integer> sellerIds, SellerRetParam param);
-    public Future<com.jfshare.finagle.thrift.result.BoolResult> isLoginNameExist(String loginName);
-    public Future<com.jfshare.finagle.thrift.result.Result> signup(Seller seller);
-    public Future<SellerResult> signin(Seller seller, LoginLog loginLog);
-    public Future<com.jfshare.finagle.thrift.result.Result> signout(LoginLog loginLog);
-    public Future<SellerResult> isOnline(LoginLog loginLog);
-    public Future<SellerResult> getOnlineInfo(LoginLog loginLog);
+    public Future<com.jfshare.finagle.thrift.result.BoolResult> buyerIsExist(String loginName);
+    public Future<com.jfshare.finagle.thrift.result.Result> signin(Buyer buyer);
+    public Future<com.jfshare.finagle.thrift.result.Result> newSignin(Buyer buyer);
+    public Future<BuyerResult> login(Buyer buyer, LoginLog loginLog);
+    public Future<BuyerResult> newLogin(Buyer buyer, LoginLog loginLog);
+    public Future<BuyerResult> smsLogin(Buyer buyer, LoginLog loginLog);
+    public Future<com.jfshare.finagle.thrift.result.Result> logout(LoginLog loginLog);
+    public Future<BuyerResult> isOnline(LoginLog loginLog);
+    public Future<BuyerResult> getOnlineInfo(LoginLog loginLog);
     public Future<com.jfshare.finagle.thrift.result.StringResult> pwdFind(int findWay, String account);
-    public Future<com.jfshare.finagle.thrift.result.Result> updateSeller(Seller seller);
-    public Future<com.jfshare.finagle.thrift.result.Result> resetSellerPwd(String newPwd, Seller seller);
-    public Future<com.jfshare.finagle.thrift.result.Result> insertUserSellerReal(String userId, String sellerId);
-    public Future<com.jfshare.finagle.thrift.result.Result> deleteUserSellerRealByuserId(String userId);
-    public Future<SellerVipResult> querySellerVipList(String sellerId, com.jfshare.finagle.thrift.pagination.Pagination pagination);
+    public Future<BuyerResult> getBuyer(Buyer buyer);
+    public Future<com.jfshare.finagle.thrift.result.Result> updateBuyer(Buyer buyer);
+    public Future<com.jfshare.finagle.thrift.result.Result> resetBuyerPwd(String newPwd, Buyer buyer);
+    public Future<com.jfshare.finagle.thrift.result.Result> newResetBuyerPwd(String newPwd, Buyer buyer);
+    public Future<BuyerResult> signinThirdParty(LoginLog loginLog, ThirdpartyUser thirdUser);
+    public Future<BuyerResult> isBindThirdParty(String thirdType, LoginLog loginLog);
+    public Future<AuthInfoResult> getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog);
+    public Future<com.jfshare.finagle.thrift.result.Result> validAuth(LoginLog loginLog, AuthInfo authInfo);
   }
 
   public static class Client implements TServiceClient, Iface {
@@ -127,131 +136,23 @@ public class SellerServ {
       return this.oprot_;
     }
 
-    public SellerResult querySeller(int sellerId, SellerRetParam param) throws TException
+    public com.jfshare.finagle.thrift.result.BoolResult buyerIsExist(String loginName) throws TException
     {
-      send_querySeller(sellerId, param);
-      return recv_querySeller();
+      send_buyerIsExist(loginName);
+      return recv_buyerIsExist();
     }
 
-    public void send_querySeller(int sellerId, SellerRetParam param) throws TException
+    public void send_buyerIsExist(String loginName) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("querySeller", TMessageType.CALL, ++seqid_));
-      querySeller_args args = new querySeller_args();
-      args.setSellerId(sellerId);
-      args.setParam(param);
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush();
-    }
-
-    public SellerResult recv_querySeller() throws TException
-    {
-      TMessage msg = iprot_.readMessageBegin();
-      if (msg.type == TMessageType.EXCEPTION) {
-        TApplicationException x = TApplicationException.read(iprot_);
-        iprot_.readMessageEnd();
-        throw x;
-      }
-      if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "querySeller failed: out of sequence response");
-      }
-      querySeller_result result = new querySeller_result();
-      result.read(iprot_);
-      iprot_.readMessageEnd();
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "querySeller failed: unknown result");
-    }
-    public SellerListResult querySellerList(Seller seller, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException
-    {
-      send_querySellerList(seller, pagination);
-      return recv_querySellerList();
-    }
-
-    public void send_querySellerList(Seller seller, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException
-    {
-      oprot_.writeMessageBegin(new TMessage("querySellerList", TMessageType.CALL, ++seqid_));
-      querySellerList_args args = new querySellerList_args();
-      args.setSeller(seller);
-      args.setPagination(pagination);
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush();
-    }
-
-    public SellerListResult recv_querySellerList() throws TException
-    {
-      TMessage msg = iprot_.readMessageBegin();
-      if (msg.type == TMessageType.EXCEPTION) {
-        TApplicationException x = TApplicationException.read(iprot_);
-        iprot_.readMessageEnd();
-        throw x;
-      }
-      if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "querySellerList failed: out of sequence response");
-      }
-      querySellerList_result result = new querySellerList_result();
-      result.read(iprot_);
-      iprot_.readMessageEnd();
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "querySellerList failed: unknown result");
-    }
-    public SellersResult querySellerBatch(List<Integer> sellerIds, SellerRetParam param) throws TException
-    {
-      send_querySellerBatch(sellerIds, param);
-      return recv_querySellerBatch();
-    }
-
-    public void send_querySellerBatch(List<Integer> sellerIds, SellerRetParam param) throws TException
-    {
-      oprot_.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.CALL, ++seqid_));
-      querySellerBatch_args args = new querySellerBatch_args();
-      args.setSellerIds(sellerIds);
-      args.setParam(param);
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush();
-    }
-
-    public SellersResult recv_querySellerBatch() throws TException
-    {
-      TMessage msg = iprot_.readMessageBegin();
-      if (msg.type == TMessageType.EXCEPTION) {
-        TApplicationException x = TApplicationException.read(iprot_);
-        iprot_.readMessageEnd();
-        throw x;
-      }
-      if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "querySellerBatch failed: out of sequence response");
-      }
-      querySellerBatch_result result = new querySellerBatch_result();
-      result.read(iprot_);
-      iprot_.readMessageEnd();
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "querySellerBatch failed: unknown result");
-    }
-    public com.jfshare.finagle.thrift.result.BoolResult isLoginNameExist(String loginName) throws TException
-    {
-      send_isLoginNameExist(loginName);
-      return recv_isLoginNameExist();
-    }
-
-    public void send_isLoginNameExist(String loginName) throws TException
-    {
-      oprot_.writeMessageBegin(new TMessage("isLoginNameExist", TMessageType.CALL, ++seqid_));
-      isLoginNameExist_args args = new isLoginNameExist_args();
+      oprot_.writeMessageBegin(new TMessage("buyerIsExist", TMessageType.CALL, ++seqid_));
+      buyerIsExist_args args = new buyerIsExist_args();
       args.setLoginName(loginName);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public com.jfshare.finagle.thrift.result.BoolResult recv_isLoginNameExist() throws TException
+    public com.jfshare.finagle.thrift.result.BoolResult recv_buyerIsExist() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -260,69 +161,33 @@ public class SellerServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "isLoginNameExist failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "buyerIsExist failed: out of sequence response");
       }
-      isLoginNameExist_result result = new isLoginNameExist_result();
+      buyerIsExist_result result = new buyerIsExist_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "isLoginNameExist failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "buyerIsExist failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result signup(Seller seller) throws TException
+    public com.jfshare.finagle.thrift.result.Result signin(Buyer buyer) throws TException
     {
-      send_signup(seller);
-      return recv_signup();
-    }
-
-    public void send_signup(Seller seller) throws TException
-    {
-      oprot_.writeMessageBegin(new TMessage("signup", TMessageType.CALL, ++seqid_));
-      signup_args args = new signup_args();
-      args.setSeller(seller);
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush();
-    }
-
-    public com.jfshare.finagle.thrift.result.Result recv_signup() throws TException
-    {
-      TMessage msg = iprot_.readMessageBegin();
-      if (msg.type == TMessageType.EXCEPTION) {
-        TApplicationException x = TApplicationException.read(iprot_);
-        iprot_.readMessageEnd();
-        throw x;
-      }
-      if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "signup failed: out of sequence response");
-      }
-      signup_result result = new signup_result();
-      result.read(iprot_);
-      iprot_.readMessageEnd();
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "signup failed: unknown result");
-    }
-    public SellerResult signin(Seller seller, LoginLog loginLog) throws TException
-    {
-      send_signin(seller, loginLog);
+      send_signin(buyer);
       return recv_signin();
     }
 
-    public void send_signin(Seller seller, LoginLog loginLog) throws TException
+    public void send_signin(Buyer buyer) throws TException
     {
       oprot_.writeMessageBegin(new TMessage("signin", TMessageType.CALL, ++seqid_));
       signin_args args = new signin_args();
-      args.setSeller(seller);
-      args.setLoginLog(loginLog);
+      args.setBuyer(buyer);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public SellerResult recv_signin() throws TException
+    public com.jfshare.finagle.thrift.result.Result recv_signin() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -341,23 +206,23 @@ public class SellerServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "signin failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result signout(LoginLog loginLog) throws TException
+    public com.jfshare.finagle.thrift.result.Result newSignin(Buyer buyer) throws TException
     {
-      send_signout(loginLog);
-      return recv_signout();
+      send_newSignin(buyer);
+      return recv_newSignin();
     }
 
-    public void send_signout(LoginLog loginLog) throws TException
+    public void send_newSignin(Buyer buyer) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("signout", TMessageType.CALL, ++seqid_));
-      signout_args args = new signout_args();
-      args.setLoginLog(loginLog);
+      oprot_.writeMessageBegin(new TMessage("newSignin", TMessageType.CALL, ++seqid_));
+      newSignin_args args = new newSignin_args();
+      args.setBuyer(buyer);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public com.jfshare.finagle.thrift.result.Result recv_signout() throws TException
+    public com.jfshare.finagle.thrift.result.Result recv_newSignin() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -366,17 +231,160 @@ public class SellerServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "signout failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "newSignin failed: out of sequence response");
       }
-      signout_result result = new signout_result();
+      newSignin_result result = new newSignin_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "signout failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "newSignin failed: unknown result");
     }
-    public SellerResult isOnline(LoginLog loginLog) throws TException
+    public BuyerResult login(Buyer buyer, LoginLog loginLog) throws TException
+    {
+      send_login(buyer, loginLog);
+      return recv_login();
+    }
+
+    public void send_login(Buyer buyer, LoginLog loginLog) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("login", TMessageType.CALL, ++seqid_));
+      login_args args = new login_args();
+      args.setBuyer(buyer);
+      args.setLoginLog(loginLog);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public BuyerResult recv_login() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "login failed: out of sequence response");
+      }
+      login_result result = new login_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "login failed: unknown result");
+    }
+    public BuyerResult newLogin(Buyer buyer, LoginLog loginLog) throws TException
+    {
+      send_newLogin(buyer, loginLog);
+      return recv_newLogin();
+    }
+
+    public void send_newLogin(Buyer buyer, LoginLog loginLog) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("newLogin", TMessageType.CALL, ++seqid_));
+      newLogin_args args = new newLogin_args();
+      args.setBuyer(buyer);
+      args.setLoginLog(loginLog);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public BuyerResult recv_newLogin() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "newLogin failed: out of sequence response");
+      }
+      newLogin_result result = new newLogin_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "newLogin failed: unknown result");
+    }
+    public BuyerResult smsLogin(Buyer buyer, LoginLog loginLog) throws TException
+    {
+      send_smsLogin(buyer, loginLog);
+      return recv_smsLogin();
+    }
+
+    public void send_smsLogin(Buyer buyer, LoginLog loginLog) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("smsLogin", TMessageType.CALL, ++seqid_));
+      smsLogin_args args = new smsLogin_args();
+      args.setBuyer(buyer);
+      args.setLoginLog(loginLog);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public BuyerResult recv_smsLogin() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "smsLogin failed: out of sequence response");
+      }
+      smsLogin_result result = new smsLogin_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "smsLogin failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result logout(LoginLog loginLog) throws TException
+    {
+      send_logout(loginLog);
+      return recv_logout();
+    }
+
+    public void send_logout(LoginLog loginLog) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("logout", TMessageType.CALL, ++seqid_));
+      logout_args args = new logout_args();
+      args.setLoginLog(loginLog);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_logout() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "logout failed: out of sequence response");
+      }
+      logout_result result = new logout_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "logout failed: unknown result");
+    }
+    public BuyerResult isOnline(LoginLog loginLog) throws TException
     {
       send_isOnline(loginLog);
       return recv_isOnline();
@@ -392,7 +400,7 @@ public class SellerServ {
       oprot_.getTransport().flush();
     }
 
-    public SellerResult recv_isOnline() throws TException
+    public BuyerResult recv_isOnline() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -411,7 +419,7 @@ public class SellerServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "isOnline failed: unknown result");
     }
-    public SellerResult getOnlineInfo(LoginLog loginLog) throws TException
+    public BuyerResult getOnlineInfo(LoginLog loginLog) throws TException
     {
       send_getOnlineInfo(loginLog);
       return recv_getOnlineInfo();
@@ -427,7 +435,7 @@ public class SellerServ {
       oprot_.getTransport().flush();
     }
 
-    public SellerResult recv_getOnlineInfo() throws TException
+    public BuyerResult recv_getOnlineInfo() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -482,23 +490,23 @@ public class SellerServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "pwdFind failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result updateSeller(Seller seller) throws TException
+    public BuyerResult getBuyer(Buyer buyer) throws TException
     {
-      send_updateSeller(seller);
-      return recv_updateSeller();
+      send_getBuyer(buyer);
+      return recv_getBuyer();
     }
 
-    public void send_updateSeller(Seller seller) throws TException
+    public void send_getBuyer(Buyer buyer) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("updateSeller", TMessageType.CALL, ++seqid_));
-      updateSeller_args args = new updateSeller_args();
-      args.setSeller(seller);
+      oprot_.writeMessageBegin(new TMessage("getBuyer", TMessageType.CALL, ++seqid_));
+      getBuyer_args args = new getBuyer_args();
+      args.setBuyer(buyer);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public com.jfshare.finagle.thrift.result.Result recv_updateSeller() throws TException
+    public BuyerResult recv_getBuyer() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -507,34 +515,69 @@ public class SellerServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "updateSeller failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "getBuyer failed: out of sequence response");
       }
-      updateSeller_result result = new updateSeller_result();
+      getBuyer_result result = new getBuyer_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "updateSeller failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "getBuyer failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result resetSellerPwd(String newPwd, Seller seller) throws TException
+    public com.jfshare.finagle.thrift.result.Result updateBuyer(Buyer buyer) throws TException
     {
-      send_resetSellerPwd(newPwd, seller);
-      return recv_resetSellerPwd();
+      send_updateBuyer(buyer);
+      return recv_updateBuyer();
     }
 
-    public void send_resetSellerPwd(String newPwd, Seller seller) throws TException
+    public void send_updateBuyer(Buyer buyer) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("resetSellerPwd", TMessageType.CALL, ++seqid_));
-      resetSellerPwd_args args = new resetSellerPwd_args();
+      oprot_.writeMessageBegin(new TMessage("updateBuyer", TMessageType.CALL, ++seqid_));
+      updateBuyer_args args = new updateBuyer_args();
+      args.setBuyer(buyer);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_updateBuyer() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "updateBuyer failed: out of sequence response");
+      }
+      updateBuyer_result result = new updateBuyer_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "updateBuyer failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result resetBuyerPwd(String newPwd, Buyer buyer) throws TException
+    {
+      send_resetBuyerPwd(newPwd, buyer);
+      return recv_resetBuyerPwd();
+    }
+
+    public void send_resetBuyerPwd(String newPwd, Buyer buyer) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("resetBuyerPwd", TMessageType.CALL, ++seqid_));
+      resetBuyerPwd_args args = new resetBuyerPwd_args();
       args.setNewPwd(newPwd);
-      args.setSeller(seller);
+      args.setBuyer(buyer);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public com.jfshare.finagle.thrift.result.Result recv_resetSellerPwd() throws TException
+    public com.jfshare.finagle.thrift.result.Result recv_resetBuyerPwd() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -543,34 +586,34 @@ public class SellerServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "resetSellerPwd failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "resetBuyerPwd failed: out of sequence response");
       }
-      resetSellerPwd_result result = new resetSellerPwd_result();
+      resetBuyerPwd_result result = new resetBuyerPwd_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "resetSellerPwd failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "resetBuyerPwd failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result insertUserSellerReal(String userId, String sellerId) throws TException
+    public com.jfshare.finagle.thrift.result.Result newResetBuyerPwd(String newPwd, Buyer buyer) throws TException
     {
-      send_insertUserSellerReal(userId, sellerId);
-      return recv_insertUserSellerReal();
+      send_newResetBuyerPwd(newPwd, buyer);
+      return recv_newResetBuyerPwd();
     }
 
-    public void send_insertUserSellerReal(String userId, String sellerId) throws TException
+    public void send_newResetBuyerPwd(String newPwd, Buyer buyer) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("insertUserSellerReal", TMessageType.CALL, ++seqid_));
-      insertUserSellerReal_args args = new insertUserSellerReal_args();
-      args.setUserId(userId);
-      args.setSellerId(sellerId);
+      oprot_.writeMessageBegin(new TMessage("newResetBuyerPwd", TMessageType.CALL, ++seqid_));
+      newResetBuyerPwd_args args = new newResetBuyerPwd_args();
+      args.setNewPwd(newPwd);
+      args.setBuyer(buyer);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public com.jfshare.finagle.thrift.result.Result recv_insertUserSellerReal() throws TException
+    public com.jfshare.finagle.thrift.result.Result recv_newResetBuyerPwd() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -579,33 +622,34 @@ public class SellerServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "insertUserSellerReal failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "newResetBuyerPwd failed: out of sequence response");
       }
-      insertUserSellerReal_result result = new insertUserSellerReal_result();
+      newResetBuyerPwd_result result = new newResetBuyerPwd_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "insertUserSellerReal failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "newResetBuyerPwd failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result deleteUserSellerRealByuserId(String userId) throws TException
+    public BuyerResult signinThirdParty(LoginLog loginLog, ThirdpartyUser thirdUser) throws TException
     {
-      send_deleteUserSellerRealByuserId(userId);
-      return recv_deleteUserSellerRealByuserId();
+      send_signinThirdParty(loginLog, thirdUser);
+      return recv_signinThirdParty();
     }
 
-    public void send_deleteUserSellerRealByuserId(String userId) throws TException
+    public void send_signinThirdParty(LoginLog loginLog, ThirdpartyUser thirdUser) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("deleteUserSellerRealByuserId", TMessageType.CALL, ++seqid_));
-      deleteUserSellerRealByuserId_args args = new deleteUserSellerRealByuserId_args();
-      args.setUserId(userId);
+      oprot_.writeMessageBegin(new TMessage("signinThirdParty", TMessageType.CALL, ++seqid_));
+      signinThirdParty_args args = new signinThirdParty_args();
+      args.setLoginLog(loginLog);
+      args.setThirdUser(thirdUser);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public com.jfshare.finagle.thrift.result.Result recv_deleteUserSellerRealByuserId() throws TException
+    public BuyerResult recv_signinThirdParty() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -614,34 +658,34 @@ public class SellerServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "deleteUserSellerRealByuserId failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "signinThirdParty failed: out of sequence response");
       }
-      deleteUserSellerRealByuserId_result result = new deleteUserSellerRealByuserId_result();
+      signinThirdParty_result result = new signinThirdParty_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "deleteUserSellerRealByuserId failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "signinThirdParty failed: unknown result");
     }
-    public SellerVipResult querySellerVipList(String sellerId, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException
+    public BuyerResult isBindThirdParty(String thirdType, LoginLog loginLog) throws TException
     {
-      send_querySellerVipList(sellerId, pagination);
-      return recv_querySellerVipList();
+      send_isBindThirdParty(thirdType, loginLog);
+      return recv_isBindThirdParty();
     }
 
-    public void send_querySellerVipList(String sellerId, com.jfshare.finagle.thrift.pagination.Pagination pagination) throws TException
+    public void send_isBindThirdParty(String thirdType, LoginLog loginLog) throws TException
     {
-      oprot_.writeMessageBegin(new TMessage("querySellerVipList", TMessageType.CALL, ++seqid_));
-      querySellerVipList_args args = new querySellerVipList_args();
-      args.setSellerId(sellerId);
-      args.setPagination(pagination);
+      oprot_.writeMessageBegin(new TMessage("isBindThirdParty", TMessageType.CALL, ++seqid_));
+      isBindThirdParty_args args = new isBindThirdParty_args();
+      args.setThirdType(thirdType);
+      args.setLoginLog(loginLog);
       args.write(oprot_);
       oprot_.writeMessageEnd();
       oprot_.getTransport().flush();
     }
 
-    public SellerVipResult recv_querySellerVipList() throws TException
+    public BuyerResult recv_isBindThirdParty() throws TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -650,15 +694,88 @@ public class SellerServ {
         throw x;
       }
       if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "querySellerVipList failed: out of sequence response");
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "isBindThirdParty failed: out of sequence response");
       }
-      querySellerVipList_result result = new querySellerVipList_result();
+      isBindThirdParty_result result = new isBindThirdParty_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "querySellerVipList failed: unknown result");
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "isBindThirdParty failed: unknown result");
+    }
+    public AuthInfoResult getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog) throws TException
+    {
+      send_getAuthInfo(authInfo, buyer, loginLog);
+      return recv_getAuthInfo();
+    }
+
+    public void send_getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("getAuthInfo", TMessageType.CALL, ++seqid_));
+      getAuthInfo_args args = new getAuthInfo_args();
+      args.setAuthInfo(authInfo);
+      args.setBuyer(buyer);
+      args.setLoginLog(loginLog);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public AuthInfoResult recv_getAuthInfo() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "getAuthInfo failed: out of sequence response");
+      }
+      getAuthInfo_result result = new getAuthInfo_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "getAuthInfo failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result validAuth(LoginLog loginLog, AuthInfo authInfo) throws TException
+    {
+      send_validAuth(loginLog, authInfo);
+      return recv_validAuth();
+    }
+
+    public void send_validAuth(LoginLog loginLog, AuthInfo authInfo) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("validAuth", TMessageType.CALL, ++seqid_));
+      validAuth_args args = new validAuth_args();
+      args.setLoginLog(loginLog);
+      args.setAuthInfo(authInfo);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_validAuth() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "validAuth failed: out of sequence response");
+      }
+      validAuth_result result = new validAuth_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "validAuth failed: unknown result");
     }
   }
 
@@ -679,125 +796,23 @@ public class SellerServ {
       super(protocolFactory, clientManager, transport);
     }
 
-    public void querySeller(int sellerId, SellerRetParam param, AsyncMethodCallback<querySeller_call> resultHandler) throws TException {
+    public void buyerIsExist(String loginName, AsyncMethodCallback<buyerIsExist_call> resultHandler) throws TException {
       checkReady();
-      querySeller_call method_call = new querySeller_call(sellerId, param, resultHandler, this, protocolFactory, transport);
+      buyerIsExist_call method_call = new buyerIsExist_call(loginName, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
-    public static class querySeller_call extends TAsyncMethodCall {
-      private int sellerId;
-      private SellerRetParam param;
-
-      public querySeller_call(int sellerId, SellerRetParam param, AsyncMethodCallback<querySeller_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.sellerId = sellerId;
-        this.param = param;
-      }
-
-      public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("querySeller", TMessageType.CALL, 0));
-        querySeller_args args = new querySeller_args();
-        args.setSellerId(sellerId);
-        args.setParam(param);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public SellerResult getResult() throws TException {
-        if (getState() != State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
-        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_querySeller();
-      }
-     }
-    public void querySellerList(Seller seller, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<querySellerList_call> resultHandler) throws TException {
-      checkReady();
-      querySellerList_call method_call = new querySellerList_call(seller, pagination, resultHandler, this, protocolFactory, transport);
-      manager.call(method_call);
-    }
-
-    public static class querySellerList_call extends TAsyncMethodCall {
-      private Seller seller;
-      private com.jfshare.finagle.thrift.pagination.Pagination pagination;
-
-      public querySellerList_call(Seller seller, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<querySellerList_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.seller = seller;
-        this.pagination = pagination;
-      }
-
-      public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("querySellerList", TMessageType.CALL, 0));
-        querySellerList_args args = new querySellerList_args();
-        args.setSeller(seller);
-        args.setPagination(pagination);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public SellerListResult getResult() throws TException {
-        if (getState() != State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
-        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_querySellerList();
-      }
-     }
-    public void querySellerBatch(List<Integer> sellerIds, SellerRetParam param, AsyncMethodCallback<querySellerBatch_call> resultHandler) throws TException {
-      checkReady();
-      querySellerBatch_call method_call = new querySellerBatch_call(sellerIds, param, resultHandler, this, protocolFactory, transport);
-      manager.call(method_call);
-    }
-
-    public static class querySellerBatch_call extends TAsyncMethodCall {
-      private List<Integer> sellerIds;
-      private SellerRetParam param;
-
-      public querySellerBatch_call(List<Integer> sellerIds, SellerRetParam param, AsyncMethodCallback<querySellerBatch_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.sellerIds = sellerIds;
-        this.param = param;
-      }
-
-      public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.CALL, 0));
-        querySellerBatch_args args = new querySellerBatch_args();
-        args.setSellerIds(sellerIds);
-        args.setParam(param);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public SellersResult getResult() throws TException {
-        if (getState() != State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
-        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_querySellerBatch();
-      }
-     }
-    public void isLoginNameExist(String loginName, AsyncMethodCallback<isLoginNameExist_call> resultHandler) throws TException {
-      checkReady();
-      isLoginNameExist_call method_call = new isLoginNameExist_call(loginName, resultHandler, this, protocolFactory, transport);
-      manager.call(method_call);
-    }
-
-    public static class isLoginNameExist_call extends TAsyncMethodCall {
+    public static class buyerIsExist_call extends TAsyncMethodCall {
       private String loginName;
 
-      public isLoginNameExist_call(String loginName, AsyncMethodCallback<isLoginNameExist_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public buyerIsExist_call(String loginName, AsyncMethodCallback<buyerIsExist_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.loginName = loginName;
       }
 
       public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("isLoginNameExist", TMessageType.CALL, 0));
-        isLoginNameExist_args args = new isLoginNameExist_args();
+        prot.writeMessageBegin(new TMessage("buyerIsExist", TMessageType.CALL, 0));
+        buyerIsExist_args args = new buyerIsExist_args();
         args.setLoginName(loginName);
         args.write(prot);
         prot.writeMessageEnd();
@@ -809,66 +824,32 @@ public class SellerServ {
         }
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_isLoginNameExist();
+        return (new Client(prot)).recv_buyerIsExist();
       }
      }
-    public void signup(Seller seller, AsyncMethodCallback<signup_call> resultHandler) throws TException {
+    public void signin(Buyer buyer, AsyncMethodCallback<signin_call> resultHandler) throws TException {
       checkReady();
-      signup_call method_call = new signup_call(seller, resultHandler, this, protocolFactory, transport);
-      manager.call(method_call);
-    }
-
-    public static class signup_call extends TAsyncMethodCall {
-      private Seller seller;
-
-      public signup_call(Seller seller, AsyncMethodCallback<signup_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.seller = seller;
-      }
-
-      public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("signup", TMessageType.CALL, 0));
-        signup_args args = new signup_args();
-        args.setSeller(seller);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
-        if (getState() != State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
-        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_signup();
-      }
-     }
-    public void signin(Seller seller, LoginLog loginLog, AsyncMethodCallback<signin_call> resultHandler) throws TException {
-      checkReady();
-      signin_call method_call = new signin_call(seller, loginLog, resultHandler, this, protocolFactory, transport);
+      signin_call method_call = new signin_call(buyer, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
     public static class signin_call extends TAsyncMethodCall {
-      private Seller seller;
-      private LoginLog loginLog;
+      private Buyer buyer;
 
-      public signin_call(Seller seller, LoginLog loginLog, AsyncMethodCallback<signin_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public signin_call(Buyer buyer, AsyncMethodCallback<signin_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.seller = seller;
-        this.loginLog = loginLog;
+        this.buyer = buyer;
       }
 
       public void write_args(TProtocol prot) throws TException {
         prot.writeMessageBegin(new TMessage("signin", TMessageType.CALL, 0));
         signin_args args = new signin_args();
-        args.setSeller(seller);
-        args.setLoginLog(loginLog);
+        args.setBuyer(buyer);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
-      public SellerResult getResult() throws TException {
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -877,23 +858,156 @@ public class SellerServ {
         return (new Client(prot)).recv_signin();
       }
      }
-    public void signout(LoginLog loginLog, AsyncMethodCallback<signout_call> resultHandler) throws TException {
+    public void newSignin(Buyer buyer, AsyncMethodCallback<newSignin_call> resultHandler) throws TException {
       checkReady();
-      signout_call method_call = new signout_call(loginLog, resultHandler, this, protocolFactory, transport);
+      newSignin_call method_call = new newSignin_call(buyer, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
-    public static class signout_call extends TAsyncMethodCall {
+    public static class newSignin_call extends TAsyncMethodCall {
+      private Buyer buyer;
+
+      public newSignin_call(Buyer buyer, AsyncMethodCallback<newSignin_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.buyer = buyer;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("newSignin", TMessageType.CALL, 0));
+        newSignin_args args = new newSignin_args();
+        args.setBuyer(buyer);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_newSignin();
+      }
+     }
+    public void login(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<login_call> resultHandler) throws TException {
+      checkReady();
+      login_call method_call = new login_call(buyer, loginLog, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class login_call extends TAsyncMethodCall {
+      private Buyer buyer;
       private LoginLog loginLog;
 
-      public signout_call(LoginLog loginLog, AsyncMethodCallback<signout_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public login_call(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<login_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.buyer = buyer;
+        this.loginLog = loginLog;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("login", TMessageType.CALL, 0));
+        login_args args = new login_args();
+        args.setBuyer(buyer);
+        args.setLoginLog(loginLog);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_login();
+      }
+     }
+    public void newLogin(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<newLogin_call> resultHandler) throws TException {
+      checkReady();
+      newLogin_call method_call = new newLogin_call(buyer, loginLog, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class newLogin_call extends TAsyncMethodCall {
+      private Buyer buyer;
+      private LoginLog loginLog;
+
+      public newLogin_call(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<newLogin_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.buyer = buyer;
+        this.loginLog = loginLog;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("newLogin", TMessageType.CALL, 0));
+        newLogin_args args = new newLogin_args();
+        args.setBuyer(buyer);
+        args.setLoginLog(loginLog);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_newLogin();
+      }
+     }
+    public void smsLogin(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<smsLogin_call> resultHandler) throws TException {
+      checkReady();
+      smsLogin_call method_call = new smsLogin_call(buyer, loginLog, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class smsLogin_call extends TAsyncMethodCall {
+      private Buyer buyer;
+      private LoginLog loginLog;
+
+      public smsLogin_call(Buyer buyer, LoginLog loginLog, AsyncMethodCallback<smsLogin_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.buyer = buyer;
+        this.loginLog = loginLog;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("smsLogin", TMessageType.CALL, 0));
+        smsLogin_args args = new smsLogin_args();
+        args.setBuyer(buyer);
+        args.setLoginLog(loginLog);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_smsLogin();
+      }
+     }
+    public void logout(LoginLog loginLog, AsyncMethodCallback<logout_call> resultHandler) throws TException {
+      checkReady();
+      logout_call method_call = new logout_call(loginLog, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class logout_call extends TAsyncMethodCall {
+      private LoginLog loginLog;
+
+      public logout_call(LoginLog loginLog, AsyncMethodCallback<logout_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.loginLog = loginLog;
       }
 
       public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("signout", TMessageType.CALL, 0));
-        signout_args args = new signout_args();
+        prot.writeMessageBegin(new TMessage("logout", TMessageType.CALL, 0));
+        logout_args args = new logout_args();
         args.setLoginLog(loginLog);
         args.write(prot);
         prot.writeMessageEnd();
@@ -905,7 +1019,7 @@ public class SellerServ {
         }
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_signout();
+        return (new Client(prot)).recv_logout();
       }
      }
     public void isOnline(LoginLog loginLog, AsyncMethodCallback<isOnline_call> resultHandler) throws TException {
@@ -930,7 +1044,7 @@ public class SellerServ {
         prot.writeMessageEnd();
       }
 
-      public SellerResult getResult() throws TException {
+      public BuyerResult getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -961,7 +1075,7 @@ public class SellerServ {
         prot.writeMessageEnd();
       }
 
-      public SellerResult getResult() throws TException {
+      public BuyerResult getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -1004,24 +1118,55 @@ public class SellerServ {
         return (new Client(prot)).recv_pwdFind();
       }
      }
-    public void updateSeller(Seller seller, AsyncMethodCallback<updateSeller_call> resultHandler) throws TException {
+    public void getBuyer(Buyer buyer, AsyncMethodCallback<getBuyer_call> resultHandler) throws TException {
       checkReady();
-      updateSeller_call method_call = new updateSeller_call(seller, resultHandler, this, protocolFactory, transport);
+      getBuyer_call method_call = new getBuyer_call(buyer, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
-    public static class updateSeller_call extends TAsyncMethodCall {
-      private Seller seller;
+    public static class getBuyer_call extends TAsyncMethodCall {
+      private Buyer buyer;
 
-      public updateSeller_call(Seller seller, AsyncMethodCallback<updateSeller_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public getBuyer_call(Buyer buyer, AsyncMethodCallback<getBuyer_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.seller = seller;
+        this.buyer = buyer;
       }
 
       public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("updateSeller", TMessageType.CALL, 0));
-        updateSeller_args args = new updateSeller_args();
-        args.setSeller(seller);
+        prot.writeMessageBegin(new TMessage("getBuyer", TMessageType.CALL, 0));
+        getBuyer_args args = new getBuyer_args();
+        args.setBuyer(buyer);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getBuyer();
+      }
+     }
+    public void updateBuyer(Buyer buyer, AsyncMethodCallback<updateBuyer_call> resultHandler) throws TException {
+      checkReady();
+      updateBuyer_call method_call = new updateBuyer_call(buyer, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class updateBuyer_call extends TAsyncMethodCall {
+      private Buyer buyer;
+
+      public updateBuyer_call(Buyer buyer, AsyncMethodCallback<updateBuyer_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.buyer = buyer;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("updateBuyer", TMessageType.CALL, 0));
+        updateBuyer_args args = new updateBuyer_args();
+        args.setBuyer(buyer);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1032,30 +1177,30 @@ public class SellerServ {
         }
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_updateSeller();
+        return (new Client(prot)).recv_updateBuyer();
       }
      }
-    public void resetSellerPwd(String newPwd, Seller seller, AsyncMethodCallback<resetSellerPwd_call> resultHandler) throws TException {
+    public void resetBuyerPwd(String newPwd, Buyer buyer, AsyncMethodCallback<resetBuyerPwd_call> resultHandler) throws TException {
       checkReady();
-      resetSellerPwd_call method_call = new resetSellerPwd_call(newPwd, seller, resultHandler, this, protocolFactory, transport);
+      resetBuyerPwd_call method_call = new resetBuyerPwd_call(newPwd, buyer, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
-    public static class resetSellerPwd_call extends TAsyncMethodCall {
+    public static class resetBuyerPwd_call extends TAsyncMethodCall {
       private String newPwd;
-      private Seller seller;
+      private Buyer buyer;
 
-      public resetSellerPwd_call(String newPwd, Seller seller, AsyncMethodCallback<resetSellerPwd_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public resetBuyerPwd_call(String newPwd, Buyer buyer, AsyncMethodCallback<resetBuyerPwd_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.newPwd = newPwd;
-        this.seller = seller;
+        this.buyer = buyer;
       }
 
       public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("resetSellerPwd", TMessageType.CALL, 0));
-        resetSellerPwd_args args = new resetSellerPwd_args();
+        prot.writeMessageBegin(new TMessage("resetBuyerPwd", TMessageType.CALL, 0));
+        resetBuyerPwd_args args = new resetBuyerPwd_args();
         args.setNewPwd(newPwd);
-        args.setSeller(seller);
+        args.setBuyer(buyer);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1066,30 +1211,30 @@ public class SellerServ {
         }
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_resetSellerPwd();
+        return (new Client(prot)).recv_resetBuyerPwd();
       }
      }
-    public void insertUserSellerReal(String userId, String sellerId, AsyncMethodCallback<insertUserSellerReal_call> resultHandler) throws TException {
+    public void newResetBuyerPwd(String newPwd, Buyer buyer, AsyncMethodCallback<newResetBuyerPwd_call> resultHandler) throws TException {
       checkReady();
-      insertUserSellerReal_call method_call = new insertUserSellerReal_call(userId, sellerId, resultHandler, this, protocolFactory, transport);
+      newResetBuyerPwd_call method_call = new newResetBuyerPwd_call(newPwd, buyer, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
-    public static class insertUserSellerReal_call extends TAsyncMethodCall {
-      private String userId;
-      private String sellerId;
+    public static class newResetBuyerPwd_call extends TAsyncMethodCall {
+      private String newPwd;
+      private Buyer buyer;
 
-      public insertUserSellerReal_call(String userId, String sellerId, AsyncMethodCallback<insertUserSellerReal_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public newResetBuyerPwd_call(String newPwd, Buyer buyer, AsyncMethodCallback<newResetBuyerPwd_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.userId = userId;
-        this.sellerId = sellerId;
+        this.newPwd = newPwd;
+        this.buyer = buyer;
       }
 
       public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("insertUserSellerReal", TMessageType.CALL, 0));
-        insertUserSellerReal_args args = new insertUserSellerReal_args();
-        args.setUserId(userId);
-        args.setSellerId(sellerId);
+        prot.writeMessageBegin(new TMessage("newResetBuyerPwd", TMessageType.CALL, 0));
+        newResetBuyerPwd_args args = new newResetBuyerPwd_args();
+        args.setNewPwd(newPwd);
+        args.setBuyer(buyer);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1100,27 +1245,135 @@ public class SellerServ {
         }
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_insertUserSellerReal();
+        return (new Client(prot)).recv_newResetBuyerPwd();
       }
      }
-    public void deleteUserSellerRealByuserId(String userId, AsyncMethodCallback<deleteUserSellerRealByuserId_call> resultHandler) throws TException {
+    public void signinThirdParty(LoginLog loginLog, ThirdpartyUser thirdUser, AsyncMethodCallback<signinThirdParty_call> resultHandler) throws TException {
       checkReady();
-      deleteUserSellerRealByuserId_call method_call = new deleteUserSellerRealByuserId_call(userId, resultHandler, this, protocolFactory, transport);
+      signinThirdParty_call method_call = new signinThirdParty_call(loginLog, thirdUser, resultHandler, this, protocolFactory, transport);
       manager.call(method_call);
     }
 
-    public static class deleteUserSellerRealByuserId_call extends TAsyncMethodCall {
-      private String userId;
+    public static class signinThirdParty_call extends TAsyncMethodCall {
+      private LoginLog loginLog;
+      private ThirdpartyUser thirdUser;
 
-      public deleteUserSellerRealByuserId_call(String userId, AsyncMethodCallback<deleteUserSellerRealByuserId_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+      public signinThirdParty_call(LoginLog loginLog, ThirdpartyUser thirdUser, AsyncMethodCallback<signinThirdParty_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.userId = userId;
+        this.loginLog = loginLog;
+        this.thirdUser = thirdUser;
       }
 
       public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("deleteUserSellerRealByuserId", TMessageType.CALL, 0));
-        deleteUserSellerRealByuserId_args args = new deleteUserSellerRealByuserId_args();
-        args.setUserId(userId);
+        prot.writeMessageBegin(new TMessage("signinThirdParty", TMessageType.CALL, 0));
+        signinThirdParty_args args = new signinThirdParty_args();
+        args.setLoginLog(loginLog);
+        args.setThirdUser(thirdUser);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_signinThirdParty();
+      }
+     }
+    public void isBindThirdParty(String thirdType, LoginLog loginLog, AsyncMethodCallback<isBindThirdParty_call> resultHandler) throws TException {
+      checkReady();
+      isBindThirdParty_call method_call = new isBindThirdParty_call(thirdType, loginLog, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class isBindThirdParty_call extends TAsyncMethodCall {
+      private String thirdType;
+      private LoginLog loginLog;
+
+      public isBindThirdParty_call(String thirdType, LoginLog loginLog, AsyncMethodCallback<isBindThirdParty_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.thirdType = thirdType;
+        this.loginLog = loginLog;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("isBindThirdParty", TMessageType.CALL, 0));
+        isBindThirdParty_args args = new isBindThirdParty_args();
+        args.setThirdType(thirdType);
+        args.setLoginLog(loginLog);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BuyerResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_isBindThirdParty();
+      }
+     }
+    public void getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog, AsyncMethodCallback<getAuthInfo_call> resultHandler) throws TException {
+      checkReady();
+      getAuthInfo_call method_call = new getAuthInfo_call(authInfo, buyer, loginLog, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class getAuthInfo_call extends TAsyncMethodCall {
+      private AuthInfo authInfo;
+      private Buyer buyer;
+      private LoginLog loginLog;
+
+      public getAuthInfo_call(AuthInfo authInfo, Buyer buyer, LoginLog loginLog, AsyncMethodCallback<getAuthInfo_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.authInfo = authInfo;
+        this.buyer = buyer;
+        this.loginLog = loginLog;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("getAuthInfo", TMessageType.CALL, 0));
+        getAuthInfo_args args = new getAuthInfo_args();
+        args.setAuthInfo(authInfo);
+        args.setBuyer(buyer);
+        args.setLoginLog(loginLog);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public AuthInfoResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getAuthInfo();
+      }
+     }
+    public void validAuth(LoginLog loginLog, AuthInfo authInfo, AsyncMethodCallback<validAuth_call> resultHandler) throws TException {
+      checkReady();
+      validAuth_call method_call = new validAuth_call(loginLog, authInfo, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class validAuth_call extends TAsyncMethodCall {
+      private LoginLog loginLog;
+      private AuthInfo authInfo;
+
+      public validAuth_call(LoginLog loginLog, AuthInfo authInfo, AsyncMethodCallback<validAuth_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.loginLog = loginLog;
+        this.authInfo = authInfo;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("validAuth", TMessageType.CALL, 0));
+        validAuth_args args = new validAuth_args();
+        args.setLoginLog(loginLog);
+        args.setAuthInfo(authInfo);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1131,41 +1384,7 @@ public class SellerServ {
         }
         TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
         TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_deleteUserSellerRealByuserId();
-      }
-     }
-    public void querySellerVipList(String sellerId, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<querySellerVipList_call> resultHandler) throws TException {
-      checkReady();
-      querySellerVipList_call method_call = new querySellerVipList_call(sellerId, pagination, resultHandler, this, protocolFactory, transport);
-      manager.call(method_call);
-    }
-
-    public static class querySellerVipList_call extends TAsyncMethodCall {
-      private String sellerId;
-      private com.jfshare.finagle.thrift.pagination.Pagination pagination;
-
-      public querySellerVipList_call(String sellerId, com.jfshare.finagle.thrift.pagination.Pagination pagination, AsyncMethodCallback<querySellerVipList_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.sellerId = sellerId;
-        this.pagination = pagination;
-      }
-
-      public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("querySellerVipList", TMessageType.CALL, 0));
-        querySellerVipList_args args = new querySellerVipList_args();
-        args.setSellerId(sellerId);
-        args.setPagination(pagination);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public SellerVipResult getResult() throws TException {
-        if (getState() != State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
-        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_querySellerVipList();
+        return (new Client(prot)).recv_validAuth();
       }
      }
    }
@@ -1180,106 +1399,13 @@ public class SellerServ {
       this.protocolFactory = protocolFactory;
     }
 
-    public Future<SellerResult> querySeller(int sellerId, SellerRetParam param) {
+    public Future<com.jfshare.finagle.thrift.result.BoolResult> buyerIsExist(String loginName) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("querySeller", TMessageType.CALL, 0));
-        querySeller_args __args__ = new querySeller_args();
-        __args__.setSellerId(sellerId);
-        __args__.setParam(param);
-        __args__.write(__prot__);
-        __prot__.writeMessageEnd();
-
-
-        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
-        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
-        Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<SellerResult>>() {
-          public Future<SellerResult> apply(byte[] __buffer__) {
-            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
-            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
-            try {
-              return Future.value((new Client(__prot__)).recv_querySeller());
-            } catch (Exception e) {
-              return Future.exception(e);
-            }
-          }
-        });
-      } catch (TException e) {
-        return Future.exception(e);
-      }
-    }
-    public Future<SellerListResult> querySellerList(Seller seller, com.jfshare.finagle.thrift.pagination.Pagination pagination) {
-      try {
-        // TODO: size
-        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
-        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("querySellerList", TMessageType.CALL, 0));
-        querySellerList_args __args__ = new querySellerList_args();
-        __args__.setSeller(seller);
-        __args__.setPagination(pagination);
-        __args__.write(__prot__);
-        __prot__.writeMessageEnd();
-
-
-        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
-        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
-        Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<SellerListResult>>() {
-          public Future<SellerListResult> apply(byte[] __buffer__) {
-            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
-            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
-            try {
-              return Future.value((new Client(__prot__)).recv_querySellerList());
-            } catch (Exception e) {
-              return Future.exception(e);
-            }
-          }
-        });
-      } catch (TException e) {
-        return Future.exception(e);
-      }
-    }
-    public Future<SellersResult> querySellerBatch(List<Integer> sellerIds, SellerRetParam param) {
-      try {
-        // TODO: size
-        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
-        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.CALL, 0));
-        querySellerBatch_args __args__ = new querySellerBatch_args();
-        __args__.setSellerIds(sellerIds);
-        __args__.setParam(param);
-        __args__.write(__prot__);
-        __prot__.writeMessageEnd();
-
-
-        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
-        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
-        Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<SellersResult>>() {
-          public Future<SellersResult> apply(byte[] __buffer__) {
-            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
-            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
-            try {
-              return Future.value((new Client(__prot__)).recv_querySellerBatch());
-            } catch (Exception e) {
-              return Future.exception(e);
-            }
-          }
-        });
-      } catch (TException e) {
-        return Future.exception(e);
-      }
-    }
-    public Future<com.jfshare.finagle.thrift.result.BoolResult> isLoginNameExist(String loginName) {
-      try {
-        // TODO: size
-        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
-        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("isLoginNameExist", TMessageType.CALL, 0));
-        isLoginNameExist_args __args__ = new isLoginNameExist_args();
+        __prot__.writeMessageBegin(new TMessage("buyerIsExist", TMessageType.CALL, 0));
+        buyerIsExist_args __args__ = new buyerIsExist_args();
         __args__.setLoginName(loginName);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
@@ -1293,7 +1419,7 @@ public class SellerServ {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
-              return Future.value((new Client(__prot__)).recv_isLoginNameExist());
+              return Future.value((new Client(__prot__)).recv_buyerIsExist());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1303,14 +1429,14 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> signup(Seller seller) {
+    public Future<com.jfshare.finagle.thrift.result.Result> signin(Buyer buyer) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("signup", TMessageType.CALL, 0));
-        signup_args __args__ = new signup_args();
-        __args__.setSeller(seller);
+        __prot__.writeMessageBegin(new TMessage("signin", TMessageType.CALL, 0));
+        signin_args __args__ = new signin_args();
+        __args__.setBuyer(buyer);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -1320,37 +1446,6 @@ public class SellerServ {
         Future<byte[]> __done__ = this.service.apply(__request__);
         return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
           public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
-            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
-            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
-            try {
-              return Future.value((new Client(__prot__)).recv_signup());
-            } catch (Exception e) {
-              return Future.exception(e);
-            }
-          }
-        });
-      } catch (TException e) {
-        return Future.exception(e);
-      }
-    }
-    public Future<SellerResult> signin(Seller seller, LoginLog loginLog) {
-      try {
-        // TODO: size
-        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
-        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("signin", TMessageType.CALL, 0));
-        signin_args __args__ = new signin_args();
-        __args__.setSeller(seller);
-        __args__.setLoginLog(loginLog);
-        __args__.write(__prot__);
-        __prot__.writeMessageEnd();
-
-
-        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
-        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
-        Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<SellerResult>>() {
-          public Future<SellerResult> apply(byte[] __buffer__) {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
@@ -1364,13 +1459,136 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> signout(LoginLog loginLog) {
+    public Future<com.jfshare.finagle.thrift.result.Result> newSignin(Buyer buyer) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("signout", TMessageType.CALL, 0));
-        signout_args __args__ = new signout_args();
+        __prot__.writeMessageBegin(new TMessage("newSignin", TMessageType.CALL, 0));
+        newSignin_args __args__ = new newSignin_args();
+        __args__.setBuyer(buyer);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_newSignin());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<BuyerResult> login(Buyer buyer, LoginLog loginLog) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("login", TMessageType.CALL, 0));
+        login_args __args__ = new login_args();
+        __args__.setBuyer(buyer);
+        __args__.setLoginLog(loginLog);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_login());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<BuyerResult> newLogin(Buyer buyer, LoginLog loginLog) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("newLogin", TMessageType.CALL, 0));
+        newLogin_args __args__ = new newLogin_args();
+        __args__.setBuyer(buyer);
+        __args__.setLoginLog(loginLog);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_newLogin());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<BuyerResult> smsLogin(Buyer buyer, LoginLog loginLog) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("smsLogin", TMessageType.CALL, 0));
+        smsLogin_args __args__ = new smsLogin_args();
+        __args__.setBuyer(buyer);
+        __args__.setLoginLog(loginLog);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_smsLogin());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> logout(LoginLog loginLog) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("logout", TMessageType.CALL, 0));
+        logout_args __args__ = new logout_args();
         __args__.setLoginLog(loginLog);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
@@ -1384,7 +1602,7 @@ public class SellerServ {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
-              return Future.value((new Client(__prot__)).recv_signout());
+              return Future.value((new Client(__prot__)).recv_logout());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1394,7 +1612,7 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
-    public Future<SellerResult> isOnline(LoginLog loginLog) {
+    public Future<BuyerResult> isOnline(LoginLog loginLog) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
@@ -1409,8 +1627,8 @@ public class SellerServ {
         byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
         ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
         Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<SellerResult>>() {
-          public Future<SellerResult> apply(byte[] __buffer__) {
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
@@ -1424,7 +1642,7 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
-    public Future<SellerResult> getOnlineInfo(LoginLog loginLog) {
+    public Future<BuyerResult> getOnlineInfo(LoginLog loginLog) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
@@ -1439,8 +1657,8 @@ public class SellerServ {
         byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
         ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
         Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<SellerResult>>() {
-          public Future<SellerResult> apply(byte[] __buffer__) {
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
@@ -1485,14 +1703,44 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> updateSeller(Seller seller) {
+    public Future<BuyerResult> getBuyer(Buyer buyer) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("updateSeller", TMessageType.CALL, 0));
-        updateSeller_args __args__ = new updateSeller_args();
-        __args__.setSeller(seller);
+        __prot__.writeMessageBegin(new TMessage("getBuyer", TMessageType.CALL, 0));
+        getBuyer_args __args__ = new getBuyer_args();
+        __args__.setBuyer(buyer);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_getBuyer());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> updateBuyer(Buyer buyer) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("updateBuyer", TMessageType.CALL, 0));
+        updateBuyer_args __args__ = new updateBuyer_args();
+        __args__.setBuyer(buyer);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -1505,7 +1753,7 @@ public class SellerServ {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
-              return Future.value((new Client(__prot__)).recv_updateSeller());
+              return Future.value((new Client(__prot__)).recv_updateBuyer());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1515,15 +1763,15 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> resetSellerPwd(String newPwd, Seller seller) {
+    public Future<com.jfshare.finagle.thrift.result.Result> resetBuyerPwd(String newPwd, Buyer buyer) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("resetSellerPwd", TMessageType.CALL, 0));
-        resetSellerPwd_args __args__ = new resetSellerPwd_args();
+        __prot__.writeMessageBegin(new TMessage("resetBuyerPwd", TMessageType.CALL, 0));
+        resetBuyerPwd_args __args__ = new resetBuyerPwd_args();
         __args__.setNewPwd(newPwd);
-        __args__.setSeller(seller);
+        __args__.setBuyer(buyer);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -1536,7 +1784,7 @@ public class SellerServ {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
-              return Future.value((new Client(__prot__)).recv_resetSellerPwd());
+              return Future.value((new Client(__prot__)).recv_resetBuyerPwd());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1546,15 +1794,15 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> insertUserSellerReal(String userId, String sellerId) {
+    public Future<com.jfshare.finagle.thrift.result.Result> newResetBuyerPwd(String newPwd, Buyer buyer) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("insertUserSellerReal", TMessageType.CALL, 0));
-        insertUserSellerReal_args __args__ = new insertUserSellerReal_args();
-        __args__.setUserId(userId);
-        __args__.setSellerId(sellerId);
+        __prot__.writeMessageBegin(new TMessage("newResetBuyerPwd", TMessageType.CALL, 0));
+        newResetBuyerPwd_args __args__ = new newResetBuyerPwd_args();
+        __args__.setNewPwd(newPwd);
+        __args__.setBuyer(buyer);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -1567,7 +1815,7 @@ public class SellerServ {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
-              return Future.value((new Client(__prot__)).recv_insertUserSellerReal());
+              return Future.value((new Client(__prot__)).recv_newResetBuyerPwd());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1577,14 +1825,109 @@ public class SellerServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> deleteUserSellerRealByuserId(String userId) {
+    public Future<BuyerResult> signinThirdParty(LoginLog loginLog, ThirdpartyUser thirdUser) {
       try {
         // TODO: size
         TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
         TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("deleteUserSellerRealByuserId", TMessageType.CALL, 0));
-        deleteUserSellerRealByuserId_args __args__ = new deleteUserSellerRealByuserId_args();
-        __args__.setUserId(userId);
+        __prot__.writeMessageBegin(new TMessage("signinThirdParty", TMessageType.CALL, 0));
+        signinThirdParty_args __args__ = new signinThirdParty_args();
+        __args__.setLoginLog(loginLog);
+        __args__.setThirdUser(thirdUser);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_signinThirdParty());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<BuyerResult> isBindThirdParty(String thirdType, LoginLog loginLog) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("isBindThirdParty", TMessageType.CALL, 0));
+        isBindThirdParty_args __args__ = new isBindThirdParty_args();
+        __args__.setThirdType(thirdType);
+        __args__.setLoginLog(loginLog);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BuyerResult>>() {
+          public Future<BuyerResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_isBindThirdParty());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<AuthInfoResult> getAuthInfo(AuthInfo authInfo, Buyer buyer, LoginLog loginLog) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("getAuthInfo", TMessageType.CALL, 0));
+        getAuthInfo_args __args__ = new getAuthInfo_args();
+        __args__.setAuthInfo(authInfo);
+        __args__.setBuyer(buyer);
+        __args__.setLoginLog(loginLog);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<AuthInfoResult>>() {
+          public Future<AuthInfoResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_getAuthInfo());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> validAuth(LoginLog loginLog, AuthInfo authInfo) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("validAuth", TMessageType.CALL, 0));
+        validAuth_args __args__ = new validAuth_args();
+        __args__.setLoginLog(loginLog);
+        __args__.setAuthInfo(authInfo);
         __args__.write(__prot__);
         __prot__.writeMessageEnd();
 
@@ -1597,38 +1940,7 @@ public class SellerServ {
             TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
             TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
             try {
-              return Future.value((new Client(__prot__)).recv_deleteUserSellerRealByuserId());
-            } catch (Exception e) {
-              return Future.exception(e);
-            }
-          }
-        });
-      } catch (TException e) {
-        return Future.exception(e);
-      }
-    }
-    public Future<SellerVipResult> querySellerVipList(String sellerId, com.jfshare.finagle.thrift.pagination.Pagination pagination) {
-      try {
-        // TODO: size
-        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
-        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("querySellerVipList", TMessageType.CALL, 0));
-        querySellerVipList_args __args__ = new querySellerVipList_args();
-        __args__.setSellerId(sellerId);
-        __args__.setPagination(pagination);
-        __args__.write(__prot__);
-        __prot__.writeMessageEnd();
-
-
-        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
-        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
-        Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<SellerVipResult>>() {
-          public Future<SellerVipResult> apply(byte[] __buffer__) {
-            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
-            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
-            try {
-              return Future.value((new Client(__prot__)).recv_querySellerVipList());
+              return Future.value((new Client(__prot__)).recv_validAuth());
             } catch (Exception e) {
               return Future.exception(e);
             }
@@ -1645,21 +1957,24 @@ public class SellerServ {
     public Processor(Iface iface)
     {
       iface_ = iface;
-      processMap_.put("querySeller", new querySeller());
-      processMap_.put("querySellerList", new querySellerList());
-      processMap_.put("querySellerBatch", new querySellerBatch());
-      processMap_.put("isLoginNameExist", new isLoginNameExist());
-      processMap_.put("signup", new signup());
+      processMap_.put("buyerIsExist", new buyerIsExist());
       processMap_.put("signin", new signin());
-      processMap_.put("signout", new signout());
+      processMap_.put("newSignin", new newSignin());
+      processMap_.put("login", new login());
+      processMap_.put("newLogin", new newLogin());
+      processMap_.put("smsLogin", new smsLogin());
+      processMap_.put("logout", new logout());
       processMap_.put("isOnline", new isOnline());
       processMap_.put("getOnlineInfo", new getOnlineInfo());
       processMap_.put("pwdFind", new pwdFind());
-      processMap_.put("updateSeller", new updateSeller());
-      processMap_.put("resetSellerPwd", new resetSellerPwd());
-      processMap_.put("insertUserSellerReal", new insertUserSellerReal());
-      processMap_.put("deleteUserSellerRealByuserId", new deleteUserSellerRealByuserId());
-      processMap_.put("querySellerVipList", new querySellerVipList());
+      processMap_.put("getBuyer", new getBuyer());
+      processMap_.put("updateBuyer", new updateBuyer());
+      processMap_.put("resetBuyerPwd", new resetBuyerPwd());
+      processMap_.put("newResetBuyerPwd", new newResetBuyerPwd());
+      processMap_.put("signinThirdParty", new signinThirdParty());
+      processMap_.put("isBindThirdParty", new isBindThirdParty());
+      processMap_.put("getAuthInfo", new getAuthInfo());
+      processMap_.put("validAuth", new validAuth());
     }
 
     protected static interface ProcessFunction {
@@ -1687,126 +2002,26 @@ public class SellerServ {
       return true;
     }
 
-    private class querySeller implements ProcessFunction {
+    private class buyerIsExist implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        querySeller_args args = new querySeller_args();
+        buyerIsExist_args args = new buyerIsExist_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("querySeller", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("buyerIsExist", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        querySeller_result result = new querySeller_result();
-        result.success = iface_.querySeller(args.sellerId, args.param);
+        buyerIsExist_result result = new buyerIsExist_result();
+        result.success = iface_.buyerIsExist(args.loginName);
         
-        oprot.writeMessageBegin(new TMessage("querySeller", TMessageType.REPLY, seqid));
-        result.write(oprot);
-        oprot.writeMessageEnd();
-        oprot.getTransport().flush();
-      }
-    }
-    private class querySellerList implements ProcessFunction {
-      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
-      {
-        querySellerList_args args = new querySellerList_args();
-        try {
-          args.read(iprot);
-        } catch (TProtocolException e) {
-          iprot.readMessageEnd();
-          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("querySellerList", TMessageType.EXCEPTION, seqid));
-          x.write(oprot);
-          oprot.writeMessageEnd();
-          oprot.getTransport().flush();
-          return;
-        }
-        iprot.readMessageEnd();
-        querySellerList_result result = new querySellerList_result();
-        result.success = iface_.querySellerList(args.seller, args.pagination);
-        
-        oprot.writeMessageBegin(new TMessage("querySellerList", TMessageType.REPLY, seqid));
-        result.write(oprot);
-        oprot.writeMessageEnd();
-        oprot.getTransport().flush();
-      }
-    }
-    private class querySellerBatch implements ProcessFunction {
-      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
-      {
-        querySellerBatch_args args = new querySellerBatch_args();
-        try {
-          args.read(iprot);
-        } catch (TProtocolException e) {
-          iprot.readMessageEnd();
-          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.EXCEPTION, seqid));
-          x.write(oprot);
-          oprot.writeMessageEnd();
-          oprot.getTransport().flush();
-          return;
-        }
-        iprot.readMessageEnd();
-        querySellerBatch_result result = new querySellerBatch_result();
-        result.success = iface_.querySellerBatch(args.sellerIds, args.param);
-        
-        oprot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.REPLY, seqid));
-        result.write(oprot);
-        oprot.writeMessageEnd();
-        oprot.getTransport().flush();
-      }
-    }
-    private class isLoginNameExist implements ProcessFunction {
-      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
-      {
-        isLoginNameExist_args args = new isLoginNameExist_args();
-        try {
-          args.read(iprot);
-        } catch (TProtocolException e) {
-          iprot.readMessageEnd();
-          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("isLoginNameExist", TMessageType.EXCEPTION, seqid));
-          x.write(oprot);
-          oprot.writeMessageEnd();
-          oprot.getTransport().flush();
-          return;
-        }
-        iprot.readMessageEnd();
-        isLoginNameExist_result result = new isLoginNameExist_result();
-        result.success = iface_.isLoginNameExist(args.loginName);
-        
-        oprot.writeMessageBegin(new TMessage("isLoginNameExist", TMessageType.REPLY, seqid));
-        result.write(oprot);
-        oprot.writeMessageEnd();
-        oprot.getTransport().flush();
-      }
-    }
-    private class signup implements ProcessFunction {
-      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
-      {
-        signup_args args = new signup_args();
-        try {
-          args.read(iprot);
-        } catch (TProtocolException e) {
-          iprot.readMessageEnd();
-          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("signup", TMessageType.EXCEPTION, seqid));
-          x.write(oprot);
-          oprot.writeMessageEnd();
-          oprot.getTransport().flush();
-          return;
-        }
-        iprot.readMessageEnd();
-        signup_result result = new signup_result();
-        result.success = iface_.signup(args.seller);
-        
-        oprot.writeMessageBegin(new TMessage("signup", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("buyerIsExist", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -1829,7 +2044,7 @@ public class SellerServ {
         }
         iprot.readMessageEnd();
         signin_result result = new signin_result();
-        result.success = iface_.signin(args.seller, args.loginLog);
+        result.success = iface_.signin(args.buyer);
         
         oprot.writeMessageBegin(new TMessage("signin", TMessageType.REPLY, seqid));
         result.write(oprot);
@@ -1837,26 +2052,126 @@ public class SellerServ {
         oprot.getTransport().flush();
       }
     }
-    private class signout implements ProcessFunction {
+    private class newSignin implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        signout_args args = new signout_args();
+        newSignin_args args = new newSignin_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("signout", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("newSignin", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        signout_result result = new signout_result();
-        result.success = iface_.signout(args.loginLog);
+        newSignin_result result = new newSignin_result();
+        result.success = iface_.newSignin(args.buyer);
         
-        oprot.writeMessageBegin(new TMessage("signout", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("newSignin", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class login implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        login_args args = new login_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("login", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        login_result result = new login_result();
+        result.success = iface_.login(args.buyer, args.loginLog);
+        
+        oprot.writeMessageBegin(new TMessage("login", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class newLogin implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        newLogin_args args = new newLogin_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("newLogin", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        newLogin_result result = new newLogin_result();
+        result.success = iface_.newLogin(args.buyer, args.loginLog);
+        
+        oprot.writeMessageBegin(new TMessage("newLogin", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class smsLogin implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        smsLogin_args args = new smsLogin_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("smsLogin", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        smsLogin_result result = new smsLogin_result();
+        result.success = iface_.smsLogin(args.buyer, args.loginLog);
+        
+        oprot.writeMessageBegin(new TMessage("smsLogin", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class logout implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        logout_args args = new logout_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("logout", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        logout_result result = new logout_result();
+        result.success = iface_.logout(args.loginLog);
+        
+        oprot.writeMessageBegin(new TMessage("logout", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -1937,126 +2252,201 @@ public class SellerServ {
         oprot.getTransport().flush();
       }
     }
-    private class updateSeller implements ProcessFunction {
+    private class getBuyer implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        updateSeller_args args = new updateSeller_args();
+        getBuyer_args args = new getBuyer_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("updateSeller", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("getBuyer", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        updateSeller_result result = new updateSeller_result();
-        result.success = iface_.updateSeller(args.seller);
+        getBuyer_result result = new getBuyer_result();
+        result.success = iface_.getBuyer(args.buyer);
         
-        oprot.writeMessageBegin(new TMessage("updateSeller", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("getBuyer", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
       }
     }
-    private class resetSellerPwd implements ProcessFunction {
+    private class updateBuyer implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        resetSellerPwd_args args = new resetSellerPwd_args();
+        updateBuyer_args args = new updateBuyer_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("resetSellerPwd", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("updateBuyer", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        resetSellerPwd_result result = new resetSellerPwd_result();
-        result.success = iface_.resetSellerPwd(args.newPwd, args.seller);
+        updateBuyer_result result = new updateBuyer_result();
+        result.success = iface_.updateBuyer(args.buyer);
         
-        oprot.writeMessageBegin(new TMessage("resetSellerPwd", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("updateBuyer", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
       }
     }
-    private class insertUserSellerReal implements ProcessFunction {
+    private class resetBuyerPwd implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        insertUserSellerReal_args args = new insertUserSellerReal_args();
+        resetBuyerPwd_args args = new resetBuyerPwd_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("insertUserSellerReal", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("resetBuyerPwd", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        insertUserSellerReal_result result = new insertUserSellerReal_result();
-        result.success = iface_.insertUserSellerReal(args.userId, args.sellerId);
+        resetBuyerPwd_result result = new resetBuyerPwd_result();
+        result.success = iface_.resetBuyerPwd(args.newPwd, args.buyer);
         
-        oprot.writeMessageBegin(new TMessage("insertUserSellerReal", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("resetBuyerPwd", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
       }
     }
-    private class deleteUserSellerRealByuserId implements ProcessFunction {
+    private class newResetBuyerPwd implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        deleteUserSellerRealByuserId_args args = new deleteUserSellerRealByuserId_args();
+        newResetBuyerPwd_args args = new newResetBuyerPwd_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("deleteUserSellerRealByuserId", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("newResetBuyerPwd", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        deleteUserSellerRealByuserId_result result = new deleteUserSellerRealByuserId_result();
-        result.success = iface_.deleteUserSellerRealByuserId(args.userId);
+        newResetBuyerPwd_result result = new newResetBuyerPwd_result();
+        result.success = iface_.newResetBuyerPwd(args.newPwd, args.buyer);
         
-        oprot.writeMessageBegin(new TMessage("deleteUserSellerRealByuserId", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("newResetBuyerPwd", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
       }
     }
-    private class querySellerVipList implements ProcessFunction {
+    private class signinThirdParty implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
-        querySellerVipList_args args = new querySellerVipList_args();
+        signinThirdParty_args args = new signinThirdParty_args();
         try {
           args.read(iprot);
         } catch (TProtocolException e) {
           iprot.readMessageEnd();
           TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("querySellerVipList", TMessageType.EXCEPTION, seqid));
+          oprot.writeMessageBegin(new TMessage("signinThirdParty", TMessageType.EXCEPTION, seqid));
           x.write(oprot);
           oprot.writeMessageEnd();
           oprot.getTransport().flush();
           return;
         }
         iprot.readMessageEnd();
-        querySellerVipList_result result = new querySellerVipList_result();
-        result.success = iface_.querySellerVipList(args.sellerId, args.pagination);
+        signinThirdParty_result result = new signinThirdParty_result();
+        result.success = iface_.signinThirdParty(args.loginLog, args.thirdUser);
         
-        oprot.writeMessageBegin(new TMessage("querySellerVipList", TMessageType.REPLY, seqid));
+        oprot.writeMessageBegin(new TMessage("signinThirdParty", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class isBindThirdParty implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        isBindThirdParty_args args = new isBindThirdParty_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("isBindThirdParty", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        isBindThirdParty_result result = new isBindThirdParty_result();
+        result.success = iface_.isBindThirdParty(args.thirdType, args.loginLog);
+        
+        oprot.writeMessageBegin(new TMessage("isBindThirdParty", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class getAuthInfo implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        getAuthInfo_args args = new getAuthInfo_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("getAuthInfo", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        getAuthInfo_result result = new getAuthInfo_result();
+        result.success = iface_.getAuthInfo(args.authInfo, args.buyer, args.loginLog);
+        
+        oprot.writeMessageBegin(new TMessage("getAuthInfo", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class validAuth implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        validAuth_args args = new validAuth_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("validAuth", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        validAuth_result result = new validAuth_result();
+        result.success = iface_.validAuth(args.loginLog, args.authInfo);
+        
+        oprot.writeMessageBegin(new TMessage("validAuth", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
         oprot.getTransport().flush();
@@ -2071,9 +2461,9 @@ public class SellerServ {
     public Service(final ServiceIface iface, final TProtocolFactory protocolFactory) {
       this.iface = iface;
       this.protocolFactory = protocolFactory;
-      functionMap.put("querySeller", new Function2<TProtocol, Integer, Future<byte[]>>() {
+      functionMap.put("buyerIsExist", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          querySeller_args args = new querySeller_args();
+          buyerIsExist_args args = new buyerIsExist_args();
           try {
             args.read(iprot);
           } catch (TProtocolException e) {
@@ -2083,208 +2473,7 @@ public class SellerServ {
               TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
               TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-              oprot.writeMessageBegin(new TMessage("querySeller", TMessageType.EXCEPTION, seqid));
-              x.write(oprot);
-              oprot.writeMessageEnd();
-              oprot.getTransport().flush();
-              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
-              return Future.value(buffer);
-            } catch (Exception e1) {
-              return Future.exception(e1);
-            }
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-
-          try {
-            iprot.readMessageEnd();
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-          Future<SellerResult> future;
-          try {
-            future = iface.querySeller(args.sellerId, args.param);
-          } catch (Exception e) {
-            future = Future.exception(e);
-          }
-
-          try {
-            return future.flatMap(new Function<SellerResult, Future<byte[]>>() {
-              public Future<byte[]> apply(SellerResult value) {
-                querySeller_result result = new querySeller_result();
-                result.success = value;
-                result.setSuccessIsSet(true);
-
-                try {
-                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-                  oprot.writeMessageBegin(new TMessage("querySeller", TMessageType.REPLY, seqid));
-                  result.write(oprot);
-                  oprot.writeMessageEnd();
-
-                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
-                } catch (Exception e) {
-                  return Future.exception(e);
-                }
-              }
-            }).rescue(new Function<Throwable, Future<byte[]>>() {
-              public Future<byte[]> apply(Throwable t) {
-                return Future.exception(t);
-              }
-            });
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-        }
-      });
-      functionMap.put("querySellerList", new Function2<TProtocol, Integer, Future<byte[]>>() {
-        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          querySellerList_args args = new querySellerList_args();
-          try {
-            args.read(iprot);
-          } catch (TProtocolException e) {
-            try {
-              iprot.readMessageEnd();
-              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-              oprot.writeMessageBegin(new TMessage("querySellerList", TMessageType.EXCEPTION, seqid));
-              x.write(oprot);
-              oprot.writeMessageEnd();
-              oprot.getTransport().flush();
-              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
-              return Future.value(buffer);
-            } catch (Exception e1) {
-              return Future.exception(e1);
-            }
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-
-          try {
-            iprot.readMessageEnd();
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-          Future<SellerListResult> future;
-          try {
-            future = iface.querySellerList(args.seller, args.pagination);
-          } catch (Exception e) {
-            future = Future.exception(e);
-          }
-
-          try {
-            return future.flatMap(new Function<SellerListResult, Future<byte[]>>() {
-              public Future<byte[]> apply(SellerListResult value) {
-                querySellerList_result result = new querySellerList_result();
-                result.success = value;
-                result.setSuccessIsSet(true);
-
-                try {
-                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-                  oprot.writeMessageBegin(new TMessage("querySellerList", TMessageType.REPLY, seqid));
-                  result.write(oprot);
-                  oprot.writeMessageEnd();
-
-                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
-                } catch (Exception e) {
-                  return Future.exception(e);
-                }
-              }
-            }).rescue(new Function<Throwable, Future<byte[]>>() {
-              public Future<byte[]> apply(Throwable t) {
-                return Future.exception(t);
-              }
-            });
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-        }
-      });
-      functionMap.put("querySellerBatch", new Function2<TProtocol, Integer, Future<byte[]>>() {
-        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          querySellerBatch_args args = new querySellerBatch_args();
-          try {
-            args.read(iprot);
-          } catch (TProtocolException e) {
-            try {
-              iprot.readMessageEnd();
-              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-              oprot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.EXCEPTION, seqid));
-              x.write(oprot);
-              oprot.writeMessageEnd();
-              oprot.getTransport().flush();
-              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
-              return Future.value(buffer);
-            } catch (Exception e1) {
-              return Future.exception(e1);
-            }
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-
-          try {
-            iprot.readMessageEnd();
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-          Future<SellersResult> future;
-          try {
-            future = iface.querySellerBatch(args.sellerIds, args.param);
-          } catch (Exception e) {
-            future = Future.exception(e);
-          }
-
-          try {
-            return future.flatMap(new Function<SellersResult, Future<byte[]>>() {
-              public Future<byte[]> apply(SellersResult value) {
-                querySellerBatch_result result = new querySellerBatch_result();
-                result.success = value;
-                result.setSuccessIsSet(true);
-
-                try {
-                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-                  oprot.writeMessageBegin(new TMessage("querySellerBatch", TMessageType.REPLY, seqid));
-                  result.write(oprot);
-                  oprot.writeMessageEnd();
-
-                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
-                } catch (Exception e) {
-                  return Future.exception(e);
-                }
-              }
-            }).rescue(new Function<Throwable, Future<byte[]>>() {
-              public Future<byte[]> apply(Throwable t) {
-                return Future.exception(t);
-              }
-            });
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-        }
-      });
-      functionMap.put("isLoginNameExist", new Function2<TProtocol, Integer, Future<byte[]>>() {
-        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          isLoginNameExist_args args = new isLoginNameExist_args();
-          try {
-            args.read(iprot);
-          } catch (TProtocolException e) {
-            try {
-              iprot.readMessageEnd();
-              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-              oprot.writeMessageBegin(new TMessage("isLoginNameExist", TMessageType.EXCEPTION, seqid));
+              oprot.writeMessageBegin(new TMessage("buyerIsExist", TMessageType.EXCEPTION, seqid));
               x.write(oprot);
               oprot.writeMessageEnd();
               oprot.getTransport().flush();
@@ -2304,7 +2493,7 @@ public class SellerServ {
           }
           Future<com.jfshare.finagle.thrift.result.BoolResult> future;
           try {
-            future = iface.isLoginNameExist(args.loginName);
+            future = iface.buyerIsExist(args.loginName);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -2312,7 +2501,7 @@ public class SellerServ {
           try {
             return future.flatMap(new Function<com.jfshare.finagle.thrift.result.BoolResult, Future<byte[]>>() {
               public Future<byte[]> apply(com.jfshare.finagle.thrift.result.BoolResult value) {
-                isLoginNameExist_result result = new isLoginNameExist_result();
+                buyerIsExist_result result = new buyerIsExist_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
 
@@ -2320,74 +2509,7 @@ public class SellerServ {
                   TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-                  oprot.writeMessageBegin(new TMessage("isLoginNameExist", TMessageType.REPLY, seqid));
-                  result.write(oprot);
-                  oprot.writeMessageEnd();
-
-                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
-                } catch (Exception e) {
-                  return Future.exception(e);
-                }
-              }
-            }).rescue(new Function<Throwable, Future<byte[]>>() {
-              public Future<byte[]> apply(Throwable t) {
-                return Future.exception(t);
-              }
-            });
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-        }
-      });
-      functionMap.put("signup", new Function2<TProtocol, Integer, Future<byte[]>>() {
-        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          signup_args args = new signup_args();
-          try {
-            args.read(iprot);
-          } catch (TProtocolException e) {
-            try {
-              iprot.readMessageEnd();
-              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-              oprot.writeMessageBegin(new TMessage("signup", TMessageType.EXCEPTION, seqid));
-              x.write(oprot);
-              oprot.writeMessageEnd();
-              oprot.getTransport().flush();
-              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
-              return Future.value(buffer);
-            } catch (Exception e1) {
-              return Future.exception(e1);
-            }
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-
-          try {
-            iprot.readMessageEnd();
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-          Future<com.jfshare.finagle.thrift.result.Result> future;
-          try {
-            future = iface.signup(args.seller);
-          } catch (Exception e) {
-            future = Future.exception(e);
-          }
-
-          try {
-            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
-              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                signup_result result = new signup_result();
-                result.success = value;
-                result.setSuccessIsSet(true);
-
-                try {
-                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-                  oprot.writeMessageBegin(new TMessage("signup", TMessageType.REPLY, seqid));
+                  oprot.writeMessageBegin(new TMessage("buyerIsExist", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -2436,16 +2558,16 @@ public class SellerServ {
           } catch (Exception e) {
             return Future.exception(e);
           }
-          Future<SellerResult> future;
+          Future<com.jfshare.finagle.thrift.result.Result> future;
           try {
-            future = iface.signin(args.seller, args.loginLog);
+            future = iface.signin(args.buyer);
           } catch (Exception e) {
             future = Future.exception(e);
           }
 
           try {
-            return future.flatMap(new Function<SellerResult, Future<byte[]>>() {
-              public Future<byte[]> apply(SellerResult value) {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
                 signin_result result = new signin_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
@@ -2473,9 +2595,9 @@ public class SellerServ {
           }
         }
       });
-      functionMap.put("signout", new Function2<TProtocol, Integer, Future<byte[]>>() {
+      functionMap.put("newSignin", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          signout_args args = new signout_args();
+          newSignin_args args = new newSignin_args();
           try {
             args.read(iprot);
           } catch (TProtocolException e) {
@@ -2485,7 +2607,7 @@ public class SellerServ {
               TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
               TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-              oprot.writeMessageBegin(new TMessage("signout", TMessageType.EXCEPTION, seqid));
+              oprot.writeMessageBegin(new TMessage("newSignin", TMessageType.EXCEPTION, seqid));
               x.write(oprot);
               oprot.writeMessageEnd();
               oprot.getTransport().flush();
@@ -2505,7 +2627,7 @@ public class SellerServ {
           }
           Future<com.jfshare.finagle.thrift.result.Result> future;
           try {
-            future = iface.signout(args.loginLog);
+            future = iface.newSignin(args.buyer);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -2513,7 +2635,7 @@ public class SellerServ {
           try {
             return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
               public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                signout_result result = new signout_result();
+                newSignin_result result = new newSignin_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
 
@@ -2521,7 +2643,275 @@ public class SellerServ {
                   TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-                  oprot.writeMessageBegin(new TMessage("signout", TMessageType.REPLY, seqid));
+                  oprot.writeMessageBegin(new TMessage("newSignin", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("login", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          login_args args = new login_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("login", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.login(args.buyer, args.loginLog);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                login_result result = new login_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("login", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("newLogin", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          newLogin_args args = new newLogin_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("newLogin", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.newLogin(args.buyer, args.loginLog);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                newLogin_result result = new newLogin_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("newLogin", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("smsLogin", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          smsLogin_args args = new smsLogin_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("smsLogin", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.smsLogin(args.buyer, args.loginLog);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                smsLogin_result result = new smsLogin_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("smsLogin", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("logout", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          logout_args args = new logout_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("logout", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.logout(args.loginLog);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                logout_result result = new logout_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("logout", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -2570,7 +2960,7 @@ public class SellerServ {
           } catch (Exception e) {
             return Future.exception(e);
           }
-          Future<SellerResult> future;
+          Future<BuyerResult> future;
           try {
             future = iface.isOnline(args.loginLog);
           } catch (Exception e) {
@@ -2578,8 +2968,8 @@ public class SellerServ {
           }
 
           try {
-            return future.flatMap(new Function<SellerResult, Future<byte[]>>() {
-              public Future<byte[]> apply(SellerResult value) {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
                 isOnline_result result = new isOnline_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
@@ -2637,7 +3027,7 @@ public class SellerServ {
           } catch (Exception e) {
             return Future.exception(e);
           }
-          Future<SellerResult> future;
+          Future<BuyerResult> future;
           try {
             future = iface.getOnlineInfo(args.loginLog);
           } catch (Exception e) {
@@ -2645,8 +3035,8 @@ public class SellerServ {
           }
 
           try {
-            return future.flatMap(new Function<SellerResult, Future<byte[]>>() {
-              public Future<byte[]> apply(SellerResult value) {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
                 getOnlineInfo_result result = new getOnlineInfo_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
@@ -2741,9 +3131,9 @@ public class SellerServ {
           }
         }
       });
-      functionMap.put("updateSeller", new Function2<TProtocol, Integer, Future<byte[]>>() {
+      functionMap.put("getBuyer", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          updateSeller_args args = new updateSeller_args();
+          getBuyer_args args = new getBuyer_args();
           try {
             args.read(iprot);
           } catch (TProtocolException e) {
@@ -2753,7 +3143,74 @@ public class SellerServ {
               TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
               TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-              oprot.writeMessageBegin(new TMessage("updateSeller", TMessageType.EXCEPTION, seqid));
+              oprot.writeMessageBegin(new TMessage("getBuyer", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.getBuyer(args.buyer);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                getBuyer_result result = new getBuyer_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("getBuyer", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("updateBuyer", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          updateBuyer_args args = new updateBuyer_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("updateBuyer", TMessageType.EXCEPTION, seqid));
               x.write(oprot);
               oprot.writeMessageEnd();
               oprot.getTransport().flush();
@@ -2773,7 +3230,7 @@ public class SellerServ {
           }
           Future<com.jfshare.finagle.thrift.result.Result> future;
           try {
-            future = iface.updateSeller(args.seller);
+            future = iface.updateBuyer(args.buyer);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -2781,7 +3238,7 @@ public class SellerServ {
           try {
             return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
               public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                updateSeller_result result = new updateSeller_result();
+                updateBuyer_result result = new updateBuyer_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
 
@@ -2789,7 +3246,7 @@ public class SellerServ {
                   TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-                  oprot.writeMessageBegin(new TMessage("updateSeller", TMessageType.REPLY, seqid));
+                  oprot.writeMessageBegin(new TMessage("updateBuyer", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -2808,9 +3265,9 @@ public class SellerServ {
           }
         }
       });
-      functionMap.put("resetSellerPwd", new Function2<TProtocol, Integer, Future<byte[]>>() {
+      functionMap.put("resetBuyerPwd", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          resetSellerPwd_args args = new resetSellerPwd_args();
+          resetBuyerPwd_args args = new resetBuyerPwd_args();
           try {
             args.read(iprot);
           } catch (TProtocolException e) {
@@ -2820,7 +3277,7 @@ public class SellerServ {
               TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
               TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-              oprot.writeMessageBegin(new TMessage("resetSellerPwd", TMessageType.EXCEPTION, seqid));
+              oprot.writeMessageBegin(new TMessage("resetBuyerPwd", TMessageType.EXCEPTION, seqid));
               x.write(oprot);
               oprot.writeMessageEnd();
               oprot.getTransport().flush();
@@ -2840,7 +3297,7 @@ public class SellerServ {
           }
           Future<com.jfshare.finagle.thrift.result.Result> future;
           try {
-            future = iface.resetSellerPwd(args.newPwd, args.seller);
+            future = iface.resetBuyerPwd(args.newPwd, args.buyer);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -2848,7 +3305,7 @@ public class SellerServ {
           try {
             return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
               public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                resetSellerPwd_result result = new resetSellerPwd_result();
+                resetBuyerPwd_result result = new resetBuyerPwd_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
 
@@ -2856,7 +3313,7 @@ public class SellerServ {
                   TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-                  oprot.writeMessageBegin(new TMessage("resetSellerPwd", TMessageType.REPLY, seqid));
+                  oprot.writeMessageBegin(new TMessage("resetBuyerPwd", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -2875,9 +3332,9 @@ public class SellerServ {
           }
         }
       });
-      functionMap.put("insertUserSellerReal", new Function2<TProtocol, Integer, Future<byte[]>>() {
+      functionMap.put("newResetBuyerPwd", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          insertUserSellerReal_args args = new insertUserSellerReal_args();
+          newResetBuyerPwd_args args = new newResetBuyerPwd_args();
           try {
             args.read(iprot);
           } catch (TProtocolException e) {
@@ -2887,7 +3344,7 @@ public class SellerServ {
               TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
               TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-              oprot.writeMessageBegin(new TMessage("insertUserSellerReal", TMessageType.EXCEPTION, seqid));
+              oprot.writeMessageBegin(new TMessage("newResetBuyerPwd", TMessageType.EXCEPTION, seqid));
               x.write(oprot);
               oprot.writeMessageEnd();
               oprot.getTransport().flush();
@@ -2907,7 +3364,7 @@ public class SellerServ {
           }
           Future<com.jfshare.finagle.thrift.result.Result> future;
           try {
-            future = iface.insertUserSellerReal(args.userId, args.sellerId);
+            future = iface.newResetBuyerPwd(args.newPwd, args.buyer);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -2915,7 +3372,7 @@ public class SellerServ {
           try {
             return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
               public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                insertUserSellerReal_result result = new insertUserSellerReal_result();
+                newResetBuyerPwd_result result = new newResetBuyerPwd_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
 
@@ -2923,7 +3380,7 @@ public class SellerServ {
                   TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-                  oprot.writeMessageBegin(new TMessage("insertUserSellerReal", TMessageType.REPLY, seqid));
+                  oprot.writeMessageBegin(new TMessage("newResetBuyerPwd", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -2942,9 +3399,9 @@ public class SellerServ {
           }
         }
       });
-      functionMap.put("deleteUserSellerRealByuserId", new Function2<TProtocol, Integer, Future<byte[]>>() {
+      functionMap.put("signinThirdParty", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          deleteUserSellerRealByuserId_args args = new deleteUserSellerRealByuserId_args();
+          signinThirdParty_args args = new signinThirdParty_args();
           try {
             args.read(iprot);
           } catch (TProtocolException e) {
@@ -2954,7 +3411,208 @@ public class SellerServ {
               TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
               TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-              oprot.writeMessageBegin(new TMessage("deleteUserSellerRealByuserId", TMessageType.EXCEPTION, seqid));
+              oprot.writeMessageBegin(new TMessage("signinThirdParty", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.signinThirdParty(args.loginLog, args.thirdUser);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                signinThirdParty_result result = new signinThirdParty_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("signinThirdParty", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("isBindThirdParty", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          isBindThirdParty_args args = new isBindThirdParty_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("isBindThirdParty", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BuyerResult> future;
+          try {
+            future = iface.isBindThirdParty(args.thirdType, args.loginLog);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BuyerResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BuyerResult value) {
+                isBindThirdParty_result result = new isBindThirdParty_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("isBindThirdParty", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("getAuthInfo", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          getAuthInfo_args args = new getAuthInfo_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("getAuthInfo", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<AuthInfoResult> future;
+          try {
+            future = iface.getAuthInfo(args.authInfo, args.buyer, args.loginLog);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<AuthInfoResult, Future<byte[]>>() {
+              public Future<byte[]> apply(AuthInfoResult value) {
+                getAuthInfo_result result = new getAuthInfo_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("getAuthInfo", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("validAuth", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          validAuth_args args = new validAuth_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("validAuth", TMessageType.EXCEPTION, seqid));
               x.write(oprot);
               oprot.writeMessageEnd();
               oprot.getTransport().flush();
@@ -2974,7 +3632,7 @@ public class SellerServ {
           }
           Future<com.jfshare.finagle.thrift.result.Result> future;
           try {
-            future = iface.deleteUserSellerRealByuserId(args.userId);
+            future = iface.validAuth(args.loginLog, args.authInfo);
           } catch (Exception e) {
             future = Future.exception(e);
           }
@@ -2982,7 +3640,7 @@ public class SellerServ {
           try {
             return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
               public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                deleteUserSellerRealByuserId_result result = new deleteUserSellerRealByuserId_result();
+                validAuth_result result = new validAuth_result();
                 result.success = value;
                 result.setSuccessIsSet(true);
 
@@ -2990,74 +3648,7 @@ public class SellerServ {
                   TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
                   TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
 
-                  oprot.writeMessageBegin(new TMessage("deleteUserSellerRealByuserId", TMessageType.REPLY, seqid));
-                  result.write(oprot);
-                  oprot.writeMessageEnd();
-
-                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
-                } catch (Exception e) {
-                  return Future.exception(e);
-                }
-              }
-            }).rescue(new Function<Throwable, Future<byte[]>>() {
-              public Future<byte[]> apply(Throwable t) {
-                return Future.exception(t);
-              }
-            });
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-        }
-      });
-      functionMap.put("querySellerVipList", new Function2<TProtocol, Integer, Future<byte[]>>() {
-        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          querySellerVipList_args args = new querySellerVipList_args();
-          try {
-            args.read(iprot);
-          } catch (TProtocolException e) {
-            try {
-              iprot.readMessageEnd();
-              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-              oprot.writeMessageBegin(new TMessage("querySellerVipList", TMessageType.EXCEPTION, seqid));
-              x.write(oprot);
-              oprot.writeMessageEnd();
-              oprot.getTransport().flush();
-              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
-              return Future.value(buffer);
-            } catch (Exception e1) {
-              return Future.exception(e1);
-            }
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-
-          try {
-            iprot.readMessageEnd();
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-          Future<SellerVipResult> future;
-          try {
-            future = iface.querySellerVipList(args.sellerId, args.pagination);
-          } catch (Exception e) {
-            future = Future.exception(e);
-          }
-
-          try {
-            return future.flatMap(new Function<SellerVipResult, Future<byte[]>>() {
-              public Future<byte[]> apply(SellerVipResult value) {
-                querySellerVipList_result result = new querySellerVipList_result();
-                result.success = value;
-                result.setSuccessIsSet(true);
-
-                try {
-                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-                  oprot.writeMessageBegin(new TMessage("querySellerVipList", TMessageType.REPLY, seqid));
+                  oprot.writeMessageBegin(new TMessage("validAuth", TMessageType.REPLY, seqid));
                   result.write(oprot);
                   oprot.writeMessageEnd();
 
@@ -3111,2036 +3702,8 @@ public class SellerServ {
     }
   }
 
-  public static class querySeller_args implements TBase<querySeller_args, querySeller_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("querySeller_args");
-
-  private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.I32, (short)1);
-  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)2);
-
-
-  public int sellerId;
-  public SellerRetParam param;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SELLER_ID((short)1, "sellerId"),
-    PARAM((short)2, "param");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 1: // SELLER_ID
-  	return SELLER_ID;
-        case 2: // PARAM
-  	return PARAM;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-  private static final int __SELLERID_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellerRetParam.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(querySeller_args.class, metaDataMap);
-  }
-
-
-  public querySeller_args() {
-  }
-
-  public querySeller_args(
-    int sellerId,
-    SellerRetParam param)
-  {
-    this();
-    this.sellerId = sellerId;
-    setSellerIdIsSet(true);
-    this.param = param;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public querySeller_args(querySeller_args other) {
-    __isset_bit_vector.clear();
-    __isset_bit_vector.or(other.__isset_bit_vector);
-    this.sellerId = other.sellerId;
-    if (other.isSetParam()) {
-      this.param = new SellerRetParam(other.param);
-    }
-  }
-
-  public querySeller_args deepCopy() {
-    return new querySeller_args(this);
-  }
-
-  @Override
-  public void clear() {
-    setSellerIdIsSet(false);
-    this.sellerId = 0;
-    this.param = null;
-  }
-
-  public int getSellerId() {
-    return this.sellerId;
-  }
-
-  public querySeller_args setSellerId(int sellerId) {
-    this.sellerId = sellerId;
-    setSellerIdIsSet(true);
-
-    return this;
-  }
-
-  public void unsetSellerId() {
-  __isset_bit_vector.clear(__SELLERID_ISSET_ID);
-  }
-
-  /** Returns true if field sellerId is set (has been asigned a value) and false otherwise */
-  public boolean isSetSellerId() {
-    return __isset_bit_vector.get(__SELLERID_ISSET_ID);
-  }
-
-  public void setSellerIdIsSet(boolean value) {
-    __isset_bit_vector.set(__SELLERID_ISSET_ID, value);
-  }
-
-  public SellerRetParam getParam() {
-    return this.param;
-  }
-
-  public querySeller_args setParam(SellerRetParam param) {
-    this.param = param;
-    
-    return this;
-  }
-
-  public void unsetParam() {
-    this.param = null;
-  }
-
-  /** Returns true if field param is set (has been asigned a value) and false otherwise */
-  public boolean isSetParam() {
-    return this.param != null;
-  }
-
-  public void setParamIsSet(boolean value) {
-    if (!value) {
-      this.param = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SELLER_ID:
-      if (value == null) {
-        unsetSellerId();
-      } else {
-        setSellerId((Integer)value);
-      }
-      break;
-    case PARAM:
-      if (value == null) {
-        unsetParam();
-      } else {
-        setParam((SellerRetParam)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SELLER_ID:
-      return new Integer(getSellerId());
-    case PARAM:
-      return getParam();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SELLER_ID:
-      return isSetSellerId();
-    case PARAM:
-      return isSetParam();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof querySeller_args)
-      return this.equals((querySeller_args)that);
-    return false;
-  }
-
-  public boolean equals(querySeller_args that) {
-    if (that == null)
-      return false;
-    boolean this_present_sellerId = true;
-    boolean that_present_sellerId = true;
-    if (this_present_sellerId || that_present_sellerId) {
-      if (!(this_present_sellerId && that_present_sellerId))
-        return false;
-      if (this.sellerId != that.sellerId)
-        return false;
-    }
-    boolean this_present_param = true && this.isSetParam();
-    boolean that_present_param = true && that.isSetParam();
-    if (this_present_param || that_present_param) {
-      if (!(this_present_param && that_present_param))
-        return false;
-      if (!this.param.equals(that.param))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_sellerId = true;
-    builder.append(present_sellerId);
-    if (present_sellerId)
-      builder.append(sellerId);
-    boolean present_param = true && (isSetParam());
-    builder.append(present_param);
-    if (present_param)
-      builder.append(param);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(querySeller_args other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    querySeller_args typedOther = (querySeller_args)other;
-
-    lastComparison = Boolean.valueOf(isSetSellerId()).compareTo(typedOther.isSetSellerId());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSellerId()) {
-      lastComparison = TBaseHelper.compareTo(this.sellerId, typedOther.sellerId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetParam()) {
-      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 1: // SELLER_ID
-          if (field.type == TType.I32) {
-            this.sellerId = iprot.readI32();
-            setSellerIdIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 2: // PARAM
-          if (field.type == TType.STRUCT) {
-            this.param = new SellerRetParam();
-            this.param.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    validate();
-    
-    oprot.writeStructBegin(STRUCT_DESC);
-    oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
-    oprot.writeI32(this.sellerId);
-    oprot.writeFieldEnd();
-    if (this.param != null) {
-      oprot.writeFieldBegin(PARAM_FIELD_DESC);
-      this.param.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("querySeller_args(");
-    boolean first = true;
-    sb.append("sellerId:");
-    sb.append(this.sellerId);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("param:");
-    if (this.param == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.param);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-  public static class querySeller_result implements TBase<querySeller_result, querySeller_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("querySeller_result");
-
-  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
-
-
-  public SellerResult success;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SUCCESS((short)0, "success");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 0: // SUCCESS
-  	return SUCCESS;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellerResult.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(querySeller_result.class, metaDataMap);
-  }
-
-
-  public querySeller_result() {
-  }
-
-  public querySeller_result(
-    SellerResult success)
-  {
-    this();
-    this.success = success;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public querySeller_result(querySeller_result other) {
-    if (other.isSetSuccess()) {
-      this.success = new SellerResult(other.success);
-    }
-  }
-
-  public querySeller_result deepCopy() {
-    return new querySeller_result(this);
-  }
-
-  @Override
-  public void clear() {
-    this.success = null;
-  }
-
-  public SellerResult getSuccess() {
-    return this.success;
-  }
-
-  public querySeller_result setSuccess(SellerResult success) {
-    this.success = success;
-    
-    return this;
-  }
-
-  public void unsetSuccess() {
-    this.success = null;
-  }
-
-  /** Returns true if field success is set (has been asigned a value) and false otherwise */
-  public boolean isSetSuccess() {
-    return this.success != null;
-  }
-
-  public void setSuccessIsSet(boolean value) {
-    if (!value) {
-      this.success = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        setSuccess((SellerResult)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SUCCESS:
-      return getSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SUCCESS:
-      return isSetSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof querySeller_result)
-      return this.equals((querySeller_result)that);
-    return false;
-  }
-
-  public boolean equals(querySeller_result that) {
-    if (that == null)
-      return false;
-    boolean this_present_success = true && this.isSetSuccess();
-    boolean that_present_success = true && that.isSetSuccess();
-    if (this_present_success || that_present_success) {
-      if (!(this_present_success && that_present_success))
-        return false;
-      if (!this.success.equals(that.success))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_success = true && (isSetSuccess());
-    builder.append(present_success);
-    if (present_success)
-      builder.append(success);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(querySeller_result other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    querySeller_result typedOther = (querySeller_result)other;
-
-    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSuccess()) {
-      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 0: // SUCCESS
-          if (field.type == TType.STRUCT) {
-            this.success = new SellerResult();
-            this.success.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("querySeller_result(");
-    boolean first = true;
-    sb.append("success:");
-    if (this.success == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.success);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-
-  public static class querySellerList_args implements TBase<querySellerList_args, querySellerList_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("querySellerList_args");
-
-  private static final TField SELLER_FIELD_DESC = new TField("seller", TType.STRUCT, (short)1);
-  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)2);
-
-
-  public Seller seller;
-  public com.jfshare.finagle.thrift.pagination.Pagination pagination;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SELLER((short)1, "seller"),
-    PAGINATION((short)2, "pagination");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 1: // SELLER
-  	return SELLER;
-        case 2: // PAGINATION
-  	return PAGINATION;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SELLER, new FieldMetaData("seller", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, Seller.class)));
-    tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(querySellerList_args.class, metaDataMap);
-  }
-
-
-  public querySellerList_args() {
-  }
-
-  public querySellerList_args(
-    Seller seller,
-    com.jfshare.finagle.thrift.pagination.Pagination pagination)
-  {
-    this();
-    this.seller = seller;
-    this.pagination = pagination;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public querySellerList_args(querySellerList_args other) {
-    if (other.isSetSeller()) {
-      this.seller = new Seller(other.seller);
-    }
-    if (other.isSetPagination()) {
-      this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
-    }
-  }
-
-  public querySellerList_args deepCopy() {
-    return new querySellerList_args(this);
-  }
-
-  @Override
-  public void clear() {
-    this.seller = null;
-    this.pagination = null;
-  }
-
-  public Seller getSeller() {
-    return this.seller;
-  }
-
-  public querySellerList_args setSeller(Seller seller) {
-    this.seller = seller;
-    
-    return this;
-  }
-
-  public void unsetSeller() {
-    this.seller = null;
-  }
-
-  /** Returns true if field seller is set (has been asigned a value) and false otherwise */
-  public boolean isSetSeller() {
-    return this.seller != null;
-  }
-
-  public void setSellerIsSet(boolean value) {
-    if (!value) {
-      this.seller = null;
-    }
-  }
-
-  public com.jfshare.finagle.thrift.pagination.Pagination getPagination() {
-    return this.pagination;
-  }
-
-  public querySellerList_args setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
-    this.pagination = pagination;
-    
-    return this;
-  }
-
-  public void unsetPagination() {
-    this.pagination = null;
-  }
-
-  /** Returns true if field pagination is set (has been asigned a value) and false otherwise */
-  public boolean isSetPagination() {
-    return this.pagination != null;
-  }
-
-  public void setPaginationIsSet(boolean value) {
-    if (!value) {
-      this.pagination = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SELLER:
-      if (value == null) {
-        unsetSeller();
-      } else {
-        setSeller((Seller)value);
-      }
-      break;
-    case PAGINATION:
-      if (value == null) {
-        unsetPagination();
-      } else {
-        setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SELLER:
-      return getSeller();
-    case PAGINATION:
-      return getPagination();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SELLER:
-      return isSetSeller();
-    case PAGINATION:
-      return isSetPagination();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof querySellerList_args)
-      return this.equals((querySellerList_args)that);
-    return false;
-  }
-
-  public boolean equals(querySellerList_args that) {
-    if (that == null)
-      return false;
-    boolean this_present_seller = true && this.isSetSeller();
-    boolean that_present_seller = true && that.isSetSeller();
-    if (this_present_seller || that_present_seller) {
-      if (!(this_present_seller && that_present_seller))
-        return false;
-      if (!this.seller.equals(that.seller))
-        return false;
-    }
-    boolean this_present_pagination = true && this.isSetPagination();
-    boolean that_present_pagination = true && that.isSetPagination();
-    if (this_present_pagination || that_present_pagination) {
-      if (!(this_present_pagination && that_present_pagination))
-        return false;
-      if (!this.pagination.equals(that.pagination))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_seller = true && (isSetSeller());
-    builder.append(present_seller);
-    if (present_seller)
-      builder.append(seller);
-    boolean present_pagination = true && (isSetPagination());
-    builder.append(present_pagination);
-    if (present_pagination)
-      builder.append(pagination);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(querySellerList_args other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    querySellerList_args typedOther = (querySellerList_args)other;
-
-    lastComparison = Boolean.valueOf(isSetSeller()).compareTo(typedOther.isSetSeller());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSeller()) {
-      lastComparison = TBaseHelper.compareTo(this.seller, typedOther.seller);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetPagination()).compareTo(typedOther.isSetPagination());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetPagination()) {
-      lastComparison = TBaseHelper.compareTo(this.pagination, typedOther.pagination);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 1: // SELLER
-          if (field.type == TType.STRUCT) {
-            this.seller = new Seller();
-            this.seller.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 2: // PAGINATION
-          if (field.type == TType.STRUCT) {
-            this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination();
-            this.pagination.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    validate();
-    
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.seller != null) {
-      oprot.writeFieldBegin(SELLER_FIELD_DESC);
-      this.seller.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    if (this.pagination != null) {
-      oprot.writeFieldBegin(PAGINATION_FIELD_DESC);
-      this.pagination.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("querySellerList_args(");
-    boolean first = true;
-    sb.append("seller:");
-    if (this.seller == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.seller);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("pagination:");
-    if (this.pagination == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.pagination);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-  public static class querySellerList_result implements TBase<querySellerList_result, querySellerList_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("querySellerList_result");
-
-  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
-
-
-  public SellerListResult success;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SUCCESS((short)0, "success");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 0: // SUCCESS
-  	return SUCCESS;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellerListResult.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(querySellerList_result.class, metaDataMap);
-  }
-
-
-  public querySellerList_result() {
-  }
-
-  public querySellerList_result(
-    SellerListResult success)
-  {
-    this();
-    this.success = success;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public querySellerList_result(querySellerList_result other) {
-    if (other.isSetSuccess()) {
-      this.success = new SellerListResult(other.success);
-    }
-  }
-
-  public querySellerList_result deepCopy() {
-    return new querySellerList_result(this);
-  }
-
-  @Override
-  public void clear() {
-    this.success = null;
-  }
-
-  public SellerListResult getSuccess() {
-    return this.success;
-  }
-
-  public querySellerList_result setSuccess(SellerListResult success) {
-    this.success = success;
-    
-    return this;
-  }
-
-  public void unsetSuccess() {
-    this.success = null;
-  }
-
-  /** Returns true if field success is set (has been asigned a value) and false otherwise */
-  public boolean isSetSuccess() {
-    return this.success != null;
-  }
-
-  public void setSuccessIsSet(boolean value) {
-    if (!value) {
-      this.success = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        setSuccess((SellerListResult)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SUCCESS:
-      return getSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SUCCESS:
-      return isSetSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof querySellerList_result)
-      return this.equals((querySellerList_result)that);
-    return false;
-  }
-
-  public boolean equals(querySellerList_result that) {
-    if (that == null)
-      return false;
-    boolean this_present_success = true && this.isSetSuccess();
-    boolean that_present_success = true && that.isSetSuccess();
-    if (this_present_success || that_present_success) {
-      if (!(this_present_success && that_present_success))
-        return false;
-      if (!this.success.equals(that.success))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_success = true && (isSetSuccess());
-    builder.append(present_success);
-    if (present_success)
-      builder.append(success);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(querySellerList_result other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    querySellerList_result typedOther = (querySellerList_result)other;
-
-    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSuccess()) {
-      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 0: // SUCCESS
-          if (field.type == TType.STRUCT) {
-            this.success = new SellerListResult();
-            this.success.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("querySellerList_result(");
-    boolean first = true;
-    sb.append("success:");
-    if (this.success == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.success);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-
-  public static class querySellerBatch_args implements TBase<querySellerBatch_args, querySellerBatch_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("querySellerBatch_args");
-
-  private static final TField SELLER_IDS_FIELD_DESC = new TField("sellerIds", TType.LIST, (short)1);
-  private static final TField PARAM_FIELD_DESC = new TField("param", TType.STRUCT, (short)2);
-
-
-  public List<Integer> sellerIds;
-  public SellerRetParam param;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SELLER_IDS((short)1, "sellerIds"),
-    PARAM((short)2, "param");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 1: // SELLER_IDS
-  	return SELLER_IDS;
-        case 2: // PARAM
-  	return PARAM;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SELLER_IDS, new FieldMetaData("sellerIds", TFieldRequirementType.DEFAULT,
-      new ListMetaData(TType.LIST,
-                new FieldValueMetaData(TType.I32))));
-    tmpMap.put(_Fields.PARAM, new FieldMetaData("param", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellerRetParam.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(querySellerBatch_args.class, metaDataMap);
-  }
-
-
-  public querySellerBatch_args() {
-  }
-
-  public querySellerBatch_args(
-    List<Integer> sellerIds,
-    SellerRetParam param)
-  {
-    this();
-    this.sellerIds = sellerIds;
-    this.param = param;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public querySellerBatch_args(querySellerBatch_args other) {
-    if (other.isSetSellerIds()) {
-      List<Integer> __this__sellerIds = new ArrayList<Integer>();
-      for (Integer other_element : other.sellerIds) {
-        __this__sellerIds.add(other_element);
-      }
-      this.sellerIds = __this__sellerIds;
-    }
-    if (other.isSetParam()) {
-      this.param = new SellerRetParam(other.param);
-    }
-  }
-
-  public querySellerBatch_args deepCopy() {
-    return new querySellerBatch_args(this);
-  }
-
-  @Override
-  public void clear() {
-    this.sellerIds = null;
-    this.param = null;
-  }
-
-  public int getSellerIdsSize() {
-    return (this.sellerIds == null) ? 0 : this.sellerIds.size();
-  }
-
-  public java.util.Iterator<Integer> getSellerIdsIterator() {
-    return (this.sellerIds == null) ? null : this.sellerIds.iterator();
-  }
-
-  public void addToSellerIds(int elem) {
-    if (this.sellerIds == null) {
-      this.sellerIds = new ArrayList<Integer>();
-    }
-    this.sellerIds.add(elem);
-  }
-
-  public List<Integer> getSellerIds() {
-    return this.sellerIds;
-  }
-
-  public querySellerBatch_args setSellerIds(List<Integer> sellerIds) {
-    this.sellerIds = sellerIds;
-    
-    return this;
-  }
-
-  public void unsetSellerIds() {
-    this.sellerIds = null;
-  }
-
-  /** Returns true if field sellerIds is set (has been asigned a value) and false otherwise */
-  public boolean isSetSellerIds() {
-    return this.sellerIds != null;
-  }
-
-  public void setSellerIdsIsSet(boolean value) {
-    if (!value) {
-      this.sellerIds = null;
-    }
-  }
-
-  public SellerRetParam getParam() {
-    return this.param;
-  }
-
-  public querySellerBatch_args setParam(SellerRetParam param) {
-    this.param = param;
-    
-    return this;
-  }
-
-  public void unsetParam() {
-    this.param = null;
-  }
-
-  /** Returns true if field param is set (has been asigned a value) and false otherwise */
-  public boolean isSetParam() {
-    return this.param != null;
-  }
-
-  public void setParamIsSet(boolean value) {
-    if (!value) {
-      this.param = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SELLER_IDS:
-      if (value == null) {
-        unsetSellerIds();
-      } else {
-        setSellerIds((List<Integer>)value);
-      }
-      break;
-    case PARAM:
-      if (value == null) {
-        unsetParam();
-      } else {
-        setParam((SellerRetParam)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SELLER_IDS:
-      return getSellerIds();
-    case PARAM:
-      return getParam();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SELLER_IDS:
-      return isSetSellerIds();
-    case PARAM:
-      return isSetParam();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof querySellerBatch_args)
-      return this.equals((querySellerBatch_args)that);
-    return false;
-  }
-
-  public boolean equals(querySellerBatch_args that) {
-    if (that == null)
-      return false;
-    boolean this_present_sellerIds = true && this.isSetSellerIds();
-    boolean that_present_sellerIds = true && that.isSetSellerIds();
-    if (this_present_sellerIds || that_present_sellerIds) {
-      if (!(this_present_sellerIds && that_present_sellerIds))
-        return false;
-      if (!this.sellerIds.equals(that.sellerIds))
-        return false;
-    }
-    boolean this_present_param = true && this.isSetParam();
-    boolean that_present_param = true && that.isSetParam();
-    if (this_present_param || that_present_param) {
-      if (!(this_present_param && that_present_param))
-        return false;
-      if (!this.param.equals(that.param))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_sellerIds = true && (isSetSellerIds());
-    builder.append(present_sellerIds);
-    if (present_sellerIds)
-      builder.append(sellerIds);
-    boolean present_param = true && (isSetParam());
-    builder.append(present_param);
-    if (present_param)
-      builder.append(param);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(querySellerBatch_args other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    querySellerBatch_args typedOther = (querySellerBatch_args)other;
-
-    lastComparison = Boolean.valueOf(isSetSellerIds()).compareTo(typedOther.isSetSellerIds());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSellerIds()) {
-      lastComparison = TBaseHelper.compareTo(this.sellerIds, typedOther.sellerIds);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetParam()).compareTo(typedOther.isSetParam());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetParam()) {
-      lastComparison = TBaseHelper.compareTo(this.param, typedOther.param);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 1: // SELLER_IDS
-          if (field.type == TType.LIST) {
-            {
-            TList _list13 = iprot.readListBegin();
-            this.sellerIds = new ArrayList<Integer>(_list13.size);
-            for (int _i14 = 0; _i14 < _list13.size; ++_i14)
-            {
-              int _elem15;
-              _elem15 = iprot.readI32();
-              this.sellerIds.add(_elem15);
-            }
-            iprot.readListEnd();
-            }
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 2: // PARAM
-          if (field.type == TType.STRUCT) {
-            this.param = new SellerRetParam();
-            this.param.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    validate();
-    
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.sellerIds != null) {
-      oprot.writeFieldBegin(SELLER_IDS_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.I32, this.sellerIds.size()));
-        for (int _iter16 : this.sellerIds)
-        {
-          oprot.writeI32(_iter16);
-        }
-        oprot.writeListEnd();
-      }
-      oprot.writeFieldEnd();
-    }
-    if (this.param != null) {
-      oprot.writeFieldBegin(PARAM_FIELD_DESC);
-      this.param.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("querySellerBatch_args(");
-    boolean first = true;
-    sb.append("sellerIds:");
-    if (this.sellerIds == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.sellerIds);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("param:");
-    if (this.param == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.param);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-  public static class querySellerBatch_result implements TBase<querySellerBatch_result, querySellerBatch_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("querySellerBatch_result");
-
-  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
-
-
-  public SellersResult success;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SUCCESS((short)0, "success");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 0: // SUCCESS
-  	return SUCCESS;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellersResult.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(querySellerBatch_result.class, metaDataMap);
-  }
-
-
-  public querySellerBatch_result() {
-  }
-
-  public querySellerBatch_result(
-    SellersResult success)
-  {
-    this();
-    this.success = success;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public querySellerBatch_result(querySellerBatch_result other) {
-    if (other.isSetSuccess()) {
-      this.success = new SellersResult(other.success);
-    }
-  }
-
-  public querySellerBatch_result deepCopy() {
-    return new querySellerBatch_result(this);
-  }
-
-  @Override
-  public void clear() {
-    this.success = null;
-  }
-
-  public SellersResult getSuccess() {
-    return this.success;
-  }
-
-  public querySellerBatch_result setSuccess(SellersResult success) {
-    this.success = success;
-    
-    return this;
-  }
-
-  public void unsetSuccess() {
-    this.success = null;
-  }
-
-  /** Returns true if field success is set (has been asigned a value) and false otherwise */
-  public boolean isSetSuccess() {
-    return this.success != null;
-  }
-
-  public void setSuccessIsSet(boolean value) {
-    if (!value) {
-      this.success = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        setSuccess((SellersResult)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SUCCESS:
-      return getSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SUCCESS:
-      return isSetSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof querySellerBatch_result)
-      return this.equals((querySellerBatch_result)that);
-    return false;
-  }
-
-  public boolean equals(querySellerBatch_result that) {
-    if (that == null)
-      return false;
-    boolean this_present_success = true && this.isSetSuccess();
-    boolean that_present_success = true && that.isSetSuccess();
-    if (this_present_success || that_present_success) {
-      if (!(this_present_success && that_present_success))
-        return false;
-      if (!this.success.equals(that.success))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_success = true && (isSetSuccess());
-    builder.append(present_success);
-    if (present_success)
-      builder.append(success);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(querySellerBatch_result other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    querySellerBatch_result typedOther = (querySellerBatch_result)other;
-
-    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSuccess()) {
-      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 0: // SUCCESS
-          if (field.type == TType.STRUCT) {
-            this.success = new SellersResult();
-            this.success.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("querySellerBatch_result(");
-    boolean first = true;
-    sb.append("success:");
-    if (this.success == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.success);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-
-  public static class isLoginNameExist_args implements TBase<isLoginNameExist_args, isLoginNameExist_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("isLoginNameExist_args");
+  public static class buyerIsExist_args implements TBase<buyerIsExist_args, buyerIsExist_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("buyerIsExist_args");
 
   private static final TField LOGIN_NAME_FIELD_DESC = new TField("loginName", TType.STRING, (short)1);
 
@@ -5214,14 +3777,14 @@ public class SellerServ {
     tmpMap.put(_Fields.LOGIN_NAME, new FieldMetaData("loginName", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(isLoginNameExist_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(buyerIsExist_args.class, metaDataMap);
   }
 
 
-  public isLoginNameExist_args() {
+  public buyerIsExist_args() {
   }
 
-  public isLoginNameExist_args(
+  public buyerIsExist_args(
     String loginName)
   {
     this();
@@ -5231,14 +3794,14 @@ public class SellerServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public isLoginNameExist_args(isLoginNameExist_args other) {
+  public buyerIsExist_args(buyerIsExist_args other) {
     if (other.isSetLoginName()) {
       this.loginName = other.loginName;
     }
   }
 
-  public isLoginNameExist_args deepCopy() {
-    return new isLoginNameExist_args(this);
+  public buyerIsExist_args deepCopy() {
+    return new buyerIsExist_args(this);
   }
 
   @Override
@@ -5250,7 +3813,7 @@ public class SellerServ {
     return this.loginName;
   }
 
-  public isLoginNameExist_args setLoginName(String loginName) {
+  public buyerIsExist_args setLoginName(String loginName) {
     this.loginName = loginName;
     
     return this;
@@ -5308,12 +3871,12 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof isLoginNameExist_args)
-      return this.equals((isLoginNameExist_args)that);
+    if (that instanceof buyerIsExist_args)
+      return this.equals((buyerIsExist_args)that);
     return false;
   }
 
-  public boolean equals(isLoginNameExist_args that) {
+  public boolean equals(buyerIsExist_args that) {
     if (that == null)
       return false;
     boolean this_present_loginName = true && this.isSetLoginName();
@@ -5338,13 +3901,13 @@ public class SellerServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(isLoginNameExist_args other) {
+  public int compareTo(buyerIsExist_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    isLoginNameExist_args typedOther = (isLoginNameExist_args)other;
+    buyerIsExist_args typedOther = (buyerIsExist_args)other;
 
     lastComparison = Boolean.valueOf(isSetLoginName()).compareTo(typedOther.isSetLoginName());
     if (lastComparison != 0) {
@@ -5407,7 +3970,7 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("isLoginNameExist_args(");
+    StringBuilder sb = new StringBuilder("buyerIsExist_args(");
     boolean first = true;
     sb.append("loginName:");
     if (this.loginName == null) {
@@ -5425,8 +3988,8 @@ public class SellerServ {
   }
 }
 
-  public static class isLoginNameExist_result implements TBase<isLoginNameExist_result, isLoginNameExist_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("isLoginNameExist_result");
+  public static class buyerIsExist_result implements TBase<buyerIsExist_result, buyerIsExist_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("buyerIsExist_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
@@ -5500,14 +4063,14 @@ public class SellerServ {
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.BoolResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(isLoginNameExist_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(buyerIsExist_result.class, metaDataMap);
   }
 
 
-  public isLoginNameExist_result() {
+  public buyerIsExist_result() {
   }
 
-  public isLoginNameExist_result(
+  public buyerIsExist_result(
     com.jfshare.finagle.thrift.result.BoolResult success)
   {
     this();
@@ -5517,14 +4080,14 @@ public class SellerServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public isLoginNameExist_result(isLoginNameExist_result other) {
+  public buyerIsExist_result(buyerIsExist_result other) {
     if (other.isSetSuccess()) {
       this.success = new com.jfshare.finagle.thrift.result.BoolResult(other.success);
     }
   }
 
-  public isLoginNameExist_result deepCopy() {
-    return new isLoginNameExist_result(this);
+  public buyerIsExist_result deepCopy() {
+    return new buyerIsExist_result(this);
   }
 
   @Override
@@ -5536,7 +4099,7 @@ public class SellerServ {
     return this.success;
   }
 
-  public isLoginNameExist_result setSuccess(com.jfshare.finagle.thrift.result.BoolResult success) {
+  public buyerIsExist_result setSuccess(com.jfshare.finagle.thrift.result.BoolResult success) {
     this.success = success;
     
     return this;
@@ -5594,12 +4157,12 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof isLoginNameExist_result)
-      return this.equals((isLoginNameExist_result)that);
+    if (that instanceof buyerIsExist_result)
+      return this.equals((buyerIsExist_result)that);
     return false;
   }
 
-  public boolean equals(isLoginNameExist_result that) {
+  public boolean equals(buyerIsExist_result that) {
     if (that == null)
       return false;
     boolean this_present_success = true && this.isSetSuccess();
@@ -5624,13 +4187,13 @@ public class SellerServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(isLoginNameExist_result other) {
+  public int compareTo(buyerIsExist_result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    isLoginNameExist_result typedOther = (isLoginNameExist_result)other;
+    buyerIsExist_result typedOther = (buyerIsExist_result)other;
 
     lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
     if (lastComparison != 0) {
@@ -5692,7 +4255,7 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("isLoginNameExist_result(");
+    StringBuilder sb = new StringBuilder("buyerIsExist_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -5711,17 +4274,17 @@ public class SellerServ {
 }
 
 
-  public static class signup_args implements TBase<signup_args, signup_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("signup_args");
+  public static class signin_args implements TBase<signin_args, signin_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("signin_args");
 
-  private static final TField SELLER_FIELD_DESC = new TField("seller", TType.STRUCT, (short)1);
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)1);
 
 
-  public Seller seller;
+  public Buyer buyer;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    SELLER((short)1, "seller");
+    BUYER((short)1, "buyer");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -5736,8 +4299,8 @@ public class SellerServ {
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // SELLER
-  	return SELLER;
+        case 1: // BUYER
+  	return BUYER;
         default:
   	return null;
       }
@@ -5783,73 +4346,73 @@ public class SellerServ {
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SELLER, new FieldMetaData("seller", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, Seller.class)));
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(signup_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(signin_args.class, metaDataMap);
   }
 
 
-  public signup_args() {
+  public signin_args() {
   }
 
-  public signup_args(
-    Seller seller)
+  public signin_args(
+    Buyer buyer)
   {
     this();
-    this.seller = seller;
+    this.buyer = buyer;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public signup_args(signup_args other) {
-    if (other.isSetSeller()) {
-      this.seller = new Seller(other.seller);
+  public signin_args(signin_args other) {
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
     }
   }
 
-  public signup_args deepCopy() {
-    return new signup_args(this);
+  public signin_args deepCopy() {
+    return new signin_args(this);
   }
 
   @Override
   public void clear() {
-    this.seller = null;
+    this.buyer = null;
   }
 
-  public Seller getSeller() {
-    return this.seller;
+  public Buyer getBuyer() {
+    return this.buyer;
   }
 
-  public signup_args setSeller(Seller seller) {
-    this.seller = seller;
+  public signin_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
     
     return this;
   }
 
-  public void unsetSeller() {
-    this.seller = null;
+  public void unsetBuyer() {
+    this.buyer = null;
   }
 
-  /** Returns true if field seller is set (has been asigned a value) and false otherwise */
-  public boolean isSetSeller() {
-    return this.seller != null;
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
   }
 
-  public void setSellerIsSet(boolean value) {
+  public void setBuyerIsSet(boolean value) {
     if (!value) {
-      this.seller = null;
+      this.buyer = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case SELLER:
+    case BUYER:
       if (value == null) {
-        unsetSeller();
+        unsetBuyer();
       } else {
-        setSeller((Seller)value);
+        setBuyer((Buyer)value);
       }
       break;
     }
@@ -5857,8 +4420,8 @@ public class SellerServ {
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case SELLER:
-      return getSeller();
+    case BUYER:
+      return getBuyer();
     }
     throw new IllegalStateException();
   }
@@ -5870,8 +4433,8 @@ public class SellerServ {
     }
 
     switch (field) {
-    case SELLER:
-      return isSetSeller();
+    case BUYER:
+      return isSetBuyer();
     }
     throw new IllegalStateException();
   }
@@ -5880,20 +4443,20 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof signup_args)
-      return this.equals((signup_args)that);
+    if (that instanceof signin_args)
+      return this.equals((signin_args)that);
     return false;
   }
 
-  public boolean equals(signup_args that) {
+  public boolean equals(signin_args that) {
     if (that == null)
       return false;
-    boolean this_present_seller = true && this.isSetSeller();
-    boolean that_present_seller = true && that.isSetSeller();
-    if (this_present_seller || that_present_seller) {
-      if (!(this_present_seller && that_present_seller))
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
         return false;
-      if (!this.seller.equals(that.seller))
+      if (!this.buyer.equals(that.buyer))
         return false;
     }
 
@@ -5903,27 +4466,27 @@ public class SellerServ {
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_seller = true && (isSetSeller());
-    builder.append(present_seller);
-    if (present_seller)
-      builder.append(seller);
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
     return builder.toHashCode();
   }
 
-  public int compareTo(signup_args other) {
+  public int compareTo(signin_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    signup_args typedOther = (signup_args)other;
+    signin_args typedOther = (signin_args)other;
 
-    lastComparison = Boolean.valueOf(isSetSeller()).compareTo(typedOther.isSetSeller());
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSeller()) {
-      lastComparison = TBaseHelper.compareTo(this.seller, typedOther.seller);
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -5946,10 +4509,10 @@ public class SellerServ {
         break;
       }
       switch (field.id) {
-        case 1: // SELLER
+        case 1: // BUYER
           if (field.type == TType.STRUCT) {
-            this.seller = new Seller();
-            this.seller.read(iprot);
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -5969,9 +4532,9 @@ public class SellerServ {
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.seller != null) {
-      oprot.writeFieldBegin(SELLER_FIELD_DESC);
-      this.seller.write(oprot);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -5980,13 +4543,13 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("signup_args(");
+    StringBuilder sb = new StringBuilder("signin_args(");
     boolean first = true;
-    sb.append("seller:");
-    if (this.seller == null) {
+    sb.append("buyer:");
+    if (this.buyer == null) {
       sb.append("null");
     } else {
-      sb.append(this.seller);
+      sb.append(this.buyer);
     }
     first = false;
     sb.append(")");
@@ -5998,8 +4561,8 @@ public class SellerServ {
   }
 }
 
-  public static class signup_result implements TBase<signup_result, signup_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("signup_result");
+  public static class signin_result implements TBase<signin_result, signin_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("signin_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
@@ -6073,14 +4636,14 @@ public class SellerServ {
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(signup_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(signin_result.class, metaDataMap);
   }
 
 
-  public signup_result() {
+  public signin_result() {
   }
 
-  public signup_result(
+  public signin_result(
     com.jfshare.finagle.thrift.result.Result success)
   {
     this();
@@ -6090,14 +4653,14 @@ public class SellerServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public signup_result(signup_result other) {
+  public signin_result(signin_result other) {
     if (other.isSetSuccess()) {
       this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
     }
   }
 
-  public signup_result deepCopy() {
-    return new signup_result(this);
+  public signin_result deepCopy() {
+    return new signin_result(this);
   }
 
   @Override
@@ -6109,7 +4672,7 @@ public class SellerServ {
     return this.success;
   }
 
-  public signup_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+  public signin_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
     this.success = success;
     
     return this;
@@ -6137,671 +4700,6 @@ public class SellerServ {
         unsetSuccess();
       } else {
         setSuccess((com.jfshare.finagle.thrift.result.Result)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SUCCESS:
-      return getSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SUCCESS:
-      return isSetSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof signup_result)
-      return this.equals((signup_result)that);
-    return false;
-  }
-
-  public boolean equals(signup_result that) {
-    if (that == null)
-      return false;
-    boolean this_present_success = true && this.isSetSuccess();
-    boolean that_present_success = true && that.isSetSuccess();
-    if (this_present_success || that_present_success) {
-      if (!(this_present_success && that_present_success))
-        return false;
-      if (!this.success.equals(that.success))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_success = true && (isSetSuccess());
-    builder.append(present_success);
-    if (present_success)
-      builder.append(success);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(signup_result other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    signup_result typedOther = (signup_result)other;
-
-    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSuccess()) {
-      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 0: // SUCCESS
-          if (field.type == TType.STRUCT) {
-            this.success = new com.jfshare.finagle.thrift.result.Result();
-            this.success.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("signup_result(");
-    boolean first = true;
-    sb.append("success:");
-    if (this.success == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.success);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-
-  public static class signin_args implements TBase<signin_args, signin_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("signin_args");
-
-  private static final TField SELLER_FIELD_DESC = new TField("seller", TType.STRUCT, (short)1);
-  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)2);
-
-
-  public Seller seller;
-  public LoginLog loginLog;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SELLER((short)1, "seller"),
-    LOGIN_LOG((short)2, "loginLog");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 1: // SELLER
-  	return SELLER;
-        case 2: // LOGIN_LOG
-  	return LOGIN_LOG;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SELLER, new FieldMetaData("seller", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, Seller.class)));
-    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, LoginLog.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(signin_args.class, metaDataMap);
-  }
-
-
-  public signin_args() {
-  }
-
-  public signin_args(
-    Seller seller,
-    LoginLog loginLog)
-  {
-    this();
-    this.seller = seller;
-    this.loginLog = loginLog;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public signin_args(signin_args other) {
-    if (other.isSetSeller()) {
-      this.seller = new Seller(other.seller);
-    }
-    if (other.isSetLoginLog()) {
-      this.loginLog = new LoginLog(other.loginLog);
-    }
-  }
-
-  public signin_args deepCopy() {
-    return new signin_args(this);
-  }
-
-  @Override
-  public void clear() {
-    this.seller = null;
-    this.loginLog = null;
-  }
-
-  public Seller getSeller() {
-    return this.seller;
-  }
-
-  public signin_args setSeller(Seller seller) {
-    this.seller = seller;
-    
-    return this;
-  }
-
-  public void unsetSeller() {
-    this.seller = null;
-  }
-
-  /** Returns true if field seller is set (has been asigned a value) and false otherwise */
-  public boolean isSetSeller() {
-    return this.seller != null;
-  }
-
-  public void setSellerIsSet(boolean value) {
-    if (!value) {
-      this.seller = null;
-    }
-  }
-
-  public LoginLog getLoginLog() {
-    return this.loginLog;
-  }
-
-  public signin_args setLoginLog(LoginLog loginLog) {
-    this.loginLog = loginLog;
-    
-    return this;
-  }
-
-  public void unsetLoginLog() {
-    this.loginLog = null;
-  }
-
-  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
-  public boolean isSetLoginLog() {
-    return this.loginLog != null;
-  }
-
-  public void setLoginLogIsSet(boolean value) {
-    if (!value) {
-      this.loginLog = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SELLER:
-      if (value == null) {
-        unsetSeller();
-      } else {
-        setSeller((Seller)value);
-      }
-      break;
-    case LOGIN_LOG:
-      if (value == null) {
-        unsetLoginLog();
-      } else {
-        setLoginLog((LoginLog)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SELLER:
-      return getSeller();
-    case LOGIN_LOG:
-      return getLoginLog();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SELLER:
-      return isSetSeller();
-    case LOGIN_LOG:
-      return isSetLoginLog();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof signin_args)
-      return this.equals((signin_args)that);
-    return false;
-  }
-
-  public boolean equals(signin_args that) {
-    if (that == null)
-      return false;
-    boolean this_present_seller = true && this.isSetSeller();
-    boolean that_present_seller = true && that.isSetSeller();
-    if (this_present_seller || that_present_seller) {
-      if (!(this_present_seller && that_present_seller))
-        return false;
-      if (!this.seller.equals(that.seller))
-        return false;
-    }
-    boolean this_present_loginLog = true && this.isSetLoginLog();
-    boolean that_present_loginLog = true && that.isSetLoginLog();
-    if (this_present_loginLog || that_present_loginLog) {
-      if (!(this_present_loginLog && that_present_loginLog))
-        return false;
-      if (!this.loginLog.equals(that.loginLog))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_seller = true && (isSetSeller());
-    builder.append(present_seller);
-    if (present_seller)
-      builder.append(seller);
-    boolean present_loginLog = true && (isSetLoginLog());
-    builder.append(present_loginLog);
-    if (present_loginLog)
-      builder.append(loginLog);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(signin_args other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    signin_args typedOther = (signin_args)other;
-
-    lastComparison = Boolean.valueOf(isSetSeller()).compareTo(typedOther.isSetSeller());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSeller()) {
-      lastComparison = TBaseHelper.compareTo(this.seller, typedOther.seller);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetLoginLog()) {
-      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 1: // SELLER
-          if (field.type == TType.STRUCT) {
-            this.seller = new Seller();
-            this.seller.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 2: // LOGIN_LOG
-          if (field.type == TType.STRUCT) {
-            this.loginLog = new LoginLog();
-            this.loginLog.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    validate();
-    
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.seller != null) {
-      oprot.writeFieldBegin(SELLER_FIELD_DESC);
-      this.seller.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    if (this.loginLog != null) {
-      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
-      this.loginLog.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("signin_args(");
-    boolean first = true;
-    sb.append("seller:");
-    if (this.seller == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.seller);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("loginLog:");
-    if (this.loginLog == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.loginLog);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-  public static class signin_result implements TBase<signin_result, signin_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("signin_result");
-
-  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
-
-
-  public SellerResult success;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SUCCESS((short)0, "success");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 0: // SUCCESS
-  	return SUCCESS;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellerResult.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(signin_result.class, metaDataMap);
-  }
-
-
-  public signin_result() {
-  }
-
-  public signin_result(
-    SellerResult success)
-  {
-    this();
-    this.success = success;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public signin_result(signin_result other) {
-    if (other.isSetSuccess()) {
-      this.success = new SellerResult(other.success);
-    }
-  }
-
-  public signin_result deepCopy() {
-    return new signin_result(this);
-  }
-
-  @Override
-  public void clear() {
-    this.success = null;
-  }
-
-  public SellerResult getSuccess() {
-    return this.success;
-  }
-
-  public signin_result setSuccess(SellerResult success) {
-    this.success = success;
-    
-    return this;
-  }
-
-  public void unsetSuccess() {
-    this.success = null;
-  }
-
-  /** Returns true if field success is set (has been asigned a value) and false otherwise */
-  public boolean isSetSuccess() {
-    return this.success != null;
-  }
-
-  public void setSuccessIsSet(boolean value) {
-    if (!value) {
-      this.success = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        setSuccess((SellerResult)value);
       }
       break;
     }
@@ -6900,7 +4798,7 @@ public class SellerServ {
       switch (field.id) {
         case 0: // SUCCESS
           if (field.type == TType.STRUCT) {
-            this.success = new SellerResult();
+            this.success = new com.jfshare.finagle.thrift.result.Result();
             this.success.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
@@ -6949,17 +4847,17 @@ public class SellerServ {
 }
 
 
-  public static class signout_args implements TBase<signout_args, signout_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("signout_args");
+  public static class newSignin_args implements TBase<newSignin_args, newSignin_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("newSignin_args");
 
-  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)1);
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)1);
 
 
-  public LoginLog loginLog;
+  public Buyer buyer;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    LOGIN_LOG((short)1, "loginLog");
+    BUYER((short)1, "buyer");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -6974,8 +4872,8 @@ public class SellerServ {
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // LOGIN_LOG
-  	return LOGIN_LOG;
+        case 1: // BUYER
+  	return BUYER;
         default:
   	return null;
       }
@@ -7021,73 +4919,73 @@ public class SellerServ {
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(signout_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(newSignin_args.class, metaDataMap);
   }
 
 
-  public signout_args() {
+  public newSignin_args() {
   }
 
-  public signout_args(
-    LoginLog loginLog)
+  public newSignin_args(
+    Buyer buyer)
   {
     this();
-    this.loginLog = loginLog;
+    this.buyer = buyer;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public signout_args(signout_args other) {
-    if (other.isSetLoginLog()) {
-      this.loginLog = new LoginLog(other.loginLog);
+  public newSignin_args(newSignin_args other) {
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
     }
   }
 
-  public signout_args deepCopy() {
-    return new signout_args(this);
+  public newSignin_args deepCopy() {
+    return new newSignin_args(this);
   }
 
   @Override
   public void clear() {
-    this.loginLog = null;
+    this.buyer = null;
   }
 
-  public LoginLog getLoginLog() {
-    return this.loginLog;
+  public Buyer getBuyer() {
+    return this.buyer;
   }
 
-  public signout_args setLoginLog(LoginLog loginLog) {
-    this.loginLog = loginLog;
+  public newSignin_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
     
     return this;
   }
 
-  public void unsetLoginLog() {
-    this.loginLog = null;
+  public void unsetBuyer() {
+    this.buyer = null;
   }
 
-  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
-  public boolean isSetLoginLog() {
-    return this.loginLog != null;
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
   }
 
-  public void setLoginLogIsSet(boolean value) {
+  public void setBuyerIsSet(boolean value) {
     if (!value) {
-      this.loginLog = null;
+      this.buyer = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case LOGIN_LOG:
+    case BUYER:
       if (value == null) {
-        unsetLoginLog();
+        unsetBuyer();
       } else {
-        setLoginLog((LoginLog)value);
+        setBuyer((Buyer)value);
       }
       break;
     }
@@ -7095,8 +4993,8 @@ public class SellerServ {
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case LOGIN_LOG:
-      return getLoginLog();
+    case BUYER:
+      return getBuyer();
     }
     throw new IllegalStateException();
   }
@@ -7108,8 +5006,8 @@ public class SellerServ {
     }
 
     switch (field) {
-    case LOGIN_LOG:
-      return isSetLoginLog();
+    case BUYER:
+      return isSetBuyer();
     }
     throw new IllegalStateException();
   }
@@ -7118,20 +5016,20 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof signout_args)
-      return this.equals((signout_args)that);
+    if (that instanceof newSignin_args)
+      return this.equals((newSignin_args)that);
     return false;
   }
 
-  public boolean equals(signout_args that) {
+  public boolean equals(newSignin_args that) {
     if (that == null)
       return false;
-    boolean this_present_loginLog = true && this.isSetLoginLog();
-    boolean that_present_loginLog = true && that.isSetLoginLog();
-    if (this_present_loginLog || that_present_loginLog) {
-      if (!(this_present_loginLog && that_present_loginLog))
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
         return false;
-      if (!this.loginLog.equals(that.loginLog))
+      if (!this.buyer.equals(that.buyer))
         return false;
     }
 
@@ -7141,27 +5039,27 @@ public class SellerServ {
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_loginLog = true && (isSetLoginLog());
-    builder.append(present_loginLog);
-    if (present_loginLog)
-      builder.append(loginLog);
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
     return builder.toHashCode();
   }
 
-  public int compareTo(signout_args other) {
+  public int compareTo(newSignin_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    signout_args typedOther = (signout_args)other;
+    newSignin_args typedOther = (newSignin_args)other;
 
-    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetLoginLog()) {
-      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -7184,10 +5082,10 @@ public class SellerServ {
         break;
       }
       switch (field.id) {
-        case 1: // LOGIN_LOG
+        case 1: // BUYER
           if (field.type == TType.STRUCT) {
-            this.loginLog = new LoginLog();
-            this.loginLog.read(iprot);
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -7207,9 +5105,9 @@ public class SellerServ {
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.loginLog != null) {
-      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
-      this.loginLog.write(oprot);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -7218,13 +5116,13 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("signout_args(");
+    StringBuilder sb = new StringBuilder("newSignin_args(");
     boolean first = true;
-    sb.append("loginLog:");
-    if (this.loginLog == null) {
+    sb.append("buyer:");
+    if (this.buyer == null) {
       sb.append("null");
     } else {
-      sb.append(this.loginLog);
+      sb.append(this.buyer);
     }
     first = false;
     sb.append(")");
@@ -7236,8 +5134,8 @@ public class SellerServ {
   }
 }
 
-  public static class signout_result implements TBase<signout_result, signout_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("signout_result");
+  public static class newSignin_result implements TBase<newSignin_result, newSignin_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("newSignin_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
@@ -7311,14 +5209,14 @@ public class SellerServ {
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(signout_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(newSignin_result.class, metaDataMap);
   }
 
 
-  public signout_result() {
+  public newSignin_result() {
   }
 
-  public signout_result(
+  public newSignin_result(
     com.jfshare.finagle.thrift.result.Result success)
   {
     this();
@@ -7328,14 +5226,14 @@ public class SellerServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public signout_result(signout_result other) {
+  public newSignin_result(newSignin_result other) {
     if (other.isSetSuccess()) {
       this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
     }
   }
 
-  public signout_result deepCopy() {
-    return new signout_result(this);
+  public newSignin_result deepCopy() {
+    return new newSignin_result(this);
   }
 
   @Override
@@ -7347,7 +5245,7 @@ public class SellerServ {
     return this.success;
   }
 
-  public signout_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+  public newSignin_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
     this.success = success;
     
     return this;
@@ -7405,12 +5303,12 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof signout_result)
-      return this.equals((signout_result)that);
+    if (that instanceof newSignin_result)
+      return this.equals((newSignin_result)that);
     return false;
   }
 
-  public boolean equals(signout_result that) {
+  public boolean equals(newSignin_result that) {
     if (that == null)
       return false;
     boolean this_present_success = true && this.isSetSuccess();
@@ -7435,13 +5333,13 @@ public class SellerServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(signout_result other) {
+  public int compareTo(newSignin_result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    signout_result typedOther = (signout_result)other;
+    newSignin_result typedOther = (newSignin_result)other;
 
     lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
     if (lastComparison != 0) {
@@ -7503,7 +5401,2575 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("signout_result(");
+    StringBuilder sb = new StringBuilder("newSignin_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class login_args implements TBase<login_args, login_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("login_args");
+
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)1);
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)2);
+
+
+  public Buyer buyer;
+  public LoginLog loginLog;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    BUYER((short)1, "buyer"),
+    LOGIN_LOG((short)2, "loginLog");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // BUYER
+  	return BUYER;
+        case 2: // LOGIN_LOG
+  	return LOGIN_LOG;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(login_args.class, metaDataMap);
+  }
+
+
+  public login_args() {
+  }
+
+  public login_args(
+    Buyer buyer,
+    LoginLog loginLog)
+  {
+    this();
+    this.buyer = buyer;
+    this.loginLog = loginLog;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public login_args(login_args other) {
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
+    }
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+  }
+
+  public login_args deepCopy() {
+    return new login_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.buyer = null;
+    this.loginLog = null;
+  }
+
+  public Buyer getBuyer() {
+    return this.buyer;
+  }
+
+  public login_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
+    
+    return this;
+  }
+
+  public void unsetBuyer() {
+    this.buyer = null;
+  }
+
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
+  }
+
+  public void setBuyerIsSet(boolean value) {
+    if (!value) {
+      this.buyer = null;
+    }
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public login_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case BUYER:
+      if (value == null) {
+        unsetBuyer();
+      } else {
+        setBuyer((Buyer)value);
+      }
+      break;
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case BUYER:
+      return getBuyer();
+    case LOGIN_LOG:
+      return getLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case BUYER:
+      return isSetBuyer();
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof login_args)
+      return this.equals((login_args)that);
+    return false;
+  }
+
+  public boolean equals(login_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
+        return false;
+      if (!this.buyer.equals(that.buyer))
+        return false;
+    }
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(login_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    login_args typedOther = (login_args)other;
+
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // BUYER
+          if (field.type == TType.STRUCT) {
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("login_args(");
+    boolean first = true;
+    sb.append("buyer:");
+    if (this.buyer == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.buyer);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class login_result implements TBase<login_result, login_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("login_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(login_result.class, metaDataMap);
+  }
+
+
+  public login_result() {
+  }
+
+  public login_result(
+    BuyerResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public login_result(login_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerResult(other.success);
+    }
+  }
+
+  public login_result deepCopy() {
+    return new login_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerResult getSuccess() {
+    return this.success;
+  }
+
+  public login_result setSuccess(BuyerResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof login_result)
+      return this.equals((login_result)that);
+    return false;
+  }
+
+  public boolean equals(login_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(login_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    login_result typedOther = (login_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("login_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class newLogin_args implements TBase<newLogin_args, newLogin_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("newLogin_args");
+
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)1);
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)2);
+
+
+  public Buyer buyer;
+  public LoginLog loginLog;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    BUYER((short)1, "buyer"),
+    LOGIN_LOG((short)2, "loginLog");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // BUYER
+  	return BUYER;
+        case 2: // LOGIN_LOG
+  	return LOGIN_LOG;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(newLogin_args.class, metaDataMap);
+  }
+
+
+  public newLogin_args() {
+  }
+
+  public newLogin_args(
+    Buyer buyer,
+    LoginLog loginLog)
+  {
+    this();
+    this.buyer = buyer;
+    this.loginLog = loginLog;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public newLogin_args(newLogin_args other) {
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
+    }
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+  }
+
+  public newLogin_args deepCopy() {
+    return new newLogin_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.buyer = null;
+    this.loginLog = null;
+  }
+
+  public Buyer getBuyer() {
+    return this.buyer;
+  }
+
+  public newLogin_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
+    
+    return this;
+  }
+
+  public void unsetBuyer() {
+    this.buyer = null;
+  }
+
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
+  }
+
+  public void setBuyerIsSet(boolean value) {
+    if (!value) {
+      this.buyer = null;
+    }
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public newLogin_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case BUYER:
+      if (value == null) {
+        unsetBuyer();
+      } else {
+        setBuyer((Buyer)value);
+      }
+      break;
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case BUYER:
+      return getBuyer();
+    case LOGIN_LOG:
+      return getLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case BUYER:
+      return isSetBuyer();
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof newLogin_args)
+      return this.equals((newLogin_args)that);
+    return false;
+  }
+
+  public boolean equals(newLogin_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
+        return false;
+      if (!this.buyer.equals(that.buyer))
+        return false;
+    }
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(newLogin_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    newLogin_args typedOther = (newLogin_args)other;
+
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // BUYER
+          if (field.type == TType.STRUCT) {
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("newLogin_args(");
+    boolean first = true;
+    sb.append("buyer:");
+    if (this.buyer == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.buyer);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class newLogin_result implements TBase<newLogin_result, newLogin_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("newLogin_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(newLogin_result.class, metaDataMap);
+  }
+
+
+  public newLogin_result() {
+  }
+
+  public newLogin_result(
+    BuyerResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public newLogin_result(newLogin_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerResult(other.success);
+    }
+  }
+
+  public newLogin_result deepCopy() {
+    return new newLogin_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerResult getSuccess() {
+    return this.success;
+  }
+
+  public newLogin_result setSuccess(BuyerResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof newLogin_result)
+      return this.equals((newLogin_result)that);
+    return false;
+  }
+
+  public boolean equals(newLogin_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(newLogin_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    newLogin_result typedOther = (newLogin_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("newLogin_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class smsLogin_args implements TBase<smsLogin_args, smsLogin_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("smsLogin_args");
+
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)1);
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)2);
+
+
+  public Buyer buyer;
+  public LoginLog loginLog;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    BUYER((short)1, "buyer"),
+    LOGIN_LOG((short)2, "loginLog");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // BUYER
+  	return BUYER;
+        case 2: // LOGIN_LOG
+  	return LOGIN_LOG;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(smsLogin_args.class, metaDataMap);
+  }
+
+
+  public smsLogin_args() {
+  }
+
+  public smsLogin_args(
+    Buyer buyer,
+    LoginLog loginLog)
+  {
+    this();
+    this.buyer = buyer;
+    this.loginLog = loginLog;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public smsLogin_args(smsLogin_args other) {
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
+    }
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+  }
+
+  public smsLogin_args deepCopy() {
+    return new smsLogin_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.buyer = null;
+    this.loginLog = null;
+  }
+
+  public Buyer getBuyer() {
+    return this.buyer;
+  }
+
+  public smsLogin_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
+    
+    return this;
+  }
+
+  public void unsetBuyer() {
+    this.buyer = null;
+  }
+
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
+  }
+
+  public void setBuyerIsSet(boolean value) {
+    if (!value) {
+      this.buyer = null;
+    }
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public smsLogin_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case BUYER:
+      if (value == null) {
+        unsetBuyer();
+      } else {
+        setBuyer((Buyer)value);
+      }
+      break;
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case BUYER:
+      return getBuyer();
+    case LOGIN_LOG:
+      return getLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case BUYER:
+      return isSetBuyer();
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof smsLogin_args)
+      return this.equals((smsLogin_args)that);
+    return false;
+  }
+
+  public boolean equals(smsLogin_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
+        return false;
+      if (!this.buyer.equals(that.buyer))
+        return false;
+    }
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(smsLogin_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    smsLogin_args typedOther = (smsLogin_args)other;
+
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // BUYER
+          if (field.type == TType.STRUCT) {
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("smsLogin_args(");
+    boolean first = true;
+    sb.append("buyer:");
+    if (this.buyer == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.buyer);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class smsLogin_result implements TBase<smsLogin_result, smsLogin_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("smsLogin_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(smsLogin_result.class, metaDataMap);
+  }
+
+
+  public smsLogin_result() {
+  }
+
+  public smsLogin_result(
+    BuyerResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public smsLogin_result(smsLogin_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerResult(other.success);
+    }
+  }
+
+  public smsLogin_result deepCopy() {
+    return new smsLogin_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerResult getSuccess() {
+    return this.success;
+  }
+
+  public smsLogin_result setSuccess(BuyerResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof smsLogin_result)
+      return this.equals((smsLogin_result)that);
+    return false;
+  }
+
+  public boolean equals(smsLogin_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(smsLogin_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    smsLogin_result typedOther = (smsLogin_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("smsLogin_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class logout_args implements TBase<logout_args, logout_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("logout_args");
+
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)1);
+
+
+  public LoginLog loginLog;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    LOGIN_LOG((short)1, "loginLog");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // LOGIN_LOG
+  	return LOGIN_LOG;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(logout_args.class, metaDataMap);
+  }
+
+
+  public logout_args() {
+  }
+
+  public logout_args(
+    LoginLog loginLog)
+  {
+    this();
+    this.loginLog = loginLog;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public logout_args(logout_args other) {
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+  }
+
+  public logout_args deepCopy() {
+    return new logout_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.loginLog = null;
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public logout_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case LOGIN_LOG:
+      return getLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof logout_args)
+      return this.equals((logout_args)that);
+    return false;
+  }
+
+  public boolean equals(logout_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(logout_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    logout_args typedOther = (logout_args)other;
+
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("logout_args(");
+    boolean first = true;
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class logout_result implements TBase<logout_result, logout_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("logout_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(logout_result.class, metaDataMap);
+  }
+
+
+  public logout_result() {
+  }
+
+  public logout_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public logout_result(logout_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public logout_result deepCopy() {
+    return new logout_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public logout_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof logout_result)
+      return this.equals((logout_result)that);
+    return false;
+  }
+
+  public boolean equals(logout_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(logout_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    logout_result typedOther = (logout_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("logout_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -7815,7 +8281,7 @@ public class SellerServ {
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
 
-  public SellerResult success;
+  public BuyerResult success;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -7882,7 +8348,7 @@ public class SellerServ {
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellerResult.class)));
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(isOnline_result.class, metaDataMap);
   }
@@ -7892,7 +8358,7 @@ public class SellerServ {
   }
 
   public isOnline_result(
-    SellerResult success)
+    BuyerResult success)
   {
     this();
     this.success = success;
@@ -7903,7 +8369,7 @@ public class SellerServ {
    */
   public isOnline_result(isOnline_result other) {
     if (other.isSetSuccess()) {
-      this.success = new SellerResult(other.success);
+      this.success = new BuyerResult(other.success);
     }
   }
 
@@ -7916,11 +8382,11 @@ public class SellerServ {
     this.success = null;
   }
 
-  public SellerResult getSuccess() {
+  public BuyerResult getSuccess() {
     return this.success;
   }
 
-  public isOnline_result setSuccess(SellerResult success) {
+  public isOnline_result setSuccess(BuyerResult success) {
     this.success = success;
     
     return this;
@@ -7947,7 +8413,7 @@ public class SellerServ {
       if (value == null) {
         unsetSuccess();
       } else {
-        setSuccess((SellerResult)value);
+        setSuccess((BuyerResult)value);
       }
       break;
     }
@@ -8046,7 +8512,7 @@ public class SellerServ {
       switch (field.id) {
         case 0: // SUCCESS
           if (field.type == TType.STRUCT) {
-            this.success = new SellerResult();
+            this.success = new BuyerResult();
             this.success.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
@@ -8388,7 +8854,7 @@ public class SellerServ {
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
 
-  public SellerResult success;
+  public BuyerResult success;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -8455,7 +8921,7 @@ public class SellerServ {
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellerResult.class)));
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(getOnlineInfo_result.class, metaDataMap);
   }
@@ -8465,7 +8931,7 @@ public class SellerServ {
   }
 
   public getOnlineInfo_result(
-    SellerResult success)
+    BuyerResult success)
   {
     this();
     this.success = success;
@@ -8476,7 +8942,7 @@ public class SellerServ {
    */
   public getOnlineInfo_result(getOnlineInfo_result other) {
     if (other.isSetSuccess()) {
-      this.success = new SellerResult(other.success);
+      this.success = new BuyerResult(other.success);
     }
   }
 
@@ -8489,11 +8955,11 @@ public class SellerServ {
     this.success = null;
   }
 
-  public SellerResult getSuccess() {
+  public BuyerResult getSuccess() {
     return this.success;
   }
 
-  public getOnlineInfo_result setSuccess(SellerResult success) {
+  public getOnlineInfo_result setSuccess(BuyerResult success) {
     this.success = success;
     
     return this;
@@ -8520,7 +8986,7 @@ public class SellerServ {
       if (value == null) {
         unsetSuccess();
       } else {
-        setSuccess((SellerResult)value);
+        setSuccess((BuyerResult)value);
       }
       break;
     }
@@ -8619,7 +9085,7 @@ public class SellerServ {
       switch (field.id) {
         case 0: // SUCCESS
           if (field.type == TType.STRUCT) {
-            this.success = new SellerResult();
+            this.success = new BuyerResult();
             this.success.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
@@ -9329,17 +9795,17 @@ public class SellerServ {
 }
 
 
-  public static class updateSeller_args implements TBase<updateSeller_args, updateSeller_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("updateSeller_args");
+  public static class getBuyer_args implements TBase<getBuyer_args, getBuyer_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getBuyer_args");
 
-  private static final TField SELLER_FIELD_DESC = new TField("seller", TType.STRUCT, (short)1);
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)1);
 
 
-  public Seller seller;
+  public Buyer buyer;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    SELLER((short)1, "seller");
+    BUYER((short)1, "buyer");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -9354,8 +9820,8 @@ public class SellerServ {
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // SELLER
-  	return SELLER;
+        case 1: // BUYER
+  	return BUYER;
         default:
   	return null;
       }
@@ -9401,73 +9867,73 @@ public class SellerServ {
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SELLER, new FieldMetaData("seller", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, Seller.class)));
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(updateSeller_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(getBuyer_args.class, metaDataMap);
   }
 
 
-  public updateSeller_args() {
+  public getBuyer_args() {
   }
 
-  public updateSeller_args(
-    Seller seller)
+  public getBuyer_args(
+    Buyer buyer)
   {
     this();
-    this.seller = seller;
+    this.buyer = buyer;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public updateSeller_args(updateSeller_args other) {
-    if (other.isSetSeller()) {
-      this.seller = new Seller(other.seller);
+  public getBuyer_args(getBuyer_args other) {
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
     }
   }
 
-  public updateSeller_args deepCopy() {
-    return new updateSeller_args(this);
+  public getBuyer_args deepCopy() {
+    return new getBuyer_args(this);
   }
 
   @Override
   public void clear() {
-    this.seller = null;
+    this.buyer = null;
   }
 
-  public Seller getSeller() {
-    return this.seller;
+  public Buyer getBuyer() {
+    return this.buyer;
   }
 
-  public updateSeller_args setSeller(Seller seller) {
-    this.seller = seller;
+  public getBuyer_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
     
     return this;
   }
 
-  public void unsetSeller() {
-    this.seller = null;
+  public void unsetBuyer() {
+    this.buyer = null;
   }
 
-  /** Returns true if field seller is set (has been asigned a value) and false otherwise */
-  public boolean isSetSeller() {
-    return this.seller != null;
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
   }
 
-  public void setSellerIsSet(boolean value) {
+  public void setBuyerIsSet(boolean value) {
     if (!value) {
-      this.seller = null;
+      this.buyer = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case SELLER:
+    case BUYER:
       if (value == null) {
-        unsetSeller();
+        unsetBuyer();
       } else {
-        setSeller((Seller)value);
+        setBuyer((Buyer)value);
       }
       break;
     }
@@ -9475,8 +9941,8 @@ public class SellerServ {
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case SELLER:
-      return getSeller();
+    case BUYER:
+      return getBuyer();
     }
     throw new IllegalStateException();
   }
@@ -9488,8 +9954,8 @@ public class SellerServ {
     }
 
     switch (field) {
-    case SELLER:
-      return isSetSeller();
+    case BUYER:
+      return isSetBuyer();
     }
     throw new IllegalStateException();
   }
@@ -9498,20 +9964,20 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof updateSeller_args)
-      return this.equals((updateSeller_args)that);
+    if (that instanceof getBuyer_args)
+      return this.equals((getBuyer_args)that);
     return false;
   }
 
-  public boolean equals(updateSeller_args that) {
+  public boolean equals(getBuyer_args that) {
     if (that == null)
       return false;
-    boolean this_present_seller = true && this.isSetSeller();
-    boolean that_present_seller = true && that.isSetSeller();
-    if (this_present_seller || that_present_seller) {
-      if (!(this_present_seller && that_present_seller))
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
         return false;
-      if (!this.seller.equals(that.seller))
+      if (!this.buyer.equals(that.buyer))
         return false;
     }
 
@@ -9521,27 +9987,27 @@ public class SellerServ {
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_seller = true && (isSetSeller());
-    builder.append(present_seller);
-    if (present_seller)
-      builder.append(seller);
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
     return builder.toHashCode();
   }
 
-  public int compareTo(updateSeller_args other) {
+  public int compareTo(getBuyer_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    updateSeller_args typedOther = (updateSeller_args)other;
+    getBuyer_args typedOther = (getBuyer_args)other;
 
-    lastComparison = Boolean.valueOf(isSetSeller()).compareTo(typedOther.isSetSeller());
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSeller()) {
-      lastComparison = TBaseHelper.compareTo(this.seller, typedOther.seller);
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -9564,10 +10030,10 @@ public class SellerServ {
         break;
       }
       switch (field.id) {
-        case 1: // SELLER
+        case 1: // BUYER
           if (field.type == TType.STRUCT) {
-            this.seller = new Seller();
-            this.seller.read(iprot);
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -9587,9 +10053,9 @@ public class SellerServ {
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.seller != null) {
-      oprot.writeFieldBegin(SELLER_FIELD_DESC);
-      this.seller.write(oprot);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -9598,13 +10064,13 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("updateSeller_args(");
+    StringBuilder sb = new StringBuilder("getBuyer_args(");
     boolean first = true;
-    sb.append("seller:");
-    if (this.seller == null) {
+    sb.append("buyer:");
+    if (this.buyer == null) {
       sb.append("null");
     } else {
-      sb.append(this.seller);
+      sb.append(this.buyer);
     }
     first = false;
     sb.append(")");
@@ -9616,8 +10082,581 @@ public class SellerServ {
   }
 }
 
-  public static class updateSeller_result implements TBase<updateSeller_result, updateSeller_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("updateSeller_result");
+  public static class getBuyer_result implements TBase<getBuyer_result, getBuyer_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getBuyer_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getBuyer_result.class, metaDataMap);
+  }
+
+
+  public getBuyer_result() {
+  }
+
+  public getBuyer_result(
+    BuyerResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getBuyer_result(getBuyer_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerResult(other.success);
+    }
+  }
+
+  public getBuyer_result deepCopy() {
+    return new getBuyer_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerResult getSuccess() {
+    return this.success;
+  }
+
+  public getBuyer_result setSuccess(BuyerResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getBuyer_result)
+      return this.equals((getBuyer_result)that);
+    return false;
+  }
+
+  public boolean equals(getBuyer_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getBuyer_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getBuyer_result typedOther = (getBuyer_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getBuyer_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class updateBuyer_args implements TBase<updateBuyer_args, updateBuyer_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("updateBuyer_args");
+
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)1);
+
+
+  public Buyer buyer;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    BUYER((short)1, "buyer");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // BUYER
+  	return BUYER;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(updateBuyer_args.class, metaDataMap);
+  }
+
+
+  public updateBuyer_args() {
+  }
+
+  public updateBuyer_args(
+    Buyer buyer)
+  {
+    this();
+    this.buyer = buyer;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public updateBuyer_args(updateBuyer_args other) {
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
+    }
+  }
+
+  public updateBuyer_args deepCopy() {
+    return new updateBuyer_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.buyer = null;
+  }
+
+  public Buyer getBuyer() {
+    return this.buyer;
+  }
+
+  public updateBuyer_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
+    
+    return this;
+  }
+
+  public void unsetBuyer() {
+    this.buyer = null;
+  }
+
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
+  }
+
+  public void setBuyerIsSet(boolean value) {
+    if (!value) {
+      this.buyer = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case BUYER:
+      if (value == null) {
+        unsetBuyer();
+      } else {
+        setBuyer((Buyer)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case BUYER:
+      return getBuyer();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case BUYER:
+      return isSetBuyer();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof updateBuyer_args)
+      return this.equals((updateBuyer_args)that);
+    return false;
+  }
+
+  public boolean equals(updateBuyer_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
+        return false;
+      if (!this.buyer.equals(that.buyer))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(updateBuyer_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    updateBuyer_args typedOther = (updateBuyer_args)other;
+
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // BUYER
+          if (field.type == TType.STRUCT) {
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("updateBuyer_args(");
+    boolean first = true;
+    sb.append("buyer:");
+    if (this.buyer == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.buyer);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class updateBuyer_result implements TBase<updateBuyer_result, updateBuyer_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("updateBuyer_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
@@ -9691,14 +10730,14 @@ public class SellerServ {
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(updateSeller_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(updateBuyer_result.class, metaDataMap);
   }
 
 
-  public updateSeller_result() {
+  public updateBuyer_result() {
   }
 
-  public updateSeller_result(
+  public updateBuyer_result(
     com.jfshare.finagle.thrift.result.Result success)
   {
     this();
@@ -9708,14 +10747,14 @@ public class SellerServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public updateSeller_result(updateSeller_result other) {
+  public updateBuyer_result(updateBuyer_result other) {
     if (other.isSetSuccess()) {
       this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
     }
   }
 
-  public updateSeller_result deepCopy() {
-    return new updateSeller_result(this);
+  public updateBuyer_result deepCopy() {
+    return new updateBuyer_result(this);
   }
 
   @Override
@@ -9727,7 +10766,7 @@ public class SellerServ {
     return this.success;
   }
 
-  public updateSeller_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+  public updateBuyer_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
     this.success = success;
     
     return this;
@@ -9785,12 +10824,12 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof updateSeller_result)
-      return this.equals((updateSeller_result)that);
+    if (that instanceof updateBuyer_result)
+      return this.equals((updateBuyer_result)that);
     return false;
   }
 
-  public boolean equals(updateSeller_result that) {
+  public boolean equals(updateBuyer_result that) {
     if (that == null)
       return false;
     boolean this_present_success = true && this.isSetSuccess();
@@ -9815,13 +10854,13 @@ public class SellerServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(updateSeller_result other) {
+  public int compareTo(updateBuyer_result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    updateSeller_result typedOther = (updateSeller_result)other;
+    updateBuyer_result typedOther = (updateBuyer_result)other;
 
     lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
     if (lastComparison != 0) {
@@ -9883,7 +10922,7 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("updateSeller_result(");
+    StringBuilder sb = new StringBuilder("updateBuyer_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -9902,20 +10941,20 @@ public class SellerServ {
 }
 
 
-  public static class resetSellerPwd_args implements TBase<resetSellerPwd_args, resetSellerPwd_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("resetSellerPwd_args");
+  public static class resetBuyerPwd_args implements TBase<resetBuyerPwd_args, resetBuyerPwd_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("resetBuyerPwd_args");
 
   private static final TField NEW_PWD_FIELD_DESC = new TField("newPwd", TType.STRING, (short)1);
-  private static final TField SELLER_FIELD_DESC = new TField("seller", TType.STRUCT, (short)2);
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)2);
 
 
   public String newPwd;
-  public Seller seller;
+  public Buyer buyer;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     NEW_PWD((short)1, "newPwd"),
-    SELLER((short)2, "seller");
+    BUYER((short)2, "buyer");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -9932,8 +10971,8 @@ public class SellerServ {
       switch(fieldId) {
         case 1: // NEW_PWD
   	return NEW_PWD;
-        case 2: // SELLER
-  	return SELLER;
+        case 2: // BUYER
+  	return BUYER;
         default:
   	return null;
       }
@@ -9981,52 +11020,52 @@ public class SellerServ {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.NEW_PWD, new FieldMetaData("newPwd", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.SELLER, new FieldMetaData("seller", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, Seller.class)));
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(resetSellerPwd_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(resetBuyerPwd_args.class, metaDataMap);
   }
 
 
-  public resetSellerPwd_args() {
+  public resetBuyerPwd_args() {
   }
 
-  public resetSellerPwd_args(
+  public resetBuyerPwd_args(
     String newPwd,
-    Seller seller)
+    Buyer buyer)
   {
     this();
     this.newPwd = newPwd;
-    this.seller = seller;
+    this.buyer = buyer;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public resetSellerPwd_args(resetSellerPwd_args other) {
+  public resetBuyerPwd_args(resetBuyerPwd_args other) {
     if (other.isSetNewPwd()) {
       this.newPwd = other.newPwd;
     }
-    if (other.isSetSeller()) {
-      this.seller = new Seller(other.seller);
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
     }
   }
 
-  public resetSellerPwd_args deepCopy() {
-    return new resetSellerPwd_args(this);
+  public resetBuyerPwd_args deepCopy() {
+    return new resetBuyerPwd_args(this);
   }
 
   @Override
   public void clear() {
     this.newPwd = null;
-    this.seller = null;
+    this.buyer = null;
   }
 
   public String getNewPwd() {
     return this.newPwd;
   }
 
-  public resetSellerPwd_args setNewPwd(String newPwd) {
+  public resetBuyerPwd_args setNewPwd(String newPwd) {
     this.newPwd = newPwd;
     
     return this;
@@ -10047,28 +11086,28 @@ public class SellerServ {
     }
   }
 
-  public Seller getSeller() {
-    return this.seller;
+  public Buyer getBuyer() {
+    return this.buyer;
   }
 
-  public resetSellerPwd_args setSeller(Seller seller) {
-    this.seller = seller;
+  public resetBuyerPwd_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
     
     return this;
   }
 
-  public void unsetSeller() {
-    this.seller = null;
+  public void unsetBuyer() {
+    this.buyer = null;
   }
 
-  /** Returns true if field seller is set (has been asigned a value) and false otherwise */
-  public boolean isSetSeller() {
-    return this.seller != null;
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
   }
 
-  public void setSellerIsSet(boolean value) {
+  public void setBuyerIsSet(boolean value) {
     if (!value) {
-      this.seller = null;
+      this.buyer = null;
     }
   }
 
@@ -10081,11 +11120,11 @@ public class SellerServ {
         setNewPwd((String)value);
       }
       break;
-    case SELLER:
+    case BUYER:
       if (value == null) {
-        unsetSeller();
+        unsetBuyer();
       } else {
-        setSeller((Seller)value);
+        setBuyer((Buyer)value);
       }
       break;
     }
@@ -10095,8 +11134,8 @@ public class SellerServ {
     switch (field) {
     case NEW_PWD:
       return getNewPwd();
-    case SELLER:
-      return getSeller();
+    case BUYER:
+      return getBuyer();
     }
     throw new IllegalStateException();
   }
@@ -10110,8 +11149,8 @@ public class SellerServ {
     switch (field) {
     case NEW_PWD:
       return isSetNewPwd();
-    case SELLER:
-      return isSetSeller();
+    case BUYER:
+      return isSetBuyer();
     }
     throw new IllegalStateException();
   }
@@ -10120,12 +11159,12 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof resetSellerPwd_args)
-      return this.equals((resetSellerPwd_args)that);
+    if (that instanceof resetBuyerPwd_args)
+      return this.equals((resetBuyerPwd_args)that);
     return false;
   }
 
-  public boolean equals(resetSellerPwd_args that) {
+  public boolean equals(resetBuyerPwd_args that) {
     if (that == null)
       return false;
     boolean this_present_newPwd = true && this.isSetNewPwd();
@@ -10136,12 +11175,12 @@ public class SellerServ {
       if (!this.newPwd.equals(that.newPwd))
         return false;
     }
-    boolean this_present_seller = true && this.isSetSeller();
-    boolean that_present_seller = true && that.isSetSeller();
-    if (this_present_seller || that_present_seller) {
-      if (!(this_present_seller && that_present_seller))
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
         return false;
-      if (!this.seller.equals(that.seller))
+      if (!this.buyer.equals(that.buyer))
         return false;
     }
 
@@ -10155,20 +11194,20 @@ public class SellerServ {
     builder.append(present_newPwd);
     if (present_newPwd)
       builder.append(newPwd);
-    boolean present_seller = true && (isSetSeller());
-    builder.append(present_seller);
-    if (present_seller)
-      builder.append(seller);
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
     return builder.toHashCode();
   }
 
-  public int compareTo(resetSellerPwd_args other) {
+  public int compareTo(resetBuyerPwd_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    resetSellerPwd_args typedOther = (resetSellerPwd_args)other;
+    resetBuyerPwd_args typedOther = (resetBuyerPwd_args)other;
 
     lastComparison = Boolean.valueOf(isSetNewPwd()).compareTo(typedOther.isSetNewPwd());
     if (lastComparison != 0) {
@@ -10180,12 +11219,12 @@ public class SellerServ {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSeller()).compareTo(typedOther.isSetSeller());
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSeller()) {
-      lastComparison = TBaseHelper.compareTo(this.seller, typedOther.seller);
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -10215,10 +11254,10 @@ public class SellerServ {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // SELLER
+        case 2: // BUYER
           if (field.type == TType.STRUCT) {
-            this.seller = new Seller();
-            this.seller.read(iprot);
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -10243,9 +11282,9 @@ public class SellerServ {
       oprot.writeString(this.newPwd);
       oprot.writeFieldEnd();
     }
-    if (this.seller != null) {
-      oprot.writeFieldBegin(SELLER_FIELD_DESC);
-      this.seller.write(oprot);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -10254,7 +11293,7 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("resetSellerPwd_args(");
+    StringBuilder sb = new StringBuilder("resetBuyerPwd_args(");
     boolean first = true;
     sb.append("newPwd:");
     if (this.newPwd == null) {
@@ -10264,11 +11303,11 @@ public class SellerServ {
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("seller:");
-    if (this.seller == null) {
+    sb.append("buyer:");
+    if (this.buyer == null) {
       sb.append("null");
     } else {
-      sb.append(this.seller);
+      sb.append(this.buyer);
     }
     first = false;
     sb.append(")");
@@ -10280,8 +11319,8 @@ public class SellerServ {
   }
 }
 
-  public static class resetSellerPwd_result implements TBase<resetSellerPwd_result, resetSellerPwd_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("resetSellerPwd_result");
+  public static class resetBuyerPwd_result implements TBase<resetBuyerPwd_result, resetBuyerPwd_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("resetBuyerPwd_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
@@ -10355,14 +11394,14 @@ public class SellerServ {
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(resetSellerPwd_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(resetBuyerPwd_result.class, metaDataMap);
   }
 
 
-  public resetSellerPwd_result() {
+  public resetBuyerPwd_result() {
   }
 
-  public resetSellerPwd_result(
+  public resetBuyerPwd_result(
     com.jfshare.finagle.thrift.result.Result success)
   {
     this();
@@ -10372,14 +11411,14 @@ public class SellerServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public resetSellerPwd_result(resetSellerPwd_result other) {
+  public resetBuyerPwd_result(resetBuyerPwd_result other) {
     if (other.isSetSuccess()) {
       this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
     }
   }
 
-  public resetSellerPwd_result deepCopy() {
-    return new resetSellerPwd_result(this);
+  public resetBuyerPwd_result deepCopy() {
+    return new resetBuyerPwd_result(this);
   }
 
   @Override
@@ -10391,7 +11430,7 @@ public class SellerServ {
     return this.success;
   }
 
-  public resetSellerPwd_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+  public resetBuyerPwd_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
     this.success = success;
     
     return this;
@@ -10449,12 +11488,12 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof resetSellerPwd_result)
-      return this.equals((resetSellerPwd_result)that);
+    if (that instanceof resetBuyerPwd_result)
+      return this.equals((resetBuyerPwd_result)that);
     return false;
   }
 
-  public boolean equals(resetSellerPwd_result that) {
+  public boolean equals(resetBuyerPwd_result that) {
     if (that == null)
       return false;
     boolean this_present_success = true && this.isSetSuccess();
@@ -10479,13 +11518,13 @@ public class SellerServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(resetSellerPwd_result other) {
+  public int compareTo(resetBuyerPwd_result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    resetSellerPwd_result typedOther = (resetSellerPwd_result)other;
+    resetBuyerPwd_result typedOther = (resetBuyerPwd_result)other;
 
     lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
     if (lastComparison != 0) {
@@ -10547,7 +11586,7 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("resetSellerPwd_result(");
+    StringBuilder sb = new StringBuilder("resetBuyerPwd_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -10566,20 +11605,20 @@ public class SellerServ {
 }
 
 
-  public static class insertUserSellerReal_args implements TBase<insertUserSellerReal_args, insertUserSellerReal_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("insertUserSellerReal_args");
+  public static class newResetBuyerPwd_args implements TBase<newResetBuyerPwd_args, newResetBuyerPwd_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("newResetBuyerPwd_args");
 
-  private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.STRING, (short)1);
-  private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.STRING, (short)2);
+  private static final TField NEW_PWD_FIELD_DESC = new TField("newPwd", TType.STRING, (short)1);
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)2);
 
 
-  public String userId;
-  public String sellerId;
+  public String newPwd;
+  public Buyer buyer;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    USER_ID((short)1, "userId"),
-    SELLER_ID((short)2, "sellerId");
+    NEW_PWD((short)1, "newPwd"),
+    BUYER((short)2, "buyer");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -10594,10 +11633,10 @@ public class SellerServ {
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // USER_ID
-  	return USER_ID;
-        case 2: // SELLER_ID
-  	return SELLER_ID;
+        case 1: // NEW_PWD
+  	return NEW_PWD;
+        case 2: // BUYER
+  	return BUYER;
         default:
   	return null;
       }
@@ -10643,113 +11682,113 @@ public class SellerServ {
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.USER_ID, new FieldMetaData("userId", TFieldRequirementType.DEFAULT,
+    tmpMap.put(_Fields.NEW_PWD, new FieldMetaData("newPwd", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(insertUserSellerReal_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(newResetBuyerPwd_args.class, metaDataMap);
   }
 
 
-  public insertUserSellerReal_args() {
+  public newResetBuyerPwd_args() {
   }
 
-  public insertUserSellerReal_args(
-    String userId,
-    String sellerId)
+  public newResetBuyerPwd_args(
+    String newPwd,
+    Buyer buyer)
   {
     this();
-    this.userId = userId;
-    this.sellerId = sellerId;
+    this.newPwd = newPwd;
+    this.buyer = buyer;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public insertUserSellerReal_args(insertUserSellerReal_args other) {
-    if (other.isSetUserId()) {
-      this.userId = other.userId;
+  public newResetBuyerPwd_args(newResetBuyerPwd_args other) {
+    if (other.isSetNewPwd()) {
+      this.newPwd = other.newPwd;
     }
-    if (other.isSetSellerId()) {
-      this.sellerId = other.sellerId;
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
     }
   }
 
-  public insertUserSellerReal_args deepCopy() {
-    return new insertUserSellerReal_args(this);
+  public newResetBuyerPwd_args deepCopy() {
+    return new newResetBuyerPwd_args(this);
   }
 
   @Override
   public void clear() {
-    this.userId = null;
-    this.sellerId = null;
+    this.newPwd = null;
+    this.buyer = null;
   }
 
-  public String getUserId() {
-    return this.userId;
+  public String getNewPwd() {
+    return this.newPwd;
   }
 
-  public insertUserSellerReal_args setUserId(String userId) {
-    this.userId = userId;
+  public newResetBuyerPwd_args setNewPwd(String newPwd) {
+    this.newPwd = newPwd;
     
     return this;
   }
 
-  public void unsetUserId() {
-    this.userId = null;
+  public void unsetNewPwd() {
+    this.newPwd = null;
   }
 
-  /** Returns true if field userId is set (has been asigned a value) and false otherwise */
-  public boolean isSetUserId() {
-    return this.userId != null;
+  /** Returns true if field newPwd is set (has been asigned a value) and false otherwise */
+  public boolean isSetNewPwd() {
+    return this.newPwd != null;
   }
 
-  public void setUserIdIsSet(boolean value) {
+  public void setNewPwdIsSet(boolean value) {
     if (!value) {
-      this.userId = null;
+      this.newPwd = null;
     }
   }
 
-  public String getSellerId() {
-    return this.sellerId;
+  public Buyer getBuyer() {
+    return this.buyer;
   }
 
-  public insertUserSellerReal_args setSellerId(String sellerId) {
-    this.sellerId = sellerId;
+  public newResetBuyerPwd_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
     
     return this;
   }
 
-  public void unsetSellerId() {
-    this.sellerId = null;
+  public void unsetBuyer() {
+    this.buyer = null;
   }
 
-  /** Returns true if field sellerId is set (has been asigned a value) and false otherwise */
-  public boolean isSetSellerId() {
-    return this.sellerId != null;
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
   }
 
-  public void setSellerIdIsSet(boolean value) {
+  public void setBuyerIsSet(boolean value) {
     if (!value) {
-      this.sellerId = null;
+      this.buyer = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case USER_ID:
+    case NEW_PWD:
       if (value == null) {
-        unsetUserId();
+        unsetNewPwd();
       } else {
-        setUserId((String)value);
+        setNewPwd((String)value);
       }
       break;
-    case SELLER_ID:
+    case BUYER:
       if (value == null) {
-        unsetSellerId();
+        unsetBuyer();
       } else {
-        setSellerId((String)value);
+        setBuyer((Buyer)value);
       }
       break;
     }
@@ -10757,10 +11796,10 @@ public class SellerServ {
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case USER_ID:
-      return getUserId();
-    case SELLER_ID:
-      return getSellerId();
+    case NEW_PWD:
+      return getNewPwd();
+    case BUYER:
+      return getBuyer();
     }
     throw new IllegalStateException();
   }
@@ -10772,10 +11811,10 @@ public class SellerServ {
     }
 
     switch (field) {
-    case USER_ID:
-      return isSetUserId();
-    case SELLER_ID:
-      return isSetSellerId();
+    case NEW_PWD:
+      return isSetNewPwd();
+    case BUYER:
+      return isSetBuyer();
     }
     throw new IllegalStateException();
   }
@@ -10784,28 +11823,28 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof insertUserSellerReal_args)
-      return this.equals((insertUserSellerReal_args)that);
+    if (that instanceof newResetBuyerPwd_args)
+      return this.equals((newResetBuyerPwd_args)that);
     return false;
   }
 
-  public boolean equals(insertUserSellerReal_args that) {
+  public boolean equals(newResetBuyerPwd_args that) {
     if (that == null)
       return false;
-    boolean this_present_userId = true && this.isSetUserId();
-    boolean that_present_userId = true && that.isSetUserId();
-    if (this_present_userId || that_present_userId) {
-      if (!(this_present_userId && that_present_userId))
+    boolean this_present_newPwd = true && this.isSetNewPwd();
+    boolean that_present_newPwd = true && that.isSetNewPwd();
+    if (this_present_newPwd || that_present_newPwd) {
+      if (!(this_present_newPwd && that_present_newPwd))
         return false;
-      if (!this.userId.equals(that.userId))
+      if (!this.newPwd.equals(that.newPwd))
         return false;
     }
-    boolean this_present_sellerId = true && this.isSetSellerId();
-    boolean that_present_sellerId = true && that.isSetSellerId();
-    if (this_present_sellerId || that_present_sellerId) {
-      if (!(this_present_sellerId && that_present_sellerId))
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
         return false;
-      if (!this.sellerId.equals(that.sellerId))
+      if (!this.buyer.equals(that.buyer))
         return false;
     }
 
@@ -10815,41 +11854,41 @@ public class SellerServ {
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_userId = true && (isSetUserId());
-    builder.append(present_userId);
-    if (present_userId)
-      builder.append(userId);
-    boolean present_sellerId = true && (isSetSellerId());
-    builder.append(present_sellerId);
-    if (present_sellerId)
-      builder.append(sellerId);
+    boolean present_newPwd = true && (isSetNewPwd());
+    builder.append(present_newPwd);
+    if (present_newPwd)
+      builder.append(newPwd);
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
     return builder.toHashCode();
   }
 
-  public int compareTo(insertUserSellerReal_args other) {
+  public int compareTo(newResetBuyerPwd_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    insertUserSellerReal_args typedOther = (insertUserSellerReal_args)other;
+    newResetBuyerPwd_args typedOther = (newResetBuyerPwd_args)other;
 
-    lastComparison = Boolean.valueOf(isSetUserId()).compareTo(typedOther.isSetUserId());
+    lastComparison = Boolean.valueOf(isSetNewPwd()).compareTo(typedOther.isSetNewPwd());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetUserId()) {
-      lastComparison = TBaseHelper.compareTo(this.userId, typedOther.userId);
+    if (isSetNewPwd()) {
+      lastComparison = TBaseHelper.compareTo(this.newPwd, typedOther.newPwd);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSellerId()).compareTo(typedOther.isSetSellerId());
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSellerId()) {
-      lastComparison = TBaseHelper.compareTo(this.sellerId, typedOther.sellerId);
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -10872,16 +11911,17 @@ public class SellerServ {
         break;
       }
       switch (field.id) {
-        case 1: // USER_ID
+        case 1: // NEW_PWD
           if (field.type == TType.STRING) {
-            this.userId = iprot.readString();
+            this.newPwd = iprot.readString();
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // SELLER_ID
-          if (field.type == TType.STRING) {
-            this.sellerId = iprot.readString();
+        case 2: // BUYER
+          if (field.type == TType.STRUCT) {
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -10901,14 +11941,14 @@ public class SellerServ {
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.userId != null) {
-      oprot.writeFieldBegin(USER_ID_FIELD_DESC);
-      oprot.writeString(this.userId);
+    if (this.newPwd != null) {
+      oprot.writeFieldBegin(NEW_PWD_FIELD_DESC);
+      oprot.writeString(this.newPwd);
       oprot.writeFieldEnd();
     }
-    if (this.sellerId != null) {
-      oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
-      oprot.writeString(this.sellerId);
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -10917,21 +11957,21 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("insertUserSellerReal_args(");
+    StringBuilder sb = new StringBuilder("newResetBuyerPwd_args(");
     boolean first = true;
-    sb.append("userId:");
-    if (this.userId == null) {
+    sb.append("newPwd:");
+    if (this.newPwd == null) {
       sb.append("null");
     } else {
-      sb.append(this.userId);
+      sb.append(this.newPwd);
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("sellerId:");
-    if (this.sellerId == null) {
+    sb.append("buyer:");
+    if (this.buyer == null) {
       sb.append("null");
     } else {
-      sb.append(this.sellerId);
+      sb.append(this.buyer);
     }
     first = false;
     sb.append(")");
@@ -10943,8 +11983,8 @@ public class SellerServ {
   }
 }
 
-  public static class insertUserSellerReal_result implements TBase<insertUserSellerReal_result, insertUserSellerReal_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("insertUserSellerReal_result");
+  public static class newResetBuyerPwd_result implements TBase<newResetBuyerPwd_result, newResetBuyerPwd_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("newResetBuyerPwd_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
@@ -11018,14 +12058,14 @@ public class SellerServ {
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(insertUserSellerReal_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(newResetBuyerPwd_result.class, metaDataMap);
   }
 
 
-  public insertUserSellerReal_result() {
+  public newResetBuyerPwd_result() {
   }
 
-  public insertUserSellerReal_result(
+  public newResetBuyerPwd_result(
     com.jfshare.finagle.thrift.result.Result success)
   {
     this();
@@ -11035,14 +12075,14 @@ public class SellerServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public insertUserSellerReal_result(insertUserSellerReal_result other) {
+  public newResetBuyerPwd_result(newResetBuyerPwd_result other) {
     if (other.isSetSuccess()) {
       this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
     }
   }
 
-  public insertUserSellerReal_result deepCopy() {
-    return new insertUserSellerReal_result(this);
+  public newResetBuyerPwd_result deepCopy() {
+    return new newResetBuyerPwd_result(this);
   }
 
   @Override
@@ -11054,7 +12094,7 @@ public class SellerServ {
     return this.success;
   }
 
-  public insertUserSellerReal_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+  public newResetBuyerPwd_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
     this.success = success;
     
     return this;
@@ -11112,12 +12152,12 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof insertUserSellerReal_result)
-      return this.equals((insertUserSellerReal_result)that);
+    if (that instanceof newResetBuyerPwd_result)
+      return this.equals((newResetBuyerPwd_result)that);
     return false;
   }
 
-  public boolean equals(insertUserSellerReal_result that) {
+  public boolean equals(newResetBuyerPwd_result that) {
     if (that == null)
       return false;
     boolean this_present_success = true && this.isSetSuccess();
@@ -11142,13 +12182,13 @@ public class SellerServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(insertUserSellerReal_result other) {
+  public int compareTo(newResetBuyerPwd_result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    insertUserSellerReal_result typedOther = (insertUserSellerReal_result)other;
+    newResetBuyerPwd_result typedOther = (newResetBuyerPwd_result)other;
 
     lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
     if (lastComparison != 0) {
@@ -11210,7 +12250,7 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("insertUserSellerReal_result(");
+    StringBuilder sb = new StringBuilder("newResetBuyerPwd_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
@@ -11229,17 +12269,20 @@ public class SellerServ {
 }
 
 
-  public static class deleteUserSellerRealByuserId_args implements TBase<deleteUserSellerRealByuserId_args, deleteUserSellerRealByuserId_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("deleteUserSellerRealByuserId_args");
+  public static class signinThirdParty_args implements TBase<signinThirdParty_args, signinThirdParty_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("signinThirdParty_args");
 
-  private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.STRING, (short)1);
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)1);
+  private static final TField THIRD_USER_FIELD_DESC = new TField("thirdUser", TType.STRUCT, (short)2);
 
 
-  public String userId;
+  public LoginLog loginLog;
+  public ThirdpartyUser thirdUser;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
-    USER_ID((short)1, "userId");
+    LOGIN_LOG((short)1, "loginLog"),
+    THIRD_USER((short)2, "thirdUser");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -11254,8 +12297,10 @@ public class SellerServ {
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // USER_ID
-  	return USER_ID;
+        case 1: // LOGIN_LOG
+  	return LOGIN_LOG;
+        case 2: // THIRD_USER
+  	return THIRD_USER;
         default:
   	return null;
       }
@@ -11301,73 +12346,113 @@ public class SellerServ {
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.USER_ID, new FieldMetaData("userId", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    tmpMap.put(_Fields.THIRD_USER, new FieldMetaData("thirdUser", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, ThirdpartyUser.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(deleteUserSellerRealByuserId_args.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(signinThirdParty_args.class, metaDataMap);
   }
 
 
-  public deleteUserSellerRealByuserId_args() {
+  public signinThirdParty_args() {
   }
 
-  public deleteUserSellerRealByuserId_args(
-    String userId)
+  public signinThirdParty_args(
+    LoginLog loginLog,
+    ThirdpartyUser thirdUser)
   {
     this();
-    this.userId = userId;
+    this.loginLog = loginLog;
+    this.thirdUser = thirdUser;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public deleteUserSellerRealByuserId_args(deleteUserSellerRealByuserId_args other) {
-    if (other.isSetUserId()) {
-      this.userId = other.userId;
+  public signinThirdParty_args(signinThirdParty_args other) {
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+    if (other.isSetThirdUser()) {
+      this.thirdUser = new ThirdpartyUser(other.thirdUser);
     }
   }
 
-  public deleteUserSellerRealByuserId_args deepCopy() {
-    return new deleteUserSellerRealByuserId_args(this);
+  public signinThirdParty_args deepCopy() {
+    return new signinThirdParty_args(this);
   }
 
   @Override
   public void clear() {
-    this.userId = null;
+    this.loginLog = null;
+    this.thirdUser = null;
   }
 
-  public String getUserId() {
-    return this.userId;
+  public LoginLog getLoginLog() {
+    return this.loginLog;
   }
 
-  public deleteUserSellerRealByuserId_args setUserId(String userId) {
-    this.userId = userId;
+  public signinThirdParty_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
     
     return this;
   }
 
-  public void unsetUserId() {
-    this.userId = null;
+  public void unsetLoginLog() {
+    this.loginLog = null;
   }
 
-  /** Returns true if field userId is set (has been asigned a value) and false otherwise */
-  public boolean isSetUserId() {
-    return this.userId != null;
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
   }
 
-  public void setUserIdIsSet(boolean value) {
+  public void setLoginLogIsSet(boolean value) {
     if (!value) {
-      this.userId = null;
+      this.loginLog = null;
+    }
+  }
+
+  public ThirdpartyUser getThirdUser() {
+    return this.thirdUser;
+  }
+
+  public signinThirdParty_args setThirdUser(ThirdpartyUser thirdUser) {
+    this.thirdUser = thirdUser;
+    
+    return this;
+  }
+
+  public void unsetThirdUser() {
+    this.thirdUser = null;
+  }
+
+  /** Returns true if field thirdUser is set (has been asigned a value) and false otherwise */
+  public boolean isSetThirdUser() {
+    return this.thirdUser != null;
+  }
+
+  public void setThirdUserIsSet(boolean value) {
+    if (!value) {
+      this.thirdUser = null;
     }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case USER_ID:
+    case LOGIN_LOG:
       if (value == null) {
-        unsetUserId();
+        unsetLoginLog();
       } else {
-        setUserId((String)value);
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    case THIRD_USER:
+      if (value == null) {
+        unsetThirdUser();
+      } else {
+        setThirdUser((ThirdpartyUser)value);
       }
       break;
     }
@@ -11375,8 +12460,10 @@ public class SellerServ {
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case USER_ID:
-      return getUserId();
+    case LOGIN_LOG:
+      return getLoginLog();
+    case THIRD_USER:
+      return getThirdUser();
     }
     throw new IllegalStateException();
   }
@@ -11388,8 +12475,10 @@ public class SellerServ {
     }
 
     switch (field) {
-    case USER_ID:
-      return isSetUserId();
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    case THIRD_USER:
+      return isSetThirdUser();
     }
     throw new IllegalStateException();
   }
@@ -11398,20 +12487,28 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof deleteUserSellerRealByuserId_args)
-      return this.equals((deleteUserSellerRealByuserId_args)that);
+    if (that instanceof signinThirdParty_args)
+      return this.equals((signinThirdParty_args)that);
     return false;
   }
 
-  public boolean equals(deleteUserSellerRealByuserId_args that) {
+  public boolean equals(signinThirdParty_args that) {
     if (that == null)
       return false;
-    boolean this_present_userId = true && this.isSetUserId();
-    boolean that_present_userId = true && that.isSetUserId();
-    if (this_present_userId || that_present_userId) {
-      if (!(this_present_userId && that_present_userId))
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
         return false;
-      if (!this.userId.equals(that.userId))
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+    boolean this_present_thirdUser = true && this.isSetThirdUser();
+    boolean that_present_thirdUser = true && that.isSetThirdUser();
+    if (this_present_thirdUser || that_present_thirdUser) {
+      if (!(this_present_thirdUser && that_present_thirdUser))
+        return false;
+      if (!this.thirdUser.equals(that.thirdUser))
         return false;
     }
 
@@ -11421,27 +12518,41 @@ public class SellerServ {
   @Override
   public int hashCode() {
     HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_userId = true && (isSetUserId());
-    builder.append(present_userId);
-    if (present_userId)
-      builder.append(userId);
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    boolean present_thirdUser = true && (isSetThirdUser());
+    builder.append(present_thirdUser);
+    if (present_thirdUser)
+      builder.append(thirdUser);
     return builder.toHashCode();
   }
 
-  public int compareTo(deleteUserSellerRealByuserId_args other) {
+  public int compareTo(signinThirdParty_args other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    deleteUserSellerRealByuserId_args typedOther = (deleteUserSellerRealByuserId_args)other;
+    signinThirdParty_args typedOther = (signinThirdParty_args)other;
 
-    lastComparison = Boolean.valueOf(isSetUserId()).compareTo(typedOther.isSetUserId());
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetUserId()) {
-      lastComparison = TBaseHelper.compareTo(this.userId, typedOther.userId);
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetThirdUser()).compareTo(typedOther.isSetThirdUser());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetThirdUser()) {
+      lastComparison = TBaseHelper.compareTo(this.thirdUser, typedOther.thirdUser);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -11464,660 +12575,18 @@ public class SellerServ {
         break;
       }
       switch (field.id) {
-        case 1: // USER_ID
-          if (field.type == TType.STRING) {
-            this.userId = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    validate();
-    
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.userId != null) {
-      oprot.writeFieldBegin(USER_ID_FIELD_DESC);
-      oprot.writeString(this.userId);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("deleteUserSellerRealByuserId_args(");
-    boolean first = true;
-    sb.append("userId:");
-    if (this.userId == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.userId);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-  public static class deleteUserSellerRealByuserId_result implements TBase<deleteUserSellerRealByuserId_result, deleteUserSellerRealByuserId_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("deleteUserSellerRealByuserId_result");
-
-  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
-
-
-  public com.jfshare.finagle.thrift.result.Result success;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SUCCESS((short)0, "success");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 0: // SUCCESS
-  	return SUCCESS;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(deleteUserSellerRealByuserId_result.class, metaDataMap);
-  }
-
-
-  public deleteUserSellerRealByuserId_result() {
-  }
-
-  public deleteUserSellerRealByuserId_result(
-    com.jfshare.finagle.thrift.result.Result success)
-  {
-    this();
-    this.success = success;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public deleteUserSellerRealByuserId_result(deleteUserSellerRealByuserId_result other) {
-    if (other.isSetSuccess()) {
-      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
-    }
-  }
-
-  public deleteUserSellerRealByuserId_result deepCopy() {
-    return new deleteUserSellerRealByuserId_result(this);
-  }
-
-  @Override
-  public void clear() {
-    this.success = null;
-  }
-
-  public com.jfshare.finagle.thrift.result.Result getSuccess() {
-    return this.success;
-  }
-
-  public deleteUserSellerRealByuserId_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
-    this.success = success;
-    
-    return this;
-  }
-
-  public void unsetSuccess() {
-    this.success = null;
-  }
-
-  /** Returns true if field success is set (has been asigned a value) and false otherwise */
-  public boolean isSetSuccess() {
-    return this.success != null;
-  }
-
-  public void setSuccessIsSet(boolean value) {
-    if (!value) {
-      this.success = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SUCCESS:
-      return getSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SUCCESS:
-      return isSetSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof deleteUserSellerRealByuserId_result)
-      return this.equals((deleteUserSellerRealByuserId_result)that);
-    return false;
-  }
-
-  public boolean equals(deleteUserSellerRealByuserId_result that) {
-    if (that == null)
-      return false;
-    boolean this_present_success = true && this.isSetSuccess();
-    boolean that_present_success = true && that.isSetSuccess();
-    if (this_present_success || that_present_success) {
-      if (!(this_present_success && that_present_success))
-        return false;
-      if (!this.success.equals(that.success))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_success = true && (isSetSuccess());
-    builder.append(present_success);
-    if (present_success)
-      builder.append(success);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(deleteUserSellerRealByuserId_result other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    deleteUserSellerRealByuserId_result typedOther = (deleteUserSellerRealByuserId_result)other;
-
-    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSuccess()) {
-      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 0: // SUCCESS
+        case 1: // LOGIN_LOG
           if (field.type == TType.STRUCT) {
-            this.success = new com.jfshare.finagle.thrift.result.Result();
-            this.success.read(iprot);
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("deleteUserSellerRealByuserId_result(");
-    boolean first = true;
-    sb.append("success:");
-    if (this.success == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.success);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-
-  public static class querySellerVipList_args implements TBase<querySellerVipList_args, querySellerVipList_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("querySellerVipList_args");
-
-  private static final TField SELLER_ID_FIELD_DESC = new TField("sellerId", TType.STRING, (short)1);
-  private static final TField PAGINATION_FIELD_DESC = new TField("pagination", TType.STRUCT, (short)2);
-
-
-  public String sellerId;
-  public com.jfshare.finagle.thrift.pagination.Pagination pagination;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SELLER_ID((short)1, "sellerId"),
-    PAGINATION((short)2, "pagination");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 1: // SELLER_ID
-  	return SELLER_ID;
-        case 2: // PAGINATION
-  	return PAGINATION;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SELLER_ID, new FieldMetaData("sellerId", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.STRING)));
-    tmpMap.put(_Fields.PAGINATION, new FieldMetaData("pagination", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.pagination.Pagination.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(querySellerVipList_args.class, metaDataMap);
-  }
-
-
-  public querySellerVipList_args() {
-  }
-
-  public querySellerVipList_args(
-    String sellerId,
-    com.jfshare.finagle.thrift.pagination.Pagination pagination)
-  {
-    this();
-    this.sellerId = sellerId;
-    this.pagination = pagination;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public querySellerVipList_args(querySellerVipList_args other) {
-    if (other.isSetSellerId()) {
-      this.sellerId = other.sellerId;
-    }
-    if (other.isSetPagination()) {
-      this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination(other.pagination);
-    }
-  }
-
-  public querySellerVipList_args deepCopy() {
-    return new querySellerVipList_args(this);
-  }
-
-  @Override
-  public void clear() {
-    this.sellerId = null;
-    this.pagination = null;
-  }
-
-  public String getSellerId() {
-    return this.sellerId;
-  }
-
-  public querySellerVipList_args setSellerId(String sellerId) {
-    this.sellerId = sellerId;
-    
-    return this;
-  }
-
-  public void unsetSellerId() {
-    this.sellerId = null;
-  }
-
-  /** Returns true if field sellerId is set (has been asigned a value) and false otherwise */
-  public boolean isSetSellerId() {
-    return this.sellerId != null;
-  }
-
-  public void setSellerIdIsSet(boolean value) {
-    if (!value) {
-      this.sellerId = null;
-    }
-  }
-
-  public com.jfshare.finagle.thrift.pagination.Pagination getPagination() {
-    return this.pagination;
-  }
-
-  public querySellerVipList_args setPagination(com.jfshare.finagle.thrift.pagination.Pagination pagination) {
-    this.pagination = pagination;
-    
-    return this;
-  }
-
-  public void unsetPagination() {
-    this.pagination = null;
-  }
-
-  /** Returns true if field pagination is set (has been asigned a value) and false otherwise */
-  public boolean isSetPagination() {
-    return this.pagination != null;
-  }
-
-  public void setPaginationIsSet(boolean value) {
-    if (!value) {
-      this.pagination = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SELLER_ID:
-      if (value == null) {
-        unsetSellerId();
-      } else {
-        setSellerId((String)value);
-      }
-      break;
-    case PAGINATION:
-      if (value == null) {
-        unsetPagination();
-      } else {
-        setPagination((com.jfshare.finagle.thrift.pagination.Pagination)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SELLER_ID:
-      return getSellerId();
-    case PAGINATION:
-      return getPagination();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SELLER_ID:
-      return isSetSellerId();
-    case PAGINATION:
-      return isSetPagination();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof querySellerVipList_args)
-      return this.equals((querySellerVipList_args)that);
-    return false;
-  }
-
-  public boolean equals(querySellerVipList_args that) {
-    if (that == null)
-      return false;
-    boolean this_present_sellerId = true && this.isSetSellerId();
-    boolean that_present_sellerId = true && that.isSetSellerId();
-    if (this_present_sellerId || that_present_sellerId) {
-      if (!(this_present_sellerId && that_present_sellerId))
-        return false;
-      if (!this.sellerId.equals(that.sellerId))
-        return false;
-    }
-    boolean this_present_pagination = true && this.isSetPagination();
-    boolean that_present_pagination = true && that.isSetPagination();
-    if (this_present_pagination || that_present_pagination) {
-      if (!(this_present_pagination && that_present_pagination))
-        return false;
-      if (!this.pagination.equals(that.pagination))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_sellerId = true && (isSetSellerId());
-    builder.append(present_sellerId);
-    if (present_sellerId)
-      builder.append(sellerId);
-    boolean present_pagination = true && (isSetPagination());
-    builder.append(present_pagination);
-    if (present_pagination)
-      builder.append(pagination);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(querySellerVipList_args other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    querySellerVipList_args typedOther = (querySellerVipList_args)other;
-
-    lastComparison = Boolean.valueOf(isSetSellerId()).compareTo(typedOther.isSetSellerId());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSellerId()) {
-      lastComparison = TBaseHelper.compareTo(this.sellerId, typedOther.sellerId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetPagination()).compareTo(typedOther.isSetPagination());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetPagination()) {
-      lastComparison = TBaseHelper.compareTo(this.pagination, typedOther.pagination);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 1: // SELLER_ID
-          if (field.type == TType.STRING) {
-            this.sellerId = iprot.readString();
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 2: // PAGINATION
+        case 2: // THIRD_USER
           if (field.type == TType.STRUCT) {
-            this.pagination = new com.jfshare.finagle.thrift.pagination.Pagination();
-            this.pagination.read(iprot);
+            this.thirdUser = new ThirdpartyUser();
+            this.thirdUser.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -12137,14 +12606,14 @@ public class SellerServ {
     validate();
     
     oprot.writeStructBegin(STRUCT_DESC);
-    if (this.sellerId != null) {
-      oprot.writeFieldBegin(SELLER_ID_FIELD_DESC);
-      oprot.writeString(this.sellerId);
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (this.pagination != null) {
-      oprot.writeFieldBegin(PAGINATION_FIELD_DESC);
-      this.pagination.write(oprot);
+    if (this.thirdUser != null) {
+      oprot.writeFieldBegin(THIRD_USER_FIELD_DESC);
+      this.thirdUser.write(oprot);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -12153,21 +12622,21 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("querySellerVipList_args(");
+    StringBuilder sb = new StringBuilder("signinThirdParty_args(");
     boolean first = true;
-    sb.append("sellerId:");
-    if (this.sellerId == null) {
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
       sb.append("null");
     } else {
-      sb.append(this.sellerId);
+      sb.append(this.loginLog);
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("pagination:");
-    if (this.pagination == null) {
+    sb.append("thirdUser:");
+    if (this.thirdUser == null) {
       sb.append("null");
     } else {
-      sb.append(this.pagination);
+      sb.append(this.thirdUser);
     }
     first = false;
     sb.append(")");
@@ -12179,13 +12648,13 @@ public class SellerServ {
   }
 }
 
-  public static class querySellerVipList_result implements TBase<querySellerVipList_result, querySellerVipList_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("querySellerVipList_result");
+  public static class signinThirdParty_result implements TBase<signinThirdParty_result, signinThirdParty_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("signinThirdParty_result");
 
   private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
 
 
-  public SellerVipResult success;
+  public BuyerResult success;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -12252,17 +12721,17 @@ public class SellerServ {
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, SellerVipResult.class)));
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(querySellerVipList_result.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(signinThirdParty_result.class, metaDataMap);
   }
 
 
-  public querySellerVipList_result() {
+  public signinThirdParty_result() {
   }
 
-  public querySellerVipList_result(
-    SellerVipResult success)
+  public signinThirdParty_result(
+    BuyerResult success)
   {
     this();
     this.success = success;
@@ -12271,14 +12740,14 @@ public class SellerServ {
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public querySellerVipList_result(querySellerVipList_result other) {
+  public signinThirdParty_result(signinThirdParty_result other) {
     if (other.isSetSuccess()) {
-      this.success = new SellerVipResult(other.success);
+      this.success = new BuyerResult(other.success);
     }
   }
 
-  public querySellerVipList_result deepCopy() {
-    return new querySellerVipList_result(this);
+  public signinThirdParty_result deepCopy() {
+    return new signinThirdParty_result(this);
   }
 
   @Override
@@ -12286,11 +12755,11 @@ public class SellerServ {
     this.success = null;
   }
 
-  public SellerVipResult getSuccess() {
+  public BuyerResult getSuccess() {
     return this.success;
   }
 
-  public querySellerVipList_result setSuccess(SellerVipResult success) {
+  public signinThirdParty_result setSuccess(BuyerResult success) {
     this.success = success;
     
     return this;
@@ -12317,7 +12786,7 @@ public class SellerServ {
       if (value == null) {
         unsetSuccess();
       } else {
-        setSuccess((SellerVipResult)value);
+        setSuccess((BuyerResult)value);
       }
       break;
     }
@@ -12348,12 +12817,12 @@ public class SellerServ {
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof querySellerVipList_result)
-      return this.equals((querySellerVipList_result)that);
+    if (that instanceof signinThirdParty_result)
+      return this.equals((signinThirdParty_result)that);
     return false;
   }
 
-  public boolean equals(querySellerVipList_result that) {
+  public boolean equals(signinThirdParty_result that) {
     if (that == null)
       return false;
     boolean this_present_success = true && this.isSetSuccess();
@@ -12378,13 +12847,13 @@ public class SellerServ {
     return builder.toHashCode();
   }
 
-  public int compareTo(querySellerVipList_result other) {
+  public int compareTo(signinThirdParty_result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    querySellerVipList_result typedOther = (querySellerVipList_result)other;
+    signinThirdParty_result typedOther = (signinThirdParty_result)other;
 
     lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
     if (lastComparison != 0) {
@@ -12416,7 +12885,7 @@ public class SellerServ {
       switch (field.id) {
         case 0: // SUCCESS
           if (field.type == TType.STRUCT) {
-            this.success = new SellerVipResult();
+            this.success = new BuyerResult();
             this.success.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
@@ -12446,7 +12915,2093 @@ public class SellerServ {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("querySellerVipList_result(");
+    StringBuilder sb = new StringBuilder("signinThirdParty_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class isBindThirdParty_args implements TBase<isBindThirdParty_args, isBindThirdParty_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("isBindThirdParty_args");
+
+  private static final TField THIRD_TYPE_FIELD_DESC = new TField("thirdType", TType.STRING, (short)1);
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)2);
+
+
+  public String thirdType;
+  public LoginLog loginLog;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    THIRD_TYPE((short)1, "thirdType"),
+    LOGIN_LOG((short)2, "loginLog");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // THIRD_TYPE
+  	return THIRD_TYPE;
+        case 2: // LOGIN_LOG
+  	return LOGIN_LOG;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.THIRD_TYPE, new FieldMetaData("thirdType", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(isBindThirdParty_args.class, metaDataMap);
+  }
+
+
+  public isBindThirdParty_args() {
+  }
+
+  public isBindThirdParty_args(
+    String thirdType,
+    LoginLog loginLog)
+  {
+    this();
+    this.thirdType = thirdType;
+    this.loginLog = loginLog;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public isBindThirdParty_args(isBindThirdParty_args other) {
+    if (other.isSetThirdType()) {
+      this.thirdType = other.thirdType;
+    }
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+  }
+
+  public isBindThirdParty_args deepCopy() {
+    return new isBindThirdParty_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.thirdType = null;
+    this.loginLog = null;
+  }
+
+  public String getThirdType() {
+    return this.thirdType;
+  }
+
+  public isBindThirdParty_args setThirdType(String thirdType) {
+    this.thirdType = thirdType;
+    
+    return this;
+  }
+
+  public void unsetThirdType() {
+    this.thirdType = null;
+  }
+
+  /** Returns true if field thirdType is set (has been asigned a value) and false otherwise */
+  public boolean isSetThirdType() {
+    return this.thirdType != null;
+  }
+
+  public void setThirdTypeIsSet(boolean value) {
+    if (!value) {
+      this.thirdType = null;
+    }
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public isBindThirdParty_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case THIRD_TYPE:
+      if (value == null) {
+        unsetThirdType();
+      } else {
+        setThirdType((String)value);
+      }
+      break;
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case THIRD_TYPE:
+      return getThirdType();
+    case LOGIN_LOG:
+      return getLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case THIRD_TYPE:
+      return isSetThirdType();
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof isBindThirdParty_args)
+      return this.equals((isBindThirdParty_args)that);
+    return false;
+  }
+
+  public boolean equals(isBindThirdParty_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_thirdType = true && this.isSetThirdType();
+    boolean that_present_thirdType = true && that.isSetThirdType();
+    if (this_present_thirdType || that_present_thirdType) {
+      if (!(this_present_thirdType && that_present_thirdType))
+        return false;
+      if (!this.thirdType.equals(that.thirdType))
+        return false;
+    }
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_thirdType = true && (isSetThirdType());
+    builder.append(present_thirdType);
+    if (present_thirdType)
+      builder.append(thirdType);
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(isBindThirdParty_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    isBindThirdParty_args typedOther = (isBindThirdParty_args)other;
+
+    lastComparison = Boolean.valueOf(isSetThirdType()).compareTo(typedOther.isSetThirdType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetThirdType()) {
+      lastComparison = TBaseHelper.compareTo(this.thirdType, typedOther.thirdType);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // THIRD_TYPE
+          if (field.type == TType.STRING) {
+            this.thirdType = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.thirdType != null) {
+      oprot.writeFieldBegin(THIRD_TYPE_FIELD_DESC);
+      oprot.writeString(this.thirdType);
+      oprot.writeFieldEnd();
+    }
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("isBindThirdParty_args(");
+    boolean first = true;
+    sb.append("thirdType:");
+    if (this.thirdType == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.thirdType);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class isBindThirdParty_result implements TBase<isBindThirdParty_result, isBindThirdParty_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("isBindThirdParty_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BuyerResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BuyerResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(isBindThirdParty_result.class, metaDataMap);
+  }
+
+
+  public isBindThirdParty_result() {
+  }
+
+  public isBindThirdParty_result(
+    BuyerResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public isBindThirdParty_result(isBindThirdParty_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BuyerResult(other.success);
+    }
+  }
+
+  public isBindThirdParty_result deepCopy() {
+    return new isBindThirdParty_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BuyerResult getSuccess() {
+    return this.success;
+  }
+
+  public isBindThirdParty_result setSuccess(BuyerResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BuyerResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof isBindThirdParty_result)
+      return this.equals((isBindThirdParty_result)that);
+    return false;
+  }
+
+  public boolean equals(isBindThirdParty_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(isBindThirdParty_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    isBindThirdParty_result typedOther = (isBindThirdParty_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BuyerResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("isBindThirdParty_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class getAuthInfo_args implements TBase<getAuthInfo_args, getAuthInfo_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getAuthInfo_args");
+
+  private static final TField AUTH_INFO_FIELD_DESC = new TField("authInfo", TType.STRUCT, (short)1);
+  private static final TField BUYER_FIELD_DESC = new TField("buyer", TType.STRUCT, (short)2);
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)3);
+
+
+  public AuthInfo authInfo;
+  public Buyer buyer;
+  public LoginLog loginLog;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    AUTH_INFO((short)1, "authInfo"),
+    BUYER((short)2, "buyer"),
+    LOGIN_LOG((short)3, "loginLog");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // AUTH_INFO
+  	return AUTH_INFO;
+        case 2: // BUYER
+  	return BUYER;
+        case 3: // LOGIN_LOG
+  	return LOGIN_LOG;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.AUTH_INFO, new FieldMetaData("authInfo", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, AuthInfo.class)));
+    tmpMap.put(_Fields.BUYER, new FieldMetaData("buyer", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, Buyer.class)));
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getAuthInfo_args.class, metaDataMap);
+  }
+
+
+  public getAuthInfo_args() {
+  }
+
+  public getAuthInfo_args(
+    AuthInfo authInfo,
+    Buyer buyer,
+    LoginLog loginLog)
+  {
+    this();
+    this.authInfo = authInfo;
+    this.buyer = buyer;
+    this.loginLog = loginLog;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getAuthInfo_args(getAuthInfo_args other) {
+    if (other.isSetAuthInfo()) {
+      this.authInfo = new AuthInfo(other.authInfo);
+    }
+    if (other.isSetBuyer()) {
+      this.buyer = new Buyer(other.buyer);
+    }
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+  }
+
+  public getAuthInfo_args deepCopy() {
+    return new getAuthInfo_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.authInfo = null;
+    this.buyer = null;
+    this.loginLog = null;
+  }
+
+  public AuthInfo getAuthInfo() {
+    return this.authInfo;
+  }
+
+  public getAuthInfo_args setAuthInfo(AuthInfo authInfo) {
+    this.authInfo = authInfo;
+    
+    return this;
+  }
+
+  public void unsetAuthInfo() {
+    this.authInfo = null;
+  }
+
+  /** Returns true if field authInfo is set (has been asigned a value) and false otherwise */
+  public boolean isSetAuthInfo() {
+    return this.authInfo != null;
+  }
+
+  public void setAuthInfoIsSet(boolean value) {
+    if (!value) {
+      this.authInfo = null;
+    }
+  }
+
+  public Buyer getBuyer() {
+    return this.buyer;
+  }
+
+  public getAuthInfo_args setBuyer(Buyer buyer) {
+    this.buyer = buyer;
+    
+    return this;
+  }
+
+  public void unsetBuyer() {
+    this.buyer = null;
+  }
+
+  /** Returns true if field buyer is set (has been asigned a value) and false otherwise */
+  public boolean isSetBuyer() {
+    return this.buyer != null;
+  }
+
+  public void setBuyerIsSet(boolean value) {
+    if (!value) {
+      this.buyer = null;
+    }
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public getAuthInfo_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case AUTH_INFO:
+      if (value == null) {
+        unsetAuthInfo();
+      } else {
+        setAuthInfo((AuthInfo)value);
+      }
+      break;
+    case BUYER:
+      if (value == null) {
+        unsetBuyer();
+      } else {
+        setBuyer((Buyer)value);
+      }
+      break;
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case AUTH_INFO:
+      return getAuthInfo();
+    case BUYER:
+      return getBuyer();
+    case LOGIN_LOG:
+      return getLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case AUTH_INFO:
+      return isSetAuthInfo();
+    case BUYER:
+      return isSetBuyer();
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getAuthInfo_args)
+      return this.equals((getAuthInfo_args)that);
+    return false;
+  }
+
+  public boolean equals(getAuthInfo_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_authInfo = true && this.isSetAuthInfo();
+    boolean that_present_authInfo = true && that.isSetAuthInfo();
+    if (this_present_authInfo || that_present_authInfo) {
+      if (!(this_present_authInfo && that_present_authInfo))
+        return false;
+      if (!this.authInfo.equals(that.authInfo))
+        return false;
+    }
+    boolean this_present_buyer = true && this.isSetBuyer();
+    boolean that_present_buyer = true && that.isSetBuyer();
+    if (this_present_buyer || that_present_buyer) {
+      if (!(this_present_buyer && that_present_buyer))
+        return false;
+      if (!this.buyer.equals(that.buyer))
+        return false;
+    }
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_authInfo = true && (isSetAuthInfo());
+    builder.append(present_authInfo);
+    if (present_authInfo)
+      builder.append(authInfo);
+    boolean present_buyer = true && (isSetBuyer());
+    builder.append(present_buyer);
+    if (present_buyer)
+      builder.append(buyer);
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getAuthInfo_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getAuthInfo_args typedOther = (getAuthInfo_args)other;
+
+    lastComparison = Boolean.valueOf(isSetAuthInfo()).compareTo(typedOther.isSetAuthInfo());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAuthInfo()) {
+      lastComparison = TBaseHelper.compareTo(this.authInfo, typedOther.authInfo);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetBuyer()).compareTo(typedOther.isSetBuyer());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBuyer()) {
+      lastComparison = TBaseHelper.compareTo(this.buyer, typedOther.buyer);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // AUTH_INFO
+          if (field.type == TType.STRUCT) {
+            this.authInfo = new AuthInfo();
+            this.authInfo.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // BUYER
+          if (field.type == TType.STRUCT) {
+            this.buyer = new Buyer();
+            this.buyer.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 3: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.authInfo != null) {
+      oprot.writeFieldBegin(AUTH_INFO_FIELD_DESC);
+      this.authInfo.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.buyer != null) {
+      oprot.writeFieldBegin(BUYER_FIELD_DESC);
+      this.buyer.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getAuthInfo_args(");
+    boolean first = true;
+    sb.append("authInfo:");
+    if (this.authInfo == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.authInfo);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("buyer:");
+    if (this.buyer == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.buyer);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class getAuthInfo_result implements TBase<getAuthInfo_result, getAuthInfo_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("getAuthInfo_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public AuthInfoResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, AuthInfoResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(getAuthInfo_result.class, metaDataMap);
+  }
+
+
+  public getAuthInfo_result() {
+  }
+
+  public getAuthInfo_result(
+    AuthInfoResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public getAuthInfo_result(getAuthInfo_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new AuthInfoResult(other.success);
+    }
+  }
+
+  public getAuthInfo_result deepCopy() {
+    return new getAuthInfo_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public AuthInfoResult getSuccess() {
+    return this.success;
+  }
+
+  public getAuthInfo_result setSuccess(AuthInfoResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((AuthInfoResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof getAuthInfo_result)
+      return this.equals((getAuthInfo_result)that);
+    return false;
+  }
+
+  public boolean equals(getAuthInfo_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(getAuthInfo_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    getAuthInfo_result typedOther = (getAuthInfo_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new AuthInfoResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("getAuthInfo_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class validAuth_args implements TBase<validAuth_args, validAuth_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("validAuth_args");
+
+  private static final TField LOGIN_LOG_FIELD_DESC = new TField("loginLog", TType.STRUCT, (short)1);
+  private static final TField AUTH_INFO_FIELD_DESC = new TField("authInfo", TType.STRUCT, (short)2);
+
+
+  public LoginLog loginLog;
+  public AuthInfo authInfo;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    LOGIN_LOG((short)1, "loginLog"),
+    AUTH_INFO((short)2, "authInfo");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // LOGIN_LOG
+  	return LOGIN_LOG;
+        case 2: // AUTH_INFO
+  	return AUTH_INFO;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.LOGIN_LOG, new FieldMetaData("loginLog", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, LoginLog.class)));
+    tmpMap.put(_Fields.AUTH_INFO, new FieldMetaData("authInfo", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, AuthInfo.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(validAuth_args.class, metaDataMap);
+  }
+
+
+  public validAuth_args() {
+  }
+
+  public validAuth_args(
+    LoginLog loginLog,
+    AuthInfo authInfo)
+  {
+    this();
+    this.loginLog = loginLog;
+    this.authInfo = authInfo;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public validAuth_args(validAuth_args other) {
+    if (other.isSetLoginLog()) {
+      this.loginLog = new LoginLog(other.loginLog);
+    }
+    if (other.isSetAuthInfo()) {
+      this.authInfo = new AuthInfo(other.authInfo);
+    }
+  }
+
+  public validAuth_args deepCopy() {
+    return new validAuth_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.loginLog = null;
+    this.authInfo = null;
+  }
+
+  public LoginLog getLoginLog() {
+    return this.loginLog;
+  }
+
+  public validAuth_args setLoginLog(LoginLog loginLog) {
+    this.loginLog = loginLog;
+    
+    return this;
+  }
+
+  public void unsetLoginLog() {
+    this.loginLog = null;
+  }
+
+  /** Returns true if field loginLog is set (has been asigned a value) and false otherwise */
+  public boolean isSetLoginLog() {
+    return this.loginLog != null;
+  }
+
+  public void setLoginLogIsSet(boolean value) {
+    if (!value) {
+      this.loginLog = null;
+    }
+  }
+
+  public AuthInfo getAuthInfo() {
+    return this.authInfo;
+  }
+
+  public validAuth_args setAuthInfo(AuthInfo authInfo) {
+    this.authInfo = authInfo;
+    
+    return this;
+  }
+
+  public void unsetAuthInfo() {
+    this.authInfo = null;
+  }
+
+  /** Returns true if field authInfo is set (has been asigned a value) and false otherwise */
+  public boolean isSetAuthInfo() {
+    return this.authInfo != null;
+  }
+
+  public void setAuthInfoIsSet(boolean value) {
+    if (!value) {
+      this.authInfo = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case LOGIN_LOG:
+      if (value == null) {
+        unsetLoginLog();
+      } else {
+        setLoginLog((LoginLog)value);
+      }
+      break;
+    case AUTH_INFO:
+      if (value == null) {
+        unsetAuthInfo();
+      } else {
+        setAuthInfo((AuthInfo)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case LOGIN_LOG:
+      return getLoginLog();
+    case AUTH_INFO:
+      return getAuthInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case LOGIN_LOG:
+      return isSetLoginLog();
+    case AUTH_INFO:
+      return isSetAuthInfo();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof validAuth_args)
+      return this.equals((validAuth_args)that);
+    return false;
+  }
+
+  public boolean equals(validAuth_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_loginLog = true && this.isSetLoginLog();
+    boolean that_present_loginLog = true && that.isSetLoginLog();
+    if (this_present_loginLog || that_present_loginLog) {
+      if (!(this_present_loginLog && that_present_loginLog))
+        return false;
+      if (!this.loginLog.equals(that.loginLog))
+        return false;
+    }
+    boolean this_present_authInfo = true && this.isSetAuthInfo();
+    boolean that_present_authInfo = true && that.isSetAuthInfo();
+    if (this_present_authInfo || that_present_authInfo) {
+      if (!(this_present_authInfo && that_present_authInfo))
+        return false;
+      if (!this.authInfo.equals(that.authInfo))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_loginLog = true && (isSetLoginLog());
+    builder.append(present_loginLog);
+    if (present_loginLog)
+      builder.append(loginLog);
+    boolean present_authInfo = true && (isSetAuthInfo());
+    builder.append(present_authInfo);
+    if (present_authInfo)
+      builder.append(authInfo);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(validAuth_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    validAuth_args typedOther = (validAuth_args)other;
+
+    lastComparison = Boolean.valueOf(isSetLoginLog()).compareTo(typedOther.isSetLoginLog());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLoginLog()) {
+      lastComparison = TBaseHelper.compareTo(this.loginLog, typedOther.loginLog);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetAuthInfo()).compareTo(typedOther.isSetAuthInfo());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAuthInfo()) {
+      lastComparison = TBaseHelper.compareTo(this.authInfo, typedOther.authInfo);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // LOGIN_LOG
+          if (field.type == TType.STRUCT) {
+            this.loginLog = new LoginLog();
+            this.loginLog.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // AUTH_INFO
+          if (field.type == TType.STRUCT) {
+            this.authInfo = new AuthInfo();
+            this.authInfo.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.loginLog != null) {
+      oprot.writeFieldBegin(LOGIN_LOG_FIELD_DESC);
+      this.loginLog.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.authInfo != null) {
+      oprot.writeFieldBegin(AUTH_INFO_FIELD_DESC);
+      this.authInfo.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("validAuth_args(");
+    boolean first = true;
+    sb.append("loginLog:");
+    if (this.loginLog == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.loginLog);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("authInfo:");
+    if (this.authInfo == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.authInfo);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class validAuth_result implements TBase<validAuth_result, validAuth_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("validAuth_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(validAuth_result.class, metaDataMap);
+  }
+
+
+  public validAuth_result() {
+  }
+
+  public validAuth_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public validAuth_result(validAuth_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public validAuth_result deepCopy() {
+    return new validAuth_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public validAuth_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof validAuth_result)
+      return this.equals((validAuth_result)that);
+    return false;
+  }
+
+  public boolean equals(validAuth_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(validAuth_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    validAuth_result typedOther = (validAuth_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("validAuth_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {

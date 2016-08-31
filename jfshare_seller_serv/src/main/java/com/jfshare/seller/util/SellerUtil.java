@@ -14,6 +14,24 @@ public class SellerUtil {
         tbSeller.setSellerId(seller.getSellerId());
         tbSeller.setSellerName(seller.getSellerName());
         tbSeller.setLoginName(seller.getLoginName());
+        tbSeller.setAccountHolder(seller.getAccountHolder());
+        tbSeller.setAccountNumber(seller.getAccountNumber());
+        tbSeller.setAddress(seller.getAddress());
+        tbSeller.setCityid(seller.getCityId());
+        tbSeller.setCityname(seller.getCityName());
+        tbSeller.setCompanyName(seller.getCompanyName());
+        tbSeller.setContactName(seller.getContactName());
+        tbSeller.setCountyid(seller.getCountyId());
+        tbSeller.setCountyname(seller.getCountyName());
+        tbSeller.setOpenBank(seller.getOpenBank());
+        tbSeller.setProvinceid(seller.getProvinceId());
+        tbSeller.setProvincename(seller.getProvinceName());
+        tbSeller.setRemark(seller.getRemark());
+        tbSeller.setShopName(seller.getShopName());
+        tbSeller.setMobile(seller.getMobile());
+        tbSeller.setTel(seller.getTel());
+        tbSeller.setEmail(seller.getEmail());
+        
         if (!StringUtil.isNullOrEmpty(seller.getPwdEnc())) {
             tbSeller.setPwdEnc(CryptoUtil.encryptDBPwd(seller.getPwdEnc().trim()));
         }
@@ -26,6 +44,23 @@ public class SellerUtil {
             seller.setSellerId(tbSeller.getSellerId());
             seller.setSellerName(tbSeller.getSellerName());
             seller.setLoginName(tbSeller.getLoginName());
+            seller.setAccountHolder(tbSeller.getAccountHolder());
+            seller.setAccountNumber(tbSeller.getAccountNumber());
+            seller.setAddress(tbSeller.getAddress());
+            seller.setCityId(tbSeller.getCityid());
+            seller.setCityName(tbSeller.getCityname());
+            seller.setCompanyName(tbSeller.getCompanyName());
+            seller.setContactName(tbSeller.getContactName());
+            seller.setCountyId(tbSeller.getCountyid());
+            seller.setCountyName(tbSeller.getCountyname());
+            seller.setOpenBank(tbSeller.getOpenBank());
+            seller.setProvinceId(tbSeller.getProvinceid());
+            seller.setProvinceName(tbSeller.getProvincename());
+            seller.setRemark(tbSeller.getRemark());
+            seller.setShopName(tbSeller.getShopName());
+            seller.setMobile(tbSeller.getMobile());
+            seller.setTel(tbSeller.getTel());
+            seller.setEmail(tbSeller.getEmail());
         }
         return seller;
     }

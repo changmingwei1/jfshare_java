@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.Transaction;
 
 import javax.annotation.Resource;
@@ -35,8 +36,8 @@ import java.util.Set;
 public class SellerJedisImpl implements ISellerJedis {
 	private final static transient Logger logger = LoggerFactory.getLogger(SellerJedisImpl.class);
 	@Resource
-	private JedisPool jedisPool;
-	
+	//private JedisPool jedisPool;
+	private JedisSentinelPool jedisPool;
 	@Override
 	public int addOnline(TbSeller tbSeller, String sId) {
 		int ret = 0;

@@ -16,6 +16,7 @@ public class FailCode {
 
     public static FailDesc SYSTEM_EXCEPTION;
     public static FailDesc PARAM_ERROR;
+    public static FailDesc QUERY_EXCEPTION;
 
     static {
     	loginNameLen = new FailDesc("longName", "1000", "登录名长度限制");
@@ -26,6 +27,7 @@ public class FailCode {
 		loginNameHasExist = new FailDesc("longName", "1006", "用户名已存在");
 
         SYSTEM_EXCEPTION = new FailDesc("system", "2000", "系统异常");
+        QUERY_EXCEPTION = new FailDesc("system", "500", "系统异常");
         PARAM_ERROR = new FailDesc("param", "2001", "参数有误");
     }
 

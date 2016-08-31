@@ -23,7 +23,10 @@ public interface TbSellerMapper {
 
     @Insert({
         "insert into tb_seller (seller_id, login_name, ",
-        "seller_name, pwd_enc, ",
+        "seller_name, shop_name, ",
+        "company_name, contact_name, ",
+        "open_bank, account_holder, ",
+        "account_number, pwd_enc, ",
         "fav_img, state, birthday, ",
         "sex, id_card, mobile, ",
         "tel, email, provinceId, ",
@@ -34,7 +37,10 @@ public interface TbSellerMapper {
         "serial, create_time, ",
         "last_update_time)",
         "values (#{sellerId,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, ",
-        "#{sellerName,jdbcType=VARCHAR}, #{pwdEnc,jdbcType=VARCHAR}, ",
+        "#{sellerName,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, ",
+        "#{companyName,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, ",
+        "#{openBank,jdbcType=VARCHAR}, #{accountHolder,jdbcType=VARCHAR}, ",
+        "#{accountNumber,jdbcType=VARCHAR}, #{pwdEnc,jdbcType=VARCHAR}, ",
         "#{favImg,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{birthday,jdbcType=TIMESTAMP,typeHandler=com.jfshare.mybatis.typehandler.JodaDateTime2TimestampTypeHandler}, ",
         "#{sex,jdbcType=TINYINT}, #{idCard,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, ",
         "#{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{provinceid,jdbcType=INTEGER}, ",
@@ -53,9 +59,10 @@ public interface TbSellerMapper {
 
     @Select({
         "select",
-        "seller_id, login_name, seller_name, pwd_enc, fav_img, state, birthday, sex, ",
-        "id_card, mobile, tel, email, provinceId, provinceName, cityId, cityName, countyId, ",
-        "countyName, address, postCode, remark, serial, create_time, last_update_time",
+        "seller_id, login_name, seller_name, shop_name, company_name, contact_name, open_bank, ",
+        "account_holder, account_number, pwd_enc, fav_img, state, birthday, sex, id_card, ",
+        "mobile, tel, email, provinceId, provinceName, cityId, cityName, countyId, countyName, ",
+        "address, postCode, remark, serial, create_time, last_update_time",
         "from tb_seller",
         "where seller_id = #{sellerId,jdbcType=INTEGER}"
     })
@@ -72,6 +79,12 @@ public interface TbSellerMapper {
         "update tb_seller",
         "set login_name = #{loginName,jdbcType=VARCHAR},",
           "seller_name = #{sellerName,jdbcType=VARCHAR},",
+          "shop_name = #{shopName,jdbcType=VARCHAR},",
+          "company_name = #{companyName,jdbcType=VARCHAR},",
+          "contact_name = #{contactName,jdbcType=VARCHAR},",
+          "open_bank = #{openBank,jdbcType=VARCHAR},",
+          "account_holder = #{accountHolder,jdbcType=VARCHAR},",
+          "account_number = #{accountNumber,jdbcType=VARCHAR},",
           "pwd_enc = #{pwdEnc,jdbcType=VARCHAR},",
           "fav_img = #{favImg,jdbcType=VARCHAR},",
           "state = #{state,jdbcType=TINYINT},",

@@ -36,19 +36,73 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
   private static final TField LOGIN_NAME_FIELD_DESC = new TField("loginName", TType.STRING, (short)2);
   private static final TField SELLER_NAME_FIELD_DESC = new TField("sellerName", TType.STRING, (short)3);
   private static final TField PWD_ENC_FIELD_DESC = new TField("pwdEnc", TType.STRING, (short)4);
+  private static final TField COMPANY_NAME_FIELD_DESC = new TField("companyName", TType.STRING, (short)5);
+  private static final TField SHOP_NAME_FIELD_DESC = new TField("shopName", TType.STRING, (short)6);
+  private static final TField CONTACT_NAME_FIELD_DESC = new TField("contactName", TType.STRING, (short)7);
+  private static final TField OPEN_BANK_FIELD_DESC = new TField("openBank", TType.STRING, (short)8);
+  private static final TField ACCOUNT_HOLDER_FIELD_DESC = new TField("accountHolder", TType.STRING, (short)9);
+  private static final TField ACCOUNT_NUMBER_FIELD_DESC = new TField("accountNumber", TType.STRING, (short)10);
+  private static final TField REMARK_FIELD_DESC = new TField("remark", TType.STRING, (short)11);
+  private static final TField PROVINCE_ID_FIELD_DESC = new TField("provinceId", TType.I32, (short)12);
+  private static final TField PROVINCE_NAME_FIELD_DESC = new TField("provinceName", TType.STRING, (short)13);
+  private static final TField CITY_ID_FIELD_DESC = new TField("cityId", TType.I32, (short)14);
+  private static final TField CITY_NAME_FIELD_DESC = new TField("cityName", TType.STRING, (short)15);
+  private static final TField COUNTY_ID_FIELD_DESC = new TField("countyId", TType.I32, (short)16);
+  private static final TField COUNTY_NAME_FIELD_DESC = new TField("countyName", TType.STRING, (short)17);
+  private static final TField ADDRESS_FIELD_DESC = new TField("address", TType.STRING, (short)18);
+  private static final TField MOBILE_FIELD_DESC = new TField("mobile", TType.STRING, (short)19);
+  private static final TField TEL_FIELD_DESC = new TField("tel", TType.STRING, (short)20);
+  private static final TField EMAIL_FIELD_DESC = new TField("email", TType.STRING, (short)21);
+  private static final TField CREATE_TIME_FIELD_DESC = new TField("createTime", TType.STRING, (short)22);
 
 
   public int sellerId;
   public String loginName;
   public String sellerName;
   public String pwdEnc;
+  public String companyName;
+  public String shopName;
+  public String contactName;
+  public String openBank;
+  public String accountHolder;
+  public String accountNumber;
+  public String remark;
+  public int provinceId;
+  public String provinceName;
+  public int cityId;
+  public String cityName;
+  public int countyId;
+  public String countyName;
+  public String address;
+  public String mobile;
+  public String tel;
+  public String email;
+  public String createTime;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SELLER_ID((short)1, "sellerId"),
     LOGIN_NAME((short)2, "loginName"),
     SELLER_NAME((short)3, "sellerName"),
-    PWD_ENC((short)4, "pwdEnc");
+    PWD_ENC((short)4, "pwdEnc"),
+    COMPANY_NAME((short)5, "companyName"),
+    SHOP_NAME((short)6, "shopName"),
+    CONTACT_NAME((short)7, "contactName"),
+    OPEN_BANK((short)8, "openBank"),
+    ACCOUNT_HOLDER((short)9, "accountHolder"),
+    ACCOUNT_NUMBER((short)10, "accountNumber"),
+    REMARK((short)11, "remark"),
+    PROVINCE_ID((short)12, "provinceId"),
+    PROVINCE_NAME((short)13, "provinceName"),
+    CITY_ID((short)14, "cityId"),
+    CITY_NAME((short)15, "cityName"),
+    COUNTY_ID((short)16, "countyId"),
+    COUNTY_NAME((short)17, "countyName"),
+    ADDRESS((short)18, "address"),
+    MOBILE((short)19, "mobile"),
+    TEL((short)20, "tel"),
+    EMAIL((short)21, "email"),
+    CREATE_TIME((short)22, "createTime");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -71,6 +125,42 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
   	return SELLER_NAME;
         case 4: // PWD_ENC
   	return PWD_ENC;
+        case 5: // COMPANY_NAME
+  	return COMPANY_NAME;
+        case 6: // SHOP_NAME
+  	return SHOP_NAME;
+        case 7: // CONTACT_NAME
+  	return CONTACT_NAME;
+        case 8: // OPEN_BANK
+  	return OPEN_BANK;
+        case 9: // ACCOUNT_HOLDER
+  	return ACCOUNT_HOLDER;
+        case 10: // ACCOUNT_NUMBER
+  	return ACCOUNT_NUMBER;
+        case 11: // REMARK
+  	return REMARK;
+        case 12: // PROVINCE_ID
+  	return PROVINCE_ID;
+        case 13: // PROVINCE_NAME
+  	return PROVINCE_NAME;
+        case 14: // CITY_ID
+  	return CITY_ID;
+        case 15: // CITY_NAME
+  	return CITY_NAME;
+        case 16: // COUNTY_ID
+  	return COUNTY_ID;
+        case 17: // COUNTY_NAME
+  	return COUNTY_NAME;
+        case 18: // ADDRESS
+  	return ADDRESS;
+        case 19: // MOBILE
+  	return MOBILE;
+        case 20: // TEL
+  	return TEL;
+        case 21: // EMAIL
+  	return EMAIL;
+        case 22: // CREATE_TIME
+  	return CREATE_TIME;
         default:
   	return null;
       }
@@ -113,7 +203,10 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
 
   // isset id assignments
   private static final int __SELLERID_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
+  private static final int __PROVINCEID_ISSET_ID = 1;
+  private static final int __CITYID_ISSET_ID = 2;
+  private static final int __COUNTYID_ISSET_ID = 3;
+  private BitSet __isset_bit_vector = new BitSet(4);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -125,6 +218,42 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
     tmpMap.put(_Fields.SELLER_NAME, new FieldMetaData("sellerName", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.PWD_ENC, new FieldMetaData("pwdEnc", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.COMPANY_NAME, new FieldMetaData("companyName", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.SHOP_NAME, new FieldMetaData("shopName", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.CONTACT_NAME, new FieldMetaData("contactName", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.OPEN_BANK, new FieldMetaData("openBank", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.ACCOUNT_HOLDER, new FieldMetaData("accountHolder", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.ACCOUNT_NUMBER, new FieldMetaData("accountNumber", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.REMARK, new FieldMetaData("remark", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.PROVINCE_ID, new FieldMetaData("provinceId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.PROVINCE_NAME, new FieldMetaData("provinceName", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.CITY_ID, new FieldMetaData("cityId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.CITY_NAME, new FieldMetaData("cityName", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.COUNTY_ID, new FieldMetaData("countyId", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    tmpMap.put(_Fields.COUNTY_NAME, new FieldMetaData("countyName", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.ADDRESS, new FieldMetaData("address", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.MOBILE, new FieldMetaData("mobile", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.TEL, new FieldMetaData("tel", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.EMAIL, new FieldMetaData("email", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.CREATE_TIME, new FieldMetaData("createTime", TFieldRequirementType.DEFAULT,
       new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(Seller.class, metaDataMap);
@@ -138,7 +267,25 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
     int sellerId,
     String loginName,
     String sellerName,
-    String pwdEnc)
+    String pwdEnc,
+    String companyName,
+    String shopName,
+    String contactName,
+    String openBank,
+    String accountHolder,
+    String accountNumber,
+    String remark,
+    int provinceId,
+    String provinceName,
+    int cityId,
+    String cityName,
+    int countyId,
+    String countyName,
+    String address,
+    String mobile,
+    String tel,
+    String email,
+    String createTime)
   {
     this();
     this.sellerId = sellerId;
@@ -146,6 +293,27 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
     this.loginName = loginName;
     this.sellerName = sellerName;
     this.pwdEnc = pwdEnc;
+    this.companyName = companyName;
+    this.shopName = shopName;
+    this.contactName = contactName;
+    this.openBank = openBank;
+    this.accountHolder = accountHolder;
+    this.accountNumber = accountNumber;
+    this.remark = remark;
+    this.provinceId = provinceId;
+    setProvinceIdIsSet(true);
+    this.provinceName = provinceName;
+    this.cityId = cityId;
+    setCityIdIsSet(true);
+    this.cityName = cityName;
+    this.countyId = countyId;
+    setCountyIdIsSet(true);
+    this.countyName = countyName;
+    this.address = address;
+    this.mobile = mobile;
+    this.tel = tel;
+    this.email = email;
+    this.createTime = createTime;
   }
 
   /**
@@ -164,6 +332,54 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
     if (other.isSetPwdEnc()) {
       this.pwdEnc = other.pwdEnc;
     }
+    if (other.isSetCompanyName()) {
+      this.companyName = other.companyName;
+    }
+    if (other.isSetShopName()) {
+      this.shopName = other.shopName;
+    }
+    if (other.isSetContactName()) {
+      this.contactName = other.contactName;
+    }
+    if (other.isSetOpenBank()) {
+      this.openBank = other.openBank;
+    }
+    if (other.isSetAccountHolder()) {
+      this.accountHolder = other.accountHolder;
+    }
+    if (other.isSetAccountNumber()) {
+      this.accountNumber = other.accountNumber;
+    }
+    if (other.isSetRemark()) {
+      this.remark = other.remark;
+    }
+    this.provinceId = other.provinceId;
+    if (other.isSetProvinceName()) {
+      this.provinceName = other.provinceName;
+    }
+    this.cityId = other.cityId;
+    if (other.isSetCityName()) {
+      this.cityName = other.cityName;
+    }
+    this.countyId = other.countyId;
+    if (other.isSetCountyName()) {
+      this.countyName = other.countyName;
+    }
+    if (other.isSetAddress()) {
+      this.address = other.address;
+    }
+    if (other.isSetMobile()) {
+      this.mobile = other.mobile;
+    }
+    if (other.isSetTel()) {
+      this.tel = other.tel;
+    }
+    if (other.isSetEmail()) {
+      this.email = other.email;
+    }
+    if (other.isSetCreateTime()) {
+      this.createTime = other.createTime;
+    }
   }
 
   public Seller deepCopy() {
@@ -177,6 +393,27 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
     this.loginName = null;
     this.sellerName = null;
     this.pwdEnc = null;
+    this.companyName = null;
+    this.shopName = null;
+    this.contactName = null;
+    this.openBank = null;
+    this.accountHolder = null;
+    this.accountNumber = null;
+    this.remark = null;
+    setProvinceIdIsSet(false);
+    this.provinceId = 0;
+    this.provinceName = null;
+    setCityIdIsSet(false);
+    this.cityId = 0;
+    this.cityName = null;
+    setCountyIdIsSet(false);
+    this.countyId = 0;
+    this.countyName = null;
+    this.address = null;
+    this.mobile = null;
+    this.tel = null;
+    this.email = null;
+    this.createTime = null;
   }
 
   public int getSellerId() {
@@ -278,6 +515,453 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
     }
   }
 
+  public String getCompanyName() {
+    return this.companyName;
+  }
+
+  public Seller setCompanyName(String companyName) {
+    this.companyName = companyName;
+    
+    return this;
+  }
+
+  public void unsetCompanyName() {
+    this.companyName = null;
+  }
+
+  /** Returns true if field companyName is set (has been asigned a value) and false otherwise */
+  public boolean isSetCompanyName() {
+    return this.companyName != null;
+  }
+
+  public void setCompanyNameIsSet(boolean value) {
+    if (!value) {
+      this.companyName = null;
+    }
+  }
+
+  public String getShopName() {
+    return this.shopName;
+  }
+
+  public Seller setShopName(String shopName) {
+    this.shopName = shopName;
+    
+    return this;
+  }
+
+  public void unsetShopName() {
+    this.shopName = null;
+  }
+
+  /** Returns true if field shopName is set (has been asigned a value) and false otherwise */
+  public boolean isSetShopName() {
+    return this.shopName != null;
+  }
+
+  public void setShopNameIsSet(boolean value) {
+    if (!value) {
+      this.shopName = null;
+    }
+  }
+
+  public String getContactName() {
+    return this.contactName;
+  }
+
+  public Seller setContactName(String contactName) {
+    this.contactName = contactName;
+    
+    return this;
+  }
+
+  public void unsetContactName() {
+    this.contactName = null;
+  }
+
+  /** Returns true if field contactName is set (has been asigned a value) and false otherwise */
+  public boolean isSetContactName() {
+    return this.contactName != null;
+  }
+
+  public void setContactNameIsSet(boolean value) {
+    if (!value) {
+      this.contactName = null;
+    }
+  }
+
+  public String getOpenBank() {
+    return this.openBank;
+  }
+
+  public Seller setOpenBank(String openBank) {
+    this.openBank = openBank;
+    
+    return this;
+  }
+
+  public void unsetOpenBank() {
+    this.openBank = null;
+  }
+
+  /** Returns true if field openBank is set (has been asigned a value) and false otherwise */
+  public boolean isSetOpenBank() {
+    return this.openBank != null;
+  }
+
+  public void setOpenBankIsSet(boolean value) {
+    if (!value) {
+      this.openBank = null;
+    }
+  }
+
+  public String getAccountHolder() {
+    return this.accountHolder;
+  }
+
+  public Seller setAccountHolder(String accountHolder) {
+    this.accountHolder = accountHolder;
+    
+    return this;
+  }
+
+  public void unsetAccountHolder() {
+    this.accountHolder = null;
+  }
+
+  /** Returns true if field accountHolder is set (has been asigned a value) and false otherwise */
+  public boolean isSetAccountHolder() {
+    return this.accountHolder != null;
+  }
+
+  public void setAccountHolderIsSet(boolean value) {
+    if (!value) {
+      this.accountHolder = null;
+    }
+  }
+
+  public String getAccountNumber() {
+    return this.accountNumber;
+  }
+
+  public Seller setAccountNumber(String accountNumber) {
+    this.accountNumber = accountNumber;
+    
+    return this;
+  }
+
+  public void unsetAccountNumber() {
+    this.accountNumber = null;
+  }
+
+  /** Returns true if field accountNumber is set (has been asigned a value) and false otherwise */
+  public boolean isSetAccountNumber() {
+    return this.accountNumber != null;
+  }
+
+  public void setAccountNumberIsSet(boolean value) {
+    if (!value) {
+      this.accountNumber = null;
+    }
+  }
+
+  public String getRemark() {
+    return this.remark;
+  }
+
+  public Seller setRemark(String remark) {
+    this.remark = remark;
+    
+    return this;
+  }
+
+  public void unsetRemark() {
+    this.remark = null;
+  }
+
+  /** Returns true if field remark is set (has been asigned a value) and false otherwise */
+  public boolean isSetRemark() {
+    return this.remark != null;
+  }
+
+  public void setRemarkIsSet(boolean value) {
+    if (!value) {
+      this.remark = null;
+    }
+  }
+
+  public int getProvinceId() {
+    return this.provinceId;
+  }
+
+  public Seller setProvinceId(int provinceId) {
+    this.provinceId = provinceId;
+    setProvinceIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetProvinceId() {
+  __isset_bit_vector.clear(__PROVINCEID_ISSET_ID);
+  }
+
+  /** Returns true if field provinceId is set (has been asigned a value) and false otherwise */
+  public boolean isSetProvinceId() {
+    return __isset_bit_vector.get(__PROVINCEID_ISSET_ID);
+  }
+
+  public void setProvinceIdIsSet(boolean value) {
+    __isset_bit_vector.set(__PROVINCEID_ISSET_ID, value);
+  }
+
+  public String getProvinceName() {
+    return this.provinceName;
+  }
+
+  public Seller setProvinceName(String provinceName) {
+    this.provinceName = provinceName;
+    
+    return this;
+  }
+
+  public void unsetProvinceName() {
+    this.provinceName = null;
+  }
+
+  /** Returns true if field provinceName is set (has been asigned a value) and false otherwise */
+  public boolean isSetProvinceName() {
+    return this.provinceName != null;
+  }
+
+  public void setProvinceNameIsSet(boolean value) {
+    if (!value) {
+      this.provinceName = null;
+    }
+  }
+
+  public int getCityId() {
+    return this.cityId;
+  }
+
+  public Seller setCityId(int cityId) {
+    this.cityId = cityId;
+    setCityIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetCityId() {
+  __isset_bit_vector.clear(__CITYID_ISSET_ID);
+  }
+
+  /** Returns true if field cityId is set (has been asigned a value) and false otherwise */
+  public boolean isSetCityId() {
+    return __isset_bit_vector.get(__CITYID_ISSET_ID);
+  }
+
+  public void setCityIdIsSet(boolean value) {
+    __isset_bit_vector.set(__CITYID_ISSET_ID, value);
+  }
+
+  public String getCityName() {
+    return this.cityName;
+  }
+
+  public Seller setCityName(String cityName) {
+    this.cityName = cityName;
+    
+    return this;
+  }
+
+  public void unsetCityName() {
+    this.cityName = null;
+  }
+
+  /** Returns true if field cityName is set (has been asigned a value) and false otherwise */
+  public boolean isSetCityName() {
+    return this.cityName != null;
+  }
+
+  public void setCityNameIsSet(boolean value) {
+    if (!value) {
+      this.cityName = null;
+    }
+  }
+
+  public int getCountyId() {
+    return this.countyId;
+  }
+
+  public Seller setCountyId(int countyId) {
+    this.countyId = countyId;
+    setCountyIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetCountyId() {
+  __isset_bit_vector.clear(__COUNTYID_ISSET_ID);
+  }
+
+  /** Returns true if field countyId is set (has been asigned a value) and false otherwise */
+  public boolean isSetCountyId() {
+    return __isset_bit_vector.get(__COUNTYID_ISSET_ID);
+  }
+
+  public void setCountyIdIsSet(boolean value) {
+    __isset_bit_vector.set(__COUNTYID_ISSET_ID, value);
+  }
+
+  public String getCountyName() {
+    return this.countyName;
+  }
+
+  public Seller setCountyName(String countyName) {
+    this.countyName = countyName;
+    
+    return this;
+  }
+
+  public void unsetCountyName() {
+    this.countyName = null;
+  }
+
+  /** Returns true if field countyName is set (has been asigned a value) and false otherwise */
+  public boolean isSetCountyName() {
+    return this.countyName != null;
+  }
+
+  public void setCountyNameIsSet(boolean value) {
+    if (!value) {
+      this.countyName = null;
+    }
+  }
+
+  public String getAddress() {
+    return this.address;
+  }
+
+  public Seller setAddress(String address) {
+    this.address = address;
+    
+    return this;
+  }
+
+  public void unsetAddress() {
+    this.address = null;
+  }
+
+  /** Returns true if field address is set (has been asigned a value) and false otherwise */
+  public boolean isSetAddress() {
+    return this.address != null;
+  }
+
+  public void setAddressIsSet(boolean value) {
+    if (!value) {
+      this.address = null;
+    }
+  }
+
+  public String getMobile() {
+    return this.mobile;
+  }
+
+  public Seller setMobile(String mobile) {
+    this.mobile = mobile;
+    
+    return this;
+  }
+
+  public void unsetMobile() {
+    this.mobile = null;
+  }
+
+  /** Returns true if field mobile is set (has been asigned a value) and false otherwise */
+  public boolean isSetMobile() {
+    return this.mobile != null;
+  }
+
+  public void setMobileIsSet(boolean value) {
+    if (!value) {
+      this.mobile = null;
+    }
+  }
+
+  public String getTel() {
+    return this.tel;
+  }
+
+  public Seller setTel(String tel) {
+    this.tel = tel;
+    
+    return this;
+  }
+
+  public void unsetTel() {
+    this.tel = null;
+  }
+
+  /** Returns true if field tel is set (has been asigned a value) and false otherwise */
+  public boolean isSetTel() {
+    return this.tel != null;
+  }
+
+  public void setTelIsSet(boolean value) {
+    if (!value) {
+      this.tel = null;
+    }
+  }
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public Seller setEmail(String email) {
+    this.email = email;
+    
+    return this;
+  }
+
+  public void unsetEmail() {
+    this.email = null;
+  }
+
+  /** Returns true if field email is set (has been asigned a value) and false otherwise */
+  public boolean isSetEmail() {
+    return this.email != null;
+  }
+
+  public void setEmailIsSet(boolean value) {
+    if (!value) {
+      this.email = null;
+    }
+  }
+
+  public String getCreateTime() {
+    return this.createTime;
+  }
+
+  public Seller setCreateTime(String createTime) {
+    this.createTime = createTime;
+    
+    return this;
+  }
+
+  public void unsetCreateTime() {
+    this.createTime = null;
+  }
+
+  /** Returns true if field createTime is set (has been asigned a value) and false otherwise */
+  public boolean isSetCreateTime() {
+    return this.createTime != null;
+  }
+
+  public void setCreateTimeIsSet(boolean value) {
+    if (!value) {
+      this.createTime = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SELLER_ID:
@@ -308,6 +992,132 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
         setPwdEnc((String)value);
       }
       break;
+    case COMPANY_NAME:
+      if (value == null) {
+        unsetCompanyName();
+      } else {
+        setCompanyName((String)value);
+      }
+      break;
+    case SHOP_NAME:
+      if (value == null) {
+        unsetShopName();
+      } else {
+        setShopName((String)value);
+      }
+      break;
+    case CONTACT_NAME:
+      if (value == null) {
+        unsetContactName();
+      } else {
+        setContactName((String)value);
+      }
+      break;
+    case OPEN_BANK:
+      if (value == null) {
+        unsetOpenBank();
+      } else {
+        setOpenBank((String)value);
+      }
+      break;
+    case ACCOUNT_HOLDER:
+      if (value == null) {
+        unsetAccountHolder();
+      } else {
+        setAccountHolder((String)value);
+      }
+      break;
+    case ACCOUNT_NUMBER:
+      if (value == null) {
+        unsetAccountNumber();
+      } else {
+        setAccountNumber((String)value);
+      }
+      break;
+    case REMARK:
+      if (value == null) {
+        unsetRemark();
+      } else {
+        setRemark((String)value);
+      }
+      break;
+    case PROVINCE_ID:
+      if (value == null) {
+        unsetProvinceId();
+      } else {
+        setProvinceId((Integer)value);
+      }
+      break;
+    case PROVINCE_NAME:
+      if (value == null) {
+        unsetProvinceName();
+      } else {
+        setProvinceName((String)value);
+      }
+      break;
+    case CITY_ID:
+      if (value == null) {
+        unsetCityId();
+      } else {
+        setCityId((Integer)value);
+      }
+      break;
+    case CITY_NAME:
+      if (value == null) {
+        unsetCityName();
+      } else {
+        setCityName((String)value);
+      }
+      break;
+    case COUNTY_ID:
+      if (value == null) {
+        unsetCountyId();
+      } else {
+        setCountyId((Integer)value);
+      }
+      break;
+    case COUNTY_NAME:
+      if (value == null) {
+        unsetCountyName();
+      } else {
+        setCountyName((String)value);
+      }
+      break;
+    case ADDRESS:
+      if (value == null) {
+        unsetAddress();
+      } else {
+        setAddress((String)value);
+      }
+      break;
+    case MOBILE:
+      if (value == null) {
+        unsetMobile();
+      } else {
+        setMobile((String)value);
+      }
+      break;
+    case TEL:
+      if (value == null) {
+        unsetTel();
+      } else {
+        setTel((String)value);
+      }
+      break;
+    case EMAIL:
+      if (value == null) {
+        unsetEmail();
+      } else {
+        setEmail((String)value);
+      }
+      break;
+    case CREATE_TIME:
+      if (value == null) {
+        unsetCreateTime();
+      } else {
+        setCreateTime((String)value);
+      }
+      break;
     }
   }
 
@@ -321,6 +1131,42 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
       return getSellerName();
     case PWD_ENC:
       return getPwdEnc();
+    case COMPANY_NAME:
+      return getCompanyName();
+    case SHOP_NAME:
+      return getShopName();
+    case CONTACT_NAME:
+      return getContactName();
+    case OPEN_BANK:
+      return getOpenBank();
+    case ACCOUNT_HOLDER:
+      return getAccountHolder();
+    case ACCOUNT_NUMBER:
+      return getAccountNumber();
+    case REMARK:
+      return getRemark();
+    case PROVINCE_ID:
+      return new Integer(getProvinceId());
+    case PROVINCE_NAME:
+      return getProvinceName();
+    case CITY_ID:
+      return new Integer(getCityId());
+    case CITY_NAME:
+      return getCityName();
+    case COUNTY_ID:
+      return new Integer(getCountyId());
+    case COUNTY_NAME:
+      return getCountyName();
+    case ADDRESS:
+      return getAddress();
+    case MOBILE:
+      return getMobile();
+    case TEL:
+      return getTel();
+    case EMAIL:
+      return getEmail();
+    case CREATE_TIME:
+      return getCreateTime();
     }
     throw new IllegalStateException();
   }
@@ -340,6 +1186,42 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
       return isSetSellerName();
     case PWD_ENC:
       return isSetPwdEnc();
+    case COMPANY_NAME:
+      return isSetCompanyName();
+    case SHOP_NAME:
+      return isSetShopName();
+    case CONTACT_NAME:
+      return isSetContactName();
+    case OPEN_BANK:
+      return isSetOpenBank();
+    case ACCOUNT_HOLDER:
+      return isSetAccountHolder();
+    case ACCOUNT_NUMBER:
+      return isSetAccountNumber();
+    case REMARK:
+      return isSetRemark();
+    case PROVINCE_ID:
+      return isSetProvinceId();
+    case PROVINCE_NAME:
+      return isSetProvinceName();
+    case CITY_ID:
+      return isSetCityId();
+    case CITY_NAME:
+      return isSetCityName();
+    case COUNTY_ID:
+      return isSetCountyId();
+    case COUNTY_NAME:
+      return isSetCountyName();
+    case ADDRESS:
+      return isSetAddress();
+    case MOBILE:
+      return isSetMobile();
+    case TEL:
+      return isSetTel();
+    case EMAIL:
+      return isSetEmail();
+    case CREATE_TIME:
+      return isSetCreateTime();
     }
     throw new IllegalStateException();
   }
@@ -388,6 +1270,150 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
       if (!this.pwdEnc.equals(that.pwdEnc))
         return false;
     }
+    boolean this_present_companyName = true && this.isSetCompanyName();
+    boolean that_present_companyName = true && that.isSetCompanyName();
+    if (this_present_companyName || that_present_companyName) {
+      if (!(this_present_companyName && that_present_companyName))
+        return false;
+      if (!this.companyName.equals(that.companyName))
+        return false;
+    }
+    boolean this_present_shopName = true && this.isSetShopName();
+    boolean that_present_shopName = true && that.isSetShopName();
+    if (this_present_shopName || that_present_shopName) {
+      if (!(this_present_shopName && that_present_shopName))
+        return false;
+      if (!this.shopName.equals(that.shopName))
+        return false;
+    }
+    boolean this_present_contactName = true && this.isSetContactName();
+    boolean that_present_contactName = true && that.isSetContactName();
+    if (this_present_contactName || that_present_contactName) {
+      if (!(this_present_contactName && that_present_contactName))
+        return false;
+      if (!this.contactName.equals(that.contactName))
+        return false;
+    }
+    boolean this_present_openBank = true && this.isSetOpenBank();
+    boolean that_present_openBank = true && that.isSetOpenBank();
+    if (this_present_openBank || that_present_openBank) {
+      if (!(this_present_openBank && that_present_openBank))
+        return false;
+      if (!this.openBank.equals(that.openBank))
+        return false;
+    }
+    boolean this_present_accountHolder = true && this.isSetAccountHolder();
+    boolean that_present_accountHolder = true && that.isSetAccountHolder();
+    if (this_present_accountHolder || that_present_accountHolder) {
+      if (!(this_present_accountHolder && that_present_accountHolder))
+        return false;
+      if (!this.accountHolder.equals(that.accountHolder))
+        return false;
+    }
+    boolean this_present_accountNumber = true && this.isSetAccountNumber();
+    boolean that_present_accountNumber = true && that.isSetAccountNumber();
+    if (this_present_accountNumber || that_present_accountNumber) {
+      if (!(this_present_accountNumber && that_present_accountNumber))
+        return false;
+      if (!this.accountNumber.equals(that.accountNumber))
+        return false;
+    }
+    boolean this_present_remark = true && this.isSetRemark();
+    boolean that_present_remark = true && that.isSetRemark();
+    if (this_present_remark || that_present_remark) {
+      if (!(this_present_remark && that_present_remark))
+        return false;
+      if (!this.remark.equals(that.remark))
+        return false;
+    }
+    boolean this_present_provinceId = true;
+    boolean that_present_provinceId = true;
+    if (this_present_provinceId || that_present_provinceId) {
+      if (!(this_present_provinceId && that_present_provinceId))
+        return false;
+      if (this.provinceId != that.provinceId)
+        return false;
+    }
+    boolean this_present_provinceName = true && this.isSetProvinceName();
+    boolean that_present_provinceName = true && that.isSetProvinceName();
+    if (this_present_provinceName || that_present_provinceName) {
+      if (!(this_present_provinceName && that_present_provinceName))
+        return false;
+      if (!this.provinceName.equals(that.provinceName))
+        return false;
+    }
+    boolean this_present_cityId = true;
+    boolean that_present_cityId = true;
+    if (this_present_cityId || that_present_cityId) {
+      if (!(this_present_cityId && that_present_cityId))
+        return false;
+      if (this.cityId != that.cityId)
+        return false;
+    }
+    boolean this_present_cityName = true && this.isSetCityName();
+    boolean that_present_cityName = true && that.isSetCityName();
+    if (this_present_cityName || that_present_cityName) {
+      if (!(this_present_cityName && that_present_cityName))
+        return false;
+      if (!this.cityName.equals(that.cityName))
+        return false;
+    }
+    boolean this_present_countyId = true;
+    boolean that_present_countyId = true;
+    if (this_present_countyId || that_present_countyId) {
+      if (!(this_present_countyId && that_present_countyId))
+        return false;
+      if (this.countyId != that.countyId)
+        return false;
+    }
+    boolean this_present_countyName = true && this.isSetCountyName();
+    boolean that_present_countyName = true && that.isSetCountyName();
+    if (this_present_countyName || that_present_countyName) {
+      if (!(this_present_countyName && that_present_countyName))
+        return false;
+      if (!this.countyName.equals(that.countyName))
+        return false;
+    }
+    boolean this_present_address = true && this.isSetAddress();
+    boolean that_present_address = true && that.isSetAddress();
+    if (this_present_address || that_present_address) {
+      if (!(this_present_address && that_present_address))
+        return false;
+      if (!this.address.equals(that.address))
+        return false;
+    }
+    boolean this_present_mobile = true && this.isSetMobile();
+    boolean that_present_mobile = true && that.isSetMobile();
+    if (this_present_mobile || that_present_mobile) {
+      if (!(this_present_mobile && that_present_mobile))
+        return false;
+      if (!this.mobile.equals(that.mobile))
+        return false;
+    }
+    boolean this_present_tel = true && this.isSetTel();
+    boolean that_present_tel = true && that.isSetTel();
+    if (this_present_tel || that_present_tel) {
+      if (!(this_present_tel && that_present_tel))
+        return false;
+      if (!this.tel.equals(that.tel))
+        return false;
+    }
+    boolean this_present_email = true && this.isSetEmail();
+    boolean that_present_email = true && that.isSetEmail();
+    if (this_present_email || that_present_email) {
+      if (!(this_present_email && that_present_email))
+        return false;
+      if (!this.email.equals(that.email))
+        return false;
+    }
+    boolean this_present_createTime = true && this.isSetCreateTime();
+    boolean that_present_createTime = true && that.isSetCreateTime();
+    if (this_present_createTime || that_present_createTime) {
+      if (!(this_present_createTime && that_present_createTime))
+        return false;
+      if (!this.createTime.equals(that.createTime))
+        return false;
+    }
 
     return true;
   }
@@ -411,6 +1437,78 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
     builder.append(present_pwdEnc);
     if (present_pwdEnc)
       builder.append(pwdEnc);
+    boolean present_companyName = true && (isSetCompanyName());
+    builder.append(present_companyName);
+    if (present_companyName)
+      builder.append(companyName);
+    boolean present_shopName = true && (isSetShopName());
+    builder.append(present_shopName);
+    if (present_shopName)
+      builder.append(shopName);
+    boolean present_contactName = true && (isSetContactName());
+    builder.append(present_contactName);
+    if (present_contactName)
+      builder.append(contactName);
+    boolean present_openBank = true && (isSetOpenBank());
+    builder.append(present_openBank);
+    if (present_openBank)
+      builder.append(openBank);
+    boolean present_accountHolder = true && (isSetAccountHolder());
+    builder.append(present_accountHolder);
+    if (present_accountHolder)
+      builder.append(accountHolder);
+    boolean present_accountNumber = true && (isSetAccountNumber());
+    builder.append(present_accountNumber);
+    if (present_accountNumber)
+      builder.append(accountNumber);
+    boolean present_remark = true && (isSetRemark());
+    builder.append(present_remark);
+    if (present_remark)
+      builder.append(remark);
+    boolean present_provinceId = true;
+    builder.append(present_provinceId);
+    if (present_provinceId)
+      builder.append(provinceId);
+    boolean present_provinceName = true && (isSetProvinceName());
+    builder.append(present_provinceName);
+    if (present_provinceName)
+      builder.append(provinceName);
+    boolean present_cityId = true;
+    builder.append(present_cityId);
+    if (present_cityId)
+      builder.append(cityId);
+    boolean present_cityName = true && (isSetCityName());
+    builder.append(present_cityName);
+    if (present_cityName)
+      builder.append(cityName);
+    boolean present_countyId = true;
+    builder.append(present_countyId);
+    if (present_countyId)
+      builder.append(countyId);
+    boolean present_countyName = true && (isSetCountyName());
+    builder.append(present_countyName);
+    if (present_countyName)
+      builder.append(countyName);
+    boolean present_address = true && (isSetAddress());
+    builder.append(present_address);
+    if (present_address)
+      builder.append(address);
+    boolean present_mobile = true && (isSetMobile());
+    builder.append(present_mobile);
+    if (present_mobile)
+      builder.append(mobile);
+    boolean present_tel = true && (isSetTel());
+    builder.append(present_tel);
+    if (present_tel)
+      builder.append(tel);
+    boolean present_email = true && (isSetEmail());
+    builder.append(present_email);
+    if (present_email)
+      builder.append(email);
+    boolean present_createTime = true && (isSetCreateTime());
+    builder.append(present_createTime);
+    if (present_createTime)
+      builder.append(createTime);
     return builder.toHashCode();
   }
 
@@ -462,6 +1560,186 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetCompanyName()).compareTo(typedOther.isSetCompanyName());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetCompanyName()) {
+      lastComparison = TBaseHelper.compareTo(this.companyName, typedOther.companyName);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetShopName()).compareTo(typedOther.isSetShopName());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetShopName()) {
+      lastComparison = TBaseHelper.compareTo(this.shopName, typedOther.shopName);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetContactName()).compareTo(typedOther.isSetContactName());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetContactName()) {
+      lastComparison = TBaseHelper.compareTo(this.contactName, typedOther.contactName);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetOpenBank()).compareTo(typedOther.isSetOpenBank());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOpenBank()) {
+      lastComparison = TBaseHelper.compareTo(this.openBank, typedOther.openBank);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetAccountHolder()).compareTo(typedOther.isSetAccountHolder());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAccountHolder()) {
+      lastComparison = TBaseHelper.compareTo(this.accountHolder, typedOther.accountHolder);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetAccountNumber()).compareTo(typedOther.isSetAccountNumber());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAccountNumber()) {
+      lastComparison = TBaseHelper.compareTo(this.accountNumber, typedOther.accountNumber);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetRemark()).compareTo(typedOther.isSetRemark());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetRemark()) {
+      lastComparison = TBaseHelper.compareTo(this.remark, typedOther.remark);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetProvinceId()).compareTo(typedOther.isSetProvinceId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetProvinceId()) {
+      lastComparison = TBaseHelper.compareTo(this.provinceId, typedOther.provinceId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetProvinceName()).compareTo(typedOther.isSetProvinceName());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetProvinceName()) {
+      lastComparison = TBaseHelper.compareTo(this.provinceName, typedOther.provinceName);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetCityId()).compareTo(typedOther.isSetCityId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetCityId()) {
+      lastComparison = TBaseHelper.compareTo(this.cityId, typedOther.cityId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetCityName()).compareTo(typedOther.isSetCityName());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetCityName()) {
+      lastComparison = TBaseHelper.compareTo(this.cityName, typedOther.cityName);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetCountyId()).compareTo(typedOther.isSetCountyId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetCountyId()) {
+      lastComparison = TBaseHelper.compareTo(this.countyId, typedOther.countyId);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetCountyName()).compareTo(typedOther.isSetCountyName());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetCountyName()) {
+      lastComparison = TBaseHelper.compareTo(this.countyName, typedOther.countyName);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetAddress()).compareTo(typedOther.isSetAddress());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetAddress()) {
+      lastComparison = TBaseHelper.compareTo(this.address, typedOther.address);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetMobile()).compareTo(typedOther.isSetMobile());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetMobile()) {
+      lastComparison = TBaseHelper.compareTo(this.mobile, typedOther.mobile);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetTel()).compareTo(typedOther.isSetTel());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetTel()) {
+      lastComparison = TBaseHelper.compareTo(this.tel, typedOther.tel);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetEmail()).compareTo(typedOther.isSetEmail());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetEmail()) {
+      lastComparison = TBaseHelper.compareTo(this.email, typedOther.email);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetCreateTime()).compareTo(typedOther.isSetCreateTime());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetCreateTime()) {
+      lastComparison = TBaseHelper.compareTo(this.createTime, typedOther.createTime);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -509,6 +1787,135 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 5: // COMPANY_NAME
+          if (field.type == TType.STRING) {
+            this.companyName = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 6: // SHOP_NAME
+          if (field.type == TType.STRING) {
+            this.shopName = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 7: // CONTACT_NAME
+          if (field.type == TType.STRING) {
+            this.contactName = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 8: // OPEN_BANK
+          if (field.type == TType.STRING) {
+            this.openBank = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 9: // ACCOUNT_HOLDER
+          if (field.type == TType.STRING) {
+            this.accountHolder = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 10: // ACCOUNT_NUMBER
+          if (field.type == TType.STRING) {
+            this.accountNumber = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 11: // REMARK
+          if (field.type == TType.STRING) {
+            this.remark = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 12: // PROVINCE_ID
+          if (field.type == TType.I32) {
+            this.provinceId = iprot.readI32();
+            setProvinceIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 13: // PROVINCE_NAME
+          if (field.type == TType.STRING) {
+            this.provinceName = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 14: // CITY_ID
+          if (field.type == TType.I32) {
+            this.cityId = iprot.readI32();
+            setCityIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 15: // CITY_NAME
+          if (field.type == TType.STRING) {
+            this.cityName = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 16: // COUNTY_ID
+          if (field.type == TType.I32) {
+            this.countyId = iprot.readI32();
+            setCountyIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 17: // COUNTY_NAME
+          if (field.type == TType.STRING) {
+            this.countyName = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 18: // ADDRESS
+          if (field.type == TType.STRING) {
+            this.address = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 19: // MOBILE
+          if (field.type == TType.STRING) {
+            this.mobile = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 20: // TEL
+          if (field.type == TType.STRING) {
+            this.tel = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 21: // EMAIL
+          if (field.type == TType.STRING) {
+            this.email = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 22: // CREATE_TIME
+          if (field.type == TType.STRING) {
+            this.createTime = iprot.readString();
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -540,6 +1947,90 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
     if (this.pwdEnc != null) {
       oprot.writeFieldBegin(PWD_ENC_FIELD_DESC);
       oprot.writeString(this.pwdEnc);
+      oprot.writeFieldEnd();
+    }
+    if (this.companyName != null) {
+      oprot.writeFieldBegin(COMPANY_NAME_FIELD_DESC);
+      oprot.writeString(this.companyName);
+      oprot.writeFieldEnd();
+    }
+    if (this.shopName != null) {
+      oprot.writeFieldBegin(SHOP_NAME_FIELD_DESC);
+      oprot.writeString(this.shopName);
+      oprot.writeFieldEnd();
+    }
+    if (this.contactName != null) {
+      oprot.writeFieldBegin(CONTACT_NAME_FIELD_DESC);
+      oprot.writeString(this.contactName);
+      oprot.writeFieldEnd();
+    }
+    if (this.openBank != null) {
+      oprot.writeFieldBegin(OPEN_BANK_FIELD_DESC);
+      oprot.writeString(this.openBank);
+      oprot.writeFieldEnd();
+    }
+    if (this.accountHolder != null) {
+      oprot.writeFieldBegin(ACCOUNT_HOLDER_FIELD_DESC);
+      oprot.writeString(this.accountHolder);
+      oprot.writeFieldEnd();
+    }
+    if (this.accountNumber != null) {
+      oprot.writeFieldBegin(ACCOUNT_NUMBER_FIELD_DESC);
+      oprot.writeString(this.accountNumber);
+      oprot.writeFieldEnd();
+    }
+    if (this.remark != null) {
+      oprot.writeFieldBegin(REMARK_FIELD_DESC);
+      oprot.writeString(this.remark);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldBegin(PROVINCE_ID_FIELD_DESC);
+    oprot.writeI32(this.provinceId);
+    oprot.writeFieldEnd();
+    if (this.provinceName != null) {
+      oprot.writeFieldBegin(PROVINCE_NAME_FIELD_DESC);
+      oprot.writeString(this.provinceName);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldBegin(CITY_ID_FIELD_DESC);
+    oprot.writeI32(this.cityId);
+    oprot.writeFieldEnd();
+    if (this.cityName != null) {
+      oprot.writeFieldBegin(CITY_NAME_FIELD_DESC);
+      oprot.writeString(this.cityName);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldBegin(COUNTY_ID_FIELD_DESC);
+    oprot.writeI32(this.countyId);
+    oprot.writeFieldEnd();
+    if (this.countyName != null) {
+      oprot.writeFieldBegin(COUNTY_NAME_FIELD_DESC);
+      oprot.writeString(this.countyName);
+      oprot.writeFieldEnd();
+    }
+    if (this.address != null) {
+      oprot.writeFieldBegin(ADDRESS_FIELD_DESC);
+      oprot.writeString(this.address);
+      oprot.writeFieldEnd();
+    }
+    if (this.mobile != null) {
+      oprot.writeFieldBegin(MOBILE_FIELD_DESC);
+      oprot.writeString(this.mobile);
+      oprot.writeFieldEnd();
+    }
+    if (this.tel != null) {
+      oprot.writeFieldBegin(TEL_FIELD_DESC);
+      oprot.writeString(this.tel);
+      oprot.writeFieldEnd();
+    }
+    if (this.email != null) {
+      oprot.writeFieldBegin(EMAIL_FIELD_DESC);
+      oprot.writeString(this.email);
+      oprot.writeFieldEnd();
+    }
+    if (this.createTime != null) {
+      oprot.writeFieldBegin(CREATE_TIME_FIELD_DESC);
+      oprot.writeString(this.createTime);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -575,6 +2066,138 @@ public class Seller implements TBase<Seller, Seller._Fields>, java.io.Serializab
       sb.append("null");
     } else {
       sb.append(this.pwdEnc);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("companyName:");
+    if (this.companyName == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.companyName);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("shopName:");
+    if (this.shopName == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.shopName);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("contactName:");
+    if (this.contactName == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.contactName);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("openBank:");
+    if (this.openBank == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.openBank);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("accountHolder:");
+    if (this.accountHolder == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.accountHolder);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("accountNumber:");
+    if (this.accountNumber == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.accountNumber);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("remark:");
+    if (this.remark == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.remark);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("provinceId:");
+    sb.append(this.provinceId);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("provinceName:");
+    if (this.provinceName == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.provinceName);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("cityId:");
+    sb.append(this.cityId);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("cityName:");
+    if (this.cityName == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.cityName);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("countyId:");
+    sb.append(this.countyId);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("countyName:");
+    if (this.countyName == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.countyName);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("address:");
+    if (this.address == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.address);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("mobile:");
+    if (this.mobile == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.mobile);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("tel:");
+    if (this.tel == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.tel);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("email:");
+    if (this.email == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.email);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("createTime:");
+    if (this.createTime == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.createTime);
     }
     first = false;
     sb.append(")");
