@@ -29,26 +29,20 @@ import org.apache.thrift.protocol.*;
 
 // No additional import required for struct/union.
 
-public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("BrandResult");
+public class BrandInfoResult implements TBase<BrandInfoResult, BrandInfoResult._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("BrandInfoResult");
 
   private static final TField RESULT_FIELD_DESC = new TField("result", TType.STRUCT, (short)1);
-  private static final TField TOTAL_FIELD_DESC = new TField("total", TType.I32, (short)2);
-  private static final TField PAGE_COUNT_FIELD_DESC = new TField("pageCount", TType.I32, (short)3);
-  private static final TField BRAND_INFO_FIELD_DESC = new TField("brandInfo", TType.LIST, (short)4);
+  private static final TField BRAND_INFO_FIELD_DESC = new TField("brandInfo", TType.STRUCT, (short)2);
 
 
   public com.jfshare.finagle.thrift.result.Result result;
-  public int total;
-  public int pageCount;
-  public List<BrandInfo> brandInfo;
+  public BrandInfo brandInfo;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     RESULT((short)1, "result"),
-    TOTAL((short)2, "total"),
-    PAGE_COUNT((short)3, "pageCount"),
-    BRAND_INFO((short)4, "brandInfo");
+    BRAND_INFO((short)2, "brandInfo");
   
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
   
@@ -65,11 +59,7 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
       switch(fieldId) {
         case 1: // RESULT
   	return RESULT;
-        case 2: // TOTAL
-  	return TOTAL;
-        case 3: // PAGE_COUNT
-  	return PAGE_COUNT;
-        case 4: // BRAND_INFO
+        case 2: // BRAND_INFO
   	return BRAND_INFO;
         default:
   	return null;
@@ -112,68 +102,50 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
 
 
   // isset id assignments
-  private static final int __TOTAL_ISSET_ID = 0;
-  private static final int __PAGECOUNT_ISSET_ID = 1;
-  private BitSet __isset_bit_vector = new BitSet(2);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.RESULT, new FieldMetaData("result", TFieldRequirementType.DEFAULT,
       new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    tmpMap.put(_Fields.TOTAL, new FieldMetaData("total", TFieldRequirementType.OPTIONAL,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.PAGE_COUNT, new FieldMetaData("pageCount", TFieldRequirementType.OPTIONAL,
-      new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.BRAND_INFO, new FieldMetaData("brandInfo", TFieldRequirementType.OPTIONAL,
-      new ListMetaData(TType.LIST,
-                new StructMetaData(TType.STRUCT, BrandInfo.class))));
+    tmpMap.put(_Fields.BRAND_INFO, new FieldMetaData("brandInfo", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BrandInfo.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(BrandResult.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(BrandInfoResult.class, metaDataMap);
   }
 
 
-  public BrandResult() {
+  public BrandInfoResult() {
   }
 
-  public BrandResult(
-    com.jfshare.finagle.thrift.result.Result result)
+  public BrandInfoResult(
+    com.jfshare.finagle.thrift.result.Result result,
+    BrandInfo brandInfo)
   {
     this();
     this.result = result;
+    this.brandInfo = brandInfo;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public BrandResult(BrandResult other) {
-    __isset_bit_vector.clear();
-    __isset_bit_vector.or(other.__isset_bit_vector);
+  public BrandInfoResult(BrandInfoResult other) {
     if (other.isSetResult()) {
       this.result = new com.jfshare.finagle.thrift.result.Result(other.result);
     }
-    this.total = other.total;
-    this.pageCount = other.pageCount;
     if (other.isSetBrandInfo()) {
-      List<BrandInfo> __this__brandInfo = new ArrayList<BrandInfo>();
-      for (BrandInfo other_element : other.brandInfo) {
-        __this__brandInfo.add(new BrandInfo(other_element));
-      }
-      this.brandInfo = __this__brandInfo;
+      this.brandInfo = new BrandInfo(other.brandInfo);
     }
   }
 
-  public BrandResult deepCopy() {
-    return new BrandResult(this);
+  public BrandInfoResult deepCopy() {
+    return new BrandInfoResult(this);
   }
 
   @Override
   public void clear() {
     this.result = null;
-    setTotalIsSet(false);
-    this.total = 0;
-    setPageCountIsSet(false);
-    this.pageCount = 0;
     this.brandInfo = null;
   }
 
@@ -181,7 +153,7 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
     return this.result;
   }
 
-  public BrandResult setResult(com.jfshare.finagle.thrift.result.Result result) {
+  public BrandInfoResult setResult(com.jfshare.finagle.thrift.result.Result result) {
     this.result = result;
     
     return this;
@@ -202,74 +174,11 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
     }
   }
 
-  public int getTotal() {
-    return this.total;
-  }
-
-  public BrandResult setTotal(int total) {
-    this.total = total;
-    setTotalIsSet(true);
-
-    return this;
-  }
-
-  public void unsetTotal() {
-  __isset_bit_vector.clear(__TOTAL_ISSET_ID);
-  }
-
-  /** Returns true if field total is set (has been asigned a value) and false otherwise */
-  public boolean isSetTotal() {
-    return __isset_bit_vector.get(__TOTAL_ISSET_ID);
-  }
-
-  public void setTotalIsSet(boolean value) {
-    __isset_bit_vector.set(__TOTAL_ISSET_ID, value);
-  }
-
-  public int getPageCount() {
-    return this.pageCount;
-  }
-
-  public BrandResult setPageCount(int pageCount) {
-    this.pageCount = pageCount;
-    setPageCountIsSet(true);
-
-    return this;
-  }
-
-  public void unsetPageCount() {
-  __isset_bit_vector.clear(__PAGECOUNT_ISSET_ID);
-  }
-
-  /** Returns true if field pageCount is set (has been asigned a value) and false otherwise */
-  public boolean isSetPageCount() {
-    return __isset_bit_vector.get(__PAGECOUNT_ISSET_ID);
-  }
-
-  public void setPageCountIsSet(boolean value) {
-    __isset_bit_vector.set(__PAGECOUNT_ISSET_ID, value);
-  }
-
-  public int getBrandInfoSize() {
-    return (this.brandInfo == null) ? 0 : this.brandInfo.size();
-  }
-
-  public java.util.Iterator<BrandInfo> getBrandInfoIterator() {
-    return (this.brandInfo == null) ? null : this.brandInfo.iterator();
-  }
-
-  public void addToBrandInfo(BrandInfo elem) {
-    if (this.brandInfo == null) {
-      this.brandInfo = new ArrayList<BrandInfo>();
-    }
-    this.brandInfo.add(elem);
-  }
-
-  public List<BrandInfo> getBrandInfo() {
+  public BrandInfo getBrandInfo() {
     return this.brandInfo;
   }
 
-  public BrandResult setBrandInfo(List<BrandInfo> brandInfo) {
+  public BrandInfoResult setBrandInfo(BrandInfo brandInfo) {
     this.brandInfo = brandInfo;
     
     return this;
@@ -299,25 +208,11 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
         setResult((com.jfshare.finagle.thrift.result.Result)value);
       }
       break;
-    case TOTAL:
-      if (value == null) {
-        unsetTotal();
-      } else {
-        setTotal((Integer)value);
-      }
-      break;
-    case PAGE_COUNT:
-      if (value == null) {
-        unsetPageCount();
-      } else {
-        setPageCount((Integer)value);
-      }
-      break;
     case BRAND_INFO:
       if (value == null) {
         unsetBrandInfo();
       } else {
-        setBrandInfo((List<BrandInfo>)value);
+        setBrandInfo((BrandInfo)value);
       }
       break;
     }
@@ -327,10 +222,6 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
     switch (field) {
     case RESULT:
       return getResult();
-    case TOTAL:
-      return new Integer(getTotal());
-    case PAGE_COUNT:
-      return new Integer(getPageCount());
     case BRAND_INFO:
       return getBrandInfo();
     }
@@ -346,10 +237,6 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
     switch (field) {
     case RESULT:
       return isSetResult();
-    case TOTAL:
-      return isSetTotal();
-    case PAGE_COUNT:
-      return isSetPageCount();
     case BRAND_INFO:
       return isSetBrandInfo();
     }
@@ -360,12 +247,12 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof BrandResult)
-      return this.equals((BrandResult)that);
+    if (that instanceof BrandInfoResult)
+      return this.equals((BrandInfoResult)that);
     return false;
   }
 
-  public boolean equals(BrandResult that) {
+  public boolean equals(BrandInfoResult that) {
     if (that == null)
       return false;
     boolean this_present_result = true && this.isSetResult();
@@ -374,22 +261,6 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
       if (!(this_present_result && that_present_result))
         return false;
       if (!this.result.equals(that.result))
-        return false;
-    }
-    boolean this_present_total = true && this.isSetTotal();
-    boolean that_present_total = true && that.isSetTotal();
-    if (this_present_total || that_present_total) {
-      if (!(this_present_total && that_present_total))
-        return false;
-      if (this.total != that.total)
-        return false;
-    }
-    boolean this_present_pageCount = true && this.isSetPageCount();
-    boolean that_present_pageCount = true && that.isSetPageCount();
-    if (this_present_pageCount || that_present_pageCount) {
-      if (!(this_present_pageCount && that_present_pageCount))
-        return false;
-      if (this.pageCount != that.pageCount)
         return false;
     }
     boolean this_present_brandInfo = true && this.isSetBrandInfo();
@@ -411,14 +282,6 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
     builder.append(present_result);
     if (present_result)
       builder.append(result);
-    boolean present_total = true && (isSetTotal());
-    builder.append(present_total);
-    if (present_total)
-      builder.append(total);
-    boolean present_pageCount = true && (isSetPageCount());
-    builder.append(present_pageCount);
-    if (present_pageCount)
-      builder.append(pageCount);
     boolean present_brandInfo = true && (isSetBrandInfo());
     builder.append(present_brandInfo);
     if (present_brandInfo)
@@ -426,13 +289,13 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
     return builder.toHashCode();
   }
 
-  public int compareTo(BrandResult other) {
+  public int compareTo(BrandInfoResult other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    BrandResult typedOther = (BrandResult)other;
+    BrandInfoResult typedOther = (BrandInfoResult)other;
 
     lastComparison = Boolean.valueOf(isSetResult()).compareTo(typedOther.isSetResult());
     if (lastComparison != 0) {
@@ -440,26 +303,6 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
     }
     if (isSetResult()) {
       lastComparison = TBaseHelper.compareTo(this.result, typedOther.result);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetTotal()).compareTo(typedOther.isSetTotal());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetTotal()) {
-      lastComparison = TBaseHelper.compareTo(this.total, typedOther.total);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetPageCount()).compareTo(typedOther.isSetPageCount());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetPageCount()) {
-      lastComparison = TBaseHelper.compareTo(this.pageCount, typedOther.pageCount);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -500,36 +343,10 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 2: // TOTAL
-          if (field.type == TType.I32) {
-            this.total = iprot.readI32();
-            setTotalIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 3: // PAGE_COUNT
-          if (field.type == TType.I32) {
-            this.pageCount = iprot.readI32();
-            setPageCountIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 4: // BRAND_INFO
-          if (field.type == TType.LIST) {
-            {
-            TList _list4 = iprot.readListBegin();
-            this.brandInfo = new ArrayList<BrandInfo>(_list4.size);
-            for (int _i5 = 0; _i5 < _list4.size; ++_i5)
-            {
-              BrandInfo _elem6;
-              _elem6 = new BrandInfo();
-              _elem6.read(iprot);
-              this.brandInfo.add(_elem6);
-            }
-            iprot.readListEnd();
-            }
+        case 2: // BRAND_INFO
+          if (field.type == TType.STRUCT) {
+            this.brandInfo = new BrandInfo();
+            this.brandInfo.read(iprot);
           } else {
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -554,29 +371,10 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
       this.result.write(oprot);
       oprot.writeFieldEnd();
     }
-    if (isSetTotal()) {
-      oprot.writeFieldBegin(TOTAL_FIELD_DESC);
-      oprot.writeI32(this.total);
-      oprot.writeFieldEnd();
-    }
-    if (isSetPageCount()) {
-      oprot.writeFieldBegin(PAGE_COUNT_FIELD_DESC);
-      oprot.writeI32(this.pageCount);
-      oprot.writeFieldEnd();
-    }
     if (this.brandInfo != null) {
-      if (isSetBrandInfo()) {
-        oprot.writeFieldBegin(BRAND_INFO_FIELD_DESC);
-        {
-          oprot.writeListBegin(new TList(TType.STRUCT, this.brandInfo.size()));
-          for (BrandInfo _iter7 : this.brandInfo)
-          {
-            _iter7.write(oprot);
-          }
-          oprot.writeListEnd();
-        }
-        oprot.writeFieldEnd();
-      }
+      oprot.writeFieldBegin(BRAND_INFO_FIELD_DESC);
+      this.brandInfo.write(oprot);
+      oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -584,7 +382,7 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("BrandResult(");
+    StringBuilder sb = new StringBuilder("BrandInfoResult(");
     boolean first = true;
     sb.append("result:");
     if (this.result == null) {
@@ -593,28 +391,14 @@ public class BrandResult implements TBase<BrandResult, BrandResult._Fields>, jav
       sb.append(this.result);
     }
     first = false;
-    if (isSetTotal()) {
-      if (!first) sb.append(", ");
-      sb.append("total:");
-      sb.append(this.total);
-      first = false;
-      }
-    if (isSetPageCount()) {
-      if (!first) sb.append(", ");
-      sb.append("pageCount:");
-      sb.append(this.pageCount);
-      first = false;
-      }
-    if (isSetBrandInfo()) {
-      if (!first) sb.append(", ");
-      sb.append("brandInfo:");
-      if (this.brandInfo == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.brandInfo);
-      }
-      first = false;
-      }
+    if (!first) sb.append(", ");
+    sb.append("brandInfo:");
+    if (this.brandInfo == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.brandInfo);
+    }
+    first = false;
     sb.append(")");
     return sb.toString();
   }

@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -10,10 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.jfshare.finagle.thrift.brand.BrandInfo;
 import com.jfshare.finagle.thrift.brand.BrandResult;
 import com.jfshare.finagle.thrift.brand.BrandServ;
-import com.jfshare.finagle.thrift.result.Result;
 
 
 public class Test_brand {
@@ -53,40 +48,48 @@ public class Test_brand {
 //    public void testM1() throws Exception {
 //        if (DO_IT == 0)
 //            return;
-//        
-// /*       BrandInfo info = new BrandInfo();
+        
+//        BrandInfo info = new BrandInfo();
 //        info.setCreateId(33);
 //        info.setName("hewei");
 //        info.setImgKey("heweikey");
-//        Result result = client.addBrand(info);
-//        System.out.print("返回码=" + result);*/
-//        
-///*        BrandInfo info = new BrandInfo();
+//        BrandInfoResult result = client.addBrand(info);
+//        System.out.print("返回码=" + result);
+        
+//        BrandInfo info = new BrandInfo();
 //        info.setId(834);
 //        info.setCreateId(33);
 //        info.setName("hewei");
 //        info.setImgKey("heweikey2");
 //        info.setLastUpdateId(22222);
 //        Result result = client.updateBrand(info);
-//        System.out.print("返回码=" + result);*/
-//        
-//        
-//        /*Result result = client.deleteBrand(833);
-//        System.out.print("返回码=" + result);*/
-//        
-//        BrandResult result = client.queryBySubject(3001);
 //        System.out.print("返回码=" + result);
-//
-////        QueryParam param = new QueryParam();
-//////        param.setId(1);
-////param.setPageSize(2);
-////        param.setCurPage(1);
-////        BrandResult ret = client.query();
-////        System.out.println("返回码="+ret);
-//
-///*        List<Integer> ids = new ArrayList<Integer>();
-//        ids.add(1);ids.add(2);
-//        BrandResult brandResult = client.queryBatch(ids);
-//        System.out.println("返回码="+brandResult);*/
+        
+        
+        /*Result result = client.deleteBrand(833);
+        System.out.print("返回码=" + result);*/
+        
+//       BrandResult result = client.queryBySubject(3650);
+//        System.out.print("返回码=" + result);
+        
+//        QueryParam param = new QueryParam();
+//        param.setCurPage(1);
+//        param.setPageSize(20);
+//        param.setPageSize(20);
+//        param.setName("ST");
+//        BrandResult result = client.queryByPage(param);
+//        System.out.print("返回码=" + result);
+
+//        QueryParam param = new QueryParam();
+////        param.setId(1);
+//param.setPageSize(2);
+//        param.setCurPage(1);
+//        BrandResult ret = client.query();
+//        System.out.println("返回码="+ret);
+
+/*        List<Integer> ids = new ArrayList<Integer>();
+        ids.add(1);ids.add(2);
+        BrandResult brandResult = client.queryBatch(ids);
+        System.out.println("返回码="+brandResult);*/
 //    }
 }

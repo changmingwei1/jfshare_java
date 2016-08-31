@@ -12,10 +12,14 @@ public interface IBrandDao {
     int queryCount(QueryParam param);
 
     List<TbBrand> queryByPage(QueryParam param);
+    
+    List<TbBrand> querySort();
 
     List<TbBrand> query();
 
     List<TbBrand> queryByIds(List<Integer> validIdList);
+    
+    int repeatName(String name);
     
     int addBrand(TbBrand brand);
     

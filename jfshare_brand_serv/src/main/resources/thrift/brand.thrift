@@ -32,21 +32,31 @@ struct BrandResult{
 	4:optional list<BrandInfo> brandInfo
 }
 
+struct BrandInfoResult{
+	1:result.Result result,
+	2:BrandInfo brandInfo
+}
 
+/**
+* 1.对于单个brand，需要在redis进行缓存，hash结构 key: 例如 brand:1
+* 2.修改和删除brand后，需要清除缓存
+* 3.获取brand先在缓存中获取，如果没有，将数据库中的数据加入缓存
+**/
 /*品牌*/
 service BrandServ {
+    /* 添加品牌 */
+	BrandInfoResult addBrand(1:BrandInfo brand);
+	/* 修改品牌 */
+	result.Result updateBrand(1:BrandInfo brand);
+	/* 删除品牌 */
+	result.Result deleteBrand(1:i32 id);
+
 	/*查询所有品牌*/
-  BrandResult query();
+    BrandResult query();
 	/*分页查询*/
 	BrandResult queryByPage(1:QueryParam param);
 	/*批量查询*/
-	BrandResult queryBatch(1:list<i32> idList); 
-	/*添加品牌*/
-	result.Result addBrand(1:BrandInfo brand);
-	/*删除品牌*/
-	result.Result deleteBrand(1:i32 id);
-	/*修改品牌*/
-	result.Result updateBrand(1:BrandInfo brand);
+	BrandResult queryBatch(1:list<i32> idList);
 	/*查询类目下的品牌*/
 	BrandResult queryBySubject(1:i32 id)
 }

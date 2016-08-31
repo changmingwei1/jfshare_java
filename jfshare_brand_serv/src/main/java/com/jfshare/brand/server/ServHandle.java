@@ -3,10 +3,12 @@ package com.jfshare.brand.server;
 import com.jfshare.brand.service.IBrandSvc;
 import com.jfshare.brand.util.FailCode;
 import com.jfshare.finagle.thrift.brand.BrandInfo;
+import com.jfshare.finagle.thrift.brand.BrandInfoResult;
 import com.jfshare.finagle.thrift.brand.BrandResult;
 import com.jfshare.finagle.thrift.brand.BrandServ;
 import com.jfshare.finagle.thrift.brand.QueryParam;
 import com.jfshare.finagle.thrift.result.Result;
+
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +70,6 @@ public class ServHandle implements BrandServ.Iface {
 			logger.error("分页查询品牌出错！params=" + param, e);
 			result.setCode(1);
 		}
-
 		return brandResult;
 	}
 
@@ -103,11 +104,13 @@ public class ServHandle implements BrandServ.Iface {
 	}
 
 	@Override
-	public Result addBrand(BrandInfo brand) throws TException {
+	public BrandInfoResult addBrand(BrandInfo brand) throws TException {
+		BrandInfoResult biResult = new BrandInfoResult();
 		Result result = new Result();
 		result.setCode(0);
+		biResult.setResult(result);
 		try {
-			int ret = brandSvcImpl.addBrand(brand);
+			int ret = brandSvcImpl.addBrand(brand,biResult);
 			if(ret!=0){
 				result.setCode(1);
 				logger.info("参数问题，添加品牌出错！");
@@ -116,7 +119,7 @@ public class ServHandle implements BrandServ.Iface {
 			logger.error("添加品牌出错！", e);
 			result.setCode(1);
 		}
-		return result;
+		return biResult;
 	}
 
 	

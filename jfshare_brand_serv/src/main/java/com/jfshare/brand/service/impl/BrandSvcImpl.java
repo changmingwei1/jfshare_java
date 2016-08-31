@@ -13,8 +13,10 @@ import com.jfshare.brand.dao.mysql.ISubjectBrandDao;
 import com.jfshare.brand.model.TbBrand;
 import com.jfshare.brand.model.TbSubjectBrandKey;
 import com.jfshare.finagle.thrift.brand.BrandInfo;
+import com.jfshare.finagle.thrift.brand.BrandInfoResult;
 import com.jfshare.finagle.thrift.brand.QueryParam;
 import com.jfshare.utils.BeanUtil;
+import com.jfshare.utils.DateUtils;
 
 /**
  * Created by lenovo on 2015/9/28.
@@ -25,6 +27,9 @@ public class BrandSvcImpl implements com.jfshare.brand.service.IBrandSvc {
     private IBrandDao brandDaoImpl;
     @Autowired
     private ISubjectBrandDao subjectBrandDaoImpl;
+    
+    private boolean usedRedis = true;
+    
     @Override
     public int queryCount(QueryParam param) {
         return brandDaoImpl.queryCount(param);
@@ -36,8 +41,19 @@ public class BrandSvcImpl implements com.jfshare.brand.service.IBrandSvc {
         List<TbBrand> tbBrands = brandDaoImpl.queryByPage(param);
         for(TbBrand item : tbBrands) {
             BrandInfo brandInfo = new BrandInfo();
-            Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
-            BeanUtil.fillBeanData(brandInfo, stringObjectMap);
+            brandInfo.setId(item.getId());
+            brandInfo.setName(item.getName());
+            brandInfo.setImgKey(item.getImgKey());
+            brandInfo.setUrl(item.getUrl());
+            brandInfo.setSerial(item.getSerial());
+            brandInfo.setRemark(item.getRemark());
+            brandInfo.setCreateTime(DateUtils.toDateTimeStr(item.getCreateTime()));
+            brandInfo.setCreateId(item.getCreateId());
+            brandInfo.setLastUpdateTime(DateUtils.toDateTimeStr(item.getLastUpdateTime()));
+            brandInfo.setLastUpdateId(item.getLastUpdateId());
+            brandInfo.setState(item.getState());       
+            //Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
+            //BeanUtil.fillBeanData(brandInfo, stringObjectMap);
             brandInfos.add(brandInfo);
         }
 
@@ -50,8 +66,19 @@ public class BrandSvcImpl implements com.jfshare.brand.service.IBrandSvc {
         List<TbBrand> tbBrands = brandDaoImpl.query();
         for(TbBrand item : tbBrands) {
             BrandInfo brandInfo = new BrandInfo();
-            Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
-            BeanUtil.fillBeanData(brandInfo, stringObjectMap);
+            brandInfo.setId(item.getId());
+            brandInfo.setName(item.getName());
+            brandInfo.setImgKey(item.getImgKey());
+            brandInfo.setUrl(item.getUrl());
+            brandInfo.setSerial(item.getSerial());
+            brandInfo.setRemark(item.getRemark());
+            brandInfo.setCreateTime(DateUtils.toDateTimeStr(item.getCreateTime()));
+            brandInfo.setCreateId(item.getCreateId());
+            brandInfo.setLastUpdateTime(DateUtils.toDateTimeStr(item.getLastUpdateTime()));
+            brandInfo.setLastUpdateId(item.getLastUpdateId());
+            brandInfo.setState(item.getState());      
+            //Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
+            //BeanUtil.fillBeanData(brandInfo, stringObjectMap);
             brandInfos.add(brandInfo);
         }
 
@@ -64,8 +91,19 @@ public class BrandSvcImpl implements com.jfshare.brand.service.IBrandSvc {
         List<TbBrand> tbBrands = brandDaoImpl.queryByIds(validIdList);
         for(TbBrand item : tbBrands) {
             BrandInfo brandInfo = new BrandInfo();
-            Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
-            BeanUtil.fillBeanData(brandInfo, stringObjectMap);
+            brandInfo.setId(item.getId());
+            brandInfo.setName(item.getName());
+            brandInfo.setImgKey(item.getImgKey());
+            brandInfo.setUrl(item.getUrl());
+            brandInfo.setSerial(item.getSerial());
+            brandInfo.setRemark(item.getRemark());
+            brandInfo.setCreateTime(DateUtils.toDateTimeStr(item.getCreateTime()));
+            brandInfo.setCreateId(item.getCreateId());
+            brandInfo.setLastUpdateTime(DateUtils.toDateTimeStr(item.getLastUpdateTime()));
+            brandInfo.setLastUpdateId(item.getLastUpdateId());
+            brandInfo.setState(item.getState());      
+            //Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
+            //BeanUtil.fillBeanData(brandInfo, stringObjectMap);
             brandInfos.add(brandInfo);
         }
 
@@ -73,7 +111,7 @@ public class BrandSvcImpl implements com.jfshare.brand.service.IBrandSvc {
     }
 
 	@Override
-	public int addBrand(BrandInfo brand) {
+	public int addBrand(BrandInfo brand,BrandInfoResult result) {
 		if(brand!=null){
 			if(brand.name.isEmpty()||brand.name.length()<=0){
 				return 1;
@@ -82,6 +120,11 @@ public class BrandSvcImpl implements com.jfshare.brand.service.IBrandSvc {
 			}else if(brand.createId<=0){
 				return 1;
 			}
+			
+			if(brandDaoImpl.repeatName(brand.name)==1){
+				return 1;
+			}
+			
 			TbBrand tbBrand = new TbBrand();
 			tbBrand.setName(brand.name);
 			tbBrand.setImgKey(brand.imgKey);
@@ -93,8 +136,23 @@ public class BrandSvcImpl implements com.jfshare.brand.service.IBrandSvc {
 			tbBrand.setLastUpdateTime(new Date());
 			tbBrand.setLastUpdateId(brand.lastUpdateId>0?brand.lastUpdateId:brand.createId);
 			tbBrand.setState(0);
-			
 			brandDaoImpl.addBrand(tbBrand);
+			
+			BrandInfo brandInfo = new BrandInfo();
+			brandInfo.setId(tbBrand.getId());
+            brandInfo.setName(tbBrand.getName());
+            brandInfo.setImgKey(tbBrand.getImgKey());
+            brandInfo.setUrl(tbBrand.getUrl());
+            brandInfo.setSerial(tbBrand.getSerial());
+            brandInfo.setRemark(tbBrand.getRemark());
+            brandInfo.setCreateTime(DateUtils.toDateTimeStr(tbBrand.getCreateTime()));
+            brandInfo.setCreateId(tbBrand.getCreateId());
+            brandInfo.setLastUpdateTime(DateUtils.toDateTimeStr(tbBrand.getLastUpdateTime()));
+            brandInfo.setLastUpdateId(tbBrand.getLastUpdateId());
+            brandInfo.setState(tbBrand.getState());      
+            //Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(tbBrand);
+            //BeanUtil.fillBeanData(brandInfo, stringObjectMap);
+            result.setBrandInfo(brandInfo);
 		}else{
 			return 1;
 		}
@@ -136,19 +194,34 @@ public class BrandSvcImpl implements com.jfshare.brand.service.IBrandSvc {
 	@Override
 	public List<BrandInfo> queryBySubject(int id) {
 		List<TbSubjectBrandKey> listKeys = subjectBrandDaoImpl.queryBySubjectId(id);
-		List<Integer> listintIntegers = new ArrayList<Integer>();
-		for(TbSubjectBrandKey key: listKeys){
-			listintIntegers.add(key.getBrandId());
+		if(listKeys!=null&&!listKeys.isEmpty()){
+			List<Integer> listintIntegers = new ArrayList<Integer>();
+			for(TbSubjectBrandKey key: listKeys){
+				listintIntegers.add(key.getBrandId());
+			}
+			List<BrandInfo> brandInfos = new ArrayList<BrandInfo>();
+			List<TbBrand> tbBrands = brandDaoImpl.queryByIds(listintIntegers);
+	        for(TbBrand item : tbBrands) {
+	            BrandInfo brandInfo = new BrandInfo();
+	            brandInfo.setId(item.getId());
+	            brandInfo.setName(item.getName());
+	            brandInfo.setImgKey(item.getImgKey());
+	            brandInfo.setUrl(item.getUrl());
+	            brandInfo.setSerial(item.getSerial());
+	            brandInfo.setRemark(item.getRemark());
+	            brandInfo.setCreateTime(DateUtils.toDateTimeStr(item.getCreateTime()));
+	            brandInfo.setCreateId(item.getCreateId());
+	            brandInfo.setLastUpdateTime(DateUtils.toDateTimeStr(item.getLastUpdateTime()));
+	            brandInfo.setLastUpdateId(item.getLastUpdateId());
+	            brandInfo.setState(item.getState());      
+	            //Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
+	            //BeanUtil.fillBeanData(brandInfo, stringObjectMap);
+	            brandInfos.add(brandInfo);
+	        }
+		    return brandInfos;
+		}else{
+			return null;
 		}
-		List<BrandInfo> brandInfos = new ArrayList<BrandInfo>();
-		List<TbBrand> tbBrands = brandDaoImpl.queryByIds(listintIntegers);
-        for(TbBrand item : tbBrands) {
-            BrandInfo brandInfo = new BrandInfo();
-            Map<String, Object> stringObjectMap = BeanUtil.transBean2Map(item);
-            BeanUtil.fillBeanData(brandInfo, stringObjectMap);
-            brandInfos.add(brandInfo);
-        }
-	    return brandInfos;
 	}
     
     

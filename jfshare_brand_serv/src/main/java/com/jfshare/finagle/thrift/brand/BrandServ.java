@@ -37,32 +37,32 @@ import com.twitter.finagle.thrift.ThriftClientRequest;
 
 public class BrandServ {
   public interface Iface {
+    public BrandInfoResult addBrand(BrandInfo brand) throws TException;
+    public com.jfshare.finagle.thrift.result.Result updateBrand(BrandInfo brand) throws TException;
+    public com.jfshare.finagle.thrift.result.Result deleteBrand(int id) throws TException;
     public BrandResult query() throws TException;
     public BrandResult queryByPage(QueryParam param) throws TException;
     public BrandResult queryBatch(List<Integer> idList) throws TException;
-    public com.jfshare.finagle.thrift.result.Result addBrand(BrandInfo brand) throws TException;
-    public com.jfshare.finagle.thrift.result.Result deleteBrand(int id) throws TException;
-    public com.jfshare.finagle.thrift.result.Result updateBrand(BrandInfo brand) throws TException;
     public BrandResult queryBySubject(int id) throws TException;
   }
 
   public interface AsyncIface {
+    public void addBrand(BrandInfo brand, AsyncMethodCallback<AsyncClient.addBrand_call> resultHandler) throws TException;
+    public void updateBrand(BrandInfo brand, AsyncMethodCallback<AsyncClient.updateBrand_call> resultHandler) throws TException;
+    public void deleteBrand(int id, AsyncMethodCallback<AsyncClient.deleteBrand_call> resultHandler) throws TException;
     public void query(AsyncMethodCallback<AsyncClient.query_call> resultHandler) throws TException;
     public void queryByPage(QueryParam param, AsyncMethodCallback<AsyncClient.queryByPage_call> resultHandler) throws TException;
     public void queryBatch(List<Integer> idList, AsyncMethodCallback<AsyncClient.queryBatch_call> resultHandler) throws TException;
-    public void addBrand(BrandInfo brand, AsyncMethodCallback<AsyncClient.addBrand_call> resultHandler) throws TException;
-    public void deleteBrand(int id, AsyncMethodCallback<AsyncClient.deleteBrand_call> resultHandler) throws TException;
-    public void updateBrand(BrandInfo brand, AsyncMethodCallback<AsyncClient.updateBrand_call> resultHandler) throws TException;
     public void queryBySubject(int id, AsyncMethodCallback<AsyncClient.queryBySubject_call> resultHandler) throws TException;
   }
 
   public interface ServiceIface {
+    public Future<BrandInfoResult> addBrand(BrandInfo brand);
+    public Future<com.jfshare.finagle.thrift.result.Result> updateBrand(BrandInfo brand);
+    public Future<com.jfshare.finagle.thrift.result.Result> deleteBrand(int id);
     public Future<BrandResult> query();
     public Future<BrandResult> queryByPage(QueryParam param);
     public Future<BrandResult> queryBatch(List<Integer> idList);
-    public Future<com.jfshare.finagle.thrift.result.Result> addBrand(BrandInfo brand);
-    public Future<com.jfshare.finagle.thrift.result.Result> deleteBrand(int id);
-    public Future<com.jfshare.finagle.thrift.result.Result> updateBrand(BrandInfo brand);
     public Future<BrandResult> queryBySubject(int id);
   }
 
@@ -103,6 +103,111 @@ public class BrandServ {
       return this.oprot_;
     }
 
+    public BrandInfoResult addBrand(BrandInfo brand) throws TException
+    {
+      send_addBrand(brand);
+      return recv_addBrand();
+    }
+
+    public void send_addBrand(BrandInfo brand) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("addBrand", TMessageType.CALL, ++seqid_));
+      addBrand_args args = new addBrand_args();
+      args.setBrand(brand);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public BrandInfoResult recv_addBrand() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "addBrand failed: out of sequence response");
+      }
+      addBrand_result result = new addBrand_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "addBrand failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result updateBrand(BrandInfo brand) throws TException
+    {
+      send_updateBrand(brand);
+      return recv_updateBrand();
+    }
+
+    public void send_updateBrand(BrandInfo brand) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("updateBrand", TMessageType.CALL, ++seqid_));
+      updateBrand_args args = new updateBrand_args();
+      args.setBrand(brand);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_updateBrand() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "updateBrand failed: out of sequence response");
+      }
+      updateBrand_result result = new updateBrand_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "updateBrand failed: unknown result");
+    }
+    public com.jfshare.finagle.thrift.result.Result deleteBrand(int id) throws TException
+    {
+      send_deleteBrand(id);
+      return recv_deleteBrand();
+    }
+
+    public void send_deleteBrand(int id) throws TException
+    {
+      oprot_.writeMessageBegin(new TMessage("deleteBrand", TMessageType.CALL, ++seqid_));
+      deleteBrand_args args = new deleteBrand_args();
+      args.setId(id);
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush();
+    }
+
+    public com.jfshare.finagle.thrift.result.Result recv_deleteBrand() throws TException
+    {
+      TMessage msg = iprot_.readMessageBegin();
+      if (msg.type == TMessageType.EXCEPTION) {
+        TApplicationException x = TApplicationException.read(iprot_);
+        iprot_.readMessageEnd();
+        throw x;
+      }
+      if (msg.seqid != seqid_) {
+        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "deleteBrand failed: out of sequence response");
+      }
+      deleteBrand_result result = new deleteBrand_result();
+      result.read(iprot_);
+      iprot_.readMessageEnd();
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new TApplicationException(TApplicationException.MISSING_RESULT, "deleteBrand failed: unknown result");
+    }
     public BrandResult query() throws TException
     {
       send_query();
@@ -207,111 +312,6 @@ public class BrandServ {
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "queryBatch failed: unknown result");
     }
-    public com.jfshare.finagle.thrift.result.Result addBrand(BrandInfo brand) throws TException
-    {
-      send_addBrand(brand);
-      return recv_addBrand();
-    }
-
-    public void send_addBrand(BrandInfo brand) throws TException
-    {
-      oprot_.writeMessageBegin(new TMessage("addBrand", TMessageType.CALL, ++seqid_));
-      addBrand_args args = new addBrand_args();
-      args.setBrand(brand);
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush();
-    }
-
-    public com.jfshare.finagle.thrift.result.Result recv_addBrand() throws TException
-    {
-      TMessage msg = iprot_.readMessageBegin();
-      if (msg.type == TMessageType.EXCEPTION) {
-        TApplicationException x = TApplicationException.read(iprot_);
-        iprot_.readMessageEnd();
-        throw x;
-      }
-      if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "addBrand failed: out of sequence response");
-      }
-      addBrand_result result = new addBrand_result();
-      result.read(iprot_);
-      iprot_.readMessageEnd();
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "addBrand failed: unknown result");
-    }
-    public com.jfshare.finagle.thrift.result.Result deleteBrand(int id) throws TException
-    {
-      send_deleteBrand(id);
-      return recv_deleteBrand();
-    }
-
-    public void send_deleteBrand(int id) throws TException
-    {
-      oprot_.writeMessageBegin(new TMessage("deleteBrand", TMessageType.CALL, ++seqid_));
-      deleteBrand_args args = new deleteBrand_args();
-      args.setId(id);
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush();
-    }
-
-    public com.jfshare.finagle.thrift.result.Result recv_deleteBrand() throws TException
-    {
-      TMessage msg = iprot_.readMessageBegin();
-      if (msg.type == TMessageType.EXCEPTION) {
-        TApplicationException x = TApplicationException.read(iprot_);
-        iprot_.readMessageEnd();
-        throw x;
-      }
-      if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "deleteBrand failed: out of sequence response");
-      }
-      deleteBrand_result result = new deleteBrand_result();
-      result.read(iprot_);
-      iprot_.readMessageEnd();
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "deleteBrand failed: unknown result");
-    }
-    public com.jfshare.finagle.thrift.result.Result updateBrand(BrandInfo brand) throws TException
-    {
-      send_updateBrand(brand);
-      return recv_updateBrand();
-    }
-
-    public void send_updateBrand(BrandInfo brand) throws TException
-    {
-      oprot_.writeMessageBegin(new TMessage("updateBrand", TMessageType.CALL, ++seqid_));
-      updateBrand_args args = new updateBrand_args();
-      args.setBrand(brand);
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush();
-    }
-
-    public com.jfshare.finagle.thrift.result.Result recv_updateBrand() throws TException
-    {
-      TMessage msg = iprot_.readMessageBegin();
-      if (msg.type == TMessageType.EXCEPTION) {
-        TApplicationException x = TApplicationException.read(iprot_);
-        iprot_.readMessageEnd();
-        throw x;
-      }
-      if (msg.seqid != seqid_) {
-        throw new TApplicationException(TApplicationException.BAD_SEQUENCE_ID, "updateBrand failed: out of sequence response");
-      }
-      updateBrand_result result = new updateBrand_result();
-      result.read(iprot_);
-      iprot_.readMessageEnd();
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new TApplicationException(TApplicationException.MISSING_RESULT, "updateBrand failed: unknown result");
-    }
     public BrandResult queryBySubject(int id) throws TException
     {
       send_queryBySubject(id);
@@ -366,6 +366,99 @@ public class BrandServ {
       super(protocolFactory, clientManager, transport);
     }
 
+    public void addBrand(BrandInfo brand, AsyncMethodCallback<addBrand_call> resultHandler) throws TException {
+      checkReady();
+      addBrand_call method_call = new addBrand_call(brand, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class addBrand_call extends TAsyncMethodCall {
+      private BrandInfo brand;
+
+      public addBrand_call(BrandInfo brand, AsyncMethodCallback<addBrand_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.brand = brand;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("addBrand", TMessageType.CALL, 0));
+        addBrand_args args = new addBrand_args();
+        args.setBrand(brand);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public BrandInfoResult getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_addBrand();
+      }
+     }
+    public void updateBrand(BrandInfo brand, AsyncMethodCallback<updateBrand_call> resultHandler) throws TException {
+      checkReady();
+      updateBrand_call method_call = new updateBrand_call(brand, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class updateBrand_call extends TAsyncMethodCall {
+      private BrandInfo brand;
+
+      public updateBrand_call(BrandInfo brand, AsyncMethodCallback<updateBrand_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.brand = brand;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("updateBrand", TMessageType.CALL, 0));
+        updateBrand_args args = new updateBrand_args();
+        args.setBrand(brand);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_updateBrand();
+      }
+     }
+    public void deleteBrand(int id, AsyncMethodCallback<deleteBrand_call> resultHandler) throws TException {
+      checkReady();
+      deleteBrand_call method_call = new deleteBrand_call(id, resultHandler, this, protocolFactory, transport);
+      manager.call(method_call);
+    }
+
+    public static class deleteBrand_call extends TAsyncMethodCall {
+      private int id;
+
+      public deleteBrand_call(int id, AsyncMethodCallback<deleteBrand_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.id = id;
+      }
+
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.CALL, 0));
+        deleteBrand_args args = new deleteBrand_args();
+        args.setId(id);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_deleteBrand();
+      }
+     }
     public void query(AsyncMethodCallback<query_call> resultHandler) throws TException {
       checkReady();
       query_call method_call = new query_call(resultHandler, this, protocolFactory, transport);
@@ -456,99 +549,6 @@ public class BrandServ {
         return (new Client(prot)).recv_queryBatch();
       }
      }
-    public void addBrand(BrandInfo brand, AsyncMethodCallback<addBrand_call> resultHandler) throws TException {
-      checkReady();
-      addBrand_call method_call = new addBrand_call(brand, resultHandler, this, protocolFactory, transport);
-      manager.call(method_call);
-    }
-
-    public static class addBrand_call extends TAsyncMethodCall {
-      private BrandInfo brand;
-
-      public addBrand_call(BrandInfo brand, AsyncMethodCallback<addBrand_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.brand = brand;
-      }
-
-      public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("addBrand", TMessageType.CALL, 0));
-        addBrand_args args = new addBrand_args();
-        args.setBrand(brand);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
-        if (getState() != State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
-        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_addBrand();
-      }
-     }
-    public void deleteBrand(int id, AsyncMethodCallback<deleteBrand_call> resultHandler) throws TException {
-      checkReady();
-      deleteBrand_call method_call = new deleteBrand_call(id, resultHandler, this, protocolFactory, transport);
-      manager.call(method_call);
-    }
-
-    public static class deleteBrand_call extends TAsyncMethodCall {
-      private int id;
-
-      public deleteBrand_call(int id, AsyncMethodCallback<deleteBrand_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.id = id;
-      }
-
-      public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.CALL, 0));
-        deleteBrand_args args = new deleteBrand_args();
-        args.setId(id);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
-        if (getState() != State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
-        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_deleteBrand();
-      }
-     }
-    public void updateBrand(BrandInfo brand, AsyncMethodCallback<updateBrand_call> resultHandler) throws TException {
-      checkReady();
-      updateBrand_call method_call = new updateBrand_call(brand, resultHandler, this, protocolFactory, transport);
-      manager.call(method_call);
-    }
-
-    public static class updateBrand_call extends TAsyncMethodCall {
-      private BrandInfo brand;
-
-      public updateBrand_call(BrandInfo brand, AsyncMethodCallback<updateBrand_call> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.brand = brand;
-      }
-
-      public void write_args(TProtocol prot) throws TException {
-        prot.writeMessageBegin(new TMessage("updateBrand", TMessageType.CALL, 0));
-        updateBrand_args args = new updateBrand_args();
-        args.setBrand(brand);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public com.jfshare.finagle.thrift.result.Result getResult() throws TException {
-        if (getState() != State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
-        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_updateBrand();
-      }
-     }
     public void queryBySubject(int id, AsyncMethodCallback<queryBySubject_call> resultHandler) throws TException {
       checkReady();
       queryBySubject_call method_call = new queryBySubject_call(id, resultHandler, this, protocolFactory, transport);
@@ -592,6 +592,96 @@ public class BrandServ {
       this.protocolFactory = protocolFactory;
     }
 
+    public Future<BrandInfoResult> addBrand(BrandInfo brand) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("addBrand", TMessageType.CALL, 0));
+        addBrand_args __args__ = new addBrand_args();
+        __args__.setBrand(brand);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<BrandInfoResult>>() {
+          public Future<BrandInfoResult> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_addBrand());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> updateBrand(BrandInfo brand) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("updateBrand", TMessageType.CALL, 0));
+        updateBrand_args __args__ = new updateBrand_args();
+        __args__.setBrand(brand);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_updateBrand());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
+    public Future<com.jfshare.finagle.thrift.result.Result> deleteBrand(int id) {
+      try {
+        // TODO: size
+        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
+        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
+        __prot__.writeMessageBegin(new TMessage("deleteBrand", TMessageType.CALL, 0));
+        deleteBrand_args __args__ = new deleteBrand_args();
+        __args__.setId(id);
+        __args__.write(__prot__);
+        __prot__.writeMessageEnd();
+
+
+        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
+        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
+        Future<byte[]> __done__ = this.service.apply(__request__);
+        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
+          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
+            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
+            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
+            try {
+              return Future.value((new Client(__prot__)).recv_deleteBrand());
+            } catch (Exception e) {
+              return Future.exception(e);
+            }
+          }
+        });
+      } catch (TException e) {
+        return Future.exception(e);
+      }
+    }
     public Future<BrandResult> query() {
       try {
         // TODO: size
@@ -681,96 +771,6 @@ public class BrandServ {
         return Future.exception(e);
       }
     }
-    public Future<com.jfshare.finagle.thrift.result.Result> addBrand(BrandInfo brand) {
-      try {
-        // TODO: size
-        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
-        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("addBrand", TMessageType.CALL, 0));
-        addBrand_args __args__ = new addBrand_args();
-        __args__.setBrand(brand);
-        __args__.write(__prot__);
-        __prot__.writeMessageEnd();
-
-
-        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
-        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
-        Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
-          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
-            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
-            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
-            try {
-              return Future.value((new Client(__prot__)).recv_addBrand());
-            } catch (Exception e) {
-              return Future.exception(e);
-            }
-          }
-        });
-      } catch (TException e) {
-        return Future.exception(e);
-      }
-    }
-    public Future<com.jfshare.finagle.thrift.result.Result> deleteBrand(int id) {
-      try {
-        // TODO: size
-        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
-        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("deleteBrand", TMessageType.CALL, 0));
-        deleteBrand_args __args__ = new deleteBrand_args();
-        __args__.setId(id);
-        __args__.write(__prot__);
-        __prot__.writeMessageEnd();
-
-
-        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
-        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
-        Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
-          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
-            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
-            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
-            try {
-              return Future.value((new Client(__prot__)).recv_deleteBrand());
-            } catch (Exception e) {
-              return Future.exception(e);
-            }
-          }
-        });
-      } catch (TException e) {
-        return Future.exception(e);
-      }
-    }
-    public Future<com.jfshare.finagle.thrift.result.Result> updateBrand(BrandInfo brand) {
-      try {
-        // TODO: size
-        TMemoryBuffer __memoryTransport__ = new TMemoryBuffer(512);
-        TProtocol __prot__ = this.protocolFactory.getProtocol(__memoryTransport__);
-        __prot__.writeMessageBegin(new TMessage("updateBrand", TMessageType.CALL, 0));
-        updateBrand_args __args__ = new updateBrand_args();
-        __args__.setBrand(brand);
-        __args__.write(__prot__);
-        __prot__.writeMessageEnd();
-
-
-        byte[] __buffer__ = Arrays.copyOfRange(__memoryTransport__.getArray(), 0, __memoryTransport__.length());
-        ThriftClientRequest __request__ = new ThriftClientRequest(__buffer__, false);
-        Future<byte[]> __done__ = this.service.apply(__request__);
-        return __done__.flatMap(new Function<byte[], Future<com.jfshare.finagle.thrift.result.Result>>() {
-          public Future<com.jfshare.finagle.thrift.result.Result> apply(byte[] __buffer__) {
-            TMemoryInputTransport __memoryTransport__ = new TMemoryInputTransport(__buffer__);
-            TProtocol __prot__ = ServiceToClient.this.protocolFactory.getProtocol(__memoryTransport__);
-            try {
-              return Future.value((new Client(__prot__)).recv_updateBrand());
-            } catch (Exception e) {
-              return Future.exception(e);
-            }
-          }
-        });
-      } catch (TException e) {
-        return Future.exception(e);
-      }
-    }
     public Future<BrandResult> queryBySubject(int id) {
       try {
         // TODO: size
@@ -808,12 +808,12 @@ public class BrandServ {
     public Processor(Iface iface)
     {
       iface_ = iface;
+      processMap_.put("addBrand", new addBrand());
+      processMap_.put("updateBrand", new updateBrand());
+      processMap_.put("deleteBrand", new deleteBrand());
       processMap_.put("query", new query());
       processMap_.put("queryByPage", new queryByPage());
       processMap_.put("queryBatch", new queryBatch());
-      processMap_.put("addBrand", new addBrand());
-      processMap_.put("deleteBrand", new deleteBrand());
-      processMap_.put("updateBrand", new updateBrand());
       processMap_.put("queryBySubject", new queryBySubject());
     }
 
@@ -842,6 +842,81 @@ public class BrandServ {
       return true;
     }
 
+    private class addBrand implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        addBrand_args args = new addBrand_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("addBrand", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        addBrand_result result = new addBrand_result();
+        result.success = iface_.addBrand(args.brand);
+        
+        oprot.writeMessageBegin(new TMessage("addBrand", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class updateBrand implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        updateBrand_args args = new updateBrand_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("updateBrand", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        updateBrand_result result = new updateBrand_result();
+        result.success = iface_.updateBrand(args.brand);
+        
+        oprot.writeMessageBegin(new TMessage("updateBrand", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
+    private class deleteBrand implements ProcessFunction {
+      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
+      {
+        deleteBrand_args args = new deleteBrand_args();
+        try {
+          args.read(iprot);
+        } catch (TProtocolException e) {
+          iprot.readMessageEnd();
+          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+          oprot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        iprot.readMessageEnd();
+        deleteBrand_result result = new deleteBrand_result();
+        result.success = iface_.deleteBrand(args.id);
+        
+        oprot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+    }
     private class query implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
@@ -917,81 +992,6 @@ public class BrandServ {
         oprot.getTransport().flush();
       }
     }
-    private class addBrand implements ProcessFunction {
-      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
-      {
-        addBrand_args args = new addBrand_args();
-        try {
-          args.read(iprot);
-        } catch (TProtocolException e) {
-          iprot.readMessageEnd();
-          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("addBrand", TMessageType.EXCEPTION, seqid));
-          x.write(oprot);
-          oprot.writeMessageEnd();
-          oprot.getTransport().flush();
-          return;
-        }
-        iprot.readMessageEnd();
-        addBrand_result result = new addBrand_result();
-        result.success = iface_.addBrand(args.brand);
-        
-        oprot.writeMessageBegin(new TMessage("addBrand", TMessageType.REPLY, seqid));
-        result.write(oprot);
-        oprot.writeMessageEnd();
-        oprot.getTransport().flush();
-      }
-    }
-    private class deleteBrand implements ProcessFunction {
-      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
-      {
-        deleteBrand_args args = new deleteBrand_args();
-        try {
-          args.read(iprot);
-        } catch (TProtocolException e) {
-          iprot.readMessageEnd();
-          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.EXCEPTION, seqid));
-          x.write(oprot);
-          oprot.writeMessageEnd();
-          oprot.getTransport().flush();
-          return;
-        }
-        iprot.readMessageEnd();
-        deleteBrand_result result = new deleteBrand_result();
-        result.success = iface_.deleteBrand(args.id);
-        
-        oprot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.REPLY, seqid));
-        result.write(oprot);
-        oprot.writeMessageEnd();
-        oprot.getTransport().flush();
-      }
-    }
-    private class updateBrand implements ProcessFunction {
-      public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
-      {
-        updateBrand_args args = new updateBrand_args();
-        try {
-          args.read(iprot);
-        } catch (TProtocolException e) {
-          iprot.readMessageEnd();
-          TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-          oprot.writeMessageBegin(new TMessage("updateBrand", TMessageType.EXCEPTION, seqid));
-          x.write(oprot);
-          oprot.writeMessageEnd();
-          oprot.getTransport().flush();
-          return;
-        }
-        iprot.readMessageEnd();
-        updateBrand_result result = new updateBrand_result();
-        result.success = iface_.updateBrand(args.brand);
-        
-        oprot.writeMessageBegin(new TMessage("updateBrand", TMessageType.REPLY, seqid));
-        result.write(oprot);
-        oprot.writeMessageEnd();
-        oprot.getTransport().flush();
-      }
-    }
     private class queryBySubject implements ProcessFunction {
       public void process(int seqid, TProtocol iprot, TProtocol oprot) throws TException
       {
@@ -1026,6 +1026,207 @@ public class BrandServ {
     public Service(final ServiceIface iface, final TProtocolFactory protocolFactory) {
       this.iface = iface;
       this.protocolFactory = protocolFactory;
+      functionMap.put("addBrand", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          addBrand_args args = new addBrand_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("addBrand", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<BrandInfoResult> future;
+          try {
+            future = iface.addBrand(args.brand);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<BrandInfoResult, Future<byte[]>>() {
+              public Future<byte[]> apply(BrandInfoResult value) {
+                addBrand_result result = new addBrand_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("addBrand", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("updateBrand", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          updateBrand_args args = new updateBrand_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("updateBrand", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.updateBrand(args.brand);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                updateBrand_result result = new updateBrand_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("updateBrand", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
+      functionMap.put("deleteBrand", new Function2<TProtocol, Integer, Future<byte[]>>() {
+        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
+          deleteBrand_args args = new deleteBrand_args();
+          try {
+            args.read(iprot);
+          } catch (TProtocolException e) {
+            try {
+              iprot.readMessageEnd();
+              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
+              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+              oprot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.EXCEPTION, seqid));
+              x.write(oprot);
+              oprot.writeMessageEnd();
+              oprot.getTransport().flush();
+              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
+              return Future.value(buffer);
+            } catch (Exception e1) {
+              return Future.exception(e1);
+            }
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+
+          try {
+            iprot.readMessageEnd();
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+          Future<com.jfshare.finagle.thrift.result.Result> future;
+          try {
+            future = iface.deleteBrand(args.id);
+          } catch (Exception e) {
+            future = Future.exception(e);
+          }
+
+          try {
+            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
+              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
+                deleteBrand_result result = new deleteBrand_result();
+                result.success = value;
+                result.setSuccessIsSet(true);
+
+                try {
+                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
+                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
+
+                  oprot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.REPLY, seqid));
+                  result.write(oprot);
+                  oprot.writeMessageEnd();
+
+                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
+                } catch (Exception e) {
+                  return Future.exception(e);
+                }
+              }
+            }).rescue(new Function<Throwable, Future<byte[]>>() {
+              public Future<byte[]> apply(Throwable t) {
+                return Future.exception(t);
+              }
+            });
+          } catch (Exception e) {
+            return Future.exception(e);
+          }
+        }
+      });
       functionMap.put("query", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
           query_args args = new query_args();
@@ -1227,207 +1428,6 @@ public class BrandServ {
           }
         }
       });
-      functionMap.put("addBrand", new Function2<TProtocol, Integer, Future<byte[]>>() {
-        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          addBrand_args args = new addBrand_args();
-          try {
-            args.read(iprot);
-          } catch (TProtocolException e) {
-            try {
-              iprot.readMessageEnd();
-              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-              oprot.writeMessageBegin(new TMessage("addBrand", TMessageType.EXCEPTION, seqid));
-              x.write(oprot);
-              oprot.writeMessageEnd();
-              oprot.getTransport().flush();
-              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
-              return Future.value(buffer);
-            } catch (Exception e1) {
-              return Future.exception(e1);
-            }
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-
-          try {
-            iprot.readMessageEnd();
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-          Future<com.jfshare.finagle.thrift.result.Result> future;
-          try {
-            future = iface.addBrand(args.brand);
-          } catch (Exception e) {
-            future = Future.exception(e);
-          }
-
-          try {
-            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
-              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                addBrand_result result = new addBrand_result();
-                result.success = value;
-                result.setSuccessIsSet(true);
-
-                try {
-                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-                  oprot.writeMessageBegin(new TMessage("addBrand", TMessageType.REPLY, seqid));
-                  result.write(oprot);
-                  oprot.writeMessageEnd();
-
-                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
-                } catch (Exception e) {
-                  return Future.exception(e);
-                }
-              }
-            }).rescue(new Function<Throwable, Future<byte[]>>() {
-              public Future<byte[]> apply(Throwable t) {
-                return Future.exception(t);
-              }
-            });
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-        }
-      });
-      functionMap.put("deleteBrand", new Function2<TProtocol, Integer, Future<byte[]>>() {
-        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          deleteBrand_args args = new deleteBrand_args();
-          try {
-            args.read(iprot);
-          } catch (TProtocolException e) {
-            try {
-              iprot.readMessageEnd();
-              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-              oprot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.EXCEPTION, seqid));
-              x.write(oprot);
-              oprot.writeMessageEnd();
-              oprot.getTransport().flush();
-              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
-              return Future.value(buffer);
-            } catch (Exception e1) {
-              return Future.exception(e1);
-            }
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-
-          try {
-            iprot.readMessageEnd();
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-          Future<com.jfshare.finagle.thrift.result.Result> future;
-          try {
-            future = iface.deleteBrand(args.id);
-          } catch (Exception e) {
-            future = Future.exception(e);
-          }
-
-          try {
-            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
-              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                deleteBrand_result result = new deleteBrand_result();
-                result.success = value;
-                result.setSuccessIsSet(true);
-
-                try {
-                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-                  oprot.writeMessageBegin(new TMessage("deleteBrand", TMessageType.REPLY, seqid));
-                  result.write(oprot);
-                  oprot.writeMessageEnd();
-
-                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
-                } catch (Exception e) {
-                  return Future.exception(e);
-                }
-              }
-            }).rescue(new Function<Throwable, Future<byte[]>>() {
-              public Future<byte[]> apply(Throwable t) {
-                return Future.exception(t);
-              }
-            });
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-        }
-      });
-      functionMap.put("updateBrand", new Function2<TProtocol, Integer, Future<byte[]>>() {
-        public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
-          updateBrand_args args = new updateBrand_args();
-          try {
-            args.read(iprot);
-          } catch (TProtocolException e) {
-            try {
-              iprot.readMessageEnd();
-              TApplicationException x = new TApplicationException(TApplicationException.PROTOCOL_ERROR, e.getMessage());
-              TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-              TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-              oprot.writeMessageBegin(new TMessage("updateBrand", TMessageType.EXCEPTION, seqid));
-              x.write(oprot);
-              oprot.writeMessageEnd();
-              oprot.getTransport().flush();
-              byte[] buffer = Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length());
-              return Future.value(buffer);
-            } catch (Exception e1) {
-              return Future.exception(e1);
-            }
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-
-          try {
-            iprot.readMessageEnd();
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-          Future<com.jfshare.finagle.thrift.result.Result> future;
-          try {
-            future = iface.updateBrand(args.brand);
-          } catch (Exception e) {
-            future = Future.exception(e);
-          }
-
-          try {
-            return future.flatMap(new Function<com.jfshare.finagle.thrift.result.Result, Future<byte[]>>() {
-              public Future<byte[]> apply(com.jfshare.finagle.thrift.result.Result value) {
-                updateBrand_result result = new updateBrand_result();
-                result.success = value;
-                result.setSuccessIsSet(true);
-
-                try {
-                  TMemoryBuffer memoryBuffer = new TMemoryBuffer(512);
-                  TProtocol oprot = protocolFactory.getProtocol(memoryBuffer);
-
-                  oprot.writeMessageBegin(new TMessage("updateBrand", TMessageType.REPLY, seqid));
-                  result.write(oprot);
-                  oprot.writeMessageEnd();
-
-                  return Future.value(Arrays.copyOfRange(memoryBuffer.getArray(), 0, memoryBuffer.length()));
-                } catch (Exception e) {
-                  return Future.exception(e);
-                }
-              }
-            }).rescue(new Function<Throwable, Future<byte[]>>() {
-              public Future<byte[]> apply(Throwable t) {
-                return Future.exception(t);
-              }
-            });
-          } catch (Exception e) {
-            return Future.exception(e);
-          }
-        }
-      });
       functionMap.put("queryBySubject", new Function2<TProtocol, Integer, Future<byte[]>>() {
         public Future<byte[]> apply(final TProtocol iprot, final Integer seqid) {
           queryBySubject_args args = new queryBySubject_args();
@@ -1529,6 +1529,1722 @@ public class BrandServ {
       return fn.apply(iprot, msg.seqid);
     }
   }
+
+  public static class addBrand_args implements TBase<addBrand_args, addBrand_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("addBrand_args");
+
+  private static final TField BRAND_FIELD_DESC = new TField("brand", TType.STRUCT, (short)1);
+
+
+  public BrandInfo brand;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    BRAND((short)1, "brand");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // BRAND
+  	return BRAND;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.BRAND, new FieldMetaData("brand", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BrandInfo.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(addBrand_args.class, metaDataMap);
+  }
+
+
+  public addBrand_args() {
+  }
+
+  public addBrand_args(
+    BrandInfo brand)
+  {
+    this();
+    this.brand = brand;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public addBrand_args(addBrand_args other) {
+    if (other.isSetBrand()) {
+      this.brand = new BrandInfo(other.brand);
+    }
+  }
+
+  public addBrand_args deepCopy() {
+    return new addBrand_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.brand = null;
+  }
+
+  public BrandInfo getBrand() {
+    return this.brand;
+  }
+
+  public addBrand_args setBrand(BrandInfo brand) {
+    this.brand = brand;
+    
+    return this;
+  }
+
+  public void unsetBrand() {
+    this.brand = null;
+  }
+
+  /** Returns true if field brand is set (has been asigned a value) and false otherwise */
+  public boolean isSetBrand() {
+    return this.brand != null;
+  }
+
+  public void setBrandIsSet(boolean value) {
+    if (!value) {
+      this.brand = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case BRAND:
+      if (value == null) {
+        unsetBrand();
+      } else {
+        setBrand((BrandInfo)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case BRAND:
+      return getBrand();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case BRAND:
+      return isSetBrand();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof addBrand_args)
+      return this.equals((addBrand_args)that);
+    return false;
+  }
+
+  public boolean equals(addBrand_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_brand = true && this.isSetBrand();
+    boolean that_present_brand = true && that.isSetBrand();
+    if (this_present_brand || that_present_brand) {
+      if (!(this_present_brand && that_present_brand))
+        return false;
+      if (!this.brand.equals(that.brand))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_brand = true && (isSetBrand());
+    builder.append(present_brand);
+    if (present_brand)
+      builder.append(brand);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(addBrand_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    addBrand_args typedOther = (addBrand_args)other;
+
+    lastComparison = Boolean.valueOf(isSetBrand()).compareTo(typedOther.isSetBrand());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBrand()) {
+      lastComparison = TBaseHelper.compareTo(this.brand, typedOther.brand);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // BRAND
+          if (field.type == TType.STRUCT) {
+            this.brand = new BrandInfo();
+            this.brand.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.brand != null) {
+      oprot.writeFieldBegin(BRAND_FIELD_DESC);
+      this.brand.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("addBrand_args(");
+    boolean first = true;
+    sb.append("brand:");
+    if (this.brand == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.brand);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class addBrand_result implements TBase<addBrand_result, addBrand_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("addBrand_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public BrandInfoResult success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BrandInfoResult.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(addBrand_result.class, metaDataMap);
+  }
+
+
+  public addBrand_result() {
+  }
+
+  public addBrand_result(
+    BrandInfoResult success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public addBrand_result(addBrand_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new BrandInfoResult(other.success);
+    }
+  }
+
+  public addBrand_result deepCopy() {
+    return new addBrand_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public BrandInfoResult getSuccess() {
+    return this.success;
+  }
+
+  public addBrand_result setSuccess(BrandInfoResult success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((BrandInfoResult)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof addBrand_result)
+      return this.equals((addBrand_result)that);
+    return false;
+  }
+
+  public boolean equals(addBrand_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(addBrand_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    addBrand_result typedOther = (addBrand_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new BrandInfoResult();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("addBrand_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class updateBrand_args implements TBase<updateBrand_args, updateBrand_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("updateBrand_args");
+
+  private static final TField BRAND_FIELD_DESC = new TField("brand", TType.STRUCT, (short)1);
+
+
+  public BrandInfo brand;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    BRAND((short)1, "brand");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // BRAND
+  	return BRAND;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.BRAND, new FieldMetaData("brand", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, BrandInfo.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(updateBrand_args.class, metaDataMap);
+  }
+
+
+  public updateBrand_args() {
+  }
+
+  public updateBrand_args(
+    BrandInfo brand)
+  {
+    this();
+    this.brand = brand;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public updateBrand_args(updateBrand_args other) {
+    if (other.isSetBrand()) {
+      this.brand = new BrandInfo(other.brand);
+    }
+  }
+
+  public updateBrand_args deepCopy() {
+    return new updateBrand_args(this);
+  }
+
+  @Override
+  public void clear() {
+    this.brand = null;
+  }
+
+  public BrandInfo getBrand() {
+    return this.brand;
+  }
+
+  public updateBrand_args setBrand(BrandInfo brand) {
+    this.brand = brand;
+    
+    return this;
+  }
+
+  public void unsetBrand() {
+    this.brand = null;
+  }
+
+  /** Returns true if field brand is set (has been asigned a value) and false otherwise */
+  public boolean isSetBrand() {
+    return this.brand != null;
+  }
+
+  public void setBrandIsSet(boolean value) {
+    if (!value) {
+      this.brand = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case BRAND:
+      if (value == null) {
+        unsetBrand();
+      } else {
+        setBrand((BrandInfo)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case BRAND:
+      return getBrand();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case BRAND:
+      return isSetBrand();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof updateBrand_args)
+      return this.equals((updateBrand_args)that);
+    return false;
+  }
+
+  public boolean equals(updateBrand_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_brand = true && this.isSetBrand();
+    boolean that_present_brand = true && that.isSetBrand();
+    if (this_present_brand || that_present_brand) {
+      if (!(this_present_brand && that_present_brand))
+        return false;
+      if (!this.brand.equals(that.brand))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_brand = true && (isSetBrand());
+    builder.append(present_brand);
+    if (present_brand)
+      builder.append(brand);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(updateBrand_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    updateBrand_args typedOther = (updateBrand_args)other;
+
+    lastComparison = Boolean.valueOf(isSetBrand()).compareTo(typedOther.isSetBrand());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBrand()) {
+      lastComparison = TBaseHelper.compareTo(this.brand, typedOther.brand);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // BRAND
+          if (field.type == TType.STRUCT) {
+            this.brand = new BrandInfo();
+            this.brand.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.brand != null) {
+      oprot.writeFieldBegin(BRAND_FIELD_DESC);
+      this.brand.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("updateBrand_args(");
+    boolean first = true;
+    sb.append("brand:");
+    if (this.brand == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.brand);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class updateBrand_result implements TBase<updateBrand_result, updateBrand_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("updateBrand_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(updateBrand_result.class, metaDataMap);
+  }
+
+
+  public updateBrand_result() {
+  }
+
+  public updateBrand_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public updateBrand_result(updateBrand_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public updateBrand_result deepCopy() {
+    return new updateBrand_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public updateBrand_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof updateBrand_result)
+      return this.equals((updateBrand_result)that);
+    return false;
+  }
+
+  public boolean equals(updateBrand_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(updateBrand_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    updateBrand_result typedOther = (updateBrand_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("updateBrand_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+
+  public static class deleteBrand_args implements TBase<deleteBrand_args, deleteBrand_args._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("deleteBrand_args");
+
+  private static final TField ID_FIELD_DESC = new TField("id", TType.I32, (short)1);
+
+
+  public int id;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    ID((short)1, "id");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 1: // ID
+  	return ID;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+  private static final int __ID_ISSET_ID = 0;
+  private BitSet __isset_bit_vector = new BitSet(1);
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.ID, new FieldMetaData("id", TFieldRequirementType.DEFAULT,
+      new FieldValueMetaData(TType.I32)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(deleteBrand_args.class, metaDataMap);
+  }
+
+
+  public deleteBrand_args() {
+  }
+
+  public deleteBrand_args(
+    int id)
+  {
+    this();
+    this.id = id;
+    setIdIsSet(true);
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public deleteBrand_args(deleteBrand_args other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
+    this.id = other.id;
+  }
+
+  public deleteBrand_args deepCopy() {
+    return new deleteBrand_args(this);
+  }
+
+  @Override
+  public void clear() {
+    setIdIsSet(false);
+    this.id = 0;
+  }
+
+  public int getId() {
+    return this.id;
+  }
+
+  public deleteBrand_args setId(int id) {
+    this.id = id;
+    setIdIsSet(true);
+
+    return this;
+  }
+
+  public void unsetId() {
+  __isset_bit_vector.clear(__ID_ISSET_ID);
+  }
+
+  /** Returns true if field id is set (has been asigned a value) and false otherwise */
+  public boolean isSetId() {
+    return __isset_bit_vector.get(__ID_ISSET_ID);
+  }
+
+  public void setIdIsSet(boolean value) {
+    __isset_bit_vector.set(__ID_ISSET_ID, value);
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case ID:
+      if (value == null) {
+        unsetId();
+      } else {
+        setId((Integer)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case ID:
+      return new Integer(getId());
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case ID:
+      return isSetId();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof deleteBrand_args)
+      return this.equals((deleteBrand_args)that);
+    return false;
+  }
+
+  public boolean equals(deleteBrand_args that) {
+    if (that == null)
+      return false;
+    boolean this_present_id = true;
+    boolean that_present_id = true;
+    if (this_present_id || that_present_id) {
+      if (!(this_present_id && that_present_id))
+        return false;
+      if (this.id != that.id)
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_id = true;
+    builder.append(present_id);
+    if (present_id)
+      builder.append(id);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(deleteBrand_args other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    deleteBrand_args typedOther = (deleteBrand_args)other;
+
+    lastComparison = Boolean.valueOf(isSetId()).compareTo(typedOther.isSetId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetId()) {
+      lastComparison = TBaseHelper.compareTo(this.id, typedOther.id);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 1: // ID
+          if (field.type == TType.I32) {
+            this.id = iprot.readI32();
+            setIdIsSet(true);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    validate();
+    
+    oprot.writeStructBegin(STRUCT_DESC);
+    oprot.writeFieldBegin(ID_FIELD_DESC);
+    oprot.writeI32(this.id);
+    oprot.writeFieldEnd();
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("deleteBrand_args(");
+    boolean first = true;
+    sb.append("id:");
+    sb.append(this.id);
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
+  public static class deleteBrand_result implements TBase<deleteBrand_result, deleteBrand_result._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("deleteBrand_result");
+
+  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
+
+
+  public com.jfshare.finagle.thrift.result.Result success;
+
+  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+  public enum _Fields implements TFieldIdEnum {
+    SUCCESS((short)0, "success");
+  
+    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+  
+    static {
+      for (_Fields field : EnumSet.allOf(_Fields.class)) {
+        byName.put(field.getFieldName(), field);
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, or null if its not found.
+     */
+    public static _Fields findByThriftId(int fieldId) {
+      switch(fieldId) {
+        case 0: // SUCCESS
+  	return SUCCESS;
+        default:
+  	return null;
+      }
+    }
+  
+    /**
+     * Find the _Fields constant that matches fieldId, throwing an exception
+     * if it is not found.
+     */
+    public static _Fields findByThriftIdOrThrow(int fieldId) {
+      _Fields fields = findByThriftId(fieldId);
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      return fields;
+    }
+  
+    /**
+     * Find the _Fields constant that matches name, or null if its not found.
+     */
+    public static _Fields findByName(String name) {
+      return byName.get(name);
+    }
+  
+    private final short _thriftId;
+    private final String _fieldName;
+  
+    _Fields(short thriftId, String fieldName) {
+      _thriftId = thriftId;
+      _fieldName = fieldName;
+    }
+  
+    public short getThriftFieldId() {
+      return _thriftId;
+    }
+  
+    public String getFieldName() {
+      return _fieldName;
+    }
+  }
+
+
+  // isset id assignments
+
+  public static final Map<_Fields, FieldMetaData> metaDataMap;
+  static {
+    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
+      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
+    metaDataMap = Collections.unmodifiableMap(tmpMap);
+    FieldMetaData.addStructMetaDataMap(deleteBrand_result.class, metaDataMap);
+  }
+
+
+  public deleteBrand_result() {
+  }
+
+  public deleteBrand_result(
+    com.jfshare.finagle.thrift.result.Result success)
+  {
+    this();
+    this.success = success;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public deleteBrand_result(deleteBrand_result other) {
+    if (other.isSetSuccess()) {
+      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
+    }
+  }
+
+  public deleteBrand_result deepCopy() {
+    return new deleteBrand_result(this);
+  }
+
+  @Override
+  public void clear() {
+    this.success = null;
+  }
+
+  public com.jfshare.finagle.thrift.result.Result getSuccess() {
+    return this.success;
+  }
+
+  public deleteBrand_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
+    this.success = success;
+    
+    return this;
+  }
+
+  public void unsetSuccess() {
+    this.success = null;
+  }
+
+  /** Returns true if field success is set (has been asigned a value) and false otherwise */
+  public boolean isSetSuccess() {
+    return this.success != null;
+  }
+
+  public void setSuccessIsSet(boolean value) {
+    if (!value) {
+      this.success = null;
+    }
+  }
+
+  public void setFieldValue(_Fields field, Object value) {
+    switch (field) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
+      }
+      break;
+    }
+  }
+
+  public Object getFieldValue(_Fields field) {
+    switch (field) {
+    case SUCCESS:
+      return getSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
+  public boolean isSet(_Fields field) {
+    if (field == null) {
+      throw new IllegalArgumentException();
+    }
+
+    switch (field) {
+    case SUCCESS:
+      return isSetSuccess();
+    }
+    throw new IllegalStateException();
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof deleteBrand_result)
+      return this.equals((deleteBrand_result)that);
+    return false;
+  }
+
+  public boolean equals(deleteBrand_result that) {
+    if (that == null)
+      return false;
+    boolean this_present_success = true && this.isSetSuccess();
+    boolean that_present_success = true && that.isSetSuccess();
+    if (this_present_success || that_present_success) {
+      if (!(this_present_success && that_present_success))
+        return false;
+      if (!this.success.equals(that.success))
+        return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    HashCodeBuilder builder = new HashCodeBuilder();
+    boolean present_success = true && (isSetSuccess());
+    builder.append(present_success);
+    if (present_success)
+      builder.append(success);
+    return builder.toHashCode();
+  }
+
+  public int compareTo(deleteBrand_result other) {
+    if (!getClass().equals(other.getClass())) {
+      return getClass().getName().compareTo(other.getClass().getName());
+    }
+
+    int lastComparison = 0;
+    deleteBrand_result typedOther = (deleteBrand_result)other;
+
+    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSuccess()) {
+      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    return 0;
+  }
+
+  public _Fields fieldForId(int fieldId) {
+    return _Fields.findByThriftId(fieldId);
+  }
+
+
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) {
+        break;
+      }
+      switch (field.id) {
+        case 0: // SUCCESS
+          if (field.type == TType.STRUCT) {
+            this.success = new com.jfshare.finagle.thrift.result.Result();
+            this.success.read(iprot);
+          } else {
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public void write(TProtocol oprot) throws TException {
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("deleteBrand_result(");
+    boolean first = true;
+    sb.append("success:");
+    if (this.success == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.success);
+    }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public void validate() throws TException {
+    // check for required fields
+  }
+}
+
 
   public static class query_args implements TBase<query_args, query_args._Fields>, java.io.Serializable, Cloneable {
   private static final TStruct STRUCT_DESC = new TStruct("query_args");
@@ -3173,1722 +4889,6 @@ public class BrandServ {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("queryBatch_result(");
-    boolean first = true;
-    sb.append("success:");
-    if (this.success == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.success);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-
-  public static class addBrand_args implements TBase<addBrand_args, addBrand_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("addBrand_args");
-
-  private static final TField BRAND_FIELD_DESC = new TField("brand", TType.STRUCT, (short)1);
-
-
-  public BrandInfo brand;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    BRAND((short)1, "brand");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 1: // BRAND
-  	return BRAND;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.BRAND, new FieldMetaData("brand", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, BrandInfo.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(addBrand_args.class, metaDataMap);
-  }
-
-
-  public addBrand_args() {
-  }
-
-  public addBrand_args(
-    BrandInfo brand)
-  {
-    this();
-    this.brand = brand;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public addBrand_args(addBrand_args other) {
-    if (other.isSetBrand()) {
-      this.brand = new BrandInfo(other.brand);
-    }
-  }
-
-  public addBrand_args deepCopy() {
-    return new addBrand_args(this);
-  }
-
-  @Override
-  public void clear() {
-    this.brand = null;
-  }
-
-  public BrandInfo getBrand() {
-    return this.brand;
-  }
-
-  public addBrand_args setBrand(BrandInfo brand) {
-    this.brand = brand;
-    
-    return this;
-  }
-
-  public void unsetBrand() {
-    this.brand = null;
-  }
-
-  /** Returns true if field brand is set (has been asigned a value) and false otherwise */
-  public boolean isSetBrand() {
-    return this.brand != null;
-  }
-
-  public void setBrandIsSet(boolean value) {
-    if (!value) {
-      this.brand = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case BRAND:
-      if (value == null) {
-        unsetBrand();
-      } else {
-        setBrand((BrandInfo)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case BRAND:
-      return getBrand();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case BRAND:
-      return isSetBrand();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof addBrand_args)
-      return this.equals((addBrand_args)that);
-    return false;
-  }
-
-  public boolean equals(addBrand_args that) {
-    if (that == null)
-      return false;
-    boolean this_present_brand = true && this.isSetBrand();
-    boolean that_present_brand = true && that.isSetBrand();
-    if (this_present_brand || that_present_brand) {
-      if (!(this_present_brand && that_present_brand))
-        return false;
-      if (!this.brand.equals(that.brand))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_brand = true && (isSetBrand());
-    builder.append(present_brand);
-    if (present_brand)
-      builder.append(brand);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(addBrand_args other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    addBrand_args typedOther = (addBrand_args)other;
-
-    lastComparison = Boolean.valueOf(isSetBrand()).compareTo(typedOther.isSetBrand());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetBrand()) {
-      lastComparison = TBaseHelper.compareTo(this.brand, typedOther.brand);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 1: // BRAND
-          if (field.type == TType.STRUCT) {
-            this.brand = new BrandInfo();
-            this.brand.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    validate();
-    
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.brand != null) {
-      oprot.writeFieldBegin(BRAND_FIELD_DESC);
-      this.brand.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("addBrand_args(");
-    boolean first = true;
-    sb.append("brand:");
-    if (this.brand == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.brand);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-  public static class addBrand_result implements TBase<addBrand_result, addBrand_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("addBrand_result");
-
-  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
-
-
-  public com.jfshare.finagle.thrift.result.Result success;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SUCCESS((short)0, "success");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 0: // SUCCESS
-  	return SUCCESS;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(addBrand_result.class, metaDataMap);
-  }
-
-
-  public addBrand_result() {
-  }
-
-  public addBrand_result(
-    com.jfshare.finagle.thrift.result.Result success)
-  {
-    this();
-    this.success = success;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public addBrand_result(addBrand_result other) {
-    if (other.isSetSuccess()) {
-      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
-    }
-  }
-
-  public addBrand_result deepCopy() {
-    return new addBrand_result(this);
-  }
-
-  @Override
-  public void clear() {
-    this.success = null;
-  }
-
-  public com.jfshare.finagle.thrift.result.Result getSuccess() {
-    return this.success;
-  }
-
-  public addBrand_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
-    this.success = success;
-    
-    return this;
-  }
-
-  public void unsetSuccess() {
-    this.success = null;
-  }
-
-  /** Returns true if field success is set (has been asigned a value) and false otherwise */
-  public boolean isSetSuccess() {
-    return this.success != null;
-  }
-
-  public void setSuccessIsSet(boolean value) {
-    if (!value) {
-      this.success = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SUCCESS:
-      return getSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SUCCESS:
-      return isSetSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof addBrand_result)
-      return this.equals((addBrand_result)that);
-    return false;
-  }
-
-  public boolean equals(addBrand_result that) {
-    if (that == null)
-      return false;
-    boolean this_present_success = true && this.isSetSuccess();
-    boolean that_present_success = true && that.isSetSuccess();
-    if (this_present_success || that_present_success) {
-      if (!(this_present_success && that_present_success))
-        return false;
-      if (!this.success.equals(that.success))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_success = true && (isSetSuccess());
-    builder.append(present_success);
-    if (present_success)
-      builder.append(success);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(addBrand_result other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    addBrand_result typedOther = (addBrand_result)other;
-
-    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSuccess()) {
-      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 0: // SUCCESS
-          if (field.type == TType.STRUCT) {
-            this.success = new com.jfshare.finagle.thrift.result.Result();
-            this.success.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("addBrand_result(");
-    boolean first = true;
-    sb.append("success:");
-    if (this.success == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.success);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-
-  public static class deleteBrand_args implements TBase<deleteBrand_args, deleteBrand_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("deleteBrand_args");
-
-  private static final TField ID_FIELD_DESC = new TField("id", TType.I32, (short)1);
-
-
-  public int id;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    ID((short)1, "id");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 1: // ID
-  	return ID;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-  private static final int __ID_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.ID, new FieldMetaData("id", TFieldRequirementType.DEFAULT,
-      new FieldValueMetaData(TType.I32)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(deleteBrand_args.class, metaDataMap);
-  }
-
-
-  public deleteBrand_args() {
-  }
-
-  public deleteBrand_args(
-    int id)
-  {
-    this();
-    this.id = id;
-    setIdIsSet(true);
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public deleteBrand_args(deleteBrand_args other) {
-    __isset_bit_vector.clear();
-    __isset_bit_vector.or(other.__isset_bit_vector);
-    this.id = other.id;
-  }
-
-  public deleteBrand_args deepCopy() {
-    return new deleteBrand_args(this);
-  }
-
-  @Override
-  public void clear() {
-    setIdIsSet(false);
-    this.id = 0;
-  }
-
-  public int getId() {
-    return this.id;
-  }
-
-  public deleteBrand_args setId(int id) {
-    this.id = id;
-    setIdIsSet(true);
-
-    return this;
-  }
-
-  public void unsetId() {
-  __isset_bit_vector.clear(__ID_ISSET_ID);
-  }
-
-  /** Returns true if field id is set (has been asigned a value) and false otherwise */
-  public boolean isSetId() {
-    return __isset_bit_vector.get(__ID_ISSET_ID);
-  }
-
-  public void setIdIsSet(boolean value) {
-    __isset_bit_vector.set(__ID_ISSET_ID, value);
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case ID:
-      if (value == null) {
-        unsetId();
-      } else {
-        setId((Integer)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case ID:
-      return new Integer(getId());
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case ID:
-      return isSetId();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof deleteBrand_args)
-      return this.equals((deleteBrand_args)that);
-    return false;
-  }
-
-  public boolean equals(deleteBrand_args that) {
-    if (that == null)
-      return false;
-    boolean this_present_id = true;
-    boolean that_present_id = true;
-    if (this_present_id || that_present_id) {
-      if (!(this_present_id && that_present_id))
-        return false;
-      if (this.id != that.id)
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_id = true;
-    builder.append(present_id);
-    if (present_id)
-      builder.append(id);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(deleteBrand_args other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    deleteBrand_args typedOther = (deleteBrand_args)other;
-
-    lastComparison = Boolean.valueOf(isSetId()).compareTo(typedOther.isSetId());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetId()) {
-      lastComparison = TBaseHelper.compareTo(this.id, typedOther.id);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 1: // ID
-          if (field.type == TType.I32) {
-            this.id = iprot.readI32();
-            setIdIsSet(true);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    validate();
-    
-    oprot.writeStructBegin(STRUCT_DESC);
-    oprot.writeFieldBegin(ID_FIELD_DESC);
-    oprot.writeI32(this.id);
-    oprot.writeFieldEnd();
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("deleteBrand_args(");
-    boolean first = true;
-    sb.append("id:");
-    sb.append(this.id);
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-  public static class deleteBrand_result implements TBase<deleteBrand_result, deleteBrand_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("deleteBrand_result");
-
-  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
-
-
-  public com.jfshare.finagle.thrift.result.Result success;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SUCCESS((short)0, "success");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 0: // SUCCESS
-  	return SUCCESS;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(deleteBrand_result.class, metaDataMap);
-  }
-
-
-  public deleteBrand_result() {
-  }
-
-  public deleteBrand_result(
-    com.jfshare.finagle.thrift.result.Result success)
-  {
-    this();
-    this.success = success;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public deleteBrand_result(deleteBrand_result other) {
-    if (other.isSetSuccess()) {
-      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
-    }
-  }
-
-  public deleteBrand_result deepCopy() {
-    return new deleteBrand_result(this);
-  }
-
-  @Override
-  public void clear() {
-    this.success = null;
-  }
-
-  public com.jfshare.finagle.thrift.result.Result getSuccess() {
-    return this.success;
-  }
-
-  public deleteBrand_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
-    this.success = success;
-    
-    return this;
-  }
-
-  public void unsetSuccess() {
-    this.success = null;
-  }
-
-  /** Returns true if field success is set (has been asigned a value) and false otherwise */
-  public boolean isSetSuccess() {
-    return this.success != null;
-  }
-
-  public void setSuccessIsSet(boolean value) {
-    if (!value) {
-      this.success = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SUCCESS:
-      return getSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SUCCESS:
-      return isSetSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof deleteBrand_result)
-      return this.equals((deleteBrand_result)that);
-    return false;
-  }
-
-  public boolean equals(deleteBrand_result that) {
-    if (that == null)
-      return false;
-    boolean this_present_success = true && this.isSetSuccess();
-    boolean that_present_success = true && that.isSetSuccess();
-    if (this_present_success || that_present_success) {
-      if (!(this_present_success && that_present_success))
-        return false;
-      if (!this.success.equals(that.success))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_success = true && (isSetSuccess());
-    builder.append(present_success);
-    if (present_success)
-      builder.append(success);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(deleteBrand_result other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    deleteBrand_result typedOther = (deleteBrand_result)other;
-
-    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSuccess()) {
-      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 0: // SUCCESS
-          if (field.type == TType.STRUCT) {
-            this.success = new com.jfshare.finagle.thrift.result.Result();
-            this.success.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("deleteBrand_result(");
-    boolean first = true;
-    sb.append("success:");
-    if (this.success == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.success);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-
-  public static class updateBrand_args implements TBase<updateBrand_args, updateBrand_args._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("updateBrand_args");
-
-  private static final TField BRAND_FIELD_DESC = new TField("brand", TType.STRUCT, (short)1);
-
-
-  public BrandInfo brand;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    BRAND((short)1, "brand");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 1: // BRAND
-  	return BRAND;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.BRAND, new FieldMetaData("brand", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, BrandInfo.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(updateBrand_args.class, metaDataMap);
-  }
-
-
-  public updateBrand_args() {
-  }
-
-  public updateBrand_args(
-    BrandInfo brand)
-  {
-    this();
-    this.brand = brand;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public updateBrand_args(updateBrand_args other) {
-    if (other.isSetBrand()) {
-      this.brand = new BrandInfo(other.brand);
-    }
-  }
-
-  public updateBrand_args deepCopy() {
-    return new updateBrand_args(this);
-  }
-
-  @Override
-  public void clear() {
-    this.brand = null;
-  }
-
-  public BrandInfo getBrand() {
-    return this.brand;
-  }
-
-  public updateBrand_args setBrand(BrandInfo brand) {
-    this.brand = brand;
-    
-    return this;
-  }
-
-  public void unsetBrand() {
-    this.brand = null;
-  }
-
-  /** Returns true if field brand is set (has been asigned a value) and false otherwise */
-  public boolean isSetBrand() {
-    return this.brand != null;
-  }
-
-  public void setBrandIsSet(boolean value) {
-    if (!value) {
-      this.brand = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case BRAND:
-      if (value == null) {
-        unsetBrand();
-      } else {
-        setBrand((BrandInfo)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case BRAND:
-      return getBrand();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case BRAND:
-      return isSetBrand();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof updateBrand_args)
-      return this.equals((updateBrand_args)that);
-    return false;
-  }
-
-  public boolean equals(updateBrand_args that) {
-    if (that == null)
-      return false;
-    boolean this_present_brand = true && this.isSetBrand();
-    boolean that_present_brand = true && that.isSetBrand();
-    if (this_present_brand || that_present_brand) {
-      if (!(this_present_brand && that_present_brand))
-        return false;
-      if (!this.brand.equals(that.brand))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_brand = true && (isSetBrand());
-    builder.append(present_brand);
-    if (present_brand)
-      builder.append(brand);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(updateBrand_args other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    updateBrand_args typedOther = (updateBrand_args)other;
-
-    lastComparison = Boolean.valueOf(isSetBrand()).compareTo(typedOther.isSetBrand());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetBrand()) {
-      lastComparison = TBaseHelper.compareTo(this.brand, typedOther.brand);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 1: // BRAND
-          if (field.type == TType.STRUCT) {
-            this.brand = new BrandInfo();
-            this.brand.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    validate();
-    
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.brand != null) {
-      oprot.writeFieldBegin(BRAND_FIELD_DESC);
-      this.brand.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("updateBrand_args(");
-    boolean first = true;
-    sb.append("brand:");
-    if (this.brand == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.brand);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
-
-  public void validate() throws TException {
-    // check for required fields
-  }
-}
-
-  public static class updateBrand_result implements TBase<updateBrand_result, updateBrand_result._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("updateBrand_result");
-
-  private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.STRUCT, (short)0);
-
-
-  public com.jfshare.finagle.thrift.result.Result success;
-
-  /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-  public enum _Fields implements TFieldIdEnum {
-    SUCCESS((short)0, "success");
-  
-    private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-  
-    static {
-      for (_Fields field : EnumSet.allOf(_Fields.class)) {
-        byName.put(field.getFieldName(), field);
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, or null if its not found.
-     */
-    public static _Fields findByThriftId(int fieldId) {
-      switch(fieldId) {
-        case 0: // SUCCESS
-  	return SUCCESS;
-        default:
-  	return null;
-      }
-    }
-  
-    /**
-     * Find the _Fields constant that matches fieldId, throwing an exception
-     * if it is not found.
-     */
-    public static _Fields findByThriftIdOrThrow(int fieldId) {
-      _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-      return fields;
-    }
-  
-    /**
-     * Find the _Fields constant that matches name, or null if its not found.
-     */
-    public static _Fields findByName(String name) {
-      return byName.get(name);
-    }
-  
-    private final short _thriftId;
-    private final String _fieldName;
-  
-    _Fields(short thriftId, String fieldName) {
-      _thriftId = thriftId;
-      _fieldName = fieldName;
-    }
-  
-    public short getThriftFieldId() {
-      return _thriftId;
-    }
-  
-    public String getFieldName() {
-      return _fieldName;
-    }
-  }
-
-
-  // isset id assignments
-
-  public static final Map<_Fields, FieldMetaData> metaDataMap;
-  static {
-    Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SUCCESS, new FieldMetaData("success", TFieldRequirementType.DEFAULT,
-      new StructMetaData(TType.STRUCT, com.jfshare.finagle.thrift.result.Result.class)));
-    metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(updateBrand_result.class, metaDataMap);
-  }
-
-
-  public updateBrand_result() {
-  }
-
-  public updateBrand_result(
-    com.jfshare.finagle.thrift.result.Result success)
-  {
-    this();
-    this.success = success;
-  }
-
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public updateBrand_result(updateBrand_result other) {
-    if (other.isSetSuccess()) {
-      this.success = new com.jfshare.finagle.thrift.result.Result(other.success);
-    }
-  }
-
-  public updateBrand_result deepCopy() {
-    return new updateBrand_result(this);
-  }
-
-  @Override
-  public void clear() {
-    this.success = null;
-  }
-
-  public com.jfshare.finagle.thrift.result.Result getSuccess() {
-    return this.success;
-  }
-
-  public updateBrand_result setSuccess(com.jfshare.finagle.thrift.result.Result success) {
-    this.success = success;
-    
-    return this;
-  }
-
-  public void unsetSuccess() {
-    this.success = null;
-  }
-
-  /** Returns true if field success is set (has been asigned a value) and false otherwise */
-  public boolean isSetSuccess() {
-    return this.success != null;
-  }
-
-  public void setSuccessIsSet(boolean value) {
-    if (!value) {
-      this.success = null;
-    }
-  }
-
-  public void setFieldValue(_Fields field, Object value) {
-    switch (field) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        setSuccess((com.jfshare.finagle.thrift.result.Result)value);
-      }
-      break;
-    }
-  }
-
-  public Object getFieldValue(_Fields field) {
-    switch (field) {
-    case SUCCESS:
-      return getSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  /** Returns true if field corresponding to fieldID is set (has been asigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
-    if (field == null) {
-      throw new IllegalArgumentException();
-    }
-
-    switch (field) {
-    case SUCCESS:
-      return isSetSuccess();
-    }
-    throw new IllegalStateException();
-  }
-
-  @Override
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof updateBrand_result)
-      return this.equals((updateBrand_result)that);
-    return false;
-  }
-
-  public boolean equals(updateBrand_result that) {
-    if (that == null)
-      return false;
-    boolean this_present_success = true && this.isSetSuccess();
-    boolean that_present_success = true && that.isSetSuccess();
-    if (this_present_success || that_present_success) {
-      if (!(this_present_success && that_present_success))
-        return false;
-      if (!this.success.equals(that.success))
-        return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-    boolean present_success = true && (isSetSuccess());
-    builder.append(present_success);
-    if (present_success)
-      builder.append(success);
-    return builder.toHashCode();
-  }
-
-  public int compareTo(updateBrand_result other) {
-    if (!getClass().equals(other.getClass())) {
-      return getClass().getName().compareTo(other.getClass().getName());
-    }
-
-    int lastComparison = 0;
-    updateBrand_result typedOther = (updateBrand_result)other;
-
-    lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSuccess()) {
-      lastComparison = TBaseHelper.compareTo(this.success, typedOther.success);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
-
-  public _Fields fieldForId(int fieldId) {
-    return _Fields.findByThriftId(fieldId);
-  }
-
-
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) {
-        break;
-      }
-      switch (field.id) {
-        case 0: // SUCCESS
-          if (field.type == TType.STRUCT) {
-            this.success = new com.jfshare.finagle.thrift.result.Result();
-            this.success.read(iprot);
-          } else {
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public void write(TProtocol oprot) throws TException {
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("updateBrand_result(");
     boolean first = true;
     sb.append("success:");
     if (this.success == null) {
