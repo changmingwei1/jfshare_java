@@ -611,7 +611,9 @@ public class OrderHandler extends BaseHandler implements OrderServ.Iface {
 
     private boolean checkIsOnlyScorePay(List<OrderModel> orderModels) {
         for(OrderModel order : orderModels) {
-            if(order.getExchangeCash() != order.getClosingPrice()) {
+            if(order.getExchangeCash()-order.getClosingPrice()!=0) {
+            	logger.info("--------》"+(order.getExchangeCash()-order.getClosingPrice()));
+            	logger.info("exchange--------"+order.getExchangeCash()+"ClosingPrice-----------》"+order.getClosingPrice());
                 return false;
             }
         }
